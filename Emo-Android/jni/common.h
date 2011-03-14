@@ -6,7 +6,6 @@
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN,  "EmoFramework", __VA_ARGS__))
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "EmoFramework", __VA_ARGS__))
 
-#define SQUIRREL_VM_INITIAL_STACK_SIZE 1024
 #define _UNICODE
 
 /**

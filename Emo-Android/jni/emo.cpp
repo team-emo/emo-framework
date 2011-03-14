@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <stdarg.h>
 
+#include <android/asset_manager.h>
 #include <GLES/gl.h>
 
 #include <squirrel.h>
@@ -31,6 +31,13 @@ static void sq_errorfunc(HSQUIRRELVM v,const SQChar *s,...) {
 
     LOGW(text);
 }
+static SQInteger sqlexer(SQUserPointer asset) {
+	SQChar c;
+		if(AAsset_read((AAsset*)asset, &c, 1) > 0) {
+			return c;
+		}
+	return 0;
+}
 /**
  * Initialize the framework
  */
@@ -41,8 +48,20 @@ void emo_init_display(struct engine* engine) {
     sq_setprintfunc(engine->sqvm, sq_printfunc, sq_errorfunc);
 
     /* read squirrel script */
-    SQChar sqbuffer[1024] = _SC("local str = \"hello, squirrel!\";print(str);");
-    if(SQ_SUCCEEDED(sq_compilebuffer(engine->sqvm, sqbuffer, strlen(sqbuffer), _SC("main.nut"), false))) {
+    // use asset manager to open asset by filename
+    AAssetManager* mgr = engine->app->activity->assetManager;
+    if (mgr == NULL) {
+    	LOGE("Failed to load AAssetManager");
+    	return;
+    }
+
+    AAsset* asset = AAssetManager_open(mgr, SQUIRREL_MAIN_SCRIPT, AASSET_MODE_UNKNOWN);
+    if (asset == NULL) {
+    	LOGE("Failed to open Emo main script file");
+    	return;
+    }
+
+    if(SQ_SUCCEEDED(sq_compile(engine->sqvm, sqlexer, asset, SQUIRREL_MAIN_SCRIPT, SQTrue))) {
         sq_pushroottable(engine->sqvm);
         if (SQ_FAILED(sq_call(engine->sqvm, 1, SQFalse, SQTrue))) {
             LOGE("failed to sq_call");
@@ -56,6 +75,7 @@ void emo_init_display(struct engine* engine) {
     glEnable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
 }
+
 
 /*
  * Draw current frame
