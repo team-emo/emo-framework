@@ -1,9 +1,5 @@
 #include <android_native_app_glue.h>
 
-#include <squirrel.h>
-#include <sqstdio.h>
-#include <sqstdaux.h>
-
 #define SQUIRREL_VM_INITIAL_STACK_SIZE 1024
 #define SQUIRREL_MAIN_SCRIPT "emomain.nut"
 

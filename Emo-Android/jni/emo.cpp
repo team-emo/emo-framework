@@ -9,81 +9,8 @@
 
 #include <common.h>
 #include <emo.h>
+#include <sqfunc.h>
 
-/*
- * Squirrel basic functions
- */
-/*
- * Read script callback
- */
-static SQInteger sq_lexer(SQUserPointer asset) {
-	SQChar c;
-		if(AAsset_read((AAsset*)asset, &c, 1) > 0) {
-			return c;
-		}
-	return 0;
-}
-/*
- * Call Squirrel function with no parameter
- */
-static SQBool callSqFunctionNoParam(HSQUIRRELVM v, const SQChar* name) {
-	SQBool result = SQFalse;
-
-	SQInteger top = sq_gettop(v);
-	sq_pushroottable(v);
-	sq_pushstring(v, name, -1);
-	if(SQ_SUCCEEDED(sq_get(v, -2))) {
-		sq_pushroottable(v);
-		result = SQ_SUCCEEDED(sq_call(v, 1, SQFalse, SQTrue));
-	}
-	sq_settop(v,top);
-
-	return result;
-}
-/*
- * Call Squirrel function with one string parameter
- */
-static SQBool callSqFunctionOneString(HSQUIRRELVM v, const SQChar* name, const SQChar* param) {
-	SQBool result = SQFalse;
-
-	SQInteger top = sq_gettop(v);
-	sq_pushroottable(v);
-	sq_pushstring(v, name, -1);
-	if(SQ_SUCCEEDED(sq_get(v, -2))) {
-		sq_pushroottable(v);
-		sq_pushstring(v, param, -1);
-		result = SQ_SUCCEEDED(sq_call(v, 2, SQFalse, SQTrue));
-	}
-	sq_settop(v,top);
-
-	return result;
-}
-/*
- * printfunc
- */
-static void sq_printfunc(HSQUIRRELVM v,const SQChar *s,...) {
-	static SQChar text[2048];
-	va_list args;
-    va_start(args, s);
-    scvsprintf(text, s, args);
-    va_end(args);
-
-    LOGI(text);
-}
-/*
- * errorfunc
- */
-static void sq_errorfunc(HSQUIRRELVM v,const SQChar *s,...) {
-	static SQChar text[2048];
-	va_list args;
-    va_start(args, s);
-    scvsprintf(text, s, args);
-    va_end(args);
-
-    callSqFunctionOneString(v, "onError", text);
-
-    LOGW(text);
-}
 /**
  * Initialize the framework
  */
@@ -122,7 +49,9 @@ void emo_init_display(struct engine* engine) {
         return;
     }
 
-    callSqFunctionNoParam(engine->sqvm, "onLoad");
+    if (engine->enableSQOnLoad) {
+    	callSqFunctionNoParam(engine->sqvm, "onLoad");
+    }
 
     /* init OpenGL state */
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -138,7 +67,9 @@ void emo_draw_frame(struct engine* engine) {
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-	callSqFunctionNoParam(engine->sqvm, "onDrawFrame");
+    if (engine->enableSQOnDrawFrame) {
+    	callSqFunctionNoParam(engine->sqvm, "onDrawFrame");
+    }
 }
 
 
@@ -146,7 +77,9 @@ void emo_draw_frame(struct engine* engine) {
  * Terminate the framework
  */
 void emo_term_display(struct engine* engine) {
-	callSqFunctionNoParam(engine->sqvm, "onDispose");
+	if (engine->enableSQOnDispose) {
+		callSqFunctionNoParam(engine->sqvm, "onDispose");
+	}
 }
 
 /**
