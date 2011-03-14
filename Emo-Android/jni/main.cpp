@@ -86,6 +86,7 @@ static int engine_init_display(struct engine* engine) {
     engine->width = w;
     engine->height = h;
     engine->sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
+    engine->lastError = EMO_NO_ERROR;
 
     emo_init_display(engine);
     

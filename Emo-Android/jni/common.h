@@ -29,6 +29,7 @@ struct engine {
     int32_t width;
     int32_t height;
     HSQUIRRELVM sqvm;
+    int32_t lastError;
     
     struct saved_state state;
 };
