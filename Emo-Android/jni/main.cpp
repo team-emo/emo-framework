@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2010 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
 #include <jni.h>
 #include <errno.h>
 
@@ -27,11 +11,185 @@
 #include <sqstdio.h>
 #include <sqstdaux.h>
 
-#include <common.h>
-#include <emo.h>
+#include <main.h>
+#include <sqfunc.h>
 
 /* global pointer to application engine */
 struct engine *g_engine;
+
+/*
+ * Read script callback
+ */
+static SQInteger sq_lexer(SQUserPointer asset) {
+	SQChar c;
+		if(AAsset_read((AAsset*)asset, &c, 1) > 0) {
+			return c;
+		}
+	return 0;
+}
+
+/*
+ * Load squirrel script from asset
+ */
+SQBool loadScriptFromAsset(struct engine* engine, AAssetManager* mgr, const char* fname) {
+    AAsset* asset = AAssetManager_open(mgr, fname, AASSET_MODE_UNKNOWN);
+    if (asset == NULL) {
+    	engine->lastError = ERR_SCRIPT_OPEN;
+    	LOGW("Failed to open main script file");
+        LOGW(fname);
+    	return SQFalse;
+    }
+
+    if(SQ_SUCCEEDED(sq_compile(engine->sqvm, sq_lexer, asset, fname, SQTrue))) {
+        sq_pushroottable(engine->sqvm);
+        if (SQ_FAILED(sq_call(engine->sqvm, 1, SQFalse, SQTrue))) {
+        	engine->lastError = ERR_SCRIPT_CALL_ROOT;
+            LOGW("failed to sq_call");
+            LOGW(fname);
+            return SQFalse;
+        }
+    } else {
+    	engine->lastError = ERR_SCRIPT_COMPILE;
+        LOGW("Failed to compile squirrel script");
+        LOGW(fname);
+        return SQFalse;
+    }
+
+    AAsset_close(asset);
+
+    return SQTrue;
+}
+
+/*
+ * mport function called from squirrel script
+ */
+SQInteger emo_import_script(HSQUIRRELVM v) {
+    AAssetManager* mgr = g_engine->app->activity->assetManager;
+
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+    	if (sq_gettype(v, n) == OT_STRING) {
+    		const SQChar *fname;
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &fname);
+            sq_poptop(v);
+
+    		loadScriptFromAsset(g_engine, mgr, fname);
+    	}
+    }
+	return 0;
+}
+
+/*
+ * option function called from squirrel script
+ */
+SQInteger emo_set_options(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+    	if (sq_gettype(v, n) == OT_STRING) {
+    		const SQChar *value;
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &value);
+            sq_poptop(v);
+
+    	}
+    }
+	return 0;
+}
+
+/**
+ * Initialize the framework
+ */
+void emo_init_display(struct engine* engine) {
+
+    /* init Squirrel VM */
+    sqstd_seterrorhandlers(engine->sqvm);
+    sq_setprintfunc(engine->sqvm, sq_printfunc, sq_errorfunc);
+
+    register_global_func(engine->sqvm, emo_import_script, "emoImport");
+
+    /*
+     * read squirrel script from asset
+     */
+    AAssetManager* mgr = engine->app->activity->assetManager;
+    if (mgr == NULL) {
+    	engine->lastError = ERR_SCRIPT_LOAD;
+    	LOGE("Failed to load AAssetManager");
+    	return;
+    }
+
+    /* load main script */
+    loadScriptFromAsset(engine, mgr, SQUIRREL_MAIN_SCRIPT);
+
+    /* call onLoad() */
+    callSqFunctionNoParam(engine->sqvm, "onLoad");
+
+    /* init OpenGL state */
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glEnable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+}
+
+/*
+ * Draw current frame
+ */
+void emo_draw_frame(struct engine* engine) {
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    if (engine->enableSQOnDrawFrame) {
+    	callSqFunctionNoParam(engine->sqvm, "onDrawFrame");
+    }
+}
+
+/*
+ * Terminate the framework
+ */
+void emo_term_display(struct engine* engine) {
+	callSqFunctionNoParam(engine->sqvm, "onDispose");
+}
+
+/*
+ * Process motion event
+ */
+static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
+	return 0;
+}
+
+/*
+ * Process key event
+ */
+static int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
+    return 0;
+}
+
+/**
+ * Process the input event.
+ */
+int32_t emo_handle_input(struct android_app* app, AInputEvent* event) {
+	if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
+        return emo_event_motion(app, event);
+    } else if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_KEY) {
+        return emo_event_key(app, event);
+    }
+    return 0;
+}
+
+/*
+ * Gained focus
+ */
+void emo_gained_focus(struct engine* engine) {
+	callSqFunctionNoParam(engine->sqvm, "onGainedFocus");
+    engine->animating = 1;
+}
+
+/*
+ * Lost focus
+ */
+void emo_lost_focus(struct engine* engine) {
+	callSqFunctionNoParam(engine->sqvm, "onLostFocus");
+    engine->animating = 0;
+}
 
 /**
  * Initialize an EGL context for the current display.
