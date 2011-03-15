@@ -30,6 +30,9 @@
 #include <common.h>
 #include <emo.h>
 
+/* global pointer to application engine */
+struct engine *g_engine;
+
 /**
  * Initialize an EGL context for the current display.
  */
@@ -179,6 +182,8 @@ void android_main(struct android_app* state) {
     if (state->savedState != NULL) {
         engine.state = *(struct saved_state*)state->savedState;
     }
+
+    g_engine = &engine;
 
     while (1) {
         int ident;
