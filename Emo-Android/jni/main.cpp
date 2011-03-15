@@ -4,7 +4,6 @@
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 
-#include <android/log.h>
 #include <android_native_app_glue.h>
 
 #include <squirrel.h>
@@ -18,84 +17,16 @@
 struct engine *g_engine;
 
 /*
- * Read script callback
+ * extern
  */
-static SQInteger sq_lexer(SQUserPointer asset) {
-	SQChar c;
-		if(AAsset_read((AAsset*)asset, &c, 1) > 0) {
-			return c;
-		}
-	return 0;
-}
+extern void LOGI(const SQChar* msg);
+extern void LOGW(const SQChar* msg);
+extern void LOGE(const SQChar* msg);
 
-/*
- * Load squirrel script from asset
- */
-SQBool loadScriptFromAsset(struct engine* engine, AAssetManager* mgr, const char* fname) {
-    AAsset* asset = AAssetManager_open(mgr, fname, AASSET_MODE_UNKNOWN);
-    if (asset == NULL) {
-    	engine->lastError = ERR_SCRIPT_OPEN;
-    	LOGW("Failed to open main script file");
-        LOGW(fname);
-    	return SQFalse;
-    }
-
-    if(SQ_SUCCEEDED(sq_compile(engine->sqvm, sq_lexer, asset, fname, SQTrue))) {
-        sq_pushroottable(engine->sqvm);
-        if (SQ_FAILED(sq_call(engine->sqvm, 1, SQFalse, SQTrue))) {
-        	engine->lastError = ERR_SCRIPT_CALL_ROOT;
-            LOGW("failed to sq_call");
-            LOGW(fname);
-            return SQFalse;
-        }
-    } else {
-    	engine->lastError = ERR_SCRIPT_COMPILE;
-        LOGW("Failed to compile squirrel script");
-        LOGW(fname);
-        return SQFalse;
-    }
-
-    AAsset_close(asset);
-
-    return SQTrue;
-}
-
-/*
- * mport function called from squirrel script
- */
-SQInteger emo_import_script(HSQUIRRELVM v) {
-    AAssetManager* mgr = g_engine->app->activity->assetManager;
-
-    SQInteger nargs = sq_gettop(v);
-    for(SQInteger n = 1; n <= nargs; n++) {
-    	if (sq_gettype(v, n) == OT_STRING) {
-    		const SQChar *fname;
-            sq_tostring(v, n);
-            sq_getstring(v, -1, &fname);
-            sq_poptop(v);
-
-    		loadScriptFromAsset(g_engine, mgr, fname);
-    	}
-    }
-	return 0;
-}
-
-/*
- * option function called from squirrel script
- */
-SQInteger emo_set_options(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-    for(SQInteger n = 1; n <= nargs; n++) {
-    	if (sq_gettype(v, n) == OT_STRING) {
-    		const SQChar *value;
-            sq_tostring(v, n);
-            sq_getstring(v, -1, &value);
-            sq_poptop(v);
-
-    	}
-    }
-	return 0;
-}
+extern SQInteger sq_lexer(SQUserPointer asset);
+extern SQInteger emo_import_script(HSQUIRRELVM v);
+extern SQInteger emo_set_options(HSQUIRRELVM v);
+extern SQBool loadScriptFromAsset(const char* fname);
 
 /**
  * Initialize the framework
@@ -108,18 +39,8 @@ void emo_init_display(struct engine* engine) {
 
     register_global_func(engine->sqvm, emo_import_script, "emoImport");
 
-    /*
-     * read squirrel script from asset
-     */
-    AAssetManager* mgr = engine->app->activity->assetManager;
-    if (mgr == NULL) {
-    	engine->lastError = ERR_SCRIPT_LOAD;
-    	LOGE("Failed to load AAssetManager");
-    	return;
-    }
-
     /* load main script */
-    loadScriptFromAsset(engine, mgr, SQUIRREL_MAIN_SCRIPT);
+    loadScriptFromAsset(SQUIRREL_MAIN_SCRIPT);
 
     /* call onLoad() */
     callSqFunctionNoParam(engine->sqvm, "onLoad");

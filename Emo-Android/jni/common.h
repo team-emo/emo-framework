@@ -6,6 +6,7 @@
 #define SQUIRREL_MAIN_SCRIPT "emomain.nut"
 
 #define EMO_NO_ERROR    0x0000
+#define EMO_ERROR       0x0001
 
 #define ERR_SCRIPT_LOAD      0x0100
 #define ERR_SCRIPT_OPEN      0x0101
