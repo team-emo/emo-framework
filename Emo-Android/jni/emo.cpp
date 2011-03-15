@@ -50,9 +50,6 @@ void emo_init_display(struct engine* engine) {
     }
 
     callSqFunctionNoParam(engine->sqvm, "onLoad");
-    SQChar test[32];
-    SQInteger nint = callSqFunctionNoParam_Int(engine->sqvm, "niceHint");
-    sprintf(test, "%d", nint);
 
     /* init OpenGL state */
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);

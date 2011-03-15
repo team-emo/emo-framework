@@ -59,19 +59,18 @@ SQBool callSqFunctionString(HSQUIRRELVM v, const SQChar* name, const SQChar* par
 }
 /*
  * Call Squirrel function with no parameter, returns integer
- * This call assumes positive return value, returns -1 if sq_call is failed.
+ * Returns default value if sq_call is failed.
  */
-SQInteger callSqFunctionNoParam_Int(HSQUIRRELVM v, const SQChar* name) {
-	SQInteger result = -1;
+SQInteger callSqFunctionNoParam_Int(HSQUIRRELVM v, const SQChar* name, SQInteger defaultValue) {
+	SQInteger result = defaultValue;
 
 	SQInteger top = sq_gettop(v);
 	sq_pushroottable(v);
 	sq_pushstring(v, name, -1);
 	if(SQ_SUCCEEDED(sq_get(v, -2))) {
 		sq_pushroottable(v);
-		if (SQ_SUCCEEDED(sq_call(v, 1, SQFalse, SQTrue))) {
-			sq_getinteger(v, -1, &result);
-			sq_pop(v, 1);
+		if (SQ_SUCCEEDED(sq_call(v, 1, SQTrue, SQTrue))) {
+			sq_getinteger(v, sq_gettop(v), &result);
 		}
 	}
 	sq_settop(v,top);
@@ -79,11 +78,32 @@ SQInteger callSqFunctionNoParam_Int(HSQUIRRELVM v, const SQChar* name) {
 	return result;
 }
 /*
- * Call Squirrel function with one integer parameter, returns integer
- * This call assumes positive return value, returns -1 if sq_call is failed.
+ * Call Squirrel function with no parameter, returns boolean
+ * Returns the default value if sq_call is failed.
  */
-SQInteger callSqFunctionInt_Int(HSQUIRRELVM v, const SQChar* name, SQInteger param) {
-	SQInteger result = -1;
+SQBool callSqFunctionNoParam_Bool(HSQUIRRELVM v, const SQChar* name, SQBool defaultValue) {
+	SQBool result = defaultValue;
+
+	SQInteger top = sq_gettop(v);
+	sq_pushroottable(v);
+	sq_pushstring(v, name, -1);
+	if(SQ_SUCCEEDED(sq_get(v, -2))) {
+		sq_pushroottable(v);
+		if (SQ_SUCCEEDED(sq_call(v, 1, SQTrue, SQTrue))) {
+			sq_getbool(v, sq_gettop(v), &result);
+		}
+	}
+	sq_settop(v,top);
+
+	return result;
+}
+
+/*
+ * Call Squirrel function with one integer parameter, returns integer
+ * Returns default value if sq_call is failed.
+ */
+SQInteger callSqFunctionInt_Int(HSQUIRRELVM v, const SQChar* name, SQInteger param, SQInteger defaultValue) {
+	SQInteger result = defaultValue;
 
 	SQInteger top = sq_gettop(v);
 	sq_pushroottable(v);
@@ -91,9 +111,8 @@ SQInteger callSqFunctionInt_Int(HSQUIRRELVM v, const SQChar* name, SQInteger par
 	if(SQ_SUCCEEDED(sq_get(v, -2))) {
 		sq_pushroottable(v);
 		sq_pushinteger(v, param);
-		if (SQ_SUCCEEDED(sq_call(v, 2, SQFalse, SQTrue))) {
-			sq_getinteger(v, -1, &result);
-			sq_pop(v, 1);
+		if (SQ_SUCCEEDED(sq_call(v, 2, SQTrue, SQTrue))) {
+			sq_getinteger(v, sq_gettop(v), &result);
 		}
 	}
 	sq_settop(v,top);
