@@ -30,9 +30,7 @@ struct engine {
     HSQUIRRELVM sqvm;
     int32_t lastError;
     
-    SQBool enableSQOnLoad;
     SQBool enableSQOnDrawFrame;
-    SQBool enableSQOnDispose;
 
     struct saved_state state;
 };

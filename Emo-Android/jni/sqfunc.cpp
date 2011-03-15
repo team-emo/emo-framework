@@ -42,7 +42,7 @@ SQBool callSqFunctionNoParam(HSQUIRRELVM v, const SQChar* name) {
 /*
  * Call Squirrel function with one string parameter
  */
-SQBool callSqFunctionOneString(HSQUIRRELVM v, const SQChar* name, const SQChar* param) {
+SQBool callSqFunctionString(HSQUIRRELVM v, const SQChar* name, const SQChar* param) {
 	SQBool result = SQFalse;
 
 	SQInteger top = sq_gettop(v);
@@ -52,6 +52,49 @@ SQBool callSqFunctionOneString(HSQUIRRELVM v, const SQChar* name, const SQChar* 
 		sq_pushroottable(v);
 		sq_pushstring(v, param, -1);
 		result = SQ_SUCCEEDED(sq_call(v, 2, SQFalse, SQTrue));
+	}
+	sq_settop(v,top);
+
+	return result;
+}
+/*
+ * Call Squirrel function with no parameter, returns integer
+ * This call assumes positive return value, returns -1 if sq_call is failed.
+ */
+SQInteger callSqFunctionNoParam_Int(HSQUIRRELVM v, const SQChar* name) {
+	SQInteger result = -1;
+
+	SQInteger top = sq_gettop(v);
+	sq_pushroottable(v);
+	sq_pushstring(v, name, -1);
+	if(SQ_SUCCEEDED(sq_get(v, -2))) {
+		sq_pushroottable(v);
+		if (SQ_SUCCEEDED(sq_call(v, 1, SQFalse, SQTrue))) {
+			sq_getinteger(v, -1, &result);
+			sq_pop(v, 1);
+		}
+	}
+	sq_settop(v,top);
+
+	return result;
+}
+/*
+ * Call Squirrel function with one integer parameter, returns integer
+ * This call assumes positive return value, returns -1 if sq_call is failed.
+ */
+SQInteger callSqFunctionInt_Int(HSQUIRRELVM v, const SQChar* name, SQInteger param) {
+	SQInteger result = -1;
+
+	SQInteger top = sq_gettop(v);
+	sq_pushroottable(v);
+	sq_pushstring(v, name, -1);
+	if(SQ_SUCCEEDED(sq_get(v, -2))) {
+		sq_pushroottable(v);
+		sq_pushinteger(v, param);
+		if (SQ_SUCCEEDED(sq_call(v, 2, SQFalse, SQTrue))) {
+			sq_getinteger(v, -1, &result);
+			sq_pop(v, 1);
+		}
 	}
 	sq_settop(v,top);
 
@@ -79,7 +122,7 @@ void sq_errorfunc(HSQUIRRELVM v,const SQChar *s,...) {
     scvsprintf(text, s, args);
     va_end(args);
 
-    callSqFunctionOneString(v, "onError", text);
+    callSqFunctionString(v, "onError", text);
 
     LOGW(text);
 }

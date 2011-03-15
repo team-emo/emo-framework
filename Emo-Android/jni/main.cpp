@@ -88,10 +88,8 @@ static int engine_init_display(struct engine* engine) {
     engine->sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
     engine->lastError = EMO_NO_ERROR;
 
-    // enable/disable default callback functions
-    engine->enableSQOnLoad      = SQTrue;
+    // disable drawframe callback by default to improve performance
     engine->enableSQOnDrawFrame = SQFalse;
-    engine->enableSQOnDispose   = SQTrue;
 
     emo_init_display(engine);
     

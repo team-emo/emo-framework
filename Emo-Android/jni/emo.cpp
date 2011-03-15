@@ -32,7 +32,7 @@ void emo_init_display(struct engine* engine) {
     AAsset* asset = AAssetManager_open(mgr, SQUIRREL_MAIN_SCRIPT, AASSET_MODE_UNKNOWN);
     if (asset == NULL) {
     	engine->lastError = ERR_SCRIPT_OPEN;
-    	LOGE("Failed to open Emo main script file");
+    	LOGE("Failed to open main script file");
     	return;
     }
 
@@ -49,15 +49,15 @@ void emo_init_display(struct engine* engine) {
         return;
     }
 
-    if (engine->enableSQOnLoad) {
-    	callSqFunctionNoParam(engine->sqvm, "onLoad");
-    }
+    callSqFunctionNoParam(engine->sqvm, "onLoad");
+    SQChar test[32];
+    SQInteger nint = callSqFunctionNoParam_Int(engine->sqvm, "niceHint");
+    sprintf(test, "%d", nint);
 
     /* init OpenGL state */
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     glEnable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
-
 }
 
 /*
@@ -72,25 +72,37 @@ void emo_draw_frame(struct engine* engine) {
     }
 }
 
-
 /*
  * Terminate the framework
  */
 void emo_term_display(struct engine* engine) {
-	if (engine->enableSQOnDispose) {
-		callSqFunctionNoParam(engine->sqvm, "onDispose");
-	}
+	callSqFunctionNoParam(engine->sqvm, "onDispose");
+}
+
+/*
+ * Process motion event
+ */
+static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
+    struct engine* engine = (struct engine*)app->userData;
+	return 0;
+}
+
+/*
+ * Process key event
+ */
+static int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
+    struct engine* engine = (struct engine*)app->userData;
+    return 0;
 }
 
 /**
  * Process the input event.
  */
 int32_t emo_handle_input(struct android_app* app, AInputEvent* event) {
-    struct engine* engine = (struct engine*)app->userData;
-    if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
-        engine->state.x = AMotionEvent_getX(event, 0);
-        engine->state.y = AMotionEvent_getY(event, 0);
-        return 1;
+	if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
+        return emo_event_motion(app, event);
+    } else if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_KEY) {
+        return emo_event_key(app, event);
     }
     return 0;
 }
@@ -99,6 +111,7 @@ int32_t emo_handle_input(struct android_app* app, AInputEvent* event) {
  * Gained focus
  */
 void emo_gained_focus(struct engine* engine) {
+	callSqFunctionNoParam(engine->sqvm, "onGainedFocus");
     engine->animating = 1;
 }
 
@@ -106,5 +119,6 @@ void emo_gained_focus(struct engine* engine) {
  * Lost focus
  */
 void emo_lost_focus(struct engine* engine) {
+	callSqFunctionNoParam(engine->sqvm, "onLostFocus");
     engine->animating = 0;
 }
