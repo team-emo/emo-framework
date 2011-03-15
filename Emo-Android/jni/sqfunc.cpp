@@ -24,6 +24,7 @@ SQInteger sq_lexer(SQUserPointer asset) {
 }
 /*
  * Call Squirrel function with no parameter
+ * Returns SQTrue if sq_call succeeds.
  */
 SQBool callSqFunctionNoParam(HSQUIRRELVM v, const SQChar* name) {
 	SQBool result = SQFalse;
@@ -41,6 +42,7 @@ SQBool callSqFunctionNoParam(HSQUIRRELVM v, const SQChar* name) {
 }
 /*
  * Call Squirrel function with one string parameter
+ * Returns SQTrue if sq_call succeeds.
  */
 SQBool callSqFunctionString(HSQUIRRELVM v, const SQChar* name, const SQChar* param) {
 	SQBool result = SQFalse;
@@ -59,7 +61,7 @@ SQBool callSqFunctionString(HSQUIRRELVM v, const SQChar* name, const SQChar* par
 }
 /*
  * Call Squirrel function with no parameter, returns integer
- * Returns default value if sq_call is failed.
+ * Returns default value if sq_call failed.
  */
 SQInteger callSqFunctionNoParam_Int(HSQUIRRELVM v, const SQChar* name, SQInteger defaultValue) {
 	SQInteger result = defaultValue;
@@ -79,7 +81,7 @@ SQInteger callSqFunctionNoParam_Int(HSQUIRRELVM v, const SQChar* name, SQInteger
 }
 /*
  * Call Squirrel function with no parameter, returns boolean
- * Returns the default value if sq_call is failed.
+ * Returns the default value if sq_call failed.
  */
 SQBool callSqFunctionNoParam_Bool(HSQUIRRELVM v, const SQChar* name, SQBool defaultValue) {
 	SQBool result = defaultValue;
@@ -100,7 +102,7 @@ SQBool callSqFunctionNoParam_Bool(HSQUIRRELVM v, const SQChar* name, SQBool defa
 
 /*
  * Call Squirrel function with one integer parameter, returns integer
- * Returns default value if sq_call is failed.
+ * Returns default value if sq_call failed.
  */
 SQInteger callSqFunctionInt_Int(HSQUIRRELVM v, const SQChar* name, SQInteger param, SQInteger defaultValue) {
 	SQInteger result = defaultValue;
