@@ -1,0 +1,463 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D3623260D0F684500981E51 /* Emo_iOSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* Emo_iOSAppDelegate.m */; };
+		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
+		28EC4C5911D54ECE0027AA9F /* Emo_iOSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28EC4C5711D54ECE0027AA9F /* Emo_iOSViewController.m */; };
+		28EC4C5A11D54ECE0027AA9F /* Emo_iOSViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28EC4C5811D54ECE0027AA9F /* Emo_iOSViewController.xib */; };
+		28FD14FE0DC6FC130079059D /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FD14FD0DC6FC130079059D /* EAGLView.m */; };
+		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
+		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		F90EA0A713309F2400C9600E /* emomain.nut in Resources */ = {isa = PBXBuildFile; fileRef = F90EA0561330946900C9600E /* emomain.nut */; };
+		F91D80AF13303C9E00F8805A /* sqstdaux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D808713303C9E00F8805A /* sqstdaux.cpp */; };
+		F91D80B013303C9E00F8805A /* sqstdblob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D808813303C9E00F8805A /* sqstdblob.cpp */; };
+		F91D80B113303C9E00F8805A /* sqstdio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D808A13303C9E00F8805A /* sqstdio.cpp */; };
+		F91D80B213303C9E00F8805A /* sqstdmath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D808B13303C9E00F8805A /* sqstdmath.cpp */; };
+		F91D80B313303C9E00F8805A /* sqstdrex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D808C13303C9E00F8805A /* sqstdrex.cpp */; };
+		F91D80B513303C9E00F8805A /* sqstdstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D808E13303C9E00F8805A /* sqstdstream.cpp */; };
+		F91D80B613303C9E00F8805A /* sqstdstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D809013303C9E00F8805A /* sqstdstring.cpp */; };
+		F91D80B713303C9E00F8805A /* sqstdsystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D809113303C9E00F8805A /* sqstdsystem.cpp */; };
+		F91D80B813303C9E00F8805A /* sqapi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D809313303C9E00F8805A /* sqapi.cpp */; };
+		F91D80B913303C9E00F8805A /* sqbaselib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D809513303C9E00F8805A /* sqbaselib.cpp */; };
+		F91D80BA13303C9E00F8805A /* sqclass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D809613303C9E00F8805A /* sqclass.cpp */; };
+		F91D80BB13303C9E00F8805A /* sqcompiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D809913303C9E00F8805A /* sqcompiler.cpp */; };
+		F91D80BC13303C9E00F8805A /* sqdebug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D809B13303C9E00F8805A /* sqdebug.cpp */; };
+		F91D80BD13303C9E00F8805A /* sqfuncstate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D809D13303C9E00F8805A /* sqfuncstate.cpp */; };
+		F91D80BE13303C9E00F8805A /* sqlexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D809F13303C9E00F8805A /* sqlexer.cpp */; };
+		F91D80BF13303C9E00F8805A /* sqmem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D80A113303C9E00F8805A /* sqmem.cpp */; };
+		F91D80C013303C9E00F8805A /* sqobject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D80A213303C9E00F8805A /* sqobject.cpp */; };
+		F91D80C113303C9E00F8805A /* sqstate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D80A613303C9E00F8805A /* sqstate.cpp */; };
+		F91D80C213303C9E00F8805A /* sqtable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D80A913303C9E00F8805A /* sqtable.cpp */; };
+		F91D80C313303C9E00F8805A /* sqvm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F91D80AD13303C9E00F8805A /* sqvm.cpp */; };
+		F98288B61330487C003457D4 /* engine.m in Sources */ = {isa = PBXBuildFile; fileRef = F98288B51330487C003457D4 /* engine.m */; };
+		F9BE387113303F92004FF02B /* sqfunc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9BE386F13303F92004FF02B /* sqfunc.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D3623240D0F684500981E51 /* Emo_iOSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emo_iOSAppDelegate.h; sourceTree = "<group>"; };
+		1D3623250D0F684500981E51 /* Emo_iOSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Emo_iOSAppDelegate.m; sourceTree = "<group>"; };
+		1D6058910D05DD3D006BFB54 /* Emo-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Emo-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
+		28EC4C5611D54ECE0027AA9F /* Emo_iOSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emo_iOSViewController.h; sourceTree = "<group>"; };
+		28EC4C5711D54ECE0027AA9F /* Emo_iOSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Emo_iOSViewController.m; sourceTree = "<group>"; };
+		28EC4C5811D54ECE0027AA9F /* Emo_iOSViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Emo_iOSViewController.xib; sourceTree = "<group>"; };
+		28FD14FC0DC6FC130079059D /* EAGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
+		28FD14FD0DC6FC130079059D /* EAGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EAGLView.m; sourceTree = "<group>"; };
+		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		32CA4F630368D1EE00C91783 /* Emo_iOS_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emo_iOS_Prefix.pch; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Emo_iOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Emo_iOS-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		F90EA0561330946900C9600E /* emomain.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emomain.nut; sourceTree = "<group>"; };
+		F91D807F13303C9E00F8805A /* sqstdaux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqstdaux.h; sourceTree = "<group>"; };
+		F91D808013303C9E00F8805A /* sqstdblob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqstdblob.h; sourceTree = "<group>"; };
+		F91D808113303C9E00F8805A /* sqstdio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqstdio.h; sourceTree = "<group>"; };
+		F91D808213303C9E00F8805A /* sqstdmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqstdmath.h; sourceTree = "<group>"; };
+		F91D808313303C9E00F8805A /* sqstdstring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqstdstring.h; sourceTree = "<group>"; };
+		F91D808413303C9E00F8805A /* sqstdsystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqstdsystem.h; sourceTree = "<group>"; };
+		F91D808513303C9E00F8805A /* squirrel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = squirrel.h; sourceTree = "<group>"; };
+		F91D808713303C9E00F8805A /* sqstdaux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqstdaux.cpp; sourceTree = "<group>"; };
+		F91D808813303C9E00F8805A /* sqstdblob.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqstdblob.cpp; sourceTree = "<group>"; };
+		F91D808913303C9E00F8805A /* sqstdblobimpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqstdblobimpl.h; sourceTree = "<group>"; };
+		F91D808A13303C9E00F8805A /* sqstdio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqstdio.cpp; sourceTree = "<group>"; };
+		F91D808B13303C9E00F8805A /* sqstdmath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqstdmath.cpp; sourceTree = "<group>"; };
+		F91D808C13303C9E00F8805A /* sqstdrex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqstdrex.cpp; sourceTree = "<group>"; };
+		F91D808E13303C9E00F8805A /* sqstdstream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqstdstream.cpp; sourceTree = "<group>"; };
+		F91D808F13303C9E00F8805A /* sqstdstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqstdstream.h; sourceTree = "<group>"; };
+		F91D809013303C9E00F8805A /* sqstdstring.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqstdstring.cpp; sourceTree = "<group>"; };
+		F91D809113303C9E00F8805A /* sqstdsystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqstdsystem.cpp; sourceTree = "<group>"; };
+		F91D809313303C9E00F8805A /* sqapi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqapi.cpp; sourceTree = "<group>"; };
+		F91D809413303C9E00F8805A /* sqarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqarray.h; sourceTree = "<group>"; };
+		F91D809513303C9E00F8805A /* sqbaselib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqbaselib.cpp; sourceTree = "<group>"; };
+		F91D809613303C9E00F8805A /* sqclass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqclass.cpp; sourceTree = "<group>"; };
+		F91D809713303C9E00F8805A /* sqclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqclass.h; sourceTree = "<group>"; };
+		F91D809813303C9E00F8805A /* sqclosure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqclosure.h; sourceTree = "<group>"; };
+		F91D809913303C9E00F8805A /* sqcompiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqcompiler.cpp; sourceTree = "<group>"; };
+		F91D809A13303C9E00F8805A /* sqcompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqcompiler.h; sourceTree = "<group>"; };
+		F91D809B13303C9E00F8805A /* sqdebug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqdebug.cpp; sourceTree = "<group>"; };
+		F91D809C13303C9E00F8805A /* sqfuncproto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqfuncproto.h; sourceTree = "<group>"; };
+		F91D809D13303C9E00F8805A /* sqfuncstate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqfuncstate.cpp; sourceTree = "<group>"; };
+		F91D809E13303C9E00F8805A /* sqfuncstate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqfuncstate.h; sourceTree = "<group>"; };
+		F91D809F13303C9E00F8805A /* sqlexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlexer.cpp; sourceTree = "<group>"; };
+		F91D80A013303C9E00F8805A /* sqlexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlexer.h; sourceTree = "<group>"; };
+		F91D80A113303C9E00F8805A /* sqmem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqmem.cpp; sourceTree = "<group>"; };
+		F91D80A213303C9E00F8805A /* sqobject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqobject.cpp; sourceTree = "<group>"; };
+		F91D80A313303C9E00F8805A /* sqobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqobject.h; sourceTree = "<group>"; };
+		F91D80A413303C9E00F8805A /* sqopcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqopcodes.h; sourceTree = "<group>"; };
+		F91D80A513303C9E00F8805A /* sqpcheader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqpcheader.h; sourceTree = "<group>"; };
+		F91D80A613303C9E00F8805A /* sqstate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqstate.cpp; sourceTree = "<group>"; };
+		F91D80A713303C9E00F8805A /* sqstate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqstate.h; sourceTree = "<group>"; };
+		F91D80A813303C9E00F8805A /* sqstring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqstring.h; sourceTree = "<group>"; };
+		F91D80A913303C9E00F8805A /* sqtable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqtable.cpp; sourceTree = "<group>"; };
+		F91D80AA13303C9E00F8805A /* sqtable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqtable.h; sourceTree = "<group>"; };
+		F91D80AB13303C9E00F8805A /* squserdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = squserdata.h; sourceTree = "<group>"; };
+		F91D80AC13303C9E00F8805A /* squtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = squtils.h; sourceTree = "<group>"; };
+		F91D80AD13303C9E00F8805A /* sqvm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqvm.cpp; sourceTree = "<group>"; };
+		F91D80AE13303C9E00F8805A /* sqvm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqvm.h; sourceTree = "<group>"; };
+		F98288B41330487C003457D4 /* engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = engine.h; path = emo/engine.h; sourceTree = "<group>"; };
+		F98288B51330487C003457D4 /* engine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = engine.m; path = emo/engine.m; sourceTree = "<group>"; };
+		F9BE386E13303F92004FF02B /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = common.h; path = emo/common.h; sourceTree = "<group>"; };
+		F9BE386F13303F92004FF02B /* sqfunc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = sqfunc.m; path = emo/sqfunc.m; sourceTree = "<group>"; };
+		F9BE387013303F92004FF02B /* sqfunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqfunc.h; path = emo/sqfunc.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D60588F0D05DD3D006BFB54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
+				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				28FD14FC0DC6FC130079059D /* EAGLView.h */,
+				28FD14FD0DC6FC130079059D /* EAGLView.m */,
+				1D3623240D0F684500981E51 /* Emo_iOSAppDelegate.h */,
+				1D3623250D0F684500981E51 /* Emo_iOSAppDelegate.m */,
+				28EC4C5611D54ECE0027AA9F /* Emo_iOSViewController.h */,
+				28EC4C5711D54ECE0027AA9F /* Emo_iOSViewController.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D6058910D05DD3D006BFB54 /* Emo-iOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				F9BE386D13303F83004FF02B /* Emo */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				F91D807D13303C9E00F8805A /* squirrel */,
+				32CA4F630368D1EE00C91783 /* Emo_iOS_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				28EC4C5811D54ECE0027AA9F /* Emo_iOSViewController.xib */,
+				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
+				8D1107310486CEB800E47090 /* Emo_iOS-Info.plist */,
+				F90EA0561330946900C9600E /* emomain.nut */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
+				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F91D807D13303C9E00F8805A /* squirrel */ = {
+			isa = PBXGroup;
+			children = (
+				F91D807E13303C9E00F8805A /* include */,
+				F91D808613303C9E00F8805A /* sqstdlib */,
+				F91D809213303C9E00F8805A /* squirrel */,
+			);
+			path = squirrel;
+			sourceTree = "<group>";
+		};
+		F91D807E13303C9E00F8805A /* include */ = {
+			isa = PBXGroup;
+			children = (
+				F91D807F13303C9E00F8805A /* sqstdaux.h */,
+				F91D808013303C9E00F8805A /* sqstdblob.h */,
+				F91D808113303C9E00F8805A /* sqstdio.h */,
+				F91D808213303C9E00F8805A /* sqstdmath.h */,
+				F91D808313303C9E00F8805A /* sqstdstring.h */,
+				F91D808413303C9E00F8805A /* sqstdsystem.h */,
+				F91D808513303C9E00F8805A /* squirrel.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		F91D808613303C9E00F8805A /* sqstdlib */ = {
+			isa = PBXGroup;
+			children = (
+				F91D808713303C9E00F8805A /* sqstdaux.cpp */,
+				F91D808813303C9E00F8805A /* sqstdblob.cpp */,
+				F91D808913303C9E00F8805A /* sqstdblobimpl.h */,
+				F91D808A13303C9E00F8805A /* sqstdio.cpp */,
+				F91D808B13303C9E00F8805A /* sqstdmath.cpp */,
+				F91D808C13303C9E00F8805A /* sqstdrex.cpp */,
+				F91D808E13303C9E00F8805A /* sqstdstream.cpp */,
+				F91D808F13303C9E00F8805A /* sqstdstream.h */,
+				F91D809013303C9E00F8805A /* sqstdstring.cpp */,
+				F91D809113303C9E00F8805A /* sqstdsystem.cpp */,
+			);
+			path = sqstdlib;
+			sourceTree = "<group>";
+		};
+		F91D809213303C9E00F8805A /* squirrel */ = {
+			isa = PBXGroup;
+			children = (
+				F91D809313303C9E00F8805A /* sqapi.cpp */,
+				F91D809413303C9E00F8805A /* sqarray.h */,
+				F91D809513303C9E00F8805A /* sqbaselib.cpp */,
+				F91D809613303C9E00F8805A /* sqclass.cpp */,
+				F91D809713303C9E00F8805A /* sqclass.h */,
+				F91D809813303C9E00F8805A /* sqclosure.h */,
+				F91D809913303C9E00F8805A /* sqcompiler.cpp */,
+				F91D809A13303C9E00F8805A /* sqcompiler.h */,
+				F91D809B13303C9E00F8805A /* sqdebug.cpp */,
+				F91D809C13303C9E00F8805A /* sqfuncproto.h */,
+				F91D809D13303C9E00F8805A /* sqfuncstate.cpp */,
+				F91D809E13303C9E00F8805A /* sqfuncstate.h */,
+				F91D809F13303C9E00F8805A /* sqlexer.cpp */,
+				F91D80A013303C9E00F8805A /* sqlexer.h */,
+				F91D80A113303C9E00F8805A /* sqmem.cpp */,
+				F91D80A213303C9E00F8805A /* sqobject.cpp */,
+				F91D80A313303C9E00F8805A /* sqobject.h */,
+				F91D80A413303C9E00F8805A /* sqopcodes.h */,
+				F91D80A513303C9E00F8805A /* sqpcheader.h */,
+				F91D80A613303C9E00F8805A /* sqstate.cpp */,
+				F91D80A713303C9E00F8805A /* sqstate.h */,
+				F91D80A813303C9E00F8805A /* sqstring.h */,
+				F91D80A913303C9E00F8805A /* sqtable.cpp */,
+				F91D80AA13303C9E00F8805A /* sqtable.h */,
+				F91D80AB13303C9E00F8805A /* squserdata.h */,
+				F91D80AC13303C9E00F8805A /* squtils.h */,
+				F91D80AD13303C9E00F8805A /* sqvm.cpp */,
+				F91D80AE13303C9E00F8805A /* sqvm.h */,
+			);
+			path = squirrel;
+			sourceTree = "<group>";
+		};
+		F9BE386D13303F83004FF02B /* Emo */ = {
+			isa = PBXGroup;
+			children = (
+				F98288B41330487C003457D4 /* engine.h */,
+				F98288B51330487C003457D4 /* engine.m */,
+				F9BE386E13303F92004FF02B /* common.h */,
+				F9BE386F13303F92004FF02B /* sqfunc.m */,
+				F9BE387013303F92004FF02B /* sqfunc.h */,
+			);
+			name = Emo;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D6058900D05DD3D006BFB54 /* Emo-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Emo-iOS" */;
+			buildPhases = (
+				1D60588D0D05DD3D006BFB54 /* Resources */,
+				1D60588E0D05DD3D006BFB54 /* Sources */,
+				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Emo-iOS";
+			productName = "Emo-iOS";
+			productReference = 1D6058910D05DD3D006BFB54 /* Emo-iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Emo-iOS" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D6058900D05DD3D006BFB54 /* Emo-iOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D60588D0D05DD3D006BFB54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F90EA0A713309F2400C9600E /* emomain.nut in Resources */,
+				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
+				28EC4C5A11D54ECE0027AA9F /* Emo_iOSViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D60588E0D05DD3D006BFB54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
+				1D3623260D0F684500981E51 /* Emo_iOSAppDelegate.m in Sources */,
+				28FD14FE0DC6FC130079059D /* EAGLView.m in Sources */,
+				28EC4C5911D54ECE0027AA9F /* Emo_iOSViewController.m in Sources */,
+				F91D80AF13303C9E00F8805A /* sqstdaux.cpp in Sources */,
+				F91D80B013303C9E00F8805A /* sqstdblob.cpp in Sources */,
+				F91D80B113303C9E00F8805A /* sqstdio.cpp in Sources */,
+				F91D80B213303C9E00F8805A /* sqstdmath.cpp in Sources */,
+				F91D80B313303C9E00F8805A /* sqstdrex.cpp in Sources */,
+				F91D80B513303C9E00F8805A /* sqstdstream.cpp in Sources */,
+				F91D80B613303C9E00F8805A /* sqstdstring.cpp in Sources */,
+				F91D80B713303C9E00F8805A /* sqstdsystem.cpp in Sources */,
+				F91D80B813303C9E00F8805A /* sqapi.cpp in Sources */,
+				F91D80B913303C9E00F8805A /* sqbaselib.cpp in Sources */,
+				F91D80BA13303C9E00F8805A /* sqclass.cpp in Sources */,
+				F91D80BB13303C9E00F8805A /* sqcompiler.cpp in Sources */,
+				F91D80BC13303C9E00F8805A /* sqdebug.cpp in Sources */,
+				F91D80BD13303C9E00F8805A /* sqfuncstate.cpp in Sources */,
+				F91D80BE13303C9E00F8805A /* sqlexer.cpp in Sources */,
+				F91D80BF13303C9E00F8805A /* sqmem.cpp in Sources */,
+				F91D80C013303C9E00F8805A /* sqobject.cpp in Sources */,
+				F91D80C113303C9E00F8805A /* sqstate.cpp in Sources */,
+				F91D80C213303C9E00F8805A /* sqtable.cpp in Sources */,
+				F91D80C313303C9E00F8805A /* sqvm.cpp in Sources */,
+				F9BE387113303F92004FF02B /* sqfunc.m in Sources */,
+				F98288B61330487C003457D4 /* engine.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1D6058940D05DD3E006BFB54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Emo_iOS_Prefix.pch;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "Emo_iOS-Info.plist";
+				PRODUCT_NAME = "Emo-iOS";
+			};
+			name = Debug;
+		};
+		1D6058950D05DD3E006BFB54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Emo_iOS_Prefix.pch;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "Emo_iOS-Info.plist";
+				PRODUCT_NAME = "Emo-iOS";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					emo,
+					squirrel/include,
+				);
+				PREBINDING = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PREBINDING = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Emo-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D6058940D05DD3E006BFB54 /* Debug */,
+				1D6058950D05DD3E006BFB54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Emo-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
