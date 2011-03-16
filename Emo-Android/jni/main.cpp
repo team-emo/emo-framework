@@ -17,7 +17,7 @@
 struct engine *g_engine;
 
 /*
- * extern
+ * extern common functions
  */
 extern void LOGI(const SQChar* msg);
 extern void LOGW(const SQChar* msg);
