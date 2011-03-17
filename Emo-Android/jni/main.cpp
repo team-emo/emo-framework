@@ -210,7 +210,6 @@ static void engine_term_display(struct engine* engine) {
     engine->context = EGL_NO_CONTEXT;
     engine->surface = EGL_NO_SURFACE;
     
-    sq_pop(engine->sqvm,1);
     sq_close(engine->sqvm);
 }
 /**
