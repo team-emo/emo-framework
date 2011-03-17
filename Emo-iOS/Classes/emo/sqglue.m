@@ -1,9 +1,11 @@
+#include "stdio.h"
+#include "string.h"
 #include "squirrel.h"
 #include "sqstdio.h"
 #include "sqstdaux.h"
 #include "sqglue.h"
-#include "common.h";
-#include "sqfunc.h";
+#include "common.h"
+#include "sqfunc.h"
 
 /*
  * Logging
