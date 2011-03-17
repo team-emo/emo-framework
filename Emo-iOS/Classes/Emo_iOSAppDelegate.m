@@ -1,13 +1,6 @@
-//
-//  Emo_iOSAppDelegate.m
-//  Emo-iOS
-//
-//  Created by Kota Iguchi on 11/03/16.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
-//
-
 #import "Emo_iOSAppDelegate.h"
 #import "EmoViewController.h"
+#import "EmoView.h"
 
 @implementation Emo_iOSAppDelegate
 
@@ -16,7 +9,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	
+    viewController = [[EmoViewController alloc] init];
+	viewController.view = [[EmoView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	[viewController awakeFromNib];
+	
     [self.window addSubview:self.viewController.view];
+	
+	[window makeKeyAndVisible];
+
     return YES;
 }
 
@@ -41,7 +43,6 @@
 {
     [viewController release];
     [window release];
-    
     [super dealloc];
 }
 
