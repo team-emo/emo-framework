@@ -14,7 +14,6 @@
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28EC4C5911D54ECE0027AA9F /* Emo_iOSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28EC4C5711D54ECE0027AA9F /* Emo_iOSViewController.m */; };
 		28EC4C5A11D54ECE0027AA9F /* Emo_iOSViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28EC4C5811D54ECE0027AA9F /* Emo_iOSViewController.xib */; };
-		28FD14FE0DC6FC130079059D /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FD14FD0DC6FC130079059D /* EAGLView.m */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
 		F937BBB11331890D00DCE63B /* engine.m in Sources */ = {isa = PBXBuildFile; fileRef = F937BBAE1331890D00DCE63B /* engine.m */; };
@@ -40,6 +39,7 @@
 		F937BBF61331891900DCE63B /* sqtable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F937BBDE1331891900DCE63B /* sqtable.cpp */; };
 		F937BBF71331891900DCE63B /* sqvm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F937BBE21331891900DCE63B /* sqvm.cpp */; };
 		F937BBFE1331898800DCE63B /* emomain.nut in Resources */ = {isa = PBXBuildFile; fileRef = F937BBFD1331898800DCE63B /* emomain.nut */; };
+		F94593DA1331935E00290114 /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = F94593D91331935E00290114 /* EAGLView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,8 +52,6 @@
 		28EC4C5611D54ECE0027AA9F /* Emo_iOSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emo_iOSViewController.h; sourceTree = "<group>"; };
 		28EC4C5711D54ECE0027AA9F /* Emo_iOSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Emo_iOSViewController.m; sourceTree = "<group>"; };
 		28EC4C5811D54ECE0027AA9F /* Emo_iOSViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Emo_iOSViewController.xib; sourceTree = "<group>"; };
-		28FD14FC0DC6FC130079059D /* EAGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
-		28FD14FD0DC6FC130079059D /* EAGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EAGLView.m; sourceTree = "<group>"; };
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -110,6 +108,8 @@
 		F937BBE21331891900DCE63B /* sqvm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqvm.cpp; sourceTree = "<group>"; };
 		F937BBE31331891900DCE63B /* sqvm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqvm.h; sourceTree = "<group>"; };
 		F937BBFD1331898800DCE63B /* emomain.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emomain.nut; path = Resources/emomain.nut; sourceTree = "<group>"; };
+		F94593D81331935E00290114 /* EAGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
+		F94593D91331935E00290114 /* EAGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EAGLView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,8 +132,6 @@
 			children = (
 				F937BBB31331891900DCE63B /* squirrel */,
 				F937BBAB1331890D00DCE63B /* emo */,
-				28FD14FC0DC6FC130079059D /* EAGLView.h */,
-				28FD14FD0DC6FC130079059D /* EAGLView.m */,
 				1D3623240D0F684500981E51 /* Emo_iOSAppDelegate.h */,
 				1D3623250D0F684500981E51 /* Emo_iOSAppDelegate.m */,
 				28EC4C5611D54ECE0027AA9F /* Emo_iOSViewController.h */,
@@ -196,6 +194,8 @@
 		F937BBAB1331890D00DCE63B /* emo */ = {
 			isa = PBXGroup;
 			children = (
+				F94593D81331935E00290114 /* EAGLView.h */,
+				F94593D91331935E00290114 /* EAGLView.m */,
 				F937BBAC1331890D00DCE63B /* common.h */,
 				F937BBAD1331890D00DCE63B /* engine.h */,
 				F937BBAE1331890D00DCE63B /* engine.m */,
@@ -345,7 +345,6 @@
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* Emo_iOSAppDelegate.m in Sources */,
-				28FD14FE0DC6FC130079059D /* EAGLView.m in Sources */,
 				28EC4C5911D54ECE0027AA9F /* Emo_iOSViewController.m in Sources */,
 				F937BBB11331890D00DCE63B /* engine.m in Sources */,
 				F937BBB21331890D00DCE63B /* sqfunc.m in Sources */,
@@ -369,6 +368,7 @@
 				F937BBF51331891900DCE63B /* sqstate.cpp in Sources */,
 				F937BBF61331891900DCE63B /* sqtable.cpp in Sources */,
 				F937BBF71331891900DCE63B /* sqvm.cpp in Sources */,
+				F94593DA1331935E00290114 /* EAGLView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
