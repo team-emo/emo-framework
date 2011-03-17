@@ -1,5 +1,5 @@
 #import "common.h"
-#import "sqengine.h"
+#import "EmoEngine.h"
 #import "sqglue.h"
 
 void LOGI(const char* msg) {
@@ -33,7 +33,7 @@ void NSLOGW(NSString* msg) {
 - (BOOL)startEngine {
 	
 	enableSQOnDrawFrame = false;
-	lastError = EMO_NO_ERROR:
+	lastError = EMO_NO_ERROR;
 	
 	// initialize squirrel vm
 	if (!initSQGlue()) {
@@ -62,10 +62,11 @@ void NSLOGW(NSString* msg) {
 	}
 	
 	const char* script = [nscontent UTF8String];
-	const char* fname  = [fname UTF8String];
+	const char* sourcename  = [path UTF8String];
 
-	if (!sqGlue_compile(script, fname)) {
+	if (!sqGlue_compile(script, sourcename)) {
 		lastError = ERR_SCRIPT_COMPILE;
+		return FALSE;
 	}
 	
 	return TRUE;

@@ -14,7 +14,7 @@ void NSLOGW(NSString* msg);
 @property BOOL enableSQOnDrawFrame;
 
 - (BOOL)loadScriptFromResource:(NSString *)fname;
-- (BOOL)startEngine
-- (BOOL)stopEngine
+- (BOOL)startEngine;
+- (BOOL)stopEngine;
 @end
 

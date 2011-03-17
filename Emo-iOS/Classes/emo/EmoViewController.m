@@ -11,6 +11,7 @@
 #import "EmoViewController.h"
 #import "EmoView.h"
 #import "common.h"
+#import "sqglue.h"
 
 @interface EmoViewController ()
 @property (nonatomic, retain) EAGLContext *context;
@@ -149,20 +150,20 @@
 }
 
 - (void)onLoad {
+	NSLOGI(@"onLoad Start");
+	if (![engine startEngine]) {
+		NSLOGE(@"Failed to start engine");
+	}
 	
-	[engine startEngine]
-	
-	
-	BOOL result = [engine loadScriptFromResource:@SQUIRREL_MAIN_SCRIPT];
-	if (!result) {
-		if (engine.lastError == ERR_SCRIPT_OPEN) {
-			NSLOGE(@"Failed to load script");
-		}
+	if (![engine loadScriptFromResource:@SQUIRREL_MAIN_SCRIPT]) {
+		NSLOGE(@"Failed to load script");
 	}
 	
 	/* call onLoad() */
-	callSqGlueFunctionNoParam("onLoad");
-	
+	if (!callSqGlueFunctionNoParam("onLoad")) {
+		NSLOGE(@"failed to call onLoad");		
+	}	
+	NSLOGI(@"onLoad End");
 }
 - (void)onGainedFocus {
 	callSqGlueFunctionNoParam("onGainedFocus");
@@ -172,6 +173,6 @@
 }
 - (void)onDispose {
 	callSqGlueFunctionNoParam("onDispose");
-	[engine stopEngine]
+	[engine stopEngine];
 }
 @end
