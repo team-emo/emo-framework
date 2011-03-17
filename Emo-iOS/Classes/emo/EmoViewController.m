@@ -150,7 +150,6 @@
 }
 
 - (void)onLoad {
-	NSLOGI(@"onLoad Start");
 	if (![engine startEngine]) {
 		NSLOGE(@"Failed to start engine");
 	}
@@ -163,7 +162,6 @@
 	if (!callSqGlueFunctionNoParam("onLoad")) {
 		NSLOGE(@"failed to call onLoad");		
 	}	
-	NSLOGI(@"onLoad End");
 }
 - (void)onGainedFocus {
 	callSqGlueFunctionNoParam("onGainedFocus");

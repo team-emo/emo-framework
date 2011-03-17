@@ -64,8 +64,9 @@ void NSLOGW(NSString* msg) {
 	const char* script = [nscontent UTF8String];
 	const char* sourcename  = [path UTF8String];
 
-	if (!sqGlue_compile(script, sourcename)) {
-		lastError = ERR_SCRIPT_COMPILE;
+	int compileResult = sqGlue_compile(script, sourcename);
+	if (compileResult != EMO_NO_ERROR) {
+		lastError = compileResult;
 		return FALSE;
 	}
 	
