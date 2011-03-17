@@ -28,16 +28,28 @@ void NSLOGW(NSString* msg) {
 
 @implementation EmoEngine
 @synthesize lastError;
+@synthesize enableSQOnDrawFrame;
 
-- (id)init {
-    self = [super init];
-    if (self != nil) {
-		
-		// initialize squirrel vm
-		initSQGlue();
-		
-    }
-    return self;
+- (BOOL)startEngine {
+	
+	enableSQOnDrawFrame = false;
+	lastError = EMO_NO_ERROR:
+	
+	// initialize squirrel vm
+	if (!initSQGlue()) {
+		lastError = ERR_VM_OPEN;
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+- (BOOL)stopEngine {
+	if (!stopSQGlue()) {
+		lastError = ERR_VM_CLOSE;
+		return FALSE;
+	}
+	return TRUE;
 }
 
 - (BOOL)loadScriptFromResource:(NSString *)fname {
@@ -50,10 +62,9 @@ void NSLOGW(NSString* msg) {
 	}
 	
 	const char* script = [nscontent UTF8String];
+	const char* fname  = [fname UTF8String];
 
-	if (sqGlue_compile(script)) {
-		lastError = EMO_NO_ERROR;
-	} else {
+	if (!sqGlue_compile(script, fname)) {
 		lastError = ERR_SCRIPT_COMPILE;
 	}
 	

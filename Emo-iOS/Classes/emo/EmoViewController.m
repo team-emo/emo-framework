@@ -137,7 +137,7 @@
 {
     [(EmoView *)self.view setFramebuffer];
     
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glClearColor(0, 0, 0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
     [(EmoView *)self.view presentFramebuffer];
@@ -149,23 +149,29 @@
 }
 
 - (void)onLoad {
-	LOGI("onLoad");	
-	if (engine != nil) {
-		BOOL result = [engine loadScriptFromResource:@"emomain.nut"];
-		if (!result) {
-			if (engine.lastError == ERR_SCRIPT_OPEN) {
-				NSLOGE(@"Failed to load script");
-			}
+	
+	[engine startEngine]
+	
+	
+	BOOL result = [engine loadScriptFromResource:@SQUIRREL_MAIN_SCRIPT];
+	if (!result) {
+		if (engine.lastError == ERR_SCRIPT_OPEN) {
+			NSLOGE(@"Failed to load script");
 		}
 	}
+	
+	/* call onLoad() */
+	callSqGlueFunctionNoParam("onLoad");
+	
 }
 - (void)onGainedFocus {
-	LOGI("onGainedFocus");	
+	callSqGlueFunctionNoParam("onGainedFocus");
 }
 - (void)onLostFocus {
-	LOGI("onLostFocus");
+	callSqGlueFunctionNoParam("onLostFocus");
 }
 - (void)onDispose {
-	LOGI("onDispose");	
+	callSqGlueFunctionNoParam("onDispose");
+	[engine stopEngine]
 }
 @end

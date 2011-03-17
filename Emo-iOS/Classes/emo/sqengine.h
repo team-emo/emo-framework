@@ -8,9 +8,13 @@ void NSLOGW(NSString* msg);
 
 @interface EmoEngine : NSObject {
 	int lastError;
+	BOOL enableSQOnDrawFrame;
 }
 @property int lastError;
+@property BOOL enableSQOnDrawFrame;
 
 - (BOOL)loadScriptFromResource:(NSString *)fname;
+- (BOOL)startEngine
+- (BOOL)stopEngine
 @end
 
