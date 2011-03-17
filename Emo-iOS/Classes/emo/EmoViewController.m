@@ -8,16 +8,16 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-#import "Emo_iOSViewController.h"
-#import "EAGLView.h"
+#import "EmoViewController.h"
+#import "EmoView.h"
 #import "common.h"
 
-@interface Emo_iOSViewController ()
+@interface EmoViewController ()
 @property (nonatomic, retain) EAGLContext *context;
 @property (nonatomic, assign) CADisplayLink *displayLink;
 @end
 
-@implementation Emo_iOSViewController
+@implementation EmoViewController
 
 @synthesize animating, context, displayLink;
 @synthesize engine;
@@ -39,8 +39,8 @@
 	self.context = aContext;
 	[aContext release];
 	
-    [(EAGLView *)self.view setContext:context];
-    [(EAGLView *)self.view setFramebuffer];
+    [(EmoView *)self.view setContext:context];
+    [(EmoView *)self.view setFramebuffer];
         
     animating = FALSE;
     animationFrameInterval = 1;
@@ -135,12 +135,12 @@
 
 - (void)drawFrame
 {
-    [(EAGLView *)self.view setFramebuffer];
+    [(EmoView *)self.view setFramebuffer];
     
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    [(EAGLView *)self.view presentFramebuffer];
+    [(EmoView *)self.view presentFramebuffer];
 }
 
 - (void)didReceiveMemoryWarning

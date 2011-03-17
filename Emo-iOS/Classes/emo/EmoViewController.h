@@ -1,5 +1,5 @@
 //
-//  Emo_iOSViewController.h
+//  EmoViewController.h
 //  Emo-iOS
 //
 //  Created by Kota Iguchi on 11/03/16.
@@ -16,7 +16,7 @@
 #import <OpenGLES/ES2/glext.h>
 #import <engine.h>
 
-@interface Emo_iOSViewController : UIViewController
+@interface EmoViewController : UIViewController
 {
     EAGLContext *context;
     

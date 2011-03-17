@@ -7,7 +7,7 @@
 //
 
 #import "Emo_iOSAppDelegate.h"
-#import "Emo_iOSViewController.h"
+#import "EmoViewController.h"
 
 @implementation Emo_iOSAppDelegate
 

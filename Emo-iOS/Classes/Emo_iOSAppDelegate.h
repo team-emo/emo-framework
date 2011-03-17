@@ -8,15 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@class Emo_iOSViewController;
+@class EmoViewController;
 
 @interface Emo_iOSAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
-    Emo_iOSViewController *viewController;
+    EmoViewController *viewController;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet Emo_iOSViewController *viewController;
+@property (nonatomic, retain) IBOutlet EmoViewController *viewController;
 
 @end
 
