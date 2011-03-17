@@ -46,7 +46,7 @@
     animationFrameInterval = 1;
     self.displayLink = nil;
 	
-	self.engine = [[Engine alloc]init];
+	self.engine = [[EmoEngine alloc]init];
 	
 	[self onLoad];
 }

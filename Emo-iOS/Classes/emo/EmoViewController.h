@@ -1,11 +1,3 @@
-//
-//  EmoViewController.h
-//  Emo-iOS
-//
-//  Created by Kota Iguchi on 11/03/16.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 #import <OpenGLES/EAGL.h>
@@ -23,12 +15,12 @@
     BOOL animating;
     NSInteger animationFrameInterval;
     CADisplayLink *displayLink;
-	Engine *engine;
+	EmoEngine *engine;
 }
 
 @property (readonly, nonatomic, getter=isAnimating) BOOL animating;
 @property (nonatomic) NSInteger animationFrameInterval;
-@property (nonatomic, retain) Engine *engine;
+@property (nonatomic, retain) EmoEngine *engine;
 
 - (void)onLoad;
 - (void)startAnimation;

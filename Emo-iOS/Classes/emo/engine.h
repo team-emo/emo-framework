@@ -6,7 +6,7 @@ void NSLOGI(NSString* msg);
 void NSLOGE(NSString* msg);
 void NSLOGW(NSString* msg);
 
-@interface Engine : NSObject {
+@interface EmoEngine : NSObject {
 	int lastError;
 }
 @property int lastError;

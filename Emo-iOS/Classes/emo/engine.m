@@ -1,5 +1,6 @@
 #import "common.h"
 #import "engine.h"
+#import "sqglue.h"
 
 void LOGI(const char* msg) {
 	NSLog(@"%s INFO %s", EMO_LOG_TAG, msg);
@@ -25,8 +26,19 @@ void NSLOGW(NSString* msg) {
 	LOGW([msg UTF8String]);	
 }
 
-@implementation Engine
+@implementation EmoEngine
 @synthesize lastError;
+
+- (id)init {
+    self = [super init];
+    if (self != nil) {
+		
+		// initialize squirrel vm
+		initSQGlue();
+		
+    }
+    return self;
+}
 
 - (BOOL)loadScriptFromResource:(NSString *)fname {
 	NSString* path = [[NSBundle mainBundle] pathForResource:fname ofType:nil];
@@ -37,9 +49,13 @@ void NSLOGW(NSString* msg) {
 		return FALSE;
 	}
 	
-	const char* contents = [nscontent UTF8String];
-	
-	LOGI(contents);
+	const char* script = [nscontent UTF8String];
+
+	if (sqGlue_compile(script)) {
+		lastError = EMO_NO_ERROR;
+	} else {
+		lastError = ERR_SCRIPT_COMPILE;
+	}
 	
 	return TRUE;
 }
