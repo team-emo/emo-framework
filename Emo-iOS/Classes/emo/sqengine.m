@@ -1,5 +1,5 @@
 #import "common.h"
-#import "engine.h"
+#import "sqengine.h"
 #import "sqglue.h"
 
 void LOGI(const char* msg) {

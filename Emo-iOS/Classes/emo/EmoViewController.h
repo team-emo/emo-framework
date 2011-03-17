@@ -6,7 +6,7 @@
 #import <OpenGLES/ES1/glext.h>
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
-#import <engine.h>
+#import <sqengine.h>
 
 @interface EmoViewController : UIViewController
 {
