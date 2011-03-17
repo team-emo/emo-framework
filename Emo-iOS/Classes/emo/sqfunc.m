@@ -8,9 +8,12 @@
 #include <common.h>
 #include <sqfunc.h>
 
+/*
+ * Logging
+ */
 extern void LOGI(const SQChar* msg);
-extern void LOGE(const SQChar* msg);
 extern void LOGW(const SQChar* msg);
+extern void LOGE(const SQChar* msg);
 
 /*
  * Call Squirrel function with no parameter
