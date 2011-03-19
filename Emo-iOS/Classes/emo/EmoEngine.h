@@ -11,14 +11,14 @@ void NSLOGW(NSString* msg);
 @interface EmoEngine : NSObject {
 	HSQUIRRELVM sqvm;
 	int lastError;
-	BOOL enableSQOnDrawFrame;
+	BOOL isFrameInitialized;
 }
-@property int lastError;
-@property BOOL enableSQOnDrawFrame;
-@property HSQUIRRELVM sqvm;
+@property (readonly) int  lastError;
+@property (readonly) BOOL isFrameInitialized;
+@property (readonly) HSQUIRRELVM sqvm;
 
 + (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
-- (void)initDrawFrame;
+- (BOOL)initDrawFrame;
 - (BOOL)onLoad;
 - (BOOL)onGainedFocus;
 - (BOOL)onDrawFrame;

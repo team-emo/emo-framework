@@ -114,8 +114,6 @@
 {
     if (!animating)
     {
-		[engine initDrawFrame];
-		
         CADisplayLink *aDisplayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawFrame)];
         [aDisplayLink setFrameInterval:animationFrameInterval];
         [aDisplayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
@@ -138,10 +136,10 @@
 - (void)drawFrame
 {
     [(EmoView *)self.view setFramebuffer];
-    
-    glClearColor(0, 0, 0, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-	
+
+    [engine initDrawFrame];
+	[engine onDrawFrame];
+		
     [(EmoView *)self.view presentFramebuffer];
 }
 

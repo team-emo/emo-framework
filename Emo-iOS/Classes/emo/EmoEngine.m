@@ -7,7 +7,8 @@
 #import "EmoEngine.h"
 #import "sqfunc.h"
 
-static BOOL enablePerspectiveNicest = true;
+static BOOL enablePerspectiveNicest = TRUE;
+static BOOL enableOnDrawFrame = FALSE;
 
 void LOGI(const char* msg) {
 	NSLog(@"%s INFO %s", EMO_LOG_TAG, msg);
@@ -58,10 +59,13 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
 static void emoUpdateOptions(SQInteger value) {
     switch(value) {
 		case OPT_ENABLE_PERSPECTIVE_NICEST:
-			enablePerspectiveNicest = true;
+			enablePerspectiveNicest = TRUE;
 			break;
 		case OPT_ENABLE_PERSPECTIVE_FASTEST:
-			enablePerspectiveNicest = false;
+			enablePerspectiveNicest = FALSE;
+			break;
+		case OPT_ENABLE_ONDRAW_CALLBACK:
+			enableOnDrawFrame = TRUE;
 			break;
     }
 }
@@ -74,8 +78,7 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
     for(SQInteger n = 1; n <= nargs; n++) {
         if (sq_gettype(v, n) == OT_INTEGER) {
             SQInteger value;
-            sq_getinteger(v, -1, &value);
-            sq_poptop(v);
+            sq_getinteger(v, n, &value);
 			
             emoUpdateOptions(value);
         }
@@ -89,7 +92,7 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 
 @implementation EmoEngine
 @synthesize lastError;
-@synthesize enableSQOnDrawFrame;
+@synthesize isFrameInitialized;
 @synthesize sqvm;
 
 - (void)initEngine {
@@ -98,7 +101,7 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 }
 - (BOOL)startEngine {
 	
-	enableSQOnDrawFrame = false;
+	isFrameInitialized = FALSE;
 	lastError = EMO_NO_ERROR;
 	
 	sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
@@ -114,8 +117,12 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 	return TRUE;
 }
 
-- (void)initDrawFrame {
-    /* initialize OpenGL state */
+/*
+ * initialize OpenGL state 
+ */
+- (BOOL)initDrawFrame {
+
+	if (isFrameInitialized) return FALSE;
 	
     if (enablePerspectiveNicest) {
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -137,7 +144,11 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
     glEnable(GL_VERTEX_ARRAY);
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
-    glCullFace(GL_BACK);	
+    glCullFace(GL_BACK);
+	
+	isFrameInitialized = TRUE;
+	
+	return TRUE;
 }
 
 +(int)loadScriptFromResource:(const char*)chfname vm:(HSQUIRRELVM) v {
@@ -164,10 +175,13 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 	return callSqFunctionNoParam(sqvm, "onGainedFocus");
 }
 -(BOOL)onDrawFrame {
-	if (enableSQOnDrawFrame) {
+    glClearColor(0, 0, 0, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+	
+	if (enableOnDrawFrame) {
 		return callSqFunctionNoParam(sqvm, "onDrawFrame");
 	}
-	return false;
+	return FALSE;
 }
 -(BOOL)onLostFocus {
 	return callSqFunctionNoParam(sqvm, "onLostFocus");
