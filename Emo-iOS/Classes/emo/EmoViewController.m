@@ -153,7 +153,7 @@
 		NSLOGE(@"Failed to start engine");
 	}
 	
-	if (![engine loadScriptFromResource:@SQUIRREL_MAIN_SCRIPT]) {
+	if ([EmoEngine loadScriptFromResource:SQUIRREL_MAIN_SCRIPT vm:engine.sqvm] != EMO_NO_ERROR) {
 		NSLOGE(@"Failed to load script");
 	}
 	

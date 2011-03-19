@@ -26,11 +26,40 @@ void NSLOGW(NSString* msg) {
 	LOGW([msg UTF8String]);	
 }
 
+/*
+ * Import function called from squirrel script
+ * Returns number of parameters that are succeed to import.
+ */
+SQInteger emoImportScript(HSQUIRRELVM v) {
+	SQInteger succeedCount = 0;
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+    	if (sq_gettype(v, n) == OT_STRING) {
+    		const SQChar *fname;
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &fname);
+            sq_poptop(v);
+			
+    		if ([EmoEngine loadScriptFromResource:(const char*)fname vm:v] == EMO_NO_ERROR) {
+				succeedCount++;
+			}
+    	}
+    }
+	return succeedCount;
+}
+
+@interface EmoEngine (PrivateMethods)
+- (void)initEngine;
+@end
+
 @implementation EmoEngine
 @synthesize lastError;
 @synthesize enableSQOnDrawFrame;
 @synthesize sqvm;
 
+- (void)initEngine {
+	register_global_func(sqvm, emoImportScript, "emoImport");	
+}
 - (BOOL)startEngine {
 	
 	enableSQOnDrawFrame = false;
@@ -39,6 +68,7 @@ void NSLOGW(NSString* msg) {
 	sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
 	
 	initSQVM(sqvm);
+	[self initEngine];
 
 	return TRUE;
 }
@@ -48,21 +78,21 @@ void NSLOGW(NSString* msg) {
 	return TRUE;
 }
 
--(BOOL)loadScriptFromResource:(NSString *)fname {
++(int)loadScriptFromResource:(const char*)chfname vm:(HSQUIRRELVM) v {
+	NSString* fname = [[NSString alloc] initWithUTF8String:chfname];
 	NSString* path = [[NSBundle mainBundle] pathForResource:fname ofType:nil];
 	NSString* nscontent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error: nil];
 	
+	[fname release];
+	
 	if (nscontent == nil) {
-		lastError = ERR_SCRIPT_OPEN;
-		return FALSE;
+		return ERR_SCRIPT_OPEN;
 	}
 	
 	const char* script = [nscontent UTF8String];
 	const char* sourcename  = [path UTF8String];
 	
-	lastError = sqCompileBuffer(sqvm, script, sourcename);
-	
-	return lastError == EMO_NO_ERROR;
+	return sqCompileBuffer(v, script, sourcename);
 }
 
 -(BOOL)onLoad {
@@ -76,9 +106,5 @@ void NSLOGW(NSString* msg) {
 }
 -(BOOL)onDispose {
 	return callSqFunctionNoParam(sqvm, "onDispose");
-}
-
--(void) dealloc{
-	[super dealloc];
 }
 @end

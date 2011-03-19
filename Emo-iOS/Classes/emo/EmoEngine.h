@@ -17,7 +17,7 @@ void NSLOGW(NSString* msg);
 @property BOOL enableSQOnDrawFrame;
 @property HSQUIRRELVM sqvm;
 
-- (BOOL)loadScriptFromResource:(NSString *)fname;
++ (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 - (BOOL)onLoad;
 - (BOOL)onGainedFocus;
 - (BOOL)onLostFocus;

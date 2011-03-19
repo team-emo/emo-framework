@@ -2,7 +2,8 @@ local str = "Hello, Squirrel from File!";
 print(str);
 
 function onLoad() { 
-    print("onLoad"); 
+    print("onLoad");
+	emoImport("import.nut");
 }
 
 function onGainedFocus() {
