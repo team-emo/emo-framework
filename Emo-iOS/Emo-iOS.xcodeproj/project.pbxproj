@@ -38,7 +38,6 @@
 		F937BBFE1331898800DCE63B /* emomain.nut in Resources */ = {isa = PBXBuildFile; fileRef = F937BBFD1331898800DCE63B /* emomain.nut */; };
 		F94593DA1331935E00290114 /* EmoView.m in Sources */ = {isa = PBXBuildFile; fileRef = F94593D91331935E00290114 /* EmoView.m */; };
 		F94594221331975600290114 /* EmoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94594211331975600290114 /* EmoViewController.m */; };
-		F94594CF1331A99900290114 /* sqglue.m in Sources */ = {isa = PBXBuildFile; fileRef = F94594CE1331A99900290114 /* sqglue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,13 +101,11 @@
 		F937BBE11331891900DCE63B /* squtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = squtils.h; sourceTree = "<group>"; };
 		F937BBE21331891900DCE63B /* sqvm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqvm.cpp; sourceTree = "<group>"; };
 		F937BBE31331891900DCE63B /* sqvm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqvm.h; sourceTree = "<group>"; };
-		F937BBFD1331898800DCE63B /* emomain.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emomain.nut; path = Resources/emomain.nut; sourceTree = "<group>"; };
+		F937BBFD1331898800DCE63B /* emomain.nut */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; name = emomain.nut; path = Resources/emomain.nut; sourceTree = "<group>"; };
 		F94593D81331935E00290114 /* EmoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoView.h; sourceTree = "<group>"; };
 		F94593D91331935E00290114 /* EmoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoView.m; sourceTree = "<group>"; };
 		F94594201331975600290114 /* EmoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoViewController.h; sourceTree = "<group>"; };
 		F94594211331975600290114 /* EmoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoViewController.m; sourceTree = "<group>"; };
-		F94594CD1331A99900290114 /* sqglue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqglue.h; sourceTree = "<group>"; };
-		F94594CE1331A99900290114 /* sqglue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = sqglue.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,8 +195,6 @@
 				F937BBAE1331890D00DCE63B /* EmoEngine.m */,
 				F937BBAF1331890D00DCE63B /* sqfunc.h */,
 				F937BBB01331890D00DCE63B /* sqfunc.m */,
-				F94594CD1331A99900290114 /* sqglue.h */,
-				F94594CE1331A99900290114 /* sqglue.m */,
 			);
 			path = emo;
 			sourceTree = "<group>";
@@ -366,7 +361,6 @@
 				F937BBF71331891900DCE63B /* sqvm.cpp in Sources */,
 				F94593DA1331935E00290114 /* EmoView.m in Sources */,
 				F94594221331975600290114 /* EmoViewController.m in Sources */,
-				F94594CF1331A99900290114 /* sqglue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

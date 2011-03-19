@@ -15,6 +15,23 @@ extern void LOGI(const SQChar* msg);
 extern void LOGW(const SQChar* msg);
 extern void LOGE(const SQChar* msg);
 
+void initSQVM(HSQUIRRELVM v) {
+	sqstd_seterrorhandlers(v);
+	sq_setprintfunc(v, sq_printfunc, sq_errorfunc);
+}
+
+SQInteger sqCompileBuffer(HSQUIRRELVM v, const char* script, const char* sourcename) {
+	if (SQ_SUCCEEDED(sq_compilebuffer(v, script, scstrlen(script), sourcename, SQTrue))) {
+		sq_pushroottable(v);
+		if (SQ_FAILED(sq_call(v, 1, SQFalse, SQTrue))) {
+			return ERR_SCRIPT_CALL_ROOT;
+		}
+	} else {
+		return ERR_SCRIPT_COMPILE;
+	}
+	return EMO_NO_ERROR;
+}
+
 /*
  * Call Squirrel function with no parameter
  * Returns SQTrue if sq_call succeeds.

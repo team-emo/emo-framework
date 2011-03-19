@@ -1,6 +1,6 @@
 #import "common.h"
 #import "EmoEngine.h"
-#import "sqglue.h"
+#import "sqfunc.h"
 
 void LOGI(const char* msg) {
 	NSLog(@"%s INFO %s", EMO_LOG_TAG, msg);
@@ -29,30 +29,26 @@ void NSLOGW(NSString* msg) {
 @implementation EmoEngine
 @synthesize lastError;
 @synthesize enableSQOnDrawFrame;
+@synthesize sqvm;
 
 - (BOOL)startEngine {
 	
 	enableSQOnDrawFrame = false;
 	lastError = EMO_NO_ERROR;
 	
-	// initialize squirrel vm
-	if (!initSQGlue()) {
-		lastError = ERR_VM_OPEN;
-		return FALSE;
-	}
+	sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
+	
+	initSQVM(sqvm);
 
 	return TRUE;
 }
 
 - (BOOL)stopEngine {
-	if (!stopSQGlue()) {
-		lastError = ERR_VM_CLOSE;
-		return FALSE;
-	}
+	sq_close(sqvm);
 	return TRUE;
 }
 
-- (BOOL)loadScriptFromResource:(NSString *)fname {
+-(BOOL)loadScriptFromResource:(NSString *)fname {
 	NSString* path = [[NSBundle mainBundle] pathForResource:fname ofType:nil];
 	NSString* nscontent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error: nil];
 	
@@ -63,15 +59,16 @@ void NSLOGW(NSString* msg) {
 	
 	const char* script = [nscontent UTF8String];
 	const char* sourcename  = [path UTF8String];
-
-	int compileResult = sqGlue_compile(script, sourcename);
-	if (compileResult != EMO_NO_ERROR) {
-		lastError = compileResult;
-		return FALSE;
-	}
 	
-	return TRUE;
+	lastError = sqCompileBuffer(sqvm, script, sourcename);
+	
+	return lastError == EMO_NO_ERROR;
 }
+
+-(BOOL)callFunctionNoParam:(const SQChar*) name {
+	return callSqFunctionNoParam(sqvm, name);
+}
+
 -(void) dealloc{
 	[super dealloc];
 }

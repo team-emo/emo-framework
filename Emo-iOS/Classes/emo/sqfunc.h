@@ -1,3 +1,6 @@
+void initSQVM(HSQUIRRELVM v); 
+SQInteger sqCompileBuffer(HSQUIRRELVM v, const char* script, const char* sourcename);
+
 SQBool callSqFunctionNoParam(HSQUIRRELVM v, const SQChar* name);
 SQBool callSqFunctionString(HSQUIRRELVM v, const SQChar* name, const SQChar* param);
 SQInteger callSqFunctionNoParam_Int(HSQUIRRELVM v, const SQChar* name, SQInteger defaultValue);

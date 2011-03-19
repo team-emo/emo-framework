@@ -11,7 +11,6 @@
 #import "EmoViewController.h"
 #import "EmoView.h"
 #import "common.h"
-#import "sqglue.h"
 
 @interface EmoViewController ()
 @property (nonatomic, retain) EAGLContext *context;
@@ -159,18 +158,20 @@
 	}
 	
 	/* call onLoad() */
-	if (!callSqGlueFunctionNoParam("onLoad")) {
+	if (![engine callFunctionNoParam:"onLoad"]) {
 		NSLOGE(@"failed to call onLoad");		
 	}	
 }
 - (void)onGainedFocus {
-	callSqGlueFunctionNoParam("onGainedFocus");
+	[engine callFunctionNoParam:"onGainedFocus"];
 }
+
 - (void)onLostFocus {
-	callSqGlueFunctionNoParam("onLostFocus");
+	[engine callFunctionNoParam:"onLostFocus"];
 }
+
 - (void)onDispose {
-	callSqGlueFunctionNoParam("onDispose");
+	[engine callFunctionNoParam:"onDispose"];
 	[engine stopEngine];
 }
 @end
