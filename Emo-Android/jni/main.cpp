@@ -46,8 +46,8 @@ void emo_init_engine(struct engine* engine) {
     initSQVM(engine->sqvm);
 
     /* initialize squirrel functions */
-    register_global_func(engine->sqvm, emoImportScript, "emoImport");
-    register_global_func(engine->sqvm, emoSetOptions,   "emoSetOptions");
+    register_global_func(engine->sqvm, emoImportScript, "emo_import");
+    register_global_func(engine->sqvm, emoSetOptions,   "emo_options");
 
     /* load main script */
     loadScriptFromAsset(SQUIRREL_MAIN_SCRIPT);

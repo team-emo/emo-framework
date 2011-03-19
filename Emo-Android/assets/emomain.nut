@@ -1,4 +1,4 @@
-emoImport("emo.nut");
+emo_import("emo.nut");
 
 local str = "Hello, Squirrel from File!";
 print(str);
