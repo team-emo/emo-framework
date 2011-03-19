@@ -111,7 +111,7 @@ static void emoUpdateOptions(SQInteger value) {
 /*
  * option function called from squirrel script
  */
-void emoSetOptions(HSQUIRRELVM v) {
+SQInteger emoSetOptions(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
     for(SQInteger n = 1; n <= nargs; n++) {
         if (sq_gettype(v, n) == OT_INTEGER) {
@@ -121,5 +121,6 @@ void emoSetOptions(HSQUIRRELVM v) {
             emoUpdateOptions(value);
         }
     }
+    return 0;
 }
 
