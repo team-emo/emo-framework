@@ -18,8 +18,10 @@ void NSLOGW(NSString* msg);
 @property HSQUIRRELVM sqvm;
 
 + (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
+- (void)initDrawFrame;
 - (BOOL)onLoad;
 - (BOOL)onGainedFocus;
+- (BOOL)onDrawFrame;
 - (BOOL)onLostFocus;
 - (BOOL)onDispose;
 - (BOOL)startEngine;

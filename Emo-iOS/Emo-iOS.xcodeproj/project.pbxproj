@@ -38,7 +38,7 @@
 		F937BBFE1331898800DCE63B /* emomain.nut in Resources */ = {isa = PBXBuildFile; fileRef = F937BBFD1331898800DCE63B /* emomain.nut */; };
 		F94593DA1331935E00290114 /* EmoView.m in Sources */ = {isa = PBXBuildFile; fileRef = F94593D91331935E00290114 /* EmoView.m */; };
 		F94594221331975600290114 /* EmoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94594211331975600290114 /* EmoViewController.m */; };
-		F9B9DF1D133456B100B015C1 /* import.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9B9DF081334567800B015C1 /* import.nut */; };
+		F9D55A2D1334A55D00628930 /* emo.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D55A2C1334A55D00628930 /* emo.nut */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -107,7 +107,7 @@
 		F94593D91331935E00290114 /* EmoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoView.m; sourceTree = "<group>"; };
 		F94594201331975600290114 /* EmoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoViewController.h; sourceTree = "<group>"; };
 		F94594211331975600290114 /* EmoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoViewController.m; sourceTree = "<group>"; };
-		F9B9DF081334567800B015C1 /* import.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = import.nut; sourceTree = "<group>"; };
+		F9D55A2C1334A55D00628930 /* emo.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emo.nut; path = Resources/emo.nut; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,9 +168,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F9D55A2C1334A55D00628930 /* emo.nut */,
 				F937BBFD1331898800DCE63B /* emomain.nut */,
 				8D1107310486CEB800E47090 /* Emo_iOS-Info.plist */,
-				F9B9DF081334567800B015C1 /* import.nut */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -327,8 +327,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9B9DF1D133456B100B015C1 /* import.nut in Resources */,
 				F937BBFE1331898800DCE63B /* emomain.nut in Resources */,
+				F9D55A2D1334A55D00628930 /* emo.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

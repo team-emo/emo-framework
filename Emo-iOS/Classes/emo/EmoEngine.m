@@ -1,6 +1,13 @@
+#import <OpenGLES/ES1/gl.h>
+#import <OpenGLES/ES1/glext.h>
+#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES2/glext.h>
+
 #import "common.h"
 #import "EmoEngine.h"
 #import "sqfunc.h"
+
+static BOOL enablePerspectiveNicest = true;
 
 void LOGI(const char* msg) {
 	NSLog(@"%s INFO %s", EMO_LOG_TAG, msg);
@@ -48,6 +55,34 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
 	return succeedCount;
 }
 
+static void emoUpdateOptions(SQInteger value) {
+    switch(value) {
+		case OPT_ENABLE_PERSPECTIVE_NICEST:
+			enablePerspectiveNicest = true;
+			break;
+		case OPT_ENABLE_PERSPECTIVE_FASTEST:
+			enablePerspectiveNicest = false;
+			break;
+    }
+}
+
+/*
+ * option function called from squirrel script
+ */
+SQInteger emoSetOptions(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+        if (sq_gettype(v, n) == OT_INTEGER) {
+            SQInteger value;
+            sq_getinteger(v, -1, &value);
+            sq_poptop(v);
+			
+            emoUpdateOptions(value);
+        }
+    }
+	return 0;
+}
+
 @interface EmoEngine (PrivateMethods)
 - (void)initEngine;
 @end
@@ -58,7 +93,8 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
 @synthesize sqvm;
 
 - (void)initEngine {
-	register_global_func(sqvm, emoImportScript, "emoImport");	
+	register_global_func(sqvm, emoImportScript, "emo_import");	
+	register_global_func(sqvm, emoSetOptions,   "emo_options");	
 }
 - (BOOL)startEngine {
 	
@@ -76,6 +112,32 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
 - (BOOL)stopEngine {
 	sq_close(sqvm);
 	return TRUE;
+}
+
+- (void)initDrawFrame {
+    /* initialize OpenGL state */
+	
+    if (enablePerspectiveNicest) {
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    } else {
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+    }
+	
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_MULTISAMPLE);
+    glDisable(GL_DITHER);
+    glDisable(GL_COLOR_ARRAY);
+	
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_COORD_ARRAY);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+    glEnable(GL_VERTEX_ARRAY);
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
+    glCullFace(GL_BACK);	
 }
 
 +(int)loadScriptFromResource:(const char*)chfname vm:(HSQUIRRELVM) v {
@@ -100,6 +162,12 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
 }
 -(BOOL)onGainedFocus {
 	return callSqFunctionNoParam(sqvm, "onGainedFocus");
+}
+-(BOOL)onDrawFrame {
+	if (enableSQOnDrawFrame) {
+		return callSqFunctionNoParam(sqvm, "onDrawFrame");
+	}
+	return false;
 }
 -(BOOL)onLostFocus {
 	return callSqFunctionNoParam(sqvm, "onLostFocus");
