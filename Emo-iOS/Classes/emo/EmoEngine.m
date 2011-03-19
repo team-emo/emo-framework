@@ -65,8 +65,17 @@ void NSLOGW(NSString* msg) {
 	return lastError == EMO_NO_ERROR;
 }
 
--(BOOL)callFunctionNoParam:(const SQChar*) name {
-	return callSqFunctionNoParam(sqvm, name);
+-(BOOL)onLoad {
+	return callSqFunctionNoParam(sqvm, "onLoad");
+}
+-(BOOL)onGainedFocus {
+	return callSqFunctionNoParam(sqvm, "onGainedFocus");
+}
+-(BOOL)onLostFocus {
+	return callSqFunctionNoParam(sqvm, "onLostFocus");
+}
+-(BOOL)onDispose {
+	return callSqFunctionNoParam(sqvm, "onDispose");
 }
 
 -(void) dealloc{

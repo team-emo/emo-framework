@@ -158,20 +158,20 @@
 	}
 	
 	/* call onLoad() */
-	if (![engine callFunctionNoParam:"onLoad"]) {
+	if (![engine onLoad]) {
 		NSLOGE(@"failed to call onLoad");		
 	}	
 }
 - (void)onGainedFocus {
-	[engine callFunctionNoParam:"onGainedFocus"];
+	[engine onGainedFocus];
 }
 
 - (void)onLostFocus {
-	[engine callFunctionNoParam:"onLostFocus"];
+	[engine onLostFocus];
 }
 
 - (void)onDispose {
-	[engine callFunctionNoParam:"onDispose"];
+	[engine onDispose];
 	[engine stopEngine];
 }
 @end

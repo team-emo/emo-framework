@@ -18,7 +18,10 @@ void NSLOGW(NSString* msg);
 @property HSQUIRRELVM sqvm;
 
 - (BOOL)loadScriptFromResource:(NSString *)fname;
-- (BOOL)callFunctionNoParam:(const SQChar*) name;
+- (BOOL)onLoad;
+- (BOOL)onGainedFocus;
+- (BOOL)onLostFocus;
+- (BOOL)onDispose;
 - (BOOL)startEngine;
 - (BOOL)stopEngine;
 @end
