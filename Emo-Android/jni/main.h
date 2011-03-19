@@ -26,7 +26,7 @@ struct engine {
     int32_t lastError;
 
     SQBool enablePerspectiveNicest;
-    SQBool enableSQOnDrawFrame;
+    SQBool enableOnDrawFrame;
 
     struct saved_state state;
 };

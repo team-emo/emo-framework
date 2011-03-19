@@ -37,7 +37,7 @@ void emo_init_engine(struct engine* engine) {
     engine->lastError = EMO_NO_ERROR;
 
     // disable drawframe callback to improve performance (default)
-    engine->enableSQOnDrawFrame = SQFalse;
+    engine->enableOnDrawFrame = SQFalse;
 
     // enable perspective hint to nicest (default)
     engine->enablePerspectiveNicest = SQTrue;
@@ -94,7 +94,7 @@ void emo_draw_frame(struct engine* engine) {
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (engine->enableSQOnDrawFrame) {
+    if (engine->enableOnDrawFrame) {
     	callSqFunctionNoParam(engine->sqvm, "onDrawFrame");
     }
 }

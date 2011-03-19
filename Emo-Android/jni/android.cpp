@@ -102,6 +102,9 @@ static void emoUpdateOptions(SQInteger value) {
     case OPT_ENABLE_PERSPECTIVE_FASTEST:
         g_engine->enablePerspectiveNicest = false;
         break;
+    case OPT_ENABLE_ONDRAW_CALLBACK:
+        g_engine->enableOnDrawFrame = true;
+        break;
     }
 }
 
@@ -113,8 +116,7 @@ void emoSetOptions(HSQUIRRELVM v) {
     for(SQInteger n = 1; n <= nargs; n++) {
         if (sq_gettype(v, n) == OT_INTEGER) {
             SQInteger value;
-            sq_getinteger(v, -1, &value);
-            sq_poptop(v);
+            sq_getinteger(v, n, &value);
 
             emoUpdateOptions(value);
         }
