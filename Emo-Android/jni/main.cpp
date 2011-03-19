@@ -24,8 +24,8 @@ extern void LOGW(const SQChar* msg);
 extern void LOGE(const SQChar* msg);
 
 extern SQInteger sq_lexer(SQUserPointer asset);
-extern SQInteger emo_import_script(HSQUIRRELVM v);
-extern SQInteger emo_set_options(HSQUIRRELVM v);
+extern SQInteger emoImportScript(HSQUIRRELVM v);
+extern SQInteger emoSetOptions(HSQUIRRELVM v);
 extern SQBool loadScriptFromAsset(const char* fname);
 
 /**
@@ -34,10 +34,9 @@ extern SQBool loadScriptFromAsset(const char* fname);
 void emo_init_display(struct engine* engine) {
 
     /* init Squirrel VM */
-    sqstd_seterrorhandlers(engine->sqvm);
-    sq_setprintfunc(engine->sqvm, sq_printfunc, sq_errorfunc);
+    initSQVM(engine->sqvm);
 
-    register_global_func(engine->sqvm, emo_import_script, "emoImport");
+    register_global_func(engine->sqvm, emoImportScript, "emoImport");
 
     /* load main script */
     loadScriptFromAsset(SQUIRREL_MAIN_SCRIPT);

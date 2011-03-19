@@ -76,9 +76,9 @@ SQBool loadScriptFromAsset(const char* fname) {
 }
 
 /*
- * mport function called from squirrel script
+ * Import function called from squirrel script
  */
-SQInteger emo_import_script(HSQUIRRELVM v) {
+SQInteger emoImportScript(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
     for(SQInteger n = 1; n <= nargs; n++) {
     	if (sq_gettype(v, n) == OT_STRING) {
@@ -96,7 +96,7 @@ SQInteger emo_import_script(HSQUIRRELVM v) {
 /*
  * option function called from squirrel script
  */
-SQInteger emo_set_options(HSQUIRRELVM v) {
+SQInteger emoSetOptions(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
     for(SQInteger n = 1; n <= nargs; n++) {
     	if (sq_gettype(v, n) == OT_STRING) {
