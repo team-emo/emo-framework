@@ -36,10 +36,8 @@ void NSLOGW(NSString* msg) {
 
 /*
  * Import function called from squirrel script
- * Returns number of parameters that are succeed to import.
  */
 SQInteger emoImportScript(HSQUIRRELVM v) {
-	SQInteger succeedCount = 0;
     SQInteger nargs = sq_gettop(v);
     for(SQInteger n = 1; n <= nargs; n++) {
     	if (sq_gettype(v, n) == OT_STRING) {
@@ -48,12 +46,10 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
             sq_getstring(v, -1, &fname);
             sq_poptop(v);
 			
-    		if ([EmoEngine loadScriptFromResource:(const char*)fname vm:v] == EMO_NO_ERROR) {
-				succeedCount++;
-			}
+    		[EmoEngine loadScriptFromResource:(const char*)fname vm:v];
     	}
     }
-	return succeedCount;
+	return 0;
 }
 
 static void emoUpdateOptions(SQInteger value) {
