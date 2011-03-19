@@ -66,10 +66,8 @@ void emo_init_display(struct engine* engine) {
 
     if (engine->enablePerspectiveNicest) {
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-LOGI("NICEST");
     } else {
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-LOGI("FASTEST");
     }
 
     glDisable(GL_DEPTH_TEST);
