@@ -25,6 +25,7 @@ struct engine {
     HSQUIRRELVM sqvm;
     int32_t lastError;
 
+    SQBool enablePerspectiveNicest;
     SQBool enableSQOnDrawFrame;
 
     struct saved_state state;

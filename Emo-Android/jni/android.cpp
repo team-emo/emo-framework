@@ -1,3 +1,4 @@
+#include <GLES/gl.h>
 #include <android/log.h>
 #include <android_native_app_glue.h>
 
@@ -93,21 +94,30 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
 	return 0;
 }
 
+static void emoUpdateOptions(SQInteger value) {
+    switch(value) {
+    case OPT_ENABLE_PERSPECTIVE_NICEST:
+        g_engine->enablePerspectiveNicest = true;
+        break;
+    case OPT_ENABLE_PERSPECTIVE_FASTEST:
+        g_engine->enablePerspectiveNicest = false;
+        break;
+    }
+}
+
 /*
  * option function called from squirrel script
  */
-SQInteger emoSetOptions(HSQUIRRELVM v) {
+void emoSetOptions(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
     for(SQInteger n = 1; n <= nargs; n++) {
-    	if (sq_gettype(v, n) == OT_STRING) {
-    		const SQChar *value;
-            sq_tostring(v, n);
-            sq_getstring(v, -1, &value);
+        if (sq_gettype(v, n) == OT_INTEGER) {
+            SQInteger value;
+            sq_getinteger(v, -1, &value);
             sq_poptop(v);
 
-            // TODO update options
-
-    	}
+            emoUpdateOptions(value);
+        }
     }
-	return 0;
 }
+

@@ -31,12 +31,23 @@ extern SQBool loadScriptFromAsset(const char* fname);
 /**
  * Initialize the framework
  */
-void emo_init_display(struct engine* engine) {
+void emo_init_engine(struct engine* engine) {
+
+    engine->sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
+    engine->lastError = EMO_NO_ERROR;
+
+    // disable drawframe callback to improve performance (default)
+    engine->enableSQOnDrawFrame = SQFalse;
+
+    // enable perspective hint to nicest (default)
+    engine->enablePerspectiveNicest = SQTrue;
 
     /* init Squirrel VM */
     initSQVM(engine->sqvm);
 
+    /* initialize squirrel functions */
     register_global_func(engine->sqvm, emoImportScript, "emoImport");
+    register_global_func(engine->sqvm, emoSetOptions,   "emoSetOptions");
 
     /* load main script */
     loadScriptFromAsset(SQUIRREL_MAIN_SCRIPT);
@@ -44,10 +55,38 @@ void emo_init_display(struct engine* engine) {
     /* call onLoad() */
     callSqFunctionNoParam(engine->sqvm, "onLoad");
 
-    /* init OpenGL state */
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    glEnable(GL_CULL_FACE);
+}
+
+/*
+ * Initialize the display
+ */
+void emo_init_display(struct engine* engine) {
+
+    /* initialize OpenGL state */
+
+    if (engine->enablePerspectiveNicest) {
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+LOGI("NICEST");
+    } else {
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+LOGI("FASTEST");
+    }
+
     glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_MULTISAMPLE);
+    glDisable(GL_DITHER);
+    glDisable(GL_COLOR_ARRAY);
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_COORD_ARRAY);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnable(GL_VERTEX_ARRAY);
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
+    glCullFace(GL_BACK);
 }
 
 /*
@@ -166,11 +205,6 @@ static int engine_init_display(struct engine* engine) {
     engine->surface = surface;
     engine->width = w;
     engine->height = h;
-    engine->sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
-    engine->lastError = EMO_NO_ERROR;
-
-    // disable drawframe callback by default to improve performance
-    engine->enableSQOnDrawFrame = SQFalse;
 
     emo_init_display(engine);
     
@@ -261,6 +295,9 @@ void android_main(struct android_app* state) {
     }
 
     g_engine = &engine;
+
+    /* Initialize the framework */
+    emo_init_engine(&engine);
 
     while (1) {
         int ident;
