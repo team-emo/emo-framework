@@ -53,7 +53,7 @@ void emo_init_engine(struct engine* engine) {
     loadScriptFromAsset(SQUIRREL_MAIN_SCRIPT);
 
     /* call onLoad() */
-    callSqFunctionNoParam(engine->sqvm, "onLoad");
+    callSqFunction(engine->sqvm, "onLoad");
 
 }
 
@@ -95,27 +95,35 @@ void emo_draw_frame(struct engine* engine) {
     glClear(GL_COLOR_BUFFER_BIT);
 
     if (engine->enableOnDrawFrame) {
-    	callSqFunctionNoParam(engine->sqvm, "onDrawFrame");
+    	callSqFunction(engine->sqvm, "onDrawFrame");
     }
 }
 
 /*
  * Terminate the framework
  */
-void emo_term_display(struct engine* engine) {
-	callSqFunctionNoParam(engine->sqvm, "onDispose");
+void emo_dispose_engine(struct engine* engine) {
+    callSqFunction(engine->sqvm, "onDispose");
+    sq_close(engine->sqvm);
 }
 
 /*
  * Process motion event
  */
 static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
+	struct engine* engine = (struct engine*)app->userData;
 	size_t pointerCount =  AMotionEvent_getPointerCount(event);
 	for (size_t i = 0; i < pointerCount; i++) {
 		size_t pointerId = AMotionEvent_getPointerId(event, i);
-		float x = AMotionEvent_getX(event, pointerId);
-		float y = AMotionEvent_getY(event, pointerId);
-		int32_t action = AMotionEvent_getAction(event);
+		float param[3] = { 
+			AMotionEvent_getAction(event),
+			AMotionEvent_getX(event, pointerId),
+			AMotionEvent_getY(event, pointerId)
+		};
+		
+		if (callSqFunction_Bool_Floats(engine->sqvm, "onMotionEvent", param, false)) {
+			return 1;
+		}
 	}
 	return 0;
 }
@@ -143,7 +151,7 @@ int32_t emo_handle_input(struct android_app* app, AInputEvent* event) {
  * Gained focus
  */
 void emo_gained_focus(struct engine* engine) {
-	callSqFunctionNoParam(engine->sqvm, "onGainedFocus");
+	callSqFunction(engine->sqvm, "onGainedFocus");
     engine->animating = 1;
 }
 
@@ -151,7 +159,7 @@ void emo_gained_focus(struct engine* engine) {
  * Lost focus
  */
 void emo_lost_focus(struct engine* engine) {
-	callSqFunctionNoParam(engine->sqvm, "onLostFocus");
+	callSqFunction(engine->sqvm, "onLostFocus");
     engine->animating = 0;
 }
 
@@ -232,7 +240,7 @@ static void engine_draw_frame(struct engine* engine) {
 static void engine_term_display(struct engine* engine) {
     if (engine->display != EGL_NO_DISPLAY) {
 
-        emo_term_display(engine);
+        emo_dispose_engine(engine);
 
         eglMakeCurrent(engine->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
         if (engine->context != EGL_NO_CONTEXT) {
@@ -247,8 +255,6 @@ static void engine_term_display(struct engine* engine) {
     engine->display = EGL_NO_DISPLAY;
     engine->context = EGL_NO_CONTEXT;
     engine->surface = EGL_NO_SURFACE;
-    
-    sq_close(engine->sqvm);
 }
 /**
  * Process the next main command.
