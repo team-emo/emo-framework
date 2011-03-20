@@ -21,7 +21,7 @@ SQUIRREL_CFLAGS := -O2 -Wall
 
 LOCAL_MODULE    := emo-android
 LOCAL_ARM_MODE  := arm
-LOCAL_SRC_FILES := main.cpp sqfunc.cpp android.cpp $(SQUIRREL_SRC_FILES)
+LOCAL_SRC_FILES := main.cpp sqfunc.cpp emo_engine.cpp $(SQUIRREL_SRC_FILES)
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM
 LOCAL_STATIC_LIBRARIES := android_native_app_glue
 LOCAL_SHARED_LIBRARIES := libsquirrel

@@ -110,6 +110,13 @@ void emo_term_display(struct engine* engine) {
  * Process motion event
  */
 static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
+	size_t pointerCount =  AMotionEvent_getPointerCount(event);
+	for (size_t i = 0; i < pointerCount; i++) {
+		size_t pointerId = AMotionEvent_getPointerId(event, i);
+		float x = AMotionEvent_getX(event, pointerId);
+		float y = AMotionEvent_getY(event, pointerId);
+		int32_t action = AMotionEvent_getAction(event);
+	}
 	return 0;
 }
 
