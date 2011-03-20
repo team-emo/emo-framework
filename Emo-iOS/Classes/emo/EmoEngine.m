@@ -165,24 +165,24 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 }
 
 -(BOOL)onLoad {
-	return callSqFunctionNoParam(sqvm, "onLoad");
+	return callSqFunction(sqvm, "onLoad");
 }
 -(BOOL)onGainedFocus {
-	return callSqFunctionNoParam(sqvm, "onGainedFocus");
+	return callSqFunction(sqvm, "onGainedFocus");
 }
 -(BOOL)onDrawFrame {
     glClearColor(0, 0, 0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 	
 	if (enableOnDrawFrame) {
-		return callSqFunctionNoParam(sqvm, "onDrawFrame");
+		return callSqFunction(sqvm, "onDrawFrame");
 	}
 	return FALSE;
 }
 -(BOOL)onLostFocus {
-	return callSqFunctionNoParam(sqvm, "onLostFocus");
+	return callSqFunction(sqvm, "onLostFocus");
 }
 -(BOOL)onDispose {
-	return callSqFunctionNoParam(sqvm, "onDispose");
+	return callSqFunction(sqvm, "onDispose");
 }
 @end
