@@ -53,6 +53,8 @@
 
 - (void)dealloc
 {
+    [self onDispose];
+
     // Tear down context.
     if ([EAGLContext currentContext] == context)
         [EAGLContext setCurrentContext:nil];
@@ -77,14 +79,13 @@
 
 - (void)viewDidUnload
 {
-	[self onDispose];
-	
 	[super viewDidUnload];
 
     // Tear down context.
     if ([EAGLContext currentContext] == context)
         [EAGLContext setCurrentContext:nil];
 	self.context = nil;	
+	self.engine = nil;
 }
 
 - (NSInteger)animationFrameInterval
