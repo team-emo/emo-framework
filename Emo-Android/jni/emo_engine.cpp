@@ -95,7 +95,7 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
 	return 0;
 }
 
-static void emoUpdateOptions(SQInteger value) {
+void emoUpdateOptions(SQInteger value) {
     switch(value) {
     case OPT_ENABLE_PERSPECTIVE_NICEST:
         g_engine->enablePerspectiveNicest = true;

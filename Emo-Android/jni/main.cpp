@@ -26,6 +26,7 @@ extern void LOGE(const SQChar* msg);
 extern SQInteger sq_lexer(SQUserPointer asset);
 extern SQInteger emoImportScript(HSQUIRRELVM v);
 extern SQInteger emoSetOptions(HSQUIRRELVM v);
+extern void emoUpdateOptions(SQInteger value);
 extern SQBool loadScriptFromAsset(const char* fname);
 
 /**
@@ -42,17 +43,20 @@ void emo_init_engine(struct engine* engine) {
     // enable perspective hint to nicest (default)
     engine->enablePerspectiveNicest = SQTrue;
 
-    /* init Squirrel VM */
+    // init Squirrel VM
     initSQVM(engine->sqvm);
 
-    /* initialize squirrel functions */
+    // initialize squirrel functions
     register_global_func(engine->sqvm, emoImportScript, "emo_import");
     register_global_func(engine->sqvm, emoSetOptions,   "emo_options");
 
-    /* load main script */
+    // load main script
     loadScriptFromAsset(SQUIRREL_MAIN_SCRIPT);
 
-    /* call onLoad() */
+    // force fullscreen
+    emoUpdateOptions(OPT_WINDOW_FORCE_FULLSCREEN);
+
+    // call onLoad()
     callSqFunction(engine->sqvm, "onLoad");
 
 }
