@@ -185,4 +185,7 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 -(BOOL)onDispose {
 	return callSqFunction(sqvm, "onDispose");
 }
+-(BOOL)onLowMemory {
+	return callSqFunction(sqvm, "onLowMemory");	
+}
 @end

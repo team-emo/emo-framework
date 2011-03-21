@@ -146,6 +146,7 @@
 
 - (void)didReceiveMemoryWarning
 {
+	[engine onLowMemory];
     [super didReceiveMemoryWarning];
 }
 

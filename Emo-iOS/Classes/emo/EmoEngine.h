@@ -24,6 +24,7 @@ void NSLOGW(NSString* msg);
 - (BOOL)onDrawFrame;
 - (BOOL)onLostFocus;
 - (BOOL)onDispose;
+- (BOOL)onLowMemory;
 - (BOOL)startEngine;
 - (BOOL)stopEngine;
 @end

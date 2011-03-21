@@ -32,3 +32,7 @@ function onDrawFrame() {
 		drawed = true;
 	}
 }
+
+function onLowMemory() {
+	print("onLowMemory");
+}
