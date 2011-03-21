@@ -1,6 +1,7 @@
 #include <GLES/gl.h>
 #include <android/log.h>
 #include <android_native_app_glue.h>
+#include <android/window.h>
 
 #include <squirrel.h>
 #include <common.h>
@@ -104,6 +105,9 @@ static void emoUpdateOptions(SQInteger value) {
         break;
     case OPT_ENABLE_ONDRAW_CALLBACK:
         g_engine->enableOnDrawFrame = true;
+        break;
+    case OPT_FORCE_FULLSCREEN:
+        ANativeActivity_setWindowFlags(g_engine->app->activity, AWINDOW_FLAG_FULLSCREEN, AWINDOW_FLAG_FORCE_NOT_FULLSCREEN);
         break;
     }
 }

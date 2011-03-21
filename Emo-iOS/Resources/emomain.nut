@@ -7,7 +7,7 @@ local drawed = false;
 
 function onLoad() { 
     print("onLoad");
-	emo_options(OPT_ENABLE_ONDRAW_CALLBACK, OPT_ENABLE_PERSPECTIVE_FASTEST);
+    emo_options(OPT_ENABLE_ONDRAW_CALLBACK, OPT_ENABLE_PERSPECTIVE_FASTEST, OPT_FORCE_FULLSCREEN);
 }
 
 function onGainedFocus() {
@@ -23,16 +23,32 @@ function onDispose() {
 } 
 
 function onError(msg) {
-	print("onError: " + msg);
+    print("onError: " + msg);
 }
 
 function onDrawFrame() {
-	if (!drawed) {
-		print("onDrawFrame");
-		drawed = true;
-	}
+    if (!drawed) {
+        print("onDrawFrame");
+        drawed = true;
+    }
 }
 
 function onLowMemory() {
-	print("onLowMemory");
+    print("onLowMemory");
+}
+
+function onMotionEvent(...) {
+    local sb = "MotionEvent: ";
+    for(local i = 0; i < vargv.len(); i++) {
+        sb = sb + vargv[i] + " ";
+    }
+    print(sb);
+}
+
+function onKeyEvent(...) {
+    local sb = "KeyEvent: ";
+    for(local i = 0; i < vargv.len(); i++) {
+        sb = sb + vargv[i] + " ";
+    }
+    print(sb);
 }

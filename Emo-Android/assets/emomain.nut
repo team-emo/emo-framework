@@ -7,7 +7,7 @@ local drawed = false;
 
 function onLoad() { 
     print("onLoad");
-    emo_options(OPT_ENABLE_ONDRAW_CALLBACK, OPT_ENABLE_PERSPECTIVE_FASTEST);
+    emo_options(OPT_ENABLE_ONDRAW_CALLBACK, OPT_ENABLE_PERSPECTIVE_FASTEST, OPT_FORCE_FULLSCREEN);
 }
 
 function onGainedFocus() {
