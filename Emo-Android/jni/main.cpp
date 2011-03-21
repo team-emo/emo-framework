@@ -164,6 +164,14 @@ void emo_lost_focus(struct engine* engine) {
 }
 
 /**
+ * Command from main thread: the system is running low on memory.
+ * Try to reduce your memory use.
+ */
+void emo_low_memory(struct engine* engine) {
+	callSqFunction(engine->sqvm, "onLowMemory");
+}
+
+/**
  * Initialize an EGL context for the current display.
  */
 static int engine_init_display(struct engine* engine) {
@@ -279,6 +287,9 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
             break;
         case APP_CMD_LOST_FOCUS:
             emo_lost_focus(engine);
+            break;
+        case APP_CMD_LOW_MEMORY:
+            emo_low_memory(engine);
             break;
     }
 }
