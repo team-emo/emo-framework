@@ -12,10 +12,12 @@ void NSLOGW(NSString* msg);
 	HSQUIRRELVM sqvm;
 	int lastError;
 	BOOL isFrameInitialized;
+	BOOL isRunning;
 }
+@property (readonly) HSQUIRRELVM sqvm;
 @property (readonly) int  lastError;
 @property (readonly) BOOL isFrameInitialized;
-@property (readonly) HSQUIRRELVM sqvm;
+@property (readonly) BOOL isRunning;
 
 + (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 - (BOOL)initDrawFrame;

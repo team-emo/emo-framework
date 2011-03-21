@@ -87,9 +87,10 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 @end
 
 @implementation EmoEngine
+@synthesize sqvm;
 @synthesize lastError;
 @synthesize isFrameInitialized;
-@synthesize sqvm;
+@synthesize isRunning;
 
 - (void)initSqFunc {
 	register_global_func(sqvm, emoImportScript, "emo_import");	
@@ -99,6 +100,7 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 	
 	isFrameInitialized = FALSE;
 	lastError = EMO_NO_ERROR;
+	isRunning = TRUE;
 	
 	sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
 	
@@ -112,6 +114,7 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 - (BOOL)stopEngine {
 	sq_close(sqvm);
 	sqvm = nil;
+	isRunning = FALSE;
 	return TRUE;
 }
 
@@ -120,6 +123,10 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
  */
 - (BOOL)initDrawFrame {
 
+	if (!isRunning) {
+		NSLOGE(@"initDrawFrame failed because EmoEngine is stopped.");
+		return FALSE;
+	}
 	if (isFrameInitialized) return FALSE;
 	
     if (enablePerspectiveNicest) {
@@ -167,12 +174,24 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 }
 
 -(BOOL)onLoad {
+	if (!isRunning) {
+		NSLOGE(@"onLoad failed because EmoEngine is stopped.");
+		return FALSE;
+	}
 	return callSqFunction(sqvm, "onLoad");
 }
 -(BOOL)onGainedFocus {
+	if (!isRunning) {
+		NSLOGE(@"onGainedFocus failed because EmoEngine is stopped.");
+		return FALSE;
+	}
 	return callSqFunction(sqvm, "onGainedFocus");
 }
 -(BOOL)onDrawFrame {
+	if (!isRunning) {
+		NSLOGE(@"onDrawFrame failed because EmoEngine is stopped.");
+		return FALSE;
+	}
     glClearColor(0, 0, 0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 	
@@ -182,12 +201,24 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 	return FALSE;
 }
 -(BOOL)onLostFocus {
+	if (!isRunning) {
+		NSLOGE(@"onLostFocus failed because EmoEngine is stopped.");
+		return FALSE;
+	}
 	return callSqFunction(sqvm, "onLostFocus");
 }
 -(BOOL)onDispose {
+	if (!isRunning) {
+		NSLOGE(@"onDispose failed because EmoEngine is stopped.");
+		return FALSE;
+	}
 	return callSqFunction(sqvm, "onDispose");
 }
 -(BOOL)onLowMemory {
+	if (!isRunning) {
+		NSLOGE(@"onLowMemory failed because EmoEngine is stopped.");
+		return FALSE;
+	}
 	return callSqFunction(sqvm, "onLowMemory");	
 }
 @end
