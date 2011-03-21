@@ -91,7 +91,7 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 @synthesize isFrameInitialized;
 @synthesize sqvm;
 
-- (void)initEngine {
+- (void)initSqFunc {
 	register_global_func(sqvm, emoImportScript, "emo_import");	
 	register_global_func(sqvm, emoSetOptions,   "emo_options");	
 }
@@ -103,13 +103,15 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 	sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
 	
 	initSQVM(sqvm);
-	[self initEngine];
+	
+	[self initSqFunc];
 
 	return TRUE;
 }
 
 - (BOOL)stopEngine {
 	sq_close(sqvm);
+	sqvm = nil;
 	return TRUE;
 }
 

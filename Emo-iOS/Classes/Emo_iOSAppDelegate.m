@@ -26,10 +26,12 @@
 {
 	[self.viewController onLostFocus];
     [self.viewController stopAnimation];
+	[self.viewController onDispose];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+	[self.viewController onLoad];
 	[self.viewController onGainedFocus];
     [self.viewController startAnimation];
 }

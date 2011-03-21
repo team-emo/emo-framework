@@ -46,15 +46,11 @@
     animationFrameInterval = 1;
     self.displayLink = nil;
 	
-	self.engine = [[EmoEngine alloc]init];
-	
-	[self onLoad];
+	self.engine = [[EmoEngine alloc]init];	
 }
 
 - (void)dealloc
 {
-    [self onDispose];
-
     // Tear down context.
     if ([EAGLContext currentContext] == context)
         [EAGLContext setCurrentContext:nil];
