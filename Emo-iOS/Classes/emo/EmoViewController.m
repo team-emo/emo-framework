@@ -46,6 +46,11 @@
     animationFrameInterval = 1;
     self.displayLink = nil;
 	
+	// Enable user interaction
+	[self.view setUserInteractionEnabled:TRUE];
+	[self.view setMultipleTouchEnabled:TRUE];
+	((EmoView *)self.view).eventDelegate = self;
+	
 	self.engine = [[EmoEngine alloc]init];	
 }
 
@@ -172,4 +177,23 @@
 	[engine onDispose];
 	[engine stopEngine];
 }
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+/*
+	for (UITouch *touch in touches) {
+		CGPoint location = [touch locationInView:self.view];
+		NSLog(@"x:%f y:%f",location.x,location.y);
+	}	
+ */
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+}
+
 @end

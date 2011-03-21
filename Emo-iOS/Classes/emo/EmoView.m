@@ -9,15 +9,14 @@
 
 @implementation EmoView
 
+@synthesize eventDelegate;
 @dynamic context;
 
-// You must implement this method
 + (Class)layerClass
 {
     return [CAEAGLLayer class];
 }
 
-//The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:.
 - (id)initWithCoder:(NSCoder*)coder
 {
     self = [super initWithCoder:coder];
@@ -67,11 +66,9 @@
     {
         [EAGLContext setCurrentContext:context];
         
-        // Create default framebuffer object.
         glGenFramebuffers(1, &defaultFramebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
         
-        // Create color render buffer and allocate backing store.
         glGenRenderbuffers(1, &colorRenderbuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
         [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)self.layer];
@@ -138,8 +135,30 @@
 
 - (void)layoutSubviews
 {
-    // The framebuffer will be re-created at the beginning of the next setFramebuffer method call.
     [self deleteFramebuffer];
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	if (eventDelegate) {
+		[eventDelegate touchesBegan:touches withEvent:event];
+	}
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+	if (eventDelegate) {
+		[eventDelegate touchesMoved:touches withEvent:event];
+	}	
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+	if (eventDelegate) {
+		[eventDelegate touchesEnded:touches withEvent:event];
+	}	
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+	if (eventDelegate) {
+		[eventDelegate touchesCancelled:touches withEvent:event];
+	}	
+}
 @end

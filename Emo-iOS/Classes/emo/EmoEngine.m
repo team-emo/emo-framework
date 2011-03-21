@@ -63,6 +63,9 @@ static void emoUpdateOptions(SQInteger value) {
 		case OPT_ENABLE_ONDRAW_CALLBACK:
 			enableOnDrawFrame = TRUE;
 			break;
+		case OPT_WINDOW_KEEP_SCREEN_ON:
+			[UIApplication sharedApplication].idleTimerDisabled = YES;
+			break;
     }
 }
 
@@ -112,6 +115,10 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 }
 
 - (BOOL)stopEngine {
+	
+	// disable "keep screen on"
+	[UIApplication sharedApplication].idleTimerDisabled = NO;
+	
 	sq_close(sqvm);
 	sqvm = nil;
 	isRunning = FALSE;

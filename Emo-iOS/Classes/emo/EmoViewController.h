@@ -7,8 +7,9 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 #import <EmoEngine.h>
+#import <EmoView.h>
 
-@interface EmoViewController : UIViewController
+@interface EmoViewController : UIViewController <EmoViewEventHandler>
 {
     EAGLContext *context;
     
