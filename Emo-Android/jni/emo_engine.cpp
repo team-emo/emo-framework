@@ -106,8 +106,11 @@ static void emoUpdateOptions(SQInteger value) {
     case OPT_ENABLE_ONDRAW_CALLBACK:
         g_engine->enableOnDrawFrame = true;
         break;
-    case OPT_FORCE_FULLSCREEN:
+    case OPT_WINDOW_FORCE_FULLSCREEN:
         ANativeActivity_setWindowFlags(g_engine->app->activity, AWINDOW_FLAG_FULLSCREEN, AWINDOW_FLAG_FORCE_NOT_FULLSCREEN);
+        break;
+    case OPT_WINDOW_KEEP_SCREEN_ON:
+        ANativeActivity_setWindowFlags(g_engine->app->activity, AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
         break;
     }
 }
