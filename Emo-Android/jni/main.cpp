@@ -118,11 +118,19 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 
 	for (size_t i = 0; i < pointerCount; i++) {
 		size_t pointerId = AMotionEvent_getPointerId(event, i);
+		size_t action = AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK;
+		size_t pointerIndex = i;
+		
+		if (action == AMOTION_EVENT_ACTION_POINTER_DOWN || action == AMOTION_EVENT_ACTION_POINTER_UP) {
+			pointerIndex = (AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+			pointerId = AMotionEvent_getPointerId(event, pointerIndex);
+		}
+
 		float param[paramCount] = { 
 			pointerId,
-			AMotionEvent_getAction(event),
-			AMotionEvent_getX(event, pointerId),
-			AMotionEvent_getY(event, pointerId),
+			action,
+			AMotionEvent_getX(event, pointerIndex),
+			AMotionEvent_getY(event, pointerIndex),
 			AMotionEvent_getDownTime(event),
 			AMotionEvent_getEventTime(event),
 			AInputEvent_getDeviceId(event),
