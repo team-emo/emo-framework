@@ -102,9 +102,8 @@ SQBool callSqFunction_Bool(HSQUIRRELVM v, const SQChar* name, SQBool defaultValu
  * Call Squirrel function with multiple float parameters, returns boolean
  * Returns default value if sq_call failed.
  */
-SQBool callSqFunction_Bool_Floats(HSQUIRRELVM v, const SQChar* name, SQFloat param[], SQBool defaultValue) {
+SQBool callSqFunction_Bool_Floats(HSQUIRRELVM v, const SQChar* name, SQFloat param[], int count, SQBool defaultValue) {
 	SQBool   result = defaultValue;
-	SQInteger count = sizeof(param) / sizeof(param[0]);
 
 	SQInteger top = sq_gettop(v);
 	sq_pushroottable(v);
@@ -114,7 +113,6 @@ SQBool callSqFunction_Bool_Floats(HSQUIRRELVM v, const SQChar* name, SQFloat par
 		for (int i = 0; i < count; i++) {
 			sq_pushfloat(v, param[i]);
 		}
-		
 		if (SQ_SUCCEEDED(sq_call(v, count + 1, SQTrue, SQTrue))) {
 			sq_getbool(v, sq_gettop(v), &result);
 		}

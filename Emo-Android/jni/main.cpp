@@ -113,15 +113,23 @@ void emo_dispose_engine(struct engine* engine) {
 static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 	struct engine* engine = (struct engine*)app->userData;
 	size_t pointerCount =  AMotionEvent_getPointerCount(event);
+
+	const int paramCount = 8;
+
 	for (size_t i = 0; i < pointerCount; i++) {
 		size_t pointerId = AMotionEvent_getPointerId(event, i);
-		float param[3] = { 
+		float param[paramCount] = { 
+			pointerId,
 			AMotionEvent_getAction(event),
 			AMotionEvent_getX(event, pointerId),
-			AMotionEvent_getY(event, pointerId)
+			AMotionEvent_getY(event, pointerId),
+			AMotionEvent_getDownTime(event),
+			AMotionEvent_getEventTime(event),
+			AInputEvent_getDeviceId(event),
+			AInputEvent_getSource(event)
 		};
 		
-		if (callSqFunction_Bool_Floats(engine->sqvm, "onMotionEvent", param, false)) {
+		if (callSqFunction_Bool_Floats(engine->sqvm, "onMotionEvent", param, paramCount, false)) {
 			return 1;
 		}
 	}
@@ -132,6 +140,24 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
  * Process key event
  */
 static int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
+	struct engine* engine = (struct engine*)app->userData;
+
+	const int paramCount = 8;
+
+	float param[paramCount] = {
+		AKeyEvent_getAction(event),
+		AKeyEvent_getKeyCode(event),
+		AKeyEvent_getRepeatCount(event),
+		AKeyEvent_getMetaState(event),
+		AKeyEvent_getDownTime(event),
+		AKeyEvent_getEventTime(event),
+		AInputEvent_getDeviceId(event),
+		AInputEvent_getSource(event)
+	};
+
+	if (callSqFunction_Bool_Floats(engine->sqvm, "onKeyEvent", param, paramCount, false)) {
+		return 1;
+	}
     return 0;
 }
 
