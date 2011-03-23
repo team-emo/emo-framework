@@ -228,4 +228,18 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 	}
 	return callSqFunction(sqvm, "onLowMemory");	
 }
+-(BOOL)onMotionEvent:(float *)param {
+	if (!isRunning) {
+		NSLOGE(@"onMotionEvent failed because EmoEngine is stopped.");
+		return FALSE;
+	}
+	return callSqFunction_Bool_Floats(sqvm, "onMotionEvent", param, MOTION_EVENT_PARAMS_SIZE, FALSE);
+}
+-(BOOL)onKeyEvent:(float *)param {
+	if (!isRunning) {
+		NSLOGE(@"onKeyEvent failed because EmoEngine is stopped.");
+		return FALSE;
+	}
+	return callSqFunction_Bool_Floats(sqvm, "onKeyEvent", param, KEY_EVENT_PARAMS_SIZE, FALSE);	
+}
 @end

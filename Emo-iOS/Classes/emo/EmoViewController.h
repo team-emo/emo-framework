@@ -6,6 +6,7 @@
 #import <OpenGLES/ES1/glext.h>
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
+#import <common.h>
 #import <EmoEngine.h>
 #import <EmoView.h>
 
@@ -17,6 +18,10 @@
     NSInteger animationFrameInterval;
     CADisplayLink *displayLink;
 	EmoEngine *engine;
+	
+	NSMutableDictionary *touchIdMaster;
+	float touchEventParamCache[MOTION_EVENT_PARAMS_SIZE];
+	NSInteger nextTouchId;
 }
 
 @property (readonly, nonatomic, getter=isAnimating) BOOL animating;

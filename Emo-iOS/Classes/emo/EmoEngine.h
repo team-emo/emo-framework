@@ -27,6 +27,8 @@ void NSLOGW(NSString* msg);
 - (BOOL)onLostFocus;
 - (BOOL)onDispose;
 - (BOOL)onLowMemory;
+- (BOOL)onMotionEvent:(float *)param;
+- (BOOL)onKeyEvent:(float *)param;
 - (BOOL)startEngine;
 - (BOOL)stopEngine;
 @end

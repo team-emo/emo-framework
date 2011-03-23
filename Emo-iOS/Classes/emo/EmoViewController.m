@@ -13,6 +13,9 @@
 #import "common.h"
 
 @interface EmoViewController ()
+- (void)updateTouchId;
+- (void)fireMotionEvent:(NSSet *)touches withEvent:(UIEvent *) event withAction:(NSInteger) action;
+
 @property (nonatomic, retain) EAGLContext *context;
 @property (nonatomic, assign) CADisplayLink *displayLink;
 @end
@@ -50,6 +53,8 @@
 	[self.view setUserInteractionEnabled:TRUE];
 	[self.view setMultipleTouchEnabled:TRUE];
 	((EmoView *)self.view).eventDelegate = self;
+    touchIdMaster = [[NSMutableDictionary alloc] init];
+	nextTouchId = 0;
 	
 	self.engine = [[EmoEngine alloc]init];	
 }
@@ -62,6 +67,7 @@
     
     [context release];
 	[engine release];
+	[touchIdMaster release];
     
     [super dealloc];
 }
@@ -87,6 +93,9 @@
         [EAGLContext setCurrentContext:nil];
 	self.context = nil;	
 	self.engine = nil;
+	
+	[touchIdMaster removeAllObjects];
+	touchIdMaster = nil;
 }
 
 - (NSInteger)animationFrameInterval
@@ -178,22 +187,65 @@
 	[engine stopEngine];
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 /*
-	for (UITouch *touch in touches) {
-		CGPoint location = [touch locationInView:self.view];
-		NSLog(@"x:%f y:%f",location.x,location.y);
-	}	
+ * Handle touch events
  */
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	for (UITouch *touch in touches) {
+		if ([touchIdMaster objectForKey:touch] == nil) {
+			[touchIdMaster setObject:[NSNumber numberWithInteger:nextTouchId] forKey:[NSValue valueWithPointer:touch]];
+			nextTouchId++;
+		}
+	}
+	[self fireMotionEvent: touches withEvent:event withAction: MOTION_EVENT_ACTION_DOWN];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+	[self fireMotionEvent: touches withEvent:event withAction: MOTION_EVENT_ACTION_MOVE];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+	for (UITouch *touch in touches) {
+		if ([touchIdMaster objectForKey:touch] != nil) {
+			[touchIdMaster removeObjectForKey:touch];
+		}
+	}
+	[self updateTouchId];
+	[self fireMotionEvent: touches withEvent:event withAction: MOTION_EVENT_ACTION_UP];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+	for (UITouch *touch in touches) {
+		if ([touchIdMaster objectForKey:touch] != nil) {
+			[touchIdMaster removeObjectForKey:touch];
+		}
+	}
+	[self updateTouchId];
+	[self fireMotionEvent: touches withEvent:event withAction: MOTION_EVENT_ACTION_CANCEL];
 }
 
+/*
+ * Fire motion event
+ */
+- (void)fireMotionEvent:(NSSet *)touches withEvent:(UIEvent *)event withAction:(NSInteger) action {
+	for (UITouch *touch in touches) {
+		NSNumber *touchId = [touchIdMaster objectForKey:touch];
+		CGPoint location = [touch locationInView:self.view];
+		touchEventParamCache[0] = [touchId intValue];
+		touchEventParamCache[1] = action;
+		touchEventParamCache[2] = location.x;
+		touchEventParamCache[3] = location.y;
+		touchEventParamCache[4] = event.timestamp; // downtime  (since startup)
+		touchEventParamCache[5] = event.timestamp; // eventtime (since startup)
+		touchEventParamCache[6] = 0; // device id
+		touchEventParamCache[7] = 0; // source id
+		
+		[engine onMotionEvent:touchEventParamCache];
+	}
+}
+- (void)updateTouchId {
+	if ([touchIdMaster count] == 0) {
+		nextTouchId = 0;
+	}
+}
 @end
