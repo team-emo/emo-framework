@@ -1,6 +1,7 @@
+#include <stdio.h>
 #include <jni.h>
 #include <errno.h>
-#include <time.h>
+#include <sys/timeb.h>
 
 #include <EGL/egl.h>
 #include <GLES/gl.h>
@@ -34,6 +35,9 @@ extern SQBool loadScriptFromAsset(const char* fname);
  * Initialize the framework
  */
 void emo_init_engine(struct engine* engine) {
+
+    // update startup time
+    ftime(&engine->uptime);
 
     engine->sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
     engine->lastError = EMO_NO_ERROR;
@@ -119,8 +123,10 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 	struct engine* engine = (struct engine*)app->userData;
 	size_t pointerCount =  AMotionEvent_getPointerCount(event);
 
-	time_t eventTime;
-	time(&eventTime);
+	timeb eventTime;
+	ftime(&eventTime);
+
+	time_t timeSinceUptime = eventTime.time - engine->uptime.time;
 
 	for (size_t i = 0; i < pointerCount; i++) {
 		size_t pointerId = AMotionEvent_getPointerId(event, i);
@@ -132,17 +138,16 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 			pointerId = AMotionEvent_getPointerId(event, pointerIndex);
 		}
 
-		float param[MOTION_EVENT_PARAMS_SIZE] = { 
-			pointerId,
-			action,
-			AMotionEvent_getX(event, pointerIndex),
-			AMotionEvent_getY(event, pointerIndex),
-			eventTime,
-			AInputEvent_getDeviceId(event),
-			AInputEvent_getSource(event)
-		};
+		engine->touchEventParamCache[0] = pointerId;
+		engine->touchEventParamCache[1] = action;
+		engine->touchEventParamCache[2] = AMotionEvent_getX(event, pointerIndex);
+		engine->touchEventParamCache[3] = AMotionEvent_getY(event, pointerIndex);
+		engine->touchEventParamCache[4] = timeSinceUptime;
+		engine->touchEventParamCache[5] = eventTime.millitm;
+		engine->touchEventParamCache[6] = AInputEvent_getDeviceId(event);
+		engine->touchEventParamCache[7] = AInputEvent_getSource(event);
 		
-		if (callSqFunction_Bool_Floats(engine->sqvm, "onMotionEvent", param, MOTION_EVENT_PARAMS_SIZE, false)) {
+		if (callSqFunction_Bool_Floats(engine->sqvm, "onMotionEvent", engine->touchEventParamCache, MOTION_EVENT_PARAMS_SIZE, false)) {
 			return 1;
 		}
 	}
@@ -155,20 +160,21 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 static int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 	struct engine* engine = (struct engine*)app->userData;
 
-	time_t eventTime;
-	time(&eventTime);
+	timeb eventTime;
+	ftime(&eventTime);
 
-	float param[KEY_EVENT_PARAMS_SIZE] = {
-		AKeyEvent_getAction(event),
-		AKeyEvent_getKeyCode(event),
-		AKeyEvent_getRepeatCount(event),
-		AKeyEvent_getMetaState(event),
-		eventTime,
-		AInputEvent_getDeviceId(event),
-		AInputEvent_getSource(event)
-	};
+	time_t timeSinceUptime = eventTime.time - engine->uptime.time;
 
-	if (callSqFunction_Bool_Floats(engine->sqvm, "onKeyEvent", param, KEY_EVENT_PARAMS_SIZE, false)) {
+	engine->keyEventParamCache[0] = AKeyEvent_getAction(event);
+	engine->keyEventParamCache[1] = AKeyEvent_getKeyCode(event);
+	engine->keyEventParamCache[2] = AKeyEvent_getRepeatCount(event);
+	engine->keyEventParamCache[3] = AKeyEvent_getMetaState(event);
+	engine->keyEventParamCache[4] = timeSinceUptime;
+	engine->keyEventParamCache[5] = eventTime.millitm;
+	engine->keyEventParamCache[6] = AInputEvent_getDeviceId(event);
+	engine->keyEventParamCache[7] = AInputEvent_getSource(event);
+
+	if (callSqFunction_Bool_Floats(engine->sqvm, "onKeyEvent", engine->keyEventParamCache, KEY_EVENT_PARAMS_SIZE, false)) {
 		return 1;
 	}
     return 0;
