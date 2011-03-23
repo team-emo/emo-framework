@@ -118,8 +118,6 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 	struct engine* engine = (struct engine*)app->userData;
 	size_t pointerCount =  AMotionEvent_getPointerCount(event);
 
-	const int paramCount = 8;
-
 	for (size_t i = 0; i < pointerCount; i++) {
 		size_t pointerId = AMotionEvent_getPointerId(event, i);
 		size_t action = AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK;
@@ -130,7 +128,7 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 			pointerId = AMotionEvent_getPointerId(event, pointerIndex);
 		}
 
-		float param[paramCount] = { 
+		float param[MOTION_EVENT_PARAMS_SIZE] = { 
 			pointerId,
 			action,
 			AMotionEvent_getX(event, pointerIndex),
@@ -141,7 +139,7 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 			AInputEvent_getSource(event)
 		};
 		
-		if (callSqFunction_Bool_Floats(engine->sqvm, "onMotionEvent", param, paramCount, false)) {
+		if (callSqFunction_Bool_Floats(engine->sqvm, "onMotionEvent", param, MOTION_EVENT_PARAMS_SIZE, false)) {
 			return 1;
 		}
 	}
@@ -154,7 +152,7 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 static int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 	struct engine* engine = (struct engine*)app->userData;
 
-	float param[MOTION_EVENT_PARAMS_SIZE] = {
+	float param[KEY_EVENT_PARAMS_SIZE] = {
 		AKeyEvent_getAction(event),
 		AKeyEvent_getKeyCode(event),
 		AKeyEvent_getRepeatCount(event),
@@ -165,7 +163,7 @@ static int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 		AInputEvent_getSource(event)
 	};
 
-	if (callSqFunction_Bool_Floats(engine->sqvm, "onKeyEvent", param, MOTION_EVENT_PARAMS_SIZE, false)) {
+	if (callSqFunction_Bool_Floats(engine->sqvm, "onKeyEvent", param, KEY_EVENT_PARAMS_SIZE, false)) {
 		return 1;
 	}
     return 0;
