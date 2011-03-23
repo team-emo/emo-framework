@@ -154,9 +154,7 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 static int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 	struct engine* engine = (struct engine*)app->userData;
 
-	const int paramCount = 8;
-
-	float param[paramCount] = {
+	float param[MOTION_EVENT_PARAMS_SIZE] = {
 		AKeyEvent_getAction(event),
 		AKeyEvent_getKeyCode(event),
 		AKeyEvent_getRepeatCount(event),
@@ -167,7 +165,7 @@ static int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 		AInputEvent_getSource(event)
 	};
 
-	if (callSqFunction_Bool_Floats(engine->sqvm, "onKeyEvent", param, paramCount, false)) {
+	if (callSqFunction_Bool_Floats(engine->sqvm, "onKeyEvent", param, MOTION_EVENT_PARAMS_SIZE, false)) {
 		return 1;
 	}
     return 0;
