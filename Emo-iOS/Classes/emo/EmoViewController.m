@@ -231,13 +231,16 @@
 	for (UITouch *touch in touches) {
 		NSNumber *touchId = [touchIdMaster objectForKey:touch];
 		CGPoint location = [touch locationInView:self.view];
+		NSTimeInterval uptimeSec  = [engine getUptime];
+		NSTimeInterval uptimeMsec = (uptimeSec - floor(uptimeSec)) * 1000; 
 		touchEventParamCache[0] = [touchId intValue];
 		touchEventParamCache[1] = action;
 		touchEventParamCache[2] = location.x;
 		touchEventParamCache[3] = location.y;
-		touchEventParamCache[4] = [engine getUptime]; // event time since startup (milliseconds)
-		touchEventParamCache[5] = 0; // device id
-		touchEventParamCache[6] = 0; // source id
+		touchEventParamCache[4] = floor(uptimeSec);  // event time since startup (sec)
+		touchEventParamCache[5] = floor(uptimeMsec); // event time since startup (msec)
+		touchEventParamCache[6] = 0; // device id
+		touchEventParamCache[7] = 0; // source id
 		
 		[engine onMotionEvent:touchEventParamCache];
 	}
