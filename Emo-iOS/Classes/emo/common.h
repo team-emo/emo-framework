@@ -19,3 +19,24 @@
 #define OPT_WINDOW_FORCE_FULLSCREEN     0x1003
 #define OPT_WINDOW_KEEP_SCREEN_ON       0x1004
 
+#define MOTION_EVENT_ACTION_DOWN            0
+#define MOTION_EVENT_ACTION_UP              1
+#define MOTION_EVENT_ACTION_MOVE            2
+#define MOTION_EVENT_ACTION_CANCEL          3
+#define MOTION_EVENT_ACTION_OUTSIDE         4
+#define MOTION_EVENT_ACTION_POINTER_DOWN    5
+#define MOTION_EVENT_ACTION_POINTER_UP      6
+
+#define KEY_EVENT_ACTION_DOWN               0
+#define KEY_EVENT_ACTION_UP                 1
+#define KEY_EVENT_ACTION_MULTIPLE           2
+
+#define META_NONE              0
+#define META_ALT_ON            0x02
+#define META_ALT_LEFT_ON       0x10
+#define META_ALT_RIGHT_ON      0x20
+#define META_SHIFT_ON          0x01
+#define META_SHIFT_LEFT_ON     0x40
+#define META_SHIFT_RIGHT_ON    0x80
+#define META_SYM_ON            0x04
+
