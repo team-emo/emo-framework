@@ -1,5 +1,6 @@
 #include <jni.h>
 #include <errno.h>
+#include <time.h>
 
 #include <EGL/egl.h>
 #include <GLES/gl.h>
@@ -118,6 +119,9 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 	struct engine* engine = (struct engine*)app->userData;
 	size_t pointerCount =  AMotionEvent_getPointerCount(event);
 
+	time_t eventTime;
+	time(&eventTime);
+
 	for (size_t i = 0; i < pointerCount; i++) {
 		size_t pointerId = AMotionEvent_getPointerId(event, i);
 		size_t action = AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK;
@@ -133,8 +137,7 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 			action,
 			AMotionEvent_getX(event, pointerIndex),
 			AMotionEvent_getY(event, pointerIndex),
-			AMotionEvent_getDownTime(event),
-			AMotionEvent_getEventTime(event),
+			eventTime,
 			AInputEvent_getDeviceId(event),
 			AInputEvent_getSource(event)
 		};
@@ -152,13 +155,15 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 static int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 	struct engine* engine = (struct engine*)app->userData;
 
+	time_t eventTime;
+	time(&eventTime);
+
 	float param[KEY_EVENT_PARAMS_SIZE] = {
 		AKeyEvent_getAction(event),
 		AKeyEvent_getKeyCode(event),
 		AKeyEvent_getRepeatCount(event),
 		AKeyEvent_getMetaState(event),
-		AKeyEvent_getDownTime(event),
-		AKeyEvent_getEventTime(event),
+		eventTime,
 		AInputEvent_getDeviceId(event),
 		AInputEvent_getSource(event)
 	};
