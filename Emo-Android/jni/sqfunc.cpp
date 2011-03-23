@@ -5,6 +5,11 @@
 #include <squirrel.h>
 #include <sqstdio.h>
 #include <sqstdaux.h>
+#include <sqstdblob.h>
+#include <sqstdio.h>
+#include <sqstdmath.h>
+#include <sqstdstring.h>
+#include <sqstdsystem.h>
 
 #include <common.h>
 #include <sqfunc.h>
@@ -22,6 +27,12 @@ extern void LOGE(const SQChar* msg);
 void initSQVM(HSQUIRRELVM v) {
 	sqstd_seterrorhandlers(v);
 	sq_setprintfunc(v, sq_printfunc, sq_errorfunc);
+	sq_pushroottable(v);
+	sqstd_register_systemlib(v);
+	sqstd_register_iolib(v);
+	sqstd_register_bloblib(v);
+	sqstd_register_mathlib(v);
+	sqstd_register_stringlib(v);
 }
 
 /*
