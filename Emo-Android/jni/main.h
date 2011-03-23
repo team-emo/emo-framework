@@ -17,7 +17,6 @@ struct saved_state {
 struct engine {
     struct android_app* app;
 
-    timeb uptime;
     int animating;
     EGLDisplay display;
     EGLSurface surface;
@@ -26,6 +25,9 @@ struct engine {
     int32_t height;
     HSQUIRRELVM sqvm;
     int32_t lastError;
+
+    timeb startTime;
+    timeb uptime;
 
     float touchEventParamCache[MOTION_EVENT_PARAMS_SIZE];
     float keyEventParamCache[KEY_EVENT_PARAMS_SIZE];

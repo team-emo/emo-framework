@@ -31,13 +31,26 @@ extern SQInteger emoSetOptions(HSQUIRRELVM v);
 extern void emoUpdateOptions(SQInteger value);
 extern SQBool loadScriptFromAsset(const char* fname);
 
+static void engine_update_uptime(struct engine* engine) {
+	timeb eventTime;
+	ftime(&eventTime);
+
+	engine->uptime.time     = eventTime.time - engine->startTime.time;
+	engine->uptime.millitm  = eventTime.millitm;
+	engine->uptime.timezone = eventTime.timezone;
+	engine->uptime.dstflag  = eventTime.dstflag;
+}
+
 /**
  * Initialize the framework
  */
 void emo_init_engine(struct engine* engine) {
 
-    // update startup time
-    ftime(&engine->uptime);
+    // initialize startup time
+    ftime(&engine->startTime);
+
+    // initialize uptime
+    engine_update_uptime(engine);
 
     engine->sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
     engine->lastError = EMO_NO_ERROR;
@@ -123,10 +136,7 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 	struct engine* engine = (struct engine*)app->userData;
 	size_t pointerCount =  AMotionEvent_getPointerCount(event);
 
-	timeb eventTime;
-	ftime(&eventTime);
-
-	time_t timeSinceUptime = eventTime.time - engine->uptime.time;
+	engine_update_uptime(engine);
 
 	for (size_t i = 0; i < pointerCount; i++) {
 		size_t pointerId = AMotionEvent_getPointerId(event, i);
@@ -142,8 +152,8 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 		engine->touchEventParamCache[1] = action;
 		engine->touchEventParamCache[2] = AMotionEvent_getX(event, pointerIndex);
 		engine->touchEventParamCache[3] = AMotionEvent_getY(event, pointerIndex);
-		engine->touchEventParamCache[4] = timeSinceUptime;
-		engine->touchEventParamCache[5] = eventTime.millitm;
+		engine->touchEventParamCache[4] = engine->uptime.time;
+		engine->touchEventParamCache[5] = engine->uptime.millitm;
 		engine->touchEventParamCache[6] = AInputEvent_getDeviceId(event);
 		engine->touchEventParamCache[7] = AInputEvent_getSource(event);
 		
@@ -160,17 +170,14 @@ static int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 static int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 	struct engine* engine = (struct engine*)app->userData;
 
-	timeb eventTime;
-	ftime(&eventTime);
-
-	time_t timeSinceUptime = eventTime.time - engine->uptime.time;
+	engine_update_uptime(engine);
 
 	engine->keyEventParamCache[0] = AKeyEvent_getAction(event);
 	engine->keyEventParamCache[1] = AKeyEvent_getKeyCode(event);
 	engine->keyEventParamCache[2] = AKeyEvent_getRepeatCount(event);
 	engine->keyEventParamCache[3] = AKeyEvent_getMetaState(event);
-	engine->keyEventParamCache[4] = timeSinceUptime;
-	engine->keyEventParamCache[5] = eventTime.millitm;
+	engine->keyEventParamCache[4] = engine->uptime.time;
+	engine->keyEventParamCache[5] = engine->uptime.millitm;
 	engine->keyEventParamCache[6] = AInputEvent_getDeviceId(event);
 	engine->keyEventParamCache[7] = AInputEvent_getSource(event);
 
