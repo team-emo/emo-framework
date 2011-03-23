@@ -105,6 +105,9 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 	lastError = EMO_NO_ERROR;
 	isRunning = TRUE;
 	
+	// engine startup time
+	uptime = [[NSDate date] retain];
+	
 	sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
 	
 	initSQVM(sqvm);
@@ -122,6 +125,9 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 	sq_close(sqvm);
 	sqvm = nil;
 	isRunning = FALSE;
+	
+	[uptime release];
+	
 	return TRUE;
 }
 
@@ -241,5 +247,11 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 		return FALSE;
 	}
 	return callSqFunction_Bool_Floats(sqvm, "onKeyEvent", param, KEY_EVENT_PARAMS_SIZE, FALSE);	
+}
+-(NSTimeInterval)getUptime {
+	if (!isRunning) {
+		return 0.0;
+	}
+	return [[NSDate date] timeIntervalSinceDate:uptime];
 }
 @end

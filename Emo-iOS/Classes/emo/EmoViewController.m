@@ -228,8 +228,6 @@
  * Fire motion event
  */
 - (void)fireMotionEvent:(NSSet *)touches withEvent:(UIEvent *)event withAction:(NSInteger) action {
-	NSDate *date = [NSDate date];
-	int timeSince1970 = (int)[date timeIntervalSince1970];
 	for (UITouch *touch in touches) {
 		NSNumber *touchId = [touchIdMaster objectForKey:touch];
 		CGPoint location = [touch locationInView:self.view];
@@ -237,7 +235,7 @@
 		touchEventParamCache[1] = action;
 		touchEventParamCache[2] = location.x;
 		touchEventParamCache[3] = location.y;
-		touchEventParamCache[4] = timeSince1970; // event time
+		touchEventParamCache[4] = [engine getUptime]; // event time since startup
 		touchEventParamCache[5] = 0; // device id
 		touchEventParamCache[6] = 0; // source id
 		
