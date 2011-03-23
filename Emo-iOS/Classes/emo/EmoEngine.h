@@ -13,7 +13,7 @@ void NSLOGW(NSString* msg);
 	int lastError;
 	BOOL isFrameInitialized;
 	BOOL isRunning;
-	NSDate* uptime;
+	NSDate* startTime;
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readonly) int  lastError;
@@ -32,6 +32,6 @@ void NSLOGW(NSString* msg);
 - (BOOL)onKeyEvent:(float *)param;
 - (BOOL)startEngine;
 - (BOOL)stopEngine;
-- (NSTimeInterval)getUptime;
+- (NSTimeInterval)uptime;
 @end
 
