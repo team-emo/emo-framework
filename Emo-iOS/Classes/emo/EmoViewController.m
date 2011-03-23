@@ -235,7 +235,7 @@
 		touchEventParamCache[1] = action;
 		touchEventParamCache[2] = location.x;
 		touchEventParamCache[3] = location.y;
-		touchEventParamCache[4] = [engine getUptime]; // event time since startup
+		touchEventParamCache[4] = [engine getUptime]; // event time since startup (milliseconds)
 		touchEventParamCache[5] = 0; // device id
 		touchEventParamCache[6] = 0; // source id
 		

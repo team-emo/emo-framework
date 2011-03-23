@@ -252,6 +252,6 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 	if (!isRunning) {
 		return 0.0;
 	}
-	return [[NSDate date] timeIntervalSinceDate:uptime];
+	return (int)([[NSDate date] timeIntervalSinceDate:uptime] * 1000);
 }
 @end
