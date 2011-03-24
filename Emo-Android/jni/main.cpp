@@ -14,7 +14,9 @@
 #include <main.h>
 #include <sqfunc.h>
 
-/* global pointer to application engine */
+/* 
+ * global pointer to application engine
+ */
 struct engine *g_engine;
 
 /*
@@ -23,15 +25,6 @@ struct engine *g_engine;
 extern void LOGI(const SQChar* msg);
 extern void LOGW(const SQChar* msg);
 extern void LOGE(const SQChar* msg);
-
-extern SQInteger sq_lexer(SQUserPointer asset);
-
-extern SQInteger emoImportScript(HSQUIRRELVM v);
-extern SQInteger emoSetOptions(HSQUIRRELVM v);
-extern SQInteger emoRegisterSensors(HSQUIRRELVM v);
-
-extern void emoUpdateOptions(SQInteger value);
-extern SQBool loadScriptFromAsset(const char* fname);
 
 extern void    emo_init_engine(struct engine* engine);
 extern void    emo_init_display(struct engine* engine);
@@ -168,10 +161,8 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
     }
 }
 
-/**
- * This is the main entry point of a native application that is using
- * android_native_app_glue.  It runs in its own thread, with its own
- * event loop for receiving input events and doing other things.
+/*
+ * Main application entry point
  */
 void android_main(struct android_app* state) {
     struct engine engine;
@@ -190,7 +181,7 @@ void android_main(struct android_app* state) {
 
     g_engine = &engine;
 
-    /* Initialize the framework */
+    // Initialize the framework
     emo_init_engine(&engine);
 
     while (1) {
@@ -217,7 +208,6 @@ void android_main(struct android_app* state) {
                 }
             }
 
-            // Check if we are exiting.
             if (state->destroyRequested != 0) {
                 engine_term_display(&engine);
                 emo_dispose_engine(&engine);
@@ -226,8 +216,6 @@ void android_main(struct android_app* state) {
         }
 
         if (engine.animating) {
-            // Drawing is throttled to the screen update rate, so there
-            // is no need to do timing here.
             engine_draw_frame(&engine);
         }
     }
