@@ -49,7 +49,7 @@
     animationFrameInterval = 1;
     self.displayLink = nil;
 	
-	// Enable user interaction
+	// enable user interaction (touch event)
 	[self.view setUserInteractionEnabled:TRUE];
 	[self.view setMultipleTouchEnabled:TRUE];
 	((EmoView *)self.view).eventDelegate = self;

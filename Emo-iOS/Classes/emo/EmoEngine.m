@@ -9,6 +9,7 @@
 
 static BOOL enablePerspectiveNicest = TRUE;
 static BOOL enableOnDrawFrame = FALSE;
+static BOOL enableAccelerometerSensor = FALSE;
 
 void LOGI(const char* msg) {
 	NSLog(@"%s INFO %s", EMO_LOG_TAG, msg);
@@ -70,6 +71,17 @@ static void emoUpdateOptions(SQInteger value) {
 }
 
 /*
+ * delcare to use sensors
+ */
+static void emoCreateSensors(SQInteger value) {
+	switch(value) {
+		case SENSOR_TYPE_ACCELEROMETER:
+			enableAccelerometerSensor = TRUE;
+			break;
+	}
+}
+
+/*
  * option function called from squirrel script
  */
 SQInteger emoSetOptions(HSQUIRRELVM v) {
@@ -85,6 +97,22 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 	return 0;
 }
 
+/*
+ * register sensors function called from script
+ */
+SQInteger emoRegisterSensors(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+        if (sq_gettype(v, n) == OT_INTEGER) {
+            SQInteger value;
+            sq_getinteger(v, n, &value);
+			
+            emoCreateSensors(value);
+        }
+    }
+    return 0;
+}
+
 @interface EmoEngine (PrivateMethods)
 - (void)initEngine;
 @end
@@ -95,9 +123,13 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 @synthesize isFrameInitialized;
 @synthesize isRunning;
 
-- (void)initSqFunc {
-	register_global_func(sqvm, emoImportScript, "emo_import");	
-	register_global_func(sqvm, emoSetOptions,   "emo_options");	
+- (void)initScriptFunctions {
+    register_class(sqvm, SQUIRREL_RUNTIME_CLASS);
+    register_class(sqvm, SQUIRREL_EVENT_CLASS);
+	
+    register_class_func(sqvm, SQUIRREL_RUNTIME_CLASS, "import", emoImportScript);
+    register_class_func(sqvm, SQUIRREL_RUNTIME_CLASS, "setOptions", emoSetOptions);
+    register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
 }
 - (BOOL)startEngine {
 	
@@ -112,7 +144,7 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 	
 	initSQVM(sqvm);
 	
-	[self initSqFunc];
+	[self initScriptFunctions];
 
 	return TRUE;
 }

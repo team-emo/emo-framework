@@ -14,6 +14,7 @@ void NSLOGW(NSString* msg);
 	BOOL isFrameInitialized;
 	BOOL isRunning;
 	NSDate* startTime;
+	UIAccelerometer* accelerometerSensor;
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readonly) int  lastError;
