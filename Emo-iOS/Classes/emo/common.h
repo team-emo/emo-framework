@@ -3,6 +3,7 @@
 #define EMO_LOG_TAG "EmoFramework"
 
 #define SQUIRREL_VM_INITIAL_STACK_SIZE 1024
+#define SQUIRREL_RUNTIME_SCRIPT "emoruntime.nut"
 #define SQUIRREL_MAIN_SCRIPT "emomain.nut"
 
 #define MOTION_EVENT_PARAMS_SIZE 8

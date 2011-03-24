@@ -14,3 +14,5 @@ SQBool callSqFunction_Bool_Bool(HSQUIRRELVM v, const char* name, SQBool value);
 void sq_printfunc(HSQUIRRELVM v,const char *s,...);
 void sq_errorfunc(HSQUIRRELVM v,const char *s,...);
 void register_global_func(HSQUIRRELVM v, SQFUNCTION f, const char *fname);
+void register_class(HSQUIRRELVM v, const char *cname);
+void register_class_func(HSQUIRRELVM v, const char* cname, const char* fname, SQFUNCTION func);

@@ -243,13 +243,41 @@ void sq_errorfunc(HSQUIRRELVM v, const SQChar *s,...) {
     LOGW(text);
 }
 /*
- * Register global function
+ * Register global function.
  * Must be called before loading script files
  */
-void register_global_func(HSQUIRRELVM v, SQFUNCTION f, const char *fname) {
+void register_global_func(HSQUIRRELVM v, SQFUNCTION func, const char *fname) {
     sq_pushroottable(v);
     sq_pushstring(v, fname, -1);
-    sq_newclosure(v, f, 0);
+    sq_newclosure(v, func, 0);
     sq_createslot(v, -3);
     sq_pop(v,1);
 }
+
+/*
+ * Register new class.
+ * Must be called before loading script files
+ */
+void register_class(HSQUIRRELVM v, const char *cname) {
+    sq_pushroottable(v);
+    sq_pushstring(v, cname, -1);
+    sq_newclass(v, false);
+    sq_createslot(v, -3);
+    sq_pop(v, 1);
+}
+
+/*
+ * Register class method.
+ * Must be called before loading script files
+ */
+void register_class_func(HSQUIRRELVM v, const char* cname, const char* fname, SQFUNCTION func) {
+    sq_pushroottable(v);
+    sq_pushstring(v, cname, -1);
+    if(SQ_SUCCEEDED(sq_get(v, -2))) {
+        sq_pushstring(v, fname, -1);
+        sq_newclosure(v, func, 0);
+        sq_newslot(v, -3, true);
+    }
+    sq_pop(v, 1);
+}
+

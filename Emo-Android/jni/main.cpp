@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <jni.h>
 #include <errno.h>
 #include <sys/timeb.h>
@@ -44,6 +43,18 @@ static void engine_update_uptime(struct engine* engine) {
 	engine->uptime.dstflag  = eventTime.dstflag;
 }
 
+/*
+ * register class and functions for script
+ */
+static void initScriptFunctions(struct engine* engine) {
+    register_class(engine->sqvm, "Runtime");
+    register_class(engine->sqvm, "Event");
+
+    register_class_func(engine->sqvm, "Runtime", "import", emoImportScript);
+    register_class_func(engine->sqvm, "Runtime", "setOptions", emoSetOptions);
+    register_class_func(engine->sqvm, "Event",   "registerSensors", emoRegisterSensors);
+}
+
 /**
  * Initialize the framework
  */
@@ -67,12 +78,11 @@ void emo_init_engine(struct engine* engine) {
     // init Squirrel VM
     initSQVM(engine->sqvm);
 
-    // initialize squirrel functions
-    register_global_func(engine->sqvm, emoImportScript, "emo_import");
-    register_global_func(engine->sqvm, emoSetOptions,   "emo_options");
-    register_global_func(engine->sqvm, emoRegisterSensors, "emo_register_sensors");
+    // register class and functions for script
+    initScriptFunctions(engine);
 
-    // load main script
+    // load runtime and main script
+    loadScriptFromAsset(SQUIRREL_RUNTIME_SCRIPT);
     loadScriptFromAsset(SQUIRREL_MAIN_SCRIPT);
 
     // force fullscreen
