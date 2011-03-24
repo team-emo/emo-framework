@@ -76,7 +76,7 @@ static void emoUpdateOptions(SQInteger value) {
 static void emoCreateSensors(SQInteger value) {
 	switch(value) {
 		case SENSOR_TYPE_ACCELEROMETER:
-			enableAccelerometerSensor = TRUE;
+			[EmoEngine enableAccelerometerSensor:TRUE];
 			break;
 	}
 }
@@ -280,10 +280,20 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 	}
 	return callSqFunction_Bool_Floats(sqvm, "onKeyEvent", param, KEY_EVENT_PARAMS_SIZE, FALSE);	
 }
+/*
+ * UIAccelerometer delegate
+ */
+-(void)accelerometer:(UIAccelerometer *)accelerometer
+	   didAccelerate:(UIAcceleration *)acceleration {
+	// TODO	
+}
 -(NSTimeInterval)uptime {
 	if (!isRunning) {
 		return 0.0;
 	}
 	return [[NSDate date] timeIntervalSinceDate:startTime];
+}
++(void)enableAccelerometerSensor:(BOOL)enable {
+	enableAccelerometerSensor = enable;
 }
 @end

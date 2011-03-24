@@ -8,13 +8,12 @@ void NSLOGI(NSString* msg);
 void NSLOGE(NSString* msg);
 void NSLOGW(NSString* msg);
 
-@interface EmoEngine : NSObject {
+@interface EmoEngine : NSObject<UIAccelerometerDelegate> {
 	HSQUIRRELVM sqvm;
 	int lastError;
 	BOOL isFrameInitialized;
 	BOOL isRunning;
 	NSDate* startTime;
-	UIAccelerometer* accelerometerSensor;
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readonly) int  lastError;
@@ -22,6 +21,7 @@ void NSLOGW(NSString* msg);
 @property (readonly) BOOL isRunning;
 
 + (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
++ (void)enableAccelerometerSensor:(BOOL)enable;
 - (BOOL)initDrawFrame;
 - (BOOL)onLoad;
 - (BOOL)onGainedFocus;
