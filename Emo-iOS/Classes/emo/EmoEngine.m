@@ -9,7 +9,8 @@
 
 static BOOL enablePerspectiveNicest = TRUE;
 static BOOL enableOnDrawFrame = FALSE;
-static BOOL enableAccelerometerSensor = FALSE;
+static BOOL accelerometerSensorRegistered = FALSE;
+static BOOL accelerometerShouldAlive = FALSE;
 
 void LOGI(const char* msg) {
 	NSLog(@"%s INFO %s", EMO_LOG_TAG, msg);
@@ -76,7 +77,7 @@ static void emoUpdateOptions(SQInteger value) {
 static void emoCreateSensors(SQInteger value) {
 	switch(value) {
 		case SENSOR_TYPE_ACCELEROMETER:
-			[EmoEngine enableAccelerometerSensor:TRUE];
+			[EmoEngine registerAccelerometerSensor:TRUE];
 			break;
 	}
 }
@@ -115,6 +116,7 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 
 @interface EmoEngine (PrivateMethods)
 - (void)initEngine;
+- (void)updateEngineStatus;
 @end
 
 @implementation EmoEngine
@@ -223,14 +225,22 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 		NSLOGE(@"onLoad failed because EmoEngine is stopped.");
 		return FALSE;
 	}
-	return callSqFunction(sqvm, "onLoad");
+	BOOL sqResult = callSqFunction(sqvm, "onLoad");
+
+	[self updateEngineStatus];
+
+	return sqResult;
 }
 -(BOOL)onGainedFocus {
 	if (!isRunning) {
 		NSLOGE(@"onGainedFocus failed because EmoEngine is stopped.");
 		return FALSE;
 	}
-	return callSqFunction(sqvm, "onGainedFocus");
+	BOOL sqResult = callSqFunction(sqvm, "onGainedFocus");
+
+	[self updateEngineStatus];
+
+	return sqResult;
 }
 -(BOOL)onDrawFrame {
 	if (!isRunning) {
@@ -250,21 +260,33 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 		NSLOGE(@"onLostFocus failed because EmoEngine is stopped.");
 		return FALSE;
 	}
-	return callSqFunction(sqvm, "onLostFocus");
+	BOOL sqResult = callSqFunction(sqvm, "onLostFocus");
+
+	[self updateEngineStatus];
+
+	return sqResult;
 }
 -(BOOL)onDispose {
 	if (!isRunning) {
 		NSLOGE(@"onDispose failed because EmoEngine is stopped.");
 		return FALSE;
 	}
-	return callSqFunction(sqvm, "onDispose");
+	BOOL sqResult = callSqFunction(sqvm, "onDispose");
+
+	[self updateEngineStatus];
+
+	return sqResult;
 }
 -(BOOL)onLowMemory {
 	if (!isRunning) {
 		NSLOGE(@"onLowMemory failed because EmoEngine is stopped.");
 		return FALSE;
 	}
-	return callSqFunction(sqvm, "onLowMemory");	
+	BOOL sqResult = callSqFunction(sqvm, "onLowMemory");
+	
+	[self updateEngineStatus];
+	
+	return sqResult;
 }
 -(BOOL)onMotionEvent:(float *)param {
 	if (!isRunning) {
@@ -287,13 +309,37 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 	   didAccelerate:(UIAcceleration *)acceleration {
 	// TODO	
 }
+
 -(NSTimeInterval)uptime {
 	if (!isRunning) {
 		return 0.0;
 	}
 	return [[NSDate date] timeIntervalSinceDate:startTime];
 }
-+(void)enableAccelerometerSensor:(BOOL)enable {
-	enableAccelerometerSensor = enable;
+
+-(void)updateEngineStatus {
+	// enable/disable accelerometerSensor
+	if (accelerometerShouldAlive && accelerometerSensor == nil) {
+		accelerometerSensor = [UIAccelerometer sharedAccelerometer];
+		accelerometerSensor.delegate = self;
+    } else if (!accelerometerShouldAlive && accelerometerSensor != nil) {
+		accelerometerSensor.delegate = nil;
+		accelerometerSensor = nil;
+	}
+}
+
++(void)registerAccelerometerSensor:(BOOL)enable {
+	accelerometerSensorRegistered = enable;
+}
++ (void)enableAccelerometerSensor:(BOOL)enable {
+	[self enableAccelerometerSensor:enable withInterval:0.1f];
+}
++ (void)enableAccelerometerSensor:(BOOL)enable withInterval:(NSTimeInterval)updateInterval {
+	if (enable && accelerometerSensorRegistered) {
+		accelerometerShouldAlive = TRUE;
+		[UIAccelerometer sharedAccelerometer].updateInterval = updateInterval;
+	} else {
+		accelerometerShouldAlive = FALSE;
+	}
 }
 @end

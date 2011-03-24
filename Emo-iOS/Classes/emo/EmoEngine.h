@@ -14,6 +14,7 @@ void NSLOGW(NSString* msg);
 	BOOL isFrameInitialized;
 	BOOL isRunning;
 	NSDate* startTime;
+	UIAccelerometer* accelerometerSensor;
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readonly) int  lastError;
@@ -21,7 +22,9 @@ void NSLOGW(NSString* msg);
 @property (readonly) BOOL isRunning;
 
 + (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
++ (void)registerAccelerometerSensor:(BOOL)enable;
 + (void)enableAccelerometerSensor:(BOOL)enable;
++ (void)enableAccelerometerSensor:(BOOL)enable withInterval:(NSTimeInterval)updateInterval;
 - (BOOL)initDrawFrame;
 - (BOOL)onLoad;
 - (BOOL)onGainedFocus;
