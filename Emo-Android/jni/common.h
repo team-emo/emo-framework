@@ -6,6 +6,9 @@
 #define SQUIRREL_RUNTIME_SCRIPT "emoruntime.nut"
 #define SQUIRREL_MAIN_SCRIPT "emomain.nut"
 
+#define SQUIRREL_RUNTIME_CLASS "Runtime"
+#define SQUIRREL_EVENT_CLASS "Event"
+
 #define MOTION_EVENT_PARAMS_SIZE 8
 #define KEY_EVENT_PARAMS_SIZE    8
 

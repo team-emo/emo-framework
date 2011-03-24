@@ -47,12 +47,12 @@ static void engine_update_uptime(struct engine* engine) {
  * register class and functions for script
  */
 static void initScriptFunctions(struct engine* engine) {
-    register_class(engine->sqvm, "Runtime");
-    register_class(engine->sqvm, "Event");
+    register_class(engine->sqvm, SQUIRREL_RUNTIME_CLASS);
+    register_class(engine->sqvm, SQUIRREL_EVENT_CLASS);
 
-    register_class_func(engine->sqvm, "Runtime", "import", emoImportScript);
-    register_class_func(engine->sqvm, "Runtime", "setOptions", emoSetOptions);
-    register_class_func(engine->sqvm, "Event",   "registerSensors", emoRegisterSensors);
+    register_class_func(engine->sqvm, SQUIRREL_RUNTIME_CLASS, "import", emoImportScript);
+    register_class_func(engine->sqvm, SQUIRREL_RUNTIME_CLASS, "setOptions", emoSetOptions);
+    register_class_func(engine->sqvm, SQUIRREL_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
 }
 
 /**
