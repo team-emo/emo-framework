@@ -165,8 +165,12 @@
 		NSLOGE(@"Failed to start engine");
 	}
 	
+	if ([EmoEngine loadScriptFromResource:SQUIRREL_RUNTIME_SCRIPT vm:engine.sqvm] != EMO_NO_ERROR) {
+		NSLOGE(@"Failed to load runtime script");
+	}
+
 	if ([EmoEngine loadScriptFromResource:SQUIRREL_MAIN_SCRIPT vm:engine.sqvm] != EMO_NO_ERROR) {
-		NSLOGE(@"Failed to load script");
+		NSLOGE(@"Failed to load main script");
 	}
 	
 	/* call onLoad() */

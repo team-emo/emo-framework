@@ -9,9 +9,13 @@
 
 static BOOL enablePerspectiveNicest = TRUE;
 static BOOL enableOnDrawFrame = FALSE;
+static BOOL shouldImmediateUpdateStatus = FALSE;
 static BOOL accelerometerSensorRegistered = FALSE;
 static BOOL accelerometerShouldAlive = FALSE;
 
+/*
+ * Logging
+ */
 void LOGI(const char* msg) {
 	NSLog(@"%s INFO %s", EMO_LOG_TAG, msg);
 }
@@ -37,7 +41,7 @@ void NSLOGW(NSString* msg) {
 }
 
 /*
- * Import function called from squirrel script
+ * import function called from squirrel script
  */
 SQInteger emoImportScript(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
@@ -54,6 +58,9 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
 	return 0;
 }
 
+/*
+ * update options
+ */
 static void emoUpdateOptions(SQInteger value) {
     switch(value) {
 		case OPT_ENABLE_PERSPECTIVE_NICEST:
@@ -125,6 +132,9 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 @synthesize isFrameInitialized;
 @synthesize isRunning;
 
+/*
+ * register classes and functions for script
+ */
 - (void)initScriptFunctions {
     register_class(sqvm, SQUIRREL_RUNTIME_CLASS);
     register_class(sqvm, SQUIRREL_EVENT_CLASS);
@@ -133,6 +143,10 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
     register_class_func(sqvm, SQUIRREL_RUNTIME_CLASS, "setOptions", emoSetOptions);
     register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
 }
+
+/*
+ * start the engine
+ */
 - (BOOL)startEngine {
 	
 	isFrameInitialized = FALSE;
@@ -151,6 +165,9 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 	return TRUE;
 }
 
+/*
+ * stop the engine
+ */
 - (BOOL)stopEngine {
 	
 	// disable "keep screen on"
@@ -203,6 +220,9 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 	return TRUE;
 }
 
+/*
+ * load script from resource
+ */
 +(int)loadScriptFromResource:(const char*)chfname vm:(HSQUIRRELVM) v {
 	NSString* fname = [[NSString alloc] initWithUTF8String:chfname];
 	NSString* path = [[NSBundle mainBundle] pathForResource:fname ofType:nil];
@@ -220,6 +240,9 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 	return sqCompileBuffer(v, script, sourcename);
 }
 
+/*
+ * called when the app is loaded
+ */ 
 -(BOOL)onLoad {
 	if (!isRunning) {
 		NSLOGE(@"onLoad failed because EmoEngine is stopped.");
@@ -231,6 +254,10 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 
 	return sqResult;
 }
+
+/*
+ * called when the app gained focus
+ */
 -(BOOL)onGainedFocus {
 	if (!isRunning) {
 		NSLOGE(@"onGainedFocus failed because EmoEngine is stopped.");
@@ -242,11 +269,21 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 
 	return sqResult;
 }
+
+/*
+ * called when the app requests drawing
+ */
 -(BOOL)onDrawFrame {
 	if (!isRunning) {
 		NSLOGE(@"onDrawFrame failed because EmoEngine is stopped.");
 		return FALSE;
 	}
+	
+	if (shouldImmediateUpdateStatus) {
+		[self updateEngineStatus];
+		shouldImmediateUpdateStatus = FALSE;
+	}
+	
     glClearColor(0, 0, 0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 	
@@ -255,6 +292,10 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 	}
 	return FALSE;
 }
+
+/*
+ * called when the app lost focus
+ */
 -(BOOL)onLostFocus {
 	if (!isRunning) {
 		NSLOGE(@"onLostFocus failed because EmoEngine is stopped.");
@@ -266,6 +307,10 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 
 	return sqResult;
 }
+
+/*
+ * called when the app will be disposed
+ */
 -(BOOL)onDispose {
 	if (!isRunning) {
 		NSLOGE(@"onDispose failed because EmoEngine is stopped.");
@@ -277,6 +322,10 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 
 	return sqResult;
 }
+
+/*
+ * called when the memory is low
+ */
 -(BOOL)onLowMemory {
 	if (!isRunning) {
 		NSLOGE(@"onLowMemory failed because EmoEngine is stopped.");
@@ -288,6 +337,10 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 	
 	return sqResult;
 }
+
+/*
+ * called when the touch event occurs
+ */
 -(BOOL)onMotionEvent:(float *)param {
 	if (!isRunning) {
 		NSLOGE(@"onMotionEvent failed because EmoEngine is stopped.");
@@ -295,6 +348,10 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 	}
 	return callSqFunction_Bool_Floats(sqvm, "onMotionEvent", param, MOTION_EVENT_PARAMS_SIZE, FALSE);
 }
+
+/*
+ * called when the key event occurs
+ */
 -(BOOL)onKeyEvent:(float *)param {
 	if (!isRunning) {
 		NSLOGE(@"onKeyEvent failed because EmoEngine is stopped.");
@@ -302,21 +359,29 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 	}
 	return callSqFunction_Bool_Floats(sqvm, "onKeyEvent", param, KEY_EVENT_PARAMS_SIZE, FALSE);	
 }
+
 /*
- * UIAccelerometer delegate
+ * accelerometer event
  */
 -(void)accelerometer:(UIAccelerometer *)accelerometer
 	   didAccelerate:(UIAcceleration *)acceleration {
 	// TODO	
 }
 
+/*
+ * returns uptime of the engine
+ */
 -(NSTimeInterval)uptime {
 	if (!isRunning) {
-		return 0.0;
+		return 0.0f;
 	}
 	return [[NSDate date] timeIntervalSinceDate:startTime];
 }
 
+/*
+ * update status of the engine
+ * this method enables/disables sensors
+ */
 -(void)updateEngineStatus {
 	// enable/disable accelerometerSensor
 	if (accelerometerShouldAlive && accelerometerSensor == nil) {
@@ -328,18 +393,38 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 	}
 }
 
+/*
+ * register accelerometer sensor
+ */
 +(void)registerAccelerometerSensor:(BOOL)enable {
 	accelerometerSensorRegistered = enable;
 }
-+ (void)enableAccelerometerSensor:(BOOL)enable {
-	[self enableAccelerometerSensor:enable withInterval:0.1f];
-}
-+ (void)enableAccelerometerSensor:(BOOL)enable withInterval:(NSTimeInterval)updateInterval {
-	if (enable && accelerometerSensorRegistered) {
-		accelerometerShouldAlive = TRUE;
-		[UIAccelerometer sharedAccelerometer].updateInterval = updateInterval;
-	} else {
-		accelerometerShouldAlive = FALSE;
+
+/*
+ * enable sensor with updateInterval
+ */
++ (void)enableSensor:(BOOL)enable withType:(NSInteger)sensorType withInterval:(NSTimeInterval)updateInterval {
+	if (sensorType == SENSOR_TYPE_ACCELEROMETER) {
+		if (enable && accelerometerSensorRegistered) {
+			accelerometerShouldAlive = TRUE;
+			[UIAccelerometer sharedAccelerometer].updateInterval = updateInterval;
+		} else {
+			accelerometerShouldAlive = FALSE;
+		}
 	}
+}
+
+/*
+ * disable sensor
+ */
++ (void)disableSensor:(NSInteger)sensorType {
+	[self enableSensor:FALSE withType:sensorType withInterval:0.1f];
+}
+
+/*
+ * update engine status immediately
+ */
++ (void)updateStatusImmediately {
+	shouldImmediateUpdateStatus = TRUE;
 }
 @end
