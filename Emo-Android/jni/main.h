@@ -1,6 +1,9 @@
 #include <sys/timeb.h>
 #include <EGL/egl.h>
+
+#include <android/sensor.h>
 #include <android/log.h>
+
 #include <common.h>
 
 /**
@@ -32,8 +35,17 @@ struct engine {
     float touchEventParamCache[MOTION_EVENT_PARAMS_SIZE];
     float keyEventParamCache[KEY_EVENT_PARAMS_SIZE];
 
-    SQBool enablePerspectiveNicest;
-    SQBool enableOnDrawFrame;
+    bool enablePerspectiveNicest;
+    bool enableOnDrawFrame;
+
+    ASensorManager* sensorManager;
+    ASensorEventQueue* sensorEventQueue;
+
+    const ASensor* accelerometerSensor;
+    const ASensor* magneticSensor;
+    const ASensor* gyroscopeSensor;
+    const ASensor* lightSensor;
+    const ASensor* proximitySensor;
 
     struct saved_state state;
 };

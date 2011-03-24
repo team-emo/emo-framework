@@ -115,6 +115,42 @@ void emoUpdateOptions(SQInteger value) {
     }
 }
 
+void emoCreateSensors(SQInteger value) {
+
+    if (g_engine->sensorManager == NULL) {
+        // Get a reference to the sensor manager
+        g_engine->sensorManager = ASensorManager_getInstance();
+
+        // Creates a new sensor event queue
+        g_engine->sensorEventQueue = ASensorManager_createEventQueue(
+            g_engine->sensorManager, g_engine->app->looper, LOOPER_ID_USER, NULL, NULL);
+    }
+
+    switch(value) {
+    case SENSOR_TYPE_ACCELEROMETER:
+        g_engine->accelerometerSensor = ASensorManager_getDefaultSensor(
+            g_engine->sensorManager, ASENSOR_TYPE_ACCELEROMETER);
+        break;
+    case SENSOR_TYPE_MAGNETIC_FIELD:
+        g_engine->magneticSensor = ASensorManager_getDefaultSensor(
+            g_engine->sensorManager, ASENSOR_TYPE_MAGNETIC_FIELD);
+        break;
+    case SENSOR_TYPE_GYROSCOPE:
+        g_engine->gyroscopeSensor = ASensorManager_getDefaultSensor(
+            g_engine->sensorManager, ASENSOR_TYPE_GYROSCOPE);
+        break;
+    case SENSOR_TYPE_LIGHT:
+        g_engine->lightSensor = ASensorManager_getDefaultSensor(
+            g_engine->sensorManager, ASENSOR_TYPE_LIGHT);
+        break;
+    case SENSOR_TYPE_PROXIMITY:
+        g_engine->proximitySensor = ASensorManager_getDefaultSensor(
+            g_engine->sensorManager, ASENSOR_TYPE_PROXIMITY);
+        break;
+    }
+
+}
+
 /*
  * option function called from squirrel script
  */
@@ -131,3 +167,15 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
     return 0;
 }
 
+SQInteger emoRegisterSensors(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+        if (sq_gettype(v, n) == OT_INTEGER) {
+            SQInteger value;
+            sq_getinteger(v, n, &value);
+
+            emoCreateSensors(value);
+        }
+    }
+    return 0;
+}

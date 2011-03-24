@@ -26,8 +26,11 @@ extern void LOGW(const SQChar* msg);
 extern void LOGE(const SQChar* msg);
 
 extern SQInteger sq_lexer(SQUserPointer asset);
+
 extern SQInteger emoImportScript(HSQUIRRELVM v);
 extern SQInteger emoSetOptions(HSQUIRRELVM v);
+extern SQInteger emoRegisterSensors(HSQUIRRELVM v);
+
 extern void emoUpdateOptions(SQInteger value);
 extern SQBool loadScriptFromAsset(const char* fname);
 
@@ -67,6 +70,7 @@ void emo_init_engine(struct engine* engine) {
     // initialize squirrel functions
     register_global_func(engine->sqvm, emoImportScript, "emo_import");
     register_global_func(engine->sqvm, emoSetOptions,   "emo_options");
+    register_global_func(engine->sqvm, emoRegisterSensors, "emo_register_sensors");
 
     // load main script
     loadScriptFromAsset(SQUIRREL_MAIN_SCRIPT);
@@ -197,6 +201,13 @@ int32_t emo_handle_input(struct android_app* app, AInputEvent* event) {
         return emo_event_key(app, event);
     }
     return 0;
+}
+
+/*
+ * handle sensor event TODO
+ */
+static void engine_handle_sensors(struct engine* engine, ASensorEvent* event) {
+   LOGI("engine_handle_sensors: not implemented yet.");
 }
 
 /*
@@ -389,7 +400,13 @@ void android_main(struct android_app* state) {
 
             // Process the user queue.
             if (ident == LOOPER_ID_USER) {
-
+                if (engine.sensorEventQueue != NULL) {
+                    ASensorEvent event;
+                    while (ASensorEventQueue_getEvents(
+                            engine.sensorEventQueue, &event, 1) > 0) {
+                        engine_handle_sensors(&engine, &event);
+                    }
+                }
             }
 
             // Check if we are exiting.
