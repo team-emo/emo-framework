@@ -238,11 +238,6 @@ void emo_low_memory(struct engine* engine) {
  * Initialize an EGL context for the current display.
  */
 static int engine_init_display(struct engine* engine) {
-	/*
-     * Here specify the attributes of the desired configuration.
-     * Below, we select an EGLConfig with at least 8 bits per color
-     * component compatible with on-screen windows
-     */
     const EGLint attribs[] = {
             EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
             EGL_BLUE_SIZE, 8,

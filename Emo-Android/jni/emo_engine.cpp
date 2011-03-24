@@ -152,7 +152,7 @@ void emoCreateSensors(SQInteger value) {
 }
 
 /*
- * option function called from squirrel script
+ * set options function called from script
  */
 SQInteger emoSetOptions(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
@@ -167,6 +167,9 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
     return 0;
 }
 
+/*
+ * register sensors function called from script
+ */
 SQInteger emoRegisterSensors(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
     for(SQInteger n = 1; n <= nargs; n++) {
