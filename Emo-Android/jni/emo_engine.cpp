@@ -197,7 +197,7 @@ int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 }
 
 /*
- * handle sensor event TODO
+ * handle sensor event
  */
 int32_t emo_event_sensors(struct engine* engine, ASensorEvent* event) {
     switch(event->sensor) {

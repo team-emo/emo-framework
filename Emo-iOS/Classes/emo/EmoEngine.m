@@ -229,7 +229,7 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
 - (BOOL)initDrawFrame {
 
 	if (!isRunning) {
-		NSLOGE(@"initDrawFrame failed because EmoEngine is stopped.");
+		NSLOGE(@"The framework is not running: initDrawFrame");
 		return FALSE;
 	}
 	if (isFrameInitialized) return FALSE;
@@ -286,7 +286,7 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
  */ 
 -(BOOL)onLoad {
 	if (!isRunning) {
-		NSLOGE(@"onLoad failed because EmoEngine is stopped.");
+		NSLOGE(@"The framework is not running: onLoad");
 		return FALSE;
 	}
 	BOOL sqResult = callSqFunction(sqvm, "onLoad");
@@ -301,7 +301,7 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
  */
 -(BOOL)onGainedFocus {
 	if (!isRunning) {
-		NSLOGE(@"onGainedFocus failed because EmoEngine is stopped.");
+		NSLOGE(@"The framework is not running: onGainedFocus");
 		return FALSE;
 	}
 	BOOL sqResult = callSqFunction(sqvm, "onGainedFocus");
@@ -316,7 +316,7 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
  */
 -(BOOL)onDrawFrame {
 	if (!isRunning) {
-		NSLOGE(@"onDrawFrame failed because EmoEngine is stopped.");
+		NSLOGE(@"The framework is not running: onDrawFrame");
 		return FALSE;
 	}
 	
@@ -339,7 +339,7 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
  */
 -(BOOL)onLostFocus {
 	if (!isRunning) {
-		NSLOGE(@"onLostFocus failed because EmoEngine is stopped.");
+		NSLOGE(@"The framework is not running: onLostFocus");
 		return FALSE;
 	}
 	BOOL sqResult = callSqFunction(sqvm, "onLostFocus");
@@ -354,7 +354,7 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
  */
 -(BOOL)onDispose {
 	if (!isRunning) {
-		NSLOGE(@"onDispose failed because EmoEngine is stopped.");
+		NSLOGE(@"The framework is not running: onDispose");
 		return FALSE;
 	}
 	BOOL sqResult = callSqFunction(sqvm, "onDispose");
@@ -369,7 +369,7 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
  */
 -(BOOL)onLowMemory {
 	if (!isRunning) {
-		NSLOGE(@"onLowMemory failed because EmoEngine is stopped.");
+		NSLOGE(@"The framework is not running: onLowMemory");
 		return FALSE;
 	}
 	BOOL sqResult = callSqFunction(sqvm, "onLowMemory");
@@ -384,7 +384,7 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
  */
 -(BOOL)onMotionEvent:(float *)param {
 	if (!isRunning) {
-		NSLOGE(@"onMotionEvent failed because EmoEngine is stopped.");
+		NSLOGE(@"The framework is not running: onMotionEvent");
 		return FALSE;
 	}
 	return callSqFunction_Bool_Floats(sqvm, "onMotionEvent", param, MOTION_EVENT_PARAMS_SIZE, FALSE);
@@ -395,7 +395,7 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
  */
 -(BOOL)onKeyEvent:(float *)param {
 	if (!isRunning) {
-		NSLOGE(@"onKeyEvent failed because EmoEngine is stopped.");
+		NSLOGE(@"The framework is not running: onKeyEvent");
 		return FALSE;
 	}
 	return callSqFunction_Bool_Floats(sqvm, "onKeyEvent", param, KEY_EVENT_PARAMS_SIZE, FALSE);	
