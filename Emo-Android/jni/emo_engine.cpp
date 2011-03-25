@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 
@@ -198,8 +199,19 @@ int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 /*
  * handle sensor event TODO
  */
-void emo_event_sensors(struct engine* engine, ASensorEvent* event) {
-   LOGI("engine_handle_sensors: not implemented yet.");
+int32_t emo_event_sensors(struct engine* engine, ASensorEvent* event) {
+    switch(event->sensor) {
+    case ASENSOR_TYPE_ACCELEROMETER:
+        engine->accelerometerEventParamCache[0] = event->sensor;
+        engine->accelerometerEventParamCache[1] = event->acceleration.x;
+        engine->accelerometerEventParamCache[2] = event->acceleration.y;
+        engine->accelerometerEventParamCache[3] = event->acceleration.z;
+        if (callSqFunction_Bool_Floats(engine->sqvm, "onSensorEvent", engine->accelerometerEventParamCache, ACCELEROMETER_EVENT_PARAMS_SIZE, false)) {
+            return 1;
+        }
+        break;
+    }
+    return 0;
 }
 
 /*

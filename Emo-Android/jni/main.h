@@ -34,6 +34,7 @@ struct engine {
 
     float touchEventParamCache[MOTION_EVENT_PARAMS_SIZE];
     float keyEventParamCache[KEY_EVENT_PARAMS_SIZE];
+    float accelerometerEventParamCache[ACCELEROMETER_EVENT_PARAMS_SIZE];
 
     bool enablePerspectiveNicest;
     bool enableOnDrawFrame;
