@@ -21,6 +21,13 @@ extern SQInteger emoSetOptions(HSQUIRRELVM v);
 extern SQInteger emoRegisterSensors(HSQUIRRELVM v);
 extern SQInteger emoEnableSensor(HSQUIRRELVM v);
 extern SQInteger emoDisableSensor(HSQUIRRELVM v);
+extern SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v);
+extern SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v);
+
+extern SQInteger emoDrawableCreate(HSQUIRRELVM v);
+extern SQInteger emoDrawableMove(HSQUIRRELVM v);
+extern SQInteger emoDrawableScale(HSQUIRRELVM v);
+extern SQInteger emoDrawableRotate(HSQUIRRELVM v);
 
 extern void      emoUpdateOptions(SQInteger value);
 
@@ -32,12 +39,21 @@ extern SQBool loadScriptFromAsset(const char* fname);
 static void initScriptFunctions(struct engine* engine) {
     register_class(engine->sqvm, SQUIRREL_RUNTIME_CLASS);
     register_class(engine->sqvm, SQUIRREL_EVENT_CLASS);
+    register_class(engine->sqvm, SQUIRREL_DRAWABLE_CLASS);
 
     register_class_func(engine->sqvm, SQUIRREL_RUNTIME_CLASS, "import",          emoImportScript);
     register_class_func(engine->sqvm, SQUIRREL_RUNTIME_CLASS, "setOptions",      emoSetOptions);
+
     register_class_func(engine->sqvm, SQUIRREL_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
     register_class_func(engine->sqvm, SQUIRREL_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
     register_class_func(engine->sqvm, SQUIRREL_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
+    register_class_func(engine->sqvm, SQUIRREL_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
+    register_class_func(engine->sqvm, SQUIRREL_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+
+    register_class_func(engine->sqvm, SQUIRREL_DRAWABLE_CLASS, "constructor",    emoDrawableCreate);
+    register_class_func(engine->sqvm, SQUIRREL_DRAWABLE_CLASS, "move",           emoDrawableMove);
+    register_class_func(engine->sqvm, SQUIRREL_DRAWABLE_CLASS, "scale",          emoDrawableScale);
+    register_class_func(engine->sqvm, SQUIRREL_DRAWABLE_CLASS, "rotate",         emoDrawableRotate);
 }
 
 void engine_update_uptime(struct engine* engine) {
@@ -65,7 +81,8 @@ void emo_init_engine(struct engine* engine) {
     engine->lastError = EMO_NO_ERROR;
 
     // disable drawframe callback to improve performance (default)
-    engine->enableOnDrawFrame = SQFalse;
+    engine->enableOnDrawFrame   = false;
+    engine->onDrawFrameInterval = 0;
 
     // enable perspective hint to nicest (default)
     engine->enablePerspectiveNicest = SQTrue;

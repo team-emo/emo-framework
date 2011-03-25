@@ -105,9 +105,6 @@ void emoUpdateOptions(SQInteger value) {
     case OPT_ENABLE_PERSPECTIVE_FASTEST:
         g_engine->enablePerspectiveNicest = false;
         break;
-    case OPT_ENABLE_ONDRAW_CALLBACK:
-        g_engine->enableOnDrawFrame = true;
-        break;
     case OPT_WINDOW_FORCE_FULLSCREEN:
         ANativeActivity_setWindowFlags(g_engine->app->activity, AWINDOW_FLAG_FULLSCREEN, AWINDOW_FLAG_FORCE_NOT_FULLSCREEN);
         break;
@@ -300,3 +297,24 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
 
 }
 
+// TODO
+SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
+    g_engine->enableOnDrawFrame = SQTrue;
+
+    SQInteger nargs = sq_gettop(v);
+    if (nargs < 2) {
+        return 0;
+    }
+
+    SQFloat interval;
+    sq_getfloat(v, 2, &interval);
+
+    g_engine->onDrawFrameInterval = interval;
+
+    return 0;
+}
+
+SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
+    g_engine->enableOnDrawFrame = SQFalse;
+    return 0;
+}

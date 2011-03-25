@@ -9,8 +9,10 @@ local drawed = false;
 function onLoad() { 
     print("onLoad");
 
-    runtime.setOptions(OPT_ENABLE_ONDRAW_CALLBACK, OPT_ENABLE_PERSPECTIVE_FASTEST, OPT_WINDOW_KEEP_SCREEN_ON);
-    event.registerSensors(SENSOR_TYPE_ACCELEROMETER, SENSOR_TYPE_GYROSCOPE);
+    runtime.setOptions(OPT_WINDOW_KEEP_SCREEN_ON, OPT_ENABLE_PERSPECTIVE_NICEST);
+
+    event.registerSensors(SENSOR_TYPE_ACCELEROMETER);
+    event.enableOnDrawCallback(0.1);
 }
 
 function onGainedFocus() {
