@@ -1,4 +1,5 @@
 #import "squirrel.h"
+#import "common.h"
 
 void LOGI(const char* msg);
 void LOGE(const char* msg);
@@ -15,6 +16,7 @@ void NSLOGW(NSString* msg);
 	BOOL isRunning;
 	NSDate* startTime;
 	UIAccelerometer* accelerometerSensor;
+	float accelerometerEventParamCache[ACCELEROMETER_EVENT_PARAMS_SIZE];
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readonly) int  lastError;

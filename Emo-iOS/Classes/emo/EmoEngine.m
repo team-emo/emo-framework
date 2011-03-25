@@ -406,7 +406,13 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
  */
 -(void)accelerometer:(UIAccelerometer *)accelerometer
 	   didAccelerate:(UIAcceleration *)acceleration {
-	// TODO	
+	accelerometerEventParamCache[0] = SENSOR_TYPE_ACCELEROMETER;
+	accelerometerEventParamCache[1] = acceleration.x;
+	accelerometerEventParamCache[2] = acceleration.y;
+	accelerometerEventParamCache[3] = acceleration.z;
+	
+	return callSqFunction_Bool_Floats(sqvm, "onSensorEvent",
+			accelerometerEventParamCache, ACCELEROMETER_EVENT_PARAMS_SIZE, FALSE);	
 }
 
 /*
