@@ -12,6 +12,7 @@ static BOOL enableOnDrawFrame = FALSE;
 static BOOL shouldImmediateUpdateStatus = FALSE;
 static BOOL accelerometerSensorRegistered = FALSE;
 static BOOL accelerometerShouldAlive = FALSE;
+static int onDrawFrameInterval = 0;
 
 /*
  * Logging
@@ -68,9 +69,6 @@ static void emoUpdateOptions(SQInteger value) {
 			break;
 		case OPT_ENABLE_PERSPECTIVE_FASTEST:
 			enablePerspectiveNicest = FALSE;
-			break;
-		case OPT_ENABLE_ONDRAW_CALLBACK:
-			enableOnDrawFrame = TRUE;
 			break;
 		case OPT_WINDOW_KEEP_SCREEN_ON:
 			[UIApplication sharedApplication].idleTimerDisabled = YES;
@@ -132,10 +130,10 @@ SQInteger emoEnableSensor(HSQUIRRELVM v) {
     }
 	
     SQInteger sensorType;
-    SQFloat   interval;
+    SQInteger interval;
 	
     sq_getinteger(v, 2, &sensorType);
-    sq_getfloat(v, 3, &interval);
+    sq_getinteger(v, 3, &interval);
 	
 	[EmoEngine enableSensor:TRUE withType:sensorType withInterval:interval];
 	
@@ -157,6 +155,26 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
 	
 	[EmoEngine disableSensor:sensorType];
 	
+	return 0;
+}
+
+SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
+	enableOnDrawFrame = TRUE;
+
+	SQInteger nargs = sq_gettop(v);
+	
+    if (nargs <= 2 && sq_gettype(v, 2) == OT_INTEGER) {
+        SQInteger interval;
+        sq_getinteger(v, 2, &interval);
+		
+        onDrawFrameInterval = interval;
+    }
+	
+	return 0;
+}
+
+SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
+	enableOnDrawFrame = FALSE;
 	return 0;
 }
 
@@ -183,6 +201,9 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
     register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
     register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
     register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
+    register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
+    register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+	
 }
 
 /*
@@ -411,7 +432,7 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
 	accelerometerEventParamCache[2] = acceleration.y;
 	accelerometerEventParamCache[3] = acceleration.z;
 	
-	return callSqFunction_Bool_Floats(sqvm, "onSensorEvent",
+	callSqFunction_Bool_Floats(sqvm, "onSensorEvent",
 			accelerometerEventParamCache, ACCELEROMETER_EVENT_PARAMS_SIZE, FALSE);	
 }
 
@@ -450,11 +471,11 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
 /*
  * enable sensor with updateInterval
  */
-+ (void)enableSensor:(BOOL)enable withType:(NSInteger)sensorType withInterval:(NSTimeInterval)updateInterval {
++ (void)enableSensor:(BOOL)enable withType:(NSInteger)sensorType withInterval:(int)updateInterval {
 	if (sensorType == SENSOR_TYPE_ACCELEROMETER) {
 		if (enable && accelerometerSensorRegistered) {
 			accelerometerShouldAlive = TRUE;
-			[UIAccelerometer sharedAccelerometer].updateInterval = updateInterval;
+			[UIAccelerometer sharedAccelerometer].updateInterval = updateInterval / 1000.0f;
 		} else {
 			accelerometerShouldAlive = FALSE;
 		}

@@ -25,7 +25,7 @@ void NSLOGW(NSString* msg);
 
 + (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 + (void)registerAccelerometerSensor:(BOOL)enable;
-+ (void)enableSensor:(BOOL)enable withType:(NSInteger)sensorType withInterval:(NSTimeInterval)updateInterval;
++ (void)enableSensor:(BOOL)enable withType:(NSInteger)sensorType withInterval:(int)updateInterval;
 + (void)disableSensor:(NSInteger)sensorType;
 + (void)updateStatusImmediately;
 - (BOOL)initDrawFrame;
