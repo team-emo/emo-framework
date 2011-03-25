@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include <android/log.h>
 #include <android_native_app_glue.h>
 #include <android/window.h>
@@ -181,5 +183,120 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
         }
     }
     return 0;
+}
+
+/*
+ * enable sensor
+ */
+SQInteger emoEnableSensor(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    if (nargs < 3) {
+        LOGE("Invalid call: emoEnableSensors(sensorType, interval)");
+        return 0;
+    }
+
+    SQInteger sensorType;
+    SQFloat   interval;
+
+    sq_getinteger(v, 2, &sensorType);
+    sq_getfloat(v, 3, &interval);
+
+    SQInteger intervalMsec = floor(interval * 1000);
+
+    switch(sensorType) {
+    case SENSOR_TYPE_ACCELEROMETER:
+        if (g_engine->accelerometerSensor != NULL) {
+            ASensorEventQueue_enableSensor(g_engine->sensorEventQueue,
+                g_engine->accelerometerSensor);
+            ASensorEventQueue_setEventRate(g_engine->sensorEventQueue,
+                g_engine->accelerometerSensor, intervalMsec);
+        }
+        break;
+    case SENSOR_TYPE_MAGNETIC_FIELD:
+        if (g_engine->magneticSensor != NULL) {
+            ASensorEventQueue_enableSensor(g_engine->sensorEventQueue,
+                g_engine->magneticSensor);
+            ASensorEventQueue_setEventRate(g_engine->sensorEventQueue,
+                g_engine->magneticSensor, intervalMsec);
+        }
+        break;
+    case SENSOR_TYPE_GYROSCOPE:
+        if (g_engine->gyroscopeSensor != NULL) {
+            ASensorEventQueue_enableSensor(g_engine->sensorEventQueue,
+                g_engine->gyroscopeSensor);
+            ASensorEventQueue_setEventRate(g_engine->sensorEventQueue,
+                g_engine->gyroscopeSensor, intervalMsec);
+        }
+        break;
+    case SENSOR_TYPE_LIGHT:
+        if (g_engine->lightSensor != NULL) {
+            ASensorEventQueue_enableSensor(g_engine->sensorEventQueue,
+                g_engine->lightSensor);
+            ASensorEventQueue_setEventRate(g_engine->sensorEventQueue,
+                g_engine->lightSensor, intervalMsec);
+        }
+        break;
+    case SENSOR_TYPE_PROXIMITY:
+        if (g_engine->proximitySensor != NULL) {
+            ASensorEventQueue_enableSensor(g_engine->sensorEventQueue,
+                g_engine->proximitySensor);
+            ASensorEventQueue_setEventRate(g_engine->sensorEventQueue,
+                g_engine->proximitySensor, intervalMsec);
+        }
+        break;
+    }
+
+    return 0;
+
+}
+
+/*
+ * disable sensor
+ */
+SQInteger emoDisableSensor(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    if (nargs < 2) {
+        LOGE("Invalid call: emoDisableSensors(sensorType)");
+        return 0;
+    }
+
+    SQInteger sensorType;
+    sq_getinteger(v, 2, &sensorType);
+
+    switch(sensorType) {
+    case SENSOR_TYPE_ACCELEROMETER:
+        if (g_engine->accelerometerSensor != NULL) {
+            ASensorEventQueue_disableSensor(g_engine->sensorEventQueue,
+                g_engine->accelerometerSensor);
+        }
+        break;
+    case SENSOR_TYPE_MAGNETIC_FIELD:
+        if (g_engine->magneticSensor != NULL) {
+            ASensorEventQueue_disableSensor(g_engine->sensorEventQueue,
+                g_engine->magneticSensor);
+        }
+        break;
+    case SENSOR_TYPE_GYROSCOPE:
+        if (g_engine->gyroscopeSensor != NULL) {
+            ASensorEventQueue_disableSensor(g_engine->sensorEventQueue,
+                g_engine->gyroscopeSensor);
+        }
+        break;
+    case SENSOR_TYPE_LIGHT:
+        if (g_engine->lightSensor != NULL) {
+            ASensorEventQueue_disableSensor(g_engine->sensorEventQueue,
+                g_engine->lightSensor);
+        }
+        break;
+    case SENSOR_TYPE_PROXIMITY:
+        if (g_engine->proximitySensor != NULL) {
+            ASensorEventQueue_disableSensor(g_engine->sensorEventQueue,
+                g_engine->proximitySensor);
+        }
+        break;
+    }
+
+    return 0;
+
 }
 

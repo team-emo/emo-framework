@@ -11,15 +11,16 @@ function onLoad() {
 
     runtime.setOptions(OPT_ENABLE_ONDRAW_CALLBACK, OPT_ENABLE_PERSPECTIVE_FASTEST, OPT_WINDOW_KEEP_SCREEN_ON);
     event.registerSensors(SENSOR_TYPE_ACCELEROMETER, SENSOR_TYPE_GYROSCOPE);
-
 }
 
 function onGainedFocus() {
     print("onGainedFocus"); 
+    event.enableSensor(SENSOR_TYPE_ACCELEROMETER, 0.1);
 }
 
 function onLostFocus() {
     print("onLostFocus"); 
+    event.disableSensor(SENSOR_TYPE_ACCELEROMETER);
 }
 
 function onDispose() {
