@@ -181,6 +181,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 @interface EmoEngine (PrivateMethods)
 - (void)initEngine;
 - (void)updateEngineStatus;
+- (NSTimeInterval)getLastOnDrawDelta;
 @end
 
 @implementation EmoEngine
@@ -217,6 +218,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 	
 	// engine startup time
 	startTime = [[NSDate date] retain];
+	lastOnDrawInterval = [self uptime];
 	
 	sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
 	
@@ -238,6 +240,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 	sq_close(sqvm);
 	sqvm = nil;
 	isRunning = FALSE;
+	lastOnDrawInterval = 0;
 	
 	[startTime release];
 	
@@ -350,9 +353,20 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
     glClear(GL_COLOR_BUFFER_BIT);
 	
 	if (enableOnDrawFrame) {
-		return callSqFunction(sqvm, "onDrawFrame");
+		if ([self getLastOnDrawDelta] > onDrawFrameInterval) {
+			lastOnDrawInterval = [self uptime];
+			return callSqFunction(sqvm, "onDrawFrame");
+		}
 	}
+	
 	return FALSE;
+}
+
+/*
+ * returns last ondraw delta (msec)
+ */
+-(NSTimeInterval)getLastOnDrawDelta {
+	return ([self uptime] - lastOnDrawInterval) * 1000;
 }
 
 /*

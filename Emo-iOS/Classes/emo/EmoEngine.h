@@ -15,6 +15,8 @@ void NSLOGW(NSString* msg);
 	BOOL isFrameInitialized;
 	BOOL isRunning;
 	NSDate* startTime;
+	NSTimeInterval lastOnDrawInterval;
+	
 	UIAccelerometer* accelerometerSensor;
 	float accelerometerEventParamCache[ACCELEROMETER_EVENT_PARAMS_SIZE];
 }
