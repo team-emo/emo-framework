@@ -4,15 +4,13 @@ local event   = Event();
 local str = "Hello, Squirrel from File!";
 print(str);
 
-local drawed = false;
-
 function onLoad() { 
     print("onLoad");
 
     runtime.setOptions(OPT_WINDOW_KEEP_SCREEN_ON, OPT_ENABLE_PERSPECTIVE_NICEST);
 
     event.registerSensors(SENSOR_TYPE_ACCELEROMETER);
-    event.enableOnDrawCallback(100);
+    event.enableOnDrawCallback(1000);
 }
 
 function onGainedFocus() {
@@ -34,10 +32,7 @@ function onError(msg) {
 }
 
 function onDrawFrame() {
-    if (!drawed) {
-        print("onDrawFrame");
-        drawed = true;
-    }
+    print("onDrawFrame");
 }
 
 function onLowMemory() {

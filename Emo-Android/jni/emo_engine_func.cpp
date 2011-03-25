@@ -295,7 +295,6 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
 
 }
 
-// TODO
 SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
     g_engine->enableOnDrawFrame = SQTrue;
 

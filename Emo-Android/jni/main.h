@@ -36,7 +36,8 @@ struct engine {
     float keyEventParamCache[KEY_EVENT_PARAMS_SIZE];
     float accelerometerEventParamCache[ACCELEROMETER_EVENT_PARAMS_SIZE];
 
-    int onDrawFrameInterval;
+    int32_t onDrawFrameInterval;
+    timeb   lastOnDrawInterval;
 
     bool enablePerspectiveNicest;
     bool enableOnDrawFrame;

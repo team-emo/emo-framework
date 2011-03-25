@@ -352,11 +352,9 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
     glClearColor(0, 0, 0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 	
-	if (enableOnDrawFrame) {
-		if ([self getLastOnDrawDelta] > onDrawFrameInterval) {
-			lastOnDrawInterval = [self uptime];
-			return callSqFunction(sqvm, "onDrawFrame");
-		}
+	if (enableOnDrawFrame && [self getLastOnDrawDelta] > onDrawFrameInterval) {
+		lastOnDrawInterval = [self uptime];
+		return callSqFunction(sqvm, "onDrawFrame");
 	}
 	
 	return FALSE;

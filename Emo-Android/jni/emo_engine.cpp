@@ -57,13 +57,18 @@ static void initScriptFunctions(struct engine* engine) {
 }
 
 void engine_update_uptime(struct engine* engine) {
-	timeb eventTime;
-	ftime(&eventTime);
+    timeb eventTime;
+    ftime(&eventTime);
 
-	engine->uptime.time     = eventTime.time - engine->startTime.time;
-	engine->uptime.millitm  = eventTime.millitm;
-	engine->uptime.timezone = eventTime.timezone;
-	engine->uptime.dstflag  = eventTime.dstflag;
+    engine->uptime.time     = eventTime.time - engine->startTime.time;
+    engine->uptime.millitm  = eventTime.millitm;
+}
+
+int32_t engine_getLastOnDrawDelta(struct engine* engine) {
+    int32_t deltaSec  = engine->uptime.time - engine->lastOnDrawInterval.time;
+    int32_t deltaMsec = engine->uptime.millitm - engine->lastOnDrawInterval.millitm;
+
+    return (deltaSec * 1000) + deltaMsec;
 }
 
 /**
@@ -83,6 +88,7 @@ void emo_init_engine(struct engine* engine) {
     // disable drawframe callback to improve performance (default)
     engine->enableOnDrawFrame   = false;
     engine->onDrawFrameInterval = 0;
+    engine->lastOnDrawInterval  = engine->uptime;
 
     // enable perspective hint to nicest (default)
     engine->enablePerspectiveNicest = SQTrue;
@@ -109,6 +115,7 @@ void emo_init_engine(struct engine* engine) {
  * Initialize the display
  */
 void emo_init_display(struct engine* engine) {
+    engine_update_uptime(engine);
 
     /* initialize OpenGL state */
 
@@ -139,11 +146,14 @@ void emo_init_display(struct engine* engine) {
  * Draw current frame
  */
 void emo_draw_frame(struct engine* engine) {
+    engine_update_uptime(engine);
+
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (engine->enableOnDrawFrame) {
-    	callSqFunction(engine->sqvm, "onDrawFrame");
+    if (engine->enableOnDrawFrame && engine_getLastOnDrawDelta(engine) > engine->onDrawFrameInterval) {
+        engine->lastOnDrawInterval  = engine->uptime;
+        callSqFunction(engine->sqvm, "onDrawFrame");
     }
 }
 
@@ -151,6 +161,7 @@ void emo_draw_frame(struct engine* engine) {
  * Terminate the framework
  */
 void emo_dispose_engine(struct engine* engine) {
+    engine_update_uptime(engine);
     callSqFunction(engine->sqvm, "onDispose");
     sq_close(engine->sqvm);
 }
@@ -217,6 +228,7 @@ int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
  * handle sensor event
  */
 int32_t emo_event_sensors(struct engine* engine, ASensorEvent* event) {
+    engine_update_uptime(engine);
     switch(event->sensor) {
     case ASENSOR_TYPE_ACCELEROMETER:
         engine->accelerometerEventParamCache[0] = event->sensor;
@@ -235,7 +247,8 @@ int32_t emo_event_sensors(struct engine* engine, ASensorEvent* event) {
  * Gained focus
  */
 void emo_gained_focus(struct engine* engine) {
-	callSqFunction(engine->sqvm, "onGainedFocus");
+    engine_update_uptime(engine);
+    callSqFunction(engine->sqvm, "onGainedFocus");
     engine->animating = 1;
 }
 
@@ -243,7 +256,8 @@ void emo_gained_focus(struct engine* engine) {
  * Lost focus
  */
 void emo_lost_focus(struct engine* engine) {
-	callSqFunction(engine->sqvm, "onLostFocus");
+    engine_update_uptime(engine);
+    callSqFunction(engine->sqvm, "onLostFocus");
     engine->animating = 0;
 }
 
@@ -252,6 +266,7 @@ void emo_lost_focus(struct engine* engine) {
  * Try to reduce your memory use.
  */
 void emo_low_memory(struct engine* engine) {
-	callSqFunction(engine->sqvm, "onLowMemory");
+    engine_update_uptime(engine);
+    callSqFunction(engine->sqvm, "onLowMemory");
 }
 
