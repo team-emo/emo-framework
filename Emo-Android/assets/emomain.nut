@@ -12,12 +12,12 @@ function onLoad() {
     runtime.setOptions(OPT_WINDOW_KEEP_SCREEN_ON, OPT_ENABLE_PERSPECTIVE_NICEST);
 
     event.registerSensors(SENSOR_TYPE_ACCELEROMETER);
-    event.enableOnDrawCallback(0.1);
+    event.enableOnDrawCallback(100);
 }
 
 function onGainedFocus() {
     print("onGainedFocus"); 
-    event.enableSensor(SENSOR_TYPE_ACCELEROMETER, 0.1);
+    event.enableSensor(SENSOR_TYPE_ACCELEROMETER, 100);
 }
 
 function onLostFocus() {

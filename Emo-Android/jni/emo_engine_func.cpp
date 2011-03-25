@@ -193,12 +193,10 @@ SQInteger emoEnableSensor(HSQUIRRELVM v) {
     }
 
     SQInteger sensorType;
-    SQFloat   interval;
+    SQInteger interval;
 
     sq_getinteger(v, 2, &sensorType);
-    sq_getfloat(v, 3, &interval);
-
-    SQInteger intervalMsec = floor(interval * 1000);
+    sq_getinteger(v, 3, &interval);
 
     switch(sensorType) {
     case SENSOR_TYPE_ACCELEROMETER:
@@ -206,7 +204,7 @@ SQInteger emoEnableSensor(HSQUIRRELVM v) {
             ASensorEventQueue_enableSensor(g_engine->sensorEventQueue,
                 g_engine->accelerometerSensor);
             ASensorEventQueue_setEventRate(g_engine->sensorEventQueue,
-                g_engine->accelerometerSensor, intervalMsec);
+                g_engine->accelerometerSensor, interval);
         }
         break;
     case SENSOR_TYPE_MAGNETIC_FIELD:
@@ -214,7 +212,7 @@ SQInteger emoEnableSensor(HSQUIRRELVM v) {
             ASensorEventQueue_enableSensor(g_engine->sensorEventQueue,
                 g_engine->magneticSensor);
             ASensorEventQueue_setEventRate(g_engine->sensorEventQueue,
-                g_engine->magneticSensor, intervalMsec);
+                g_engine->magneticSensor, interval);
         }
         break;
     case SENSOR_TYPE_GYROSCOPE:
@@ -222,7 +220,7 @@ SQInteger emoEnableSensor(HSQUIRRELVM v) {
             ASensorEventQueue_enableSensor(g_engine->sensorEventQueue,
                 g_engine->gyroscopeSensor);
             ASensorEventQueue_setEventRate(g_engine->sensorEventQueue,
-                g_engine->gyroscopeSensor, intervalMsec);
+                g_engine->gyroscopeSensor, interval);
         }
         break;
     case SENSOR_TYPE_LIGHT:
@@ -230,7 +228,7 @@ SQInteger emoEnableSensor(HSQUIRRELVM v) {
             ASensorEventQueue_enableSensor(g_engine->sensorEventQueue,
                 g_engine->lightSensor);
             ASensorEventQueue_setEventRate(g_engine->sensorEventQueue,
-                g_engine->lightSensor, intervalMsec);
+                g_engine->lightSensor, interval);
         }
         break;
     case SENSOR_TYPE_PROXIMITY:
@@ -238,7 +236,7 @@ SQInteger emoEnableSensor(HSQUIRRELVM v) {
             ASensorEventQueue_enableSensor(g_engine->sensorEventQueue,
                 g_engine->proximitySensor);
             ASensorEventQueue_setEventRate(g_engine->sensorEventQueue,
-                g_engine->proximitySensor, intervalMsec);
+                g_engine->proximitySensor, interval);
         }
         break;
     }
@@ -302,14 +300,13 @@ SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
     g_engine->enableOnDrawFrame = SQTrue;
 
     SQInteger nargs = sq_gettop(v);
-    if (nargs < 2) {
-        return 0;
+
+    if (nargs <= 2 && sq_gettype(v, 2) == OT_INTEGER) {
+        SQInteger interval;
+        sq_getinteger(v, 2, &interval);
+
+        g_engine->onDrawFrameInterval = interval;
     }
-
-    SQFloat interval;
-    sq_getfloat(v, 2, &interval);
-
-    g_engine->onDrawFrameInterval = interval;
 
     return 0;
 }
