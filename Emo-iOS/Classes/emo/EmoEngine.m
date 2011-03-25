@@ -121,6 +121,45 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
     return 0;
 }
 
+/*
+ * enable sensor
+ */
+SQInteger emoEnableSensor(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    if (nargs < 3) {
+        LOGE("Invalid call: emoEnableSensors(sensorType, interval)");
+        return 0;
+    }
+	
+    SQInteger sensorType;
+    SQFloat   interval;
+	
+    sq_getinteger(v, 2, &sensorType);
+    sq_getfloat(v, 3, &interval);
+	
+	[EmoEngine enableSensor:TRUE withType:sensorType withInterval:interval];
+	
+	return 0;
+}
+
+/*
+ * disable sensor
+ */
+SQInteger emoDisableSensor(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    if (nargs < 2) {
+        LOGE("Invalid call: emoDisableSensors(sensorType)");
+        return 0;
+    }
+	
+    SQInteger sensorType;
+    sq_getinteger(v, 2, &sensorType);
+	
+	[EmoEngine disableSensor:sensorType];
+	
+	return 0;
+}
+
 @interface EmoEngine (PrivateMethods)
 - (void)initEngine;
 - (void)updateEngineStatus;
@@ -142,6 +181,8 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
     register_class_func(sqvm, SQUIRREL_RUNTIME_CLASS, "import", emoImportScript);
     register_class_func(sqvm, SQUIRREL_RUNTIME_CLASS, "setOptions", emoSetOptions);
     register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
+    register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
+    register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
 }
 
 /*
