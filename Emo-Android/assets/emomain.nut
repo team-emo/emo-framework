@@ -6,7 +6,7 @@ runtime.echo("Hello, Runtime!");
 local str = "Hello, Squirrel from File!";
 print(str);
 
-function emo::onLoad() { 
+function onLoad() { 
     print("onLoad");
 
     runtime.setOptions(OPT_WINDOW_KEEP_SCREEN_ON, OPT_ENABLE_PERSPECTIVE_NICEST);
@@ -15,36 +15,36 @@ function emo::onLoad() {
     event.enableOnDrawCallback(1000);
 }
 
-function emo::onGainedFocus() {
+function onGainedFocus() {
     print("onGainedFocus"); 
     event.enableSensor(SENSOR_TYPE_ACCELEROMETER, 100);
 }
 
-function emo::onLostFocus() {
+function onLostFocus() {
     print("onLostFocus"); 
     event.disableSensor(SENSOR_TYPE_ACCELEROMETER);
 }
 
-function emo::onDispose() {
+function onDispose() {
     print("onDispose"); 
 } 
 
-function emo::onError(msg) {
+function onError(msg) {
     print("onError: " + msg);
 }
 
-function emo::onDrawFrame() {
+function onDrawFrame() {
     print("onDrawFrame");
 }
 
-function emo::onLowMemory() {
+function onLowMemory() {
     print("onLowMemory");
 }
 
-function emo::onMotionEvent(motionEvent) {
+function onMotionEvent(motionEvent) {
     print("MotionEvent: " + motionEvent.toString());
 }
 
-function emo::onKeyEvent(keyEvent) {
+function onKeyEvent(keyEvent) {
     print("KeyEvent: " + keyEvent.toString());
 }

@@ -11,15 +11,15 @@
 #define EMO_EVENT_CLASS    "Event"
 #define EMO_DRAWABLE_CLASS "Drawable"
 
-#define EMO_FUNC_ONLOAD         "emo::onLoad"
-#define EMO_FUNC_ONGAINED_FOUCS "emo::onGainedFocus"
-#define EMO_FUNC_ONLOST_FOCUS "  emo::onLostFocus"
-#define EMO_FUNC_ONDISPOSE      "emo::onDispose"
-#define EMO_FUNC_ONERROR        "emo::onError"
-#define EMO_FUNC_ONDRAW_FRAME   "emo::onDrawFrame"
-#define EMO_FUNC_ONLOW_MEMORY   "emo::onLowMemory"
-#define EMO_FUNC_MOTIONEVENT    "emo::_OnMotionEvent"
-#define EMO_FUNC_KEYEVENT       "emo::_OnKeyEvent"
+#define EMO_FUNC_ONLOAD         "onLoad"
+#define EMO_FUNC_ONGAINED_FOUCS "onGainedFocus"
+#define EMO_FUNC_ONLOST_FOCUS "  onLostFocus"
+#define EMO_FUNC_ONDISPOSE      "onDispose"
+#define EMO_FUNC_ONERROR        "onError"
+#define EMO_FUNC_ONDRAW_FRAME   "onDrawFrame"
+#define EMO_FUNC_ONLOW_MEMORY   "onLowMemory"
+#define EMO_FUNC_MOTIONEVENT    "_OnMotionEvent"
+#define EMO_FUNC_KEYEVENT       "_OnKeyEvent"
 
 #define MOTION_EVENT_PARAMS_SIZE 8
 #define KEY_EVENT_PARAMS_SIZE    8
