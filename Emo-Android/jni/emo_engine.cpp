@@ -18,6 +18,7 @@ extern void LOGE(const SQChar* msg);
 
 extern SQInteger emoImportScript(HSQUIRRELVM v);
 extern SQInteger emoSetOptions(HSQUIRRELVM v);
+extern SQInteger emoRuntimeEcho(HSQUIRRELVM v);
 extern SQInteger emoRegisterSensors(HSQUIRRELVM v);
 extern SQInteger emoEnableSensor(HSQUIRRELVM v);
 extern SQInteger emoDisableSensor(HSQUIRRELVM v);
@@ -37,23 +38,26 @@ extern SQBool loadScriptFromAsset(const char* fname);
  * register class and functions for script
  */
 static void initScriptFunctions(struct engine* engine) {
-    register_class(engine->sqvm, SQUIRREL_RUNTIME_CLASS);
-    register_class(engine->sqvm, SQUIRREL_EVENT_CLASS);
-    register_class(engine->sqvm, SQUIRREL_DRAWABLE_CLASS);
 
-    register_class_func(engine->sqvm, SQUIRREL_RUNTIME_CLASS, "import",          emoImportScript);
-    register_class_func(engine->sqvm, SQUIRREL_RUNTIME_CLASS, "setOptions",      emoSetOptions);
+	register_table(engine->sqvm, EMO_NAMESPACE);
+    register_class_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_RUNTIME_CLASS);
+    register_class_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_EVENT_CLASS);
+    register_class_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_DRAWABLE_CLASS);
 
-    register_class_func(engine->sqvm, SQUIRREL_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
-    register_class_func(engine->sqvm, SQUIRREL_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
-    register_class_func(engine->sqvm, SQUIRREL_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
-    register_class_func(engine->sqvm, SQUIRREL_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
-    register_class_func(engine->sqvm, SQUIRREL_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+    register_class_func_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_RUNTIME_CLASS, "import",          emoImportScript);
+    register_class_func_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
+    register_class_func_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
 
-    register_class_func(engine->sqvm, SQUIRREL_DRAWABLE_CLASS, "constructor",    emoDrawableCreate);
-    register_class_func(engine->sqvm, SQUIRREL_DRAWABLE_CLASS, "move",           emoDrawableMove);
-    register_class_func(engine->sqvm, SQUIRREL_DRAWABLE_CLASS, "scale",          emoDrawableScale);
-    register_class_func(engine->sqvm, SQUIRREL_DRAWABLE_CLASS, "rotate",         emoDrawableRotate);
+    register_class_func_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
+    register_class_func_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
+    register_class_func_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
+    register_class_func_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
+    register_class_func_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+
+    register_class_func_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_DRAWABLE_CLASS, "constructor",    emoDrawableCreate);
+    register_class_func_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_DRAWABLE_CLASS, "move",           emoDrawableMove);
+    register_class_func_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_DRAWABLE_CLASS, "scale",          emoDrawableScale);
+    register_class_func_with_namespace(engine->sqvm, EMO_NAMESPACE, EMO_DRAWABLE_CLASS, "rotate",         emoDrawableRotate);
 }
 
 void engine_update_uptime(struct engine* engine) {
@@ -194,7 +198,7 @@ int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 		engine->touchEventParamCache[6] = AInputEvent_getDeviceId(event);
 		engine->touchEventParamCache[7] = AInputEvent_getSource(event);
 		
-		if (callSqFunction_Bool_Floats(engine->sqvm, "onMotionEvent", engine->touchEventParamCache, MOTION_EVENT_PARAMS_SIZE, false)) {
+		if (callSqFunction_Bool_Floats(engine->sqvm, EMO_FUNC_MOTIONEVENT, engine->touchEventParamCache, MOTION_EVENT_PARAMS_SIZE, false)) {
 			return 1;
 		}
 	}
@@ -218,7 +222,7 @@ int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 	engine->keyEventParamCache[6] = AInputEvent_getDeviceId(event);
 	engine->keyEventParamCache[7] = AInputEvent_getSource(event);
 
-	if (callSqFunction_Bool_Floats(engine->sqvm, "onKeyEvent", engine->keyEventParamCache, KEY_EVENT_PARAMS_SIZE, false)) {
+	if (callSqFunction_Bool_Floats(engine->sqvm, EMO_FUNC_KEYEVENT, engine->keyEventParamCache, KEY_EVENT_PARAMS_SIZE, false)) {
 		return 1;
 	}
     return 0;

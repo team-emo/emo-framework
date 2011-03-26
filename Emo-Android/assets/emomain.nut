@@ -1,10 +1,12 @@
-local runtime = Runtime();
-local event   = Event();
+local runtime = emo.Runtime();
+local event   = emo.Event();
+
+runtime.echo("Hello, Runtime!");
 
 local str = "Hello, Squirrel from File!";
 print(str);
 
-function onLoad() { 
+function emo::onLoad() { 
     print("onLoad");
 
     runtime.setOptions(OPT_WINDOW_KEEP_SCREEN_ON, OPT_ENABLE_PERSPECTIVE_NICEST);
@@ -13,44 +15,36 @@ function onLoad() {
     event.enableOnDrawCallback(1000);
 }
 
-function onGainedFocus() {
+function emo::onGainedFocus() {
     print("onGainedFocus"); 
     event.enableSensor(SENSOR_TYPE_ACCELEROMETER, 100);
 }
 
-function onLostFocus() {
+function emo::onLostFocus() {
     print("onLostFocus"); 
     event.disableSensor(SENSOR_TYPE_ACCELEROMETER);
 }
 
-function onDispose() {
+function emo::onDispose() {
     print("onDispose"); 
 } 
 
-function onError(msg) {
+function emo::onError(msg) {
     print("onError: " + msg);
 }
 
-function onDrawFrame() {
+function emo::onDrawFrame() {
     print("onDrawFrame");
 }
 
-function onLowMemory() {
+function emo::onLowMemory() {
     print("onLowMemory");
 }
 
-function onMotionEvent(...) {
-    local sb = "MotionEvent: ";
-    for(local i = 0; i < vargv.len(); i++) {
-        sb = sb + vargv[i] + " ";
-    }
-    print(sb);
+function emo::onMotionEvent(motionEvent) {
+    print("MotionEvent: " + motionEvent.toString());
 }
 
-function onKeyEvent(...) {
-    local sb = "KeyEvent: ";
-    for(local i = 0; i < vargv.len(); i++) {
-        sb = sb + vargv[i] + " ";
-    }
-    print(sb);
+function emo::onKeyEvent(keyEvent) {
+    print("KeyEvent: " + keyEvent.toString());
 }
