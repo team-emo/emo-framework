@@ -82,6 +82,34 @@ SQBool loadScriptFromAsset(const char* fname) {
 /*
  * Echo function for api testing
  */
+SQInteger emoRuntimeLog(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    SQInteger level;
+    const SQChar *message;
+
+    if (nargs < 3) return 0;
+
+    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_STRING) {
+        sq_getinteger(v, 2, &level);
+        sq_tostring(v, 3);
+        sq_getstring(v, -1, &message);
+        sq_poptop(v);
+
+        switch(level) {
+        case LOG_INFO:
+            LOGI((char*)message);
+            break;
+        case LOG_ERROR:
+            LOGE((char*)message);
+            break;
+        case LOG_WARN:
+            LOGW((char*)message);
+            break;
+        }
+    }
+	return 0;
+}
+
 SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
 	const SQChar *str;
     SQInteger nargs = sq_gettop(v);

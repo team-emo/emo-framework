@@ -1,4 +1,4 @@
-#import "squirrel.h"
+#include <squirrel.h>
 
 void initSQVM(HSQUIRRELVM v); 
 

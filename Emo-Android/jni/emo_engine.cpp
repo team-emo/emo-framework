@@ -19,6 +19,7 @@ extern void LOGE(const SQChar* msg);
 extern SQInteger emoImportScript(HSQUIRRELVM v);
 extern SQInteger emoSetOptions(HSQUIRRELVM v);
 extern SQInteger emoRuntimeEcho(HSQUIRRELVM v);
+extern SQInteger emoRuntimeLog(HSQUIRRELVM v);
 extern SQInteger emoRegisterSensors(HSQUIRRELVM v);
 extern SQInteger emoEnableSensor(HSQUIRRELVM v);
 extern SQInteger emoDisableSensor(HSQUIRRELVM v);
@@ -62,6 +63,7 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
 	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
 	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
+	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
 
 	registerEmoClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
 	registerEmoClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);

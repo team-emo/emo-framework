@@ -28,6 +28,9 @@
 
 #define EMO_NO_ERROR    0x0000
 #define EMO_ERROR       0x0001
+#define LOG_INFO        0x0002
+#define LOG_ERROR       0x0003
+#define LOG_WARN        0x0004
 
 #define ERR_SCRIPT_LOAD      0x0100
 #define ERR_SCRIPT_OPEN      0x0101

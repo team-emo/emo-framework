@@ -1,6 +1,10 @@
 local runtime = emo.Runtime();
 local event   = emo.Event();
 
+runtime.log(LOG_INFO,  "This is Log Info");
+runtime.log(LOG_ERROR, "This is Log Error");
+runtime.log(LOG_WARN,  "This is Log Warn");
+
 print(runtime.echo("Hello, Runtime!"));
 
 local str = "Hello, Squirrel from File!";
