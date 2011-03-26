@@ -296,6 +296,10 @@ void register_class_func(HSQUIRRELVM v, const char* cname, const char* fname, SQ
     sq_pop(v, 1);
 }
 
+/*
+ * Register class method with namespace
+ * Must be called before loading script files
+ */
 void register_class_func_with_namespace(HSQUIRRELVM v, const char* nname, const char* cname, const char* fname, SQFUNCTION func) {
     sq_pushroottable(v);
     sq_pushstring(v, nname, -1);
@@ -321,3 +325,20 @@ void register_table(HSQUIRRELVM v, const char *name) {
     sq_createslot(v, -3);
     sq_pop(v, 1);
 }
+
+/*
+ * Register new class for emo framework
+ */
+void register_emo_class(HSQUIRRELVM v, const char *cname) {
+    register_class_with_namespace(v, EMO_NAMESPACE, cname);
+}
+
+/*
+ * Register class method for emo framework
+ */
+void register_emo_class_func(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func) {
+	register_class_func_with_namespace(
+			v, EMO_NAMESPACE, EMO_RUNTIME_CLASS, fname, func);
+}
+
+
