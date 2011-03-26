@@ -19,5 +19,3 @@ void register_class_with_namespace(HSQUIRRELVM v, const char *nname, const char 
 void register_class_func(HSQUIRRELVM v, const char* cname, const char* fname, SQFUNCTION func);
 void register_class_func_with_namespace(HSQUIRRELVM v, const char* nname, const char* cname, const char* fname, SQFUNCTION func);
 void register_table(HSQUIRRELVM v, const char *name);
-void register_emo_class(HSQUIRRELVM v, const char *cname);
-void register_emo_class_func(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);

@@ -35,29 +35,44 @@ extern void      emoUpdateOptions(SQInteger value);
 extern SQBool loadScriptFromAsset(const char* fname);
 
 /*
+ * Register new class for emo framework
+ */
+void registerEmoClass(HSQUIRRELVM v, const char *cname) {
+    register_class_with_namespace(v, EMO_NAMESPACE, cname);
+}
+
+/*
+ * Register class method for emo framework
+ */
+void registerEmoClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func) {
+	register_class_func_with_namespace(
+			v, EMO_NAMESPACE, cname, fname, func);
+}
+
+/*
  * register class and functions for script
  */
 static void initScriptFunctions(struct engine* engine) {
 
 	register_table(engine->sqvm, EMO_NAMESPACE);
-	register_emo_class(engine->sqvm, EMO_RUNTIME_CLASS);
-	register_emo_class(engine->sqvm, EMO_EVENT_CLASS);
-	register_emo_class(engine->sqvm, EMO_DRAWABLE_CLASS);
+	registerEmoClass(engine->sqvm, EMO_RUNTIME_CLASS);
+	registerEmoClass(engine->sqvm, EMO_EVENT_CLASS);
+	registerEmoClass(engine->sqvm, EMO_DRAWABLE_CLASS);
 
-    register_emo_class_func(engine->sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
-    register_emo_class_func(engine->sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
-    register_emo_class_func(engine->sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
+	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
+	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
+	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
 
-    register_emo_class_func(engine->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
-    register_emo_class_func(engine->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
-    register_emo_class_func(engine->sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
-    register_emo_class_func(engine->sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
-    register_emo_class_func(engine->sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+	registerEmoClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
+	registerEmoClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
+	registerEmoClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
+	registerEmoClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
+	registerEmoClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
 
-    register_emo_class_func(engine->sqvm, EMO_DRAWABLE_CLASS, "constructor",    emoDrawableCreate);
-    register_emo_class_func(engine->sqvm, EMO_DRAWABLE_CLASS, "move",           emoDrawableMove);
-    register_emo_class_func(engine->sqvm, EMO_DRAWABLE_CLASS, "scale",          emoDrawableScale);
-    register_emo_class_func(engine->sqvm, EMO_DRAWABLE_CLASS, "rotate",         emoDrawableRotate);
+	registerEmoClassFunc(engine->sqvm, EMO_DRAWABLE_CLASS, "constructor",    emoDrawableCreate);
+	registerEmoClassFunc(engine->sqvm, EMO_DRAWABLE_CLASS, "move",           emoDrawableMove);
+	registerEmoClassFunc(engine->sqvm, EMO_DRAWABLE_CLASS, "scale",          emoDrawableScale);
+	registerEmoClassFunc(engine->sqvm, EMO_DRAWABLE_CLASS, "rotate",         emoDrawableRotate);
 }
 
 void engine_update_uptime(struct engine* engine) {
