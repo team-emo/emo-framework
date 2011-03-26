@@ -83,18 +83,21 @@ SQBool loadScriptFromAsset(const char* fname) {
  * Echo function for api testing
  */
 SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
+	const SQChar *str;
     SQInteger nargs = sq_gettop(v);
     for(SQInteger n = 1; n <= nargs; n++) {
     	if (sq_gettype(v, n) == OT_STRING) {
-    		const SQChar *str;
             sq_tostring(v, n);
             sq_getstring(v, -1, &str);
             sq_poptop(v);
-
-            LOGI(str);
     	}
     }
-	return 0;
+	
+	if (str != NULL) {
+		sq_pushstring(v, str, -1);
+	}
+	
+	return 1;
 }
 
 /*
