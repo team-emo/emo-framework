@@ -1,7 +1,7 @@
 local runtime = emo.Runtime();
 local event   = emo.Event();
 
-runtime.echo("Hello, Runtime!");
+print(runtime.echo("Hello, Runtime!"));
 
 local str = "Hello, Squirrel from File!";
 print(str);
