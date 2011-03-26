@@ -4,8 +4,10 @@
 #import <OpenGLES/ES2/glext.h>
 
 #import "common.h"
-#import "EmoEngine.h"
 #import "sqfunc.h"
+#import "EmoEngine.h"
+#import "EmoDrawable.h"
+#import "EmoFunc.h"
 
 static BOOL enablePerspectiveNicest = TRUE;
 static BOOL enableOnDrawFrame = FALSE;
@@ -13,33 +15,6 @@ static BOOL shouldImmediateUpdateStatus = FALSE;
 static BOOL accelerometerSensorRegistered = FALSE;
 static BOOL accelerometerShouldAlive = FALSE;
 static int onDrawFrameInterval = 0;
-
-/*
- * Logging
- */
-void LOGI(const char* msg) {
-	NSLog(@"%s INFO %s", EMO_LOG_TAG, msg);
-}
-
-void LOGE(const char* msg) {
-	NSLog(@"%s ERROR %s", EMO_LOG_TAG, msg);
-}
-
-void LOGW(const char* msg) {
-	NSLog(@"%s WARN %s", EMO_LOG_TAG, msg);
-}
-
-void NSLOGI(NSString* msg) {
-	LOGI([msg UTF8String]);	
-}
-
-void NSLOGE(NSString* msg) {
-	LOGE([msg UTF8String]);	
-}
-
-void NSLOGW(NSString* msg) {
-	LOGW([msg UTF8String]);	
-}
 
 /*
  * import function called from squirrel script
@@ -178,6 +153,24 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 	return 0;
 }
 
+/*
+ * Echo function for api testing
+ */
+SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+    	if (sq_gettype(v, n) == OT_STRING) {
+    		const SQChar *str;
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &str);
+            sq_poptop(v);
+			
+            LOGI((char*)str);
+    	}
+    }
+	return 0;
+}
+
 @interface EmoEngine (PrivateMethods)
 - (void)initEngine;
 - (void)updateEngineStatus;
@@ -194,16 +187,25 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
  * register classes and functions for script
  */
 - (void)initScriptFunctions {
-    register_class(sqvm, SQUIRREL_RUNTIME_CLASS);
-    register_class(sqvm, SQUIRREL_EVENT_CLASS);
+	register_table(sqvm, EMO_NAMESPACE);
+	registerEmoClass(sqvm, EMO_RUNTIME_CLASS);
+	registerEmoClass(sqvm, EMO_EVENT_CLASS);
+	registerEmoClass(sqvm, EMO_DRAWABLE_CLASS);
 	
-    register_class_func(sqvm, SQUIRREL_RUNTIME_CLASS, "import", emoImportScript);
-    register_class_func(sqvm, SQUIRREL_RUNTIME_CLASS, "setOptions", emoSetOptions);
-    register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
-    register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
-    register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
-    register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
-    register_class_func(sqvm, SQUIRREL_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
+	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
+	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
+	
+	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
+	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
+	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
+	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
+	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+	
+	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "constructor",    emoDrawableCreate);
+	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "move",           emoDrawableMove);
+	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "scale",          emoDrawableScale);
+	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "rotate",         emoDrawableRotate);
 	
 }
 

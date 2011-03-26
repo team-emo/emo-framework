@@ -11,6 +11,7 @@
 #import "EmoViewController.h"
 #import "EmoView.h"
 #import "common.h"
+#import "EmoFunc.h"
 
 @interface EmoViewController ()
 - (void)updateTouchId;

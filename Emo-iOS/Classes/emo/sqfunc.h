@@ -1,3 +1,5 @@
+#import "squirrel.h"
+
 void initSQVM(HSQUIRRELVM v); 
 
 SQInteger sqCompileBuffer(HSQUIRRELVM v, const char* script, const char* sourcename);

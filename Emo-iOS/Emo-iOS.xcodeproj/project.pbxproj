@@ -38,6 +38,8 @@
 		F937BBFE1331898800DCE63B /* emomain.nut in Resources */ = {isa = PBXBuildFile; fileRef = F937BBFD1331898800DCE63B /* emomain.nut */; };
 		F94593DA1331935E00290114 /* EmoView.m in Sources */ = {isa = PBXBuildFile; fileRef = F94593D91331935E00290114 /* EmoView.m */; };
 		F94594221331975600290114 /* EmoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94594211331975600290114 /* EmoViewController.m */; };
+		F9C849D0133E09EB0095EA37 /* EmoDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849CF133E09EB0095EA37 /* EmoDrawable.m */; };
+		F9C849D3133E0A180095EA37 /* EmoFunc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849D2133E0A180095EA37 /* EmoFunc.m */; };
 		F9D17BEC133B0F7B00F577C4 /* emoruntime.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */; };
 /* End PBXBuildFile section */
 
@@ -107,6 +109,10 @@
 		F94593D91331935E00290114 /* EmoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoView.m; sourceTree = "<group>"; };
 		F94594201331975600290114 /* EmoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoViewController.h; sourceTree = "<group>"; };
 		F94594211331975600290114 /* EmoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoViewController.m; sourceTree = "<group>"; };
+		F9C849CE133E09EB0095EA37 /* EmoDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDrawable.h; sourceTree = "<group>"; };
+		F9C849CF133E09EB0095EA37 /* EmoDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDrawable.m; sourceTree = "<group>"; };
+		F9C849D1133E0A180095EA37 /* EmoFunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoFunc.h; sourceTree = "<group>"; };
+		F9C849D2133E0A180095EA37 /* EmoFunc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoFunc.m; sourceTree = "<group>"; };
 		F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoruntime.nut; path = Resources/emoruntime.nut; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -198,6 +204,10 @@
 				F937BBAE1331890D00DCE63B /* EmoEngine.m */,
 				F937BBAF1331890D00DCE63B /* sqfunc.h */,
 				F937BBB01331890D00DCE63B /* sqfunc.m */,
+				F9C849CE133E09EB0095EA37 /* EmoDrawable.h */,
+				F9C849CF133E09EB0095EA37 /* EmoDrawable.m */,
+				F9C849D1133E0A180095EA37 /* EmoFunc.h */,
+				F9C849D2133E0A180095EA37 /* EmoFunc.m */,
 			);
 			path = emo;
 			sourceTree = "<group>";
@@ -365,6 +375,8 @@
 				F937BBF71331891900DCE63B /* sqvm.cpp in Sources */,
 				F94593DA1331935E00290114 /* EmoView.m in Sources */,
 				F94594221331975600290114 /* EmoViewController.m in Sources */,
+				F9C849D0133E09EB0095EA37 /* EmoDrawable.m in Sources */,
+				F9C849D3133E0A180095EA37 /* EmoFunc.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
