@@ -1,5 +1,7 @@
-local runtime = Runtime();
-local event   = Event();
+local runtime = emo.Runtime();
+local event   = emo.Event();
+
+runtime.echo("Hello, Runtime!");
 
 local str = "Hello, Squirrel from File!";
 print(str);
@@ -39,18 +41,10 @@ function onLowMemory() {
     print("onLowMemory");
 }
 
-function onMotionEvent(...) {
-    local sb = "MotionEvent: ";
-    for(local i = 0; i < vargv.len(); i++) {
-        sb = sb + vargv[i] + " ";
-    }
-    print(sb);
+function onMotionEvent(motionEvent) {
+    print("MotionEvent: " + motionEvent.toString());
 }
 
-function onKeyEvent(...) {
-    local sb = "KeyEvent: ";
-    for(local i = 0; i < vargv.len(); i++) {
-        sb = sb + vargv[i] + " ";
-    }
-    print(sb);
+function onKeyEvent(keyEvent) {
+    print("KeyEvent: " + keyEvent.toString());
 }

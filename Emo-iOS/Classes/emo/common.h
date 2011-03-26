@@ -6,9 +6,20 @@
 #define SQUIRREL_RUNTIME_SCRIPT "emoruntime.nut"
 #define SQUIRREL_MAIN_SCRIPT "emomain.nut"
 
-#define SQUIRREL_RUNTIME_CLASS "Runtime"
-#define SQUIRREL_EVENT_CLASS "Event"
-#define SQUIRREL_DRAWABLE_CLASS "Drawable"
+#define EMO_NAMESPACE  "emo"
+#define EMO_RUNTIME_CLASS  "Runtime"
+#define EMO_EVENT_CLASS    "Event"
+#define EMO_DRAWABLE_CLASS "Drawable"
+
+#define EMO_FUNC_ONLOAD         "onLoad"
+#define EMO_FUNC_ONGAINED_FOUCS "onGainedFocus"
+#define EMO_FUNC_ONLOST_FOCUS "  onLostFocus"
+#define EMO_FUNC_ONDISPOSE      "onDispose"
+#define EMO_FUNC_ONERROR        "onError"
+#define EMO_FUNC_ONDRAW_FRAME   "onDrawFrame"
+#define EMO_FUNC_ONLOW_MEMORY   "onLowMemory"
+#define EMO_FUNC_MOTIONEVENT    "_OnMotionEvent"
+#define EMO_FUNC_KEYEVENT       "_OnKeyEvent"
 
 #define MOTION_EVENT_PARAMS_SIZE 8
 #define KEY_EVENT_PARAMS_SIZE    8
