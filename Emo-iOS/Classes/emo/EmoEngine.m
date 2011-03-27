@@ -240,9 +240,10 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
     glClearColor(0, 0, 0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 	
-	if (enableOnDrawFrame && [self getLastOnDrawDelta] > onDrawFrameInterval) {
+	NSTimeInterval delta = [self getLastOnDrawDelta];
+	if (enableOnDrawFrame && delta > onDrawFrameInterval) {
 		lastOnDrawInterval = [self uptime];
-		return callSqFunction(sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME);
+		return callSqFunction_Bool_Float(sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME, delta, SQFalse);
 	}
 	
 	return FALSE;
