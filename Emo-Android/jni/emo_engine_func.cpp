@@ -80,7 +80,7 @@ SQBool loadScriptFromAsset(const char* fname) {
 }
 
 /*
- * Echo function for api testing
+ * Runtime logging
  */
 SQInteger emoRuntimeLog(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
@@ -110,6 +110,61 @@ SQInteger emoRuntimeLog(HSQUIRRELVM v) {
 	return 0;
 }
 
+/*
+ * Runtime log info
+ */
+SQInteger emoRuntimeLogInfo(HSQUIRRELVM v) {
+    const SQChar *str;
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+        if (sq_gettype(v, n) == OT_STRING) {
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &str);
+
+            LOGI((char*)str);
+        }
+    }
+    return 0;
+}
+
+/*
+ * Runtime log error
+ */
+SQInteger emoRuntimeLogError(HSQUIRRELVM v) {
+    const SQChar *str;
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+        if (sq_gettype(v, n) == OT_STRING) {
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &str);
+
+            LOGE((char*)str);
+        }
+    }
+    return 0;
+}
+
+/*
+ * Runtime log warn
+ */
+SQInteger emoRuntimeLogWarn(HSQUIRRELVM v) {
+    const SQChar *str;
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+        if (sq_gettype(v, n) == OT_STRING) {
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &str);
+
+            LOGW((char*)str);
+        }
+    }
+    return 0;
+}
+
+
+/*
+ * Runtime echo
+ */
 SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
 	const SQChar *str;
     SQInteger nargs = sq_gettop(v);
