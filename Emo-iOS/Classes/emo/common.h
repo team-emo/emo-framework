@@ -13,7 +13,7 @@
 
 #define EMO_FUNC_ONLOAD         "onLoad"
 #define EMO_FUNC_ONGAINED_FOUCS "onGainedFocus"
-#define EMO_FUNC_ONLOST_FOCUS "  onLostFocus"
+#define EMO_FUNC_ONLOST_FOCUS   "onLostFocus"
 #define EMO_FUNC_ONDISPOSE      "onDispose"
 #define EMO_FUNC_ONERROR        "onError"
 #define EMO_FUNC_ONDRAW_FRAME   "onDrawFrame"

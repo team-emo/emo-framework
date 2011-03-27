@@ -266,7 +266,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 	BOOL sqResult = callSqFunction(sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOST_FOCUS);
 
 	[self updateEngineStatus];
-
+	
 	return sqResult;
 }
 
