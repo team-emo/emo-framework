@@ -201,7 +201,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 		NSLOGE(@"The framework is not running: onLoad");
 		return FALSE;
 	}
-	BOOL sqResult = callSqFunction(sqvm, "onLoad");
+	BOOL sqResult = callSqFunction(sqvm, EMO_FUNC_ONLOAD);
 
 	[self updateEngineStatus];
 
@@ -216,7 +216,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 		NSLOGE(@"The framework is not running: onGainedFocus");
 		return FALSE;
 	}
-	BOOL sqResult = callSqFunction(sqvm, "onGainedFocus");
+	BOOL sqResult = callSqFunction(sqvm, EMO_FUNC_ONGAINED_FOUCS);
 
 	[self updateEngineStatus];
 
@@ -242,7 +242,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 	
 	if (enableOnDrawFrame && [self getLastOnDrawDelta] > onDrawFrameInterval) {
 		lastOnDrawInterval = [self uptime];
-		return callSqFunction(sqvm, "onDrawFrame");
+		return callSqFunction(sqvm, EMO_FUNC_ONDRAW_FRAME);
 	}
 	
 	return FALSE;
@@ -263,7 +263,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 		NSLOGE(@"The framework is not running: onLostFocus");
 		return FALSE;
 	}
-	BOOL sqResult = callSqFunction(sqvm, "onLostFocus");
+	BOOL sqResult = callSqFunction(sqvm, EMO_FUNC_ONLOST_FOCUS);
 
 	[self updateEngineStatus];
 
@@ -278,7 +278,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 		NSLOGE(@"The framework is not running: onDispose");
 		return FALSE;
 	}
-	BOOL sqResult = callSqFunction(sqvm, "onDispose");
+	BOOL sqResult = callSqFunction(sqvm, EMO_FUNC_ONDISPOSE);
 
 	[self updateEngineStatus];
 
@@ -293,7 +293,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 		NSLOGE(@"The framework is not running: onLowMemory");
 		return FALSE;
 	}
-	BOOL sqResult = callSqFunction(sqvm, "onLowMemory");
+	BOOL sqResult = callSqFunction(sqvm, EMO_FUNC_ONLOW_MEMORY);
 	
 	[self updateEngineStatus];
 	
@@ -308,7 +308,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 		NSLOGE(@"The framework is not running: onMotionEvent");
 		return FALSE;
 	}
-	return callSqFunction_Bool_Floats(sqvm, "onMotionEvent", param, MOTION_EVENT_PARAMS_SIZE, FALSE);
+	return callSqFunction_Bool_Floats(sqvm, EMO_FUNC_MOTIONEVENT, param, MOTION_EVENT_PARAMS_SIZE, FALSE);
 }
 
 /*
@@ -319,7 +319,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 		NSLOGE(@"The framework is not running: onKeyEvent");
 		return FALSE;
 	}
-	return callSqFunction_Bool_Floats(sqvm, "onKeyEvent", param, KEY_EVENT_PARAMS_SIZE, FALSE);	
+	return callSqFunction_Bool_Floats(sqvm, EMO_FUNC_KEYEVENT, param, KEY_EVENT_PARAMS_SIZE, FALSE);	
 }
 
 /*
@@ -332,7 +332,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 	accelerometerEventParamCache[2] = acceleration.y;
 	accelerometerEventParamCache[3] = acceleration.z;
 	
-	callSqFunction_Bool_Floats(sqvm, "onSensorEvent",
+	callSqFunction_Bool_Floats(sqvm, EMO_FUNC_SENSOREVENT,
 			accelerometerEventParamCache, ACCELEROMETER_EVENT_PARAMS_SIZE, FALSE);	
 }
 
