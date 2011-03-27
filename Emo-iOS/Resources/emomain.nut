@@ -45,10 +45,18 @@ function emo::onLowMemory() {
     print("onLowMemory");
 }
 
-function emo::onMotionEvent(motionEvent) {
+function emo::onMotionEvent(...) {
+    local motionEvent = emo.MotionEvent(vargv);
     print("MotionEvent: " + motionEvent.toString());
 }
 
-function emo::onKeyEvent(keyEvent) {
+function emo::onKeyEvent(...) {
+    local motionEvent = emo.KeyEvent(vargv);
     print("KeyEvent: " + keyEvent.toString());
+}
+
+function emo::onSensorEvent(...) {
+    local sensorEvent = emo.KeyEvent(vargv);
+    print("SensorEvent: " + sensorEvent.toString());
+
 }

@@ -18,9 +18,9 @@
 #define EMO_FUNC_ONERROR        "onError"
 #define EMO_FUNC_ONDRAW_FRAME   "onDrawFrame"
 #define EMO_FUNC_ONLOW_MEMORY   "onLowMemory"
-#define EMO_FUNC_MOTIONEVENT    "_OnMotionEvent"
-#define EMO_FUNC_KEYEVENT       "_OnKeyEvent"
-#define EMO_FUNC_SENSOREVENT    "OnSensorEvent"
+#define EMO_FUNC_MOTIONEVENT    "onMotionEvent"
+#define EMO_FUNC_KEYEVENT       "onKeyEvent"
+#define EMO_FUNC_SENSOREVENT    "onSensorEvent"
 
 #define MOTION_EVENT_PARAMS_SIZE 8
 #define KEY_EVENT_PARAMS_SIZE    8

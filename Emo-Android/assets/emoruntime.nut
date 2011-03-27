@@ -91,11 +91,22 @@ class emo.KeyEvent {
     }
 }
 
-function emo::_OnMotionEvent(...) {
-    emo.onMotionEvent(emo.MotionEvent(vargv));
-}
+class emo.SensorEvent {
+    param = null;
+    function constructor(args) {
+        param = args;
+    }
 
-function emo::_OnKeyEvent(...) {
-    emo.onKeyEvent(emo.KeyEvent(vargv));
-}
+    function getType() { return param[0]; }
+    function getAccelerationX() { return param[1]; }
+    function getAccelerationY() { return param[2]; }
+    function getAccelerationZ() { return param[3]; }
 
+    function toString() {
+        local sb = "";
+        for(local i = 0; i < param.len(); i++) {
+            sb = sb + param[i] + " ";
+        }
+        return sb;
+    }
+}
