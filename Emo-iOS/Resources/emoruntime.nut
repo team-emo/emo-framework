@@ -91,11 +91,11 @@ class emo.KeyEvent {
     }
 }
 
-function _OnMotionEvent(...) {
-    onMotionEvent(emo.MotionEvent(vargv));
+function emo::_OnMotionEvent(...) {
+    emo.onMotionEvent(emo.MotionEvent(vargv));
 }
 
-function _OnKeyEvent(...) {
-    onKeyEvent(emo.KeyEvent(vargv));
+function emo::_OnKeyEvent(...) {
+    emo.onKeyEvent(emo.KeyEvent(vargv));
 }
 

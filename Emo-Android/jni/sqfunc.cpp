@@ -54,18 +54,21 @@ SQInteger sqCompileBuffer(HSQUIRRELVM v, const char* script, const char* sourcen
  * Call Squirrel function with no parameter
  * Returns SQTrue if sq_call succeeds.
  */
-SQBool callSqFunction(HSQUIRRELVM v, const SQChar* name) {
+SQBool callSqFunction(HSQUIRRELVM v, const SQChar* nname, const SQChar* name) {
 	SQBool result = SQFalse;
 
 	SQInteger top = sq_gettop(v);
 	sq_pushroottable(v);
-	sq_pushstring(v, name, -1);
-	if(SQ_SUCCEEDED(sq_get(v, -2))) {
-		sq_pushroottable(v);
-		result = SQ_SUCCEEDED(sq_call(v, 1, SQFalse, SQTrue));
+	sq_pushstring(v, nname, -1);
+	if (SQ_SUCCEEDED(sq_get(v, -2))) {
+		sq_pushstring(v, name, -1);
+		if(SQ_SUCCEEDED(sq_get(v, -2))) {
+			sq_pushroottable(v);
+			result = SQ_SUCCEEDED(sq_call(v, 1, SQFalse, SQTrue));
+		}
+		sq_settop(v,top);
 	}
-	sq_settop(v,top);
-
+	
 	return result;
 }
 
@@ -73,19 +76,22 @@ SQBool callSqFunction(HSQUIRRELVM v, const SQChar* name) {
  * Call Squirrel function with multiple float parameters, returns boolean
  * Returns default value if sq_call failed.
  */
-SQBool callSqFunction_Bool_Floats(HSQUIRRELVM v, const SQChar* name, SQFloat param[], int count, SQBool defaultValue) {
+SQBool callSqFunction_Bool_Floats(HSQUIRRELVM v, const SQChar* nname, const SQChar* name, SQFloat param[], int count, SQBool defaultValue) {
 	SQBool   result = defaultValue;
 
 	SQInteger top = sq_gettop(v);
 	sq_pushroottable(v);
-	sq_pushstring(v, name, -1);
-	if(SQ_SUCCEEDED(sq_get(v, -2))) {
-		sq_pushroottable(v);
-		for (int i = 0; i < count; i++) {
-			sq_pushfloat(v, param[i]);
-		}
-		if (SQ_SUCCEEDED(sq_call(v, count + 1, SQTrue, SQTrue))) {
-			sq_getbool(v, sq_gettop(v), &result);
+	sq_pushstring(v, nname, -1);
+	if (SQ_SUCCEEDED(sq_get(v, -2))) {
+		sq_pushstring(v, name, -1);
+		if(SQ_SUCCEEDED(sq_get(v, -2))) {
+			sq_pushroottable(v);
+			for (int i = 0; i < count; i++) {
+				sq_pushfloat(v, param[i]);
+			}
+			if (SQ_SUCCEEDED(sq_call(v, count + 1, SQTrue, SQTrue))) {
+				sq_getbool(v, sq_gettop(v), &result);
+			}
 		}
 	}
 	sq_settop(v,top);
@@ -97,7 +103,7 @@ SQBool callSqFunction_Bool_Floats(HSQUIRRELVM v, const SQChar* name, SQFloat par
  * Call Squirrel function with one string parameter
  * Returns SQTrue if sq_call succeeds.
  */
-SQBool callSqFunction_Bool_String(HSQUIRRELVM v, const SQChar* name, const SQChar* value) {
+SQBool callSqFunction_Bool_String(HSQUIRRELVM v, const SQChar* nname, const SQChar* name, const SQChar* value) {
 	SQBool result = SQFalse;
 
 	SQInteger top = sq_gettop(v);
@@ -125,6 +131,7 @@ void sq_printfunc(HSQUIRRELVM v, const SQChar *s,...) {
 
     LOGI(text);
 }
+
 /*
  * error function
  */
@@ -135,7 +142,7 @@ void sq_errorfunc(HSQUIRRELVM v, const SQChar *s,...) {
     scvsprintf(text, s, args);
     va_end(args);
 
-    callSqFunction_Bool_String(v, "onError", text);
+    callSqFunction_Bool_String(v, EMO_NAMESPACE, EMO_FUNC_ONERROR, text);
 
     LOGE(text);
 }
