@@ -135,7 +135,7 @@ void emo_init_engine(struct engine* engine) {
     emoUpdateOptions(OPT_WINDOW_FORCE_FULLSCREEN);
 
     // call onLoad()
-    callSqFunction(engine->sqvm, "onLoad");
+    callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOAD);
 
 }
 
@@ -181,7 +181,7 @@ void emo_draw_frame(struct engine* engine) {
 
     if (engine->enableOnDrawFrame && engine_getLastOnDrawDelta(engine) > engine->onDrawFrameInterval) {
         engine->lastOnDrawInterval  = engine->uptime;
-        callSqFunction(engine->sqvm, "onDrawFrame");
+        callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME);
     }
 }
 
@@ -190,7 +190,7 @@ void emo_draw_frame(struct engine* engine) {
  */
 void emo_dispose_engine(struct engine* engine) {
     engine_update_uptime(engine);
-    callSqFunction(engine->sqvm, "onDispose");
+    callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDISPOSE);
     sq_close(engine->sqvm);
 }
 
@@ -222,7 +222,7 @@ int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 		engine->touchEventParamCache[6] = AInputEvent_getDeviceId(event);
 		engine->touchEventParamCache[7] = AInputEvent_getSource(event);
 		
-		if (callSqFunction_Bool_Floats(engine->sqvm, EMO_FUNC_MOTIONEVENT, engine->touchEventParamCache, MOTION_EVENT_PARAMS_SIZE, false)) {
+		if (callSqFunction_Bool_Floats(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_MOTIONEVENT, engine->touchEventParamCache, MOTION_EVENT_PARAMS_SIZE, false)) {
 			return 1;
 		}
 	}
@@ -246,7 +246,7 @@ int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 	engine->keyEventParamCache[6] = AInputEvent_getDeviceId(event);
 	engine->keyEventParamCache[7] = AInputEvent_getSource(event);
 
-	if (callSqFunction_Bool_Floats(engine->sqvm, EMO_FUNC_KEYEVENT, engine->keyEventParamCache, KEY_EVENT_PARAMS_SIZE, false)) {
+	if (callSqFunction_Bool_Floats(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_KEYEVENT, engine->keyEventParamCache, KEY_EVENT_PARAMS_SIZE, false)) {
 		return 1;
 	}
     return 0;
@@ -263,7 +263,7 @@ int32_t emo_event_sensors(struct engine* engine, ASensorEvent* event) {
         engine->accelerometerEventParamCache[1] = event->acceleration.x;
         engine->accelerometerEventParamCache[2] = event->acceleration.y;
         engine->accelerometerEventParamCache[3] = event->acceleration.z;
-        if (callSqFunction_Bool_Floats(engine->sqvm, EMO_FUNC_SENSOREVENT, engine->accelerometerEventParamCache, ACCELEROMETER_EVENT_PARAMS_SIZE, false)) {
+        if (callSqFunction_Bool_Floats(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_SENSOREVENT, engine->accelerometerEventParamCache, ACCELEROMETER_EVENT_PARAMS_SIZE, false)) {
             return 1;
         }
         break;
@@ -276,7 +276,7 @@ int32_t emo_event_sensors(struct engine* engine, ASensorEvent* event) {
  */
 void emo_gained_focus(struct engine* engine) {
     engine_update_uptime(engine);
-    callSqFunction(engine->sqvm, "onGainedFocus");
+    callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONGAINED_FOUCS);
     engine->animating = 1;
 }
 
@@ -285,7 +285,7 @@ void emo_gained_focus(struct engine* engine) {
  */
 void emo_lost_focus(struct engine* engine) {
     engine_update_uptime(engine);
-    callSqFunction(engine->sqvm, "onLostFocus");
+    callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOST_FOCUS);
     engine->animating = 0;
 }
 
@@ -295,6 +295,6 @@ void emo_lost_focus(struct engine* engine) {
  */
 void emo_low_memory(struct engine* engine) {
     engine_update_uptime(engine);
-    callSqFunction(engine->sqvm, "onLowMemory");
+    callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOW_MEMORY);
 }
 
