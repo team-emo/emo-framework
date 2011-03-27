@@ -147,6 +147,9 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
             }
             break;
         case APP_CMD_TERM_WINDOW:
+            if (engine->animating) {
+                emo_lost_focus(engine);
+            }
             engine_term_display(engine);
             break;
         case APP_CMD_GAINED_FOCUS:
