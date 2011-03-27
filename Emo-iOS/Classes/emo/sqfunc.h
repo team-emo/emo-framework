@@ -6,7 +6,8 @@ SQInteger sqCompileBuffer(HSQUIRRELVM v, const char* script, const char* sourcen
 
 SQBool callSqFunction(HSQUIRRELVM v, const char* nname, const char* name);
 SQBool callSqFunction_Bool_Floats(HSQUIRRELVM v, const char* nname, const char* name, float param[], int count, SQBool defaultValue);
-SQBool callSqFunction_Bool_String(HSQUIRRELVM v, const char* nname, const char* name, const SQChar* value);
+SQBool callSqFunction_Bool_String(HSQUIRRELVM v, const char* nname, const char* name, const SQChar* value, SQBool defaultValue);
+SQBool callSqFunction_Bool_Float(HSQUIRRELVM v, const char* nname, const char* name, SQFloat value, SQBool defaultValue);
 
 void sq_printfunc(HSQUIRRELVM v,const char *s,...);
 void sq_errorfunc(HSQUIRRELVM v,const char *s,...);

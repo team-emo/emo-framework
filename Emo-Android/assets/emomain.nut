@@ -37,8 +37,8 @@ function emo::onError(msg) {
     print("onError: " + msg);
 }
 
-function emo::onDrawFrame() {
-    print("onDrawFrame");
+function emo::onDrawFrame(dt) {
+    print("onDrawFrame: " + dt);
 }
 
 function emo::onLowMemory() {
@@ -51,7 +51,7 @@ function emo::onMotionEvent(...) {
 }
 
 function emo::onKeyEvent(...) {
-    local motionEvent = emo.KeyEvent(vargv);
+    local keyEvent = emo.KeyEvent(vargv);
     print("KeyEvent: " + keyEvent.toString());
 }
 

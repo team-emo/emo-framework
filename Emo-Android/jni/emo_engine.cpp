@@ -179,9 +179,10 @@ void emo_draw_frame(struct engine* engine) {
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (engine->enableOnDrawFrame && engine_getLastOnDrawDelta(engine) > engine->onDrawFrameInterval) {
+    SQFloat delta = engine_getLastOnDrawDelta(engine);
+    if (engine->enableOnDrawFrame && delta > engine->onDrawFrameInterval) {
         engine->lastOnDrawInterval  = engine->uptime;
-        callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME);
+        callSqFunction_Bool_Float(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME, delta, SQFalse);
     }
 }
 
