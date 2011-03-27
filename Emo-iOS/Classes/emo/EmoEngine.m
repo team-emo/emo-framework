@@ -17,27 +17,9 @@ static BOOL accelerometerShouldAlive = FALSE;
 static int onDrawFrameInterval = 0;
 
 /*
- * import function called from squirrel script
- */
-SQInteger emoImportScript(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-    for(SQInteger n = 1; n <= nargs; n++) {
-    	if (sq_gettype(v, n) == OT_STRING) {
-    		const SQChar *fname;
-            sq_tostring(v, n);
-            sq_getstring(v, -1, &fname);
-            sq_poptop(v);
-			
-    		[EmoEngine loadScriptFromResource:(const char*)fname vm:v];
-    	}
-    }
-	return 0;
-}
-
-/*
  * update options
  */
-static void emoUpdateOptions(SQInteger value) {
+void emoUpdateOptions(SQInteger value) {
     switch(value) {
 		case OPT_ENABLE_PERSPECTIVE_NICEST:
 			enablePerspectiveNicest = TRUE;
@@ -49,88 +31,6 @@ static void emoUpdateOptions(SQInteger value) {
 			[UIApplication sharedApplication].idleTimerDisabled = YES;
 			break;
     }
-}
-
-/*
- * delcare to use sensors
- */
-static void emoCreateSensors(SQInteger value) {
-	switch(value) {
-		case SENSOR_TYPE_ACCELEROMETER:
-			[EmoEngine registerAccelerometerSensor:TRUE];
-			break;
-	}
-}
-
-/*
- * option function called from squirrel script
- */
-SQInteger emoSetOptions(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-    for(SQInteger n = 1; n <= nargs; n++) {
-        if (sq_gettype(v, n) == OT_INTEGER) {
-            SQInteger value;
-            sq_getinteger(v, n, &value);
-			
-            emoUpdateOptions(value);
-        }
-    }
-	return 0;
-}
-
-/*
- * register sensors function called from script
- */
-SQInteger emoRegisterSensors(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-    for(SQInteger n = 1; n <= nargs; n++) {
-        if (sq_gettype(v, n) == OT_INTEGER) {
-            SQInteger value;
-            sq_getinteger(v, n, &value);
-			
-            emoCreateSensors(value);
-        }
-    }
-    return 0;
-}
-
-/*
- * enable sensor
- */
-SQInteger emoEnableSensor(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-    if (nargs < 3) {
-        LOGE("Invalid call: emoEnableSensors(sensorType, interval)");
-        return 0;
-    }
-	
-    SQInteger sensorType;
-    SQInteger interval;
-	
-    sq_getinteger(v, 2, &sensorType);
-    sq_getinteger(v, 3, &interval);
-	
-	[EmoEngine enableSensor:TRUE withType:sensorType withInterval:interval];
-	
-	return 0;
-}
-
-/*
- * disable sensor
- */
-SQInteger emoDisableSensor(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-    if (nargs < 2) {
-        LOGE("Invalid call: emoDisableSensors(sensorType)");
-        return 0;
-    }
-	
-    SQInteger sensorType;
-    sq_getinteger(v, 2, &sensorType);
-	
-	[EmoEngine disableSensor:sensorType];
-	
-	return 0;
 }
 
 SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
@@ -151,27 +51,6 @@ SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
 SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 	enableOnDrawFrame = FALSE;
 	return 0;
-}
-
-/*
- * Echo function for api testing
- */
-SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
-	const SQChar *str;
-    SQInteger nargs = sq_gettop(v);
-    for(SQInteger n = 1; n <= nargs; n++) {
-    	if (sq_gettype(v, n) == OT_STRING) {
-            sq_tostring(v, n);
-            sq_getstring(v, -1, &str);
-            sq_poptop(v);
-    	}
-    }
-	
-	if (str != NULL) {
-		sq_pushstring(v, str, -1);
-	}
-	
-	return 1;
 }
 
 @interface EmoEngine (PrivateMethods)
@@ -204,6 +83,10 @@ SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
 	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
 	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
 	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
+	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "info",            emoRuntimeLogInfo);
+	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
+	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
 	
 	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "constructor",    emoDrawableCreate);
 	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "move",           emoDrawableMove);

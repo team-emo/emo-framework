@@ -1,6 +1,8 @@
 #import "squirrel.h"
 #import "common.h"
 
+void emoUpdateOptions(SQInteger value);
+
 @interface EmoEngine : NSObject<UIAccelerometerDelegate> {
 	HSQUIRRELVM sqvm;
 	int lastError;

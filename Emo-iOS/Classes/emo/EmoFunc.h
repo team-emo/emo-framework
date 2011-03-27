@@ -10,3 +10,14 @@ void NSLOGW(NSString* msg);
 
 void registerEmoClass(HSQUIRRELVM v, const char *cname);
 void registerEmoClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);
+SQInteger emoRuntimeEcho(HSQUIRRELVM v);
+SQInteger emoImportScript(HSQUIRRELVM v);
+void emoCreateSensors(SQInteger value);
+SQInteger emoSetOptions(HSQUIRRELVM v);
+SQInteger emoRegisterSensors(HSQUIRRELVM v);
+SQInteger emoEnableSensor(HSQUIRRELVM v);
+SQInteger emoDisableSensor(HSQUIRRELVM v);
+SQInteger emoRuntimeLog(HSQUIRRELVM v);
+SQInteger emoRuntimeLogInfo(HSQUIRRELVM v);
+SQInteger emoRuntimeLogError(HSQUIRRELVM v);
+SQInteger emoRuntimeLogWarn(HSQUIRRELVM v);
