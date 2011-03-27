@@ -20,6 +20,7 @@
 #define EMO_FUNC_ONLOW_MEMORY   "onLowMemory"
 #define EMO_FUNC_MOTIONEVENT    "_OnMotionEvent"
 #define EMO_FUNC_KEYEVENT       "_OnKeyEvent"
+#define EMO_FUNC_SENSOREVENT    "OnSensorEvent"
 
 #define MOTION_EVENT_PARAMS_SIZE 8
 #define KEY_EVENT_PARAMS_SIZE    8

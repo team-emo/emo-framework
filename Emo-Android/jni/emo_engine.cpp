@@ -263,7 +263,7 @@ int32_t emo_event_sensors(struct engine* engine, ASensorEvent* event) {
         engine->accelerometerEventParamCache[1] = event->acceleration.x;
         engine->accelerometerEventParamCache[2] = event->acceleration.y;
         engine->accelerometerEventParamCache[3] = event->acceleration.z;
-        if (callSqFunction_Bool_Floats(engine->sqvm, "onSensorEvent", engine->accelerometerEventParamCache, ACCELEROMETER_EVENT_PARAMS_SIZE, false)) {
+        if (callSqFunction_Bool_Floats(engine->sqvm, EMO_FUNC_SENSOREVENT, engine->accelerometerEventParamCache, ACCELEROMETER_EVENT_PARAMS_SIZE, false)) {
             return 1;
         }
         break;
