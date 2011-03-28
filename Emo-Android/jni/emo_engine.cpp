@@ -8,36 +8,8 @@
 #include <common.h>
 #include <main.h>
 #include <sqfunc.h>
-
-/*
- * extern common functions
- */
-extern void LOGI(const SQChar* msg);
-extern void LOGW(const SQChar* msg);
-extern void LOGE(const SQChar* msg);
-
-extern SQInteger emoImportScript(HSQUIRRELVM v);
-extern SQInteger emoSetOptions(HSQUIRRELVM v);
-extern SQInteger emoRuntimeEcho(HSQUIRRELVM v);
-extern SQInteger emoRuntimeLog(HSQUIRRELVM v);
-extern SQInteger emoRuntimeLogInfo(HSQUIRRELVM v);
-extern SQInteger emoRuntimeLogError(HSQUIRRELVM v);
-extern SQInteger emoRuntimeLogWarn(HSQUIRRELVM v);
-
-extern SQInteger emoRegisterSensors(HSQUIRRELVM v);
-extern SQInteger emoEnableSensor(HSQUIRRELVM v);
-extern SQInteger emoDisableSensor(HSQUIRRELVM v);
-extern SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v);
-extern SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v);
-
-extern SQInteger emoDrawableCreate(HSQUIRRELVM v);
-extern SQInteger emoDrawableMove(HSQUIRRELVM v);
-extern SQInteger emoDrawableScale(HSQUIRRELVM v);
-extern SQInteger emoDrawableRotate(HSQUIRRELVM v);
-
-extern void      emoUpdateOptions(SQInteger value);
-
-extern SQBool loadScriptFromAsset(const char* fname);
+#include <emo_engine.h>
+#include <emo_engine_func.h>
 
 /*
  * Register new class for emo framework

@@ -13,13 +13,7 @@
 
 #include <common.h>
 #include <sqfunc.h>
-
-/*
- * Logging
- */
-extern void LOGI(const SQChar* msg);
-extern void LOGW(const SQChar* msg);
-extern void LOGE(const SQChar* msg);
+#include <emo_engine_func.h>
 
 /*
  * Initialize Squirrel VM

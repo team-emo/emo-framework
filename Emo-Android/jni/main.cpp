@@ -13,29 +13,13 @@
 
 #include <main.h>
 #include <sqfunc.h>
+#include <emo_engine.h>
+#include <emo_engine_func.h>
 
 /* 
  * global pointer to application engine
  */
 struct engine *g_engine;
-
-/*
- * extern common functions
- */
-extern void LOGI(const SQChar* msg);
-extern void LOGW(const SQChar* msg);
-extern void LOGE(const SQChar* msg);
-
-extern void    emo_init_engine(struct engine* engine);
-extern void    emo_init_display(struct engine* engine);
-extern void    emo_draw_frame(struct engine* engine);
-extern void    emo_dispose_engine(struct engine* engine);
-extern int32_t emo_event_motion(struct android_app* app, AInputEvent* event);
-extern int32_t emo_event_key(struct android_app* app, AInputEvent* event);
-extern void    emo_event_sensors(struct engine* engine, ASensorEvent* event);
-extern void    emo_gained_focus(struct engine* engine);
-extern void    emo_lost_focus(struct engine* engine);
-extern void    emo_low_memory(struct engine* engine);
 
 /**
  * Initialize an EGL context for the current display.

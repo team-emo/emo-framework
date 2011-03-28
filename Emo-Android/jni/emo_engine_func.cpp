@@ -8,6 +8,7 @@
 #include <common.h>
 #include <main.h>
 #include <sqfunc.h>
+#include <emo_engine_func.h>
 
 extern struct engine *g_engine;
 
