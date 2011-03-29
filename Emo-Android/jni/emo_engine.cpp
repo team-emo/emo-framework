@@ -10,6 +10,8 @@
 #include <sqfunc.h>
 #include <emo_engine.h>
 #include <emo_engine_func.h>
+#include <emo_drawable.h>
+#include <emo_audio.h>
 
 /*
  * Register new class for emo framework
@@ -35,6 +37,7 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClass(engine->sqvm, EMO_RUNTIME_CLASS);
 	registerEmoClass(engine->sqvm, EMO_EVENT_CLASS);
 	registerEmoClass(engine->sqvm, EMO_DRAWABLE_CLASS);
+	registerEmoClass(engine->sqvm, EMO_AUDIO_CLASS);
 
 	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
 	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
@@ -54,6 +57,14 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClassFunc(engine->sqvm, EMO_DRAWABLE_CLASS, "move",           emoDrawableMove);
 	registerEmoClassFunc(engine->sqvm, EMO_DRAWABLE_CLASS, "scale",          emoDrawableScale);
 	registerEmoClassFunc(engine->sqvm, EMO_DRAWABLE_CLASS, "rotate",         emoDrawableRotate);
+
+	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
+	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "createEngine",   emoCreateAudioEngine);
+	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
+	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
+	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);
+	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "close",          emoCloseAudioChannel);
+	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "closeEngine",    emoCloseAudioEngine);
 }
 
 void engine_update_uptime(struct engine* engine) {

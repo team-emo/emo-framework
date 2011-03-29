@@ -36,7 +36,7 @@ static SLresult checkOpenSLresult(const char* message, SLresult result) {
     return result;
 }
 
-bool createAudioChannel(int channelCount) {
+bool createAudioEngine(int channelCount) {
 
     audioChannelCount = channelCount;
 
@@ -76,7 +76,9 @@ bool createAudioChannel(int channelCount) {
     }
 
     // create output mix
-    result = (*engineEngine)->CreateOutputMix(engineEngine, &outputMixObject, 0, NULL, NULL);
+    const SLInterfaceID mix_ids[1] = {SL_IID_VOLUME};
+    const SLboolean mix_req[1] = {SL_BOOLEAN_TRUE};
+    result = (*engineEngine)->CreateOutputMix(engineEngine, &outputMixObject, 0, mix_ids, mix_req);
     if (SL_RESULT_SUCCESS != result) {
         g_engine->lastError = ERR_AUDIO_ENGINE_INIT;
         LOGE("emo_audio: failed to create output mix object");
@@ -137,7 +139,7 @@ bool createAudioChannelFromAsset(const char* fname, struct AudioChannel* channel
 
     // create audio player
     const SLInterfaceID player_ids[3] = {SL_IID_PLAY, SL_IID_VOLUME, SL_IID_SEEK};
-    const SLboolean player_req[] = {SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE};
+    const SLboolean player_req[3] = {SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE};
     result = (*engineEngine)->CreateAudioPlayer(engineEngine, &channel->playerObject, &audioSrc, &audioSnk,
             1, player_ids, player_req);
     if (SL_RESULT_SUCCESS != result) {
@@ -220,14 +222,14 @@ void closeAudioChannel(struct AudioChannel* channel) {
     }
 }
 
-void closeAudioChannels() {
+void closeAudioEngine() {
     for (int i = 0; i < audioChannelCount; i++) {
         closeAudioChannel(&audioChannels[i]);
     }
     free(audioChannels);
 
-    (*engineObject)->Destroy(engineObject);
     (*outputMixObject)->Destroy(outputMixObject);
+    (*engineObject)->Destroy(engineObject);
 
     engineObject    = NULL;
     outputMixObject = NULL;
@@ -236,11 +238,25 @@ void closeAudioChannels() {
     audioEngineCreated = false;
 }
 
-struct AudioChannel* loadAudio(int channelIndex, const char* name) {
+/*
+ * SQInteger loadAudio(SQInteger audioIndex, SQChar* filename);
+ */
+SQInteger emoLoadAudio(HSQUIRRELVM v) {
     if (!audioEngineCreated) {
-        g_engine->lastError = ERR_AUDIO_ENGINE_CLOSED;
-        LOGE("emo_audio: audio engine is closed.");
-        return NULL;
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
+        return 1;
+    }
+
+    SQInteger channelIndex;
+    const SQChar* filename;
+
+    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_STRING) {
+        sq_getinteger(v, 2, &channelIndex);
+        sq_tostring(v, 3);
+        sq_getstring(v, -1, &filename);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
     }
 
     struct AudioChannel* channel = getAudioChannel(channelIndex);
@@ -249,9 +265,154 @@ struct AudioChannel* loadAudio(int channelIndex, const char* name) {
         closeAudioChannel(channel);
     }
 
-    if (!createAudioChannelFromAsset(name, channel)) {
-        return NULL;
+    if (!createAudioChannelFromAsset(filename, channel)) {
+        sq_pushinteger(v, g_engine->lastError);
+        return 1;
     }
 
-    return channel;
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
+}
+
+SQInteger emoCreateAudioEngine(HSQUIRRELVM v) {
+    if (audioEngineCreated) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_CREATED);
+        return 1;
+    }
+
+    SQInteger channelCount;
+
+    if (sq_gettype(v, 2) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelCount);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
+    if (!createAudioEngine(channelCount)) {
+        sq_pushinteger(v, g_engine->lastError);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
+}
+
+SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
+    if (!audioEngineCreated) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
+        return 1;
+    }
+
+    SQInteger channelIndex;
+
+    if (sq_gettype(v, 2) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
+    if (!playAudioChannel(getAudioChannel(channelIndex))) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
+}
+
+SQInteger emoPauseAudioChannel(HSQUIRRELVM v) {
+    if (!audioEngineCreated) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
+        return 1;
+    }
+
+    SQInteger channelIndex;
+
+    if (sq_gettype(v, 2) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
+    if (!pauseAudioChannel(getAudioChannel(channelIndex))) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
+}
+
+SQInteger emoStopAudioChannel(HSQUIRRELVM v) {
+    if (!audioEngineCreated) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
+        return 1;
+    }
+
+    SQInteger channelIndex;
+
+    if (sq_gettype(v, 2) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
+    if (!stopAudioChannel(getAudioChannel(channelIndex))) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
+}
+
+SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
+    if (!audioEngineCreated) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
+        return 1;
+    }
+
+    SQInteger channelIndex;
+
+    if (sq_gettype(v, 2) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
+    struct AudioChannel* channel = getAudioChannel(channelIndex);
+
+    if (channel->playerObject == NULL) {
+        sq_pushinteger(v, ERR_AUDIO_CHANNEL_CLOSED);
+        return 1;
+    }
+
+    closeAudioChannel(channel);
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
+}
+
+SQInteger emoCloseAudioEngine(HSQUIRRELVM v) {
+    if (!audioEngineCreated) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
+        return 1;
+    }
+
+    closeAudioEngine();
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
 }

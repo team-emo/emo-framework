@@ -18,11 +18,6 @@ SQInteger emoDisableSensor(HSQUIRRELVM v);
 SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v);
 SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v);
 
-SQInteger emoDrawableCreate(HSQUIRRELVM v);
-SQInteger emoDrawableMove(HSQUIRRELVM v);
-SQInteger emoDrawableScale(HSQUIRRELVM v);
-SQInteger emoDrawableRotate(HSQUIRRELVM v);
-
 void emoUpdateOptions(SQInteger value);
 SQBool loadScriptFromAsset(const char* fname);
 
