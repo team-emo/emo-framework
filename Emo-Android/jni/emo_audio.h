@@ -10,6 +10,7 @@ struct AudioChannel* getAudioChannel(int index);
 void closeAudioChannel(struct AudioChannel* channel);
 void closeAudioEngine();
 
+bool seekAudioChannel(struct AudioChannel* channel, int pos);
 bool playAudioChannel(struct AudioChannel* channel);
 bool pauseAudioChannel(struct AudioChannel* channel);
 bool stopAudioChannel(struct AudioChannel* channel);

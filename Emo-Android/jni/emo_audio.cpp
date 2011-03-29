@@ -135,7 +135,7 @@ bool createAudioChannelFromAsset(const char* fname, struct AudioChannel* channel
     const SLInterfaceID player_ids[3] = {SL_IID_PLAY, SL_IID_VOLUME, SL_IID_SEEK};
     const SLboolean player_req[3] = {SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE};
     result = (*engineEngine)->CreateAudioPlayer(engineEngine, &channel->playerObject, &audioSrc, &audioSnk,
-            1, player_ids, player_req);
+            3, player_ids, player_req);
     if (SL_RESULT_SUCCESS != result) {
         g_engine->lastError = ERR_AUDIO_ASSET_INIT;
         LOGE("emo_audio: failed to create an audio player");
@@ -177,13 +177,29 @@ bool createAudioChannelFromAsset(const char* fname, struct AudioChannel* channel
     return true;
 }
 
+SLuint32 getAudioChannelState(struct AudioChannel* channel) {
+    SLuint32 state;
+    SLresult result = (*channel->playerPlay)->GetPlayState(channel->playerPlay, &state);
+    checkOpenSLresult("emo_audio: failed to get play state", result);
+    return state;
+}
+
 bool setAudioChannelState(struct AudioChannel* channel, SLuint32 state) {
     SLresult result = (*channel->playerPlay)->SetPlayState(channel->playerPlay, state);
     checkOpenSLresult("emo_audio: failed to set play state", result);
     return (SL_RESULT_SUCCESS == result);
 }
 
+bool seekAudioChannel(struct AudioChannel* channel, int pos) {
+    SLresult result = (*channel->playerSeek)->SetPosition(channel->playerSeek, pos, SL_SEEKMODE_FAST);
+    checkOpenSLresult("emo_audio: failed to seek audio channel", result);
+    return (SL_RESULT_SUCCESS == result);
+}
+
 bool playAudioChannel(struct AudioChannel* channel) {
+    if (getAudioChannelState(channel) != SL_PLAYSTATE_STOPPED) {
+        seekAudioChannel(channel, 0);
+    }
     return setAudioChannelState(channel, SL_PLAYSTATE_PLAYING);
 }
 
@@ -193,13 +209,6 @@ bool pauseAudioChannel(struct AudioChannel* channel) {
 
 bool stopAudioChannel(struct AudioChannel* channel) {
     return setAudioChannelState(channel, SL_PLAYSTATE_STOPPED);
-}
-
-SLuint32 getAudioChannelState(struct AudioChannel* channel) {
-    SLuint32 state;
-    SLresult result = (*channel->playerPlay)->GetPlayState(channel->playerPlay, &state);
-    checkOpenSLresult("emo_audio: failed to get play state", result);
-    return state;
 }
 
 struct AudioChannel* getAudioChannel(int index) {
