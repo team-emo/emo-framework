@@ -20,8 +20,9 @@ function emo::onLoad() {
     event.enableOnDrawCallback(5000);
 
     audio.createEngine(2);
-    audio.load(0, "waterfall.wav");
-    audio.load(1, "clank.wav");
+    audio.load(0, "drums.wav");
+    audio.load(1, "clang.wav");
+    audio.play(0);
 }
 
 function emo::onGainedFocus() {
@@ -56,7 +57,6 @@ function emo::onMotionEvent(...) {
     print("MotionEvent: " + motionEvent.toString());
 
     if (motionEvent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-        audio.play(0);
         audio.play(1);
         print("0: " + audio.getVolume(0) + " - " + audio.getMaxVolume(0));
         print("1: " + audio.getVolume(1) + " - " + audio.getMaxVolume(1));
