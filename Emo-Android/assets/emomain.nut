@@ -19,24 +19,27 @@ function emo::onLoad() {
     event.registerSensors(SENSOR_TYPE_ACCELEROMETER);
     event.enableOnDrawCallback(1000);
 
+    audio.createEngine(2);
+    audio.load(0, "waterfall.wav");
+    audio.load(1, "clank.wav");
+
+    print("0: " + audio.getVolume(0) + " - " + audio.getMaxVolume(0));
+    print("1: " + audio.getVolume(1) + " - " + audio.getMaxVolume(1));
 }
 
 function emo::onGainedFocus() {
     print("onGainedFocus"); 
     event.enableSensor(SENSOR_TYPE_ACCELEROMETER, 100);
-    audio.createEngine(2);
-    audio.load(0, "waterfall.wav");
-    audio.load(1, "clank.wav");
 }
 
 function emo::onLostFocus() {
     print("onLostFocus"); 
     event.disableSensor(SENSOR_TYPE_ACCELEROMETER);
-    audio.closeEngine();
 }
 
 function emo::onDispose() {
     print("onDispose"); 
+    audio.closeEngine();
 } 
 
 function emo::onError(msg) {

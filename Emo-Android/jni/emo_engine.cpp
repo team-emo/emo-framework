@@ -63,6 +63,12 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);
+	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "seek",           emoSeekAudioChannel);
+
+	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getVolume",      emoGetAudioChannelVolume);
+	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "setVolume",      emoSetAudioChannelVolume);
+	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getMaxVolume",   emoGetAudioChannelMaxVolume);
+
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "close",          emoCloseAudioChannel);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "closeEngine",    emoCloseAudioEngine);
 }

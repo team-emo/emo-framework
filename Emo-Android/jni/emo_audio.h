@@ -10,6 +10,10 @@ struct AudioChannel* getAudioChannel(int index);
 void closeAudioChannel(struct AudioChannel* channel);
 void closeAudioEngine();
 
+SLmillibel getAudioChannelVolume(struct AudioChannel* channel);
+SLmillibel setAudioChannelVolume(struct AudioChannel* channel, SLmillibel volumeLevel);
+SLmillibel getAudioChannelMaxVolume(struct AudioChannel* channel);
+
 bool seekAudioChannel(struct AudioChannel* channel, int pos);
 bool playAudioChannel(struct AudioChannel* channel);
 bool pauseAudioChannel(struct AudioChannel* channel);
@@ -21,6 +25,11 @@ SQInteger emoCreateAudioEngine(HSQUIRRELVM v);
 SQInteger emoPlayAudioChannel(HSQUIRRELVM v);
 SQInteger emoPauseAudioChannel(HSQUIRRELVM v);
 SQInteger emoStopAudioChannel(HSQUIRRELVM v);
+SQInteger emoSeekAudioChannel(HSQUIRRELVM v);
 SQInteger emoCloseAudioChannel(HSQUIRRELVM v);
 SQInteger emoCloseAudioEngine(HSQUIRRELVM v);
+
+SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v);
+SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v);
+SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v);
 

@@ -37,18 +37,12 @@ static SLresult checkOpenSLresult(const char* message, SLresult result) {
     return result;
 }
 
-void closeAudioChannel(struct AudioChannel* channel) {
-    if (channel->loaded) {
-        (*channel->playerObject)->Destroy(channel->playerObject);
-        channel->playerObject = NULL;
-        channel->playerPlay   = NULL;
-        channel->playerSeek   = NULL;
-        channel->playerVolume = NULL;
-        channel->loaded       = SL_BOOLEAN_FALSE;
-    }
-}
-
 SLuint32 getAudioChannelState(struct AudioChannel* channel) {
+    if (!channel->loaded) {
+        g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return SL_PLAYSTATE_STOPPED;
+    }
     SLuint32 state;
     SLresult result = (*channel->playerPlay)->GetPlayState(channel->playerPlay, &state);
     checkOpenSLresult("emo_audio: failed to get play state", result);
@@ -56,30 +50,108 @@ SLuint32 getAudioChannelState(struct AudioChannel* channel) {
 }
 
 bool setAudioChannelState(struct AudioChannel* channel, SLuint32 state) {
+    if (!channel->loaded) {
+        g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return false;
+    }
     SLresult result = (*channel->playerPlay)->SetPlayState(channel->playerPlay, state);
     checkOpenSLresult("emo_audio: failed to set play state", result);
     return (SL_RESULT_SUCCESS == result);
 }
 
-bool seekAudioChannel(struct AudioChannel* channel, int pos) {
-    SLresult result = (*channel->playerSeek)->SetPosition(channel->playerSeek, pos, SL_SEEKMODE_FAST);
+bool seekAudioChannel(struct AudioChannel* channel, int pos, SLuint32 seekMode) {
+    if (!channel->loaded) {
+        g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return false;
+    }
+    SLresult result = (*channel->playerSeek)->SetPosition(channel->playerSeek, pos, seekMode);
     checkOpenSLresult("emo_audio: failed to seek audio channel", result);
     return (SL_RESULT_SUCCESS == result);
 }
 
+SLmillibel getAudioChannelVolume(struct AudioChannel* channel) {
+    if (!channel->loaded) {
+        g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return SL_MILLIBEL_MIN;
+    }
+    SLmillibel volumeLevel;
+    SLresult result = (*channel->playerVolume)->GetVolumeLevel(channel->playerVolume, &volumeLevel);
+    checkOpenSLresult("emo_audio: failed to get audio channel volume", result);
+
+    return volumeLevel;
+}
+
+SLmillibel setAudioChannelVolume(struct AudioChannel* channel, SLmillibel volumeLevel) {
+    if (!channel->loaded) {
+        g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return SL_MILLIBEL_MIN;
+    }
+    SLresult result = (*channel->playerVolume)->SetVolumeLevel(channel->playerVolume, volumeLevel);
+    checkOpenSLresult("emo_audio: failed to set audio channel volume", result);
+
+    return getAudioChannelVolume(channel);
+
+}
+
+SLmillibel getAudioChannelMaxVolume(struct AudioChannel* channel) {
+    if (!channel->loaded) {
+        g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return SL_MILLIBEL_MIN;
+    }
+    SLmillibel volumeLevel;
+    SLresult result = (*channel->playerVolume)->GetMaxVolumeLevel(channel->playerVolume, &volumeLevel);
+    checkOpenSLresult("emo_audio: failed to get audio channel max volume", result);
+
+    return volumeLevel;
+}
+
 bool playAudioChannel(struct AudioChannel* channel) {
+    if (!channel->loaded) {
+        g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return false;
+    }
     if (getAudioChannelState(channel) != SL_PLAYSTATE_STOPPED) {
-        seekAudioChannel(channel, 0);
+        seekAudioChannel(channel, 0, SL_SEEKMODE_FAST);
     }
     return setAudioChannelState(channel, SL_PLAYSTATE_PLAYING);
 }
 
 bool pauseAudioChannel(struct AudioChannel* channel) {
+    if (!channel->loaded) {
+        g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return false;
+    }
     return setAudioChannelState(channel, SL_PLAYSTATE_PAUSED);
 }
 
 bool stopAudioChannel(struct AudioChannel* channel) {
+    if (!channel->loaded) {
+        g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return false;
+    }
     return setAudioChannelState(channel, SL_PLAYSTATE_STOPPED);
+}
+
+void closeAudioChannel(struct AudioChannel* channel) {
+    if (channel->loaded) {
+        if (getAudioChannelState(channel) != SL_PLAYSTATE_PAUSED) {
+            stopAudioChannel(channel);
+        }
+        (*channel->playerObject)->Destroy(channel->playerObject);
+        channel->playerObject = NULL;
+        channel->playerPlay   = NULL;
+        channel->playerSeek   = NULL;
+        channel->playerVolume = NULL;
+        channel->loaded       = SL_BOOLEAN_FALSE;
+    }
 }
 
 bool createAudioEngine(int channelCount) {
@@ -148,9 +220,7 @@ bool createAudioChannelFromAsset(const char* fname, struct AudioChannel* channel
     SLresult result;
 
     if (channel->loaded == SL_BOOLEAN_TRUE) {
-        stopAudioChannel(channel);
         closeAudioChannel(channel);
-        channel->loaded = SL_BOOLEAN_FALSE;
     }
 
     AAssetManager* mgr = g_engine->app->activity->assetManager;
@@ -232,6 +302,11 @@ bool createAudioChannelFromAsset(const char* fname, struct AudioChannel* channel
 }
 
 struct AudioChannel* getAudioChannel(int index) {
+    if (index >= audioChannelCount) {
+        g_engine->lastError = ERR_INVALID_PARAM;
+        LOGE("emo_audio: invalid audio channel index");
+        return NULL;
+    }
     return &audioChannels[index];
 }
 
@@ -269,6 +344,11 @@ SQInteger emoLoadAudio(HSQUIRRELVM v) {
         sq_getstring(v, -1, &filename);
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
+    if (channelIndex >= audioChannelCount) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
@@ -324,6 +404,11 @@ SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
+    if (channelIndex >= audioChannelCount) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
     if (!playAudioChannel(getAudioChannel(channelIndex))) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
@@ -346,6 +431,11 @@ SQInteger emoPauseAudioChannel(HSQUIRRELVM v) {
         sq_getinteger(v, 2, &channelIndex);
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
+    if (channelIndex >= audioChannelCount) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
@@ -374,6 +464,11 @@ SQInteger emoStopAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
+    if (channelIndex >= audioChannelCount) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
     if (!stopAudioChannel(getAudioChannel(channelIndex))) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
@@ -383,6 +478,144 @@ SQInteger emoStopAudioChannel(HSQUIRRELVM v) {
 
     return 1;
 }
+
+
+SQInteger emoSeekAudioChannel(HSQUIRRELVM v) {
+    if (!audioEngineCreated) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
+        return 1;
+    }
+
+    SQInteger channelIndex;
+    SQInteger seekPosition;
+
+    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+        sq_getinteger(v, 3, &seekPosition);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
+    if (channelIndex >= audioChannelCount) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    if (!seekAudioChannel(getAudioChannel(channelIndex), seekPosition, SL_SEEKMODE_ACCURATE)) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
+}
+
+SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v) {
+    if (!audioEngineCreated) {
+        LOGE("emoGetAudioChannelVolume: audio engine is closed");
+        sq_pushinteger(v, SL_MILLIBEL_MIN);
+        return 1;
+    }
+
+    SQInteger channelIndex;
+
+    if (sq_gettype(v, 2) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+    } else {
+        sq_pushinteger(v, SL_MILLIBEL_MIN);
+        LOGE("emoGetAudioChannelVolume: invalid parameter type");
+        return 1;
+    }
+
+    if (channelIndex >= audioChannelCount) {
+        LOGE("emoGetAudioChannelVolume: invalid channel index");
+        sq_pushinteger(v, SL_MILLIBEL_MIN);
+        return 1;
+    }
+
+    struct AudioChannel* channel = getAudioChannel(channelIndex);
+
+    if (!channel->loaded) {
+        LOGE("emo_audio: audio channel is closed");
+        sq_pushinteger(v, SL_MILLIBEL_MIN);
+        return 1;
+    }
+
+    sq_pushinteger(v, getAudioChannelVolume(channel));
+
+    return 1;
+}
+
+SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
+    if (!audioEngineCreated) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
+        return 1;
+    }
+
+    SQInteger channelIndex;
+    SQInteger channelVolume;
+
+    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+        sq_getinteger(v, 3, &channelVolume);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
+    if (channelIndex >= audioChannelCount) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    if (!setAudioChannelVolume(getAudioChannel(channelIndex), channelVolume)) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
+}
+
+SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v) {
+    if (!audioEngineCreated) {
+        LOGE("emoGetAudioChannelVolume: audio engine is closed");
+        sq_pushinteger(v, SL_MILLIBEL_MIN);
+        return 1;
+    }
+
+    SQInteger channelIndex;
+
+    if (sq_gettype(v, 2) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+    } else {
+        sq_pushinteger(v, SL_MILLIBEL_MIN);
+        LOGE("emoGetAudioChannelVolume: invalid parameter type");
+        return 1;
+    }
+
+    if (channelIndex >= audioChannelCount) {
+        LOGE("emoGetAudioChannelVolume: invalid channel index");
+        sq_pushinteger(v, SL_MILLIBEL_MIN);
+        return 1;
+    }
+
+    struct AudioChannel* channel = getAudioChannel(channelIndex);
+
+    if (!channel->loaded) {
+        LOGE("emo_audio: audio channel is closed");
+        sq_pushinteger(v, SL_MILLIBEL_MIN);
+        return 1;
+    }
+
+    sq_pushinteger(v, getAudioChannelMaxVolume(channel));
+
+    return 1;
+}
+
 
 SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
     if (!audioEngineCreated) {
@@ -399,9 +632,14 @@ SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
+    if (channelIndex >= audioChannelCount) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
     struct AudioChannel* channel = getAudioChannel(channelIndex);
 
-    if (channel->playerObject == NULL) {
+    if (!channel->loaded) {
         sq_pushinteger(v, ERR_AUDIO_CHANNEL_CLOSED);
         return 1;
     }
