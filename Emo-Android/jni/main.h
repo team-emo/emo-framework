@@ -20,6 +20,7 @@ struct saved_state {
 struct engine {
     struct android_app* app;
 
+    bool loaded;
     int animating;
     EGLDisplay display;
     EGLSurface surface;

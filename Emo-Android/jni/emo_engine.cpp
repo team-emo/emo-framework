@@ -120,6 +120,7 @@ void emo_init_engine(struct engine* engine) {
     // call onLoad()
     callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOAD);
 
+    engine->loaded = true;
 }
 
 /*
@@ -173,9 +174,12 @@ void emo_draw_frame(struct engine* engine) {
  * Terminate the framework
  */
 void emo_dispose_engine(struct engine* engine) {
-    engine_update_uptime(engine);
-    callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDISPOSE);
-    sq_close(engine->sqvm);
+    if (engine->loaded) {
+        engine_update_uptime(engine);
+        callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDISPOSE);
+        sq_close(engine->sqvm);
+        engine->loaded = false;
+    }
 }
 
 /*
