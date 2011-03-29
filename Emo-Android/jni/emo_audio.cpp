@@ -12,6 +12,7 @@
 #include <emo_engine_func.h>
 
 struct AudioChannel {
+    SLboolean     loaded;
     SLObjectItf   playerObject;
     SLPlayItf     playerPlay;
     SLSeekItf     playerSeek;
@@ -34,6 +35,51 @@ static SLresult checkOpenSLresult(const char* message, SLresult result) {
         LOGE(message);
     }
     return result;
+}
+
+void closeAudioChannel(struct AudioChannel* channel) {
+    if (channel->loaded) {
+        (*channel->playerObject)->Destroy(channel->playerObject);
+        channel->playerObject = NULL;
+        channel->playerPlay   = NULL;
+        channel->playerSeek   = NULL;
+        channel->playerVolume = NULL;
+        channel->loaded       = SL_BOOLEAN_FALSE;
+    }
+}
+
+SLuint32 getAudioChannelState(struct AudioChannel* channel) {
+    SLuint32 state;
+    SLresult result = (*channel->playerPlay)->GetPlayState(channel->playerPlay, &state);
+    checkOpenSLresult("emo_audio: failed to get play state", result);
+    return state;
+}
+
+bool setAudioChannelState(struct AudioChannel* channel, SLuint32 state) {
+    SLresult result = (*channel->playerPlay)->SetPlayState(channel->playerPlay, state);
+    checkOpenSLresult("emo_audio: failed to set play state", result);
+    return (SL_RESULT_SUCCESS == result);
+}
+
+bool seekAudioChannel(struct AudioChannel* channel, int pos) {
+    SLresult result = (*channel->playerSeek)->SetPosition(channel->playerSeek, pos, SL_SEEKMODE_FAST);
+    checkOpenSLresult("emo_audio: failed to seek audio channel", result);
+    return (SL_RESULT_SUCCESS == result);
+}
+
+bool playAudioChannel(struct AudioChannel* channel) {
+    if (getAudioChannelState(channel) != SL_PLAYSTATE_STOPPED) {
+        seekAudioChannel(channel, 0);
+    }
+    return setAudioChannelState(channel, SL_PLAYSTATE_PLAYING);
+}
+
+bool pauseAudioChannel(struct AudioChannel* channel) {
+    return setAudioChannelState(channel, SL_PLAYSTATE_PAUSED);
+}
+
+bool stopAudioChannel(struct AudioChannel* channel) {
+    return setAudioChannelState(channel, SL_PLAYSTATE_STOPPED);
 }
 
 bool createAudioEngine(int channelCount) {
@@ -101,6 +147,12 @@ bool createAudioEngine(int channelCount) {
 bool createAudioChannelFromAsset(const char* fname, struct AudioChannel* channel) {
     SLresult result;
 
+    if (channel->loaded == SL_BOOLEAN_TRUE) {
+        stopAudioChannel(channel);
+        closeAudioChannel(channel);
+        channel->loaded = SL_BOOLEAN_FALSE;
+    }
+
     AAssetManager* mgr = g_engine->app->activity->assetManager;
     if (mgr == NULL) {
     	g_engine->lastError = ERR_ASSET_LOAD;
@@ -150,6 +202,8 @@ bool createAudioChannelFromAsset(const char* fname, struct AudioChannel* channel
         return false;
     }
 
+    channel->loaded = SL_BOOLEAN_TRUE;
+
     // get the play interface
     result = (*channel->playerObject)->GetInterface(channel->playerObject, SL_IID_PLAY, &channel->playerPlay);
     if (SL_RESULT_SUCCESS != result) {
@@ -177,52 +231,8 @@ bool createAudioChannelFromAsset(const char* fname, struct AudioChannel* channel
     return true;
 }
 
-SLuint32 getAudioChannelState(struct AudioChannel* channel) {
-    SLuint32 state;
-    SLresult result = (*channel->playerPlay)->GetPlayState(channel->playerPlay, &state);
-    checkOpenSLresult("emo_audio: failed to get play state", result);
-    return state;
-}
-
-bool setAudioChannelState(struct AudioChannel* channel, SLuint32 state) {
-    SLresult result = (*channel->playerPlay)->SetPlayState(channel->playerPlay, state);
-    checkOpenSLresult("emo_audio: failed to set play state", result);
-    return (SL_RESULT_SUCCESS == result);
-}
-
-bool seekAudioChannel(struct AudioChannel* channel, int pos) {
-    SLresult result = (*channel->playerSeek)->SetPosition(channel->playerSeek, pos, SL_SEEKMODE_FAST);
-    checkOpenSLresult("emo_audio: failed to seek audio channel", result);
-    return (SL_RESULT_SUCCESS == result);
-}
-
-bool playAudioChannel(struct AudioChannel* channel) {
-    if (getAudioChannelState(channel) != SL_PLAYSTATE_STOPPED) {
-        seekAudioChannel(channel, 0);
-    }
-    return setAudioChannelState(channel, SL_PLAYSTATE_PLAYING);
-}
-
-bool pauseAudioChannel(struct AudioChannel* channel) {
-    return setAudioChannelState(channel, SL_PLAYSTATE_PAUSED);
-}
-
-bool stopAudioChannel(struct AudioChannel* channel) {
-    return setAudioChannelState(channel, SL_PLAYSTATE_STOPPED);
-}
-
 struct AudioChannel* getAudioChannel(int index) {
     return &audioChannels[index];
-}
-
-void closeAudioChannel(struct AudioChannel* channel) {
-    if (channel->playerObject != NULL) {
-        (*channel->playerObject)->Destroy(channel->playerObject);
-        channel->playerObject = NULL;
-        channel->playerPlay   = NULL;
-        channel->playerSeek   = NULL;
-        channel->playerVolume = NULL;
-    }
 }
 
 void closeAudioEngine() {
