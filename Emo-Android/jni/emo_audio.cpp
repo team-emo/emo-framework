@@ -101,12 +101,6 @@ bool createAudioEngine(int channelCount) {
 bool createAudioChannelFromAsset(const char* fname, struct AudioChannel* channel) {
     SLresult result;
 
-    if (channel->playerObject != NULL) {
-        g_engine->lastError = ERR_AUDIO_CHANNEL_CREATED;
-    	LOGE("emo_audio: AudioChannel is already created.");
-        return false;
-    }
-
     AAssetManager* mgr = g_engine->app->activity->assetManager;
     if (mgr == NULL) {
     	g_engine->lastError = ERR_ASSET_LOAD;
@@ -260,10 +254,6 @@ SQInteger emoLoadAudio(HSQUIRRELVM v) {
     }
 
     struct AudioChannel* channel = getAudioChannel(channelIndex);
-    
-    if (channel->playerObject != NULL) {
-        closeAudioChannel(channel);
-    }
 
     if (!createAudioChannelFromAsset(filename, channel)) {
         sq_pushinteger(v, g_engine->lastError);
