@@ -32,4 +32,5 @@ SQInteger emoCloseAudioEngine(HSQUIRRELVM v);
 SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v);
 SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v);
 SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v);
+SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v);
 

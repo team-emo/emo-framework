@@ -616,6 +616,11 @@ SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v) {
     return 1;
 }
 
+SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v) {
+    sq_pushinteger(v, SL_MILLIBEL_MIN);
+    return 1;
+}
+
 
 SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
     if (!audioEngineCreated) {
