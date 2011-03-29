@@ -168,7 +168,7 @@ bool createAudioEngine(int channelCount) {
     audioChannels = (AudioChannel *)malloc(sizeof(AudioChannel) * audioChannelCount);
 
     for (int i = 0; i < audioChannelCount; i++) {
-        audioChannels[i].loaded = false;
+        audioChannels[i].loaded = SL_BOOLEAN_FALSE;
     }
 
     // create engine

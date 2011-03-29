@@ -135,7 +135,6 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
                 emo_lost_focus(engine);
             }
             engine_term_display(engine);
-            emo_dispose_engine(engine);
             break;
         case APP_CMD_GAINED_FOCUS:
             emo_gained_focus(engine);

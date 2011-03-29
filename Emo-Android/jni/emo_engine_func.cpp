@@ -188,7 +188,7 @@ SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
 /*
  * Shutdown the runtime
  */
-SQInteger emoRuntimeShutdown(HSQUIRRELVM v) {
+SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
     ANativeActivity_finish(g_engine->app->activity);
     return 0;
 }

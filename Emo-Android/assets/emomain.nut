@@ -68,7 +68,7 @@ function emo::onKeyEvent(...) {
     local keyEvent = emo.KeyEvent(vargv);
     print("KeyEvent: " + keyEvent.toString());
     if (keyEvent.getAction() == KEY_EVENT_ACTION_DOWN) {
-        runtime.shutdown();
+        runtime.finish();
     }
 }
 
