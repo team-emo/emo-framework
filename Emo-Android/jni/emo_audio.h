@@ -9,10 +9,12 @@ SLuint32 getAudioChannelState(struct AudioChannel* channel);
 struct AudioChannel* getAudioChannel(int index);
 void closeAudioChannel(struct AudioChannel* channel);
 void closeAudioEngine();
+bool isAudioEngineRunning();
 
 SLmillibel getAudioChannelVolume(struct AudioChannel* channel);
 SLmillibel setAudioChannelVolume(struct AudioChannel* channel, SLmillibel volumeLevel);
 SLmillibel getAudioChannelMaxVolume(struct AudioChannel* channel);
+SQInteger emoGetAudioChannelCount(HSQUIRRELVM v);
 
 bool seekAudioChannel(struct AudioChannel* channel, int pos);
 bool playAudioChannel(struct AudioChannel* channel);

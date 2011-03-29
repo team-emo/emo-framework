@@ -167,6 +167,10 @@ bool createAudioEngine(int channelCount) {
     SLresult result;
     audioChannels = (AudioChannel *)malloc(sizeof(AudioChannel) * audioChannelCount);
 
+    for (int i = 0; i < audioChannelCount; i++) {
+        audioChannels[i].loaded = false;
+    }
+
     // create engine
     const SLInterfaceID engine_ids[] = {SL_IID_ENGINE};
     const SLboolean engine_req[] = {SL_BOOLEAN_TRUE};
@@ -311,19 +315,26 @@ struct AudioChannel* getAudioChannel(int index) {
 }
 
 void closeAudioEngine() {
-    for (int i = 0; i < audioChannelCount; i++) {
-        closeAudioChannel(&audioChannels[i]);
+    if (audioEngineCreated) {
+        for (int i = 0; i < audioChannelCount; i++) {
+            closeAudioChannel(&audioChannels[i]);
+        }
+        free(audioChannels);
+
+        (*outputMixObject)->Destroy(outputMixObject);
+        (*engineObject)->Destroy(engineObject);
+
+        engineObject    = NULL;
+        outputMixObject = NULL;
+        engineEngine    = NULL;
     }
-    free(audioChannels);
-
-    (*outputMixObject)->Destroy(outputMixObject);
-    (*engineObject)->Destroy(engineObject);
-
-    engineObject    = NULL;
-    outputMixObject = NULL;
-    engineEngine    = NULL;
 
     audioEngineCreated = false;
+}
+
+
+bool isAudioEngineRunning() {
+    return audioEngineCreated;
 }
 
 /*
@@ -375,8 +386,7 @@ SQInteger emoCreateAudioEngine(HSQUIRRELVM v) {
     if (sq_gettype(v, 2) == OT_INTEGER) {
         sq_getinteger(v, 2, &channelCount);
     } else {
-        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
-        return 1;
+        channelCount = DEFAULT_AUDIO_CHANNEL_COUNT;
     }
 
     if (!createAudioEngine(channelCount)) {
@@ -614,6 +624,12 @@ SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v) {
     sq_pushinteger(v, getAudioChannelMaxVolume(channel));
 
     return 1;
+}
+
+SQInteger emoGetAudioChannelCount(HSQUIRRELVM v) {
+    sq_pushinteger(v, audioChannelCount);
+    return 1;
+
 }
 
 SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v) {

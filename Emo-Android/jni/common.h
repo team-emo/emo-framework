@@ -10,7 +10,7 @@
 #define EMO_RUNTIME_CLASS  "Runtime"
 #define EMO_EVENT_CLASS    "Event"
 #define EMO_DRAWABLE_CLASS "Drawable"
-#define EMO_AUDIO_CLASS    "Audio"
+#define EMO_AUDIO_CLASS    "AudioManager"
 
 #define EMO_FUNC_ONLOAD         "onLoad"
 #define EMO_FUNC_ONGAINED_FOUCS "onGainedFocus"
@@ -27,6 +27,8 @@
 #define KEY_EVENT_PARAMS_SIZE    8
 
 #define ACCELEROMETER_EVENT_PARAMS_SIZE 4
+
+#define DEFAULT_AUDIO_CHANNEL_COUNT 3
 
 #define EMO_NO_ERROR    0x0000
 #define EMO_ERROR       0x0001

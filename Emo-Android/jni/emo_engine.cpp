@@ -46,6 +46,7 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "info",            emoRuntimeLogInfo);
 	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
 	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
+	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "shutdown",        emoRuntimeShutdown);
 
 	registerEmoClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
 	registerEmoClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
@@ -58,12 +59,13 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClassFunc(engine->sqvm, EMO_DRAWABLE_CLASS, "scale",          emoDrawableScale);
 	registerEmoClassFunc(engine->sqvm, EMO_DRAWABLE_CLASS, "rotate",         emoDrawableRotate);
 
+	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
-	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "createEngine",   emoCreateAudioEngine);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "seek",           emoSeekAudioChannel);
+	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getChannelCount",emoGetAudioChannelCount);
 
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getVolume",      emoGetAudioChannelVolume);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "setVolume",      emoSetAudioChannelVolume);
@@ -182,6 +184,9 @@ void emo_draw_frame(struct engine* engine) {
  */
 void emo_dispose_engine(struct engine* engine) {
     if (engine->loaded) {
+        if (isAudioEngineRunning()) {
+            closeAudioEngine();
+        }
         engine_update_uptime(engine);
         callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDISPOSE);
         sq_close(engine->sqvm);
