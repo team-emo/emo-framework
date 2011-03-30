@@ -7,6 +7,9 @@ extern EmoEngine* engine;
 
 @end
 
+/*
+ * audio interfaces
+ */
 SQInteger emoLoadAudio(HSQUIRRELVM v) {
 	return 0;
 }

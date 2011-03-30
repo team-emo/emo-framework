@@ -1,5 +1,11 @@
 #import "squirrel.h"
 
+@interface EmoAudioManager : NSObject {
+
+}
+
+@end
+
 SQInteger emoLoadAudio(HSQUIRRELVM v);
 SQInteger emoCreateAudioEngine(HSQUIRRELVM v);
 SQInteger emoPlayAudioChannel(HSQUIRRELVM v);
@@ -14,9 +20,3 @@ SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v);
 SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v);
 SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v);
 SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v);
-
-@interface EmoAudioManager : NSObject {
-
-}
-
-@end

@@ -11,6 +11,7 @@
 #import "EmoViewController.h"
 #import "EmoView.h"
 #import "common.h"
+#import "emo_engine_func.h"
 #import "EmoFunc.h"
 
 EmoEngine* engine;

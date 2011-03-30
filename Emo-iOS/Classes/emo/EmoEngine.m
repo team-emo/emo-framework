@@ -5,6 +5,7 @@
 
 #import "common.h"
 #import "sqfunc.h"
+#import "emo_engine_func.h"
 #import "EmoEngine.h"
 #import "EmoDrawable.h"
 #import "EmoFunc.h"
