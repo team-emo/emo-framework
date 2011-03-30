@@ -249,4 +249,11 @@ SQInteger emoRuntimeLogWarn(HSQUIRRELVM v) {
     return 0;
 }
 
-
+/*
+ * shutdown the application
+ * (it won't work for iOS because the HOME button must be
+ * the only way to exit your app.)
+ */
+SQInteger emoRuntimeShutdown(HSQUIRRELVM v) {
+	return 0;
+}

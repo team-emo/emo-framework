@@ -21,3 +21,4 @@ SQInteger emoRuntimeLog(HSQUIRRELVM v);
 SQInteger emoRuntimeLogInfo(HSQUIRRELVM v);
 SQInteger emoRuntimeLogError(HSQUIRRELVM v);
 SQInteger emoRuntimeLogWarn(HSQUIRRELVM v);
+SQInteger emoRuntimeFinish(HSQUIRRELVM v);
