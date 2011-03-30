@@ -1,6 +1,6 @@
 local runtime = emo.Runtime();
 local event   = emo.Event();
-local audio   = emo.Audio();
+local audio   = emo.AudioManager();
 
 runtime.info("This is Log Info");
 runtime.error("This is Log Error");
@@ -19,7 +19,6 @@ function emo::onLoad() {
     event.registerSensors(SENSOR_TYPE_ACCELEROMETER);
     event.enableOnDrawCallback(5000);
 
-    audio.createEngine(2);
     audio.load(0, "drums.wav");
     audio.load(1, "clang.wav");
     audio.play(0);
@@ -32,12 +31,13 @@ function emo::onGainedFocus() {
 
 function emo::onLostFocus() {
     print("onLostFocus"); 
+    audio.stop(0);
+    audio.stop(1);
     event.disableSensor(SENSOR_TYPE_ACCELEROMETER);
 }
 
 function emo::onDispose() {
     print("onDispose"); 
-    audio.closeEngine();
 } 
 
 function emo::onError(msg) {
@@ -67,6 +67,9 @@ function emo::onMotionEvent(...) {
 function emo::onKeyEvent(...) {
     local keyEvent = emo.KeyEvent(vargv);
     print("KeyEvent: " + keyEvent.toString());
+    if (keyEvent.getAction() == KEY_EVENT_ACTION_DOWN) {
+        runtime.finish();
+    }
 }
 
 function emo::onSensorEvent(...) {

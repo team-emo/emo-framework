@@ -67,9 +67,14 @@ function emo::onMotionEvent(...) {
 function emo::onKeyEvent(...) {
     local keyEvent = emo.KeyEvent(vargv);
     print("KeyEvent: " + keyEvent.toString());
-    if (keyEvent.getAction() == KEY_EVENT_ACTION_DOWN) {
+    if (keyEvent.getAction() == KEY_EVENT_ACTION_DOWN && keyEvent.getKeyCode() != KEYCODE_BACK) {
         runtime.finish();
+        return true;
     }
+    if (keyEvent.getKeyCode() == KEYCODE_BACK) {
+        return true;
+    }
+    return false;
 }
 
 function emo::onSensorEvent(...) {
