@@ -87,6 +87,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "info",            emoRuntimeLogInfo);
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
+	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
 	
 	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "constructor",    emoDrawableCreate);
 	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "move",           emoDrawableMove);
