@@ -23,36 +23,54 @@
 @synthesize enablePerspectiveNicest;
 @synthesize enableOnDrawFrame;
 @synthesize onDrawFrameInterval;
+@synthesize audioManager;
 
-/*
+/*sqvm
  * register classes and functions for script
  */
 - (void)initScriptFunctions {
+	
 	register_table(sqvm, EMO_NAMESPACE);
 	registerEmoClass(sqvm, EMO_RUNTIME_CLASS);
 	registerEmoClass(sqvm, EMO_EVENT_CLASS);
 	registerEmoClass(sqvm, EMO_DRAWABLE_CLASS);
+	registerEmoClass(sqvm, EMO_AUDIO_CLASS);
 	
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
-	
-	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
-	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
-	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
-	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
-	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "info",            emoRuntimeLogInfo);
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
 	
+	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
+	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
+	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
+	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
+	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+	
 	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "constructor",    emoDrawableCreate);
 	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "move",           emoDrawableMove);
 	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "scale",          emoDrawableScale);
 	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "rotate",         emoDrawableRotate);
 	
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "seek",           emoSeekAudioChannel);
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "getChannelCount",emoGetAudioChannelCount);
+	
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "getVolume",      emoGetAudioChannelVolume);
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "setVolume",      emoSetAudioChannelVolume);
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "getMaxVolume",   emoGetAudioChannelMaxVolume);
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "getMinVolume",   emoGetAudioChannelMinVolume);
+	
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "close",          emoCloseAudioChannel);
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "closeEngine",    emoCloseAudioEngine);
 }
 
 /*
@@ -67,6 +85,8 @@
 	enablePerspectiveNicest = TRUE;
 	enableOnDrawFrame = FALSE;
 	accelerometerSensorRegistered = FALSE;
+	
+	audioManager = [[EmoAudioManager alloc]init];
 	
 	// engine startup time
 	startTime = [[NSDate date] retain];
@@ -93,6 +113,9 @@
 	sqvm = nil;
 	isRunning = FALSE;
 	lastOnDrawInterval = 0;
+	
+	[audioManager release];
+	audioManager = nil;
 	
 	[startTime release];
 	

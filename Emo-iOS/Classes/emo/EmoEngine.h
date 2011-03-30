@@ -1,5 +1,6 @@
 #import "squirrel.h"
 #import "common.h"
+#import "EmoAudio.h"
 
 @interface EmoEngine : NSObject<UIAccelerometerDelegate> {
 	HSQUIRRELVM sqvm;
@@ -17,6 +18,8 @@
 	BOOL accelerometerSensorRegistered;
 	int onDrawFrameInterval;
 	
+	EmoAudioManager* audioManager;
+	
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readonly) int  lastError;
@@ -25,6 +28,7 @@
 @property (readwrite) BOOL enablePerspectiveNicest;
 @property (readwrite) BOOL enableOnDrawFrame;
 @property (readwrite) int onDrawFrameInterval;
+@property (readonly) EmoAudioManager* audioManager;
 
 - (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 - (void)registerAccelerometerSensor:(BOOL)enable;
