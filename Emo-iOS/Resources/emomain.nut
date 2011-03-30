@@ -1,6 +1,10 @@
 local runtime = emo.Runtime();
 local event   = emo.Event();
-local audio   = emo.AudioManager();
+
+local audio = emo.AudioManager();
+
+local audioCh0 = emo.AudioChannel(0, audio);
+local audioCh1 = emo.AudioChannel(1, audio);
 
 runtime.info("This is Log Info");
 runtime.error("This is Log Error");
@@ -19,9 +23,9 @@ function emo::onLoad() {
     event.registerSensors(SENSOR_TYPE_ACCELEROMETER);
     event.enableOnDrawCallback(5000);
 
-    audio.load(0, "drums.wav");
-    audio.load(1, "clang.wav");
-    audio.play(0);
+    audioCh0.load("drums.wav");
+    audioCh1.load("clang.wav");
+    audioCh0.play();
 }
 
 function emo::onGainedFocus() {
@@ -31,8 +35,8 @@ function emo::onGainedFocus() {
 
 function emo::onLostFocus() {
     print("onLostFocus"); 
-    audio.stop(0);
-    audio.stop(1);
+    audioCh0.stop();
+    audioCh1.stop();
     event.disableSensor(SENSOR_TYPE_ACCELEROMETER);
 }
 
@@ -57,19 +61,26 @@ function emo::onMotionEvent(...) {
     print("MotionEvent: " + motionEvent.toString());
 
     if (motionEvent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-        audio.play(1);
-        print("0: " + audio.getVolume(0) + " - " + audio.getMaxVolume(0));
-        print("1: " + audio.getVolume(1) + " - " + audio.getMaxVolume(1));
-        audio.setVolume(0, audio.getVolume(0) -1);
+        audioCh1.play();
+
+        print("Ch0: " + audioCh0.getVolume() + " - " + audioCh0.getMaxVolume());
+        print("Ch1: " + audioCh0.getVolume() + " - " + audioCh1.getMaxVolume());
+
+        audioCh0.setVolume(audioCh0.getVolume() -1);
     }
 }
 
 function emo::onKeyEvent(...) {
     local keyEvent = emo.KeyEvent(vargv);
     print("KeyEvent: " + keyEvent.toString());
-    if (keyEvent.getAction() == KEY_EVENT_ACTION_DOWN) {
+    if (keyEvent.getAction() == KEY_EVENT_ACTION_DOWN && keyEvent.getKeyCode() != KEYCODE_BACK) {
         runtime.finish();
+        return true;
     }
+    if (keyEvent.getKeyCode() == KEYCODE_BACK) {
+        return true;
+    }
+    return false;
 }
 
 function emo::onSensorEvent(...) {

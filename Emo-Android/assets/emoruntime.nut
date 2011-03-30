@@ -245,3 +245,34 @@ class emo.SensorEvent {
         return sb;
     }
 }
+
+class emo.AudioChannel {
+
+    id        = null;
+    manager   = null;
+    available = false;
+
+    function constructor(_id, _manager) {
+        id = _id;
+        manager = _manager;
+
+        if (manager.getChannelCount() <= id) {
+            error("emo.AudioChannel: Invalid audio channel id");
+        } else {
+            available = true;
+        }
+    }
+
+    function load(file) { manager.load(id, file); }
+    function play()  { return manager.play(id); }
+    function pause() { return manager.pause(id); }
+    function stop()  { return manager.stop(id); }
+    function seek(pos) { return manager.seek(id, pos); }
+    function getVolume() { return manager.getVolume(id); }
+    function setVolume(vol) { return manager.setVolume(id, vol); }
+    function getMaxVolume() { return manager.getMaxVolume(id); }
+    function getMinVolume() { return manager.getMinVolume(id); }
+    function close() { return manager.close(id); }
+    function isAvailable() { return available; }
+}
+
