@@ -9,50 +9,6 @@
 #import "EmoDrawable.h"
 #import "EmoFunc.h"
 
-static BOOL enablePerspectiveNicest = TRUE;
-static BOOL enableOnDrawFrame = FALSE;
-static BOOL shouldImmediateUpdateStatus = FALSE;
-static BOOL accelerometerSensorRegistered = FALSE;
-static BOOL accelerometerShouldAlive = FALSE;
-static int onDrawFrameInterval = 0;
-
-/*
- * update options
- */
-void emoUpdateOptions(SQInteger value) {
-    switch(value) {
-		case OPT_ENABLE_PERSPECTIVE_NICEST:
-			enablePerspectiveNicest = TRUE;
-			break;
-		case OPT_ENABLE_PERSPECTIVE_FASTEST:
-			enablePerspectiveNicest = FALSE;
-			break;
-		case OPT_WINDOW_KEEP_SCREEN_ON:
-			[UIApplication sharedApplication].idleTimerDisabled = YES;
-			break;
-    }
-}
-
-SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
-	enableOnDrawFrame = TRUE;
-
-	SQInteger nargs = sq_gettop(v);
-	
-    if (nargs <= 2 && sq_gettype(v, 2) == OT_INTEGER) {
-        SQInteger interval;
-        sq_getinteger(v, 2, &interval);
-		
-        onDrawFrameInterval = interval;
-    }
-	
-	return 0;
-}
-
-SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
-	enableOnDrawFrame = FALSE;
-	return 0;
-}
-
 @interface EmoEngine (PrivateMethods)
 - (void)initEngine;
 - (void)updateEngineStatus;
@@ -64,6 +20,9 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 @synthesize lastError;
 @synthesize isFrameInitialized;
 @synthesize isRunning;
+@synthesize enablePerspectiveNicest;
+@synthesize enableOnDrawFrame;
+@synthesize onDrawFrameInterval;
 
 /*
  * register classes and functions for script
@@ -104,6 +63,10 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 	isFrameInitialized = FALSE;
 	lastError = EMO_NO_ERROR;
 	isRunning = TRUE;
+	
+	enablePerspectiveNicest = TRUE;
+	enableOnDrawFrame = FALSE;
+	accelerometerSensorRegistered = FALSE;
 	
 	// engine startup time
 	startTime = [[NSDate date] retain];
@@ -177,7 +140,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 /*
  * load script from resource
  */
-+(int)loadScriptFromResource:(const char*)chfname vm:(HSQUIRRELVM) v {
+-(int)loadScriptFromResource:(const char*)chfname vm:(HSQUIRRELVM) v {
 	NSString* fname = [[NSString alloc] initWithUTF8String:chfname];
 	NSString* path = [[NSBundle mainBundle] pathForResource:fname ofType:nil];
 	NSString* nscontent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error: nil];
@@ -202,11 +165,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 		NSLOGE(@"The framework is not running: onLoad");
 		return FALSE;
 	}
-	BOOL sqResult = callSqFunction(sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOAD);
-
-	[self updateEngineStatus];
-
-	return sqResult;
+	return callSqFunction(sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOAD);
 }
 
 /*
@@ -217,11 +176,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 		NSLOGE(@"The framework is not running: onGainedFocus");
 		return FALSE;
 	}
-	BOOL sqResult = callSqFunction(sqvm, EMO_NAMESPACE, EMO_FUNC_ONGAINED_FOUCS);
-
-	[self updateEngineStatus];
-
-	return sqResult;
+	return callSqFunction(sqvm, EMO_NAMESPACE, EMO_FUNC_ONGAINED_FOUCS);
 }
 
 /*
@@ -231,11 +186,6 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 	if (!isRunning) {
 		NSLOGE(@"The framework is not running: onDrawFrame");
 		return FALSE;
-	}
-	
-	if (shouldImmediateUpdateStatus) {
-		[self updateEngineStatus];
-		shouldImmediateUpdateStatus = FALSE;
 	}
 	
     glClearColor(0, 0, 0, 1.0f);
@@ -265,11 +215,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 		NSLOGE(@"The framework is not running: onLostFocus");
 		return FALSE;
 	}
-	BOOL sqResult = callSqFunction(sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOST_FOCUS);
-
-	[self updateEngineStatus];
-	
-	return sqResult;
+	return callSqFunction(sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOST_FOCUS);
 }
 
 /*
@@ -280,11 +226,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 		NSLOGE(@"The framework is not running: onDispose");
 		return FALSE;
 	}
-	BOOL sqResult = callSqFunction(sqvm, EMO_NAMESPACE, EMO_FUNC_ONDISPOSE);
-
-	[self updateEngineStatus];
-
-	return sqResult;
+	return callSqFunction(sqvm, EMO_NAMESPACE, EMO_FUNC_ONDISPOSE);
 }
 
 /*
@@ -295,11 +237,7 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 		NSLOGE(@"The framework is not running: onLowMemory");
 		return FALSE;
 	}
-	BOOL sqResult = callSqFunction(sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOW_MEMORY);
-	
-	[self updateEngineStatus];
-	
-	return sqResult;
+	return callSqFunction(sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOW_MEMORY);
 }
 
 /*
@@ -351,37 +289,24 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 }
 
 /*
- * update status of the engine
- * this method enables/disables sensors
- */
--(void)updateEngineStatus {
-	// enable/disable accelerometerSensor
-	if (accelerometerShouldAlive && accelerometerSensor == nil) {
-		accelerometerSensor = [UIAccelerometer sharedAccelerometer];
-		accelerometerSensor.delegate = self;
-    } else if (!accelerometerShouldAlive && accelerometerSensor != nil) {
-		accelerometerSensor.delegate = nil;
-		accelerometerSensor = nil;
-	}
-}
-
-/*
  * register accelerometer sensor
  */
-+(void)registerAccelerometerSensor:(BOOL)enable {
+-(void)registerAccelerometerSensor:(BOOL)enable {
 	accelerometerSensorRegistered = enable;
 }
 
 /*
  * enable sensor with updateInterval
  */
-+ (void)enableSensor:(BOOL)enable withType:(NSInteger)sensorType withInterval:(int)updateInterval {
+- (void)enableSensor:(BOOL)enable withType:(NSInteger)sensorType withInterval:(int)updateInterval {
 	if (sensorType == SENSOR_TYPE_ACCELEROMETER) {
 		if (enable && accelerometerSensorRegistered) {
-			accelerometerShouldAlive = TRUE;
+			accelerometerSensor = [UIAccelerometer sharedAccelerometer];
+			accelerometerSensor.delegate = self;
 			[UIAccelerometer sharedAccelerometer].updateInterval = updateInterval / 1000.0f;
 		} else {
-			accelerometerShouldAlive = FALSE;
+			accelerometerSensor.delegate = nil;
+			accelerometerSensor = nil;
 		}
 	}
 }
@@ -389,14 +314,8 @@ SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
 /*
  * disable sensor
  */
-+ (void)disableSensor:(NSInteger)sensorType {
+- (void)disableSensor:(NSInteger)sensorType {
 	[self enableSensor:FALSE withType:sensorType withInterval:0.1f];
 }
 
-/*
- * update engine status immediately
- */
-+ (void)updateStatusImmediately {
-	shouldImmediateUpdateStatus = TRUE;
-}
 @end

@@ -3,6 +3,8 @@
 #import "sqfunc.h"
 #import "common.h"
 
+extern EmoEngine* engine;
+
 /*
  * Logging
  */
@@ -78,12 +80,48 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
             sq_getstring(v, -1, &fname);
             sq_poptop(v);
 			
-    		[EmoEngine loadScriptFromResource:(const char*)fname vm:v];
+    		[engine loadScriptFromResource:(const char*)fname vm:v];
     	}
     }
 	return 0;
 }
 
+/*
+ * update options
+ */
+void emoUpdateOptions(SQInteger value) {
+    switch(value) {
+		case OPT_ENABLE_PERSPECTIVE_NICEST:
+			engine.enablePerspectiveNicest = TRUE;
+			break;
+		case OPT_ENABLE_PERSPECTIVE_FASTEST:
+			engine.enablePerspectiveNicest = FALSE;
+			break;
+		case OPT_WINDOW_KEEP_SCREEN_ON:
+			[UIApplication sharedApplication].idleTimerDisabled = YES;
+			break;
+    }
+}
+
+SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
+	engine.enableOnDrawFrame = TRUE;
+	
+	SQInteger nargs = sq_gettop(v);
+	
+    if (nargs <= 2 && sq_gettype(v, 2) == OT_INTEGER) {
+        SQInteger interval;
+        sq_getinteger(v, 2, &interval);
+		
+        engine.onDrawFrameInterval = interval;
+    }
+	
+	return 0;
+}
+
+SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
+	engine.enableOnDrawFrame = FALSE;
+	return 0;
+}
 
 /*
  * delcare to use sensors
@@ -91,7 +129,7 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
 void emoCreateSensors(SQInteger value) {
 	switch(value) {
 		case SENSOR_TYPE_ACCELEROMETER:
-			[EmoEngine registerAccelerometerSensor:TRUE];
+			[engine registerAccelerometerSensor:TRUE];
 			break;
 	}
 }
@@ -144,7 +182,7 @@ SQInteger emoEnableSensor(HSQUIRRELVM v) {
     sq_getinteger(v, 2, &sensorType);
     sq_getinteger(v, 3, &interval);
 	
-	[EmoEngine enableSensor:TRUE withType:sensorType withInterval:interval];
+	[engine enableSensor:TRUE withType:sensorType withInterval:interval];
 	
 	return 0;
 }
@@ -162,7 +200,7 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
     SQInteger sensorType;
     sq_getinteger(v, 2, &sensorType);
 	
-	[EmoEngine disableSensor:sensorType];
+	[engine disableSensor:sensorType];
 	
 	return 0;
 }

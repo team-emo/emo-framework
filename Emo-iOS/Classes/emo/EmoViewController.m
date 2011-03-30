@@ -13,6 +13,8 @@
 #import "common.h"
 #import "EmoFunc.h"
 
+EmoEngine* engine;
+
 @interface EmoViewController ()
 - (void)updateTouchId;
 - (void)fireMotionEvent:(NSSet *)touches withEvent:(UIEvent *) event withAction:(NSInteger) action;
@@ -24,7 +26,6 @@
 @implementation EmoViewController
 
 @synthesize animating, context, displayLink;
-@synthesize engine;
 
 - (void)awakeFromNib
 {
@@ -57,7 +58,7 @@
     touchIdMaster = [[NSMutableDictionary alloc] init];
 	nextTouchId = 0;
 	
-	self.engine = [[EmoEngine alloc]init];	
+	engine = [[EmoEngine alloc]init];
 }
 
 - (void)dealloc
@@ -93,7 +94,7 @@
     if ([EAGLContext currentContext] == context)
         [EAGLContext setCurrentContext:nil];
 	self.context = nil;	
-	self.engine = nil;
+	engine = nil;
 	
 	[touchIdMaster removeAllObjects];
 	touchIdMaster = nil;
@@ -166,11 +167,11 @@
 		NSLOGE(@"Failed to start engine");
 	}
 	
-	if ([EmoEngine loadScriptFromResource:SQUIRREL_RUNTIME_SCRIPT vm:engine.sqvm] != EMO_NO_ERROR) {
+	if ([engine loadScriptFromResource:SQUIRREL_RUNTIME_SCRIPT vm:engine.sqvm] != EMO_NO_ERROR) {
 		NSLOGE(@"Failed to load runtime script");
 	}
 
-	if ([EmoEngine loadScriptFromResource:SQUIRREL_MAIN_SCRIPT vm:engine.sqvm] != EMO_NO_ERROR) {
+	if ([engine loadScriptFromResource:SQUIRREL_MAIN_SCRIPT vm:engine.sqvm] != EMO_NO_ERROR) {
 		NSLOGE(@"Failed to load main script");
 	}
 	

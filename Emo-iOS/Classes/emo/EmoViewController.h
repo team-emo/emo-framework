@@ -17,7 +17,6 @@
     BOOL animating;
     NSInteger animationFrameInterval;
     CADisplayLink *displayLink;
-	EmoEngine *engine;
 	
 	NSMutableDictionary *touchIdMaster;
 	float touchEventParamCache[MOTION_EVENT_PARAMS_SIZE];
@@ -26,7 +25,6 @@
 
 @property (readonly, nonatomic, getter=isAnimating) BOOL animating;
 @property (nonatomic) NSInteger animationFrameInterval;
-@property (nonatomic, retain) EmoEngine *engine;
 
 - (void)onLoad;
 - (void)startAnimation;
