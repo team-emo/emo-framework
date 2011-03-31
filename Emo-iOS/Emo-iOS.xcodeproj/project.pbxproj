@@ -43,6 +43,7 @@
 		F9C849D0133E09EB0095EA37 /* EmoDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849CF133E09EB0095EA37 /* EmoDrawable.m */; };
 		F9C849D3133E0A180095EA37 /* EmoFunc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849D2133E0A180095EA37 /* EmoFunc.m */; };
 		F9D17BEC133B0F7B00F577C4 /* emoruntime.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */; };
+		F9E41A43134494DE0009385D /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E41A42134494DE0009385D /* OpenAL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -120,6 +121,7 @@
 		F9C849D1133E0A180095EA37 /* EmoFunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoFunc.h; sourceTree = "<group>"; };
 		F9C849D2133E0A180095EA37 /* EmoFunc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoFunc.m; sourceTree = "<group>"; };
 		F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoruntime.nut; path = Resources/emoruntime.nut; sourceTree = "<group>"; };
+		F9E41A42134494DE0009385D /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
 				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
+				F9E41A43134494DE0009385D /* OpenAL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,6 +197,7 @@
 				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
+				F9E41A42134494DE0009385D /* OpenAL.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

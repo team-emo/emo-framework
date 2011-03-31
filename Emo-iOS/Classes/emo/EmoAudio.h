@@ -4,9 +4,11 @@
 
 @interface EmoAudioChannel : NSObject {
 	BOOL loaded;
+	ALuint buffer;
+	ALuint source;
 }
 @property (readonly) BOOL loaded;
--(BOOL)seek:(ALfloat)pos;
+-(BOOL)seek:(ALfloat)offset;
 -(BOOL)play;
 -(BOOL)pause;
 -(BOOL)stop;
@@ -16,7 +18,8 @@
 -(ALfloat)setVolume:(ALfloat)volumeLevel;
 -(ALfloat)getMaxVolume;
 -(ALfloat)getMinVolume;
--(NSInteger)getStatus;
+-(void)setBuffer:(ALuint)_buffer;
+-(void)setSource:(ALuint)_source;
 -(void)close;
 @end
 
@@ -24,6 +27,9 @@
 @interface EmoAudioManager : NSObject {
 	BOOL audioEngineCreated;
 	NSMutableArray* channels;
+	
+    ALuint*  buffers;
+    ALuint*  sources;
 }
 
 -(BOOL)createChannels:(NSInteger)count;

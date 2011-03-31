@@ -116,6 +116,7 @@
 	isRunning = FALSE;
 	lastOnDrawInterval = 0;
 	
+	[audioManager closeEngine];
 	[audioManager release];
 	audioManager = nil;
 	
