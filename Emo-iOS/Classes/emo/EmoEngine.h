@@ -22,7 +22,7 @@
 	
 }
 @property (readonly) HSQUIRRELVM sqvm;
-@property (readonly) int  lastError;
+@property (readwrite) int  lastError;
 @property (readonly) BOOL isFrameInitialized;
 @property (readonly) BOOL isRunning;
 @property (readwrite) BOOL enablePerspectiveNicest;

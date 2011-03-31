@@ -2,6 +2,7 @@
 
 void registerEmoClass(HSQUIRRELVM v, const char *cname);
 void registerEmoClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);
+SQInteger emoRuntimeGetOSName(HSQUIRRELVM v);
 SQInteger emoRuntimeEcho(HSQUIRRELVM v);
 SQInteger emoImportScript(HSQUIRRELVM v);
 SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v);

@@ -269,3 +269,11 @@ SQInteger emoRuntimeLogWarn(HSQUIRRELVM v) {
 SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
 	return 0;
 }
+
+/*
+ * Returns OS name
+ */
+SQInteger emoRuntimeGetOSName(HSQUIRRELVM v) {
+    sq_pushstring(v, OS_IOS, -1);
+    return 1;
+}

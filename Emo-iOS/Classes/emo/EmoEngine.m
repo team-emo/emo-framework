@@ -26,7 +26,7 @@
 @synthesize onDrawFrameInterval;
 @synthesize audioManager;
 
-/*sqvm
+/*
  * register classes and functions for script
  */
 - (void)initScriptFunctions {
@@ -45,6 +45,7 @@
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
+	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);
 	
 	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
 	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
