@@ -1,6 +1,8 @@
 #define _UNICODE
 
 #define EMO_LOG_TAG "EmoFramework"
+#define OS_ANDROID "Android"
+#define OS_IOS     "iOS"
 
 #define SQUIRREL_VM_INITIAL_STACK_SIZE 1024
 #define SQUIRREL_RUNTIME_SCRIPT "emoruntime.nut"

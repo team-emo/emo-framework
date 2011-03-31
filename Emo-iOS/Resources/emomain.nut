@@ -73,12 +73,16 @@ function emo::onMotionEvent(...) {
 function emo::onKeyEvent(...) {
     local keyEvent = emo.KeyEvent(vargv);
     print("KeyEvent: " + keyEvent.toString());
-    if (keyEvent.getAction() == KEY_EVENT_ACTION_DOWN && keyEvent.getKeyCode() != KEYCODE_BACK) {
-        runtime.finish();
-        return true;
-    }
-    if (keyEvent.getKeyCode() == KEYCODE_BACK) {
-        return true;
+
+    if (runtime.os() == OS_ANDROID) {
+        if (keyEvent.getKeyCode() == KEYCODE_BACK) {
+            // disable back button (Android only)
+            return true;
+        } else if (keyEvent.getAction() == KEY_EVENT_ACTION_DOWN && keyEvent.getKeyCode() != KEYCODE_BACK) {
+            // if any key pressed except back button, finish this app
+            runtime.finish();
+            return true;
+        }
     }
     return false;
 }

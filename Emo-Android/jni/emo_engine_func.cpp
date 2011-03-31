@@ -194,6 +194,14 @@ SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
 }
 
 /*
+ * Returns OS name
+ */
+SQInteger emoRuntimeGetOSName(HSQUIRRELVM v) {
+    sq_pushstring(v, OS_ANDROID, -1);
+    return 1;
+}
+
+/*
  * Import function called from squirrel script
  */
 SQInteger emoImportScript(HSQUIRRELVM v) {

@@ -12,6 +12,7 @@ SQInteger emoRuntimeLogInfo(HSQUIRRELVM v);
 SQInteger emoRuntimeLogError(HSQUIRRELVM v);
 SQInteger emoRuntimeLogWarn(HSQUIRRELVM v);
 SQInteger emoRuntimeFinish(HSQUIRRELVM v);
+SQInteger emoRuntimeGetOSName(HSQUIRRELVM v);
 
 SQInteger emoRegisterSensors(HSQUIRRELVM v);
 SQInteger emoEnableSensor(HSQUIRRELVM v);
