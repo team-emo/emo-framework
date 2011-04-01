@@ -40,6 +40,10 @@
 		F93C591013433BD2002C29E5 /* emo_engine_func.m in Sources */ = {isa = PBXBuildFile; fileRef = F93C590F13433BD2002C29E5 /* emo_engine_func.m */; };
 		F94593DA1331935E00290114 /* EmoView.m in Sources */ = {isa = PBXBuildFile; fileRef = F94593D91331935E00290114 /* EmoView.m */; };
 		F94594221331975600290114 /* EmoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94594211331975600290114 /* EmoViewController.m */; };
+		F9C31C191345FC8600B066DC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C31C181345FC8600B066DC /* AudioToolbox.framework */; };
+		F9C31C751346012100B066DC /* clang.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C31C731346012100B066DC /* clang.wav */; };
+		F9C31C761346012100B066DC /* drums.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C31C741346012100B066DC /* drums.wav */; };
+		F9C31C781346012D00B066DC /* tada.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C31C771346012D00B066DC /* tada.wav */; };
 		F9C849D0133E09EB0095EA37 /* EmoDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849CF133E09EB0095EA37 /* EmoDrawable.m */; };
 		F9C849D3133E0A180095EA37 /* EmoFunc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849D2133E0A180095EA37 /* EmoFunc.m */; };
 		F9D17BEC133B0F7B00F577C4 /* emoruntime.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */; };
@@ -115,6 +119,10 @@
 		F94593D91331935E00290114 /* EmoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoView.m; sourceTree = "<group>"; };
 		F94594201331975600290114 /* EmoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoViewController.h; sourceTree = "<group>"; };
 		F94594211331975600290114 /* EmoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoViewController.m; sourceTree = "<group>"; };
+		F9C31C181345FC8600B066DC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		F9C31C731346012100B066DC /* clang.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = clang.wav; path = Resources/clang.wav; sourceTree = "<group>"; };
+		F9C31C741346012100B066DC /* drums.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = drums.wav; path = Resources/drums.wav; sourceTree = "<group>"; };
+		F9C31C771346012D00B066DC /* tada.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = tada.wav; path = Resources/tada.wav; sourceTree = "<group>"; };
 		F9C5E8421342E83D00F985B0 /* emo_engine_func.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emo_engine_func.h; sourceTree = "<group>"; };
 		F9C849CE133E09EB0095EA37 /* EmoDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDrawable.h; sourceTree = "<group>"; };
 		F9C849CF133E09EB0095EA37 /* EmoDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDrawable.m; sourceTree = "<group>"; };
@@ -134,6 +142,7 @@
 				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
 				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
 				F9E41A43134494DE0009385D /* OpenAL.framework in Frameworks */,
+				F9C31C191345FC8600B066DC /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,6 +192,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F9C31C771346012D00B066DC /* tada.wav */,
+				F9C31C731346012100B066DC /* clang.wav */,
+				F9C31C741346012100B066DC /* drums.wav */,
 				F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */,
 				F937BBFD1331898800DCE63B /* emomain.nut */,
 				8D1107310486CEB800E47090 /* Emo_iOS-Info.plist */,
@@ -198,6 +210,7 @@
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				F9E41A42134494DE0009385D /* OpenAL.framework */,
+				F9C31C181345FC8600B066DC /* AudioToolbox.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -353,6 +366,9 @@
 			files = (
 				F937BBFE1331898800DCE63B /* emomain.nut in Resources */,
 				F9D17BEC133B0F7B00F577C4 /* emoruntime.nut in Resources */,
+				F9C31C751346012100B066DC /* clang.wav in Resources */,
+				F9C31C761346012100B066DC /* drums.wav in Resources */,
+				F9C31C781346012D00B066DC /* tada.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

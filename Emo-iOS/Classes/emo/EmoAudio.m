@@ -5,88 +5,14 @@
 
 extern EmoEngine* engine;
 
-@implementation EmoAudioChannel
-@synthesize loaded;
-
--(void)setBuffer:(ALuint)_buffer {
-	buffer = _buffer;
-}
-
--(void)setSource:(ALuint)_source {
-	source = _source;
-}
-
--(BOOL)seek:(ALfloat)offset {
-    if (!loaded) {
-        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
-        LOGE("emo_audio: audio channel is closed");
-        return FALSE;
-    }
-	alSourcef(source, AL_SAMPLE_OFFSET, offset);
-
-	return TRUE;
-}
-
--(BOOL)play {
-    if (!loaded) {
-        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
-        LOGE("emo_audio: audio channel is closed");
-        return FALSE;
-    }
-	alSourceRewind(source);
-    alSourcePlay(source);
-	return TRUE;
-}
--(BOOL)pause {
-    if (!loaded) {
-        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
-        LOGE("emo_audio: audio channel is closed");
-        return FALSE;
-    }
-	alSourcePause(source);
-	return TRUE;
-}
--(BOOL)stop {
-    if (!loaded) {
-        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
-        LOGE("emo_audio: audio channel is closed");
-        return FALSE;
-    }
-	alSourceStop(source);
-	return TRUE;	
-}
-
--(BOOL)loadFromAsset:(const SQChar*)fname {
-	loaded = TRUE;
-	
-	
-	return TRUE; // TODO
-}
-
--(ALfloat)getVolume {
-	return  0;
-}
--(ALfloat)setVolume:(ALfloat)volumeLevel {
-	return 0;
-}
--(ALfloat)getMaxVolume {
-	return 0;
-}
--(ALfloat)getMinVolume {
-	return 0;
-}
--(void)close {
-	[self stop];
-	loaded = FALSE;
-}
-@end
-
 @implementation EmoAudioManager
+@synthesize audioChannelCount;
 
 - (id)init {
     self = [super init];
     if (self != nil) {
 		audioEngineCreated = FALSE;
+		audioChannelCount = 0;
     }
     return self;
 }
@@ -100,48 +26,129 @@ extern EmoEngine* engine;
 	
 	buffers = (ALuint *)malloc(sizeof(ALuint) * count);
 	sources = (ALuint *)malloc(sizeof(ALuint) * count);
+	loaded  = (BOOL *)malloc(sizeof(BOOL) * count);
 	
     alGenBuffers(count, buffers);
     alGenSources(count, sources);
-	
-	channels = [NSMutableArray array];
+
 	for (int i = 0; i < count; i++) {
-		EmoAudioChannel* channel = [[EmoAudioChannel alloc]init];
-		[channel setBuffer:buffers[i]];
-		[channel setSource:sources[i]];
-		[channels addObject:channel];
+		loaded[i] = FALSE;
 	}
 	audioEngineCreated = TRUE;
+	audioChannelCount = count;
+	return TRUE;
+}
+-(BOOL)loadChannelFromAsset:(NSInteger)index withFile:(const SQChar *)fname {
+	if (loaded[index]) {
+		[self closeChannel:index];
+		// if this channel is re-loaded, new buffer needs to be reassigned.
+		alGenBuffers(1, &buffers[index]);
+	}
+
+	NSString* fileName =  [[NSString alloc] initWithUTF8String:fname];
+	NSString* path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
+	[fileName release];
+	
+	if (path == nil) {
+		LOGE("Audio resource does not found:");
+		LOGE(fname);
+		return FALSE;
+	}
+	
+	void*   audioData;
+	ALsizei dataSize;
+	ALenum  dataFormat;
+	ALsizei sampleRate;
+	audioData = GetOpenALAudioData((CFURLRef)[NSURL fileURLWithPath:path], &dataSize, &dataFormat, &sampleRate);
+	
+	alBufferData(buffers[index], dataFormat, audioData, dataSize, sampleRate);
+	alSourcei(sources[index], AL_BUFFER, buffers[index]);
+	
+	loaded[index] = TRUE;
+	
 	return TRUE;
 }
 
--(EmoAudioChannel*) getAudioChannel:(NSInteger)index {
-	if ([channels count] <= index) {
-        engine.lastError = ERR_INVALID_PARAM;
-        NSLOGE(@"emo_audio: invalid audio channel index");
-		return nil;
-	}
-	return [channels objectAtIndex:index];
+-(BOOL)seekChannel:(NSInteger)index withOffset:(ALfloat)offset {
+    if (!loaded[index]) {
+        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return FALSE;
+    }
+	// fix offset because offset is millisecond basis
+	alSourcef(sources[index], AL_SEC_OFFSET, offset / 1000.0f);
+	
+	return TRUE;
+}
+
+-(BOOL)playChannel:(NSInteger)index {
+    if (!loaded[index]) {
+        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return FALSE;
+    }
+	alSourceRewind(sources[index]);
+    alSourcePlay(sources[index]);
+	return TRUE;
+}
+-(BOOL)pauseChannel:(NSInteger)index {
+    if (!loaded[index]) {
+        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return FALSE;
+    }
+	alSourcePause(sources[index]);
+	return TRUE;
+}
+-(BOOL)stopChannel:(NSInteger)index {
+    if (!loaded[index]) {
+        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return FALSE;
+    }
+	alSourceStop(sources[index]);
+	return TRUE;	
+}
+-(ALfloat)getChannelVolume:(NSInteger)index {
+	return  0;
+}
+-(ALfloat)setChannelVolume:(NSInteger)index withVolume:(ALfloat)volumeLevel {
+	return 0;
+}
+-(ALfloat)getChannelMaxVolume:(NSInteger)index {
+	return 0;
+}
+-(ALfloat)getChannelMinVolume:(NSInteger)index {
+	return 0;
+}
+
+-(BOOL)closeChannel:(NSInteger)index {
+	 if (loaded[index]) {
+		 [self stopChannel:index];
+		 // detatch buffer from source
+		 alSourcei(sources[index], AL_BUFFER, 0);
+		 // delete buffer
+		 alDeleteBuffers(1, &buffers[index]);
+		 loaded[index] = FALSE;
+		 return TRUE;
+	 }
+	return FALSE;
 }
 
 -(void)closeEngine {
 	if (audioEngineCreated) {
-		for (int i = 0; i < [channels count]; i++) {
-			EmoAudioChannel* channel = [channels objectAtIndex:i];
-			[channel stop];
-			[channel close];
-			[channel release];
+		for (int i = 0; i < audioChannelCount; i++) {
+			[self closeChannel:i];
 		}
 		
-		alDeleteBuffers([channels count], buffers);
-		alDeleteSources([channels count], sources);
+		alDeleteSources(audioChannelCount, sources);
 		
 		free(buffers);
 		free(sources);
-		
-		[channels removeAllObjects];
+		free(loaded);
 	}
 	audioEngineCreated = FALSE;
+	audioChannelCount = 0;
 }
 
 -(BOOL)isAudioEngineRunning {
@@ -149,13 +156,13 @@ extern EmoEngine* engine;
 }
 
 -(NSInteger)getChannelCount {
-	return [channels count];
+	return audioChannelCount;
 }
 
-- (void)dealloc {
-	[channels release];
-	[super dealloc]; 
+-(BOOL)channelLoaded:(NSInteger)index {
+	return loaded[index];
 }
+
 @end
 
 /*
@@ -184,9 +191,7 @@ SQInteger emoLoadAudio(HSQUIRRELVM v) {
         return 1;
     }
 	
-    EmoAudioChannel* channel = [engine.audioManager getAudioChannel:channelIndex];
-	
-    if (![channel loadFromAsset:filename]) {
+    if (![engine.audioManager loadChannelFromAsset:channelIndex withFile:filename]) {
         sq_pushinteger(v, engine.lastError);
         return 1;
     }
@@ -240,7 +245,7 @@ SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 	
-    if (![[engine.audioManager getAudioChannel:channelIndex] play]) {
+    if (![engine.audioManager playChannel:channelIndex]) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -270,7 +275,7 @@ SQInteger emoPauseAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 	
-    if (![[engine.audioManager getAudioChannel:channelIndex] pause]) {
+    if (![engine.audioManager pauseChannel:channelIndex]) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -300,7 +305,7 @@ SQInteger emoStopAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 	
-    if (![[engine.audioManager getAudioChannel:channelIndex] stop]) {
+    if (![engine.audioManager stopChannel:channelIndex]) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -336,7 +341,7 @@ SQInteger emoSeekAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 	
-    if (![[engine.audioManager getAudioChannel:channelIndex] seek:seekPosition]) {
+    if (![engine.audioManager seekChannel:channelIndex withOffset:seekPosition]) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -369,15 +374,13 @@ SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v) {
         return 1;
     }
 	
-    EmoAudioChannel* channel = [engine.audioManager getAudioChannel:channelIndex];
-	
-    if (!channel.loaded) {
+    if (![engine.audioManager channelLoaded:channelIndex]) {
         LOGE("emo_audio: audio channel is closed");
         sq_pushinteger(v, 0);
         return 1;
     }
 	
-    sq_pushfloat(v, [channel getVolume]);
+    sq_pushfloat(v, [engine.audioManager getChannelVolume:channelIndex]);
 	
     return 1;
 }
@@ -407,7 +410,7 @@ SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
         return 1;
     }
 	
-    if (![[engine.audioManager getAudioChannel:channelIndex] setVolume:channelVolume]) {
+    if (![engine.audioManager setChannelVolume:channelIndex withVolume:channelVolume]) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -440,15 +443,13 @@ SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v) {
         return 1;
     }
 	
-    EmoAudioChannel* channel = [engine.audioManager getAudioChannel:channelIndex];
-	
-    if (!channel.loaded) {
+    if (![engine.audioManager channelLoaded:channelIndex]) {
         LOGE("emo_audio: audio channel is closed");
         sq_pushinteger(v, 0);
         return 1;
     }
 	
-    sq_pushfloat(v, [channel getMaxVolume]);
+    sq_pushfloat(v, [engine.audioManager getChannelMaxVolume:channelIndex]);
 	
     return 1;
 }
@@ -482,15 +483,13 @@ SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v) {
         return 1;
     }
 	
-    EmoAudioChannel* channel = [engine.audioManager getAudioChannel:channelIndex];
-	
-    if (!channel.loaded) {
+    if (![engine.audioManager channelLoaded:channelIndex]) {
         LOGE("emo_audio: audio channel is closed");
         sq_pushinteger(v, 0);
         return 1;
     }
 	
-    sq_pushfloat(v, [channel getMinVolume]);
+    sq_pushfloat(v, [engine.audioManager getChannelMinVolume:channelIndex]);
 	
     return 1;
 }
@@ -516,14 +515,10 @@ SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 	
-    EmoAudioChannel* channel = [engine.audioManager getAudioChannel:channelIndex];
-	
-    if (!channel.loaded) {
+    if (![engine.audioManager closeChannel:channelIndex]) {
         sq_pushinteger(v, ERR_AUDIO_CHANNEL_CLOSED);
         return 1;
-    }
-	
-    [channel close];
+	}
 	
     sq_pushinteger(v, EMO_NO_ERROR);
 	

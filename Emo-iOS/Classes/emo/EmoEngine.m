@@ -169,10 +169,14 @@
 -(int)loadScriptFromResource:(const char*)chfname vm:(HSQUIRRELVM) v {
 	NSString* fname = [[NSString alloc] initWithUTF8String:chfname];
 	NSString* path = [[NSBundle mainBundle] pathForResource:fname ofType:nil];
-	NSString* nscontent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error: nil];
-	
 	[fname release];
+	if (path == nil) {
+		LOGE("Script resource does not found:");
+		LOGE(chfname);
+		return ERR_SCRIPT_OPEN;
+	}
 	
+	NSString* nscontent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error: nil];
 	if (nscontent == nil) {
 		return ERR_SCRIPT_OPEN;
 	}

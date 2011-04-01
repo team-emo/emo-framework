@@ -4,7 +4,7 @@
 
 @interface EmoEngine : NSObject<UIAccelerometerDelegate> {
 	HSQUIRRELVM sqvm;
-	int lastError;
+	NSInteger lastError;
 	BOOL isFrameInitialized;
 	BOOL isRunning;
 	NSDate* startTime;
@@ -16,7 +16,7 @@
 	BOOL enablePerspectiveNicest;
 	BOOL enableOnDrawFrame;
 	BOOL accelerometerSensorRegistered;
-	int onDrawFrameInterval;
+	NSInteger onDrawFrameInterval;
 	
 	EmoAudioManager* audioManager;
 	
