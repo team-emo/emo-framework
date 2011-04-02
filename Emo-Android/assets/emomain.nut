@@ -61,6 +61,7 @@ function emo::onMotionEvent(...) {
     print("MotionEvent: " + motionEvent.toString());
 
     if (motionEvent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+        audioCh1.setLoop(true);
         audioCh1.play();
 
         print("Ch0: " + audioCh0.getVolume() + " - " + audioCh0.getMaxVolume());

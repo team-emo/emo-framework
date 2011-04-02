@@ -32,6 +32,9 @@
 
 #define DEFAULT_AUDIO_CHANNEL_COUNT 3
 
+#define EMO_NO              0
+#define EMO_YES             1
+
 #define EMO_NO_ERROR    0x0000
 #define EMO_ERROR       0x0001
 #define LOG_INFO        0x0002
@@ -95,3 +98,7 @@
 #define SENSOR_STANDARD_GRAVITY            (9.80665f)
 #define SENSOR_MAGNETIC_FIELD_EARTH_MAX    (60.0f)
 #define SENSOR_MAGNETIC_FIELD_EARTH_MIN    (30.0f)
+
+#define AUDIO_CHANNEL_STOPPED           1
+#define AUDIO_CHANNEL_PAUSED            2
+#define AUDIO_CHANNEL_PLAYING           3

@@ -337,6 +337,34 @@ bool isAudioEngineRunning() {
     return audioEngineCreated;
 }
 
+bool getAudioChannelLooping(struct AudioChannel* channel) {
+    SLboolean enabled;
+    SLmillisecond start = 0;
+    SLmillisecond end = SL_TIME_UNKNOWN;
+    SLresult result = (*channel->playerSeek)->GetLoop(channel->playerSeek, &enabled, &start, &end);
+
+    if (SL_RESULT_SUCCESS == result && enabled) {
+        return true;
+    }
+
+    if (SL_RESULT_SUCCESS != result) {
+        LOGE("emo_audio: failed to get the channel loop status");
+    }
+
+    return false;
+}
+
+bool setAudioChannelLooping(struct AudioChannel* channel, SQInteger enable) {
+    SLresult result;
+    if (enable == EMO_YES) {
+        result = (*channel->playerSeek)->SetLoop(channel->playerSeek, SL_BOOLEAN_TRUE, 0, SL_TIME_UNKNOWN);
+    } else {
+        result = (*channel->playerSeek)->SetLoop(channel->playerSeek, SL_BOOLEAN_FALSE, 0, SL_TIME_UNKNOWN);
+    }
+    return (SL_RESULT_SUCCESS == result);
+
+}
+
 /*
  * SQInteger loadAudio(SQInteger audioIndex, SQChar* filename);
  */
@@ -635,6 +663,129 @@ SQInteger emoGetAudioChannelCount(HSQUIRRELVM v) {
 SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v) {
     sq_pushinteger(v, SL_MILLIBEL_MIN);
     return 1;
+}
+
+
+SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
+    if (!audioEngineCreated) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
+        return 1;
+    }
+
+    SQInteger channelIndex;
+    SQInteger useLoop;
+
+    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+        sq_getinteger(v, 3, &useLoop);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
+    if (channelIndex >= audioChannelCount) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    if (!setAudioChannelLooping(getAudioChannel(channelIndex), useLoop)) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
+}
+
+SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
+    if (!audioEngineCreated) {
+        LOGE("emoGetAudioChannelLooping: audio engine is closed");
+        sq_pushinteger(v, EMO_NO);
+        return 1;
+    }
+
+    SQInteger channelIndex;
+
+    if (sq_gettype(v, 2) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+    } else {
+        sq_pushinteger(v, EMO_NO);
+        LOGE("emoGetAudioChannelLooping: invalid parameter type");
+        return 1;
+    }
+
+    if (channelIndex >= audioChannelCount) {
+        LOGE("emoGetAudioChannelLooping: invalid channel index");
+        sq_pushinteger(v, EMO_NO);
+        return 1;
+    }
+
+    struct AudioChannel* channel = getAudioChannel(channelIndex);
+
+    if (!channel->loaded) {
+        LOGE("emo_audio: audio channel is closed");
+        sq_pushinteger(v, EMO_NO);
+        return 1;
+    }
+
+    if (getAudioChannelLooping(channel)) {
+        sq_pushinteger(v, EMO_YES);
+    } else {
+        sq_pushinteger(v, EMO_NO);
+    }
+
+    return 1;
+
+}
+
+SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
+    if (!audioEngineCreated) {
+        LOGE("emoGetAudioChannelState: audio engine is closed");
+        sq_pushinteger(v, SL_PLAYSTATE_STOPPED);
+        return 1;
+    }
+
+    SQInteger channelIndex;
+
+    if (sq_gettype(v, 2) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+    } else {
+        sq_pushinteger(v, SL_PLAYSTATE_STOPPED);
+        LOGE("emoGetAudioChannelState: invalid parameter type");
+        return 1;
+    }
+
+    if (channelIndex >= audioChannelCount) {
+        LOGE("emoGetAudioChannelState: invalid channel index");
+        sq_pushinteger(v, SL_PLAYSTATE_STOPPED);
+        return 1;
+    }
+
+    struct AudioChannel* channel = getAudioChannel(channelIndex);
+
+    if (!channel->loaded) {
+        LOGE("emo_audio: audio channel is closed");
+        sq_pushinteger(v, SL_PLAYSTATE_STOPPED);
+        return 1;
+    }
+
+    SLuint32 state = getAudioChannelState(channel);
+
+    switch(state) {
+    case SL_PLAYSTATE_STOPPED:
+        sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);
+        break;
+    case SL_PLAYSTATE_PAUSED:
+        sq_pushinteger(v, AUDIO_CHANNEL_PAUSED);
+        break;
+    case SL_PLAYSTATE_PLAYING:
+        sq_pushinteger(v, AUDIO_CHANNEL_PLAYING);
+        break;
+    }
+
+    return 1;
+
 }
 
 

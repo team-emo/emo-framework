@@ -8,6 +8,9 @@
 OS_ANDROID <- "Android";
 OS_IOS     <- "iOS";
 
+EMO_NO          <- 0;
+EMO_YES         <- 1;
+
 EMO_NO_ERROR    <- 0x0000;
 EMO_ERROR       <- 0x0001;
 LOG_INFO        <- 0x0002;
@@ -184,6 +187,10 @@ KEYCODE_BUTTON_START    <- 108;
 KEYCODE_BUTTON_SELECT   <- 109;
 KEYCODE_BUTTON_MODE     <- 110;
 
+AUDIO_CHANNEL_STOPPED   <- 1;
+AUDIO_CHANNEL_PAUSED    <- 2;
+AUDIO_CHANNEL_PLAYING   <- 3;
+
 class emo.MotionEvent {
     param = null;
     function constructor(args) {
@@ -268,6 +275,13 @@ class emo.AudioChannel {
     function setVolume(vol) { return manager.setVolume(id, vol); }
     function getMaxVolume() { return manager.getMaxVolume(id); }
     function getMinVolume() { return manager.getMinVolume(id); }
+    function setLoop(enable) {
+        return manager.setLoop(id, enable ? EMO_YES : EMO_NO);
+    }
+    function isLoop() {
+        return manager.isLoop(id) == EMO_YES ? true : false;
+    }
+    function getState() { return manager.getState(id); }
     function close() { return manager.close(id); }
 }
 

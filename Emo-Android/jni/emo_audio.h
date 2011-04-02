@@ -22,6 +22,9 @@ bool pauseAudioChannel(struct AudioChannel* channel);
 bool stopAudioChannel(struct AudioChannel* channel);
 struct AudioChannel* loadAudio(int channelIndex, const char* name);
 
+bool getAudioChannelLooping(struct AudioChannel* channel);
+bool setAudioChannelLooping(struct AudioChannel* channel, SQInteger enable);
+
 SQInteger emoLoadAudio(HSQUIRRELVM v);
 SQInteger emoCreateAudioEngine(HSQUIRRELVM v);
 SQInteger emoPlayAudioChannel(HSQUIRRELVM v);
@@ -36,3 +39,6 @@ SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v);
 SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v);
 SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v);
 
+SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v);
+SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v);
+SQInteger emoGetAudioChannelState(HSQUIRRELVM v);

@@ -190,6 +190,7 @@ SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
  */
 SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
     ANativeActivity_finish(g_engine->app->activity);
+    g_engine->animating = 0;
     return 0;
 }
 
