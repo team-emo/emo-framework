@@ -65,8 +65,6 @@ function emo::onMotionEvent(...) {
 
         print("Ch0: " + audioCh0.getVolume() + " - " + audioCh0.getMaxVolume());
         print("Ch1: " + audioCh0.getVolume() + " - " + audioCh1.getMaxVolume());
-
-        audioCh0.setVolume(audioCh0.getVolume() -1);
     }
 }
 
