@@ -64,8 +64,8 @@ function emo::onMotionEvent(...) {
         audioCh1.setLoop(true);
         audioCh1.play();
 
-        print("Ch0: " + audioCh0.getVolume() + " - " + audioCh0.getMaxVolume());
-        print("Ch1: " + audioCh0.getVolume() + " - " + audioCh1.getMaxVolume());
+        print("Ch0: " + audioCh0.getMinVolume() + " - " + audioCh0.getMaxVolume() + " " + audioCh0.isLoop());
+        print("Ch1: " + audioCh0.getMinVolume() + " - " + audioCh1.getMaxVolume() + " " + audioCh1.isLoop());
     }
 }
 

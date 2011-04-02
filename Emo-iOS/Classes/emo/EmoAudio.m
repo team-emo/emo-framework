@@ -282,6 +282,38 @@ extern EmoEngine* engine;
 	audioChannelCount = 0;
 }
 
+-(BOOL)getChannelLooping:(NSInteger)index {
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return FALSE;
+    }
+    if (!loaded[index]) {
+        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return FALSE;
+    }
+	ALint enabled;
+	alGetSourcei(sources[index], AL_LOOPING, &enabled);
+	
+	return enabled != 0;
+}
+
+-(BOOL)setChannelLooping:(NSInteger)index withLoop:(SQInteger) enable {
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return FALSE;
+    }
+    if (!loaded[index]) {
+        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return FALSE;
+    }
+	alSourcei(sources[index], AL_LOOPING, enable ? AL_TRUE : AL_FALSE);
+	return TRUE;
+}
+
 -(BOOL)isAudioEngineRunning {
 	return audioEngineCreated;
 }
@@ -654,6 +686,112 @@ SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
     sq_pushinteger(v, EMO_NO_ERROR);
 	
     return 1;
+}
+
+SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
+    if (![engine.audioManager isAudioEngineRunning]) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
+        return 1;
+    }
+	
+    SQInteger channelIndex;
+    SQInteger useLoop;
+	
+    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+        sq_getinteger(v, 3, &useLoop);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+	
+    if (channelIndex >= [engine.audioManager getChannelCount]) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    if (![engine.audioManager setChannelLooping:channelIndex withLoop:useLoop]) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+	
+    return 1;
+}
+
+SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
+    if (![engine.audioManager isAudioEngineRunning]) {
+        LOGE("emoGetAudioChannelLooping: audio engine is closed");
+        sq_pushinteger(v, EMO_NO);
+        return 1;
+    }
+	
+    SQInteger channelIndex;
+	
+    if (sq_gettype(v, 2) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+    } else {
+        sq_pushinteger(v, EMO_NO);
+        LOGE("emoGetAudioChannelLooping: invalid parameter type");
+        return 1;
+    }
+	
+    if (channelIndex >= [engine.audioManager getChannelCount]) {
+        LOGE("emoGetAudioChannelLooping: invalid channel index");
+        sq_pushinteger(v, EMO_NO);
+        return 1;
+    }
+	
+    if ([engine.audioManager getChannelLooping:channelIndex]) {
+        sq_pushinteger(v, EMO_YES);
+    } else {
+        sq_pushinteger(v, EMO_NO);
+    }
+	
+    return 1;
+	
+}
+
+SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
+    if (![engine.audioManager isAudioEngineRunning]) {
+        LOGE("emoGetAudioChannelState: audio engine is closed");
+        sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);
+        return 1;
+    }
+	
+    SQInteger channelIndex;
+	
+    if (sq_gettype(v, 2) == OT_INTEGER) {
+        sq_getinteger(v, 2, &channelIndex);
+    } else {
+        sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);
+        LOGE("emoGetAudioChannelState: invalid parameter type");
+        return 1;
+    }
+	
+    if (channelIndex >= [engine.audioManager getChannelCount]) {
+        LOGE("emoGetAudioChannelState: invalid channel index");
+        sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);
+        return 1;
+    }
+	
+    ALenum state = [engine.audioManager getChannelState:channelIndex];
+	
+    switch(state) {
+		case AL_STOPPED:
+			sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);
+			break;
+		case AL_PAUSED:
+			sq_pushinteger(v, AUDIO_CHANNEL_PAUSED);
+			break;
+		case AL_PLAYING:
+			sq_pushinteger(v, AUDIO_CHANNEL_PLAYING);
+			break;
+    }
+	
+    return 1;
+	
 }
 
 SQInteger emoCloseAudioEngine(HSQUIRRELVM v) {

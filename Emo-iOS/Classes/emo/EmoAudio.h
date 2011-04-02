@@ -33,6 +33,9 @@
 -(ALfloat)getChannelMaxVolume:(NSInteger)index;
 -(ALfloat)getChannelMinVolume:(NSInteger)index;
 
+-(BOOL)getChannelLooping:(NSInteger)index;
+-(BOOL)setChannelLooping:(NSInteger)index withLoop:(SQInteger) enable;
+
 @end
 
 SQInteger emoLoadAudio(HSQUIRRELVM v);
@@ -49,3 +52,7 @@ SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v);
 SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v);
 SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v);
 SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v);
+
+SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v);
+SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v);
+SQInteger emoGetAudioChannelState(HSQUIRRELVM v);

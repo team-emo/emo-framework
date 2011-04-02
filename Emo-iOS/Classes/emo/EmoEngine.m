@@ -71,6 +71,10 @@
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "getMaxVolume",   emoGetAudioChannelMaxVolume);
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "getMinVolume",   emoGetAudioChannelMinVolume);
 	
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "setLoop",        emoSetAudioChannelLooping);
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "isLoop",         emoGetAudioChannelLooping);
+	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "getState",       emoGetAudioChannelState);
+
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "close",          emoCloseAudioChannel);
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "closeEngine",    emoCloseAudioEngine);
 }

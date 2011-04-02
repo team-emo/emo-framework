@@ -742,7 +742,7 @@ SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
 SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
     if (!audioEngineCreated) {
         LOGE("emoGetAudioChannelState: audio engine is closed");
-        sq_pushinteger(v, SL_PLAYSTATE_STOPPED);
+        sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);
         return 1;
     }
 
@@ -751,14 +751,14 @@ SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
     if (sq_gettype(v, 2) == OT_INTEGER) {
         sq_getinteger(v, 2, &channelIndex);
     } else {
-        sq_pushinteger(v, SL_PLAYSTATE_STOPPED);
+        sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);
         LOGE("emoGetAudioChannelState: invalid parameter type");
         return 1;
     }
 
     if (channelIndex >= audioChannelCount) {
         LOGE("emoGetAudioChannelState: invalid channel index");
-        sq_pushinteger(v, SL_PLAYSTATE_STOPPED);
+        sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);
         return 1;
     }
 
@@ -766,7 +766,7 @@ SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
 
     if (!channel->loaded) {
         LOGE("emo_audio: audio channel is closed");
-        sq_pushinteger(v, SL_PLAYSTATE_STOPPED);
+        sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);
         return 1;
     }
 
