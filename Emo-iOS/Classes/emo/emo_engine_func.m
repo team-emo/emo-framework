@@ -36,6 +36,7 @@ void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
     ExtAudioFileRef audioFile;
     err = ExtAudioFileOpenURL(fileURL, &audioFile);
     if (err) {
+		LOGE("GetOpenALAudioData: failed to open audioFile");
         goto Exit;
     }
     

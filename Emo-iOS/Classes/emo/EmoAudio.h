@@ -9,6 +9,8 @@
     ALuint*  buffers;
     ALuint*  sources;
 	NSInteger audioChannelCount;
+    ALCdevice*  device;
+    ALCcontext* context;
 }
 @property (readwrite) NSInteger audioChannelCount;
 

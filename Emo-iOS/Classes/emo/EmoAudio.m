@@ -5,6 +5,10 @@
 
 extern EmoEngine* engine;
 
+@interface EmoAudioManager (PrivateMethods)
+-(BOOL)isALError:(ALenum)error at:(NSString*) at;
+@end
+
 @implementation EmoAudioManager
 @synthesize audioChannelCount;
 
@@ -23,6 +27,11 @@ extern EmoEngine* engine;
         LOGE("emo_audio: audio engine is already created.");
         return FALSE;
     }
+
+	// Open OpenAL device and context
+    device = alcOpenDevice(NULL);
+    context = alcCreateContext(device, NULL);
+    alcMakeContextCurrent(context);
 	
 	buffers = (ALuint *)malloc(sizeof(ALuint) * count);
 	sources = (ALuint *)malloc(sizeof(ALuint) * count);
@@ -44,6 +53,9 @@ extern EmoEngine* engine;
         LOGE("emo_audio: audio engine is closed.");
         return FALSE;
     }
+	
+	// clear errors
+	alGetError();
 	
 	if (loaded[index]) {
 		[self closeChannel:index];
@@ -68,11 +80,37 @@ extern EmoEngine* engine;
 	audioData = GetOpenALAudioData((CFURLRef)[NSURL fileURLWithPath:path], &dataSize, &dataFormat, &sampleRate);
 	
 	alBufferData(buffers[index], dataFormat, audioData, dataSize, sampleRate);
+	if ([self isALError:alGetError() at:@"alBufferData"]) {
+		LOGE(fname);
+		return FALSE;
+	}
 	alSourcei(sources[index], AL_BUFFER, buffers[index]);
+	if ([self isALError:alGetError() at:@"alSourcei"]) {
+		LOGE(fname);
+		return FALSE;
+	}
 	
 	loaded[index] = TRUE;
 	
 	return TRUE;
+}
+-(BOOL)isALError:(ALenum)error at:(NSString*) at {
+	if (error != AL_NO_ERROR) {
+		if (error == AL_OUT_OF_MEMORY) {
+			LOGE("AL_OUT_OF_MEMORY at ");
+		} else if (error == AL_INVALID_VALUE) {
+			LOGE("AL_INVALID_VALUE at ");
+		} else if (error == AL_INVALID_ENUM) {
+			LOGE("AL_INVALID_ENUM at ");
+		} else if (error == AL_INVALID_NAME) {
+			LOGE("AL_INVALID_NAME at ");
+		} else if (error = AL_INVALID_OPERATION) {
+			LOGE("AL_INVALID_OPERATION at ");
+		}
+		NSLOGE(at);
+		return TRUE;
+	}
+	return FALSE;
 }
 -(ALenum)getChannelState:(NSInteger)index {
     if (!audioEngineCreated) {
@@ -230,6 +268,11 @@ extern EmoEngine* engine;
 		}
 		
 		alDeleteSources(audioChannelCount, sources);
+		
+		// close audio context and deivce
+		alcMakeContextCurrent(NULL);
+		alcDestroyContext(context);
+		alcCloseDevice(device);
 		
 		free(buffers);
 		free(sources);
