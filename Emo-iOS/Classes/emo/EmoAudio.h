@@ -24,6 +24,7 @@
 -(BOOL)pauseChannel:(NSInteger)index;
 -(BOOL)stopChannel:(NSInteger)index;
 -(BOOL)channelLoaded:(NSInteger)index;
+-(ALenum)getChannelState:(NSInteger)index;
 
 -(ALfloat)getChannelVolume:(NSInteger)index;
 -(ALfloat)setChannelVolume:(NSInteger)index withVolume:(ALfloat)volumeLevel;

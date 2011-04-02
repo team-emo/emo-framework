@@ -44,6 +44,7 @@ void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
     err = ExtAudioFileGetProperty(
 								  audioFile, kExtAudioFileProperty_FileDataFormat, &size, &fileFormat);
     if (err) {
+		LOGE("GetOpenALAudioData: failed to get fileFormat");
         goto Exit;
     }
     
@@ -59,6 +60,7 @@ void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
     err = ExtAudioFileSetProperty(
 								  audioFile, kExtAudioFileProperty_ClientDataFormat, sizeof(outputFormat), &outputFormat);
     if (err) {
+		LOGE("GetOpenALAudioData: failed to set outputFormat");
         goto Exit;
     }
     
@@ -67,6 +69,7 @@ void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
     err = ExtAudioFileGetProperty(
 								  audioFile, kExtAudioFileProperty_FileLengthFrames, &size, &fileLengthFrames);
     if (err) {
+		LOGE("GetOpenALAudioData: failed to get fileLengthFrames");
         goto Exit;
     }
     
@@ -82,6 +85,7 @@ void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
     
     err = ExtAudioFileRead(audioFile, (UInt32*)&fileLengthFrames, &dataBuffer);
     if (err) {
+		LOGE("GetOpenALAudioData: failed to read audioFile");
         free(data);
         goto Exit;
     }

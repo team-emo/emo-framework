@@ -39,6 +39,12 @@ extern EmoEngine* engine;
 	return TRUE;
 }
 -(BOOL)loadChannelFromAsset:(NSInteger)index withFile:(const SQChar *)fname {
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return FALSE;
+    }
+	
 	if (loaded[index]) {
 		[self closeChannel:index];
 		// if this channel is re-loaded, new buffer needs to be reassigned.
@@ -68,8 +74,22 @@ extern EmoEngine* engine;
 	
 	return TRUE;
 }
-
+-(ALenum)getChannelState:(NSInteger)index {
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return AL_STOPPED;
+    }
+	ALenum state;
+	alGetSourcei(sources[index], AL_SOURCE_STATE, &state);
+	return state;
+}
 -(BOOL)seekChannel:(NSInteger)index withOffset:(ALfloat)offset {
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return FALSE;
+    }
     if (!loaded[index]) {
         engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
         LOGE("emo_audio: audio channel is closed");
@@ -82,6 +102,11 @@ extern EmoEngine* engine;
 }
 
 -(BOOL)playChannel:(NSInteger)index {
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return FALSE;
+    }
     if (!loaded[index]) {
         engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
         LOGE("emo_audio: audio channel is closed");
@@ -92,6 +117,11 @@ extern EmoEngine* engine;
 	return TRUE;
 }
 -(BOOL)pauseChannel:(NSInteger)index {
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return FALSE;
+    }
     if (!loaded[index]) {
         engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
         LOGE("emo_audio: audio channel is closed");
@@ -101,6 +131,11 @@ extern EmoEngine* engine;
 	return TRUE;
 }
 -(BOOL)stopChannel:(NSInteger)index {
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return FALSE;
+    }
     if (!loaded[index]) {
         engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
         LOGE("emo_audio: audio channel is closed");
@@ -110,20 +145,73 @@ extern EmoEngine* engine;
 	return TRUE;	
 }
 -(ALfloat)getChannelVolume:(NSInteger)index {
-	return  0;
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return 0;
+    }
+    if (!loaded[index]) {
+        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return 0;
+    }
+	ALfloat f;
+	alGetSourcef(sources[index], AL_GAIN, &f);
+	return  f;
 }
 -(ALfloat)setChannelVolume:(NSInteger)index withVolume:(ALfloat)volumeLevel {
-	return 0;
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return 0;
+    }
+    if (!loaded[index]) {
+        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return 0;
+    }
+	alSourcef(sources[index], AL_GAIN, volumeLevel);
+	
+	return [self getChannelVolume:index];
 }
 -(ALfloat)getChannelMaxVolume:(NSInteger)index {
-	return 0;
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return 0;
+    }
+    if (!loaded[index]) {
+        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return 0;
+    }
+	ALfloat f;
+	alGetSourcef(sources[index], AL_MAX_GAIN, &f);
+	return  f;
 }
 -(ALfloat)getChannelMinVolume:(NSInteger)index {
-	return 0;
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return 0;
+    }
+    if (!loaded[index]) {
+        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return 0;
+    }
+	ALfloat f;
+	alGetSourcef(sources[index], AL_MIN_GAIN, &f);
+	return  f;
 }
 
 -(BOOL)closeChannel:(NSInteger)index {
-	 if (loaded[index]) {
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return FALSE;
+    }
+	if (loaded[index]) {
 		 [self stopChannel:index];
 		 // detatch buffer from source
 		 alSourcei(sources[index], AL_BUFFER, 0);
