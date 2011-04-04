@@ -58,7 +58,7 @@ struct engine {
 
 struct ImageInfo {
     const char* filename;
-    int      textureId;
+    GLuint   textureId;
     int      width;
     int      height;
     GLubyte* data;

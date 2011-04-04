@@ -105,3 +105,5 @@
 #define AUDIO_CHANNEL_PAUSED            2
 #define AUDIO_CHANNEL_PLAYING           3
 
+bool isPowerOfTwo(int x);
+int nextPowerOfTwo(int minimum);
