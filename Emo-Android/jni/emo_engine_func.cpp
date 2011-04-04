@@ -54,7 +54,7 @@ static void png_asset_read(png_structp png_ptr, png_bytep data, png_uint_32 leng
 /* 
  * load png image from asset
  */
-bool loadPngFromAsset(const char *fname, struct ImageInfo* imageInfo, GLubyte **outData) {
+bool loadPngFromAsset(const char *fname, struct ImageInfo* imageInfo) {
     AAssetManager* mgr = g_engine->app->activity->assetManager;
     if (mgr == NULL) {
     	g_engine->lastError = ERR_ASSET_LOAD;
@@ -92,11 +92,12 @@ bool loadPngFromAsset(const char *fname, struct ImageInfo* imageInfo, GLubyte **
 
     png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND, NULL);
 
+    imageInfo->textureId = -1;
+    imageInfo->filename = fname;
     imageInfo->width  = info_ptr->width;
     imageInfo->height = info_ptr->height;
-    imageInfo->colorType = info_ptr->color_type;
 
-    switch (imageInfo->colorType) {
+    switch (info_ptr->color_type) {
         case PNG_COLOR_TYPE_RGBA:
             imageInfo->hasAlpha = true;
             break;
@@ -110,12 +111,12 @@ bool loadPngFromAsset(const char *fname, struct ImageInfo* imageInfo, GLubyte **
             return false;
     }
     unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
-    *outData = (unsigned char*) malloc(row_bytes * imageInfo->height);
+    imageInfo->data = (unsigned char*) malloc(row_bytes * imageInfo->height);
 
     png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
 
     for (int i = 0; i < imageInfo->height; i++) {
-        memcpy(*outData+(row_bytes * (imageInfo->height-1-i)), row_pointers[i], row_bytes);
+        memcpy(imageInfo->data+(row_bytes * (imageInfo->height-1-i)), row_pointers[i], row_bytes);
     }
 
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);

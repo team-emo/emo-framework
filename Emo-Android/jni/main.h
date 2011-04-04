@@ -1,5 +1,6 @@
 #include <sys/timeb.h>
 #include <EGL/egl.h>
+#include <GLES/gl.h>
 
 #include <android/sensor.h>
 #include <android/log.h>
@@ -56,8 +57,10 @@ struct engine {
 };
 
 struct ImageInfo {
-    bool hasAlpha;
-    int  width;
-    int  height;
-    int  colorType;
+    const char* filename;
+    int      textureId;
+    int      width;
+    int      height;
+    GLubyte* data;
+    bool     hasAlpha;
 };

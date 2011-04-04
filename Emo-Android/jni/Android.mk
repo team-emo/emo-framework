@@ -18,7 +18,7 @@ include $(CLEAR_VARS)
 include $(LOCAL_PATH)/squirrel/Android.mk
 include $(LOCAL_PATH)/libpng/Android.mk
 
-SQUIRREL_CFLAGS := -O2 -Wall
+SQUIRREL_CFLAGS := -O2
 
 APP_OPTIM       := release
 LOCAL_MODULE    := emo-android
