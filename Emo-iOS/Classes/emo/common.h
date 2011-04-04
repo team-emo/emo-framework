@@ -1,4 +1,5 @@
 #define _UNICODE
+#define PNG_NO_PEDANTIC_WARNINGS
 
 #define EMO_LOG_TAG "EmoFramework"
 #define OS_ANDROID "Android"
@@ -57,6 +58,7 @@
 #define ERR_INVALID_PARAM_COUNT   0x0113
 #define ERR_INVALID_PARAM_TYPE    0x0114
 #define ERR_INVALID_PARAM         0x0115
+#define ERR_FILE_OPEN             0x0118
 
 #define OPT_ENABLE_PERSPECTIVE_NICEST   0x1000
 #define OPT_ENABLE_PERSPECTIVE_FASTEST  0x1001
@@ -102,3 +104,6 @@
 #define AUDIO_CHANNEL_STOPPED           1
 #define AUDIO_CHANNEL_PAUSED            2
 #define AUDIO_CHANNEL_PLAYING           3
+
+bool isPowerOfTwo(int x);
+int nextPowerOfTwo(int minimum);
