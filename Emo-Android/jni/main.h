@@ -54,3 +54,10 @@ struct engine {
 
     struct saved_state state;
 };
+
+struct ImageInfo {
+    bool hasAlpha;
+    int  width;
+    int  height;
+    int  colorType;
+};

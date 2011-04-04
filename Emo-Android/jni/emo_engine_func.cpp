@@ -5,11 +5,15 @@
 #include <android_native_app_glue.h>
 #include <android/window.h>
 
+#include <EGL/egl.h>
+#include <GLES/gl.h>
+
 #include <squirrel.h>
 #include <common.h>
 #include <main.h>
 #include <sqfunc.h>
 #include <emo_engine_func.h>
+#include <png.h>
 
 extern struct engine *g_engine;
 
@@ -29,7 +33,7 @@ void LOGE(const SQChar* msg) {
 }
 
 /*
- * Read script callback
+ * callback function to read squirrel script
  */
 static SQInteger sq_lexer(SQUserPointer asset) {
 	SQChar c;
@@ -37,6 +41,87 @@ static SQInteger sq_lexer(SQUserPointer asset) {
 			return c;
 		}
 	return 0;
+}
+
+/*
+ * callback function to read png image
+ */
+static void png_asset_read(png_structp png_ptr, png_bytep data, png_uint_32 length) {
+    AAsset* asset = (AAsset*)png_get_io_ptr(png_ptr);
+    AAsset_read(asset, data, length);
+}
+
+/* 
+ * load png image from asset
+ */
+bool loadPngFromAsset(const char *fname, struct ImageInfo* imageInfo, GLubyte **outData) {
+    AAssetManager* mgr = g_engine->app->activity->assetManager;
+    if (mgr == NULL) {
+    	g_engine->lastError = ERR_ASSET_LOAD;
+    	LOGE("loadPngFromAsset: failed to load AAssetManager");
+    	return false;
+    }
+
+    AAsset* asset = AAssetManager_open(mgr, fname, AASSET_MODE_UNKNOWN);
+    if (asset == NULL) {
+    	g_engine->lastError = ERR_ASSET_OPEN;
+    	LOGW("loadPngFromAsset: failed to open asset");
+        LOGW(fname);
+    	return false;
+    }
+
+    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    png_infop info_ptr = png_create_info_struct(png_ptr);
+
+    if (info_ptr == NULL) {
+        AAsset_close(asset);
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        return false;
+    }
+
+    if (setjmp(png_jmpbuf(png_ptr))) {
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        AAsset_close(asset);
+        return false;
+    }
+
+    png_set_read_fn(png_ptr, (void *)asset, png_asset_read);
+
+    unsigned int sig_read = 0;
+    png_set_sig_bytes(png_ptr, sig_read);
+
+    png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND, NULL);
+
+    imageInfo->width  = info_ptr->width;
+    imageInfo->height = info_ptr->height;
+    imageInfo->colorType = info_ptr->color_type;
+
+    switch (imageInfo->colorType) {
+        case PNG_COLOR_TYPE_RGBA:
+            imageInfo->hasAlpha = true;
+            break;
+        case PNG_COLOR_TYPE_RGB:
+            imageInfo->hasAlpha = false;
+            break;
+        default:
+            LOGE("loadPngFromAsset: unsupported color type");
+            png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+            AAsset_close(asset);
+            return false;
+    }
+    unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
+    *outData = (unsigned char*) malloc(row_bytes * imageInfo->height);
+
+    png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
+
+    for (int i = 0; i < imageInfo->height; i++) {
+        memcpy(*outData+(row_bytes * (imageInfo->height-1-i)), row_pointers[i], row_bytes);
+    }
+
+    png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+    AAsset_close(asset);
+
+    return true;
 }
 
 /*
@@ -49,14 +134,14 @@ SQBool loadScriptFromAsset(const char* fname) {
     AAssetManager* mgr = g_engine->app->activity->assetManager;
     if (mgr == NULL) {
     	g_engine->lastError = ERR_SCRIPT_LOAD;
-    	LOGE("Failed to load AAssetManager");
+    	LOGE("loadScriptFromAsset: failed to load AAssetManager");
     	return SQFalse;
     }
 
     AAsset* asset = AAssetManager_open(mgr, fname, AASSET_MODE_UNKNOWN);
     if (asset == NULL) {
     	g_engine->lastError = ERR_SCRIPT_OPEN;
-    	LOGW("Failed to open main script file");
+    	LOGW("loadScriptFromAsset: failed to open main script file");
         LOGW(fname);
     	return SQFalse;
     }
@@ -65,13 +150,13 @@ SQBool loadScriptFromAsset(const char* fname) {
         sq_pushroottable(g_engine->sqvm);
         if (SQ_FAILED(sq_call(g_engine->sqvm, 1, SQFalse, SQTrue))) {
         	g_engine->lastError = ERR_SCRIPT_CALL_ROOT;
-            LOGW("failed to sq_call");
+            LOGW("loadScriptFromAsset: failed to sq_call");
             LOGW(fname);
             return SQFalse;
         }
     } else {
     	g_engine->lastError = ERR_SCRIPT_COMPILE;
-        LOGW("Failed to compile squirrel script");
+        LOGW("loadScriptFromAsset: failed to compile squirrel script");
         LOGW(fname);
         return SQFalse;
     }

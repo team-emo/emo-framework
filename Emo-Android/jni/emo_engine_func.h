@@ -1,8 +1,12 @@
 #include <squirrel.h>
+#include <EGL/egl.h>
+#include <GLES/gl.h>
 
 void LOGI(const SQChar* msg);
 void LOGW(const SQChar* msg);
 void LOGE(const SQChar* msg);
+
+bool loadPngFromAsset(const char* fname, struct ImageInfo* imageInfo, GLubyte **outData);
 
 SQInteger emoImportScript(HSQUIRRELVM v);
 SQInteger emoSetOptions(HSQUIRRELVM v);
