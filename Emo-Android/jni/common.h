@@ -12,7 +12,7 @@
 #define EMO_NAMESPACE  "emo"
 #define EMO_RUNTIME_CLASS  "Runtime"
 #define EMO_EVENT_CLASS    "Event"
-#define EMO_DRAWABLE_CLASS "Drawable"
+#define EMO_STAGE_CLASS    "Stage"
 #define EMO_AUDIO_CLASS    "AudioManager"
 
 #define EMO_FUNC_ONLOAD         "onLoad"

@@ -8,7 +8,7 @@ void updateDrawableBuffers(struct Drawable* drawable);
 void initDrawable(struct Drawable* drawable);
 void updateDrawableKey(struct Drawable* drawable, char* key);
 
-SQInteger emoDrawableCreate(HSQUIRRELVM v);
+SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);
 SQInteger emoDrawableMove(HSQUIRRELVM v);
 SQInteger emoDrawableScale(HSQUIRRELVM v);
 SQInteger emoDrawableRotate(HSQUIRRELVM v);

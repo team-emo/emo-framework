@@ -36,7 +36,7 @@ static void initScriptFunctions(struct engine* engine) {
 	register_table(engine->sqvm, EMO_NAMESPACE);
 	registerEmoClass(engine->sqvm, EMO_RUNTIME_CLASS);
 	registerEmoClass(engine->sqvm, EMO_EVENT_CLASS);
-	registerEmoClass(engine->sqvm, EMO_DRAWABLE_CLASS);
+	registerEmoClass(engine->sqvm, EMO_STAGE_CLASS);
 	registerEmoClass(engine->sqvm, EMO_AUDIO_CLASS);
 
 	registerEmoClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
@@ -55,10 +55,10 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
 	registerEmoClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
 
-	registerEmoClassFunc(engine->sqvm, EMO_DRAWABLE_CLASS, "constructor",    emoDrawableCreate);
-	registerEmoClassFunc(engine->sqvm, EMO_DRAWABLE_CLASS, "move",           emoDrawableMove);
-	registerEmoClassFunc(engine->sqvm, EMO_DRAWABLE_CLASS, "scale",          emoDrawableScale);
-	registerEmoClassFunc(engine->sqvm, EMO_DRAWABLE_CLASS, "rotate",         emoDrawableRotate);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
 
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);

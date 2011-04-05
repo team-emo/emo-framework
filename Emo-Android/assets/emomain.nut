@@ -1,43 +1,26 @@
 local runtime = emo.Runtime();
 local event   = emo.Event();
-
-local audio = emo.AudioManager();
-
-local audioCh0 = audio.createChannel(0);
-local audioCh1 = audio.createChannel(1);
-
-runtime.info("This is Log Info");
-runtime.error("This is Log Error");
-runtime.warn("This is Log Warn");
-
-print(runtime.echo("Hello, Runtime!"));
+local stage   = emo.Stage();
 
 local str = "Hello, Squirrel from File!";
 print(str);
+
+local sprite = stage.createSprite("dog.png");
 
 function emo::onLoad() { 
     print("onLoad");
 
     runtime.setOptions(OPT_WINDOW_KEEP_SCREEN_ON, OPT_ENABLE_PERSPECTIVE_NICEST);
 
-    event.registerSensors(SENSOR_TYPE_ACCELEROMETER);
     event.enableOnDrawCallback(5000);
-
-    audioCh0.load("drums.wav");
-    audioCh1.load("clang.wav");
-    audioCh0.play();
 }
 
 function emo::onGainedFocus() {
     print("onGainedFocus"); 
-    event.enableSensor(SENSOR_TYPE_ACCELEROMETER, 100);
 }
 
 function emo::onLostFocus() {
     print("onLostFocus"); 
-    audioCh0.stop();
-    audioCh1.stop();
-    event.disableSensor(SENSOR_TYPE_ACCELEROMETER);
 }
 
 function emo::onDispose() {
@@ -59,30 +42,11 @@ function emo::onLowMemory() {
 function emo::onMotionEvent(...) {
     local motionEvent = emo.MotionEvent(vargv);
     print("MotionEvent: " + motionEvent.toString());
-
-    if (motionEvent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-        audioCh1.setLoop(true);
-        audioCh1.play();
-
-        print("Ch0: " + audioCh0.getVolume() + " - " + audioCh0.getMaxVolume());
-        print("Ch1: " + audioCh0.getVolume() + " - " + audioCh1.getMaxVolume());
-    }
 }
 
 function emo::onKeyEvent(...) {
     local keyEvent = emo.KeyEvent(vargv);
     print("KeyEvent: " + keyEvent.toString());
-
-    if (runtime.os() == OS_ANDROID) {
-        if (keyEvent.getKeyCode() == KEYCODE_BACK) {
-            // disable back button (Android only)
-            return true;
-        } else if (keyEvent.getAction() == KEY_EVENT_ACTION_DOWN && keyEvent.getKeyCode() != KEYCODE_BACK) {
-            // if any key pressed except back button, finish this app
-            runtime.finish();
-            return true;
-        }
-    }
     return false;
 }
 

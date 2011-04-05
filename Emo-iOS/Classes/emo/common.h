@@ -12,7 +12,7 @@
 #define EMO_NAMESPACE  "emo"
 #define EMO_RUNTIME_CLASS  "Runtime"
 #define EMO_EVENT_CLASS    "Event"
-#define EMO_DRAWABLE_CLASS "Drawable"
+#define EMO_STAGE_CLASS    "Stage"
 #define EMO_AUDIO_CLASS    "AudioManager"
 
 #define EMO_FUNC_ONLOAD         "onLoad"
@@ -32,6 +32,7 @@
 #define ACCELEROMETER_EVENT_PARAMS_SIZE 4
 
 #define DEFAULT_AUDIO_CHANNEL_COUNT 3
+#define DRAWABLE_KEY_LENGTH 32
 
 #define EMO_NO              0
 #define EMO_YES             1

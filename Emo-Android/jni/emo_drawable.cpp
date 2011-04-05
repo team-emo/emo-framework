@@ -78,7 +78,7 @@ void updateDrawableKey(struct Drawable* drawable, char* key) {
 /*
  * create drawable instance
  */
-SQInteger emoDrawableCreate(HSQUIRRELVM v) {
+SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 
     return 0;
 }
