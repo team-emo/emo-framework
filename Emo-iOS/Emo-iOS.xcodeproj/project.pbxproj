@@ -44,6 +44,24 @@
 		F9C31C751346012100B066DC /* clang.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C31C731346012100B066DC /* clang.wav */; };
 		F9C31C761346012100B066DC /* drums.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C31C741346012100B066DC /* drums.wav */; };
 		F9C31C781346012D00B066DC /* tada.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C31C771346012D00B066DC /* tada.wav */; };
+		F9C7DE60134AB99F0053065E /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE4D134AB99E0053065E /* png.c */; };
+		F9C7DE61134AB99F0053065E /* pngerror.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE50134AB99E0053065E /* pngerror.c */; };
+		F9C7DE62134AB99F0053065E /* pngget.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE51134AB99E0053065E /* pngget.c */; };
+		F9C7DE63134AB99F0053065E /* pngmem.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE52134AB99E0053065E /* pngmem.c */; };
+		F9C7DE64134AB99F0053065E /* pngpread.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE53134AB99E0053065E /* pngpread.c */; };
+		F9C7DE65134AB99F0053065E /* pngread.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE55134AB99E0053065E /* pngread.c */; };
+		F9C7DE66134AB99F0053065E /* pngrio.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE56134AB99E0053065E /* pngrio.c */; };
+		F9C7DE67134AB99F0053065E /* pngrtran.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE57134AB99E0053065E /* pngrtran.c */; };
+		F9C7DE68134AB99F0053065E /* pngrutil.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE58134AB99F0053065E /* pngrutil.c */; };
+		F9C7DE69134AB99F0053065E /* pngset.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE59134AB99F0053065E /* pngset.c */; };
+		F9C7DE6A134AB99F0053065E /* pngtrans.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE5A134AB99F0053065E /* pngtrans.c */; };
+		F9C7DE6B134AB99F0053065E /* pngwio.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE5B134AB99F0053065E /* pngwio.c */; };
+		F9C7DE6C134AB99F0053065E /* pngwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE5C134AB99F0053065E /* pngwrite.c */; };
+		F9C7DE6D134AB99F0053065E /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE5D134AB99F0053065E /* pngwtran.c */; };
+		F9C7DE6E134AB99F0053065E /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE5E134AB99F0053065E /* pngwutil.c */; };
+		F9C7DE70134AB9FA0053065E /* common.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE6F134AB9FA0053065E /* common.m */; };
+		F9C7DE94134ABBDE0053065E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C7DE93134ABBDE0053065E /* libz.dylib */; };
+		F9C7DEAA134ACAE90053065E /* EmoImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DEA9134ACAE90053065E /* EmoImage.m */; };
 		F9C849D0133E09EB0095EA37 /* EmoDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849CF133E09EB0095EA37 /* EmoDrawable.m */; };
 		F9C849D3133E0A180095EA37 /* EmoFunc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849D2133E0A180095EA37 /* EmoFunc.m */; };
 		F9D17BEC133B0F7B00F577C4 /* emoruntime.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */; };
@@ -124,6 +142,29 @@
 		F9C31C741346012100B066DC /* drums.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = drums.wav; path = Resources/drums.wav; sourceTree = "<group>"; };
 		F9C31C771346012D00B066DC /* tada.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = tada.wav; path = Resources/tada.wav; sourceTree = "<group>"; };
 		F9C5E8421342E83D00F985B0 /* emo_engine_func.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emo_engine_func.h; sourceTree = "<group>"; };
+		F9C7DE4B134AB99E0053065E /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = libpng/config.h; sourceTree = "<group>"; };
+		F9C7DE4D134AB99E0053065E /* png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = png.c; path = libpng/png.c; sourceTree = "<group>"; };
+		F9C7DE4E134AB99E0053065E /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = png.h; path = libpng/png.h; sourceTree = "<group>"; };
+		F9C7DE4F134AB99E0053065E /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngconf.h; path = libpng/pngconf.h; sourceTree = "<group>"; };
+		F9C7DE50134AB99E0053065E /* pngerror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngerror.c; path = libpng/pngerror.c; sourceTree = "<group>"; };
+		F9C7DE51134AB99E0053065E /* pngget.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngget.c; path = libpng/pngget.c; sourceTree = "<group>"; };
+		F9C7DE52134AB99E0053065E /* pngmem.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngmem.c; path = libpng/pngmem.c; sourceTree = "<group>"; };
+		F9C7DE53134AB99E0053065E /* pngpread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngpread.c; path = libpng/pngpread.c; sourceTree = "<group>"; };
+		F9C7DE54134AB99E0053065E /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = libpng/pngpriv.h; sourceTree = "<group>"; };
+		F9C7DE55134AB99E0053065E /* pngread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngread.c; path = libpng/pngread.c; sourceTree = "<group>"; };
+		F9C7DE56134AB99E0053065E /* pngrio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngrio.c; path = libpng/pngrio.c; sourceTree = "<group>"; };
+		F9C7DE57134AB99E0053065E /* pngrtran.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngrtran.c; path = libpng/pngrtran.c; sourceTree = "<group>"; };
+		F9C7DE58134AB99F0053065E /* pngrutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngrutil.c; path = libpng/pngrutil.c; sourceTree = "<group>"; };
+		F9C7DE59134AB99F0053065E /* pngset.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngset.c; path = libpng/pngset.c; sourceTree = "<group>"; };
+		F9C7DE5A134AB99F0053065E /* pngtrans.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngtrans.c; path = libpng/pngtrans.c; sourceTree = "<group>"; };
+		F9C7DE5B134AB99F0053065E /* pngwio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwio.c; path = libpng/pngwio.c; sourceTree = "<group>"; };
+		F9C7DE5C134AB99F0053065E /* pngwrite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwrite.c; path = libpng/pngwrite.c; sourceTree = "<group>"; };
+		F9C7DE5D134AB99F0053065E /* pngwtran.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwtran.c; path = libpng/pngwtran.c; sourceTree = "<group>"; };
+		F9C7DE5E134AB99F0053065E /* pngwutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwutil.c; path = libpng/pngwutil.c; sourceTree = "<group>"; };
+		F9C7DE6F134AB9FA0053065E /* common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = common.m; sourceTree = "<group>"; };
+		F9C7DE93134ABBDE0053065E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		F9C7DEA8134ACAE90053065E /* EmoImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoImage.h; sourceTree = "<group>"; };
+		F9C7DEA9134ACAE90053065E /* EmoImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoImage.m; sourceTree = "<group>"; };
 		F9C849CE133E09EB0095EA37 /* EmoDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDrawable.h; sourceTree = "<group>"; };
 		F9C849CF133E09EB0095EA37 /* EmoDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDrawable.m; sourceTree = "<group>"; };
 		F9C849D1133E0A180095EA37 /* EmoFunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoFunc.h; sourceTree = "<group>"; };
@@ -143,6 +184,7 @@
 				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
 				F9E41A43134494DE0009385D /* OpenAL.framework in Frameworks */,
 				F9C31C191345FC8600B066DC /* AudioToolbox.framework in Frameworks */,
+				F9C7DE94134ABBDE0053065E /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,6 +194,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				F9C7DE4A134AB97E0053065E /* libpng */,
 				F937BBB31331891900DCE63B /* squirrel */,
 				F937BBAB1331890D00DCE63B /* emo */,
 				1D3623240D0F684500981E51 /* Emo_iOSAppDelegate.h */,
@@ -211,6 +254,7 @@
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				F9E41A42134494DE0009385D /* OpenAL.framework */,
 				F9C31C181345FC8600B066DC /* AudioToolbox.framework */,
+				F9C7DE93134ABBDE0053065E /* libz.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -218,23 +262,21 @@
 		F937BBAB1331890D00DCE63B /* emo */ = {
 			isa = PBXGroup;
 			children = (
+				F9C7DE9F134ACA920053065E /* common */,
 				F94594201331975600290114 /* EmoViewController.h */,
 				F94594211331975600290114 /* EmoViewController.m */,
 				F94593D81331935E00290114 /* EmoView.h */,
 				F94593D91331935E00290114 /* EmoView.m */,
-				F937BBAC1331890D00DCE63B /* common.h */,
 				F937BBAD1331890D00DCE63B /* EmoEngine.h */,
 				F937BBAE1331890D00DCE63B /* EmoEngine.m */,
-				F937BBAF1331890D00DCE63B /* sqfunc.h */,
-				F937BBB01331890D00DCE63B /* sqfunc.m */,
 				F9C849CE133E09EB0095EA37 /* EmoDrawable.h */,
 				F9C849CF133E09EB0095EA37 /* EmoDrawable.m */,
 				F9C849D1133E0A180095EA37 /* EmoFunc.h */,
 				F9C849D2133E0A180095EA37 /* EmoFunc.m */,
-				F9C5E8421342E83D00F985B0 /* emo_engine_func.h */,
-				F93C590F13433BD2002C29E5 /* emo_engine_func.m */,
 				F93C58401343187A002C29E5 /* EmoAudio.h */,
 				F93C58411343187A002C29E5 /* EmoAudio.m */,
+				F9C7DEA8134ACAE90053065E /* EmoImage.h */,
+				F9C7DEA9134ACAE90053065E /* EmoImage.m */,
 			);
 			path = emo;
 			sourceTree = "<group>";
@@ -313,6 +355,45 @@
 				F937BBE31331891900DCE63B /* sqvm.h */,
 			);
 			path = squirrel;
+			sourceTree = "<group>";
+		};
+		F9C7DE4A134AB97E0053065E /* libpng */ = {
+			isa = PBXGroup;
+			children = (
+				F9C7DE4B134AB99E0053065E /* config.h */,
+				F9C7DE4D134AB99E0053065E /* png.c */,
+				F9C7DE4E134AB99E0053065E /* png.h */,
+				F9C7DE4F134AB99E0053065E /* pngconf.h */,
+				F9C7DE50134AB99E0053065E /* pngerror.c */,
+				F9C7DE51134AB99E0053065E /* pngget.c */,
+				F9C7DE52134AB99E0053065E /* pngmem.c */,
+				F9C7DE53134AB99E0053065E /* pngpread.c */,
+				F9C7DE54134AB99E0053065E /* pngpriv.h */,
+				F9C7DE55134AB99E0053065E /* pngread.c */,
+				F9C7DE56134AB99E0053065E /* pngrio.c */,
+				F9C7DE57134AB99E0053065E /* pngrtran.c */,
+				F9C7DE58134AB99F0053065E /* pngrutil.c */,
+				F9C7DE59134AB99F0053065E /* pngset.c */,
+				F9C7DE5A134AB99F0053065E /* pngtrans.c */,
+				F9C7DE5B134AB99F0053065E /* pngwio.c */,
+				F9C7DE5C134AB99F0053065E /* pngwrite.c */,
+				F9C7DE5D134AB99F0053065E /* pngwtran.c */,
+				F9C7DE5E134AB99F0053065E /* pngwutil.c */,
+			);
+			name = libpng;
+			sourceTree = "<group>";
+		};
+		F9C7DE9F134ACA920053065E /* common */ = {
+			isa = PBXGroup;
+			children = (
+				F9C5E8421342E83D00F985B0 /* emo_engine_func.h */,
+				F93C590F13433BD2002C29E5 /* emo_engine_func.m */,
+				F937BBAC1331890D00DCE63B /* common.h */,
+				F937BBAF1331890D00DCE63B /* sqfunc.h */,
+				F937BBB01331890D00DCE63B /* sqfunc.m */,
+				F9C7DE6F134AB9FA0053065E /* common.m */,
+			);
+			name = common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -409,6 +490,23 @@
 				F9C849D3133E0A180095EA37 /* EmoFunc.m in Sources */,
 				F93C58421343187A002C29E5 /* EmoAudio.m in Sources */,
 				F93C591013433BD2002C29E5 /* emo_engine_func.m in Sources */,
+				F9C7DE60134AB99F0053065E /* png.c in Sources */,
+				F9C7DE61134AB99F0053065E /* pngerror.c in Sources */,
+				F9C7DE62134AB99F0053065E /* pngget.c in Sources */,
+				F9C7DE63134AB99F0053065E /* pngmem.c in Sources */,
+				F9C7DE64134AB99F0053065E /* pngpread.c in Sources */,
+				F9C7DE65134AB99F0053065E /* pngread.c in Sources */,
+				F9C7DE66134AB99F0053065E /* pngrio.c in Sources */,
+				F9C7DE67134AB99F0053065E /* pngrtran.c in Sources */,
+				F9C7DE68134AB99F0053065E /* pngrutil.c in Sources */,
+				F9C7DE69134AB99F0053065E /* pngset.c in Sources */,
+				F9C7DE6A134AB99F0053065E /* pngtrans.c in Sources */,
+				F9C7DE6B134AB99F0053065E /* pngwio.c in Sources */,
+				F9C7DE6C134AB99F0053065E /* pngwrite.c in Sources */,
+				F9C7DE6D134AB99F0053065E /* pngwtran.c in Sources */,
+				F9C7DE6E134AB99F0053065E /* pngwutil.c in Sources */,
+				F9C7DE70134AB9FA0053065E /* common.m in Sources */,
+				F9C7DEAA134ACAE90053065E /* EmoImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,6 +552,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					Classes/libpng,
 					Classes/emo,
 					Classes/squirrel/include,
 				);
