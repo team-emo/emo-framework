@@ -3,8 +3,8 @@ local event   = emo.Event();
 
 local audio = emo.AudioManager();
 
-local audioCh0 = emo.AudioChannel(0, audio);
-local audioCh1 = emo.AudioChannel(1, audio);
+local audioCh0 = audio.createChannel(0);
+local audioCh1 = audio.createChannel(1);
 
 runtime.info("This is Log Info");
 runtime.error("This is Log Error");
