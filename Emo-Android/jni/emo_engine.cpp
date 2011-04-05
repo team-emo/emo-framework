@@ -166,6 +166,7 @@ void emo_init_display(struct engine* engine) {
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
+
 }
 
 /*
@@ -195,6 +196,7 @@ void emo_dispose_engine(struct engine* engine) {
         engine_update_uptime(engine);
         callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDISPOSE);
         sq_close(engine->sqvm);
+        clearDrawables(engine);
         engine->loaded = false;
     }
 }

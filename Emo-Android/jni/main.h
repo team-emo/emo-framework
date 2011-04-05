@@ -1,3 +1,4 @@
+#include <hash_map>
 #include <sys/timeb.h>
 #include <EGL/egl.h>
 #include <GLES/gl.h>
@@ -13,6 +14,25 @@
 struct saved_state {
     int32_t x;
     int32_t y;
+};
+
+
+struct ImageInfo {
+    const char* filename;
+    GLuint   textureId;
+    int      width;
+    int      height;
+    GLubyte* data;
+    bool     hasAlpha;
+};
+
+struct Drawable {
+    unsigned int vbo[3];
+    float      positions[12];
+    float      tex_coords[8];
+    short      indices[4];
+    bool       hasTexture;
+    ImageInfo* texture;
 };
 
 /**
@@ -54,13 +74,6 @@ struct engine {
     const ASensor* proximitySensor;
 
     struct saved_state state;
-};
 
-struct ImageInfo {
-    const char* filename;
-    GLuint   textureId;
-    int      width;
-    int      height;
-    GLubyte* data;
-    bool     hasAlpha;
+    std::hash_map <const char *, Drawable *> drawables;
 };
