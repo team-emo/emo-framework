@@ -18,4 +18,5 @@
 @property (readwrite) GLubyte* data;
 @property (readwrite) BOOL hasAlpha;
 
+-(BOOL)loadPng:(NSString*)file;
 @end
