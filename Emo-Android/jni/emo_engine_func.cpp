@@ -12,6 +12,7 @@
 #include <common.h>
 #include <main.h>
 #include <sqfunc.h>
+#include <emo_engine.h>
 #include <emo_engine_func.h>
 #include <png.h>
 
@@ -275,7 +276,8 @@ SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
  * Shutdown the runtime
  */
 SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
-    ANativeActivity_finish(g_engine->app->activity);
+    emo_lost_focus(g_engine);
+    emo_dispose_engine(g_engine);
     g_engine->animating = 0;
     return 0;
 }
@@ -319,6 +321,11 @@ void emoUpdateOptions(SQInteger value) {
         break;
     case OPT_WINDOW_KEEP_SCREEN_ON:
         ANativeActivity_setWindowFlags(g_engine->app->activity, AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
+        break;
+    case OPT_ENABLE_BACK_KEY:
+        g_engine->enableBackKey = true;
+    case OPT_DISABLE_BACK_KEY:
+        g_engine->enableBackKey = false;
         break;
     }
 }

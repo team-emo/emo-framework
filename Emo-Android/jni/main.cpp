@@ -200,7 +200,6 @@ void android_main(struct android_app* state) {
 
             if (state->destroyRequested != 0) {
                 engine_term_display(&engine);
-                emo_dispose_engine(&engine);
                 return;
             }
         }

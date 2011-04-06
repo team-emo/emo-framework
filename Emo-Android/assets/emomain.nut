@@ -24,7 +24,6 @@ function emo::onLostFocus() {
 
 function emo::onDispose() {
     print("onDispose");
-    print(dogSprite.unload());
 } 
 
 function emo::onError(msg) {
@@ -42,6 +41,7 @@ function emo::onLowMemory() {
 function emo::onMotionEvent(...) {
     local motionEvent = emo.MotionEvent(vargv);
     print("MotionEvent: " + motionEvent.toString());
+    runtime.finish();
 }
 
 function emo::onKeyEvent(...) {

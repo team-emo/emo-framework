@@ -22,7 +22,7 @@ void clearDrawables(struct engine* engine) {
             free(drawable->texture->data);
             free(drawable->texture);
         }
-        free(drawable);
+        free(iter->second);
     }
     engine->drawables->clear();
 }
@@ -39,7 +39,7 @@ bool removeDrawable(const char* key, struct engine* engine) {
             free(drawable->texture->data);
             free(drawable->texture);
         }
-        free(drawable);
+        free(iter->second);
         engine->drawables->erase(key);
         return true;
     }
@@ -134,7 +134,6 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
         sq_getstring(v, -1, &name);
 
         drawable.name = name;
-        drawable.hasTexture = true;
     }
 
     SQFloat x = 0;
@@ -179,7 +178,8 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 
     struct ImageInfo* imageInfo = (ImageInfo *)malloc(sizeof(ImageInfo) * 1);
     if (loadPngFromAsset(drawable->name, imageInfo)) {
-        drawable->texture = imageInfo;
+        drawable->texture    = imageInfo;
+        drawable->hasTexture = true;
     } else {
         sq_pushinteger(v, ERR_ASSET_LOAD);
         return 1;

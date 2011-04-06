@@ -87,6 +87,7 @@ struct engine {
 
     bool enablePerspectiveNicest;
     bool enableOnDrawFrame;
+    bool enableBackKey;
 
     ASensorManager* sensorManager;
     ASensorEventQueue* sensorEventQueue;

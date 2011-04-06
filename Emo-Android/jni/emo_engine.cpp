@@ -120,6 +120,9 @@ void emo_init_engine(struct engine* engine) {
     // enable perspective hint to nicest (default)
     engine->enablePerspectiveNicest = SQTrue;
 
+    // back key is enabled by default
+    engine->enableBackKey = true;
+
     // init Squirrel VM
     initSQVM(engine->sqvm);
 
@@ -132,6 +135,9 @@ void emo_init_engine(struct engine* engine) {
 
     // force fullscreen
     emoUpdateOptions(OPT_WINDOW_FORCE_FULLSCREEN);
+
+    // interrupt the back key
+    emoUpdateOptions(OPT_DISABLE_BACK_KEY);
 
     // call onLoad()
     callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOAD);
@@ -255,9 +261,15 @@ int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 	engine->keyEventParamCache[6] = AInputEvent_getDeviceId(event);
 	engine->keyEventParamCache[7] = AInputEvent_getSource(event);
 
-	if (callSqFunction_Bool_Floats(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_KEYEVENT, engine->keyEventParamCache, KEY_EVENT_PARAMS_SIZE, false)) {
+	if (callSqFunction_Bool_Floats(engine->sqvm, EMO_NAMESPACE,
+					EMO_FUNC_KEYEVENT, engine->keyEventParamCache, KEY_EVENT_PARAMS_SIZE, false)) {
 		return 1;
-	}
+	} else if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN &&
+					 AKeyEvent_getKeyCode(event) == AKEYCODE_BACK && !engine->enableBackKey) {
+		emoRuntimeFinish(engine->sqvm);
+		return 1;
+    }
+
     return 0;
 }
 
