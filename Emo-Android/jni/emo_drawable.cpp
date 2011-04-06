@@ -22,6 +22,7 @@ void clearDrawables(struct engine* engine) {
             free(drawable->texture->data);
             free(drawable->texture);
         }
+        free((char*)iter->first);
         free(iter->second);
     }
     engine->drawables->clear();
@@ -39,6 +40,7 @@ bool removeDrawable(const char* key, struct engine* engine) {
             free(drawable->texture->data);
             free(drawable->texture);
         }
+        free((char*)iter->first);
         free(iter->second);
         engine->drawables->erase(key);
         return true;
@@ -61,7 +63,7 @@ struct Drawable* getDrawable(const char* key, struct engine* engine) {
  * add drawable to the engine
  */
 void addDrawable(const char* _key, struct Drawable* drawable, struct engine* engine) {
-    char* key = strdup(_key);
+    const char* key = strdup(_key);
     engine->drawables->insert(std::make_pair(key, drawable)); 
 }
 
@@ -124,8 +126,9 @@ void updateDrawableKey(struct Drawable* drawable, char* key) {
  */
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 
-    struct Drawable drawable;
-    initDrawable(&drawable);
+    struct Drawable *drawable = (Drawable *)malloc(sizeof(Drawable));
+
+    initDrawable(drawable);
 
     const SQChar* name;
     SQInteger nargs = sq_gettop(v);
@@ -133,7 +136,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
         sq_tostring(v, 2);
         sq_getstring(v, -1, &name);
 
-        drawable.name = name;
+        drawable->name = name;
     }
 
     SQFloat x = 0;
@@ -144,13 +147,13 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
         sq_getfloat(v, 4, &y);
     }
 
-    drawable.x    = x;
-    drawable.y    = y;
+    drawable->x    = x;
+    drawable->y    = y;
 
     char key[DRAWABLE_KEY_LENGTH];
-    updateDrawableKey(&drawable, key);
+    updateDrawableKey(drawable, key);
 
-    addDrawable(key, &drawable, g_engine);
+    addDrawable(key, drawable, g_engine);
 
     sq_pushstring(v, key, DRAWABLE_KEY_LENGTH);
 
@@ -176,11 +179,12 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct ImageInfo* imageInfo = (ImageInfo *)malloc(sizeof(ImageInfo) * 1);
+    struct ImageInfo* imageInfo = (ImageInfo *)malloc(sizeof(ImageInfo));
     if (loadPngFromAsset(drawable->name, imageInfo)) {
         drawable->texture    = imageInfo;
         drawable->hasTexture = true;
     } else {
+        free(imageInfo);
         sq_pushinteger(v, ERR_ASSET_LOAD);
         return 1;
     }

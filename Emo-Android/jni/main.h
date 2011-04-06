@@ -68,6 +68,7 @@ struct engine {
     bool loaded;
     bool focused;
     int animating;
+
     EGLDisplay display;
     EGLSurface surface;
     EGLContext context;
