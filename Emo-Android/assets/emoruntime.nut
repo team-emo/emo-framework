@@ -23,16 +23,19 @@ ERR_SCRIPT_COMPILE        <- 0x0102;
 ERR_SCRIPT_CALL_ROOT      <- 0x0103;
 ERR_ASSET_LOAD            <- 0x0104;
 ERR_ASSET_OPEN            <- 0x0105;
-ERR_AUDIO_ENGINE_CREATED  <- 0x0106;
-ERR_AUDIO_CHANNEL_CREATED <- 0x0107;
-ERR_AUDIO_ENGINE_INIT     <- 0x0108;
-ERR_AUDIO_ASSET_INIT      <- 0x0109;
-ERR_AUDIO_ENGINE_CLOSED   <- 0x0110;
-ERR_AUDIO_CHANNEL_CLOSED  <- 0x0111;
-ERR_AUDIO_ENGINE_STATUS   <- 0x0112;
-ERR_INVALID_PARAM_COUNT   <- 0x0113;
-ERR_INVALID_PARAM_TYPE    <- 0x0114;
-ERR_INVALID_PARAM         <- 0x0115;
+ERR_ASSET_UNLOAD          <- 0x0106;
+ERR_AUDIO_ENGINE_CREATED  <- 0x0107;
+ERR_AUDIO_CHANNEL_CREATED <- 0x0108;
+ERR_AUDIO_ENGINE_INIT     <- 0x0100;
+ERR_AUDIO_ASSET_INIT      <- 0x0110;
+ERR_AUDIO_ENGINE_CLOSED   <- 0x0111;
+ERR_AUDIO_CHANNEL_CLOSED  <- 0x0112;
+ERR_AUDIO_ENGINE_STATUS   <- 0x0113;
+ERR_INVALID_PARAM_COUNT   <- 0x0114;
+ERR_INVALID_PARAM_TYPE    <- 0x0115;
+ERR_INVALID_PARAM         <- 0x0116;
+ERR_INVALID_ID            <- 0x0117;
+ERR_FILE_OPEN             <- 0x0118;
 
 OPT_ENABLE_PERSPECTIVE_NICEST   <- 0x1000;
 OPT_ENABLE_PERSPECTIVE_FASTEST  <- 0x1001;
@@ -287,4 +290,54 @@ class emo.AudioChannel {
 
 function emo::AudioManager::createChannel(id) {
     return emo.AudioChannel(id, this);
+}
+
+runtime <- emo.Runtime();
+event   <- emo.Event();
+stage   <- emo.Stage();
+
+class emo.Sprite {
+
+    id     = -1;
+    name   = null;
+    x      = 0;
+    y      = 0;
+    loaded = false;
+
+    function constructor(...) {
+        for(local i = 0; i < vargv.len(); i++) {
+            if (i == 0) name = vargv[i];
+            if (i == 1) x    = vargv[i];
+            if (i == 2) y    = vargv[i];
+        }
+        id = stage.createSprite(name);
+    }
+
+    function load() {
+        local status = EMO_NO_ERROR;
+        if (!loaded) {
+            status = stage.load(id);
+            if (status == EMO_NO_ERROR) {
+                loaded = true;
+            }
+        }
+
+        if (loaded) {
+            move(x, y);
+        }
+        return status;
+    }
+
+    function move(x, y) {
+        stage.move(id, x, y);
+    }
+
+    function unload() {
+        local status = EMO_NO_ERROR;
+        if (loaded) {
+            status = stage.unload(id);
+            loaded = false;
+        }
+        return status;
+    }
 }

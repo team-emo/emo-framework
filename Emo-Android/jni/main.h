@@ -27,13 +27,37 @@ struct ImageInfo {
 };
 
 struct Drawable {
+    const char* name;
+
     unsigned int vbo[3];
-    float      positions[12];
-    float      tex_coords[8];
-    short      indices[4];
+
+    float      data_positions[12];
+    float      data_tex_coords[8];
+    short      data_indices[4];
+
     bool       hasTexture;
+    bool       removed;
+    bool       loaded;
+    bool       visible;
+
+    float      x;
+    float      y;
+
+    float      param_translate[3];
+    float      param_rotate[4];
+    float      param_scale[4];
+    float      param_color[4];
+
     ImageInfo* texture;
 };
+
+struct char_comparator {
+    bool operator()(const char* s1, const char* s2) const {
+        return strcmp(s1, s2) == 0;
+    }
+};
+
+typedef std::hash_map <const char *, Drawable *, std::hash<const char*>, char_comparator> drawables_t;
 
 /**
  * Shared state for application.
@@ -75,5 +99,5 @@ struct engine {
 
     struct saved_state state;
 
-    std::hash_map <const char *, Drawable *> drawables;
+    drawables_t *drawables;
 };

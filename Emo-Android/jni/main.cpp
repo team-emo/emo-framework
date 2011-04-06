@@ -166,6 +166,9 @@ void android_main(struct android_app* state) {
         engine.state = *(struct saved_state*)state->savedState;
     }
 
+    drawables_t drawables;
+    engine.drawables = &drawables;
+
     g_engine = &engine;
 
     // Initialize the framework
