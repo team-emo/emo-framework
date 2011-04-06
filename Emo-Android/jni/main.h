@@ -66,6 +66,7 @@ struct engine {
     struct android_app* app;
 
     bool loaded;
+    bool focused;
     int animating;
     EGLDisplay display;
     EGLSurface surface;

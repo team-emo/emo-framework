@@ -276,9 +276,8 @@ SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
  * Shutdown the runtime
  */
 SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
-    emo_lost_focus(g_engine);
-    emo_dispose_engine(g_engine);
     g_engine->animating = 0;
+    ANativeActivity_finish(g_engine->app->activity);
     return 0;
 }
 

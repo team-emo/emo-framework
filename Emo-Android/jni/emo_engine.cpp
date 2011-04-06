@@ -136,19 +136,20 @@ void emo_init_engine(struct engine* engine) {
     // force fullscreen
     emoUpdateOptions(OPT_WINDOW_FORCE_FULLSCREEN);
 
-    // interrupt the back key
-    emoUpdateOptions(OPT_DISABLE_BACK_KEY);
-
     // call onLoad()
     callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOAD);
 
-    engine->loaded = true;
+    engine->focused = false;
+    engine->loaded  = true;
 }
 
 /*
  * Initialize the display
  */
 void emo_init_display(struct engine* engine) {
+    if (!engine->loaded) return;
+    if (!engine->focused) return;
+
     engine_update_uptime(engine);
 
     /* initialize OpenGL state */
@@ -181,6 +182,9 @@ void emo_init_display(struct engine* engine) {
  * Draw current frame
  */
 void emo_draw_frame(struct engine* engine) {
+    if (!engine->loaded) return;
+    if (!engine->focused) return;
+
     engine_update_uptime(engine);
 
     glClearColor(0, 0, 0, 1);
@@ -204,7 +208,9 @@ void emo_dispose_engine(struct engine* engine) {
         engine_update_uptime(engine);
         callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDISPOSE);
         sq_close(engine->sqvm);
+
         clearDrawables(engine);
+
         engine->loaded = false;
     }
 }
@@ -214,6 +220,9 @@ void emo_dispose_engine(struct engine* engine) {
  */
 int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 	struct engine* engine = (struct engine*)app->userData;
+	if (!engine->loaded) return 0;
+    if (!engine->focused) return 0;
+
 	size_t pointerCount =  AMotionEvent_getPointerCount(event);
 
 	engine_update_uptime(engine);
@@ -249,6 +258,8 @@ int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
  */
 int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 	struct engine* engine = (struct engine*)app->userData;
+	if (!engine->loaded) return 0;
+    if (!engine->focused) return 0;
 
 	engine_update_uptime(engine);
 
@@ -264,9 +275,10 @@ int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 	if (callSqFunction_Bool_Floats(engine->sqvm, EMO_NAMESPACE,
 					EMO_FUNC_KEYEVENT, engine->keyEventParamCache, KEY_EVENT_PARAMS_SIZE, false)) {
 		return 1;
-	} else if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN &&
-					 AKeyEvent_getKeyCode(event) == AKEYCODE_BACK && !engine->enableBackKey) {
-		emoRuntimeFinish(engine->sqvm);
+	} else if (AKeyEvent_getKeyCode(event) == AKEYCODE_BACK && engine->enableBackKey) {
+		if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN) {
+			emoRuntimeFinish(engine->sqvm);
+		}
 		return 1;
     }
 
@@ -277,6 +289,9 @@ int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
  * handle sensor event
  */
 int32_t emo_event_sensors(struct engine* engine, ASensorEvent* event) {
+    if (!engine->loaded) return 0;
+    if (!engine->focused) return 0;
+
     engine_update_uptime(engine);
     switch(event->sensor) {
     case ASENSOR_TYPE_ACCELEROMETER:
@@ -296,6 +311,10 @@ int32_t emo_event_sensors(struct engine* engine, ASensorEvent* event) {
  * Gained focus
  */
 void emo_gained_focus(struct engine* engine) {
+    if (!engine->loaded) return;
+
+    engine->focused = true;
+
     engine_update_uptime(engine);
     callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONGAINED_FOUCS);
     engine->animating = 1;
@@ -305,6 +324,10 @@ void emo_gained_focus(struct engine* engine) {
  * Lost focus
  */
 void emo_lost_focus(struct engine* engine) {
+    if (!engine->loaded) return;
+
+    engine->focused = false;
+
     engine_update_uptime(engine);
     callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOST_FOCUS);
     engine->animating = 0;
@@ -315,6 +338,8 @@ void emo_lost_focus(struct engine* engine) {
  * Try to reduce your memory use.
  */
 void emo_low_memory(struct engine* engine) {
+    if (!engine->loaded) return;
+
     engine_update_uptime(engine);
     callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOW_MEMORY);
 }
