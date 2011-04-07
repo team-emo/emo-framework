@@ -34,7 +34,7 @@
 	register_table(sqvm, EMO_NAMESPACE);
 	registerEmoClass(sqvm, EMO_RUNTIME_CLASS);
 	registerEmoClass(sqvm, EMO_EVENT_CLASS);
-	registerEmoClass(sqvm, EMO_DRAWABLE_CLASS);
+	registerEmoClass(sqvm, EMO_STAGE_CLASS);
 	registerEmoClass(sqvm, EMO_AUDIO_CLASS);
 	
 	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
@@ -53,10 +53,13 @@
 	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
 	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
 	
-	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "constructor",    emoDrawableCreate);
-	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "move",           emoDrawableMove);
-	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "scale",          emoDrawableScale);
-	registerEmoClassFunc(sqvm, EMO_DRAWABLE_CLASS, "rotate",         emoDrawableRotate);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "load",           emoDrawableLoad);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "setColor",       emoDrawableColor);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "unload",         emoDrawableUnload);
 	
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
@@ -93,6 +96,7 @@
 	accelerometerSensorRegistered = FALSE;
 	
 	audioManager = [[EmoAudioManager alloc]init];
+	drawables    = [[NSMutableDictionary alloc]init];
 	
 	// engine startup time
 	startTime = [[NSDate date] retain];
@@ -123,6 +127,10 @@
 	[audioManager closeEngine];
 	[audioManager release];
 	audioManager = nil;
+
+	[self clearDrawables];
+	[drawables release];
+	drawables = nil;
 	
 	[startTime release];
 	
@@ -352,4 +360,35 @@
 	[self enableSensor:FALSE withType:sensorType withInterval:0.1f];
 }
 
+- (EmoDrawable*)getDrawable:(const char*)key {
+	return [drawables objectForKey:[NSString stringWithCString:(char*)key 
+													  encoding:NSUTF8StringEncoding]];
+}
+-(BOOL)removeDrawable:(const char*)key {
+	NSString* _key = [NSString stringWithCString:(char*)key 
+										encoding:NSUTF8StringEncoding];
+	[_key retain];
+	EmoDrawable* drawable = [drawables objectForKey:_key];
+	[drawable doUnload];
+	[drawable release];
+	[drawables removeObjectForKey:_key];
+	[_key release];
+	
+	return TRUE;
+	
+}
+-(void)clearDrawables {
+	
+	for (NSString* key in drawables) {
+		[[drawables objectForKey:key] doUnload];
+		[[drawables objectForKey:key] release];
+	}
+	
+	[drawables removeAllObjects];
+}
+
+-(void)addDrawable:(EmoDrawable*)drawable withKey:(const char*)key {
+	[drawables setObject:drawable forKey: [NSString stringWithCString:(char*)key 
+															 encoding:NSUTF8StringEncoding]];
+}
 @end

@@ -8,15 +8,18 @@
     GLuint   textureId;
     int      width;
     int      height;
+	int      glWidth;
+	int      glHeight;
     GLubyte* data;
     BOOL     hasAlpha;
 }
 @property (copy, readwrite) NSString* filename;
 @property (readwrite) GLuint textureId;
-@property (readwrite) int    width;
-@property (readwrite) int    height;
+@property (readwrite) int    width, height, glWidth, glHeight;
 @property (readwrite) GLubyte* data;
 @property (readwrite) BOOL hasAlpha;
 
 -(BOOL)loadPng:(NSString*)file;
+-(void)genTextures;
+-(void)doUnload;
 @end
