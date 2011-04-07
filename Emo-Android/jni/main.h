@@ -22,6 +22,10 @@ struct ImageInfo {
     GLuint   textureId;
     int      width;
     int      height;
+
+    int      glWidth;
+    int      glHeight;
+
     GLubyte* data;
     bool     hasAlpha;
 };
@@ -31,9 +35,9 @@ struct Drawable {
 
     unsigned int vbo[3];
 
-    float      data_positions[12];
-    float      data_tex_coords[8];
-    short      data_indices[4];
+    float      vertex_positions[12];
+    float      vertex_tex_coords[8];
+    short      vertex_indices[4];
 
     bool       hasTexture;
     bool       removed;
@@ -42,8 +46,11 @@ struct Drawable {
 
     float      x;
     float      y;
+    float      z;
 
-    float      param_translate[3];
+    float      width;
+    float      height;
+
     float      param_rotate[4];
     float      param_scale[4];
     float      param_color[4];

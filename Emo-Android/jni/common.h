@@ -62,6 +62,7 @@
 #define ERR_INVALID_PARAM         0x0116
 #define ERR_INVALID_ID            0x0117
 #define ERR_FILE_OPEN             0x0118
+#define ERR_CREATE_VERTEX         0x0119
 
 #define OPT_ENABLE_PERSPECTIVE_NICEST   0x1000
 #define OPT_ENABLE_PERSPECTIVE_FASTEST  0x1001

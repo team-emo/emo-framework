@@ -60,6 +60,7 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setColor",       emoDrawableColor);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "unload",         emoDrawableUnload);
 
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);

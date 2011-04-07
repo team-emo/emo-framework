@@ -36,6 +36,7 @@ ERR_INVALID_PARAM_TYPE    <- 0x0115;
 ERR_INVALID_PARAM         <- 0x0116;
 ERR_INVALID_ID            <- 0x0117;
 ERR_FILE_OPEN             <- 0x0118;
+ERR_CREATE_VERTEX         <- 0x0119;
 
 OPT_ENABLE_PERSPECTIVE_NICEST   <- 0x1000;
 OPT_ENABLE_PERSPECTIVE_FASTEST  <- 0x1001;
@@ -301,24 +302,33 @@ stage   <- emo.Stage();
 class emo.Sprite {
 
     id     = -1;
-    name   = null;
-    x      = 0;
-    y      = 0;
     loaded = false;
+    x, y, width, height;
 
-    function constructor(...) {
-        for(local i = 0; i < vargv.len(); i++) {
-            if (i == 0) name = vargv[i];
-            if (i == 1) x    = vargv[i];
-            if (i == 2) y    = vargv[i];
-        }
+    /*
+     * sprite = Sprite("aaa.png");
+     */
+    function constructor(name) {
         id = stage.createSprite(name);
     }
 
-    function load() {
+    /*
+     * sprite.load();
+     * sprite.load(x, y);
+     * sprite.load(x, y, width, height);
+     */
+    function load(...) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
-            status = stage.load(id);
+
+            if (vargv.len() >= 4) {
+                status = stage.load(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+            } else if (vargv.len() >= 2) {
+                status = stage.load(id, vargv[0], vargv[1]);
+            } else {
+                status = stage.load(id);
+            }
+
             if (status == EMO_NO_ERROR) {
                 loaded = true;
             }
@@ -330,8 +340,46 @@ class emo.Sprite {
         return status;
     }
 
-    function move(x, y) {
-        stage.move(id, x, y);
+    /*
+     * sprite.move(x, y);
+     * sprite.move(x, y, z);
+     */
+    function move(...) {
+        if (vargv.len() < 3) {
+            stage.move(id, vargv[0], vargv[1]);
+        } else {
+            stage.move(id, vargv[0], vargv[1], vargv[2]);
+        }
+    }
+
+    /*
+     * sprite.scale(scaleX, scaleY)
+     * sprite.scale(scaleX, scaleY, centerX, centerY)
+     */
+    function scale(...) {
+        if (vargv.len() >= 4) {
+            stage.scale(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+        } else if (vargv.len() >= 2) {
+            stage.scale(id, vargv[0], vargv[1]);
+        }
+    }
+
+    function rotate(...) {
+        if (vargv.len() >= 4) {
+            stage.rotate(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+        } else if (vargv.len >= 3) {
+            stage.rotate(id, vargv[0], vargv[1], vargv[2]);
+        } else if (vargv.len > 0) {
+            stage.rotate(id, vargv[0]);
+        }
+    }
+
+    function setColor(...) {
+        if (vargv.len() >= 4) {
+            stage.setColor(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+        } else if (vargv.len() >= 3) {
+            stage.setColor(id, vargv[0], vargv[1], vargv[2]);
+        }
     }
 
     function unload() {
