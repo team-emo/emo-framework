@@ -186,16 +186,38 @@ void updateDrawableVertex(struct Drawable* drawable) {
     drawable->vertex_positions[11] = drawable->z;
 }
 
+/*
+ * clear all OpenGL errors
+ */
+bool clearGLErrors() {
+    for (GLint error = glGetError(); error; error = glGetError()) {
+        // do nothing
+    }
+}
+
 bool createDrawableVertex(struct Drawable* drawable) {
+    clearGLErrors();
+
     updateDrawableVertex(drawable);
 
-   glBindBuffer (GL_ARRAY_BUFFER, drawable->vbo[0]);
-   glBufferData (GL_ARRAY_BUFFER, sizeof(drawable->vertex_positions), drawable->vertex_positions, GL_STATIC_DRAW);
-   glBindBuffer (GL_ARRAY_BUFFER, drawable->vbo[1]);
-   glBufferData (GL_ARRAY_BUFFER, sizeof(drawable->vertex_tex_coords), drawable->vertex_tex_coords, GL_STATIC_DRAW);
-   glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, drawable->vbo[2]);
-   glBufferData (GL_ELEMENT_ARRAY_BUFFER, sizeof(drawable->vertex_indices), drawable->vertex_indices, GL_STATIC_DRAW); 
+    glBindBuffer (GL_ARRAY_BUFFER, drawable->vbo[0]);
+    glBufferData (GL_ARRAY_BUFFER, sizeof(drawable->vertex_positions), drawable->vertex_positions, GL_STATIC_DRAW);
+    glBindBuffer (GL_ARRAY_BUFFER, drawable->vbo[1]);
+    glBufferData (GL_ARRAY_BUFFER, sizeof(drawable->vertex_tex_coords), drawable->vertex_tex_coords, GL_STATIC_DRAW);
+    glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, drawable->vbo[2]);
+    glBufferData (GL_ELEMENT_ARRAY_BUFFER, sizeof(drawable->vertex_indices), drawable->vertex_indices, GL_STATIC_DRAW);
+
+    GLint error;
+    if ((error = glGetError()) != GL_NO_ERROR) {
+        char str[128];
+        sprintf(str, "Could not create OpenGL buffers: code=0x%x", error);
+        LOGE(str);
+        return false;
+    }
+
+    return true;
 }
+
 
 /*
  * create drawable instance
