@@ -376,6 +376,7 @@ SQInteger emoDrawableMove(HSQUIRRELVM v) {
         sq_getfloat(v, 5, &z);
         drawable->z = z;
     }
+    return 0;
 }
 
 /*
@@ -423,6 +424,7 @@ SQInteger emoDrawableColor(HSQUIRRELVM v) {
         sq_getfloat(v, 6, &a);
         drawable->param_color[3] = a;
     }
+    return 0;
 }
 
 /*
