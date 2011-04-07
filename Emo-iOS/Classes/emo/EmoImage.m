@@ -7,6 +7,7 @@
 @synthesize width, height, glWidth, glHeight;
 @synthesize data;
 @synthesize hasAlpha;
+
 -(BOOL)loadPng:(NSString*)file {
 	return loadPngFromResource(file, self);
 }
@@ -17,6 +18,7 @@
 	glGenTextures(1, &textureId);
 }
 -(void)doUnload {
+	glDeleteTextures(1, &textureId);
 	free(data);
 }
 @end

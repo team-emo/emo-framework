@@ -78,13 +78,6 @@ void addDrawable(const char* _key, struct Drawable* drawable, struct engine* eng
 }
 
 /*
- * update drawable graphic buffers
- */
-void updateDrawableBuffers(struct Drawable* drawable) {
-    glGenBuffers (3, drawable->vbo);
-}
-
-/*
  * initialize drawable instance
  */
 void initDrawable(struct Drawable* drawable) {
@@ -121,7 +114,7 @@ void initDrawable(struct Drawable* drawable) {
     drawable->width  = 0;
     drawable->height = 0;
 
-    updateDrawableBuffers(drawable);
+    glGenBuffers (3, drawable->vbo);
 }
 
 /*
@@ -256,7 +249,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 
     addDrawable(key, drawable, g_engine);
 
-    sq_pushstring(v, key, DRAWABLE_KEY_LENGTH);
+    sq_pushstring(v, key, strlen(key));
 
     return 1;
 }

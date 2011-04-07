@@ -11,9 +11,37 @@ extern EmoEngine* engine;
 @synthesize name;
 @synthesize x, y, z, width, height;
 @synthesize hasTexture;
+@synthesize texture;
 
 -(void)initDrawable {
-	// TODO
+	x = 0;
+	y = 0;
+	z = 0;
+	width  = 0;
+	height = 0;
+	name = nil;
+
+	hasTexture = false;
+
+	// color param RGBA
+    param_color[0] = 1.0f;
+    param_color[1] = 1.0f;
+    param_color[2] = 1.0f;
+    param_color[3] = 1.0f;
+	
+    // rotate angle, center x, center y, axis
+    param_rotate[0] = 0;
+    param_rotate[1] = 0;
+    param_rotate[2] = 0;
+    param_rotate[3] = AXIS_Z;
+	
+    // scale param x, y, center x, center y
+    param_scale[0] = 1;
+    param_scale[1] = 1;
+    param_scale[2] = 0;
+    param_scale[3] = 0;
+	
+	glGenBuffers (3, vbo);
 }
 -(BOOL)createVertex {
 	return TRUE;
@@ -30,15 +58,13 @@ extern EmoEngine* engine;
 -(void)setColor:(NSInteger)index withValue:(float)value {
 	param_color[index] = value;
 }
--(void)setTexture:(EmoImage*)_texture {
-	texture = _texture;
-}
 
 -(void)doUnload {
 	if (hasTexture) {
 		[texture doUnload];
 		[texture release];
 	}
+	glDeleteBuffers(3, vbo);
 }
 -(void)dealloc {
 	[name release];
@@ -81,7 +107,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 	[drawable updateKey:key];
     [engine addDrawable:drawable withKey:key];
 	
-    sq_pushstring(v, key, DRAWABLE_KEY_LENGTH);
+    sq_pushstring(v, key, strlen(key));
 	
     return 1;
 }
@@ -115,7 +141,7 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         imageInfo.glWidth  = nextPowerOfTwo(imageInfo.width);
         imageInfo.glHeight = nextPowerOfTwo(imageInfo.height);
 		
-        [drawable setTexture:imageInfo];
+        drawable.texture = imageInfo;
         drawable.hasTexture = true;
         drawable.width  = imageInfo.width;
         drawable.height = imageInfo.height;

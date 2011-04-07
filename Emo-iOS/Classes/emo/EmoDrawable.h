@@ -28,6 +28,7 @@
 @property (readwrite) float width;
 @property (readwrite) float height;
 @property (readwrite) BOOL hasTexture;
+@property (assign, readwrite, nonatomic) EmoImage* texture;
 
 -(void)doUnload;
 -(void)initDrawable;
@@ -36,7 +37,6 @@
 -(void)setScale:(NSInteger)index withValue:(float)value;
 -(void)setRotate:(NSInteger)index withValue:(float)value;
 -(void)setColor:(NSInteger)index withValue:(float)value;
--(void)setTexture:(EmoImage*)image;
 @end
 
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);
