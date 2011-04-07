@@ -4,6 +4,7 @@
 #include <android/native_activity.h>
 #include <android_native_app_glue.h>
 #include <android/window.h>
+#include <android/configuration.h>
 
 #include <EGL/egl.h>
 #include <GLES/gl.h>
@@ -325,6 +326,12 @@ void emoUpdateOptions(SQInteger value) {
         g_engine->enableBackKey = true;
     case OPT_DISABLE_BACK_KEY:
         g_engine->enableBackKey = false;
+        break;
+    case OPT_ORIENTATION_PORTRAIT:
+        AConfiguration_setOrientation(g_engine->app->config, ACONFIGURATION_ORIENTATION_PORT);
+        break;
+    case OPT_ORIENTATION_LANDSCAPE:
+        AConfiguration_setOrientation(g_engine->app->config, ACONFIGURATION_ORIENTATION_LAND);
         break;
     }
 }

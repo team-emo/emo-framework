@@ -44,6 +44,8 @@ OPT_WINDOW_FORCE_FULLSCREEN     <- 0x1002;
 OPT_WINDOW_KEEP_SCREEN_ON       <- 0x1003;
 OPT_ENABLE_BACK_KEY             <- 0x1004;
 OPT_DISABLE_BACK_KEY            <- 0x1005;
+OPT_ORIENTATION_PORTRAIT        <- 0x1006;
+OPT_ORIENTATION_LANDSCAPE       <- 0x1007;
 
 MOTION_EVENT_ACTION_DOWN         <- 0;
 MOTION_EVENT_ACTION_UP           <- 1;
@@ -295,15 +297,12 @@ function emo::AudioManager::createChannel(id) {
     return emo.AudioChannel(id, this);
 }
 
-runtime <- emo.Runtime();
-event   <- emo.Event();
-stage   <- emo.Stage();
-
 class emo.Sprite {
+
+    stage  = emo.Stage();
 
     id     = -1;
     loaded = false;
-    x, y, width, height;
 
     /*
      * sprite = Sprite("aaa.png");
@@ -332,10 +331,6 @@ class emo.Sprite {
             if (status == EMO_NO_ERROR) {
                 loaded = true;
             }
-        }
-
-        if (loaded) {
-            move(x, y);
         }
         return status;
     }

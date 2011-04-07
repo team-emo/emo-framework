@@ -23,21 +23,29 @@ ERR_SCRIPT_COMPILE        <- 0x0102;
 ERR_SCRIPT_CALL_ROOT      <- 0x0103;
 ERR_ASSET_LOAD            <- 0x0104;
 ERR_ASSET_OPEN            <- 0x0105;
-ERR_AUDIO_ENGINE_CREATED  <- 0x0106;
-ERR_AUDIO_CHANNEL_CREATED <- 0x0107;
-ERR_AUDIO_ENGINE_INIT     <- 0x0108;
-ERR_AUDIO_ASSET_INIT      <- 0x0109;
-ERR_AUDIO_ENGINE_CLOSED   <- 0x0110;
-ERR_AUDIO_CHANNEL_CLOSED  <- 0x0111;
-ERR_AUDIO_ENGINE_STATUS   <- 0x0112;
-ERR_INVALID_PARAM_COUNT   <- 0x0113;
-ERR_INVALID_PARAM_TYPE    <- 0x0114;
-ERR_INVALID_PARAM         <- 0x0115;
+ERR_ASSET_UNLOAD          <- 0x0106;
+ERR_AUDIO_ENGINE_CREATED  <- 0x0107;
+ERR_AUDIO_CHANNEL_CREATED <- 0x0108;
+ERR_AUDIO_ENGINE_INIT     <- 0x0100;
+ERR_AUDIO_ASSET_INIT      <- 0x0110;
+ERR_AUDIO_ENGINE_CLOSED   <- 0x0111;
+ERR_AUDIO_CHANNEL_CLOSED  <- 0x0112;
+ERR_AUDIO_ENGINE_STATUS   <- 0x0113;
+ERR_INVALID_PARAM_COUNT   <- 0x0114;
+ERR_INVALID_PARAM_TYPE    <- 0x0115;
+ERR_INVALID_PARAM         <- 0x0116;
+ERR_INVALID_ID            <- 0x0117;
+ERR_FILE_OPEN             <- 0x0118;
+ERR_CREATE_VERTEX         <- 0x0119;
 
 OPT_ENABLE_PERSPECTIVE_NICEST   <- 0x1000;
 OPT_ENABLE_PERSPECTIVE_FASTEST  <- 0x1001;
 OPT_WINDOW_FORCE_FULLSCREEN     <- 0x1002;
 OPT_WINDOW_KEEP_SCREEN_ON       <- 0x1003;
+OPT_ENABLE_BACK_KEY             <- 0x1004;
+OPT_DISABLE_BACK_KEY            <- 0x1005;
+OPT_ORIENTATION_PORTRAIT        <- 0x1006;
+OPT_ORIENTATION_LANDSCAPE       <- 0x1007;
 
 MOTION_EVENT_ACTION_DOWN         <- 0;
 MOTION_EVENT_ACTION_UP           <- 1;
@@ -287,4 +295,94 @@ class emo.AudioChannel {
 
 function emo::AudioManager::createChannel(id) {
     return emo.AudioChannel(id, this);
+}
+
+class emo.Sprite {
+
+    stage  = emo.Stage();
+
+    id     = -1;
+    loaded = false;
+
+    /*
+     * sprite = Sprite("aaa.png");
+     */
+    function constructor(name) {
+        id = stage.createSprite(name);
+    }
+
+    /*
+     * sprite.load();
+     * sprite.load(x, y);
+     * sprite.load(x, y, width, height);
+     */
+    function load(...) {
+        local status = EMO_NO_ERROR;
+        if (!loaded) {
+
+            if (vargv.len() >= 4) {
+                status = stage.load(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+            } else if (vargv.len() >= 2) {
+                status = stage.load(id, vargv[0], vargv[1]);
+            } else {
+                status = stage.load(id);
+            }
+
+            if (status == EMO_NO_ERROR) {
+                loaded = true;
+            }
+        }
+        return status;
+    }
+
+    /*
+     * sprite.move(x, y);
+     * sprite.move(x, y, z);
+     */
+    function move(...) {
+        if (vargv.len() < 3) {
+            stage.move(id, vargv[0], vargv[1]);
+        } else {
+            stage.move(id, vargv[0], vargv[1], vargv[2]);
+        }
+    }
+
+    /*
+     * sprite.scale(scaleX, scaleY)
+     * sprite.scale(scaleX, scaleY, centerX, centerY)
+     */
+    function scale(...) {
+        if (vargv.len() >= 4) {
+            stage.scale(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+        } else if (vargv.len() >= 2) {
+            stage.scale(id, vargv[0], vargv[1]);
+        }
+    }
+
+    function rotate(...) {
+        if (vargv.len() >= 4) {
+            stage.rotate(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+        } else if (vargv.len >= 3) {
+            stage.rotate(id, vargv[0], vargv[1], vargv[2]);
+        } else if (vargv.len > 0) {
+            stage.rotate(id, vargv[0]);
+        }
+    }
+
+    function setColor(...) {
+        if (vargv.len() >= 4) {
+            stage.setColor(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+        } else if (vargv.len() >= 3) {
+            stage.setColor(id, vargv[0], vargv[1], vargv[2]);
+        }
+    }
+
+    function unload() {
+        local status = EMO_NO_ERROR;
+        if (loaded) {
+            status = stage.unload(id);
+            loaded = false;
+        }
+        return status;
+    }
 }

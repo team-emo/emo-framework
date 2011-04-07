@@ -1,3 +1,6 @@
+runtime <- emo.Runtime();
+event   <- emo.Event();
+stage   <- emo.Stage();
 
 local str = "Hello, Squirrel from File!";
 print(str);
@@ -7,7 +10,7 @@ local dogSprite = emo.Sprite("dog.png");
 function emo::onLoad() { 
     print("onLoad");
 
-    runtime.setOptions(OPT_WINDOW_KEEP_SCREEN_ON, OPT_ENABLE_PERSPECTIVE_NICEST);
+    runtime.setOptions(OPT_WINDOW_KEEP_SCREEN_ON, OPT_ENABLE_PERSPECTIVE_NICEST, OPT_ORIENTATION_LANDSCAPE);
 
     event.enableOnDrawCallback(5000);
 

@@ -70,6 +70,8 @@
 #define OPT_WINDOW_KEEP_SCREEN_ON       0x1003
 #define OPT_ENABLE_BACK_KEY             0x1004
 #define OPT_DISABLE_BACK_KEY            0x1005
+#define OPT_ORIENTATION_PORTRAIT        0x1006
+#define OPT_ORIENTATION_LANDSCAPE       0x1007
 
 #define MOTION_EVENT_ACTION_DOWN            0
 #define MOTION_EVENT_ACTION_UP              1
