@@ -370,7 +370,6 @@
 	[_key retain];
 	EmoDrawable* drawable = [drawables objectForKey:_key];
 	[drawable doUnload];
-	[drawable release];
 	[drawables removeObjectForKey:_key];
 	[_key release];
 	
@@ -381,7 +380,6 @@
 	
 	for (NSString* key in drawables) {
 		[[drawables objectForKey:key] doUnload];
-		[[drawables objectForKey:key] release];
 	}
 	
 	[drawables removeAllObjects];

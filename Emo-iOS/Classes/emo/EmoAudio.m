@@ -104,7 +104,7 @@ extern EmoEngine* engine;
 			LOGE("AL_INVALID_ENUM at ");
 		} else if (error == AL_INVALID_NAME) {
 			LOGE("AL_INVALID_NAME at ");
-		} else if (error = AL_INVALID_OPERATION) {
+		} else if (error == AL_INVALID_OPERATION) {
 			LOGE("AL_INVALID_OPERATION at ");
 		}
 		NSLOGE(at);

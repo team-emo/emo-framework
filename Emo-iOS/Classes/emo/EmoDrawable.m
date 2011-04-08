@@ -76,7 +76,7 @@ extern EmoEngine* engine;
  * create drawable instance
  */
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
-	EmoDrawable* drawable = [[EmoDrawable alloc]init];
+	EmoDrawable* drawable = [[[EmoDrawable alloc]init] autorelease];
 	
     [drawable initDrawable];
 	
@@ -149,7 +149,7 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         // assign OpenGL texture id
 		[imageInfo genTextures];
     } else {
-        free(imageInfo);
+        [imageInfo release];
         sq_pushinteger(v, ERR_ASSET_LOAD);
         return 1;
     }

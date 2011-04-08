@@ -35,7 +35,7 @@ SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
     	}
     }
 	
-	if (str != NULL) {
+	if (strlen(str) > 0) {
 		sq_pushstring(v, str, -1);
 	}
 	
