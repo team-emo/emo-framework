@@ -32,7 +32,7 @@
 #define ACCELEROMETER_EVENT_PARAMS_SIZE 4
 
 #define DEFAULT_AUDIO_CHANNEL_COUNT 3
-#define DRAWABLE_KEY_LENGTH 36
+#define DRAWABLE_KEY_LENGTH 48
 
 #define EMO_NO              0
 #define EMO_YES             1

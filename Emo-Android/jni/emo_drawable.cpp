@@ -283,7 +283,9 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     drawable->z    = z;
 
     char key[DRAWABLE_KEY_LENGTH];
-    sprintf(key, "%d-%d-%d", drawable->vbo[0], drawable->vbo[1], drawable->vbo[2]);
+    sprintf(key, "%d%d%d%d%d", 
+                g_engine->uptime.time, g_engine->uptime.millitm,
+                drawable->vbo[0], drawable->vbo[1], drawable->vbo[2]);
 
     addDrawable(key, drawable, g_engine);
 
