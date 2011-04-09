@@ -36,7 +36,6 @@ void clearDrawables(struct engine* engine) {
     drawables_t::iterator iter;
     for(iter = engine->drawables->begin(); iter != engine->drawables->end(); iter++) {
         struct Drawable* drawable = iter->second;
-        unloadDrawable(drawable);
         if (drawable->hasTexture) {
             free(drawable->texture->data);
             free(drawable->texture);

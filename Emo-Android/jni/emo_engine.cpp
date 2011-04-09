@@ -124,7 +124,7 @@ void emo_init_engine(struct engine* engine) {
     // back key is enabled by default
     engine->enableBackKey = true;
 
-    // alloc stage memmory
+    // alloc stage memory
     engine->stage = (Stage *)malloc(sizeof(Stage));
 
     // init Squirrel VM
@@ -183,6 +183,10 @@ void emo_init_display(struct engine* engine) {
 
 }
 
+void emo_term_display(struct engine* engine) {
+
+}
+
 /*
  * Draw current frame
  */
@@ -215,7 +219,7 @@ void emo_dispose_engine(struct engine* engine) {
         sq_close(engine->sqvm);
 
         clearDrawables(engine);
-        unloadStage(engine->stage);
+        free(engine->stage);
 
         engine->loaded = false;
     }

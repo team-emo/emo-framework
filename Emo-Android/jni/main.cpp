@@ -86,6 +86,10 @@ static void engine_draw_frame(struct engine* engine) {
 static void engine_term_display(struct engine* engine) {
     if (engine->display != EGL_NO_DISPLAY) {
 
+        if (engine->loaded) {
+            emo_term_display(engine);
+        }
+
         eglMakeCurrent(engine->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
         if (engine->context != EGL_NO_CONTEXT) {
             eglDestroyContext(engine->display, engine->context);
