@@ -49,4 +49,4 @@ SQInteger emoDrawableScale(HSQUIRRELVM v);
 SQInteger emoDrawableRotate(HSQUIRRELVM v);
 SQInteger emoDrawableColor(HSQUIRRELVM v);
 SQInteger emoDrawableUnload(HSQUIRRELVM v);
-SQInteger emoSetOnDrawFPS(HSQUIRRELVM v);
+SQInteger emoSetOnDrawInterval(HSQUIRRELVM v);

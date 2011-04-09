@@ -62,6 +62,7 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setColor",       emoDrawableColor);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "unload",         emoDrawableUnload);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
 
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
@@ -99,6 +100,13 @@ int32_t engine_getLastOnDrawDelta(struct engine* engine) {
     return (deltaSec * 1000) + deltaMsec;
 }
 
+int32_t engine_getLastOnDrawDrawablesDelta(struct engine* engine) {
+    int32_t deltaSec  = engine->uptime.time - engine->lastOnDrawDrawablesInterval.time;
+    int32_t deltaMsec = engine->uptime.millitm - engine->lastOnDrawDrawablesInterval.millitm;
+
+    return (deltaSec * 1000) + deltaMsec;
+}
+
 /**
  * Initialize the framework
  */
@@ -117,6 +125,9 @@ void emo_init_engine(struct engine* engine) {
     engine->enableOnDrawFrame   = false;
     engine->onDrawFrameInterval = 0;
     engine->lastOnDrawInterval  = engine->uptime;
+
+    engine->onDrawDrawablesInterval = 0;
+    engine->lastOnDrawDrawablesInterval = engine->uptime;
 
     // enable perspective hint to nicest (default)
     engine->enablePerspectiveNicest = SQTrue;
@@ -182,6 +193,7 @@ void emo_init_display(struct engine* engine) {
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
 
+    onDrawStage(engine->stage);
 }
 
 void emo_term_display(struct engine* engine) {
@@ -198,14 +210,20 @@ void emo_draw_frame(struct engine* engine) {
 
     engine_update_uptime(engine);
 
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    SQFloat delta = engine_getLastOnDrawDrawablesDelta(engine);
+    if (delta < engine->onDrawDrawablesInterval) {
+        return;
+    }
+    engine->lastOnDrawDrawablesInterval  = engine->uptime;
 
-    SQFloat delta = engine_getLastOnDrawDelta(engine);
+    delta = engine_getLastOnDrawDelta(engine);
     if (engine->enableOnDrawFrame && delta > engine->onDrawFrameInterval) {
         engine->lastOnDrawInterval  = engine->uptime;
         callSqFunction_Bool_Float(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME, delta, SQFalse);
     }
+
+    onDrawStage(engine->stage);
+    onDrawDrawables(engine);
 }
 
 /*

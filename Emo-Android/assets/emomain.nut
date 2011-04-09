@@ -13,6 +13,7 @@ function emo::onLoad() {
     runtime.setOptions(OPT_WINDOW_KEEP_SCREEN_ON, OPT_ENABLE_PERSPECTIVE_NICEST, OPT_ORIENTATION_LANDSCAPE);
 
     event.enableOnDrawCallback(5000);
+    stage.interval(5000);
 
     print(dogSprite.load());
 }

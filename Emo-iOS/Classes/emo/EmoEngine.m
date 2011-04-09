@@ -57,7 +57,7 @@
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "setColor",       emoDrawableColor);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "unload",         emoDrawableUnload);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "setFPS",         emoSetOnDrawFPS);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
 	
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);

@@ -99,6 +99,9 @@ struct engine {
     int32_t onDrawFrameInterval;
     timeb   lastOnDrawInterval;
 
+    int32_t onDrawDrawablesInterval;
+    timeb   lastOnDrawDrawablesInterval;
+
     bool enablePerspectiveNicest;
     bool enableOnDrawFrame;
     bool enableBackKey;

@@ -7,6 +7,9 @@ bool unloadStage(struct Stage* stage);
 void unloadDrawables(struct engine* engine);
 void loadDrawables(struct engine* engine);
 
+void onDrawDrawables(struct engine* engine);
+void onDrawStage(struct Stage* stage);
+
 void clearDrawables(struct engine* engine);
 bool removeDrawable(const char* key, struct engine* engine);
 struct Drawable* getDrawable(const char* key, struct engine* engine);
@@ -22,4 +25,4 @@ SQInteger emoDrawableScale(HSQUIRRELVM v);
 SQInteger emoDrawableRotate(HSQUIRRELVM v);
 SQInteger emoDrawableColor(HSQUIRRELVM v);
 SQInteger emoDrawableUnload(HSQUIRRELVM v);
-
+SQInteger emoSetOnDrawInterval(HSQUIRRELVM v);

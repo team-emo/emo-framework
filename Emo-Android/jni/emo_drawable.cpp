@@ -112,6 +112,22 @@ void addDrawable(const char* _key, struct Drawable* drawable, struct engine* eng
     engine->drawables->insert(std::make_pair(key, drawable)); 
 }
 
+// TODO
+void onDrawDrawables(struct engine* engine) {
+    drawables_t::iterator iter;
+    for(iter = engine->drawables->begin(); iter != engine->drawables->end(); iter++) {
+        struct Drawable* drawable = iter->second;
+
+    }
+}
+
+// TODO
+void onDrawStage(struct Stage* stage) {
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+
 bool loadStage(struct Stage* stage) {
     memset(stage, 0, sizeof(stage));
 
@@ -605,3 +621,18 @@ SQInteger emoDrawableUnload(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set onDraw interval
+ */
+SQInteger emoSetOnDrawInterval(HSQUIRRELVM v) {
+    SQInteger oldInterval = g_engine->onDrawDrawablesInterval;
+	
+    if (sq_gettype(v, 2) == OT_INTEGER) {
+        SQInteger interval;
+        sq_getinteger(v, 2, &interval);
+        g_engine->onDrawDrawablesInterval = interval;
+    }
+    sq_pushinteger(v, oldInterval);
+	
+	return 1;
+}

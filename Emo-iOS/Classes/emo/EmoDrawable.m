@@ -474,24 +474,17 @@ SQInteger emoDrawableUnload(HSQUIRRELVM v) {
 }
 
 /*
- * limit onDraw FPS
+ * set onDraw interval
  */
-SQInteger emoSetOnDrawFPS(HSQUIRRELVM v) {
-    SQFloat fps;
+SQInteger emoSetOnDrawInterval(HSQUIRRELVM v) {
+    SQInteger oldInterval = engine.onDrawDrawablesInterval;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER ||
-				sq_gettype(v, 2) == OT_FLOAT) {
-        sq_getfloat(v, 2, &fps);
-    } else {
-        sq_pushinteger(v, ERR_INVALID_PARAM);
-        return 1;
+    if (sq_gettype(v, 2) == OT_INTEGER) {
+        SQInteger interval;
+        sq_getinteger(v, 2, &interval);
+        engine.onDrawDrawablesInterval = interval;
     }
-	
-	int interval = (int)1000 / fps;
-	
-	engine.onDrawDrawablesInterval = interval;
-	
-	sq_pushinteger(v, EMO_NO_ERROR);
+    sq_pushinteger(v, oldInterval);
 	
 	return 1;
 }
