@@ -385,4 +385,8 @@ class emo.Sprite {
         }
         return status;
     }
+
+    function getId() {
+        return id;
+    }
 }

@@ -203,13 +203,6 @@ void initDrawable(struct Drawable* drawable) {
     drawable->height = 0;
 }
 
-/*
- * returns drawable key
- */
-void updateDrawableKey(struct Drawable* drawable, char* key) {
-    sprintf(key, "%d-%d-%d", drawable->vbo[0], drawable->vbo[1], drawable->vbo[2]);
-}
-
 float getTexCoordStartX(struct Drawable* drawable) {
     return 0;
 }
@@ -264,6 +257,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     struct Drawable *drawable = (Drawable *)malloc(sizeof(Drawable));
 
     initDrawable(drawable);
+    loadDrawable(drawable);
 
     const SQChar* name;
     SQInteger nargs = sq_gettop(v);
@@ -289,7 +283,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     drawable->z    = z;
 
     char key[DRAWABLE_KEY_LENGTH];
-    updateDrawableKey(drawable, key);
+    sprintf(key, "%d-%d-%d", drawable->vbo[0], drawable->vbo[1], drawable->vbo[2]);
 
     addDrawable(key, drawable, g_engine);
 
@@ -328,13 +322,13 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         drawable->hasTexture = true;
         drawable->width  = imageInfo->width;
         drawable->height = imageInfo->height;
+
+        glGenTextures(1, &drawable->texture->textureId);
     } else {
         free(imageInfo);
         sq_pushinteger(v, ERR_ASSET_LOAD);
         return 1;
     }
-
-    loadDrawable(drawable);
 
     // drawable x
     if (nargs >= 3) {
