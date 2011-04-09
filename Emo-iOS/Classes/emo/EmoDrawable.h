@@ -39,6 +39,7 @@
 -(float)getTexCoordStartY;
 -(float)getTexCoordEndX;
 -(float)getTexCoordEndY;
+-(BOOL)onDrawFrame:(NSTimeInterval)dt;
 @end
 
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);

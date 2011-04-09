@@ -11,6 +11,7 @@
 	BOOL isRunning;
 	NSDate* startTime;
 	NSTimeInterval lastOnDrawInterval;
+	NSTimeInterval lastOnDrawDrawablesInterval;
 	
 	UIAccelerometer* accelerometerSensor;
 	float accelerometerEventParamCache[ACCELEROMETER_EVENT_PARAMS_SIZE];
@@ -19,6 +20,7 @@
 	BOOL enableOnDrawFrame;
 	BOOL accelerometerSensorRegistered;
 	NSInteger onDrawFrameInterval;
+	NSInteger onDrawDrawablesInterval;
 	
 	EmoAudioManager* audioManager;
 	

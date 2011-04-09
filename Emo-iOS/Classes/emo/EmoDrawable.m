@@ -13,6 +13,10 @@ extern EmoEngine* engine;
 @synthesize hasTexture;
 @synthesize texture;
 
+-(BOOL)onDrawFrame:(NSTimeInterval)dt {
+	// TODO
+	return TRUE;
+}
 -(void)initDrawable {
 	x = 0;
 	y = 0;

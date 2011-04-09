@@ -9,6 +9,7 @@
 - (void)initEngine;
 - (void)updateEngineStatus;
 - (NSTimeInterval)getLastOnDrawDelta;
+- (NSTimeInterval)getLastOnDrawDrawablesDelta;
 @end
 
 @implementation EmoEngine
@@ -97,6 +98,10 @@
 	// engine startup time
 	startTime = [[NSDate date] retain];
 	lastOnDrawInterval = [self uptime];
+	lastOnDrawDrawablesInterval = [self uptime];
+	
+	onDrawFrameInterval = 0;
+	onDrawDrawablesInterval = 0;
 	
 	sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
 	
@@ -119,6 +124,7 @@
 	sqvm = nil;
 	isRunning = FALSE;
 	lastOnDrawInterval = 0;
+	lastOnDrawDrawablesInterval = 0;
 	
 	[audioManager closeEngine];
 	[audioManager release];
@@ -148,7 +154,6 @@
 	}
 	if (isFrameInitialized) return FALSE;
 	
-	
 	// load stage
 	[stage loadBuffer];
 	
@@ -173,6 +178,9 @@
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
+	
+	NSTimeInterval delta = [self getLastOnDrawDrawablesDelta];
+	[stage onDrawFrame:delta];
 	
 	isFrameInitialized = TRUE;
 	
@@ -234,10 +242,19 @@
 		return FALSE;
 	}
 	
-    glClearColor(0, 0, 0, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+	// check if the engine have to continue to draw
+	NSTimeInterval delta = [self getLastOnDrawDrawablesDelta];
+	if (delta < onDrawDrawablesInterval) {
+		return FALSE;
+	}
+
+	lastOnDrawDrawablesInterval = [self uptime];
+	[stage onDrawFrame:delta];
+	for (id key in drawables) {
+		[[drawables objectForKey:key] onDrawFrame:delta];
+	}
 	
-	NSTimeInterval delta = [self getLastOnDrawDelta];
+	delta = [self getLastOnDrawDelta];
 	if (enableOnDrawFrame && delta > onDrawFrameInterval) {
 		lastOnDrawInterval = [self uptime];
 		return callSqFunction_Bool_Float(sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME, delta, SQFalse);
@@ -251,6 +268,13 @@
  */
 -(NSTimeInterval)getLastOnDrawDelta {
 	return ([self uptime] - lastOnDrawInterval) * 1000;
+}
+
+/*
+ * returns last ondraw drawables delta (msec)
+ */
+-(NSTimeInterval)getLastOnDrawDrawablesDelta {
+	return ([self uptime] - lastOnDrawDrawablesInterval) * 1000;
 }
 
 /*

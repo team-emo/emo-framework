@@ -6,5 +6,6 @@
 }
 
 -(BOOL)loadBuffer;
+-(BOOL)onDrawFrame:(NSTimeInterval)dt;
 -(void)unloadBuffer;
 @end

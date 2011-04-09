@@ -47,6 +47,12 @@
 	return TRUE;
 }
 
+-(BOOL)onDrawFrame:(NSTimeInterval)dt {
+    glClearColor(0, 0, 0, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+	return TRUE;
+}
+
 -(void)unloadBuffer{
     if (!loaded) return;
 	
