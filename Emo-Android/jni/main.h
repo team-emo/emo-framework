@@ -38,9 +38,7 @@ struct Drawable {
     float      vertex_tex_coords[8];
 
     bool       hasTexture;
-    bool       removed;
-    bool       loaded;
-    bool       visible;
+    bool       hasBuffer;
 
     float      x;
     float      y;

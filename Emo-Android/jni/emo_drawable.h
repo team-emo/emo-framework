@@ -2,8 +2,10 @@
 
 
 bool clearGLErrors();
-bool initStage(struct Stage* stage);
+bool loadStage(struct Stage* stage);
 bool unloadStage(struct Stage* stage);
+void unloadDrawables(struct engine* engine);
+void loadDrawables(struct engine* engine);
 
 void clearDrawables(struct engine* engine);
 bool removeDrawable(const char* key, struct engine* engine);

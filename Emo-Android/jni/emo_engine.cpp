@@ -155,8 +155,9 @@ void emo_init_display(struct engine* engine) {
 
     engine_update_uptime(engine);
 
-    // initialize the stage
-    initStage(engine->stage);
+    // load drawables
+    loadStage(engine->stage);
+    loadDrawables(engine);
 
     // initialize OpenGL state
     if (engine->enablePerspectiveNicest) {
@@ -184,7 +185,8 @@ void emo_init_display(struct engine* engine) {
 }
 
 void emo_term_display(struct engine* engine) {
-
+    unloadDrawables(engine);
+    unloadStage(engine->stage);
 }
 
 /*

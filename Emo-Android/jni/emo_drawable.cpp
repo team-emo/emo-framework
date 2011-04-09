@@ -20,14 +20,40 @@ bool clearGLErrors() {
     }
 }
 
+void loadDrawable(struct Drawable* drawable) {
+    if (drawable->hasBuffer) return;
+    glGenBuffers (3, drawable->vbo);
 
-void unloadDrawable(struct Drawable* drawable) {
     if (drawable->hasTexture) {
-        glDeleteTextures(1, (const GLuint*)drawable->texture->textureId);
+        glGenTextures(1, &drawable->texture->textureId);
     }
-    glDeleteBuffers(3, drawable->vbo);
+    drawable->hasBuffer = true;
 }
 
+void unloadDrawable(struct Drawable* drawable) {
+    if (!drawable->hasBuffer) return;
+    if (drawable->hasTexture) {
+        glDeleteTextures(1, &drawable->texture->textureId);
+    }
+    glDeleteBuffers(3, drawable->vbo);
+    drawable->hasBuffer = false;
+}
+
+void unloadDrawables(struct engine* engine) {
+    drawables_t::iterator iter;
+    for(iter = engine->drawables->begin(); iter != engine->drawables->end(); iter++) {
+        struct Drawable* drawable = iter->second;
+        unloadDrawable(drawable);
+    }
+}
+
+void loadDrawables(struct engine* engine) {
+    drawables_t::iterator iter;
+    for(iter = engine->drawables->begin(); iter != engine->drawables->end(); iter++) {
+        struct Drawable* drawable = iter->second;
+        loadDrawable(drawable);
+    }
+}
 
 /*
  * free and clear all drawables
@@ -86,7 +112,7 @@ void addDrawable(const char* _key, struct Drawable* drawable, struct engine* eng
     engine->drawables->insert(std::make_pair(key, drawable)); 
 }
 
-bool initStage(struct Stage* stage) {
+bool loadStage(struct Stage* stage) {
     memset(stage, 0, sizeof(stage));
 
     stage->loaded = false;
@@ -138,6 +164,7 @@ void unloadStage(struct Stage* stage) {
     if (!stage->loaded) return;
 
     glDeleteBuffers(2, stage->vbo);
+    stage->loaded = false;
 }
 
 /*
@@ -148,9 +175,7 @@ void initDrawable(struct Drawable* drawable) {
 
     drawable->name       = NULL;
     drawable->hasTexture = false;
-    drawable->loaded     = false;
-    drawable->removed    = false;
-    drawable->visible    = false;
+    drawable->hasBuffer  = false;
 
     // color param RGBA
     drawable->param_color[0] = 1.0f;
@@ -176,8 +201,6 @@ void initDrawable(struct Drawable* drawable) {
 
     drawable->width  = 0;
     drawable->height = 0;
-
-    glGenBuffers (3, drawable->vbo);
 }
 
 /*
@@ -305,14 +328,13 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         drawable->hasTexture = true;
         drawable->width  = imageInfo->width;
         drawable->height = imageInfo->height;
-
-        // assign OpenGL texture id
-        glGenTextures(1, &imageInfo->textureId);
     } else {
         free(imageInfo);
         sq_pushinteger(v, ERR_ASSET_LOAD);
         return 1;
     }
+
+    loadDrawable(drawable);
 
     // drawable x
     if (nargs >= 3) {
