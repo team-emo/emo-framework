@@ -2,7 +2,7 @@
 #include <EmoImage.h>
 
 @interface EmoDrawable : NSObject {
-	unsigned int vbo[3];
+	unsigned int vbo[1];
 	NSString* name;
 	float x;
 	float y;
@@ -11,9 +11,7 @@
 	float height;
 	BOOL hasTexture;
 	
-    float      vertex_positions[12];
     float      vertex_tex_coords[8];
-    short      vertex_indices[4];
 	
     float      param_rotate[4];
     float      param_scale[4];
@@ -32,11 +30,15 @@
 
 -(void)doUnload;
 -(void)initDrawable;
--(BOOL)createVertex;
+-(BOOL)bindVertex;
 -(void)updateKey:(char*)key;
 -(void)setScale:(NSInteger)index withValue:(float)value;
 -(void)setRotate:(NSInteger)index withValue:(float)value;
 -(void)setColor:(NSInteger)index withValue:(float)value;
+-(float)getTexCoordStartX;
+-(float)getTexCoordStartY;
+-(float)getTexCoordEndX;
+-(float)getTexCoordEndY;
 @end
 
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);

@@ -2,6 +2,7 @@
 #import "common.h"
 #import "EmoAudio.h"
 #import "EmoDrawable.h"
+#import "EmoStage.h"
 
 @interface EmoEngine : NSObject<UIAccelerometerDelegate> {
 	HSQUIRRELVM sqvm;
@@ -20,6 +21,9 @@
 	NSInteger onDrawFrameInterval;
 	
 	EmoAudioManager* audioManager;
+	
+	EmoStage* stage;
+	
 	NSMutableDictionary* drawables;
 }
 @property (readonly) HSQUIRRELVM sqvm;
@@ -46,10 +50,12 @@
 - (BOOL)onKeyEvent:(float *)param;
 - (BOOL)startEngine;
 - (BOOL)stopEngine;
+
 - (void)addDrawable:(EmoDrawable*)drawable withKey:(const char*)key;
 - (EmoDrawable*)getDrawable:(const char*)key;
 - (void)clearDrawables;
 - (BOOL)removeDrawable:(const char*)key;
+
 - (NSTimeInterval)uptime;
 @end
 

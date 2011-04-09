@@ -11,6 +11,8 @@ void NSLOGI(NSString* msg);
 void NSLOGE(NSString* msg);
 void NSLOGW(NSString* msg);
 
+void clearGLErrors();
+
 BOOL loadPngFromResource(NSString* filename, EmoImage* imageInfo);
 void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
 						 ALenum* dataFormat, ALsizei *sampleRate);

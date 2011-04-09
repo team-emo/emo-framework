@@ -41,13 +41,54 @@ extern EmoEngine* engine;
     param_scale[2] = 0;
     param_scale[3] = 0;
 	
-	glGenBuffers (3, vbo);
+	glGenBuffers (1, vbo);
 }
--(BOOL)createVertex {
+-(float)getTexCoordStartX {
+    return 0;
+}
+-(float)getTexCoordStartY {
+    return 0;
+}
+-(float)getTexCoordEndX {
+    return texture.width / texture.glWidth;
+}
+-(float)getTexCoordEndY {
+    return texture.height / texture.glHeight;
+}
+
+-(BOOL)bindVertex {
+    clearGLErrors();
+	
+    vertex_tex_coords[0] = [self getTexCoordStartX];
+    vertex_tex_coords[1] = [self getTexCoordStartY];
+	
+    vertex_tex_coords[2] = [self getTexCoordStartX];
+    vertex_tex_coords[3] = [self getTexCoordEndY];
+	
+    vertex_tex_coords[4] = [self getTexCoordEndX];
+    vertex_tex_coords[5] = [self getTexCoordEndY];
+	
+    vertex_tex_coords[6] = [self getTexCoordEndX];
+    vertex_tex_coords[7] = [self getTexCoordStartY];
+	
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_tex_coords), vertex_tex_coords, GL_STATIC_DRAW);
+	
+    GLint error;
+    if ((error = glGetError()) != GL_NO_ERROR) {
+        char str[128];
+        sprintf(str, "Could not create OpenGL buffers: code=0x%x", error);
+        LOGE(str);
+        return FALSE;
+    }
+	
 	return TRUE;
 }
 -(void)updateKey:(char*)key {
-    sprintf(key, "%d-%d-%d", vbo[0], vbo[1], vbo[2]);
+	double uptime = [engine uptime];
+	int uptimes = (int)floor(uptime);
+	int uptimem = (int)floor((uptime - uptimes) * 1000);
+    sprintf(key, "%d%d%d", uptimes, uptimem, vbo[0]);
 }
 -(void)setScale:(NSInteger)index withValue:(float)value {
 	param_scale[index] = value;
@@ -64,7 +105,7 @@ extern EmoEngine* engine;
 		[texture doUnload];
 		[texture release];
 	}
-	glDeleteBuffers(3, vbo);
+	glDeleteBuffers(1, vbo);
 }
 -(void)dealloc {
 	[name release];
@@ -182,7 +223,7 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         drawable.height = height;
     }
 	
-    if ([drawable createVertex]) {
+    if ([drawable bindVertex]) {
         sq_pushinteger(v, EMO_NO_ERROR);
     } else {
         sq_pushinteger(v, ERR_CREATE_VERTEX);

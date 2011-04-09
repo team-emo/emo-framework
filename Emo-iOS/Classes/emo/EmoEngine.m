@@ -1,8 +1,3 @@
-#import <OpenGLES/ES1/gl.h>
-#import <OpenGLES/ES1/glext.h>
-#import <OpenGLES/ES2/gl.h>
-#import <OpenGLES/ES2/glext.h>
-
 #import "common.h"
 #import "sqfunc.h"
 #import "emo_engine_func.h"
@@ -97,6 +92,7 @@
 	
 	audioManager = [[EmoAudioManager alloc]init];
 	drawables    = [[NSMutableDictionary alloc]init];
+	stage        = [[EmoStage alloc]init];
 	
 	// engine startup time
 	startTime = [[NSDate date] retain];
@@ -132,6 +128,10 @@
 	[drawables release];
 	drawables = nil;
 	
+	[stage unloadBuffer];
+	[stage release];
+	stage = nil;
+	
 	[startTime release];
 	
 	return TRUE;
@@ -147,6 +147,10 @@
 		return FALSE;
 	}
 	if (isFrameInitialized) return FALSE;
+	
+	
+	// load stage
+	[stage loadBuffer];
 	
     if (enablePerspectiveNicest) {
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);

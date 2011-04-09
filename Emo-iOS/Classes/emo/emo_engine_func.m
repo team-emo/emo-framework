@@ -2,6 +2,11 @@
 #import "common.h"
 #import "png.h"
 
+#import <OpenGLES/ES1/gl.h>
+#import <OpenGLES/ES1/glext.h>
+#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES2/glext.h>
+
 /*
  * Logging
  */
@@ -28,6 +33,15 @@ void NSLOGE(NSString* msg) {
 void NSLOGW(NSString* msg) {
 	LOGW([msg UTF8String]);	
 }
+
+/*
+ * clear all OpenGL errors
+ */
+void clearGLErrors() {
+	for (GLint error = glGetError(); error; error = glGetError()) {
+		// do nothing
+	}
+}							
 
 /* 
  * load png image from resource
