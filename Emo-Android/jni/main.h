@@ -35,9 +35,7 @@ struct Drawable {
 
     unsigned int vbo[3];
 
-    float      vertex_positions[12];
     float      vertex_tex_coords[8];
-    short      vertex_indices[4];
 
     bool       hasTexture;
     bool       removed;
@@ -56,6 +54,15 @@ struct Drawable {
     float      param_color[4];
 
     ImageInfo* texture;
+};
+
+struct Stage {
+    unsigned int vbo[2];
+
+    bool loaded;
+
+    float      indices[4];
+    float      positions[12];
 };
 
 struct char_comparator {
@@ -109,5 +116,6 @@ struct engine {
 
     struct saved_state state;
 
+    struct Stage * stage;
     drawables_t *drawables;
 };

@@ -11,6 +11,16 @@
 
 extern struct engine *g_engine;
 
+/*
+ * clear all OpenGL errors
+ */
+bool clearGLErrors() {
+    for (GLint error = glGetError(); error; error = glGetError()) {
+        // do nothing
+    }
+}
+
+
 void unloadDrawable(struct Drawable* drawable) {
     if (drawable->hasTexture) {
         glDeleteTextures(1, (const GLuint*)drawable->texture->textureId);
@@ -77,6 +87,60 @@ void addDrawable(const char* _key, struct Drawable* drawable, struct engine* eng
     engine->drawables->insert(std::make_pair(key, drawable)); 
 }
 
+bool initStage(struct Stage* stage) {
+    memset(stage, 0, sizeof(stage));
+
+    stage->loaded = false;
+
+    stage->indices[0] = 0;
+    stage->indices[1] = 1;
+    stage->indices[2] = 2;
+    stage->indices[3] = 3;
+
+    stage->positions[0] = 0;
+    stage->positions[1] = 0;
+    stage->positions[2] = 0;
+
+    stage->positions[3] = 0;
+    stage->positions[4] = 1;
+    stage->positions[5] = 0;
+
+    stage->positions[6] = 1;
+    stage->positions[7] = 1;
+    stage->positions[8] = 0;
+
+    stage->positions[9]  = 1;
+    stage->positions[10] = 0;
+    stage->positions[11] = 0;
+
+    clearGLErrors();
+
+    glGenBuffers(2, stage->vbo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, stage->vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(stage->positions), stage->positions, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, stage->vbo[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(stage->indices), stage->indices, GL_STATIC_DRAW);
+
+    GLint error;
+    if ((error = glGetError()) != GL_NO_ERROR) {
+        char str[128];
+        sprintf(str, "Could not create OpenGL buffers: code=0x%x", error);
+        LOGE(str);
+        return false;
+    }
+
+    stage->loaded = true;
+
+    return true;
+}
+
+void unloadStage(struct Stage* stage) {
+    if (!stage->loaded) return;
+
+    glDeleteBuffers(2, stage->vbo);
+}
+
 /*
  * initialize drawable instance
  */
@@ -140,15 +204,8 @@ float getTexCoordEndY(struct Drawable* drawable) {
     return drawable->texture->height / drawable->texture->glHeight;
 }
 
-/*
- * create drawable buffers
- */
-void updateDrawableVertex(struct Drawable* drawable) {
-
-    drawable->vertex_indices[0] = 0;
-    drawable->vertex_indices[1] = 1;
-    drawable->vertex_indices[2] = 2;
-    drawable->vertex_indices[3] = 3;
+bool bindDrawableVertex(struct Drawable* drawable) {
+    clearGLErrors();
 
     drawable->vertex_tex_coords[0] = getTexCoordStartX(drawable);
     drawable->vertex_tex_coords[1] = getTexCoordStartY(drawable);
@@ -162,43 +219,8 @@ void updateDrawableVertex(struct Drawable* drawable) {
     drawable->vertex_tex_coords[6] = getTexCoordEndX(drawable);
     drawable->vertex_tex_coords[7] = getTexCoordStartY(drawable);
 
-    drawable->vertex_positions[0] = drawable->x;
-    drawable->vertex_positions[1] = drawable->y;
-    drawable->vertex_positions[2] = drawable->z;
-
-    drawable->vertex_positions[3] = drawable->x;
-    drawable->vertex_positions[4] = drawable->y + drawable->height;
-    drawable->vertex_positions[5] = drawable->z;
-
-    drawable->vertex_positions[6] = drawable->x + drawable->width;
-    drawable->vertex_positions[7] = drawable->y + drawable->height;
-    drawable->vertex_positions[8] = drawable->z;
-
-    drawable->vertex_positions[9]  = drawable->x + drawable->width;
-    drawable->vertex_positions[10] = drawable->y;
-    drawable->vertex_positions[11] = drawable->z;
-}
-
-/*
- * clear all OpenGL errors
- */
-bool clearGLErrors() {
-    for (GLint error = glGetError(); error; error = glGetError()) {
-        // do nothing
-    }
-}
-
-bool createDrawableVertex(struct Drawable* drawable) {
-    clearGLErrors();
-
-    updateDrawableVertex(drawable);
-
-    glBindBuffer (GL_ARRAY_BUFFER, drawable->vbo[0]);
-    glBufferData (GL_ARRAY_BUFFER, sizeof(drawable->vertex_positions), drawable->vertex_positions, GL_STATIC_DRAW);
-    glBindBuffer (GL_ARRAY_BUFFER, drawable->vbo[1]);
-    glBufferData (GL_ARRAY_BUFFER, sizeof(drawable->vertex_tex_coords), drawable->vertex_tex_coords, GL_STATIC_DRAW);
-    glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, drawable->vbo[2]);
-    glBufferData (GL_ELEMENT_ARRAY_BUFFER, sizeof(drawable->vertex_indices), drawable->vertex_indices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, drawable->vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(drawable->vertex_tex_coords), drawable->vertex_tex_coords, GL_STATIC_DRAW);
 
     GLint error;
     if ((error = glGetError()) != GL_NO_ERROR) {
@@ -321,7 +343,7 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         drawable->height = height;
     }
 
-    if (createDrawableVertex(drawable)) {
+    if (bindDrawableVertex(drawable)) {
         sq_pushinteger(v, EMO_NO_ERROR);
     } else {
         sq_pushinteger(v, ERR_CREATE_VERTEX);

@@ -124,6 +124,9 @@ void emo_init_engine(struct engine* engine) {
     // back key is enabled by default
     engine->enableBackKey = true;
 
+    // alloc stage memmory
+    engine->stage = (Stage *)malloc(sizeof(Stage));
+
     // init Squirrel VM
     initSQVM(engine->sqvm);
 
@@ -149,12 +152,13 @@ void emo_init_engine(struct engine* engine) {
  */
 void emo_init_display(struct engine* engine) {
     if (!engine->loaded) return;
-    if (!engine->focused) return;
 
     engine_update_uptime(engine);
 
-    /* initialize OpenGL state */
+    // initialize the stage
+    initStage(engine->stage);
 
+    // initialize OpenGL state
     if (engine->enablePerspectiveNicest) {
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     } else {
@@ -211,6 +215,7 @@ void emo_dispose_engine(struct engine* engine) {
         sq_close(engine->sqvm);
 
         clearDrawables(engine);
+        unloadStage(engine->stage);
 
         engine->loaded = false;
     }

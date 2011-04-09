@@ -1,5 +1,10 @@
 #include <squirrel.h>
 
+
+bool clearGLErrors();
+bool initStage(struct Stage* stage);
+bool unloadStage(struct Stage* stage);
+
 void clearDrawables(struct engine* engine);
 bool removeDrawable(const char* key, struct engine* engine);
 struct Drawable* getDrawable(const char* key, struct engine* engine);
