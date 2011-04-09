@@ -35,6 +35,7 @@
 @property (readwrite) BOOL enablePerspectiveNicest;
 @property (readwrite) BOOL enableOnDrawFrame;
 @property (readwrite) int onDrawFrameInterval;
+@property (readwrite) int onDrawDrawablesInterval;
 @property (readonly) EmoAudioManager* audioManager;
 
 - (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;

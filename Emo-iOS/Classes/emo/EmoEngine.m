@@ -20,6 +20,7 @@
 @synthesize enablePerspectiveNicest;
 @synthesize enableOnDrawFrame;
 @synthesize onDrawFrameInterval;
+@synthesize onDrawDrawablesInterval;
 @synthesize audioManager;
 
 /*
@@ -56,6 +57,7 @@
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "setColor",       emoDrawableColor);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "unload",         emoDrawableUnload);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "setFPS",         emoSetOnDrawFPS);
 	
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
@@ -179,8 +181,7 @@
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
 	
-	NSTimeInterval delta = [self getLastOnDrawDrawablesDelta];
-	[stage onDrawFrame:delta];
+	[stage onDrawFrame:0];
 	
 	isFrameInitialized = TRUE;
 	

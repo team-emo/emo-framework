@@ -68,6 +68,7 @@
 		F9C849D3133E0A180095EA37 /* EmoFunc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849D2133E0A180095EA37 /* EmoFunc.m */; };
 		F9D17BEC133B0F7B00F577C4 /* emoruntime.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */; };
 		F9E41A43134494DE0009385D /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E41A42134494DE0009385D /* OpenAL.framework */; };
+		F9F89ECD1350218C00B005AF /* EmoStage.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F89ECC1350218C00B005AF /* EmoStage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -175,6 +176,8 @@
 		F9C849D2133E0A180095EA37 /* EmoFunc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoFunc.m; sourceTree = "<group>"; };
 		F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoruntime.nut; path = Resources/emoruntime.nut; sourceTree = "<group>"; };
 		F9E41A42134494DE0009385D /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		F9F89ECB1350218C00B005AF /* EmoStage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoStage.h; sourceTree = "<group>"; };
+		F9F89ECC1350218C00B005AF /* EmoStage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoStage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -283,6 +286,8 @@
 				F93C58411343187A002C29E5 /* EmoAudio.m */,
 				F9C7DEA8134ACAE90053065E /* EmoImage.h */,
 				F9C7DEA9134ACAE90053065E /* EmoImage.m */,
+				F9F89ECB1350218C00B005AF /* EmoStage.h */,
+				F9F89ECC1350218C00B005AF /* EmoStage.m */,
 			);
 			path = emo;
 			sourceTree = "<group>";
@@ -515,6 +520,7 @@
 				F9C7DE6E134AB99F0053065E /* pngwutil.c in Sources */,
 				F9C7DE70134AB9FA0053065E /* common.m in Sources */,
 				F9C7DEAA134ACAE90053065E /* EmoImage.m in Sources */,
+				F9F89ECD1350218C00B005AF /* EmoStage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
