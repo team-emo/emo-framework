@@ -33,7 +33,7 @@ struct ImageInfo {
 struct Drawable {
     const char* name;
 
-    unsigned int vbo[3];
+    unsigned int vbo[1];
 
     float      vertex_tex_coords[8];
 

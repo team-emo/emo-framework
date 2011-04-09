@@ -22,7 +22,7 @@ bool clearGLErrors() {
 
 void loadDrawable(struct Drawable* drawable) {
     if (drawable->hasBuffer) return;
-    glGenBuffers (3, drawable->vbo);
+    glGenBuffers (1, drawable->vbo);
 
     if (drawable->hasTexture) {
         glGenTextures(1, &drawable->texture->textureId);
@@ -35,7 +35,7 @@ void unloadDrawable(struct Drawable* drawable) {
     if (drawable->hasTexture) {
         glDeleteTextures(1, &drawable->texture->textureId);
     }
-    glDeleteBuffers(3, drawable->vbo);
+    glDeleteBuffers(1, drawable->vbo);
     drawable->hasBuffer = false;
 }
 
@@ -283,9 +283,8 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     drawable->z    = z;
 
     char key[DRAWABLE_KEY_LENGTH];
-    sprintf(key, "%d%d%d%d%d", 
-                g_engine->uptime.time, g_engine->uptime.millitm,
-                drawable->vbo[0], drawable->vbo[1], drawable->vbo[2]);
+    sprintf(key, "%d%d%d", 
+                g_engine->uptime.time, g_engine->uptime.millitm, drawable->vbo[0]);
 
     addDrawable(key, drawable, g_engine);
 
