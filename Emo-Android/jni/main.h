@@ -33,7 +33,7 @@ struct ImageInfo {
 struct Drawable {
     const char* name;
 
-    unsigned int vbo[1];
+    GLuint     vbo[1];
 
     float      vertex_tex_coords[8];
 
@@ -55,7 +55,7 @@ struct Drawable {
 };
 
 struct Stage {
-    unsigned int vbo[2];
+    GLuint vbo[2];
 
     bool loaded;
     bool started;

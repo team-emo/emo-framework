@@ -184,6 +184,9 @@ bool loadStage(struct Stage* stage) {
     stage->positions[10] = 0;
     stage->positions[11] = 0;
 
+    stage->vbo[0] = 0;
+    stage->vbo[1] = 0;
+
     clearGLErrors();
 
     glGenBuffers(2, stage->vbo);
@@ -247,6 +250,8 @@ void initDrawable(struct Drawable* drawable) {
 
     drawable->width  = 0;
     drawable->height = 0;
+
+    drawable->vbo[0] = 0;
 }
 
 float getTexCoordStartX(struct Drawable* drawable) {
