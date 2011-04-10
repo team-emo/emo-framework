@@ -80,7 +80,7 @@ static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, stage->vbo[1]);
 
     // draw sprite
-    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
+    glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_SHORT, 0);
 }
 
 /*
@@ -214,21 +214,21 @@ bool loadStage(struct Stage* stage) {
     stage->indices[2] = 2;
     stage->indices[3] = 3;
 
-    stage->positions[0] =  1;
-    stage->positions[1] = -1;
-    stage->positions[2] =  0;
+    stage->positions[0] = 0;
+    stage->positions[1] = 0;
+    stage->positions[2] = 0;
 
-    stage->positions[3] = 1;
+    stage->positions[3] = 0;
     stage->positions[4] = 1;
     stage->positions[5] = 0;
 
-    stage->positions[6] = -1;
-    stage->positions[7] = -1;
-    stage->positions[8] =  0;
+    stage->positions[6] = 1;
+    stage->positions[7] = 1;
+    stage->positions[8] = 0;
 
-    stage->positions[9]  = -1;
-    stage->positions[10] =  1;
-    stage->positions[11] =  0;
+    stage->positions[9]  = 1;
+    stage->positions[10] = 0;
+    stage->positions[11] = 0;
 
     stage->vbo[0] = 0;
     stage->vbo[1] = 0;
@@ -299,7 +299,7 @@ float getTexCoordStartX(struct Drawable* drawable) {
 }
 
 float getTexCoordStartY(struct Drawable* drawable) {
-    return 0;
+    return drawable->texture->height / drawable->texture->glHeight;
 }
 
 float getTexCoordEndX(struct Drawable* drawable) {
@@ -307,23 +307,23 @@ float getTexCoordEndX(struct Drawable* drawable) {
 }
 
 float getTexCoordEndY(struct Drawable* drawable) {
-    return drawable->texture->height / drawable->texture->glHeight;
+    return 0;
 }
 
 bool bindDrawableVertex(struct Drawable* drawable) {
     clearGLErrors("bindDrawableVertex");
 
-    drawable->vertex_tex_coords[0] = getTexCoordEndX(drawable);
+    drawable->vertex_tex_coords[0] = getTexCoordStartX(drawable);
     drawable->vertex_tex_coords[1] = getTexCoordStartY(drawable);
 
-    drawable->vertex_tex_coords[2] = getTexCoordEndX(drawable);
+    drawable->vertex_tex_coords[2] = getTexCoordStartX(drawable);
     drawable->vertex_tex_coords[3] = getTexCoordEndY(drawable);
 
-    drawable->vertex_tex_coords[4] = getTexCoordStartX(drawable);
-    drawable->vertex_tex_coords[5] = getTexCoordStartY(drawable);
+    drawable->vertex_tex_coords[4] = getTexCoordEndX(drawable);
+    drawable->vertex_tex_coords[5] = getTexCoordEndY(drawable);
 
-    drawable->vertex_tex_coords[6] = getTexCoordStartX(drawable);
-    drawable->vertex_tex_coords[7] = getTexCoordEndY(drawable);
+    drawable->vertex_tex_coords[6] = getTexCoordEndX(drawable);
+    drawable->vertex_tex_coords[7] = getTexCoordStartY(drawable);
 
     glBindBuffer(GL_ARRAY_BUFFER, drawable->vbo[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, drawable->vertex_tex_coords, GL_STATIC_DRAW);
