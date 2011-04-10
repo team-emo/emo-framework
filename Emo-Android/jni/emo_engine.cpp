@@ -164,22 +164,6 @@ void emo_init_display(struct engine* engine) {
 
     engine_update_uptime(engine);
 
-    if (!engine->loadedCalled) {
-        callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOAD);
-        engine->loadedCalled = true;
-    }
-
-    // load drawables
-    loadStage(engine->stage);
-    loadDrawables(engine);
-
-    // initialize OpenGL state
-    if (engine->enablePerspectiveNicest) {
-        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    } else {
-        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-    }
-
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_LIGHTING);
     glDisable(GL_MULTISAMPLE);
@@ -192,12 +176,27 @@ void emo_init_display(struct engine* engine) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glEnable(GL_VERTEX_ARRAY);
-    glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CCW);
-    glCullFace(GL_BACK);
+    //glEnable(GL_CULL_FACE);
+    //glFrontFace(GL_CCW);
+    //glCullFace(GL_BACK);
 
     glEnableClientState (GL_VERTEX_ARRAY);
     glEnableClientState (GL_TEXTURE_COORD_ARRAY);
+
+    if (!engine->loadedCalled) {
+        callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOAD);
+        engine->loadedCalled = true;
+    }
+
+    // update OpenGL options
+    if (engine->enablePerspectiveNicest) {
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    } else {
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+    }
+
+    loadStage(engine->stage);
+    loadDrawables(engine);
 
     onDrawStage(engine->stage);
 }

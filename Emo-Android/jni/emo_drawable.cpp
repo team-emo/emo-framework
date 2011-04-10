@@ -20,11 +20,12 @@ bool clearGLErrors() {
     }
 }
 
-bool printGLErrors() {
+bool printGLErrors(const char* msg) {
     for (GLint error = glGetError(); error; error = glGetError()) {
         if (error != GL_NO_ERROR) {
+            LOGE(msg);
             char str[128];
-            sprintf(str, "OpenGL error: code=0x%x", error);
+            sprintf(str, "err code=0x%x", error);
             LOGE(str);
         }
     }
@@ -195,13 +196,7 @@ bool loadStage(struct Stage* stage) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, stage->vbo[1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 4, stage->indices, GL_STATIC_DRAW);
 
-    GLint error;
-    if ((error = glGetError()) != GL_NO_ERROR) {
-        char str[128];
-        sprintf(str, "Could not create OpenGL buffers: code=0x%x", error);
-        LOGE(str);
-        return false;
-    }
+    printGLErrors("Could not create OpenGL buffers");
 
     stage->loaded = true;
 
@@ -287,12 +282,28 @@ bool bindDrawableVertex(struct Drawable* drawable) {
     glBindBuffer(GL_ARRAY_BUFFER, drawable->vbo[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, drawable->vertex_tex_coords, GL_STATIC_DRAW);
 
-    GLint error;
-    if ((error = glGetError()) != GL_NO_ERROR) {
-        char str[128];
-        sprintf(str, "Could not create OpenGL vertex: code=0x%x", error);
-        LOGE(str);
-        return false;
+    printGLErrors("Could not create OpenGL vertex");
+
+    glBindTexture   (GL_TEXTURE_2D, drawable->texture->textureId);
+    glPixelStorei   (GL_UNPACK_ALIGNMENT, 1);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    if (drawable->hasTexture) {
+        if (drawable->texture->hasAlpha) {
+            GLubyte* holder = (GLubyte*)malloc(sizeof(GLubyte) * drawable->texture->glWidth * drawable->texture->glHeight * 4);
+            glTexImage2D    (GL_TEXTURE_2D, 0, GL_RGBA, drawable->texture->glWidth, drawable->texture->glHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, holder);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 
+                  0, 0, drawable->texture->width, drawable->texture->height, GL_RGBA, GL_UNSIGNED_BYTE, drawable->texture->data);
+            free(holder);
+        } else {
+            GLubyte* holder = (GLubyte*)malloc(sizeof(GLubyte) * drawable->texture->glWidth * drawable->texture->glHeight * 3);
+            glTexImage2D    (GL_TEXTURE_2D, 0, GL_RGB, drawable->texture->glWidth, drawable->texture->glHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, holder);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 
+                   0, 0, drawable->texture->width, drawable->texture->height, GL_RGB, GL_UNSIGNED_BYTE, drawable->texture->data);
+            free(holder);
+        }
+        printGLErrors("Could not bind OpenGL textures");
     }
 
     return true;
