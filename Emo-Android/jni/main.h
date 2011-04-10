@@ -60,7 +60,7 @@ struct Stage {
     bool loaded;
     bool started;
 
-    float      indices[4];
+    short      indices[4];
     float      positions[12];
 };
 
