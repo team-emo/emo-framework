@@ -151,11 +151,9 @@ void emo_init_engine(struct engine* engine) {
     // force fullscreen
     emoUpdateOptions(OPT_WINDOW_FORCE_FULLSCREEN);
 
-    // call onLoad()
-    callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOAD);
-
     engine->focused = false;
     engine->loaded  = true;
+    engine->loadedCalled = false;
 }
 
 /*
@@ -165,6 +163,11 @@ void emo_init_display(struct engine* engine) {
     if (!engine->loaded) return;
 
     engine_update_uptime(engine);
+
+    if (!engine->loadedCalled) {
+        callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOAD);
+        engine->loadedCalled = true;
+    }
 
     // load drawables
     loadStage(engine->stage);

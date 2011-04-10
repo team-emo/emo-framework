@@ -80,6 +80,8 @@ struct engine {
 
     bool loaded;
     bool focused;
+    bool loadedCalled;
+
     int animating;
 
     EGLDisplay display;

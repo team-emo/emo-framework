@@ -34,7 +34,6 @@ static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
     glMatrixMode (GL_MODELVIEW);
     glLoadIdentity (); 
 
-
 }
 
 /*
@@ -192,9 +191,9 @@ bool loadStage(struct Stage* stage) {
     glGenBuffers(2, stage->vbo);
 
     glBindBuffer(GL_ARRAY_BUFFER, stage->vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(stage->positions), stage->positions, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12 , stage->positions, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, stage->vbo[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(stage->indices), stage->indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 4, stage->indices, GL_STATIC_DRAW);
 
     GLint error;
     if ((error = glGetError()) != GL_NO_ERROR) {
@@ -286,12 +285,12 @@ bool bindDrawableVertex(struct Drawable* drawable) {
     drawable->vertex_tex_coords[7] = getTexCoordStartY(drawable);
 
     glBindBuffer(GL_ARRAY_BUFFER, drawable->vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(drawable->vertex_tex_coords), drawable->vertex_tex_coords, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, drawable->vertex_tex_coords, GL_STATIC_DRAW);
 
     GLint error;
     if ((error = glGetError()) != GL_NO_ERROR) {
         char str[128];
-        sprintf(str, "Could not create OpenGL buffers: code=0x%x", error);
+        sprintf(str, "Could not create OpenGL vertex: code=0x%x", error);
         LOGE(str);
         return false;
     }

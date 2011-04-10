@@ -299,6 +299,7 @@ function emo::AudioManager::createChannel(id) {
 
 class emo.Sprite {
 
+    name   = null;
     stage  = emo.Stage();
 
     id     = -1;
@@ -307,8 +308,8 @@ class emo.Sprite {
     /*
      * sprite = Sprite("aaa.png");
      */
-    function constructor(name) {
-        id = stage.createSprite(name);
+    function constructor(_name) {
+        name = _name;
     }
 
     /*
@@ -319,6 +320,8 @@ class emo.Sprite {
     function load(...) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
+
+            id = stage.createSprite(name);
 
             if (vargv.len() >= 4) {
                 status = stage.load(id, vargv[0], vargv[1], vargv[2], vargv[3]);
