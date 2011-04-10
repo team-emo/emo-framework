@@ -20,6 +20,51 @@ bool clearGLErrors() {
     }
 }
 
+bool printGLErrors() {
+    for (GLint error = glGetError(); error; error = glGetError()) {
+        if (error != GL_NO_ERROR) {
+            char str[128];
+            sprintf(str, "OpenGL error: code=0x%x", error);
+            LOGE(str);
+        }
+    }
+}
+
+static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
+    glMatrixMode (GL_MODELVIEW);
+    glLoadIdentity (); 
+
+
+}
+
+/*
+ * draw stage
+ */
+void onDrawStage(struct Stage* stage) {
+    if (!stage->started) {
+        glViewport     (0,0,380,420); 
+        glMatrixMode   (GL_PROJECTION);
+        glLoadIdentity ();
+        glOrthof(0, 380, 420, 0, -1, 1);
+        stage->started = true;
+    }
+
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+/*
+ * draw drawables
+ */
+void onDrawDrawables(struct engine* engine) {
+
+    drawables_t::iterator iter;
+    for(iter = engine->drawables->begin(); iter != engine->drawables->end(); iter++) {
+        struct Drawable* drawable = iter->second;
+        onDrawDrawable(engine->stage, drawable);
+    }
+}
+
 void loadDrawable(struct Drawable* drawable) {
     if (drawable->hasBuffer) return;
     glGenBuffers (1, drawable->vbo);
@@ -112,26 +157,11 @@ void addDrawable(const char* _key, struct Drawable* drawable, struct engine* eng
     engine->drawables->insert(std::make_pair(key, drawable)); 
 }
 
-// TODO
-void onDrawDrawables(struct engine* engine) {
-    drawables_t::iterator iter;
-    for(iter = engine->drawables->begin(); iter != engine->drawables->end(); iter++) {
-        struct Drawable* drawable = iter->second;
-
-    }
-}
-
-// TODO
-void onDrawStage(struct Stage* stage) {
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
-}
-
-
 bool loadStage(struct Stage* stage) {
     memset(stage, 0, sizeof(stage));
 
-    stage->loaded = false;
+    stage->loaded  = false;
+    stage->started = false;
 
     stage->indices[0] = 0;
     stage->indices[1] = 1;
