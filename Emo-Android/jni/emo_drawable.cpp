@@ -43,7 +43,6 @@ static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
     // update colors
     glColor4f(drawable->param_color[0], drawable->param_color[1], drawable->param_color[2], drawable->param_color[3]);
 
-/*
     // update width and height
     glScalef(drawable->width, drawable->height, 1);
 
@@ -65,7 +64,6 @@ static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
     glTranslatef(drawable->param_scale[2], drawable->param_scale[3], 0);
     glScalef(drawable->param_scale[0], drawable->param_scale[1], 1);
     glTranslatef(-drawable->param_scale[2], -drawable->param_scale[3], 0);
-*/
 
     // bind a texture
     glBindTexture(GL_TEXTURE_2D, drawable->texture->textureId);
@@ -74,6 +72,7 @@ static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
     glBindBuffer(GL_ARRAY_BUFFER, stage->vbo[0]);
     glVertexPointer(3, GL_FLOAT, 0, 0);
 
+    // bind texture coords
     glBindBuffer(GL_ARRAY_BUFFER, drawable->vbo[0]);
     glTexCoordPointer(2, GL_FLOAT, 0, 0);
 
@@ -92,7 +91,7 @@ void onDrawStage(struct Stage* stage) {
         glViewport(0,0,380,420); 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrthof(-2, 2, -2, 2, -2, 2);
+        glOrthof(0, 380, 420, 0, -1, 1);
         stage->started = true;
     }
 

@@ -173,9 +173,9 @@ void emo_init_display(struct engine* engine) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CCW);
-    glCullFace(GL_BACK);
+    //glEnable(GL_CULL_FACE);
+    //glFrontFace(GL_CCW);
+    //glCullFace(GL_BACK);
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
