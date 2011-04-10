@@ -1,7 +1,8 @@
 #include <squirrel.h>
 
 
-bool clearGLErrors();
+bool clearGLErrors(const char* msg);
+bool printGLErrors(const char* msg);
 bool loadStage(struct Stage* stage);
 bool unloadStage(struct Stage* stage);
 void unloadDrawables(struct engine* engine);

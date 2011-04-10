@@ -168,20 +168,20 @@ void emo_init_display(struct engine* engine) {
     glDisable(GL_LIGHTING);
     glDisable(GL_MULTISAMPLE);
     glDisable(GL_DITHER);
-    glDisable(GL_COLOR_ARRAY);
 
     glEnable(GL_TEXTURE_2D);
-    glEnable(GL_TEXTURE_COORD_ARRAY);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glEnable(GL_VERTEX_ARRAY);
-    //glEnable(GL_CULL_FACE);
-    //glFrontFace(GL_CCW);
-    //glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
+    glCullFace(GL_BACK);
 
-    glEnableClientState (GL_VERTEX_ARRAY);
-    glEnableClientState (GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+
+    clearGLErrors("emo_init_display");
 
     if (!engine->loadedCalled) {
         callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOAD);

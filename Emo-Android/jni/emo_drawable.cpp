@@ -14,9 +14,14 @@ extern struct engine *g_engine;
 /*
  * clear all OpenGL errors
  */
-bool clearGLErrors() {
+bool clearGLErrors(const char* msg) {
     for (GLint error = glGetError(); error; error = glGetError()) {
-        // do nothing
+        if (error != GL_NO_ERROR) {
+            LOGI(msg);
+            char str[128];
+            sprintf(str, "err code=0x%x", error);
+            LOGI(str);
+        }
     }
 }
 
@@ -187,7 +192,7 @@ bool loadStage(struct Stage* stage) {
     stage->vbo[0] = 0;
     stage->vbo[1] = 0;
 
-    clearGLErrors();
+    clearGLErrors("loadStage");
 
     glGenBuffers(2, stage->vbo);
 
@@ -265,7 +270,7 @@ float getTexCoordEndY(struct Drawable* drawable) {
 }
 
 bool bindDrawableVertex(struct Drawable* drawable) {
-    clearGLErrors();
+    clearGLErrors("bindDrawableVertex");
 
     drawable->vertex_tex_coords[0] = getTexCoordStartX(drawable);
     drawable->vertex_tex_coords[1] = getTexCoordStartY(drawable);
