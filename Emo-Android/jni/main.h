@@ -58,6 +58,7 @@ struct Stage {
     unsigned int vbo[2];
 
     bool loaded;
+    bool started;
 
     float      indices[4];
     float      positions[12];

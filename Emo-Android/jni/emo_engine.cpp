@@ -193,6 +193,9 @@ void emo_init_display(struct engine* engine) {
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
 
+    glEnableClientState (GL_VERTEX_ARRAY);
+    glEnableClientState (GL_TEXTURE_COORD_ARRAY);
+
     onDrawStage(engine->stage);
 }
 
@@ -210,17 +213,17 @@ void emo_draw_frame(struct engine* engine) {
 
     engine_update_uptime(engine);
 
-    SQFloat delta = engine_getLastOnDrawDrawablesDelta(engine);
-    if (delta < engine->onDrawDrawablesInterval) {
-        return;
-    }
-    engine->lastOnDrawDrawablesInterval  = engine->uptime;
-
-    delta = engine_getLastOnDrawDelta(engine);
+    SQFloat delta = engine_getLastOnDrawDelta(engine);
     if (engine->enableOnDrawFrame && delta > engine->onDrawFrameInterval) {
         engine->lastOnDrawInterval  = engine->uptime;
         callSqFunction_Bool_Float(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME, delta, SQFalse);
     }
+
+    delta = engine_getLastOnDrawDrawablesDelta(engine);
+    if (delta < engine->onDrawDrawablesInterval) {
+        return;
+    }
+    engine->lastOnDrawDrawablesInterval  = engine->uptime;
 
     onDrawStage(engine->stage);
     onDrawDrawables(engine);

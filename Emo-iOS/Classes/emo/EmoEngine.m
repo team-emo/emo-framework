@@ -243,8 +243,14 @@
 		return FALSE;
 	}
 	
+	NSTimeInterval delta = [self getLastOnDrawDelta];
+	if (enableOnDrawFrame && delta > onDrawFrameInterval) {
+		lastOnDrawInterval = [self uptime];
+		return callSqFunction_Bool_Float(sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME, delta, SQFalse);
+	}
+
 	// check if the engine have to continue to draw
-	NSTimeInterval delta = [self getLastOnDrawDrawablesDelta];
+	delta = [self getLastOnDrawDrawablesDelta];
 	if (delta < onDrawDrawablesInterval) {
 		return FALSE;
 	}
@@ -253,12 +259,6 @@
 	[stage onDrawFrame:delta];
 	for (id key in drawables) {
 		[[drawables objectForKey:key] onDrawFrame:delta];
-	}
-	
-	delta = [self getLastOnDrawDelta];
-	if (enableOnDrawFrame && delta > onDrawFrameInterval) {
-		lastOnDrawInterval = [self uptime];
-		return callSqFunction_Bool_Float(sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME, delta, SQFalse);
 	}
 	
 	return FALSE;
