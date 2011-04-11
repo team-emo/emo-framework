@@ -6,6 +6,7 @@ local str = "Hello, Squirrel from File!";
 print(str);
 
 local dogSprite = emo.Sprite("dog.png");
+local dogSprite2 = emo.Sprite("robot.png");
 
 function emo::onLoad() { 
     print("onLoad");
@@ -13,7 +14,6 @@ function emo::onLoad() {
     runtime.setOptions(OPT_WINDOW_KEEP_SCREEN_ON, OPT_ENABLE_PERSPECTIVE_NICEST, OPT_ORIENTATION_LANDSCAPE);
 
     event.enableOnDrawCallback(5000);
-    stage.interval(5000);
 
     print(dogSprite.load());
 }
@@ -45,7 +45,10 @@ function emo::onLowMemory() {
 function emo::onMotionEvent(...) {
     local motionEvent = emo.MotionEvent(vargv);
     print("MotionEvent: " + motionEvent.toString());
-    runtime.finish();
+    if (motionEvent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+        print(dogSprite.remove());
+        print(dogSprite2.load());
+    }
 }
 
 function emo::onKeyEvent(...) {
