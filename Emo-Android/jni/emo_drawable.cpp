@@ -313,11 +313,11 @@ float getTexCoordStartX(struct Drawable* drawable) {
 }
 
 float getTexCoordStartY(struct Drawable* drawable) {
-    return drawable->texture->height / drawable->texture->glHeight;
+    return (float)drawable->texture->height / (float)drawable->texture->glHeight;
 }
 
 float getTexCoordEndX(struct Drawable* drawable) {
-    return drawable->texture->width / drawable->texture->glWidth;
+    return (float)drawable->texture->width / (float)drawable->texture->glWidth;
 }
 
 float getTexCoordEndY(struct Drawable* drawable) {
