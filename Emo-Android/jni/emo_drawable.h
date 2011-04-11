@@ -29,3 +29,5 @@ SQInteger emoDrawableUnload(HSQUIRRELVM v);
 SQInteger emoSetOnDrawInterval(HSQUIRRELVM v);
 SQInteger emoSetViewport(HSQUIRRELVM v);
 SQInteger emoSetStageSize(HSQUIRRELVM v);
+SQInteger emoGetWindowWidth(HSQUIRRELVM v);
+SQInteger emoGetWindowHeight(HSQUIRRELVM v);

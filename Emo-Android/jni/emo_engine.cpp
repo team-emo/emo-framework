@@ -64,7 +64,9 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "unload",         emoDrawableUnload);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "viewport",       emoSetViewport);
-	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setSize",        emoSetStageSize);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "ortho",          emoSetStageSize);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pixelWidth",     emoGetWindowWidth);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pixelHeight",    emoGetWindowHeight);
 
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);

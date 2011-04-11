@@ -789,3 +789,13 @@ SQInteger emoSetStageSize(HSQUIRRELVM v) {
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }
+
+SQInteger emoGetWindowWidth(HSQUIRRELVM v) {
+    sq_pushinteger(v, ANativeWindow_getWidth(g_engine->app->window));
+    return 1;
+}
+
+SQInteger emoGetWindowHeight(HSQUIRRELVM v) {
+    sq_pushinteger(v, ANativeWindow_getHeight(g_engine->app->window));
+    return 1;
+}
