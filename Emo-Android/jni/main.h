@@ -128,4 +128,5 @@ struct engine {
 
     struct Stage * stage;
     drawables_t *drawables;
+    drawables_t *drawablesToRemove;
 };

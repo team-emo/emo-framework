@@ -38,6 +38,30 @@ bool printGLErrors(const char* msg) {
     }
 }
 
+
+/*
+ * free drawable memory with given key.
+ * returns false if the drawable is not found.
+ */
+bool freeDrawable(const char* key, struct engine* engine) {
+    drawables_t::iterator iter = engine->drawables->find(key);
+    if (iter != engine->drawables->end()) {
+        struct Drawable* drawable = iter->second;
+        char* ckey = (char*)iter->first;
+        if (engine->drawables->erase(iter->first)){
+            if (drawable->hasTexture) {
+                free(drawable->texture->data);
+                free(drawable->texture);
+            }
+
+            free(ckey);
+            free(drawable);
+        }
+        return true;
+    }
+    return false;
+}
+
 void printDrawableInfo(struct Drawable* drawable) {
     char str[1024];
     sprintf(str, "width=%f, height=%f, x=%f, y=%f", drawable->width, drawable->height, drawable->x, drawable->y);
@@ -117,6 +141,14 @@ void onDrawDrawables(struct engine* engine) {
         struct Drawable* drawable = iter->second;
         onDrawDrawable(engine->stage, drawable);
     }
+
+    if (engine->drawablesToRemove->size() > 0) {
+        for(iter = engine->drawablesToRemove->begin(); iter != engine->drawablesToRemove->end(); iter++) {
+            freeDrawable(iter->first, engine);
+            free((char*)iter->first);
+        }
+        engine->drawablesToRemove->clear();
+    }
 }
 
 void loadDrawable(struct Drawable* drawable) {
@@ -171,22 +203,20 @@ void clearDrawables(struct engine* engine) {
     engine->drawables->clear();
 }
 
+void addDrawableToRemove(const char* _key, struct Drawable* drawable, struct engine* engine) {
+    const char* key = strdup(_key);
+    engine->drawablesToRemove->insert(std::make_pair(key, drawable)); 
+}
+
 /*
- * remove a drawable with given key.
+ * set remove flag for a drawable with given key.
  * returns false if the drawable is not found.
  */
 bool removeDrawable(const char* key, struct engine* engine) {
     drawables_t::iterator iter = engine->drawables->find(key);
     if (iter != engine->drawables->end()) {
         struct Drawable* drawable = iter->second;
-        unloadDrawable(drawable);
-        if (drawable->hasTexture) {
-            free(drawable->texture->data);
-            free(drawable->texture);
-        }
-        free((char*)iter->first);
-        free(iter->second);
-        engine->drawables->erase(key);
+        addDrawableToRemove(iter->first, iter->second, engine);
         return true;
     }
     return false;
@@ -703,9 +733,9 @@ SQInteger emoDrawableRotate(HSQUIRRELVM v) {
 }
 
 /*
- * unload drawable
+ * remove drawable
  */
-SQInteger emoDrawableUnload(HSQUIRRELVM v) {
+SQInteger emoDrawableRemove(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
     if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {

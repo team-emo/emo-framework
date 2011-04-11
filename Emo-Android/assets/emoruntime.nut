@@ -381,10 +381,10 @@ class emo.Sprite {
         }
     }
 
-    function unload() {
+    function remove() {
         local status = EMO_NO_ERROR;
         if (loaded) {
-            status = stage.unload(id);
+            status = stage.remove(id);
             loaded = false;
         }
         return status;
