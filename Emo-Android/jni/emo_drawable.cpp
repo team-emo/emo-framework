@@ -38,6 +38,12 @@ bool printGLErrors(const char* msg) {
     }
 }
 
+void printDrawableInfo(struct Drawable* drawable) {
+    char str[1024];
+    sprintf(str, "width=%f, height=%f, x=%f, y=%f", drawable->width, drawable->height, drawable->x, drawable->y);
+    LOGI(str);
+}
+
 static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
     glMatrixMode (GL_MODELVIEW);
     glLoadIdentity (); 
@@ -45,11 +51,11 @@ static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
     // update colors
     glColor4f(drawable->param_color[0], drawable->param_color[1], drawable->param_color[2], drawable->param_color[3]);
 
-    // update width and height
-    glScalef(drawable->width, drawable->height, 1);
-
     // update position
     glTranslatef(drawable->x, drawable->y, drawable->z);
+
+    // update width and height
+    glScalef(drawable->width, drawable->height, 1);
 
     // rotate
     glTranslatef(drawable->param_rotate[1], drawable->param_rotate[2], 0);
@@ -339,6 +345,7 @@ bool bindDrawableVertex(struct Drawable* drawable) {
     printGLErrors("Could not create OpenGL vertex");
 
     glBindTexture   (GL_TEXTURE_2D, drawable->texture->textureId);
+
     glPixelStorei   (GL_UNPACK_ALIGNMENT, 1);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -522,7 +529,9 @@ SQInteger emoDrawableMove(HSQUIRRELVM v) {
         sq_getfloat(v, 5, &z);
         drawable->z = z;
     }
-    return 0;
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
 }
 
 /*
@@ -570,7 +579,9 @@ SQInteger emoDrawableColor(HSQUIRRELVM v) {
         sq_getfloat(v, 6, &a);
         drawable->param_color[3] = a;
     }
-    return 0;
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
 }
 
 /*
@@ -627,7 +638,8 @@ SQInteger emoDrawableScale(HSQUIRRELVM v) {
         drawable->param_scale[3] = drawable->height * 0.5f;
     }
 
-    return 0;
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
 }
 
 /*
@@ -686,7 +698,8 @@ SQInteger emoDrawableRotate(HSQUIRRELVM v) {
         drawable->param_rotate[3] = AXIS_Z;
     }
 
-    return 0;
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
 }
 
 /*
