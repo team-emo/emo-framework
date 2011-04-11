@@ -299,6 +299,7 @@ function emo::AudioManager::createChannel(id) {
 
 class emo.Sprite {
 
+    name   = null;
     stage  = emo.Stage();
 
     id     = -1;
@@ -307,8 +308,8 @@ class emo.Sprite {
     /*
      * sprite = Sprite("aaa.png");
      */
-    function constructor(name) {
-        id = stage.createSprite(name);
+    function constructor(_name) {
+        name = _name;
     }
 
     /*
@@ -319,6 +320,8 @@ class emo.Sprite {
     function load(...) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
+
+            id = stage.createSprite(name);
 
             if (vargv.len() >= 4) {
                 status = stage.load(id, vargv[0], vargv[1], vargv[2], vargv[3]);
@@ -341,9 +344,9 @@ class emo.Sprite {
      */
     function move(...) {
         if (vargv.len() < 3) {
-            stage.move(id, vargv[0], vargv[1]);
+            return stage.move(id, vargv[0], vargv[1]);
         } else {
-            stage.move(id, vargv[0], vargv[1], vargv[2]);
+            return stage.move(id, vargv[0], vargv[1], vargv[2]);
         }
     }
 
@@ -353,34 +356,35 @@ class emo.Sprite {
      */
     function scale(...) {
         if (vargv.len() >= 4) {
-            stage.scale(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+            return stage.scale(id, vargv[0], vargv[1], vargv[2], vargv[3]);
         } else if (vargv.len() >= 2) {
-            stage.scale(id, vargv[0], vargv[1]);
+            return stage.scale(id, vargv[0], vargv[1]);
         }
+        return status;
     }
 
     function rotate(...) {
         if (vargv.len() >= 4) {
-            stage.rotate(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+            return stage.rotate(id, vargv[0], vargv[1], vargv[2], vargv[3]);
         } else if (vargv.len >= 3) {
-            stage.rotate(id, vargv[0], vargv[1], vargv[2]);
+            return stage.rotate(id, vargv[0], vargv[1], vargv[2]);
         } else if (vargv.len > 0) {
-            stage.rotate(id, vargv[0]);
+            return stage.rotate(id, vargv[0]);
         }
     }
 
     function setColor(...) {
         if (vargv.len() >= 4) {
-            stage.setColor(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+            return stage.setColor(id, vargv[0], vargv[1], vargv[2], vargv[3]);
         } else if (vargv.len() >= 3) {
-            stage.setColor(id, vargv[0], vargv[1], vargv[2]);
+            return stage.setColor(id, vargv[0], vargv[1], vargv[2]);
         }
     }
 
-    function unload() {
+    function remove() {
         local status = EMO_NO_ERROR;
         if (loaded) {
-            status = stage.unload(id);
+            status = stage.remove(id);
             loaded = false;
         }
         return status;
