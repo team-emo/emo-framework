@@ -11,7 +11,7 @@ local dogSprite2 = emo.Sprite("robot.png");
 function emo::onLoad() { 
     print("onLoad");
 
-    runtime.setOptions(OPT_WINDOW_KEEP_SCREEN_ON, OPT_ENABLE_PERSPECTIVE_NICEST, OPT_ORIENTATION_LANDSCAPE);
+    runtime.setOptions(OPT_WINDOW_KEEP_SCREEN_ON, OPT_ENABLE_PERSPECTIVE_NICEST);
 
     event.enableOnDrawCallback(5000);
 
