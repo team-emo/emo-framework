@@ -69,6 +69,8 @@ void printDrawableInfo(struct Drawable* drawable) {
 }
 
 static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
+    if (!drawable->loaded) return;
+
     glMatrixMode (GL_MODELVIEW);
     glLoadIdentity (); 
 
@@ -97,16 +99,18 @@ static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
     glScalef(drawable->param_scale[0], drawable->param_scale[1], 1);
     glTranslatef(-drawable->param_scale[2], -drawable->param_scale[3], 0);
 
-    // bind a texture
-    glBindTexture(GL_TEXTURE_2D, drawable->texture->textureId);
-
     // bind vertex positions
     glBindBuffer(GL_ARRAY_BUFFER, stage->vbo[0]);
     glVertexPointer(3, GL_FLOAT, 0, 0);
 
-    // bind texture coords
-    glBindBuffer(GL_ARRAY_BUFFER, drawable->vbo[0]);
-    glTexCoordPointer(2, GL_FLOAT, 0, 0);
+    if (drawable->hasTexture) {
+        // bind a texture
+        glBindTexture(GL_TEXTURE_2D, drawable->texture->textureId);
+
+        // bind texture coords
+        glBindBuffer(GL_ARRAY_BUFFER, drawable->vbo[0]);
+        glTexCoordPointer(2, GL_FLOAT, 0, 0);
+    }
 
     // bind indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, stage->vbo[1]);
@@ -139,7 +143,9 @@ void onDrawDrawables(struct engine* engine) {
     drawables_t::iterator iter;
     for(iter = engine->drawables->begin(); iter != engine->drawables->end(); iter++) {
         struct Drawable* drawable = iter->second;
-        onDrawDrawable(engine->stage, drawable);
+        if (drawable->loaded) {
+            onDrawDrawable(engine->stage, drawable);
+        }
     }
 
     if (engine->drawablesToRemove->size() > 0) {
@@ -309,6 +315,7 @@ void initDrawable(struct Drawable* drawable) {
     drawable->name       = NULL;
     drawable->hasTexture = false;
     drawable->hasBuffer  = false;
+    drawable->loaded     = false;
 
     // color param RGBA
     drawable->param_color[0] = 1.0f;
@@ -396,6 +403,8 @@ bool bindDrawableVertex(struct Drawable* drawable) {
         }
         printGLErrors("Could not bind OpenGL textures");
     }
+
+    drawable->loaded = true;
 
     return true;
 }
