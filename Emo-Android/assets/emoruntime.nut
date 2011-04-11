@@ -344,9 +344,9 @@ class emo.Sprite {
      */
     function move(...) {
         if (vargv.len() < 3) {
-            stage.move(id, vargv[0], vargv[1]);
+            return stage.move(id, vargv[0], vargv[1]);
         } else {
-            stage.move(id, vargv[0], vargv[1], vargv[2]);
+            return stage.move(id, vargv[0], vargv[1], vargv[2]);
         }
     }
 
@@ -356,27 +356,28 @@ class emo.Sprite {
      */
     function scale(...) {
         if (vargv.len() >= 4) {
-            stage.scale(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+            return stage.scale(id, vargv[0], vargv[1], vargv[2], vargv[3]);
         } else if (vargv.len() >= 2) {
-            stage.scale(id, vargv[0], vargv[1]);
+            return stage.scale(id, vargv[0], vargv[1]);
         }
+        return status;
     }
 
     function rotate(...) {
         if (vargv.len() >= 4) {
-            stage.rotate(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+            return stage.rotate(id, vargv[0], vargv[1], vargv[2], vargv[3]);
         } else if (vargv.len >= 3) {
-            stage.rotate(id, vargv[0], vargv[1], vargv[2]);
+            return stage.rotate(id, vargv[0], vargv[1], vargv[2]);
         } else if (vargv.len > 0) {
-            stage.rotate(id, vargv[0]);
+            return stage.rotate(id, vargv[0]);
         }
     }
 
     function setColor(...) {
         if (vargv.len() >= 4) {
-            stage.setColor(id, vargv[0], vargv[1], vargv[2], vargv[3]);
+            return stage.setColor(id, vargv[0], vargv[1], vargv[2], vargv[3]);
         } else if (vargv.len() >= 3) {
-            stage.setColor(id, vargv[0], vargv[1], vargv[2]);
+            return stage.setColor(id, vargv[0], vargv[1], vargv[2]);
         }
     }
 
