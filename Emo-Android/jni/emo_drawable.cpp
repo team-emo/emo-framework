@@ -1,3 +1,5 @@
+#include <android_native_app_glue.h>
+
 #include <string.h>
 #include <stdio.h>
 #include <EGL/egl.h>
@@ -87,15 +89,15 @@ static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
  * draw stage
  */
 void onDrawStage(struct Stage* stage) {
-    if (!stage->started) {
-        glViewport(0,0,380,420); 
+    if (stage->firstDraw) {
+        glViewport(0, 0, stage->viewport_width, stage->viewport_height); 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrthof(0, 380, 420, 0, -1, 1);
-        stage->started = true;
+        glOrthof(0, stage->width, stage->height, 0, -1, 1);
+        stage->firstDraw = false;
     }
 
-    glClearColor(0, 0, 0, 1);
+    glClearColor(0, 0, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -206,8 +208,14 @@ void addDrawable(const char* _key, struct Drawable* drawable, struct engine* eng
 bool loadStage(struct Stage* stage) {
     memset(stage, 0, sizeof(stage));
 
-    stage->loaded  = false;
-    stage->started = false;
+    stage->loaded    = false;
+    stage->firstDraw = true;
+
+    stage->width  = ANativeWindow_getWidth(g_engine->app->window);
+    stage->height = ANativeWindow_getHeight(g_engine->app->window);
+
+    stage->viewport_width  = stage->width;
+    stage->viewport_height = stage->height;
 
     stage->indices[0] = 0;
     stage->indices[1] = 1;
@@ -338,13 +346,13 @@ bool bindDrawableVertex(struct Drawable* drawable) {
     if (drawable->hasTexture) {
         if (drawable->texture->hasAlpha) {
             GLubyte* holder = (GLubyte*)malloc(sizeof(GLubyte) * drawable->texture->glWidth * drawable->texture->glHeight * 4);
-            glTexImage2D    (GL_TEXTURE_2D, 0, GL_RGBA, drawable->texture->glWidth, drawable->texture->glHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, holder);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, drawable->texture->glWidth, drawable->texture->glHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, holder);
             glTexSubImage2D(GL_TEXTURE_2D, 0, 
                   0, 0, drawable->texture->width, drawable->texture->height, GL_RGBA, GL_UNSIGNED_BYTE, drawable->texture->data);
             free(holder);
         } else {
             GLubyte* holder = (GLubyte*)malloc(sizeof(GLubyte) * drawable->texture->glWidth * drawable->texture->glHeight * 3);
-            glTexImage2D    (GL_TEXTURE_2D, 0, GL_RGB, drawable->texture->glWidth, drawable->texture->glHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, holder);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, drawable->texture->glWidth, drawable->texture->glHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, holder);
             glTexSubImage2D(GL_TEXTURE_2D, 0, 
                    0, 0, drawable->texture->width, drawable->texture->height, GL_RGB, GL_UNSIGNED_BYTE, drawable->texture->data);
             free(holder);
@@ -726,4 +734,45 @@ SQInteger emoSetOnDrawInterval(HSQUIRRELVM v) {
     sq_pushinteger(v, oldInterval);
 	
 	return 1;
+}
+
+SQInteger emoSetViewport(HSQUIRRELVM v) {
+
+    SQInteger width  = g_engine->stage->viewport_width;
+    SQInteger height = g_engine->stage->viewport_height;
+
+    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_INTEGER) {
+        sq_getinteger(v, 2, &width);
+        sq_getinteger(v, 3, &height);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
+    g_engine->stage->viewport_width  = width;
+    g_engine->stage->viewport_height = height;
+    g_engine->stage->firstDraw = true;
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoSetStageSize(HSQUIRRELVM v) {
+    SQInteger width  = g_engine->stage->width;
+    SQInteger height = g_engine->stage->height;
+
+    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_INTEGER) {
+        sq_getinteger(v, 2, &width);
+        sq_getinteger(v, 3, &height);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
+    g_engine->stage->width  = width;
+    g_engine->stage->height = height;
+    g_engine->stage->firstDraw = true;
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
 }

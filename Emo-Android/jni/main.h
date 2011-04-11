@@ -57,11 +57,17 @@ struct Drawable {
 struct Stage {
     GLuint vbo[2];
 
-    bool loaded;
-    bool started;
+    bool   loaded;
+    bool   firstDraw;
 
-    short      indices[4];
-    float      positions[12];
+    short  indices[4];
+    float  positions[12];
+
+    int32_t width;
+    int32_t height;
+
+    int32_t viewport_width;
+    int32_t viewport_height;
 };
 
 struct char_comparator {

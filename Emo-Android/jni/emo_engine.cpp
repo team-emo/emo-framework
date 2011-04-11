@@ -63,6 +63,8 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setColor",       emoDrawableColor);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "unload",         emoDrawableUnload);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "viewport",       emoSetViewport);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setSize",        emoSetStageSize);
 
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
@@ -173,9 +175,9 @@ void emo_init_display(struct engine* engine) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    //glEnable(GL_CULL_FACE);
-    //glFrontFace(GL_CCW);
-    //glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
+    glCullFace(GL_BACK);
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
