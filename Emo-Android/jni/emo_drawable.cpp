@@ -16,7 +16,7 @@ extern struct engine *g_engine;
 /*
  * clear all OpenGL errors
  */
-bool clearGLErrors(const char* msg) {
+void clearGLErrors(const char* msg) {
     for (GLint error = glGetError(); error; error = glGetError()) {
         if (error != GL_NO_ERROR) {
             LOGI(msg);
@@ -28,14 +28,17 @@ bool clearGLErrors(const char* msg) {
 }
 
 bool printGLErrors(const char* msg) {
+    bool result = true;
     for (GLint error = glGetError(); error; error = glGetError()) {
         if (error != GL_NO_ERROR) {
             LOGE(msg);
             char str[128];
             sprintf(str, "err code=0x%x", error);
             LOGE(str);
+            result = false;
         }
     }
+    return result;
 }
 
 static void deleteDrawableBuffer(struct Drawable* drawable) {
