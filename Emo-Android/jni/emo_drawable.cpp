@@ -38,6 +38,35 @@ bool printGLErrors(const char* msg) {
     }
 }
 
+static void deleteDrawableBuffer(struct Drawable* drawable) {
+    if (!drawable->hasBuffer) return;
+    if (drawable->hasTexture) {
+        glDeleteTextures(1, &drawable->texture->textureId);
+    }
+    glDeleteBuffers(1, drawable->vbo);
+    drawable->hasBuffer = false;
+
+    drawable->vbo[0] = 0;
+    drawable->texture->textureId = 0;
+}
+
+void deleteDrawableBuffers(struct engine* engine) {
+    drawables_t::iterator iter;
+    for(iter = engine->drawables->begin(); iter != engine->drawables->end(); iter++) {
+        struct Drawable* drawable = iter->second;
+        deleteDrawableBuffer(drawable);
+    }
+}
+
+void deleteStageBuffer(struct Stage* stage) {
+    if (!stage->loaded) return;
+
+    glDeleteBuffers(2, stage->vbo);
+    stage->loaded = false;
+
+    stage->vbo[0] = 0;
+    stage->vbo[1] = 0;
+}
 
 /*
  * free drawable memory with given key.
@@ -47,6 +76,7 @@ bool freeDrawable(const char* key, struct engine* engine) {
     drawables_t::iterator iter = engine->drawables->find(key);
     if (iter != engine->drawables->end()) {
         struct Drawable* drawable = iter->second;
+        deleteDrawableBuffer(drawable);
         char* ckey = (char*)iter->first;
         if (engine->drawables->erase(iter->first)){
             if (drawable->hasTexture) {
@@ -62,9 +92,9 @@ bool freeDrawable(const char* key, struct engine* engine) {
     return false;
 }
 
-void printDrawableInfo(struct Drawable* drawable) {
+void printDrawableInfo(struct Stage* stage, struct Drawable* drawable) {
     char str[1024];
-    sprintf(str, "width=%f, height=%f, x=%f, y=%f", drawable->width, drawable->height, drawable->x, drawable->y);
+    sprintf(str, "%d-%d-%d %d", stage->vbo[0], stage->vbo[1], drawable->vbo[0], drawable->texture->textureId);
     LOGI(str);
 }
 
@@ -167,22 +197,6 @@ void loadDrawable(struct Drawable* drawable) {
     drawable->hasBuffer = true;
 }
 
-void unloadDrawable(struct Drawable* drawable) {
-    if (!drawable->hasBuffer) return;
-    if (drawable->hasTexture) {
-        glDeleteTextures(1, &drawable->texture->textureId);
-    }
-    glDeleteBuffers(1, drawable->vbo);
-    drawable->hasBuffer = false;
-}
-
-void unloadDrawables(struct engine* engine) {
-    drawables_t::iterator iter;
-    for(iter = engine->drawables->begin(); iter != engine->drawables->end(); iter++) {
-        struct Drawable* drawable = iter->second;
-        unloadDrawable(drawable);
-    }
-}
 
 void loadDrawables(struct engine* engine) {
     drawables_t::iterator iter;
@@ -195,10 +209,11 @@ void loadDrawables(struct engine* engine) {
 /*
  * free and clear all drawables
  */
-void clearDrawables(struct engine* engine) {
+void unloadDrawables(struct engine* engine) {
     drawables_t::iterator iter;
     for(iter = engine->drawables->begin(); iter != engine->drawables->end(); iter++) {
         struct Drawable* drawable = iter->second;
+        deleteDrawableBuffer(drawable);
         if (drawable->hasTexture) {
             free(drawable->texture->data);
             free(drawable->texture);
@@ -297,13 +312,6 @@ bool loadStage(struct Stage* stage) {
     stage->loaded = true;
 
     return true;
-}
-
-void unloadStage(struct Stage* stage) {
-    if (!stage->loaded) return;
-
-    glDeleteBuffers(2, stage->vbo);
-    stage->loaded = false;
 }
 
 /*
@@ -409,6 +417,28 @@ bool bindDrawableVertex(struct Drawable* drawable) {
     return true;
 }
 
+void rebindStageBuffers(struct Stage* stage) {
+    glGenBuffers(2, stage->vbo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, stage->vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12 , stage->positions, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, stage->vbo[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(short) * 4, stage->indices, GL_STATIC_DRAW);
+
+    printGLErrors("Could not create OpenGL buffers");
+
+    stage->firstDraw = true;
+    stage->loaded = true;
+}
+
+void rebindDrawableBuffers(struct engine* engine) {
+    drawables_t::iterator iter;
+    for(iter = engine->drawables->begin(); iter != engine->drawables->end(); iter++) {
+        struct Drawable* drawable = iter->second;
+        loadDrawable(drawable);
+        bindDrawableVertex(drawable);
+    }
+}
 
 /*
  * create drawable instance

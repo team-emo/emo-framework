@@ -158,6 +158,7 @@ void emo_init_engine(struct engine* engine) {
     engine->focused = false;
     engine->loaded  = true;
     engine->loadedCalled = false;
+    engine->initialized  = false;
 }
 
 /*
@@ -199,15 +200,26 @@ void emo_init_display(struct engine* engine) {
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     }
 
-    loadStage(engine->stage);
-    loadDrawables(engine);
+    if (engine->initialized) {
+        // return onPause so re-create buffers
+        rebindStageBuffers(engine->stage);
+        rebindDrawableBuffers(engine);
+    } else {
+        loadStage(engine->stage);
+        loadDrawables(engine);
+
+        engine->initialized = true;
+    }
+
+    engine->lastOnDrawInterval  = engine->uptime;
+    engine->lastOnDrawDrawablesInterval  = engine->uptime;
 
     onDrawStage(engine->stage);
 }
 
 void emo_term_display(struct engine* engine) {
-    unloadDrawables(engine);
-    unloadStage(engine->stage);
+    deleteDrawableBuffers(engine);
+    deleteStageBuffer(engine->stage);
 }
 
 /*
@@ -247,7 +259,9 @@ void emo_dispose_engine(struct engine* engine) {
         callSqFunction(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDISPOSE);
         sq_close(engine->sqvm);
 
-        clearDrawables(engine);
+        unloadDrawables(engine);
+        deleteStageBuffer(engine->stage);
+
         free(engine->stage);
 
         engine->loaded = false;

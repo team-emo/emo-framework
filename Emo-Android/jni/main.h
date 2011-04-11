@@ -88,6 +88,7 @@ struct engine {
     bool loaded;
     bool focused;
     bool loadedCalled;
+    bool initialized;
 
     int animating;
 
