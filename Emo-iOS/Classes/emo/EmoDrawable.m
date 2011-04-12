@@ -61,7 +61,7 @@ extern EmoEngine* engine;
 }
 
 -(BOOL)bindVertex {
-    clearGLErrors();
+    clearGLErrors("EmoDrawable:bindVertex");
 	
     vertex_tex_coords[0] = [self getTexCoordStartX];
     vertex_tex_coords[1] = [self getTexCoordStartY];

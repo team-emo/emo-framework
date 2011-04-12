@@ -26,7 +26,7 @@
     positions[10] = 0;
     positions[11] = 0;
 	
-    clearGLErrors();
+    clearGLErrors("EmoStage:loadBuffer");
 	
     glGenBuffers(2, vbo);
 	
