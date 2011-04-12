@@ -150,6 +150,10 @@ static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
 
     // draw sprite
     glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_SHORT, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 /*
@@ -310,6 +314,9 @@ bool loadStage(struct Stage* stage) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, stage->vbo[1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(short) * 4, stage->indices, GL_STATIC_DRAW);
 
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
     printGLErrors("Could not create OpenGL buffers");
 
     stage->loaded = true;
@@ -392,13 +399,13 @@ bool bindDrawableVertex(struct Drawable* drawable) {
 
     printGLErrors("Could not create OpenGL vertex");
 
-    glBindTexture   (GL_TEXTURE_2D, drawable->texture->textureId);
-
-    glPixelStorei   (GL_UNPACK_ALIGNMENT, 1);
-    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
     if (drawable->hasTexture) {
+        glBindTexture   (GL_TEXTURE_2D, drawable->texture->textureId);
+
+        glPixelStorei   (GL_UNPACK_ALIGNMENT, 1);
+        glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
         if (drawable->texture->hasAlpha) {
             GLubyte* holder = (GLubyte*)malloc(sizeof(GLubyte) * drawable->texture->glWidth * drawable->texture->glHeight * 4);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, drawable->texture->glWidth, drawable->texture->glHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, holder);
@@ -415,6 +422,9 @@ bool bindDrawableVertex(struct Drawable* drawable) {
         printGLErrors("Could not bind OpenGL textures");
     }
 
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
     drawable->loaded = true;
 
     return true;
@@ -427,6 +437,9 @@ void rebindStageBuffers(struct Stage* stage) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12 , stage->positions, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, stage->vbo[1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(short) * 4, stage->indices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     printGLErrors("Could not create OpenGL buffers");
 
