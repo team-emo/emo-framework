@@ -1,11 +1,3 @@
-//
-//  Emo_iOSViewController.m
-//  Emo-iOS
-//
-//  Created by Kota Iguchi on 11/03/16.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
-//
-
 #import <QuartzCore/QuartzCore.h>
 
 #import "EmoViewController.h"
@@ -159,7 +151,7 @@ EmoEngine* engine;
 }
 
 - (void)onLoad {
-	if (![engine startEngine]) {
+	if (![engine startEngine:((EmoView *)self.view).width withHeight:((EmoView *)self.view).height]) {
 		NSLOGE(@"Failed to start engine");
 	}
 	

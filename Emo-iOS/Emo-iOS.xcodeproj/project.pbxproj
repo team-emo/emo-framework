@@ -66,6 +66,10 @@
 		F9C7DEE9134AD72A0053065E /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = F9C7DEE8134AD72A0053065E /* dog.png */; };
 		F9C849D0133E09EB0095EA37 /* EmoDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849CF133E09EB0095EA37 /* EmoDrawable.m */; };
 		F9C849D3133E0A180095EA37 /* EmoFunc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849D2133E0A180095EA37 /* EmoFunc.m */; };
+		F9CCC7E31353D120004F7C48 /* block.png in Resources */ = {isa = PBXBuildFile; fileRef = F9CCC7DF1353D120004F7C48 /* block.png */; };
+		F9CCC7E41353D120004F7C48 /* dog2n.png in Resources */ = {isa = PBXBuildFile; fileRef = F9CCC7E01353D120004F7C48 /* dog2n.png */; };
+		F9CCC7E51353D120004F7C48 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F9CCC7E11353D120004F7C48 /* logo.png */; };
+		F9CCC7E61353D120004F7C48 /* robot.png in Resources */ = {isa = PBXBuildFile; fileRef = F9CCC7E21353D120004F7C48 /* robot.png */; };
 		F9D17BEC133B0F7B00F577C4 /* emoruntime.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */; };
 		F9E41A43134494DE0009385D /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E41A42134494DE0009385D /* OpenAL.framework */; };
 		F9F89ECD1350218C00B005AF /* EmoStage.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F89ECC1350218C00B005AF /* EmoStage.m */; };
@@ -174,6 +178,10 @@
 		F9C849CF133E09EB0095EA37 /* EmoDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDrawable.m; sourceTree = "<group>"; };
 		F9C849D1133E0A180095EA37 /* EmoFunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoFunc.h; sourceTree = "<group>"; };
 		F9C849D2133E0A180095EA37 /* EmoFunc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoFunc.m; sourceTree = "<group>"; };
+		F9CCC7DF1353D120004F7C48 /* block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = block.png; path = Resources/block.png; sourceTree = "<group>"; };
+		F9CCC7E01353D120004F7C48 /* dog2n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dog2n.png; path = Resources/dog2n.png; sourceTree = "<group>"; };
+		F9CCC7E11353D120004F7C48 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = Resources/logo.png; sourceTree = "<group>"; };
+		F9CCC7E21353D120004F7C48 /* robot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = robot.png; path = Resources/robot.png; sourceTree = "<group>"; };
 		F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoruntime.nut; path = Resources/emoruntime.nut; sourceTree = "<group>"; };
 		F9E41A42134494DE0009385D /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		F9F89ECB1350218C00B005AF /* EmoStage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoStage.h; sourceTree = "<group>"; };
@@ -242,6 +250,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F9CCC7DF1353D120004F7C48 /* block.png */,
+				F9CCC7E01353D120004F7C48 /* dog2n.png */,
+				F9CCC7E11353D120004F7C48 /* logo.png */,
+				F9CCC7E21353D120004F7C48 /* robot.png */,
 				F9C7DEE8134AD72A0053065E /* dog.png */,
 				F9C7DEE6134AD7200053065E /* background.png */,
 				F9C31C771346012D00B066DC /* tada.wav */,
@@ -463,6 +475,10 @@
 				F9C31C781346012D00B066DC /* tada.wav in Resources */,
 				F9C7DEE7134AD7200053065E /* background.png in Resources */,
 				F9C7DEE9134AD72A0053065E /* dog.png in Resources */,
+				F9CCC7E31353D120004F7C48 /* block.png in Resources */,
+				F9CCC7E41353D120004F7C48 /* dog2n.png in Resources */,
+				F9CCC7E51353D120004F7C48 /* logo.png in Resources */,
+				F9CCC7E61353D120004F7C48 /* robot.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -561,6 +577,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COMPRESS_PNG_FILES = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -570,6 +587,7 @@
 					Classes/emo,
 					Classes/squirrel/include,
 				);
+				IPHONE_OPTIMIZE_OPTIONS = "-skip-PNGs";
 				PREBINDING = NO;
 				SDKROOT = iphoneos;
 			};

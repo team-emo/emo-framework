@@ -13,8 +13,60 @@ extern EmoEngine* engine;
 @synthesize hasTexture;
 @synthesize texture;
 
--(BOOL)onDrawFrame:(NSTimeInterval)dt {
-	// TODO
+-(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
+    if (!loaded) return FALSE;
+	
+    glMatrixMode (GL_MODELVIEW);
+    glLoadIdentity (); 
+	
+    // update colors
+    glColor4f(param_color[0], param_color[1], param_color[2], param_color[3]);
+	
+    // update position
+    glTranslatef(x, y, z);
+	
+    // update width and height
+    glScalef(width, height, 1);
+	
+    // rotate
+    glTranslatef(param_rotate[1], param_rotate[2], 0);
+    if (param_rotate[3] == AXIS_X) {
+        glRotatef(param_rotate[0], 1, 0, 0);
+    } else if (param_rotate[3] == AXIS_Y) {
+        glRotatef(param_rotate[0], 0, 1, 0);
+    } else {
+        glRotatef(param_rotate[0], 0, 0, 1);
+    }
+    glTranslatef(-param_rotate[1], -param_rotate[2], 0);
+	
+    // scale
+    glTranslatef(param_scale[2], param_scale[3], 0);
+    glScalef(param_scale[0], param_scale[1], 1);
+    glTranslatef(-param_scale[2], -param_scale[3], 0);
+	
+    // bind vertex positions
+    glBindBuffer(GL_ARRAY_BUFFER, [stage getPositionPointer]);
+    glVertexPointer(3, GL_FLOAT, 0, 0);
+	
+    if (hasTexture) {
+        // bind a texture
+        glBindTexture(GL_TEXTURE_2D, texture.textureId);
+		
+        // bind texture coords
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+        glTexCoordPointer(2, GL_FLOAT, 0, 0);
+    }
+	
+    // bind indices
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [stage getIndicePointer]);
+	
+    // draw sprite
+    glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_SHORT, 0);
+	
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
 	return TRUE;
 }
 -(void)initDrawable {
@@ -25,7 +77,8 @@ extern EmoEngine* engine;
 	height = 0;
 	name = nil;
 
-	hasTexture = false;
+	hasTexture = FALSE;
+	loaded = FALSE;
 
 	// color param RGBA
     param_color[0] = 1.0f;
@@ -51,18 +104,18 @@ extern EmoEngine* engine;
     return 0;
 }
 -(float)getTexCoordStartY {
-    return 0;
+    return (float)texture.height / (float)texture.glHeight;
 }
 -(float)getTexCoordEndX {
-    return texture.width / texture.glWidth;
+    return (float)texture.width / (float)texture.glWidth;
 }
 -(float)getTexCoordEndY {
-    return texture.height / texture.glHeight;
+    return 0;
 }
 
 -(BOOL)bindVertex {
     clearGLErrors("EmoDrawable:bindVertex");
-	
+
     vertex_tex_coords[0] = [self getTexCoordStartX];
     vertex_tex_coords[1] = [self getTexCoordStartY];
 	
@@ -76,15 +129,37 @@ extern EmoEngine* engine;
     vertex_tex_coords[7] = [self getTexCoordStartY];
 	
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_tex_coords), vertex_tex_coords, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, vertex_tex_coords, GL_STATIC_DRAW);
 	
-    GLint error;
-    if ((error = glGetError()) != GL_NO_ERROR) {
-        char str[128];
-        sprintf(str, "Could not create OpenGL buffers: code=0x%x", error);
-        LOGE(str);
-        return FALSE;
+	printGLErrors("Could not create OpenGL vertex");
+	
+    if (hasTexture) {
+		glBindTexture(GL_TEXTURE_2D, texture.textureId);
+		
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		
+        if (texture.hasAlpha) {
+            GLubyte* holder = (GLubyte*)malloc(sizeof(GLubyte) * texture.glWidth * texture.glHeight * 4);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.glWidth, texture.glHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, holder);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 
+							0, 0, texture.width, texture.height, GL_RGBA, GL_UNSIGNED_BYTE, texture.data);
+            free(holder);
+        } else {
+            GLubyte* holder = (GLubyte*)malloc(sizeof(GLubyte) * texture.glWidth * texture.glHeight * 3);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture.glWidth, texture.glHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, holder);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 
+							0, 0, texture.width, texture.height, GL_RGB, GL_UNSIGNED_BYTE, texture.data);
+            free(holder);
+        }
+		glBindTexture(GL_TEXTURE_2D, 0);
+        printGLErrors("Could not bind OpenGL textures");
     }
+	
+	loaded = TRUE;
 	
 	return TRUE;
 }
@@ -443,9 +518,9 @@ SQInteger emoDrawableColor(HSQUIRRELVM v) {
 }
 
 /*
- * unload drawable
+ * remove drawable
  */
-SQInteger emoDrawableUnload(HSQUIRRELVM v) {
+SQInteger emoDrawableRemove(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
     if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
@@ -487,4 +562,55 @@ SQInteger emoSetOnDrawInterval(HSQUIRRELVM v) {
     sq_pushinteger(v, oldInterval);
 	
 	return 1;
+}
+
+SQInteger emoSetViewport(HSQUIRRELVM v) {
+	
+    SQInteger width  = engine.stage.viewport_width;
+    SQInteger height = engine.stage.viewport_height;
+	
+    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_INTEGER) {
+        sq_getinteger(v, 2, &width);
+        sq_getinteger(v, 3, &height);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+	
+    engine.stage.viewport_width  = width;
+    engine.stage.viewport_height = height;
+    engine.stage.firstDraw = TRUE;
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoSetStageSize(HSQUIRRELVM v) {
+    SQInteger width  = engine.stage.width;
+    SQInteger height = engine.stage.height;
+	
+    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_INTEGER) {
+        sq_getinteger(v, 2, &width);
+        sq_getinteger(v, 3, &height);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+	
+    engine.stage.width  = width;
+    engine.stage.height = height;
+    engine.stage.firstDraw = TRUE;
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoGetWindowWidth(HSQUIRRELVM v) {
+    sq_pushinteger(v, engine.stage.width);
+    return 1;
+}
+
+SQInteger emoGetWindowHeight(HSQUIRRELVM v) {
+    sq_pushinteger(v, engine.stage.height);
+    return 1;
 }

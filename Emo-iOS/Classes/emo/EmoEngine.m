@@ -22,6 +22,7 @@
 @synthesize onDrawFrameInterval;
 @synthesize onDrawDrawablesInterval;
 @synthesize audioManager;
+@synthesize stage;
 
 /*
  * register classes and functions for script
@@ -56,8 +57,12 @@
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "setColor",       emoDrawableColor);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "unload",         emoDrawableUnload);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "remove",         emoDrawableRemove);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "viewport",       emoSetViewport);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "ortho",          emoSetStageSize);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "pixelWidth",     emoGetWindowWidth);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "pixelHeight",    emoGetWindowHeight);
 	
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
@@ -83,7 +88,7 @@
 /*
  * start the engine
  */
-- (BOOL)startEngine {
+- (BOOL)startEngine:(GLint)width withHeight:(GLint)height  {
 	
 	isFrameInitialized = FALSE;
 	lastError = EMO_NO_ERROR;
@@ -96,6 +101,8 @@
 	audioManager = [[EmoAudioManager alloc]init];
 	drawables    = [[NSMutableDictionary alloc]init];
 	stage        = [[EmoStage alloc]init];
+	
+	[stage setSize:width height:height];
 	
 	// engine startup time
 	startTime = [[NSDate date] retain];
@@ -164,25 +171,23 @@
     } else {
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     }
-	
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_LIGHTING);
     glDisable(GL_MULTISAMPLE);
     glDisable(GL_DITHER);
-    glDisable(GL_COLOR_ARRAY);
 	
     glEnable(GL_TEXTURE_2D);
-    glEnable(GL_TEXTURE_COORD_ARRAY);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-    glEnable(GL_VERTEX_ARRAY);
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
 	
-	[stage onDrawFrame:0];
-	
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+
 	isFrameInitialized = TRUE;
 	
 	return TRUE;
@@ -239,7 +244,6 @@
  */
 -(BOOL)onDrawFrame {
 	if (!isRunning) {
-		NSLOGE(@"The framework is not running: onDrawFrame");
 		return FALSE;
 	}
 	
@@ -258,7 +262,7 @@
 	lastOnDrawDrawablesInterval = [self uptime];
 	[stage onDrawFrame:delta];
 	for (id key in drawables) {
-		[[drawables objectForKey:key] onDrawFrame:delta];
+		[[drawables objectForKey:key] onDrawFrame:delta withStage:stage];
 	}
 	
 	return FALSE;

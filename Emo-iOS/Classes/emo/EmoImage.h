@@ -1,7 +1,5 @@
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
-#import <OpenGLES/ES2/gl.h>
-#import <OpenGLES/ES2/glext.h>
 
 @interface EmoImage : NSObject {
     NSString* filename;
@@ -16,7 +14,7 @@
 @property (copy, readwrite) NSString* filename;
 @property (readwrite) GLuint textureId;
 @property (readwrite) int    width, height, glWidth, glHeight;
-@property (readwrite) GLubyte* data;
+@property (assign, readwrite) GLubyte* data;
 @property (readwrite) BOOL hasAlpha;
 
 -(BOOL)loadPng:(NSString*)file;

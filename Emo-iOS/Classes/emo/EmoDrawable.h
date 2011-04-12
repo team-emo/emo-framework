@@ -1,8 +1,9 @@
 #include <squirrel.h>
 #include <EmoImage.h>
+#include <EmoStage.h>
 
 @interface EmoDrawable : NSObject {
-	unsigned int vbo[1];
+	GLuint vbo[1];
 	NSString* name;
 	float x;
 	float y;
@@ -10,6 +11,7 @@
 	float width;
 	float height;
 	BOOL hasTexture;
+	BOOL loaded;
 	
     float      vertex_tex_coords[8];
 	
@@ -39,7 +41,7 @@
 -(float)getTexCoordStartY;
 -(float)getTexCoordEndX;
 -(float)getTexCoordEndY;
--(BOOL)onDrawFrame:(NSTimeInterval)dt;
+-(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
 @end
 
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);
@@ -48,5 +50,10 @@ SQInteger emoDrawableMove(HSQUIRRELVM v);
 SQInteger emoDrawableScale(HSQUIRRELVM v);
 SQInteger emoDrawableRotate(HSQUIRRELVM v);
 SQInteger emoDrawableColor(HSQUIRRELVM v);
-SQInteger emoDrawableUnload(HSQUIRRELVM v);
+SQInteger emoDrawableRemove(HSQUIRRELVM v);
 SQInteger emoSetOnDrawInterval(HSQUIRRELVM v);
+
+SQInteger emoSetStageSize(HSQUIRRELVM v);
+SQInteger emoSetViewport(HSQUIRRELVM v);
+SQInteger emoGetWindowWidth(HSQUIRRELVM v);
+SQInteger emoGetWindowHeight(HSQUIRRELVM v);

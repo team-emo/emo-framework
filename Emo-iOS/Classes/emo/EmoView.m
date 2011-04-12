@@ -9,6 +9,8 @@
 
 @implementation EmoView
 
+@synthesize width=framebufferWidth;
+@synthesize height=framebufferHeight;
 @synthesize eventDelegate;
 @dynamic context;
 

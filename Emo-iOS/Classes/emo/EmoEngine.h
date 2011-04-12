@@ -37,6 +37,7 @@
 @property (readwrite) int onDrawFrameInterval;
 @property (readwrite) int onDrawDrawablesInterval;
 @property (readonly) EmoAudioManager* audioManager;
+@property (readonly) EmoStage* stage;
 
 - (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 - (void)registerAccelerometerSensor:(BOOL)enable;
@@ -51,7 +52,7 @@
 - (BOOL)onLowMemory;
 - (BOOL)onMotionEvent:(float *)param;
 - (BOOL)onKeyEvent:(float *)param;
-- (BOOL)startEngine;
+- (BOOL)startEngine:(GLint)width withHeight:(GLint)height;
 - (BOOL)stopEngine;
 
 - (void)addDrawable:(EmoDrawable*)drawable withKey:(const char*)key;

@@ -2,8 +2,20 @@
 #import "emo_engine_func.h"
 
 @implementation EmoStage
+@synthesize width, height, viewport_width, viewport_height;
+@synthesize firstDraw;
+
+- (id)init {
+    self = [super init];
+    if (self != nil) {
+		loaded = FALSE;
+		firstDraw = TRUE;
+    }
+    return self;
+}
 -(BOOL)loadBuffer {
-    loaded = false;
+    loaded = FALSE;
+	firstDraw = TRUE;
 	
     indices[0] = 0;
     indices[1] = 1;
@@ -31,24 +43,36 @@
     glGenBuffers(2, vbo);
 	
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12, positions, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(short) * 4, indices, GL_STATIC_DRAW);
 	
-    GLint error;
-    if ((error = glGetError()) != GL_NO_ERROR) {
-        char str[128];
-        sprintf(str, "Could not create OpenGL buffers: code=0x%x", error);
-        LOGE(str);
-        return FALSE;
-    }
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	loaded = printGLErrors("Could not create OpenGL buffers");
 	
-    loaded = TRUE;
-	return TRUE;
+	return loaded;
+}
+
+-(GLuint)getPositionPointer {
+	return vbo[0];
+}
+
+-(GLuint)getIndicePointer {
+	return vbo[1];
 }
 
 -(BOOL)onDrawFrame:(NSTimeInterval)dt {
-    glClearColor(0, 0, 0, 1.0f);
+    if (firstDraw) {
+        glViewport(0, 0, viewport_width, viewport_height); 
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrthof(0, width, height, 0, -1, 1);
+        firstDraw = FALSE;
+    }
+	
+    glClearColor(0, 0, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 	return TRUE;
 }
@@ -58,5 +82,11 @@
 	
     glDeleteBuffers(2, vbo);
     loaded = FALSE;
+}
+-(void)setSize:(GLint)_width height:(GLint)_height {
+	width  = _width;
+	height = _height;
+	viewport_width  = _width;
+	viewport_height = _height;
 }
 @end

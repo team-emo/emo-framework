@@ -5,8 +5,8 @@ stage   <- emo.Stage();
 local str = "Hello, Squirrel from File!";
 print(str);
 
-local dogSprite = emo.Sprite("dog.png");
-local dogSprite2 = emo.Sprite("robot.png");
+local dogSprite = emo.Sprite("robot.png");
+local dogSprite2 = emo.Sprite("logo.png");
 
 function emo::onLoad() { 
     print("onLoad");
