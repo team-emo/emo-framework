@@ -37,11 +37,30 @@ void NSLOGW(NSString* msg) {
 /*
  * clear all OpenGL errors
  */
-void clearGLErrors() {
-	for (GLint error = glGetError(); error; error = glGetError()) {
-		// do nothing
-	}
-}							
+void clearGLErrors(const char* msg) {
+    for (GLint error = glGetError(); error; error = glGetError()) {
+        if (error != GL_NO_ERROR) {
+            LOGI(msg);
+            char str[128];
+            sprintf(str, "err code=0x%x", error);
+            LOGI(str);
+        }
+    }
+}
+
+BOOL printGLErrors(const char* msg) {
+    BOOL result = TRUE;
+    for (GLint error = glGetError(); error; error = glGetError()) {
+        if (error != GL_NO_ERROR) {
+            LOGE(msg);
+            char str[128];
+            sprintf(str, "err code=0x%x", error);
+            LOGE(str);
+            result = FALSE;
+        }
+    }
+    return result;
+}
 
 /* 
  * load png image from resource
