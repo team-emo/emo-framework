@@ -5,7 +5,7 @@
 	GLuint vbo[2];
 
 	BOOL loaded;
-	BOOL firstDraw;
+	BOOL dirty;
 	
 	short indices[4];
 	float positions[12];
@@ -17,7 +17,7 @@
 }
 @property (readwrite) GLint width;
 @property (readwrite) GLint height;
-@property (readwrite) BOOL firstDraw;
+@property (readwrite) BOOL dirty;
 @property (readwrite) GLint viewport_width;
 @property (readwrite) GLint viewport_height;
 

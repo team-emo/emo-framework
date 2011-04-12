@@ -3,19 +3,19 @@
 
 @implementation EmoStage
 @synthesize width, height, viewport_width, viewport_height;
-@synthesize firstDraw;
+@synthesize dirty;
 
 - (id)init {
     self = [super init];
     if (self != nil) {
 		loaded = FALSE;
-		firstDraw = TRUE;
+		dirty = TRUE;
     }
     return self;
 }
 -(BOOL)loadBuffer {
     loaded = FALSE;
-	firstDraw = TRUE;
+	dirty = TRUE;
 	
     indices[0] = 0;
     indices[1] = 1;
@@ -64,12 +64,12 @@
 }
 
 -(BOOL)onDrawFrame:(NSTimeInterval)dt {
-    if (firstDraw) {
+    if (dirty) {
         glViewport(0, 0, viewport_width, viewport_height); 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glOrthof(0, width, height, 0, -1, 1);
-        firstDraw = FALSE;
+        dirty = FALSE;
     }
 	
     glClearColor(0, 0, 1, 1);
