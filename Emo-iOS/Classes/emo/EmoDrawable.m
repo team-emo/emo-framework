@@ -115,7 +115,7 @@ extern EmoEngine* engine;
 
 -(BOOL)bindVertex {
     clearGLErrors("EmoDrawable:bindVertex");
-
+	
     vertex_tex_coords[0] = [self getTexCoordStartX];
     vertex_tex_coords[1] = [self getTexCoordStartY];
 	
@@ -134,6 +134,7 @@ extern EmoEngine* engine;
 	printGLErrors("Could not create OpenGL vertex");
 	
     if (hasTexture) {
+		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, texture.textureId);
 		
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -141,7 +142,7 @@ extern EmoEngine* engine;
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		
+
         if (texture.hasAlpha) {
             GLubyte* holder = (GLubyte*)malloc(sizeof(GLubyte) * texture.glWidth * texture.glHeight * 4);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.glWidth, texture.glHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, holder);
@@ -183,6 +184,7 @@ extern EmoEngine* engine;
 	if (hasTexture) {
 		[texture doUnload];
 		[texture release];
+		hasTexture = FALSE;
 	}
 	glDeleteBuffers(1, vbo);
 }

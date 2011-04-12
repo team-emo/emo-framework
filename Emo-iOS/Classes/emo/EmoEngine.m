@@ -161,10 +161,8 @@
 		NSLOGE(@"The framework is not running: initDrawFrame");
 		return FALSE;
 	}
-	if (isFrameInitialized) return FALSE;
 	
-	// load stage
-	[stage loadBuffer];
+	if (isFrameInitialized) return FALSE;
 	
     if (enablePerspectiveNicest) {
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -188,6 +186,9 @@
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
 
+	// load stage
+	[stage loadBuffer];
+	
 	isFrameInitialized = TRUE;
 	
 	return TRUE;

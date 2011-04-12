@@ -114,13 +114,15 @@ BOOL loadPngFromResource(NSString* filename, EmoImage* imageInfo) {
             return FALSE;
     }
     unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
-    imageInfo.data = (unsigned char*) malloc(row_bytes * imageInfo.height);
+    GLubyte* data = (unsigned char*) malloc(row_bytes * imageInfo.height);
 	
     png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
 	
     for (int i = 0; i < imageInfo.height; i++) {
-        memcpy(imageInfo.data+(row_bytes * (imageInfo.height-1-i)), row_pointers[i], row_bytes);
+        memcpy(data+(row_bytes * (imageInfo.height-1-i)), row_pointers[i], row_bytes);
     }
+	
+	imageInfo.data = data;
 	
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 	fclose(fp);
