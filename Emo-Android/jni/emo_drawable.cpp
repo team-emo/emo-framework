@@ -45,6 +45,10 @@ static GLuint getCurrentDrawableTexBufferName(struct Drawable* drawable) {
     return drawable->frames_vbos[drawable->frame_index];
 }
 
+static bool isCurrentDrawableTexBufferLoaded(struct Drawable* drawable) {
+    return drawable->frames_vbos[drawable->frame_index] > 0;
+}
+
 static bool deleteDrawableVBOAtFrame(struct Drawable* drawable, int index) {
     const GLuint value = drawable->frames_vbos[index];
     if (value > 0) {
@@ -121,12 +125,6 @@ bool freeDrawable(const char* key, struct engine* engine) {
     return false;
 }
 
-void printDrawableInfo(struct Stage* stage, struct Drawable* drawable) {
-    char str[1024];
-    sprintf(str, "%d-%d-%d-%d", stage->vbo[0], stage->vbo[1], getCurrentDrawableTexBufferName(drawable), drawable->texture->textureId);
-    LOGI(str);
-}
-
 static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
     if (!drawable->loaded) return;
 
@@ -162,7 +160,7 @@ static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
     glBindBuffer(GL_ARRAY_BUFFER, stage->vbo[0]);
     glVertexPointer(3, GL_FLOAT, 0, 0);
 
-    if (drawable->hasTexture) {
+    if (drawable->hasTexture && isCurrentDrawableTexBufferLoaded(drawable)) {
         // bind a texture
         glBindTexture(GL_TEXTURE_2D, drawable->texture->textureId);
 
@@ -226,13 +224,12 @@ void onDrawDrawables(struct engine* engine) {
 void loadDrawable(struct Drawable* drawable) {
     if (drawable->hasBuffer) return;
 
-    GLuint value = 0;
     for (int i = 0; i < drawable->frameCount; i++) {
         drawable->frames_vbos[i] = 0;
-
-        glGenBuffers(1, &value);
-        drawable->frames_vbos[i] = value;
     }
+
+    // generate buffer for current frame index
+    glGenBuffers(1, &drawable->frames_vbos[drawable->frame_index]);
 
     if (drawable->hasTexture) {
         glGenTextures(1, &drawable->texture->textureId);
@@ -462,12 +459,17 @@ bool bindDrawableVertex(struct Drawable* drawable) {
     drawable->vertex_tex_coords[6] = getTexCoordEndX(drawable);
     drawable->vertex_tex_coords[7] = getTexCoordStartY(drawable);
 
+    // generate buffer on demand
+    if (drawable->frames_vbos[drawable->frame_index] == 0) {
+        glGenBuffers(1, &drawable->frames_vbos[drawable->frame_index]);
+    }
+
     glBindBuffer(GL_ARRAY_BUFFER, getCurrentDrawableTexBufferName(drawable));
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, drawable->vertex_tex_coords, GL_STATIC_DRAW);
 
     printGLErrors("Could not create OpenGL vertex");
 
-    if (drawable->hasTexture) {
+    if (drawable->hasTexture && !drawable->texture->loaded) {
         glBindTexture   (GL_TEXTURE_2D, drawable->texture->textureId);
 
         glPixelStorei   (GL_UNPACK_ALIGNMENT, 1);
@@ -487,6 +489,7 @@ bool bindDrawableVertex(struct Drawable* drawable) {
                    0, 0, drawable->texture->width, drawable->texture->height, GL_RGB, GL_UNSIGNED_BYTE, drawable->texture->data);
             free(holder);
         }
+        drawable->texture->loaded = true;
         printGLErrors("Could not bind OpenGL textures");
     }
 
@@ -548,7 +551,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 
     char key[DRAWABLE_KEY_LENGTH];
     sprintf(key, "%d%d%d", 
-                g_engine->uptime.time, g_engine->uptime.millitm, drawable->frames_vbos[0]);
+                g_engine->uptime.time, g_engine->uptime.millitm, drawable->frames_vbos[drawable->frame_index]);
 
     addDrawable(key, drawable, g_engine);
 
@@ -576,15 +579,17 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
         }
     }
 
+    SQInteger frameIndex = 0;
     SQFloat frameWidth, frameHeight;
     SQFloat border = 0;
-    if (nargs >= 4 && sq_gettype(v, 3) != OT_NULL && sq_gettype(v, 4) != OT_NULL) {
-        sq_getfloat(v, 3, &frameWidth);
-        sq_getfloat(v, 4, &frameHeight);
+    if (nargs >= 5 && sq_gettype(v, 3) != OT_NULL && sq_gettype(v, 4) != OT_NULL && sq_gettype(v, 5) != OT_NULL) {
+        sq_getinteger(v, 3, &frameIndex);
+        sq_getfloat(v, 4, &frameWidth);
+        sq_getfloat(v, 5, &frameHeight);
     }
 
-    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
-        sq_getfloat(v, 5, &border);
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
+        sq_getfloat(v, 6, &border);
     }
 
     int width  = 0;
@@ -598,9 +603,10 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     }
 
     drawable->hasSheet = true;
-    drawable->border = border;
+    drawable->frame_index = frameIndex;
     drawable->width  = frameWidth;
     drawable->height = frameHeight;
+    drawable->border = border;
 
     drawable->frameCount = floor(width / (frameWidth  + border)) 
                                 * floor(height / frameHeight + border);
@@ -611,7 +617,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
 
     char key[DRAWABLE_KEY_LENGTH];
     sprintf(key, "%d%d%d", 
-                g_engine->uptime.time, g_engine->uptime.millitm, drawable->frames_vbos[0]);
+                g_engine->uptime.time, g_engine->uptime.millitm, drawable->frames_vbos[drawable->frame_index]);
 
     addDrawable(key, drawable, g_engine);
 
@@ -645,6 +651,7 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         // calculate the size of power of two
         imageInfo->glWidth  = nextPowerOfTwo(imageInfo->width);
         imageInfo->glHeight = nextPowerOfTwo(imageInfo->height);
+        imageInfo->loaded   = false;
 
         drawable->texture    = imageInfo;
         drawable->hasTexture = true;

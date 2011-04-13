@@ -5,8 +5,8 @@ stage   <- emo.Stage();
 local str = "Hello, Squirrel from File!";
 print(str);
 
-local dogSprite = emo.Sprite("dog.png");
-local dogSprite2 = emo.Sprite("robot.png");
+local dogSprite = emo.Sprite("blocks.png");
+local dogSprite2 = emo.Sprite("dog.png");
 
 function emo::onLoad() { 
     print("onLoad");
@@ -15,7 +15,7 @@ function emo::onLoad() {
 
     event.enableOnDrawCallback(5000);
 
-    print(dogSprite.loadSheet(0, 0, 34, 42, 1));
+    print(dogSprite.loadSheet(0, 0, 6, 32, 32, 2));
 }
 
 function emo::onGainedFocus() {
@@ -47,7 +47,7 @@ function emo::onMotionEvent(...) {
     print("MotionEvent: " + motionEvent.toString());
     if (motionEvent.getAction() == MOTION_EVENT_ACTION_DOWN) {
         print(dogSprite.remove());
-        print(dogSprite2.load());
+        print(dogSprite2.loadSheet(0, 0, 6, 34, 42, 1));
     }
 }
 

@@ -31,6 +31,7 @@ struct ImageInfo {
 
     GLubyte* data;
     bool     hasAlpha;
+    bool     loaded;
 };
 
 struct Drawable {

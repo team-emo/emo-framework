@@ -331,11 +331,11 @@ class emo.Sprite {
         return status;
     }
 
-    function loadSheet(x, y, frameWidth, frameHeight, border = 0) {
+    function loadSheet(x, y, frameIndex, frameWidth, frameHeight, border = 0) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
 
-            id = stage.createSpriteSheet(name, frameWidth, frameHeight, border);
+            id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border);
 
             status = stage.load(id, x, y);
 
