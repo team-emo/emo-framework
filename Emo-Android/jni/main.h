@@ -59,10 +59,8 @@ struct Drawable {
 
     ImageInfo* texture;
 
+    bool  hasSheet;
     float border;
-    float margin;
-    float frameWidth;
-    float frameHeight;
 };
 
 struct Stage {

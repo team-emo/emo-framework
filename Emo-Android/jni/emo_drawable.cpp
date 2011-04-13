@@ -370,6 +370,7 @@ void initDrawable(struct Drawable* drawable) {
     drawable->hasTexture = false;
     drawable->hasBuffer  = false;
     drawable->loaded     = false;
+    drawable->hasSheet   = false;
 
     // color param RGBA
     drawable->param_color[0] = 1.0f;
@@ -398,22 +399,52 @@ void initDrawable(struct Drawable* drawable) {
 
     drawable->frameCount  = 1;
     drawable->frame_index = 0;
+    drawable->border      = 0;
+}
+
+
+static float tex_coord_frame_startX(struct Drawable* drawable) {
+    int xindex = drawable->frame_index % (int)floor(drawable->texture->width / (drawable->width  + drawable->border));
+    return drawable->border + (drawable->width * xindex);
+}
+
+static float tex_coord_frame_startY(struct Drawable* drawable) {
+    int ycount = (int)floor(drawable->texture->height / (drawable->height  + drawable->border)) - 1;
+    int yindex = ycount - drawable->frame_index / (int)floor(drawable->texture->width / (drawable->width  + drawable->border));
+    return drawable->border + (drawable->height * yindex);
+}
+
+
+float getTexCoordEndX(struct Drawable* drawable) {
+    if (drawable->hasSheet) {
+        return (float)(tex_coord_frame_startX(drawable) + drawable->width) / (float)drawable->texture->glWidth;
+    } else {
+        return (float)drawable->texture->width / (float)drawable->texture->glWidth;
+    }
 }
 
 float getTexCoordStartX(struct Drawable* drawable) {
-    return 0;
+    if (drawable->hasSheet) {
+        return (float)tex_coord_frame_startX(drawable) / (float)drawable->texture->glWidth;
+    } else {
+        return 0;
+    }
 }
 
 float getTexCoordStartY(struct Drawable* drawable) {
-    return (float)drawable->texture->height / (float)drawable->texture->glHeight;
-}
-
-float getTexCoordEndX(struct Drawable* drawable) {
-    return (float)drawable->texture->width / (float)drawable->texture->glWidth;
+    if (drawable->hasSheet) {
+        return (float)(tex_coord_frame_startY(drawable) + drawable->height) / (float)drawable->texture->glHeight;
+    } else {
+        return (float)drawable->texture->height / (float)drawable->texture->glHeight;
+    }
 }
 
 float getTexCoordEndY(struct Drawable* drawable) {
-    return 0;
+    if (drawable->hasSheet) {
+        return (float)tex_coord_frame_startY(drawable) / (float)drawable->texture->glHeight;
+    } else {
+        return 0;
+    }
 }
 
 bool bindDrawableVertex(struct Drawable* drawable) {
@@ -547,7 +578,6 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
 
     SQFloat frameWidth, frameHeight;
     SQFloat border = 0;
-    SQFloat margin = 0;
     if (nargs >= 4 && sq_gettype(v, 3) != OT_NULL && sq_gettype(v, 4) != OT_NULL) {
         sq_getfloat(v, 3, &frameWidth);
         sq_getfloat(v, 4, &frameHeight);
@@ -555,9 +585,6 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
 
     if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
         sq_getfloat(v, 5, &border);
-    }
-    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
-        sq_getfloat(v, 6, &margin);
     }
 
     int width  = 0;
@@ -570,13 +597,13 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
         return 1;
     }
 
+    drawable->hasSheet = true;
     drawable->border = border;
-    drawable->margin = margin;
-    drawable->frameWidth  = frameWidth;
-    drawable->frameHeight = frameHeight;
+    drawable->width  = frameWidth;
+    drawable->height = frameHeight;
 
-    drawable->frameCount = floor(width / (frameWidth  + border + margin)) 
-                                * floor(height / frameHeight + border + margin);
+    drawable->frameCount = floor(width / (frameWidth  + border)) 
+                                * floor(height / frameHeight + border);
     if (drawable->frameCount <= 0) drawable->frameCount = 1;
 
     drawable->frames_vbos = (GLuint *)malloc(sizeof(GLuint) * drawable->frameCount);
@@ -621,8 +648,11 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 
         drawable->texture    = imageInfo;
         drawable->hasTexture = true;
-        drawable->width  = imageInfo->width;
-        drawable->height = imageInfo->height;
+
+        if (!drawable->hasSheet) {
+            drawable->width  = imageInfo->width;
+            drawable->height = imageInfo->height;
+        }
 
         glGenTextures(1, &drawable->texture->textureId);
     } else {
