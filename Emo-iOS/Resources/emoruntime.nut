@@ -317,19 +317,13 @@ class emo.Sprite {
      * sprite.load(x, y);
      * sprite.load(x, y, width, height);
      */
-    function load(...) {
+    function load(x = 0, y = 0, width = null, height = null) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
 
             id = stage.createSprite(name);
 
-            if (vargv.len() >= 4) {
-                status = stage.load(id, vargv[0], vargv[1], vargv[2], vargv[3]);
-            } else if (vargv.len() >= 2) {
-                status = stage.load(id, vargv[0], vargv[1]);
-            } else {
-                status = stage.load(id);
-            }
+            status = stage.load(id, x, y, width, height);
 
             if (status == EMO_NO_ERROR) {
                 loaded = true;
@@ -342,43 +336,33 @@ class emo.Sprite {
      * sprite.move(x, y);
      * sprite.move(x, y, z);
      */
-    function move(...) {
-        if (vargv.len() < 3) {
-            return stage.move(id, vargv[0], vargv[1]);
-        } else {
-            return stage.move(id, vargv[0], vargv[1], vargv[2]);
-        }
+    function move(x, y, z = 0) {
+        return stage.move(id, x, y, z);
     }
 
     /*
      * sprite.scale(scaleX, scaleY)
      * sprite.scale(scaleX, scaleY, centerX, centerY)
      */
-    function scale(...) {
-        if (vargv.len() >= 4) {
-            return stage.scale(id, vargv[0], vargv[1], vargv[2], vargv[3]);
-        } else if (vargv.len() >= 2) {
-            return stage.scale(id, vargv[0], vargv[1]);
-        }
-        return status;
+    function scale(scaleX, scaleY, centerX = null, centerY = null) {
+        return stage.scale(id, scaleX, scaleY, centerX, centerY);
     }
 
-    function rotate(...) {
-        if (vargv.len() >= 4) {
-            return stage.rotate(id, vargv[0], vargv[1], vargv[2], vargv[3]);
-        } else if (vargv.len >= 3) {
-            return stage.rotate(id, vargv[0], vargv[1], vargv[2]);
-        } else if (vargv.len > 0) {
-            return stage.rotate(id, vargv[0]);
-        }
+    /*
+     * sprite.rotate(angle);
+     * sprite.rotate(angle, centerX, centerY);
+     * sprite.rotate(angle, centerX, centerY, axis);
+     */
+    function rotate(angle, centerX = null, centerY = null, axis = null) {
+        return stage.rotate(id, angle, centerX, centerY, axis);
     }
 
-    function setColor(...) {
-        if (vargv.len() >= 4) {
-            return stage.setColor(id, vargv[0], vargv[1], vargv[2], vargv[3]);
-        } else if (vargv.len() >= 3) {
-            return stage.setColor(id, vargv[0], vargv[1], vargv[2]);
-        }
+    /*
+     * sprite.color(red, green, blue);
+     * sprite.color(red, green, blue, alpha);
+     */
+    function color(red, green, blue, alpha = null) {
+        return stage.setColor(id, red, green, blue, alpha);
     }
 
     function remove() {

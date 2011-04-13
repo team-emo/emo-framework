@@ -515,18 +515,6 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
         }
     }
 
-    SQFloat x = 0;
-    SQFloat y = 0;
-    SQFloat z = 0;
-
-    if (nargs >= 3) sq_getfloat(v, 3, &x);
-    if (nargs >= 4) sq_getfloat(v, 4, &y);
-    if (nargs >= 5) sq_getfloat(v, 5, &z);
-
-    drawable->x    = x;
-    drawable->y    = y;
-    drawable->z    = z;
-
     char key[DRAWABLE_KEY_LENGTH];
     sprintf(key, "%d%d%d", 
                 g_engine->uptime.time, g_engine->uptime.millitm, drawable->frames_vbos[0]);
@@ -577,28 +565,28 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
     }
 
     // drawable x
-    if (nargs >= 3) {
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQFloat x;
         sq_getfloat(v, 3, &x);
         drawable->x = x;
     }
 
     // drawable y
-    if (nargs >= 4) {
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
         SQFloat y;
         sq_getfloat(v, 4, &y);
         drawable->y = y;
     }
 
     // drawable width
-    if (nargs >= 5) {
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
         SQFloat width;
         sq_getfloat(v, 5, &width);
         drawable->width = width;
     }
 
     // drawable height
-    if (nargs >= 6) {
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
         SQFloat height;
         sq_getfloat(v, 6, &height);
         drawable->height = height;
@@ -635,19 +623,19 @@ SQInteger emoDrawableMove(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (nargs >= 3) {
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQFloat x;
         sq_getfloat(v, 3, &x);
         drawable->x = x;
     }
 
-    if (nargs >= 4) {
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
         SQFloat y;
         sq_getfloat(v, 4, &y);
         drawable->y = y;
     }
 
-    if (nargs >= 5) {
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
         SQFloat z;
         sq_getfloat(v, 5, &z);
         drawable->z = z;
@@ -679,25 +667,25 @@ SQInteger emoDrawableColor(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (nargs >= 3) {
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQFloat r;
         sq_getfloat(v, 3, &r);
         drawable->param_color[0] = r;
     }
 
-    if (nargs >= 4) {
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
         SQFloat g;
         sq_getfloat(v, 4, &g);
         drawable->param_color[1] = g;
     }
 
-    if (nargs >= 5) {
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
         SQFloat b;
         sq_getfloat(v, 5, &b);
         drawable->param_color[2] = b;
     }
 
-    if (nargs >= 6) {
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
         SQFloat a;
         sq_getfloat(v, 6, &a);
         drawable->param_color[3] = a;
@@ -730,21 +718,21 @@ SQInteger emoDrawableScale(HSQUIRRELVM v) {
     }
 
     // scale x
-    if (nargs >= 3) {
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 3, &f);
         drawable->param_scale[0] = f;
     }
 
     // scale y
-    if (nargs >= 4) {
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 4, &f);
         drawable->param_scale[1] = f;
     }
 
     // center x
-    if (nargs >= 5) {
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 5, &f);
         drawable->param_scale[2] = f;
@@ -753,7 +741,7 @@ SQInteger emoDrawableScale(HSQUIRRELVM v) {
     }
 
     // center y
-    if (nargs >= 6) {
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 6, &f);
         drawable->param_scale[3] = f;
@@ -788,14 +776,14 @@ SQInteger emoDrawableRotate(HSQUIRRELVM v) {
     }
 
     // angle
-    if (nargs >= 3) {
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 3, &f);
         drawable->param_rotate[0] = f;
     }
 
     // center x
-    if (nargs >= 4) {
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 4, &f);
         drawable->param_rotate[1] = f;
@@ -804,7 +792,7 @@ SQInteger emoDrawableRotate(HSQUIRRELVM v) {
     }
 
     // center y
-    if (nargs >= 5) {
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 5, &f);
         drawable->param_rotate[2] = f;
@@ -813,7 +801,7 @@ SQInteger emoDrawableRotate(HSQUIRRELVM v) {
     }
 
     // rotate axis
-    if (nargs >= 6) {
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 6, &f);
         drawable->param_rotate[3] = f;
