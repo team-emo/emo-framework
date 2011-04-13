@@ -15,7 +15,7 @@ function emo::onLoad() {
 
     event.enableOnDrawCallback(5000);
 
-    print(dogSprite.load());
+    print(dogSprite.loadSheet(0, 0, 35, 43));
 }
 
 function emo::onGainedFocus() {

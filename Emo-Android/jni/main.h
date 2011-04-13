@@ -58,6 +58,11 @@ struct Drawable {
     float      param_color[4];
 
     ImageInfo* texture;
+
+    float border;
+    float margin;
+    float frameWidth;
+    float frameHeight;
 };
 
 struct Stage {

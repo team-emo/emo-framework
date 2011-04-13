@@ -56,6 +56,7 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
 
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "load",           emoDrawableLoad);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);

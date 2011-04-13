@@ -526,6 +526,73 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * create drawable instance (sprite sheet)
+ */
+SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
+
+    struct Drawable *drawable = (Drawable *)malloc(sizeof(Drawable));
+    initDrawable(drawable);
+
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+
+        if (strlen(name) > 0) {
+            drawable->name = name;
+        }
+    }
+
+    SQFloat frameWidth, frameHeight;
+    SQFloat border = 0;
+    SQFloat margin = 0;
+    if (nargs >= 4 && sq_gettype(v, 3) != OT_NULL && sq_gettype(v, 4) != OT_NULL) {
+        sq_getfloat(v, 3, &frameWidth);
+        sq_getfloat(v, 4, &frameHeight);
+    }
+
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
+        sq_getfloat(v, 5, &border);
+    }
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
+        sq_getfloat(v, 6, &margin);
+    }
+
+    int width  = 0;
+    int height = 0;
+
+    if (!loadPngSizeFromAsset(name, &width, &height) || 
+          width <= 0 || height <= 0 || frameWidth <= 0 || frameHeight <= 0) {
+        free(drawable);
+        sq_pushinteger(v, -1);
+        return 1;
+    }
+
+    drawable->border = border;
+    drawable->margin = margin;
+    drawable->frameWidth  = frameWidth;
+    drawable->frameHeight = frameHeight;
+
+    drawable->frameCount = floor(width / (frameWidth  + border + margin)) 
+                                * floor(height / frameHeight + border + margin);
+    if (drawable->frameCount <= 0) drawable->frameCount = 1;
+
+    drawable->frames_vbos = (GLuint *)malloc(sizeof(GLuint) * drawable->frameCount);
+    loadDrawable(drawable);
+
+    char key[DRAWABLE_KEY_LENGTH];
+    sprintf(key, "%d%d%d", 
+                g_engine->uptime.time, g_engine->uptime.millitm, drawable->frames_vbos[0]);
+
+    addDrawable(key, drawable, g_engine);
+
+    sq_pushstring(v, key, strlen(key));
+
+    return 1;
+}
+
 SQInteger emoDrawableLoad(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);

@@ -19,6 +19,7 @@ void onDrawStage(struct Stage* stage);
 struct Drawable* getDrawable(const char* key, struct engine* engine);
 
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);
+SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v);
 SQInteger emoDrawableLoad(HSQUIRRELVM v);
 SQInteger emoDrawableMove(HSQUIRRELVM v);
 SQInteger emoDrawableScale(HSQUIRRELVM v);

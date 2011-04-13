@@ -6,6 +6,7 @@ void LOGI(const SQChar* msg);
 void LOGW(const SQChar* msg);
 void LOGE(const SQChar* msg);
 
+bool loadPngSizeFromAsset(const char *fname, int *width, int *height);
 bool loadPngFromAsset(const char* fname, struct ImageInfo* imageInfo);
 
 SQInteger emoImportScript(HSQUIRRELVM v);
