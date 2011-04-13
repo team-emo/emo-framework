@@ -41,15 +41,8 @@ bool printGLErrors(const char* msg) {
     return result;
 }
 
-static GLuint getCurrentDrawableVBO(struct Drawable* drawable) {
+static GLuint getCurrentDrawableTexBufferName(struct Drawable* drawable) {
     return drawable->frames_vbos[drawable->frame_index];
-}
-
-static GLuint generateDrawableVBOAtFrame(struct Drawable* drawable, int index) {
-    GLuint value = 0;
-    glGenBuffers(1, &value);
-    drawable->frames_vbos[index] = value;
-    return value;
 }
 
 static bool deleteDrawableVBOAtFrame(struct Drawable* drawable, int index) {
@@ -72,13 +65,6 @@ static int clearDrawableVBOs(struct Drawable* drawable) {
         }
     }
     return count;
-}
-
-static void initDrawableVBOs(struct Drawable* drawable) {
-    drawable->frames_vbos = (GLuint *)malloc(sizeof(GLuint) * drawable->frameCount);
-    for (int i = 0; i < drawable->frameCount; i++) {
-        drawable->frames_vbos[i] = 0;
-    }
 }
 
 static void deleteDrawableBuffer(struct Drawable* drawable) {
@@ -137,7 +123,7 @@ bool freeDrawable(const char* key, struct engine* engine) {
 
 void printDrawableInfo(struct Stage* stage, struct Drawable* drawable) {
     char str[1024];
-    sprintf(str, "%d-%d-%d %d", stage->vbo[0], stage->vbo[1], getCurrentDrawableVBO(drawable), drawable->texture->textureId);
+    sprintf(str, "%d-%d-%d-%d", stage->vbo[0], stage->vbo[1], getCurrentDrawableTexBufferName(drawable), drawable->texture->textureId);
     LOGI(str);
 }
 
@@ -181,7 +167,7 @@ static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
         glBindTexture(GL_TEXTURE_2D, drawable->texture->textureId);
 
         // bind texture coords
-        glBindBuffer(GL_ARRAY_BUFFER, getCurrentDrawableVBO(drawable));
+        glBindBuffer(GL_ARRAY_BUFFER, getCurrentDrawableTexBufferName(drawable));
         glTexCoordPointer(2, GL_FLOAT, 0, 0);
     }
 
@@ -234,11 +220,19 @@ void onDrawDrawables(struct engine* engine) {
     }
 }
 
+/*
+ * load drawable (single sprite)
+ */
 void loadDrawable(struct Drawable* drawable) {
     if (drawable->hasBuffer) return;
 
-    initDrawableVBOs(drawable);
-    generateDrawableVBOAtFrame(drawable, 0);
+    GLuint value = 0;
+    for (int i = 0; i < drawable->frameCount; i++) {
+        drawable->frames_vbos[i] = 0;
+
+        glGenBuffers(1, &value);
+        drawable->frames_vbos[i] = value;
+    }
 
     if (drawable->hasTexture) {
         glGenTextures(1, &drawable->texture->textureId);
@@ -437,7 +431,7 @@ bool bindDrawableVertex(struct Drawable* drawable) {
     drawable->vertex_tex_coords[6] = getTexCoordEndX(drawable);
     drawable->vertex_tex_coords[7] = getTexCoordStartY(drawable);
 
-    glBindBuffer(GL_ARRAY_BUFFER, getCurrentDrawableVBO(drawable));
+    glBindBuffer(GL_ARRAY_BUFFER, getCurrentDrawableTexBufferName(drawable));
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, drawable->vertex_tex_coords, GL_STATIC_DRAW);
 
     printGLErrors("Could not create OpenGL vertex");
@@ -500,13 +494,14 @@ void rebindDrawableBuffers(struct engine* engine) {
 }
 
 /*
- * create drawable instance
+ * create drawable instance (single sprite)
  */
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 
     struct Drawable *drawable = (Drawable *)malloc(sizeof(Drawable));
 
     initDrawable(drawable);
+    drawable->frames_vbos = (GLuint *)malloc(sizeof(GLuint) * drawable->frameCount);
     loadDrawable(drawable);
 
     const SQChar* name;
@@ -534,7 +529,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 
     char key[DRAWABLE_KEY_LENGTH];
     sprintf(key, "%d%d%d", 
-                g_engine->uptime.time, g_engine->uptime.millitm, getCurrentDrawableVBO(drawable));
+                g_engine->uptime.time, g_engine->uptime.millitm, drawable->frames_vbos[0]);
 
     addDrawable(key, drawable, g_engine);
 
