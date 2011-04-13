@@ -315,15 +315,29 @@ class emo.Sprite {
     /*
      * sprite.load();
      * sprite.load(x, y);
-     * sprite.load(x, y, width, height);
      */
-    function load(x = 0, y = 0, width = null, height = null) {
+    function load(x = 0, y = 0) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
 
             id = stage.createSprite(name);
 
-            status = stage.load(id, x, y, width, height);
+            status = stage.load(id, x, y);
+
+            if (status == EMO_NO_ERROR) {
+                loaded = true;
+            }
+        }
+        return status;
+    }
+
+    function loadSheet(x, y, frameWidth, frameHeight, border = 0, margin = 0) {
+        local status = EMO_NO_ERROR;
+        if (!loaded) {
+
+            id = stage.createSpriteSheet(name, frameWidth, frameHeight, border, margin);
+
+            status = stage.load(id, x, y);
 
             if (status == EMO_NO_ERROR) {
                 loaded = true;

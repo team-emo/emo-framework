@@ -578,20 +578,6 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         drawable->y = y;
     }
 
-    // drawable width
-    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
-        SQFloat width;
-        sq_getfloat(v, 5, &width);
-        drawable->width = width;
-    }
-
-    // drawable height
-    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
-        SQFloat height;
-        sq_getfloat(v, 6, &height);
-        drawable->height = height;
-    }
-
     if (bindDrawableVertex(drawable)) {
         sq_pushinteger(v, EMO_NO_ERROR);
     } else {
