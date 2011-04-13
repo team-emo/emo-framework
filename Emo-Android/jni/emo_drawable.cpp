@@ -405,29 +405,29 @@ void initDrawable(struct Drawable* drawable) {
 
 static float tex_coord_frame_startX(struct Drawable* drawable) {
     int xindex = drawable->frame_index % (int)floor(drawable->texture->width / (drawable->width  + drawable->border));
-    return drawable->border + (drawable->width * xindex);
+    return (drawable->border + drawable->width) * xindex + drawable->border;
 }
 
 static float tex_coord_frame_startY(struct Drawable* drawable) {
-    int ycount = (int)floor(drawable->texture->height / (drawable->height  + drawable->border)) - 1;
-    int yindex = ycount - drawable->frame_index / (int)floor(drawable->texture->width / (drawable->width  + drawable->border));
-    return drawable->border + (drawable->height * yindex);
+    int ycount = (int)floor(drawable->texture->height / (drawable->height  + drawable->border));
+    int yindex = ycount - 1 - drawable->frame_index / (int)(floor(drawable->texture->width / (drawable->width  + drawable->border)));
+
+    return (drawable->border + drawable->height) * yindex + drawable->border;
 }
 
+float getTexCoordStartX(struct Drawable* drawable) {
+    if (drawable->hasSheet) {
+        return tex_coord_frame_startX(drawable) / (float)drawable->texture->glWidth;
+    } else {
+        return 0;
+    }
+}
 
 float getTexCoordEndX(struct Drawable* drawable) {
     if (drawable->hasSheet) {
         return (float)(tex_coord_frame_startX(drawable) + drawable->width) / (float)drawable->texture->glWidth;
     } else {
         return (float)drawable->texture->width / (float)drawable->texture->glWidth;
-    }
-}
-
-float getTexCoordStartX(struct Drawable* drawable) {
-    if (drawable->hasSheet) {
-        return (float)tex_coord_frame_startX(drawable) / (float)drawable->texture->glWidth;
-    } else {
-        return 0;
     }
 }
 
@@ -441,7 +441,7 @@ float getTexCoordStartY(struct Drawable* drawable) {
 
 float getTexCoordEndY(struct Drawable* drawable) {
     if (drawable->hasSheet) {
-        return (float)tex_coord_frame_startY(drawable) / (float)drawable->texture->glHeight;
+        return tex_coord_frame_startY(drawable) / (float)drawable->texture->glHeight;
     } else {
         return 0;
     }
