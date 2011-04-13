@@ -8,9 +8,12 @@
 
 #include <common.h>
 
-/**
- * Saved state data.
- */
+struct char_comparator {
+    bool operator()(const char* s1, const char* s2) const {
+        return strcmp(s1, s2) == 0;
+    }
+};
+
 struct saved_state {
     int32_t x;
     int32_t y;
@@ -33,9 +36,11 @@ struct ImageInfo {
 struct Drawable {
     const char* name;
 
-    GLuint     vbo[1];
-
     float      vertex_tex_coords[8];
+
+    int        frame_index;
+    GLuint*    frames_vbos;
+    int        frameCount;
 
     bool       loaded;
     bool       hasTexture;
@@ -69,12 +74,6 @@ struct Stage {
 
     int32_t viewport_width;
     int32_t viewport_height;
-};
-
-struct char_comparator {
-    bool operator()(const char* s1, const char* s2) const {
-        return strcmp(s1, s2) == 0;
-    }
 };
 
 typedef std::hash_map <const char *, Drawable *, std::hash<const char*>, char_comparator> drawables_t;

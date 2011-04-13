@@ -41,15 +41,55 @@ bool printGLErrors(const char* msg) {
     return result;
 }
 
+static GLuint getCurrentDrawableVBO(struct Drawable* drawable) {
+    return drawable->frames_vbos[drawable->frame_index];
+}
+
+static GLuint generateDrawableVBOAtFrame(struct Drawable* drawable, int index) {
+    GLuint value = 0;
+    glGenBuffers(1, &value);
+    drawable->frames_vbos[index] = value;
+    return value;
+}
+
+static bool deleteDrawableVBOAtFrame(struct Drawable* drawable, int index) {
+    const GLuint value = drawable->frames_vbos[index];
+    if (value > 0) {
+        glDeleteBuffers(1, &value);
+        drawable->frames_vbos[index] = 0;
+        return true;
+    }
+    return false;
+}
+
+static int clearDrawableVBOs(struct Drawable* drawable) {
+    int count = 0;
+    for (int i = 0; i < drawable->frameCount; i++) {
+        if (drawable->frames_vbos[i] > 0) {
+            glDeleteBuffers(1, &drawable->frames_vbos[i]);
+            drawable->frames_vbos[i] = 0;
+            count++;
+        }
+    }
+    return count;
+}
+
+static void initDrawableVBOs(struct Drawable* drawable) {
+    drawable->frames_vbos = (GLuint *)malloc(sizeof(GLuint) * drawable->frameCount);
+    for (int i = 0; i < drawable->frameCount; i++) {
+        drawable->frames_vbos[i] = 0;
+    }
+}
+
 static void deleteDrawableBuffer(struct Drawable* drawable) {
     if (!drawable->hasBuffer) return;
     if (drawable->hasTexture) {
         glDeleteTextures(1, &drawable->texture->textureId);
     }
-    glDeleteBuffers(1, drawable->vbo);
+
+    clearDrawableVBOs(drawable);
     drawable->hasBuffer = false;
 
-    drawable->vbo[0] = 0;
     drawable->texture->textureId = 0;
 }
 
@@ -86,7 +126,7 @@ bool freeDrawable(const char* key, struct engine* engine) {
                 free(drawable->texture->data);
                 free(drawable->texture);
             }
-
+            free(drawable->frames_vbos);
             free(ckey);
             free(drawable);
         }
@@ -97,7 +137,7 @@ bool freeDrawable(const char* key, struct engine* engine) {
 
 void printDrawableInfo(struct Stage* stage, struct Drawable* drawable) {
     char str[1024];
-    sprintf(str, "%d-%d-%d %d", stage->vbo[0], stage->vbo[1], drawable->vbo[0], drawable->texture->textureId);
+    sprintf(str, "%d-%d-%d %d", stage->vbo[0], stage->vbo[1], getCurrentDrawableVBO(drawable), drawable->texture->textureId);
     LOGI(str);
 }
 
@@ -141,7 +181,7 @@ static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
         glBindTexture(GL_TEXTURE_2D, drawable->texture->textureId);
 
         // bind texture coords
-        glBindBuffer(GL_ARRAY_BUFFER, drawable->vbo[0]);
+        glBindBuffer(GL_ARRAY_BUFFER, getCurrentDrawableVBO(drawable));
         glTexCoordPointer(2, GL_FLOAT, 0, 0);
     }
 
@@ -196,7 +236,9 @@ void onDrawDrawables(struct engine* engine) {
 
 void loadDrawable(struct Drawable* drawable) {
     if (drawable->hasBuffer) return;
-    glGenBuffers (1, drawable->vbo);
+
+    initDrawableVBOs(drawable);
+    generateDrawableVBOAtFrame(drawable, 0);
 
     if (drawable->hasTexture) {
         glGenTextures(1, &drawable->texture->textureId);
@@ -360,7 +402,8 @@ void initDrawable(struct Drawable* drawable) {
     drawable->width  = 0;
     drawable->height = 0;
 
-    drawable->vbo[0] = 0;
+    drawable->frameCount  = 1;
+    drawable->frame_index = 0;
 }
 
 float getTexCoordStartX(struct Drawable* drawable) {
@@ -394,7 +437,7 @@ bool bindDrawableVertex(struct Drawable* drawable) {
     drawable->vertex_tex_coords[6] = getTexCoordEndX(drawable);
     drawable->vertex_tex_coords[7] = getTexCoordStartY(drawable);
 
-    glBindBuffer(GL_ARRAY_BUFFER, drawable->vbo[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, getCurrentDrawableVBO(drawable));
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, drawable->vertex_tex_coords, GL_STATIC_DRAW);
 
     printGLErrors("Could not create OpenGL vertex");
@@ -491,7 +534,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 
     char key[DRAWABLE_KEY_LENGTH];
     sprintf(key, "%d%d%d", 
-                g_engine->uptime.time, g_engine->uptime.millitm, drawable->vbo[0]);
+                g_engine->uptime.time, g_engine->uptime.millitm, getCurrentDrawableVBO(drawable));
 
     addDrawable(key, drawable, g_engine);
 
