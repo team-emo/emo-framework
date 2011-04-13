@@ -7,6 +7,7 @@ print(str);
 
 local dogSprite = emo.Sprite("blocks.png");
 local dogSprite2 = emo.Sprite("dog.png");
+local dogSprite3 = emo.Sprite("king.png");
 
 function emo::onLoad() { 
     print("onLoad");
@@ -48,6 +49,7 @@ function emo::onMotionEvent(...) {
     if (motionEvent.getAction() == MOTION_EVENT_ACTION_DOWN) {
         print(dogSprite.remove());
         print(dogSprite2.loadSheet(0, 0, 6, 34, 42, 1));
+        print(dogSprite3.loadSheet(100, 100, 6, 31, 49, 2, 3));
     }
 }
 

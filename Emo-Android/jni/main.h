@@ -51,8 +51,8 @@ struct Drawable {
     float      y;
     float      z;
 
-    float      width;
-    float      height;
+    int        width;
+    int        height;
 
     float      param_rotate[4];
     float      param_scale[4];
@@ -61,7 +61,8 @@ struct Drawable {
     ImageInfo* texture;
 
     bool  hasSheet;
-    float border;
+    int border;
+    int margin;
 };
 
 struct Stage {

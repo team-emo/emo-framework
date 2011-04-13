@@ -397,19 +397,19 @@ void initDrawable(struct Drawable* drawable) {
     drawable->frameCount  = 1;
     drawable->frame_index = 0;
     drawable->border      = 0;
+    drawable->margin      = 0;
 }
 
 
-static float tex_coord_frame_startX(struct Drawable* drawable) {
-    int xindex = drawable->frame_index % (int)floor(drawable->texture->width / (drawable->width  + drawable->border));
-    return (drawable->border + drawable->width) * xindex + drawable->border;
+static int tex_coord_frame_startX(struct Drawable* drawable) {
+    int xindex = drawable->frame_index % (int)floor((drawable->texture->width - drawable->margin) / (float)(drawable->width  + drawable->border));
+    return ((drawable->border + drawable->width) * xindex) + drawable->margin;
 }
 
-static float tex_coord_frame_startY(struct Drawable* drawable) {
-    int ycount = (int)floor(drawable->texture->height / (drawable->height  + drawable->border));
-    int yindex = ycount - 1 - drawable->frame_index / (int)(floor(drawable->texture->width / (drawable->width  + drawable->border)));
-
-    return (drawable->border + drawable->height) * yindex + drawable->border;
+static int tex_coord_frame_startY(struct Drawable* drawable) {
+    int ycount = (int)floor((drawable->texture->height - drawable->margin) / (float)(drawable->height + drawable->border));
+    int yindex = ycount - 1 - ((drawable->frame_index + 1) / (int)floor((drawable->texture->width - drawable->margin) / (float)(drawable->width  + drawable->border)));
+    return ((drawable->border + drawable->height) * yindex) + drawable->margin;
 }
 
 float getTexCoordStartX(struct Drawable* drawable) {
@@ -580,16 +580,21 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     }
 
     SQInteger frameIndex = 0;
-    SQFloat frameWidth, frameHeight;
-    SQFloat border = 0;
+    SQInteger frameWidth, frameHeight;
+    SQInteger border = 0;
+    SQInteger margin = 0;
     if (nargs >= 5 && sq_gettype(v, 3) != OT_NULL && sq_gettype(v, 4) != OT_NULL && sq_gettype(v, 5) != OT_NULL) {
         sq_getinteger(v, 3, &frameIndex);
-        sq_getfloat(v, 4, &frameWidth);
-        sq_getfloat(v, 5, &frameHeight);
+        sq_getinteger(v, 4, &frameWidth);
+        sq_getinteger(v, 5, &frameHeight);
     }
 
     if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
-        sq_getfloat(v, 6, &border);
+        sq_getinteger(v, 6, &border);
+    }
+
+    if (nargs >= 7 && sq_gettype(v, 7) != OT_NULL) {
+        sq_getinteger(v, 7, &margin);
     }
 
     int width  = 0;
@@ -608,8 +613,14 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     drawable->height = frameHeight;
     drawable->border = border;
 
-    drawable->frameCount = floor(width / (frameWidth  + border)) 
-                                * floor(height / frameHeight + border);
+    if (margin == 0 && border != 0) {
+        drawable->margin = border;
+    } else {
+        drawable->margin = margin;
+    }
+
+    drawable->frameCount = (int)floor(width / (float)(frameWidth  + border)) 
+                                       * floor(height /(float)(frameHeight + border));
     if (drawable->frameCount <= 0) drawable->frameCount = 1;
 
     drawable->frames_vbos = (GLuint *)malloc(sizeof(GLuint) * drawable->frameCount);

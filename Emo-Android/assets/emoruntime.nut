@@ -331,11 +331,16 @@ class emo.Sprite {
         return status;
     }
 
-    function loadSheet(x, y, frameIndex, frameWidth, frameHeight, border = 0) {
+    /*
+     * sprite.loadSheet(x, y, frameIndex, frameWidth, frameHeight);
+     * sprite.loadSheet(x, y, frameIndex, frameWidth, frameHeight, border);
+     * sprite.loadSheet(x, y, frameIndex, frameWidth, frameHeight, border, margin);
+     */
+    function loadSheet(x, y, frameIndex, frameWidth, frameHeight, border = 0, margin = 0) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
 
-            id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border);
+            id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border, margin);
 
             status = stage.load(id, x, y);
 
@@ -344,6 +349,14 @@ class emo.Sprite {
             }
         }
         return status;
+    }
+
+    /*
+     * sprite.animate(from, to, interval);
+     * sprite.animate(from, to, interval, loop);
+     */
+    function animate(from, to, interval, loop = false) {
+        return stage.animate(id, from, to, interval, loop);
     }
 
     /*
