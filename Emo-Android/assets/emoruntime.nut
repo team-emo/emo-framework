@@ -382,6 +382,10 @@ class emo.Sprite {
         }
     }
 
+    function setFrame(frameIndex) {
+        return pauseAt(frameIndex);
+    }
+
     function stop() {
         if (hasSheet) {
             return stage.stop(id);

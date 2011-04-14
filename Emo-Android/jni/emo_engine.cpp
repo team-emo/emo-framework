@@ -67,8 +67,14 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "viewport",       emoSetViewport);
 	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "ortho",          emoSetStageSize);
-	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pixelWidth",     emoGetWindowWidth);
-	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pixelHeight",    emoGetWindowHeight);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "windowWidth",    emoGetWindowWidth);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "windowHeight",   emoGetWindowHeight);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "show",           emoDrawableShow);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "hide",           emoDrawableHide);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "red",            emoDrawableColorRed);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "green",          emoDrawableColorGreen);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "blue",           emoDrawableColorBlue);
+	registerEmoClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "alpha",          emoDrawableColorAlpha);
 
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);

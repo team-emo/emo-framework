@@ -493,3 +493,172 @@ SQInteger emoGetWindowHeight(HSQUIRRELVM v) {
     sq_pushinteger(v, ANativeWindow_getHeight(g_engine->app->window));
     return 1;
 }
+
+SQInteger emoDrawableShow(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    struct Drawable* drawable = getDrawable(id, g_engine);
+
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+
+    drawable->param_color[3] = 1;
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
+}
+
+SQInteger emoDrawableHide(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    struct Drawable* drawable = getDrawable(id, g_engine);
+
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+
+    drawable->param_color[3] = 0;
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
+}
+
+SQInteger emoDrawableColorRed(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    struct Drawable* drawable = getDrawable(id, g_engine);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat color;
+        sq_getfloat(v, 3, &color);
+        drawable->param_color[0] = color;
+    } else {
+
+    }
+
+    sq_pushinteger(v, drawable->param_color[0]);
+    return 1;
+}
+
+SQInteger emoDrawableColorGreen(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    struct Drawable* drawable = getDrawable(id, g_engine);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat color;
+        sq_getfloat(v, 3, &color);
+        drawable->param_color[1] = color;
+    } else {
+
+    }
+
+    sq_pushinteger(v, drawable->param_color[1]);
+    return 1;
+}
+
+SQInteger emoDrawableColorBlue(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    struct Drawable* drawable = getDrawable(id, g_engine);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat color;
+        sq_getfloat(v, 3, &color);
+        drawable->param_color[2] = color;
+    } else {
+
+    }
+
+    sq_pushinteger(v, drawable->param_color[2]);
+    return 1;
+}
+
+SQInteger emoDrawableColorAlpha(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    struct Drawable* drawable = getDrawable(id, g_engine);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat color;
+        sq_getfloat(v, 3, &color);
+        drawable->param_color[3] = color;
+    } else {
+
+    }
+
+    sq_pushinteger(v, drawable->param_color[3]);
+    return 1;
+}
+
