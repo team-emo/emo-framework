@@ -177,7 +177,7 @@ bool loadPngFromAsset(const char *fname, struct ImageInfo* imageInfo) {
 /*
  * Load squirrel script from asset
  */
-SQBool loadScriptFromAsset(const char* fname) {
+bool loadScriptFromAsset(const char* fname) {
     /*
      * read squirrel script from asset
      */
@@ -185,7 +185,7 @@ SQBool loadScriptFromAsset(const char* fname) {
     if (mgr == NULL) {
     	g_engine->lastError = ERR_SCRIPT_LOAD;
     	LOGE("loadScriptFromAsset: failed to load AAssetManager");
-    	return SQFalse;
+    	return false;
     }
 
     AAsset* asset = AAssetManager_open(mgr, fname, AASSET_MODE_UNKNOWN);
@@ -193,7 +193,7 @@ SQBool loadScriptFromAsset(const char* fname) {
     	g_engine->lastError = ERR_SCRIPT_OPEN;
     	LOGW("loadScriptFromAsset: failed to open main script file");
         LOGW(fname);
-    	return SQFalse;
+    	return false;
     }
 
     if(SQ_SUCCEEDED(sq_compile(g_engine->sqvm, sq_lexer, asset, fname, SQTrue))) {
@@ -202,18 +202,18 @@ SQBool loadScriptFromAsset(const char* fname) {
         	g_engine->lastError = ERR_SCRIPT_CALL_ROOT;
             LOGW("loadScriptFromAsset: failed to sq_call");
             LOGW(fname);
-            return SQFalse;
+            return false;
         }
     } else {
     	g_engine->lastError = ERR_SCRIPT_COMPILE;
         LOGW("loadScriptFromAsset: failed to compile squirrel script");
         LOGW(fname);
-        return SQFalse;
+        return false;
     }
 
     AAsset_close(asset);
 
-    return SQTrue;
+    return true;
 }
 
 /*

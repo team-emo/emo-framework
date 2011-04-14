@@ -9,6 +9,9 @@ void LOGE(const SQChar* msg);
 bool loadPngSizeFromAsset(const char *fname, int *width, int *height);
 bool loadPngFromAsset(const char* fname, struct ImageInfo* imageInfo);
 
+void emoUpdateOptions(SQInteger value);
+bool loadScriptFromAsset(const char* fname);
+
 SQInteger emoImportScript(HSQUIRRELVM v);
 SQInteger emoSetOptions(HSQUIRRELVM v);
 SQInteger emoRuntimeEcho(HSQUIRRELVM v);
@@ -24,7 +27,4 @@ SQInteger emoEnableSensor(HSQUIRRELVM v);
 SQInteger emoDisableSensor(HSQUIRRELVM v);
 SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v);
 SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v);
-
-void emoUpdateOptions(SQInteger value);
-SQBool loadScriptFromAsset(const char* fname);
 

@@ -11,6 +11,7 @@
 #include <emo_engine.h>
 #include <emo_engine_func.h>
 #include <emo_drawable.h>
+#include <emo_drawable_func.h>
 #include <emo_audio.h>
 
 /*

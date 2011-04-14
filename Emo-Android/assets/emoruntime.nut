@@ -37,6 +37,7 @@ ERR_INVALID_PARAM         <- 0x0116;
 ERR_INVALID_ID            <- 0x0117;
 ERR_FILE_OPEN             <- 0x0118;
 ERR_CREATE_VERTEX         <- 0x0119;
+ERR_NOT_SUPPORTED         <- 0x0120;
 
 OPT_ENABLE_PERSPECTIVE_NICEST   <- 0x1000;
 OPT_ENABLE_PERSPECTIVE_FASTEST  <- 0x1001;
@@ -304,6 +305,7 @@ class emo.Sprite {
 
     id     = -1;
     loaded = false;
+    hasSheet = false;
 
     /*
      * sprite = Sprite("aaa.png");
@@ -346,18 +348,54 @@ class emo.Sprite {
 
             if (status == EMO_NO_ERROR) {
                 loaded = true;
+                hasSheet = true;
             }
         }
         return status;
     }
 
     /*
-     * sprite.animate(from, to, interval);
-     * sprite.animate(from, to, interval, loop);
+     * sprite.animate(startFrame, frameCount, interval);
+     * sprite.animate(startFrame, frameCount, interval, loopCount = 0);
      */
-    function animate(from, to, interval, loop = false) {
-        return stage.animate(id, from, to, interval, loop);
+    function animate(startFrame, frameCount, interval, loopCount = 0) {
+        if (hasSheet) {
+            return stage.animate(id, startFrame, frameCount, interval, loopCount);
+        } else {
+            return ERR_NOT_SUPPORTED;
+        }
     }
+
+    function pause() {
+        if (hasSheet) {
+            return stage.pause(id);
+        } else {
+            return ERR_NOT_SUPPORTED;
+        }
+    }
+
+    function pauseAt(frameIndex) {
+        if (hasSheet) {
+            return stage.pauseAt(id, frameIndex);
+        } else {
+            return ERR_NOT_SUPPORTED;
+        }
+    }
+
+    function stop() {
+        if (hasSheet) {
+            return stage.stop(id);
+        } else {
+            return ERR_NOT_SUPPORTED;
+        }
+    }
+
+    function show() { return stage.show(id); }
+    function hide() { return stage.hide(id); }
+    function alpha(a = null) { return stage.alpha(id, a); }
+    function red  (r = null) { return stage.red  (id, r); }
+    function green(g = null) { return stage.green(id, g); }
+    function blue (b = null) { return stage.blue (id, b); }
 
     /*
      * sprite.move(x, y);
