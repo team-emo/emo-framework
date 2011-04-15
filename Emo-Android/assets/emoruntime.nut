@@ -469,10 +469,6 @@ function emo::_onLoad() {
     if (emo.rawin("onLoad")) {
         emo.onLoad();
     }
-    if (EMO_RUNTIME_DELEGATE != null &&
-             EMO_RUNTIME_DELEGATE.rawin("onLoad")) {
-        EMO_RUNTIME_DELEGATE.onLoad();
-    }
 }
 
 function emo::_onGainedFocus() {
