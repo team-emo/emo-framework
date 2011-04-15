@@ -69,7 +69,7 @@ struct Stage {
     GLuint vbo[2];
 
     bool   loaded;
-    bool   firstDraw;
+    bool   dirty;
 
     short  indices[4];
     float  positions[12];

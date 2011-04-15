@@ -185,12 +185,12 @@ static void onDrawDrawable(struct Stage* stage, struct Drawable* drawable) {
  * draw stage
  */
 void onDrawStage(struct Stage* stage) {
-    if (stage->firstDraw) {
+    if (stage->dirty) {
         glViewport(0, 0, stage->viewport_width, stage->viewport_height); 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glOrthof(0, stage->width, stage->height, 0, -1, 1);
-        stage->firstDraw = false;
+        stage->dirty = false;
     }
 
     glClearColor(0, 0, 1, 1);
@@ -307,7 +307,7 @@ bool loadStage(struct Stage* stage) {
     memset(stage, 0, sizeof(stage));
 
     stage->loaded    = false;
-    stage->firstDraw = true;
+    stage->dirty = true;
 
     stage->width  = ANativeWindow_getWidth(g_engine->app->window);
     stage->height = ANativeWindow_getHeight(g_engine->app->window);
@@ -515,7 +515,7 @@ void rebindStageBuffers(struct Stage* stage) {
 
     printGLErrors("Could not create OpenGL buffers");
 
-    stage->firstDraw = true;
+    stage->dirty = true;
     stage->loaded = true;
 }
 

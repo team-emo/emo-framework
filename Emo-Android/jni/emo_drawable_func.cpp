@@ -458,7 +458,7 @@ SQInteger emoSetViewport(HSQUIRRELVM v) {
 
     g_engine->stage->viewport_width  = width;
     g_engine->stage->viewport_height = height;
-    g_engine->stage->firstDraw = true;
+    g_engine->stage->dirty = true;
 
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
@@ -478,7 +478,7 @@ SQInteger emoSetStageSize(HSQUIRRELVM v) {
 
     g_engine->stage->width  = width;
     g_engine->stage->height = height;
-    g_engine->stage->firstDraw = true;
+    g_engine->stage->dirty = true;
 
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
