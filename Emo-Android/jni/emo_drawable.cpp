@@ -403,13 +403,13 @@ void initDrawable(struct Drawable* drawable) {
 
 
 static int tex_coord_frame_startX(struct Drawable* drawable) {
-    int xindex = drawable->frame_index % (int)floor((drawable->texture->width - drawable->margin) / (float)(drawable->width  + drawable->border));
+    int xindex = drawable->frame_index % (int)round((drawable->texture->width - (drawable->margin * 2) + drawable->border) / (float)(drawable->width  + drawable->border));
     return ((drawable->border + drawable->width) * xindex) + drawable->margin;
 }
 
 static int tex_coord_frame_startY(struct Drawable* drawable) {
-    int ycount = (int)floor((drawable->texture->height - drawable->margin) / (float)(drawable->height + drawable->border));
-    int yindex = ycount - 1 - ((drawable->frame_index + 1) / (int)floor((drawable->texture->width - drawable->margin) / (float)(drawable->width  + drawable->border)));
+    int ycount = (int)round((drawable->texture->height - (drawable->margin * 2) + drawable->border) / (float)(drawable->height + drawable->border));
+    int yindex = ycount - 1 - ((drawable->frame_index + 1) / (int)round((drawable->texture->width - (drawable->margin * 2) + drawable->border) / (float)(drawable->width  + drawable->border)));
     return ((drawable->border + drawable->height) * yindex) + drawable->margin;
 }
 

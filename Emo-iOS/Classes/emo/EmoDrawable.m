@@ -117,13 +117,13 @@ extern EmoEngine* engine;
 }
 
 -(NSInteger)tex_coord_frame_startX {
-    int xindex = frame_index % (int)floor((texture.width - margin) / (float)(width  + border));
+    int xindex = frame_index % (int)round((texture.width - (margin * 2) + border) / (float)(width  + border));
     return ((border + width) * xindex) + margin;
 }
 
 -(NSInteger) tex_coord_frame_startY {
-    int ycount = (int)floor((texture.height - margin) / (float)(height + border));
-    int yindex = ycount - 1 - ((frame_index + 1) / (int)floor((texture.width - margin) / (float)(width  + border)));
+    int ycount = (int)round((texture.height - (margin * 2) + border) / (float)(height + border));
+    int yindex = ycount - 1 - ((frame_index + 1) / (int)round((texture.width - (margin * 2) + border) / (float)(width  + border)));
     return ((border + height) * yindex) + margin;
 }
 
