@@ -43,6 +43,7 @@
 		F94998761354548200EF10B1 /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = F94998751354548200EF10B1 /* dog.png */; };
 		F9891D851354409100F7498D /* robot.png in Resources */ = {isa = PBXBuildFile; fileRef = F9891D841354409100F7498D /* robot.png */; };
 		F9891D93135440BC00F7498D /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F9891D92135440BC00F7498D /* logo.png */; };
+		F9BF1703135832FB0086230E /* king.png in Resources */ = {isa = PBXBuildFile; fileRef = F9BF1702135832FB0086230E /* king.png */; };
 		F9C31C191345FC8600B066DC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C31C181345FC8600B066DC /* AudioToolbox.framework */; };
 		F9C31C751346012100B066DC /* clang.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C31C731346012100B066DC /* clang.wav */; };
 		F9C31C761346012100B066DC /* drums.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C31C741346012100B066DC /* drums.wav */; };
@@ -144,6 +145,7 @@
 		F94998751354548200EF10B1 /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dog.png; path = Resources/dog.png; sourceTree = "<group>"; };
 		F9891D841354409100F7498D /* robot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = robot.png; path = Resources/robot.png; sourceTree = "<group>"; };
 		F9891D92135440BC00F7498D /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = Resources/logo.png; sourceTree = "<group>"; };
+		F9BF1702135832FB0086230E /* king.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = king.png; path = Resources/king.png; sourceTree = "<group>"; };
 		F9C31C181345FC8600B066DC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F9C31C731346012100B066DC /* clang.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = clang.wav; path = Resources/clang.wav; sourceTree = "<group>"; };
 		F9C31C741346012100B066DC /* drums.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = drums.wav; path = Resources/drums.wav; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F9BF1702135832FB0086230E /* king.png */,
 				F94998751354548200EF10B1 /* dog.png */,
 				F9891D92135440BC00F7498D /* logo.png */,
 				F9891D841354409100F7498D /* robot.png */,
@@ -467,6 +470,7 @@
 				F9891D851354409100F7498D /* robot.png in Resources */,
 				F9891D93135440BC00F7498D /* logo.png in Resources */,
 				F94998761354548200EF10B1 /* dog.png in Resources */,
+				F9BF1703135832FB0086230E /* king.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

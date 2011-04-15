@@ -3,15 +3,17 @@
 #include <EmoStage.h>
 
 @interface EmoDrawable : NSObject {
-	GLuint vbo[1];
+	GLuint* frames_vbos;
 	NSString* name;
 	float x;
 	float y;
 	float z;
-	float width;
-	float height;
+	NSInteger width;
+	NSInteger height;
+	
 	BOOL hasTexture;
 	BOOL loaded;
+	BOOL hasSheet;
 	
     float      vertex_tex_coords[8];
 	
@@ -19,19 +21,30 @@
     float      param_scale[4];
     float      param_color[4];
 	
+	NSInteger frameCount;
+	NSInteger frame_index;
+	NSInteger border;
+	NSInteger margin;
+	
 	EmoImage*  texture;
 }
 @property (copy, readwrite) NSString* name;
 @property (readwrite) float x;
 @property (readwrite) float y;
 @property (readwrite) float z;
-@property (readwrite) float width;
-@property (readwrite) float height;
+@property (readwrite) NSInteger width;
+@property (readwrite) NSInteger height;
 @property (readwrite) BOOL hasTexture;
+@property (readwrite) BOOL hasSheet;
+@property (readwrite) NSInteger frameCount;
+@property (readwrite) NSInteger frame_index;
+@property (readwrite) NSInteger border;
+@property (readwrite) NSInteger margin;
 @property (assign, readwrite, nonatomic) EmoImage* texture;
 
 -(void)doUnload;
 -(void)initDrawable;
+-(void)createTextureBuffer;
 -(BOOL)bindVertex;
 -(void)updateKey:(char*)key;
 -(void)setScale:(NSInteger)index withValue:(float)value;
@@ -46,6 +59,7 @@
 @end
 
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);
+SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v);
 SQInteger emoDrawableLoad(HSQUIRRELVM v);
 SQInteger emoDrawableMove(HSQUIRRELVM v);
 SQInteger emoDrawableScale(HSQUIRRELVM v);

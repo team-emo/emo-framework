@@ -52,6 +52,7 @@
 	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
 	
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "createSpriteSheet", emoDrawableCreateSpriteSheet);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);

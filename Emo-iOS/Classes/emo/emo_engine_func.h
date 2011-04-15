@@ -14,6 +14,7 @@ void NSLOGW(NSString* msg);
 void clearGLErrors(const char* msg);
 BOOL printGLErrors(const char* msg);
 
+BOOL loadPngSizeFromAsset(NSString* filename, int *width, int *height);
 BOOL loadPngFromResource(NSString* filename, EmoImage* imageInfo);
 void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
 						 ALenum* dataFormat, ALsizei *sampleRate);

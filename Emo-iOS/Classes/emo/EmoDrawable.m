@@ -7,11 +7,22 @@
 
 extern EmoEngine* engine;
 
+@interface EmoDrawable (PrivateMethods)
+-(NSInteger)tex_coord_frame_startX;
+-(NSInteger) tex_coord_frame_startY;
+-(float)getTexCoordStartX;
+-(float)getTexCoordEndX;
+-(float)getTexCoordStartY;
+-(float)getTexCoordEndY;
+@end
+
 @implementation EmoDrawable
 @synthesize name;
-@synthesize x, y, z, width, height;
-@synthesize hasTexture;
+@synthesize x, y, z;
+@synthesize width, height;
+@synthesize hasTexture, hasSheet;
 @synthesize texture;
+@synthesize frameCount, frame_index, border, margin;
 
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
     if (!loaded) return FALSE;
@@ -53,7 +64,7 @@ extern EmoEngine* engine;
         glBindTexture(GL_TEXTURE_2D, texture.textureId);
 		
         // bind texture coords
-        glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+        glBindBuffer(GL_ARRAY_BUFFER, frames_vbos[frame_index]);
         glTexCoordPointer(2, GL_FLOAT, 0, 0);
     }
 	
@@ -98,19 +109,54 @@ extern EmoEngine* engine;
     param_scale[2] = 0;
     param_scale[3] = 0;
 	
-	glGenBuffers (1, vbo);
+	frameCount  = 1;
+    frame_index = 0;
+    border      = 0;
+    margin      = 0;
+	
 }
+
+-(NSInteger)tex_coord_frame_startX {
+    int xindex = frame_index % (int)floor((texture.width - margin) / (float)(width  + border));
+    return ((border + width) * xindex) + margin;
+}
+
+-(NSInteger) tex_coord_frame_startY {
+    int ycount = (int)floor((texture.height - margin) / (float)(height + border));
+    int yindex = ycount - 1 - ((frame_index + 1) / (int)floor((texture.width - margin) / (float)(width  + border)));
+    return ((border + height) * yindex) + margin;
+}
+
 -(float)getTexCoordStartX {
-    return 0;
+    if (hasSheet) {
+        return [self tex_coord_frame_startX] / (float)texture.glWidth;
+    } else {
+        return 0;
+    }
 }
--(float)getTexCoordStartY {
-    return (float)texture.height / (float)texture.glHeight;
-}
+
 -(float)getTexCoordEndX {
-    return (float)texture.width / (float)texture.glWidth;
+    if (hasSheet) {
+        return (float)([self tex_coord_frame_startX] + width) / (float)texture.glWidth;
+    } else {
+        return (float)texture.width / (float)texture.glWidth;
+    }
 }
+
+-(float)getTexCoordStartY {
+    if (hasSheet) {
+        return (float)([self tex_coord_frame_startY] + height) / (float)texture.glHeight;
+    } else {
+        return (float)texture.height / (float)texture.glHeight;
+    }
+}
+
 -(float)getTexCoordEndY {
-    return 0;
+    if (hasSheet) {
+        return [self tex_coord_frame_startY] / (float)texture.glHeight;
+    } else {
+        return 0;
+    }
 }
 
 -(BOOL)bindVertex {
@@ -128,7 +174,11 @@ extern EmoEngine* engine;
     vertex_tex_coords[6] = [self getTexCoordEndX];
     vertex_tex_coords[7] = [self getTexCoordStartY];
 	
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	if (frames_vbos[frame_index] == 0) {
+		glGenBuffers (1, &frames_vbos[frame_index]);
+	}
+	
+    glBindBuffer(GL_ARRAY_BUFFER, frames_vbos[frame_index]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, vertex_tex_coords, GL_STATIC_DRAW);
 	
 	printGLErrors("Could not create OpenGL vertex");
@@ -168,7 +218,7 @@ extern EmoEngine* engine;
 	double uptime = [engine uptime];
 	int uptimes = (int)floor(uptime);
 	int uptimem = (int)floor((uptime - uptimes) * 1000);
-    sprintf(key, "%d%d%d", uptimes, uptimem, vbo[0]);
+    sprintf(key, "%d%d-%d", uptimes, uptimem, frames_vbos[frame_index]);
 }
 -(void)setScale:(NSInteger)index withValue:(float)value {
 	param_scale[index] = value;
@@ -183,13 +233,28 @@ extern EmoEngine* engine;
 	return param_color[index];
 }
 
+-(void)createTextureBuffer {
+    frames_vbos = (GLuint *)malloc(sizeof(GLuint) * frameCount);
+	
+	for (int i = 0; i < frameCount; i++) {
+		frames_vbos[i] = 0;
+	}
+	glGenBuffers (1, &frames_vbos[frame_index]);
+}
 -(void)doUnload {
 	if (hasTexture) {
 		[texture doUnload];
 		[texture release];
 		hasTexture = FALSE;
 	}
-	glDeleteBuffers(1, vbo);
+	for (int i = 0; i < frameCount; i++) {
+		if (frames_vbos[i] > 0) {
+			glDeleteBuffers(1, &frames_vbos[i]);
+		}
+	}
+	frameCount  = 1;
+	frame_index = 0;
+	free(frames_vbos);
 }
 -(void)dealloc {
 	[name release];
@@ -198,7 +263,7 @@ extern EmoEngine* engine;
 @end
 
 /*
- * create drawable instance
+ * create drawable instance(single sprite)
  */
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 	EmoDrawable* drawable = [[[EmoDrawable alloc]init] autorelease];
@@ -227,6 +292,82 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     drawable.x    = x;
     drawable.y    = y;
     drawable.z    = z;
+	
+    [drawable createTextureBuffer];
+
+    char key[DRAWABLE_KEY_LENGTH];
+	[drawable updateKey:key];
+    [engine addDrawable:drawable withKey:key];
+	
+    sq_pushstring(v, key, strlen(key));
+	
+    return 1;
+}
+
+/*
+ * create drawable instance (sprite sheet)
+ */
+SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
+	EmoDrawable* drawable = [[[EmoDrawable alloc]init] autorelease];
+	
+    [drawable initDrawable];
+	
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+		
+        if (strlen(name) > 0) {
+            drawable.name = [[NSString alloc] initWithUTF8String:name];
+        }
+    }
+	
+    SQInteger frameIndex = 0;
+    SQInteger frameWidth, frameHeight;
+    SQInteger border = 0;
+    SQInteger margin = 0;
+    if (nargs >= 5 && sq_gettype(v, 3) != OT_NULL && sq_gettype(v, 4) != OT_NULL && sq_gettype(v, 5) != OT_NULL) {
+        sq_getinteger(v, 3, &frameIndex);
+        sq_getinteger(v, 4, &frameWidth);
+        sq_getinteger(v, 5, &frameHeight);
+    }
+	
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
+        sq_getinteger(v, 6, &border);
+    }
+	
+    if (nargs >= 7 && sq_gettype(v, 7) != OT_NULL) {
+        sq_getinteger(v, 7, &margin);
+    }
+	
+    int width  = 0;
+    int height = 0;
+	
+    if (!loadPngSizeFromAsset(drawable.name, &width, &height) || 
+		width <= 0 || height <= 0 || frameWidth <= 0 || frameHeight <= 0) {
+        free(drawable);
+        sq_pushinteger(v, -1);
+        return 1;
+    }
+	
+    drawable.hasSheet = true;
+    drawable.frame_index = frameIndex;
+    drawable.width  = frameWidth;
+    drawable.height = frameHeight;
+    drawable.border = border;
+	
+    if (margin == 0 && border != 0) {
+        drawable.margin = border;
+    } else {
+        drawable.margin = margin;
+    }
+	
+    drawable.frameCount = (int)floor(width / (float)(frameWidth  + border)) 
+							* floor(height /(float)(frameHeight + border));
+    if (drawable.frameCount <= 0) drawable.frameCount = 1;
+	
+    [drawable createTextureBuffer];
 	
     char key[DRAWABLE_KEY_LENGTH];
 	[drawable updateKey:key];
@@ -268,8 +409,11 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 		
         drawable.texture = imageInfo;
         drawable.hasTexture = true;
-        drawable.width  = imageInfo.width;
-        drawable.height = imageInfo.height;
+		
+		if (!drawable.hasSheet) {
+			drawable.width  = imageInfo.width;
+			drawable.height = imageInfo.height;
+        }
 		
         // assign OpenGL texture id
 		[imageInfo genTextures];

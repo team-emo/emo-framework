@@ -60,6 +60,47 @@ BOOL printGLErrors(const char* msg) {
     return result;
 }
 
+BOOL loadPngSizeFromAsset(NSString* filename, int *width, int *height) {
+	NSString* path = [[NSBundle mainBundle] pathForResource:filename ofType:nil];
+	if (path == nil) {
+		LOGE("loadPngFromResource: resource does not found");
+		NSLOGE(filename);
+		return FALSE;
+	}
+	
+	FILE* fp = fopen([path cStringUsingEncoding:1], "r");
+	
+    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    png_infop info_ptr = png_create_info_struct(png_ptr);
+	
+    if (info_ptr == NULL) {
+		fclose(fp);
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        return FALSE;
+    }
+	
+    if (setjmp(png_jmpbuf(png_ptr))) {
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+		fclose(fp);
+        return FALSE;
+    }
+	
+	png_init_io(png_ptr, fp);
+	
+    unsigned int sig_read = 0;
+    png_set_sig_bytes(png_ptr, sig_read);
+	
+    png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND, NULL);
+	
+    *width  = info_ptr->width;
+    *height = info_ptr->height;
+		
+    png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+	fclose(fp);
+	
+    return TRUE;
+}
+
 /* 
  * load png image from resource
  */
