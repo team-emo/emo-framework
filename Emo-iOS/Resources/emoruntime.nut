@@ -37,6 +37,7 @@ ERR_INVALID_PARAM         <- 0x0116;
 ERR_INVALID_ID            <- 0x0117;
 ERR_FILE_OPEN             <- 0x0118;
 ERR_CREATE_VERTEX         <- 0x0119;
+ERR_NOT_SUPPORTED         <- 0x0120;
 
 OPT_ENABLE_PERSPECTIVE_NICEST   <- 0x1000;
 OPT_ENABLE_PERSPECTIVE_FASTEST  <- 0x1001;
@@ -199,6 +200,8 @@ AUDIO_CHANNEL_STOPPED   <- 1;
 AUDIO_CHANNEL_PAUSED    <- 2;
 AUDIO_CHANNEL_PLAYING   <- 3;
 
+EMO_RUNTIME_DELEGATE    <- null;
+
 class emo.MotionEvent {
     param = null;
     function constructor(args) {
@@ -304,6 +307,7 @@ class emo.Sprite {
 
     id     = -1;
     loaded = false;
+    hasSheet = false;
 
     /*
      * sprite = Sprite("aaa.png");
@@ -315,15 +319,14 @@ class emo.Sprite {
     /*
      * sprite.load();
      * sprite.load(x, y);
-     * sprite.load(x, y, width, height);
      */
-    function load(x = 0, y = 0, width = null, height = null) {
+    function load(x = 0, y = 0) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
 
             id = stage.createSprite(name);
 
-            status = stage.load(id, x, y, width, height);
+            status = stage.loadSprite(id, x, y);
 
             if (status == EMO_NO_ERROR) {
                 loaded = true;
@@ -331,6 +334,74 @@ class emo.Sprite {
         }
         return status;
     }
+
+    /*
+     * sprite.loadSheet(x, y, frameIndex, frameWidth, frameHeight);
+     * sprite.loadSheet(x, y, frameIndex, frameWidth, frameHeight, border);
+     * sprite.loadSheet(x, y, frameIndex, frameWidth, frameHeight, border, margin);
+     */
+    function loadSheet(x, y, frameIndex, frameWidth, frameHeight, border = 0, margin = 0) {
+        local status = EMO_NO_ERROR;
+        if (!loaded) {
+
+            id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border, margin);
+
+            status = stage.loadSprite(id, x, y);
+
+            if (status == EMO_NO_ERROR) {
+                loaded = true;
+                hasSheet = true;
+            }
+        }
+        return status;
+    }
+
+    /*
+     * sprite.animate(startFrame, frameCount, interval);
+     * sprite.animate(startFrame, frameCount, interval, loopCount = 0);
+     */
+    function animate(startFrame, frameCount, interval, loopCount = 0) {
+        if (hasSheet) {
+            return stage.animate(id, startFrame, frameCount, interval, loopCount);
+        } else {
+            return ERR_NOT_SUPPORTED;
+        }
+    }
+
+    function pause() {
+        if (hasSheet) {
+            return stage.pause(id);
+        } else {
+            return ERR_NOT_SUPPORTED;
+        }
+    }
+
+    function pauseAt(frameIndex) {
+        if (hasSheet) {
+            return stage.pauseAt(id, frameIndex);
+        } else {
+            return ERR_NOT_SUPPORTED;
+        }
+    }
+
+    function setFrame(frameIndex) {
+        return pauseAt(frameIndex);
+    }
+
+    function stop() {
+        if (hasSheet) {
+            return stage.stop(id);
+        } else {
+            return ERR_NOT_SUPPORTED;
+        }
+    }
+
+    function show() { return stage.show(id); }
+    function hide() { return stage.hide(id); }
+    function alpha(a = null) { return stage.alpha(id, a); }
+    function red  (r = null) { return stage.red  (id, r); }
+    function green(g = null) { return stage.green(id, g); }
+    function blue (b = null) { return stage.blue (id, b); }
 
     /*
      * sprite.move(x, y);
@@ -378,3 +449,118 @@ class emo.Sprite {
         return id;
     }
 }
+
+function emo::Stage::load(obj) {
+
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onDispose")) {
+        EMO_RUNTIME_DELEGATE.onDispose();
+        EMO_RUNTIME_DELEGATE = null;
+    }
+
+    EMO_RUNTIME_DELEGATE = obj;
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onLoad")) {
+        EMO_RUNTIME_DELEGATE.onLoad();
+    }
+}
+
+function emo::_onLoad() { 
+    if (emo.rawin("onLoad")) {
+        emo.onLoad();
+    }
+}
+
+function emo::_onGainedFocus() {
+    if (emo.rawin("onGainedFocus")) {
+        emo.onGainedFocus();
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onGainedFocus")) {
+        EMO_RUNTIME_DELEGATE.onGainedFocus();
+    }
+}
+
+function emo::_onLostFocus() {
+    if (emo.rawin("onLostFocus")) {
+        emo.onLostFocus();
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onLostFocus")) {
+        EMO_RUNTIME_DELEGATE.onLostFocus();
+    }
+}
+
+function emo::_onDispose() {
+    if (emo.rawin("onDispose")) {
+        emo.onDispose();
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onDispose")) {
+        EMO_RUNTIME_DELEGATE.onDispose();
+    }
+} 
+
+function emo::_onError(msg) {
+    if (emo.rawin("onError")) {
+        emo.onError(msg);
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onError")) {
+        EMO_RUNTIME_DELEGATE.onError(msg);
+    }
+}
+
+function emo::_onDrawFrame(dt) {
+    if (emo.rawin("onDrawFrame")) {
+        emo.onDrawFrame(dt);
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onDrawFrame")) {
+        EMO_RUNTIME_DELEGATE.onDrawFrame(dt);
+    }
+}
+
+function emo::_onLowMemory() {
+    if (emo.rawin("onLowMemory")) {
+        emo.onLowMemory();
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onLowMemory")) {
+        EMO_RUNTIME_DELEGATE.onLowMemory();
+    }
+}
+
+function emo::_onMotionEvent(...) {
+    local mevent = emo.MotionEvent(vargv);
+    if (emo.rawin("onMotionEvent")) {
+        emo.onMotionEvent(mevent);
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onMotionEvent")) {
+        EMO_RUNTIME_DELEGATE.onMotionEvent(mevent);
+    }
+}
+
+function emo::_onKeyEvent(...) {
+    local kevent = emo.KeyEvent(vargv);
+    if (emo.rawin("onKeyEvent")) {
+        emo.onKeyEvent(kevent);
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onKeyEvent")) {
+        EMO_RUNTIME_DELEGATE.onKeyEvent(kevent);
+    }
+}
+
+function emo::_onSensorEvent(...) {
+    local sevent = emo.SensorEvent(vargv);
+    if (emo.rawin("onSensorEvent")) {
+        emo.onSensorEvent(sevent);
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onSensorEvent")) {
+        EMO_RUNTIME_DELEGATE.onSensorEvent(sevent);
+    }
+}
+

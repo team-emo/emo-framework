@@ -15,16 +15,16 @@
 #define EMO_STAGE_CLASS    "Stage"
 #define EMO_AUDIO_CLASS    "AudioManager"
 
-#define EMO_FUNC_ONLOAD         "onLoad"
-#define EMO_FUNC_ONGAINED_FOUCS "onGainedFocus"
-#define EMO_FUNC_ONLOST_FOCUS   "onLostFocus"
-#define EMO_FUNC_ONDISPOSE      "onDispose"
-#define EMO_FUNC_ONERROR        "onError"
-#define EMO_FUNC_ONDRAW_FRAME   "onDrawFrame"
-#define EMO_FUNC_ONLOW_MEMORY   "onLowMemory"
-#define EMO_FUNC_MOTIONEVENT    "onMotionEvent"
-#define EMO_FUNC_KEYEVENT       "onKeyEvent"
-#define EMO_FUNC_SENSOREVENT    "onSensorEvent"
+#define EMO_FUNC_ONLOAD         "_onLoad"
+#define EMO_FUNC_ONGAINED_FOUCS "_onGainedFocus"
+#define EMO_FUNC_ONLOST_FOCUS   "_onLostFocus"
+#define EMO_FUNC_ONDISPOSE      "_onDispose"
+#define EMO_FUNC_ONERROR        "_onError"
+#define EMO_FUNC_ONDRAW_FRAME   "_onDrawFrame"
+#define EMO_FUNC_ONLOW_MEMORY   "_onLowMemory"
+#define EMO_FUNC_MOTIONEVENT    "_onMotionEvent"
+#define EMO_FUNC_KEYEVENT       "_onKeyEvent"
+#define EMO_FUNC_SENSOREVENT    "_onSensorEvent"
 
 #define MOTION_EVENT_PARAMS_SIZE 8
 #define KEY_EVENT_PARAMS_SIZE    8
@@ -63,6 +63,7 @@
 #define ERR_INVALID_ID            0x0117
 #define ERR_FILE_OPEN             0x0118
 #define ERR_CREATE_VERTEX         0x0119
+#define ERR_NOT_SUPPORTED         0x0120
 
 #define OPT_ENABLE_PERSPECTIVE_NICEST   0x1000
 #define OPT_ENABLE_PERSPECTIVE_FASTEST  0x1001

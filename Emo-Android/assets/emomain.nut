@@ -65,7 +65,7 @@ class Level_2 {
 
     function onDispose() {
         print("Level_2:onDispose"); 
-        dogSprite.remove();
+        kingSprite.remove();
     }
 }
 
