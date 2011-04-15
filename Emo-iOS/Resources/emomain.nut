@@ -56,7 +56,6 @@ class Level_2 {
 
     function onGainedFocus() {
         print("Level_2:onGainedFocus"); 
-
     }
 
     function onLostFocus() {

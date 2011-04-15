@@ -179,6 +179,9 @@ extern EmoEngine* engine;
 -(void)setColor:(NSInteger)index withValue:(float)value {
 	param_color[index] = value;
 }
+-(float)getColor:(NSInteger)index {
+	return param_color[index];
+}
 
 -(void)doUnload {
 	if (hasTexture) {
@@ -614,5 +617,161 @@ SQInteger emoGetWindowWidth(HSQUIRRELVM v) {
 
 SQInteger emoGetWindowHeight(HSQUIRRELVM v) {
     sq_pushinteger(v, engine.stage.height);
+    return 1;
+}
+
+SQInteger emoDrawableShow(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+		return 0;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+		return 0;
+    }
+	
+    [drawable setColor:3 withValue:1];
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+	
+    return 1;
+}
+
+SQInteger emoDrawableHide(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+		return 0;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+		return 0;
+    }
+	
+    [drawable setColor:3 withValue:0];
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+	
+    return 1;
+}
+
+SQInteger emoDrawableColorRed(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+		return 0;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+		return 0;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat color;
+        sq_getfloat(v, 3, &color);
+        [drawable setColor:0 withValue:color];
+    }
+	
+    sq_pushinteger(v, [drawable getColor:0]);
+    return 1;
+}
+
+SQInteger emoDrawableColorGreen(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+		return 0;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+		return 0;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat color;
+        sq_getfloat(v, 3, &color);
+        [drawable setColor:1 withValue:color];
+    }
+	
+    sq_pushinteger(v, [drawable getColor:1]);
+    return 1;
+}
+
+SQInteger emoDrawableColorBlue(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+		return 0;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+		return 0;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat color;
+        sq_getfloat(v, 3, &color);
+        [drawable setColor:2 withValue:color];
+    }
+	
+    sq_pushinteger(v, [drawable getColor:2]);
+    return 1;
+}
+
+SQInteger emoDrawableColorAlpha(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+		return 0;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+		return 0;
+	}
+	
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat color;
+        sq_getfloat(v, 3, &color);
+        [drawable setColor:3 withValue:color];
+    }
+	
+    sq_pushinteger(v, [drawable getColor:3]);
     return 1;
 }

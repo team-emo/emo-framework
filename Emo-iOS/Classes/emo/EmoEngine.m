@@ -52,7 +52,7 @@
 	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
 	
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "load",           emoDrawableLoad);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
@@ -61,8 +61,14 @@
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "viewport",       emoSetViewport);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "ortho",          emoSetStageSize);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "pixelWidth",     emoGetWindowWidth);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "pixelHeight",    emoGetWindowHeight);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "windowWidth",    emoGetWindowWidth);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "windowHeight",   emoGetWindowHeight);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "show",           emoDrawableShow);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "hide",           emoDrawableHide);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "red",            emoDrawableColorRed);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "green",          emoDrawableColorGreen);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "blue",           emoDrawableColorBlue);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "alpha",          emoDrawableColorAlpha);
 	
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);

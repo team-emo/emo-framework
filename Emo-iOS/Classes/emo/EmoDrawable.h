@@ -37,6 +37,7 @@
 -(void)setScale:(NSInteger)index withValue:(float)value;
 -(void)setRotate:(NSInteger)index withValue:(float)value;
 -(void)setColor:(NSInteger)index withValue:(float)value;
+-(float)getColor:(NSInteger)index;
 -(float)getTexCoordStartX;
 -(float)getTexCoordStartY;
 -(float)getTexCoordEndX;
@@ -52,6 +53,12 @@ SQInteger emoDrawableRotate(HSQUIRRELVM v);
 SQInteger emoDrawableColor(HSQUIRRELVM v);
 SQInteger emoDrawableRemove(HSQUIRRELVM v);
 SQInteger emoSetOnDrawInterval(HSQUIRRELVM v);
+SQInteger emoDrawableShow(HSQUIRRELVM v);
+SQInteger emoDrawableHide(HSQUIRRELVM v);
+SQInteger emoDrawableColorRed(HSQUIRRELVM v);
+SQInteger emoDrawableColorGreen(HSQUIRRELVM v);
+SQInteger emoDrawableColorBlue(HSQUIRRELVM v);
+SQInteger emoDrawableColorAlpha(HSQUIRRELVM v);
 
 SQInteger emoSetStageSize(HSQUIRRELVM v);
 SQInteger emoSetViewport(HSQUIRRELVM v);
