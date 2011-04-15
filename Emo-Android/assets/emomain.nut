@@ -1,66 +1,61 @@
-runtime <- emo.Runtime();
-event   <- emo.Event();
-stage   <- emo.Stage();
+local runtime = emo.Runtime();
+local event   = emo.Event();
+local stage   = emo.Stage();
 
-local str = "Hello, Squirrel from File!";
-print(str);
+class Level1 {
 
-local dogSprite = emo.Sprite("blocks.png");
-local dogSprite2 = emo.Sprite("dog.png");
-local dogSprite3 = emo.Sprite("king.png");
+    dogSprite  = emo.Sprite("dog.png");
 
-function emo::onLoad() { 
-    print("onLoad");
+    function onLoad() {
+        print("Level1:onLoad"); 
+        event.enableOnDrawCallback(5000);
+        print(dogSprite.loadSheet(0, 0, 6, 34, 42, 1));
+    }
 
-    runtime.setOptions(OPT_WINDOW_KEEP_SCREEN_ON, OPT_ENABLE_PERSPECTIVE_NICEST);
+    function onGainedFocus() {
+        print("Level1:onGainedFocus"); 
 
-    event.enableOnDrawCallback(5000);
+    }
 
-    print(dogSprite.loadSheet(0, 0, 6, 32, 32, 2));
-}
+    function onLostFocus() {
+        print("Level1:onLostFocus"); 
 
-function emo::onGainedFocus() {
-    print("onGainedFocus"); 
-}
+    }
 
-function emo::onLostFocus() {
-    print("onLostFocus"); 
-}
+    function onDispose() {
+        print("Level1:onDispose"); 
+        dogSprite.remove();
+    }
 
-function emo::onDispose() {
-    print("onDispose");
-} 
+    function onDrawFrame(dt) {
+        print("Level1:onDrawFrame"); 
 
-function emo::onError(msg) {
-    print("onError: " + msg);
-}
+    }
 
-function emo::onDrawFrame(dt) {
-    print("onDrawFrame: " + dt);
-}
+    function onMotionEvent(motionEvent) {
+        print("Level1:onMotionEvent " + motionEvent.toString()); 
+        if (motionEvent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+            stage.load(Level2());
+        }
+    }
 
-function emo::onLowMemory() {
-    print("onLowMemory");
-}
-
-function emo::onMotionEvent(...) {
-    local motionEvent = emo.MotionEvent(vargv);
-    print("MotionEvent: " + motionEvent.toString());
-    if (motionEvent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-        print(dogSprite.remove());
-        print(dogSprite2.loadSheet(0, 0, 6, 34, 42, 1));
-        print(dogSprite3.loadSheet(100, 100, 6, 31, 49, 2, 3));
+    function onKeyEvent(keyEvent) {
+        print("Level1:KeyEvent " + keyEvent.toString());
+        return false;
     }
 }
 
-function emo::onKeyEvent(...) {
-    local keyEvent = emo.KeyEvent(vargv);
-    print("KeyEvent: " + keyEvent.toString());
-    return false;
+class Level2 {
+
+    kingSprite = emo.Sprite("king.png");
+
+    function onLoad() {
+        print("Level2:onLoad"); 
+        event.enableOnDrawCallback(5000);
+        print(kingSprite.loadSheet(100, 100, 6, 31, 49, 2, 3));
+    }
 }
 
-function emo::onSensorEvent(...) {
-    local sensorEvent = emo.KeyEvent(vargv);
-    print("SensorEvent: " + sensorEvent.toString());
-
+function emo::onLoad() {
+    stage.load(Level1());
 }
