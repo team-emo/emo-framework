@@ -50,7 +50,7 @@ class Level_2 {
     function onLoad() {
         print("Level_2:onLoad"); 
         event.enableOnDrawCallback(5000);
-        print(kingSprite.loadSheet(100, 100, 6, 31, 49, 2, 3));
+        print(kingSprite.loadSheet(100, 100, 6, 31, 49, 3, 2));
     }
 
     function onGainedFocus() {

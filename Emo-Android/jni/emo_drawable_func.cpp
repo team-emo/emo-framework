@@ -32,7 +32,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     }
 
     char key[DRAWABLE_KEY_LENGTH];
-    sprintf(key, "%d%d%d", 
+    sprintf(key, "%d%d-%d", 
                 g_engine->uptime.time, g_engine->uptime.millitm, drawable->frames_vbos[drawable->frame_index]);
 
     addDrawable(key, drawable, g_engine);
@@ -109,7 +109,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     loadDrawable(drawable);
 
     char key[DRAWABLE_KEY_LENGTH];
-    sprintf(key, "%d%d%d", 
+    sprintf(key, "%d%d-%d", 
                 g_engine->uptime.time, g_engine->uptime.millitm, drawable->frames_vbos[drawable->frame_index]);
 
     addDrawable(key, drawable, g_engine);
