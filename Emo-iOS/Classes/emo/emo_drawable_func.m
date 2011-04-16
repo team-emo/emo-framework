@@ -690,7 +690,10 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
 	SQInteger index;
     if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         sq_getinteger(v, 3, &index);		
-    }
+    } else {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
 	
 	if (![drawable setFrameIndex:index animating:FALSE]) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
