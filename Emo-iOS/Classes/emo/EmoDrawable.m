@@ -27,6 +27,10 @@ extern EmoEngine* engine;
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
     if (!loaded) return FALSE;
 	
+	if (frames_vbos[frame_index] <= 0) {
+		[self bindVertex];
+	}
+	
     glMatrixMode (GL_MODELVIEW);
     glLoadIdentity (); 
 	
@@ -264,6 +268,9 @@ extern EmoEngine* engine;
 	}
 	frame_index = index;
 	animating = FALSE;
+	
+	[self bindVertex];
+	
 	return TRUE;
 }
 -(BOOL)animate {
