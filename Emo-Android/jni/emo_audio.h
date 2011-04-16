@@ -3,27 +3,27 @@
 #include <squirrel.h>
 
 void createAudioEngine(int playerCount);
-bool createAudioChannelFromAsset(const char* fname, struct AudioChannel* channel);
-bool setAudioChannelState(struct AudioChannel* channel, SLuint32 state);
-SLuint32 getAudioChannelState(struct AudioChannel* channel);
-struct AudioChannel* getAudioChannel(int index);
-void closeAudioChannel(struct AudioChannel* channel);
+bool createAudioChannelFromAsset(const char* fname, AudioChannel* channel);
+bool setAudioChannelState(AudioChannel* channel, SLuint32 state);
+SLuint32 getAudioChannelState(AudioChannel* channel);
+AudioChannel* getAudioChannel(int index);
+void closeAudioChannel(AudioChannel* channel);
 void closeAudioEngine();
 bool isAudioEngineRunning();
 
-SLmillibel getAudioChannelVolume(struct AudioChannel* channel);
-SLmillibel setAudioChannelVolume(struct AudioChannel* channel, SLmillibel volumeLevel);
-SLmillibel getAudioChannelMaxVolume(struct AudioChannel* channel);
+SLmillibel getAudioChannelVolume(AudioChannel* channel);
+SLmillibel setAudioChannelVolume(AudioChannel* channel, SLmillibel volumeLevel);
+SLmillibel getAudioChannelMaxVolume(AudioChannel* channel);
 SQInteger emoGetAudioChannelCount(HSQUIRRELVM v);
 
-bool seekAudioChannel(struct AudioChannel* channel, int pos);
-bool playAudioChannel(struct AudioChannel* channel);
-bool pauseAudioChannel(struct AudioChannel* channel);
-bool stopAudioChannel(struct AudioChannel* channel);
-struct AudioChannel* loadAudio(int channelIndex, const char* name);
+bool seekAudioChannel(AudioChannel* channel, int pos);
+bool playAudioChannel(AudioChannel* channel);
+bool pauseAudioChannel(AudioChannel* channel);
+bool stopAudioChannel(AudioChannel* channel);
+AudioChannel* loadAudio(int channelIndex, const char* name);
 
-bool getAudioChannelLooping(struct AudioChannel* channel);
-bool setAudioChannelLooping(struct AudioChannel* channel, SQInteger enable);
+bool getAudioChannelLooping(AudioChannel* channel);
+bool setAudioChannelLooping(AudioChannel* channel, SQInteger enable);
 
 SQInteger emoLoadAudio(HSQUIRRELVM v);
 SQInteger emoCreateAudioEngine(HSQUIRRELVM v);

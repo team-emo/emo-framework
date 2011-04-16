@@ -1,7 +1,10 @@
 #include <hash_map>
 #include <sys/timeb.h>
+
 #include <EGL/egl.h>
 #include <GLES/gl.h>
+#include <SLES/OpenSLES.h>
+#include "SLES/OpenSLES_Android.h"
 
 #include <android/sensor.h>
 #include <android/log.h>
@@ -80,6 +83,14 @@ struct Stage {
 
     int32_t viewport_width;
     int32_t viewport_height;
+};
+
+struct AudioChannel {
+    SLboolean     loaded;
+    SLObjectItf   playerObject;
+    SLPlayItf     playerPlay;
+    SLSeekItf     playerSeek;
+    SLVolumeItf   playerVolume;
 };
 
 typedef std::hash_map <const char *, Drawable *, std::hash<const char*>, char_comparator> drawables_t;

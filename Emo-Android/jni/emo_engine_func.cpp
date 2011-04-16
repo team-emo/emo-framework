@@ -17,7 +17,7 @@
 #include <emo_engine_func.h>
 #include <png.h>
 
-extern struct engine *g_engine;
+extern engine *g_engine;
 
 /* Log INFO */
 void LOGI(const SQChar* msg) {
@@ -103,7 +103,7 @@ bool loadPngSizeFromAsset(const char *fname, int *width, int *height) {
 /* 
  * load png image from asset
  */
-bool loadPngFromAsset(const char *fname, struct ImageInfo* imageInfo) {
+bool loadPngFromAsset(const char *fname, ImageInfo* imageInfo) {
     AAssetManager* mgr = g_engine->app->activity->assetManager;
     if (mgr == NULL) {
     	g_engine->lastError = ERR_ASSET_LOAD;

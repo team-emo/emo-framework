@@ -2,25 +2,25 @@
 
 bool clearGLErrors(const char* msg);
 bool printGLErrors(const char* msg);
-bool loadStage(struct Stage* stage);
+bool loadStage(Stage* stage);
 
-void addDrawable(const char* _key, struct Drawable* drawable, struct engine* engine);
-bool removeDrawable(const char* key, struct engine* engine);
+void addDrawable(const char* _key, Drawable* drawable, engine* engine);
+bool removeDrawable(const char* key, engine* engine);
 
-void initDrawable(struct Drawable* drawable);
-void loadDrawable(struct Drawable* drawable);
-void loadDrawables(struct engine* engine);
+void initDrawable(Drawable* drawable);
+void loadDrawable(Drawable* drawable);
+void loadDrawables(engine* engine);
 
-bool bindDrawableVertex(struct Drawable* drawable);
+bool bindDrawableVertex(Drawable* drawable);
 
-void rebindStageBuffers(struct Stage* stage);
-void rebindDrawableBuffers(struct engine* engine);
+void rebindStageBuffers(Stage* stage);
+void rebindDrawableBuffers(engine* engine);
 
-void unloadDrawables(struct engine* engine);
-bool deleteStageBuffer(struct Stage* stage);
-bool deleteDrawableBuffers(struct engine* engine);
+void unloadDrawables(engine* engine);
+bool deleteStageBuffer(Stage* stage);
+bool deleteDrawableBuffers(engine* engine);
 
-void onDrawDrawables(struct engine* engine);
-void onDrawStage(struct Stage* stage);
+void onDrawDrawables(engine* engine);
+void onDrawStage(Stage* stage);
 
-struct Drawable* getDrawable(const char* key, struct engine* engine);
+Drawable* getDrawable(const char* key, engine* engine);

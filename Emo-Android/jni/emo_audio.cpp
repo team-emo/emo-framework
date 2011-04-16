@@ -11,17 +11,9 @@
 #include <main.h>
 #include <emo_engine_func.h>
 
-struct AudioChannel {
-    SLboolean     loaded;
-    SLObjectItf   playerObject;
-    SLPlayItf     playerPlay;
-    SLSeekItf     playerSeek;
-    SLVolumeItf   playerVolume;
-};
+extern engine *g_engine;
 
-extern struct engine *g_engine;
-
-struct AudioChannel *audioChannels;
+AudioChannel *audioChannels;
 
 static int  audioChannelCount  = 0;
 static bool audioEngineCreated = false;
@@ -37,7 +29,7 @@ static SLresult checkOpenSLresult(const char* message, SLresult result) {
     return result;
 }
 
-SLuint32 getAudioChannelState(struct AudioChannel* channel) {
+SLuint32 getAudioChannelState(AudioChannel* channel) {
     if (!channel->loaded) {
         g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
         LOGE("emo_audio: audio channel is closed");
@@ -49,7 +41,7 @@ SLuint32 getAudioChannelState(struct AudioChannel* channel) {
     return state;
 }
 
-bool setAudioChannelState(struct AudioChannel* channel, SLuint32 state) {
+bool setAudioChannelState(AudioChannel* channel, SLuint32 state) {
     if (!channel->loaded) {
         g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
         LOGE("emo_audio: audio channel is closed");
@@ -60,7 +52,7 @@ bool setAudioChannelState(struct AudioChannel* channel, SLuint32 state) {
     return (SL_RESULT_SUCCESS == result);
 }
 
-bool seekAudioChannel(struct AudioChannel* channel, int pos, SLuint32 seekMode) {
+bool seekAudioChannel(AudioChannel* channel, int pos, SLuint32 seekMode) {
     if (!channel->loaded) {
         g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
         LOGE("emo_audio: audio channel is closed");
@@ -71,7 +63,7 @@ bool seekAudioChannel(struct AudioChannel* channel, int pos, SLuint32 seekMode) 
     return (SL_RESULT_SUCCESS == result);
 }
 
-SLmillibel getAudioChannelVolume(struct AudioChannel* channel) {
+SLmillibel getAudioChannelVolume(AudioChannel* channel) {
     if (!channel->loaded) {
         g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
         LOGE("emo_audio: audio channel is closed");
@@ -84,7 +76,7 @@ SLmillibel getAudioChannelVolume(struct AudioChannel* channel) {
     return volumeLevel;
 }
 
-SLmillibel setAudioChannelVolume(struct AudioChannel* channel, SLmillibel volumeLevel) {
+SLmillibel setAudioChannelVolume(AudioChannel* channel, SLmillibel volumeLevel) {
     if (!channel->loaded) {
         g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
         LOGE("emo_audio: audio channel is closed");
@@ -97,7 +89,7 @@ SLmillibel setAudioChannelVolume(struct AudioChannel* channel, SLmillibel volume
 
 }
 
-SLmillibel getAudioChannelMaxVolume(struct AudioChannel* channel) {
+SLmillibel getAudioChannelMaxVolume(AudioChannel* channel) {
     if (!channel->loaded) {
         g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
         LOGE("emo_audio: audio channel is closed");
@@ -110,7 +102,7 @@ SLmillibel getAudioChannelMaxVolume(struct AudioChannel* channel) {
     return volumeLevel;
 }
 
-bool playAudioChannel(struct AudioChannel* channel) {
+bool playAudioChannel(AudioChannel* channel) {
     if (!channel->loaded) {
         g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
         LOGE("emo_audio: audio channel is closed");
@@ -122,7 +114,7 @@ bool playAudioChannel(struct AudioChannel* channel) {
     return setAudioChannelState(channel, SL_PLAYSTATE_PLAYING);
 }
 
-bool pauseAudioChannel(struct AudioChannel* channel) {
+bool pauseAudioChannel(AudioChannel* channel) {
     if (!channel->loaded) {
         g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
         LOGE("emo_audio: audio channel is closed");
@@ -131,7 +123,7 @@ bool pauseAudioChannel(struct AudioChannel* channel) {
     return setAudioChannelState(channel, SL_PLAYSTATE_PAUSED);
 }
 
-bool stopAudioChannel(struct AudioChannel* channel) {
+bool stopAudioChannel(AudioChannel* channel) {
     if (!channel->loaded) {
         g_engine->lastError = ERR_AUDIO_CHANNEL_CLOSED;
         LOGE("emo_audio: audio channel is closed");
@@ -140,7 +132,7 @@ bool stopAudioChannel(struct AudioChannel* channel) {
     return setAudioChannelState(channel, SL_PLAYSTATE_STOPPED);
 }
 
-void closeAudioChannel(struct AudioChannel* channel) {
+void closeAudioChannel(AudioChannel* channel) {
     if (channel->loaded) {
         if (getAudioChannelState(channel) != SL_PLAYSTATE_PAUSED) {
             stopAudioChannel(channel);
@@ -220,7 +212,7 @@ bool createAudioEngine(int channelCount) {
     return true;
 }
 
-bool createAudioChannelFromAsset(const char* fname, struct AudioChannel* channel) {
+bool createAudioChannelFromAsset(const char* fname, AudioChannel* channel) {
     SLresult result;
 
     if (channel->loaded == SL_BOOLEAN_TRUE) {
@@ -305,7 +297,7 @@ bool createAudioChannelFromAsset(const char* fname, struct AudioChannel* channel
     return true;
 }
 
-struct AudioChannel* getAudioChannel(int index) {
+AudioChannel* getAudioChannel(int index) {
     if (index >= audioChannelCount) {
         g_engine->lastError = ERR_INVALID_PARAM;
         LOGE("emo_audio: invalid audio channel index");
@@ -337,7 +329,7 @@ bool isAudioEngineRunning() {
     return audioEngineCreated;
 }
 
-bool getAudioChannelLooping(struct AudioChannel* channel) {
+bool getAudioChannelLooping(AudioChannel* channel) {
     SLboolean enabled;
     SLmillisecond start = 0;
     SLmillisecond end = SL_TIME_UNKNOWN;
@@ -354,7 +346,7 @@ bool getAudioChannelLooping(struct AudioChannel* channel) {
     return false;
 }
 
-bool setAudioChannelLooping(struct AudioChannel* channel, SQInteger enable) {
+bool setAudioChannelLooping(AudioChannel* channel, SQInteger enable) {
     SLresult result;
     if (enable == EMO_YES) {
         result = (*channel->playerSeek)->SetLoop(channel->playerSeek, SL_BOOLEAN_TRUE, 0, SL_TIME_UNKNOWN);
@@ -391,7 +383,7 @@ SQInteger emoLoadAudio(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct AudioChannel* channel = getAudioChannel(channelIndex);
+    AudioChannel* channel = getAudioChannel(channelIndex);
 
     if (!createAudioChannelFromAsset(filename, channel)) {
         sq_pushinteger(v, g_engine->lastError);
@@ -573,7 +565,7 @@ SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct AudioChannel* channel = getAudioChannel(channelIndex);
+    AudioChannel* channel = getAudioChannel(channelIndex);
 
     if (!channel->loaded) {
         LOGE("emo_audio: audio channel is closed");
@@ -641,7 +633,7 @@ SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct AudioChannel* channel = getAudioChannel(channelIndex);
+    AudioChannel* channel = getAudioChannel(channelIndex);
 
     if (!channel->loaded) {
         LOGE("emo_audio: audio channel is closed");
@@ -721,7 +713,7 @@ SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct AudioChannel* channel = getAudioChannel(channelIndex);
+    AudioChannel* channel = getAudioChannel(channelIndex);
 
     if (!channel->loaded) {
         LOGE("emo_audio: audio channel is closed");
@@ -762,7 +754,7 @@ SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct AudioChannel* channel = getAudioChannel(channelIndex);
+    AudioChannel* channel = getAudioChannel(channelIndex);
 
     if (!channel->loaded) {
         LOGE("emo_audio: audio channel is closed");
@@ -809,7 +801,7 @@ SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct AudioChannel* channel = getAudioChannel(channelIndex);
+    AudioChannel* channel = getAudioChannel(channelIndex);
 
     if (!channel->loaded) {
         sq_pushinteger(v, ERR_AUDIO_CHANNEL_CLOSED);

@@ -24,7 +24,7 @@ struct engine *g_engine;
 /**
  * Initialize an EGL context for the current display.
  */
-static int engine_init_display(struct engine* engine) {
+static int engine_init_display(engine* engine) {
     const EGLint attribs[] = {
             EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
             EGL_BLUE_SIZE, 8,
@@ -72,7 +72,7 @@ static int engine_init_display(struct engine* engine) {
 /**
  * Just the current frame in the display.
  */
-static void engine_draw_frame(struct engine* engine) {
+static void engine_draw_frame(engine* engine) {
     if (engine->display == NULL) {
         return;
     }
@@ -83,7 +83,7 @@ static void engine_draw_frame(struct engine* engine) {
 /**
  * Tear down the EGL context currently associated with the display.
  */
-static void engine_term_display(struct engine* engine) {
+static void engine_term_display(engine* engine) {
     if (engine->display != EGL_NO_DISPLAY) {
 
         if (engine->loaded) {
@@ -121,7 +121,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
  * Process the next main command.
  */
 static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
-    struct engine* engine = (struct engine*)app->userData;
+    engine* engine = (struct engine*)app->userData;
     switch (cmd) {
         case APP_CMD_SAVE_STATE:
             engine->app->savedState = malloc(sizeof(struct saved_state));

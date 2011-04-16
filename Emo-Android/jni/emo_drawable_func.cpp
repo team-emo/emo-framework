@@ -7,14 +7,14 @@
 #include <emo_engine_func.h>
 #include <emo_drawable.h>
 
-extern struct engine *g_engine;
+extern engine *g_engine;
 
 /*
  * create drawable instance (single sprite)
  */
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 
-    struct Drawable *drawable = (Drawable *)malloc(sizeof(Drawable));
+    Drawable *drawable = (Drawable *)malloc(sizeof(Drawable));
 
     initDrawable(drawable);
     drawable->frames_vbos = (GLuint *)malloc(sizeof(GLuint) * drawable->frameCount);
@@ -47,7 +47,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
  */
 SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
 
-    struct Drawable *drawable = (Drawable *)malloc(sizeof(Drawable));
+    Drawable *drawable = (Drawable *)malloc(sizeof(Drawable));
     initDrawable(drawable);
 
     const SQChar* name;
@@ -131,14 +131,14 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         sq_pushinteger(v, ERR_INVALID_ID);
         return 1;
     }
 
-    struct ImageInfo* imageInfo = (ImageInfo *)malloc(sizeof(ImageInfo));
+    ImageInfo* imageInfo = (ImageInfo *)malloc(sizeof(ImageInfo));
     if (drawable->name != NULL && loadPngFromAsset(drawable->name, imageInfo)) {
 
         // calculate the size of power of two
@@ -199,7 +199,7 @@ SQInteger emoDrawableMove(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         sq_pushinteger(v, ERR_INVALID_ID);
@@ -243,7 +243,7 @@ SQInteger emoDrawableColor(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         sq_pushinteger(v, ERR_INVALID_ID);
@@ -293,7 +293,7 @@ SQInteger emoDrawableScale(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         sq_pushinteger(v, ERR_INVALID_ID);
@@ -351,7 +351,7 @@ SQInteger emoDrawableRotate(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         sq_pushinteger(v, ERR_INVALID_ID);
@@ -411,7 +411,7 @@ SQInteger emoDrawableRemove(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         sq_pushinteger(v, ERR_INVALID_ID);
@@ -506,7 +506,7 @@ SQInteger emoDrawableShow(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         sq_pushinteger(v, ERR_INVALID_ID);
@@ -532,7 +532,7 @@ SQInteger emoDrawableHide(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         sq_pushinteger(v, ERR_INVALID_ID);
@@ -557,7 +557,7 @@ SQInteger emoDrawableColorRed(HSQUIRRELVM v) {
         return 0;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         return 0;
@@ -586,7 +586,7 @@ SQInteger emoDrawableColorGreen(HSQUIRRELVM v) {
         return 0;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         return 0;
@@ -615,7 +615,7 @@ SQInteger emoDrawableColorBlue(HSQUIRRELVM v) {
         return 0;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         return 0;
@@ -644,7 +644,7 @@ SQInteger emoDrawableColorAlpha(HSQUIRRELVM v) {
         return 0;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         return 0;
@@ -674,7 +674,7 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         sq_pushinteger(v, ERR_INVALID_ID);
@@ -715,7 +715,7 @@ SQInteger emoDrawablePause(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         sq_pushinteger(v, ERR_INVALID_ID);
@@ -740,7 +740,7 @@ SQInteger emoDrawableStop(HSQUIRRELVM v) {
         return 1;
     }
 
-    struct Drawable* drawable = getDrawable(id, g_engine);
+    Drawable* drawable = getDrawable(id, g_engine);
 
     if (drawable == NULL) {
         sq_pushinteger(v, ERR_INVALID_ID);

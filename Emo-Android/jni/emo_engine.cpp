@@ -32,7 +32,7 @@ void registerEmoClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, S
 /*
  * register class and functions for script
  */
-static void initScriptFunctions(struct engine* engine) {
+static void initScriptFunctions(engine* engine) {
 
 	register_table(engine->sqvm, EMO_NAMESPACE);
 	registerEmoClass(engine->sqvm, EMO_RUNTIME_CLASS);
@@ -100,7 +100,7 @@ static void initScriptFunctions(struct engine* engine) {
 	registerEmoClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "closeEngine",    emoCloseAudioEngine);
 }
 
-void engine_update_uptime(struct engine* engine) {
+void engine_update_uptime(engine* engine) {
     timeb eventTime;
     ftime(&eventTime);
 
@@ -108,14 +108,14 @@ void engine_update_uptime(struct engine* engine) {
     engine->uptime.millitm  = eventTime.millitm;
 }
 
-int32_t engine_getLastOnDrawDelta(struct engine* engine) {
+int32_t engine_getLastOnDrawDelta(engine* engine) {
     int32_t deltaSec  = engine->uptime.time - engine->lastOnDrawInterval.time;
     int32_t deltaMsec = engine->uptime.millitm - engine->lastOnDrawInterval.millitm;
 
     return (deltaSec * 1000) + deltaMsec;
 }
 
-int32_t engine_getLastOnDrawDrawablesDelta(struct engine* engine) {
+int32_t engine_getLastOnDrawDrawablesDelta(engine* engine) {
     int32_t deltaSec  = engine->uptime.time - engine->lastOnDrawDrawablesInterval.time;
     int32_t deltaMsec = engine->uptime.millitm - engine->lastOnDrawDrawablesInterval.millitm;
 
@@ -125,7 +125,7 @@ int32_t engine_getLastOnDrawDrawablesDelta(struct engine* engine) {
 /**
  * Initialize the framework
  */
-void emo_init_engine(struct engine* engine) {
+void emo_init_engine(engine* engine) {
 
     // initialize startup time
     ftime(&engine->startTime);
@@ -175,7 +175,7 @@ void emo_init_engine(struct engine* engine) {
 /*
  * Initialize the display
  */
-void emo_init_display(struct engine* engine) {
+void emo_init_display(engine* engine) {
     if (!engine->loaded) return;
 
     engine_update_uptime(engine);
@@ -228,7 +228,7 @@ void emo_init_display(struct engine* engine) {
     onDrawStage(engine->stage);
 }
 
-void emo_term_display(struct engine* engine) {
+void emo_term_display(engine* engine) {
     deleteDrawableBuffers(engine);
     deleteStageBuffer(engine->stage);
 }
@@ -236,7 +236,7 @@ void emo_term_display(struct engine* engine) {
 /*
  * Draw current frame
  */
-void emo_draw_frame(struct engine* engine) {
+void emo_draw_frame(engine* engine) {
     if (!engine->loaded) return;
     if (!engine->focused) return;
 
@@ -261,7 +261,7 @@ void emo_draw_frame(struct engine* engine) {
 /*
  * Terminate the framework
  */
-void emo_dispose_engine(struct engine* engine) {
+void emo_dispose_engine(engine* engine) {
     if (engine->loaded) {
         if (isAudioEngineRunning()) {
             closeAudioEngine();
@@ -283,7 +283,7 @@ void emo_dispose_engine(struct engine* engine) {
  * Process motion event
  */
 int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
-	struct engine* engine = (struct engine*)app->userData;
+	engine* engine = (struct engine*)app->userData;
 	if (!engine->loaded) return 0;
     if (!engine->focused) return 0;
 
@@ -320,8 +320,8 @@ int32_t emo_event_motion(struct android_app* app, AInputEvent* event) {
 /*
  * Process key event
  */
-int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
-	struct engine* engine = (struct engine*)app->userData;
+int32_t emo_event_key(android_app* app, AInputEvent* event) {
+	engine* engine = (struct engine*)app->userData;
 	if (!engine->loaded) return 0;
     if (!engine->focused) return 0;
 
@@ -352,7 +352,7 @@ int32_t emo_event_key(struct android_app* app, AInputEvent* event) {
 /*
  * handle sensor event
  */
-int32_t emo_event_sensors(struct engine* engine, ASensorEvent* event) {
+int32_t emo_event_sensors(engine* engine, ASensorEvent* event) {
     if (!engine->loaded) return 0;
     if (!engine->focused) return 0;
 
@@ -374,7 +374,7 @@ int32_t emo_event_sensors(struct engine* engine, ASensorEvent* event) {
 /*
  * Gained focus
  */
-void emo_gained_focus(struct engine* engine) {
+void emo_gained_focus(engine* engine) {
     if (!engine->loaded) return;
 
     engine->focused = true;
@@ -387,7 +387,7 @@ void emo_gained_focus(struct engine* engine) {
 /*
  * Lost focus
  */
-void emo_lost_focus(struct engine* engine) {
+void emo_lost_focus(engine* engine) {
     if (!engine->loaded) return;
 
     engine->focused = false;
@@ -401,7 +401,7 @@ void emo_lost_focus(struct engine* engine) {
  * Command from main thread: the system is running low on memory.
  * Try to reduce your memory use.
  */
-void emo_low_memory(struct engine* engine) {
+void emo_low_memory(engine* engine) {
     if (!engine->loaded) return;
 
     engine_update_uptime(engine);
