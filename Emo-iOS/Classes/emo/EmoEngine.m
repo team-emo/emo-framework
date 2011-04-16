@@ -73,6 +73,8 @@
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "blue",           emoDrawableColorBlue);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "alpha",          emoDrawableColorAlpha);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "pauseAt",        emoDrawablePauseAt);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "pause",          emoDrawablePause);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "stop",           emoDrawableStop);
 	
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);

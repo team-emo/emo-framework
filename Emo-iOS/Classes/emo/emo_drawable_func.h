@@ -21,3 +21,5 @@ SQInteger emoSetViewport(HSQUIRRELVM v);
 SQInteger emoGetWindowWidth(HSQUIRRELVM v);
 SQInteger emoGetWindowHeight(HSQUIRRELVM v);
 SQInteger emoDrawablePauseAt(HSQUIRRELVM v);
+SQInteger emoDrawablePause(HSQUIRRELVM v);
+SQInteger emoDrawableStop(HSQUIRRELVM v);

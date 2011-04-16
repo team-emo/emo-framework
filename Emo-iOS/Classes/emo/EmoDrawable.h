@@ -37,7 +37,6 @@
 @property (readwrite) NSInteger height;
 @property (readwrite) BOOL hasTexture;
 @property (readwrite) BOOL hasSheet;
-@property (readwrite) BOOL animating;
 @property (readwrite) NSInteger frameCount;
 @property (readwrite) NSInteger frame_index;
 @property (readwrite) NSInteger border;
@@ -59,4 +58,7 @@
 -(float)getTexCoordEndX;
 -(float)getTexCoordEndY;
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
+-(BOOL)animate;
+-(void)pause;
+-(void)stop;
 @end

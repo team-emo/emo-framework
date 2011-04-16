@@ -20,9 +20,22 @@ extern EmoEngine* engine;
 @synthesize name;
 @synthesize x, y, z;
 @synthesize width, height;
-@synthesize hasTexture, hasSheet, animating;
+@synthesize hasTexture, hasSheet;
 @synthesize texture;
 @synthesize frameCount, frame_index, border, margin;
+
+-(BOOL)animate {
+	animating = TRUE;
+	// TODO
+	return animating;
+}
+-(void)pause {
+	animating = FALSE;
+}
+-(void)stop {
+	animating = FALSE;
+	frame_index = 0;
+}
 
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
     if (!loaded) return FALSE;

@@ -687,15 +687,65 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
 		return 1;
 	}
 	
+	SQInteger index;
     if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
-        SQInteger index;
         sq_getinteger(v, 3, &index);		
     }
 	
-	if (![drawable setFrameIndex:(NSInteger)index]) {
+	if (![drawable setFrameIndex:index]) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDrawablePause(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+		sq_pushinteger(v, ERR_INVALID_ID);
+		return 1;
+	}
+
+	[drawable pause];
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDrawableStop(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+		sq_pushinteger(v, ERR_INVALID_ID);
+		return 1;
+	}
+	
+	[drawable stop];
 	
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
