@@ -150,9 +150,10 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         // calculate the size of power of two
         imageInfo.glWidth  = nextPowerOfTwo(imageInfo.width);
         imageInfo.glHeight = nextPowerOfTwo(imageInfo.height);
+		imageInfo.loaded = FALSE;
 		
         drawable.texture = imageInfo;
-        drawable.hasTexture = true;
+        drawable.hasTexture = TRUE;
 		
 		if (!drawable.hasSheet) {
 			drawable.width  = imageInfo.width;

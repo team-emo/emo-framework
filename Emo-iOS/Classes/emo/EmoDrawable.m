@@ -189,7 +189,7 @@ extern EmoEngine* engine;
 	
 	printGLErrors("Could not create OpenGL vertex");
 	
-    if (hasTexture) {
+    if (hasTexture && !texture.loaded) {
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, texture.textureId);
 		
@@ -213,6 +213,8 @@ extern EmoEngine* engine;
             free(holder);
         }
 		glBindTexture(GL_TEXTURE_2D, 0);
+		
+		texture.loaded = TRUE;
         printGLErrors("Could not bind OpenGL textures");
     }
 	

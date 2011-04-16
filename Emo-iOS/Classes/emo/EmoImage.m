@@ -6,7 +6,7 @@
 @synthesize textureId;
 @synthesize width, height, glWidth, glHeight;
 @synthesize data;
-@synthesize hasAlpha;
+@synthesize hasAlpha, loaded;
 
 -(BOOL)loadPng:(NSString*)file {
 	return loadPngFromResource(file, self);
