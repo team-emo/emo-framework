@@ -14,6 +14,7 @@
 	BOOL hasTexture;
 	BOOL loaded;
 	BOOL hasSheet;
+	BOOL animating;
 	
     float      vertex_tex_coords[8];
 	
@@ -36,6 +37,7 @@
 @property (readwrite) NSInteger height;
 @property (readwrite) BOOL hasTexture;
 @property (readwrite) BOOL hasSheet;
+@property (readwrite) BOOL animating;
 @property (readwrite) NSInteger frameCount;
 @property (readwrite) NSInteger frame_index;
 @property (readwrite) NSInteger border;
@@ -50,6 +52,7 @@
 -(void)setScale:(NSInteger)index withValue:(float)value;
 -(void)setRotate:(NSInteger)index withValue:(float)value;
 -(void)setColor:(NSInteger)index withValue:(float)value;
+-(BOOL)setFrameIndex:(NSInteger)index;
 -(float)getColor:(NSInteger)index;
 -(float)getTexCoordStartX;
 -(float)getTexCoordStartY;
@@ -57,24 +60,3 @@
 -(float)getTexCoordEndY;
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
 @end
-
-SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);
-SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v);
-SQInteger emoDrawableLoad(HSQUIRRELVM v);
-SQInteger emoDrawableMove(HSQUIRRELVM v);
-SQInteger emoDrawableScale(HSQUIRRELVM v);
-SQInteger emoDrawableRotate(HSQUIRRELVM v);
-SQInteger emoDrawableColor(HSQUIRRELVM v);
-SQInteger emoDrawableRemove(HSQUIRRELVM v);
-SQInteger emoSetOnDrawInterval(HSQUIRRELVM v);
-SQInteger emoDrawableShow(HSQUIRRELVM v);
-SQInteger emoDrawableHide(HSQUIRRELVM v);
-SQInteger emoDrawableColorRed(HSQUIRRELVM v);
-SQInteger emoDrawableColorGreen(HSQUIRRELVM v);
-SQInteger emoDrawableColorBlue(HSQUIRRELVM v);
-SQInteger emoDrawableColorAlpha(HSQUIRRELVM v);
-
-SQInteger emoSetStageSize(HSQUIRRELVM v);
-SQInteger emoSetViewport(HSQUIRRELVM v);
-SQInteger emoGetWindowWidth(HSQUIRRELVM v);
-SQInteger emoGetWindowHeight(HSQUIRRELVM v);

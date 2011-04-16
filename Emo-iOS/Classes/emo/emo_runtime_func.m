@@ -1,8 +1,8 @@
-#import "EmoEngine.h"
-#import "EmoFunc.h"
+#import "emo_runtime_func.h"
+#import "emo_engine_func.h"
 #import "sqfunc.h"
 #import "common.h"
-#import "emo_engine_func.h"
+#import "EmoEngine.h"
 
 extern EmoEngine* engine;
 

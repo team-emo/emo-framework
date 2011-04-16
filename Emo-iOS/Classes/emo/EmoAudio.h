@@ -1,4 +1,3 @@
-#import "squirrel.h"
 #import "OpenAL/al.h"
 #import "OpenAL/alc.h"
 #import <AudioToolbox/AudioToolbox.h>
@@ -15,7 +14,7 @@
 @property (readwrite) NSInteger audioChannelCount;
 
 -(BOOL)createChannels:(NSInteger)count;
--(BOOL)loadChannelFromAsset:(NSInteger)index withFile:(const SQChar *)fname;
+-(BOOL)loadChannelFromAsset:(NSInteger)index withFile:(const char *)fname;
 -(BOOL)closeChannel:(NSInteger)index;
 -(void)closeEngine;
 -(BOOL)isAudioEngineRunning;
@@ -34,25 +33,6 @@
 -(ALfloat)getChannelMinVolume:(NSInteger)index;
 
 -(BOOL)getChannelLooping:(NSInteger)index;
--(BOOL)setChannelLooping:(NSInteger)index withLoop:(SQInteger) enable;
+-(BOOL)setChannelLooping:(NSInteger)index withLoop:(NSInteger) enable;
 
 @end
-
-SQInteger emoLoadAudio(HSQUIRRELVM v);
-SQInteger emoCreateAudioEngine(HSQUIRRELVM v);
-SQInteger emoPlayAudioChannel(HSQUIRRELVM v);
-SQInteger emoPauseAudioChannel(HSQUIRRELVM v);
-SQInteger emoStopAudioChannel(HSQUIRRELVM v);
-SQInteger emoSeekAudioChannel(HSQUIRRELVM v);
-SQInteger emoCloseAudioChannel(HSQUIRRELVM v);
-SQInteger emoCloseAudioEngine(HSQUIRRELVM v);
-
-SQInteger emoGetAudioChannelCount(HSQUIRRELVM v);
-SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v);
-SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v);
-SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v);
-SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v);
-
-SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v);
-SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v);
-SQInteger emoGetAudioChannelState(HSQUIRRELVM v);

@@ -1,9 +1,11 @@
 #import "common.h"
 #import "sqfunc.h"
+#import "emo_runtime_func.h"
 #import "emo_engine_func.h"
+#import "emo_drawable_func.h"
+#import "emo_audio_func.h"
 #import "EmoEngine.h"
 #import "EmoDrawable.h"
-#import "EmoFunc.h"
 
 @interface EmoEngine (PrivateMethods)
 - (void)initEngine;
@@ -70,6 +72,7 @@
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "green",          emoDrawableColorGreen);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "blue",           emoDrawableColorBlue);
 	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "alpha",          emoDrawableColorAlpha);
+	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "pauseAt",        emoDrawablePauseAt);
 	
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
 	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
