@@ -692,7 +692,7 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
         sq_getinteger(v, 3, &index);		
     }
 	
-	if (![drawable setFrameIndex:index]) {
+	if (![drawable setFrameIndex:index animating:TRUE]) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}

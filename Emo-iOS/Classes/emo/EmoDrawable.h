@@ -51,7 +51,7 @@
 -(void)setScale:(NSInteger)index withValue:(float)value;
 -(void)setRotate:(NSInteger)index withValue:(float)value;
 -(void)setColor:(NSInteger)index withValue:(float)value;
--(BOOL)setFrameIndex:(NSInteger)index;
+-(BOOL)setFrameIndex:(NSInteger)index animating:(BOOL)value;
 -(float)getColor:(NSInteger)index;
 -(float)getTexCoordStartX;
 -(float)getTexCoordStartY;

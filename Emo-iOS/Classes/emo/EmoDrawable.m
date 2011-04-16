@@ -24,19 +24,6 @@ extern EmoEngine* engine;
 @synthesize texture;
 @synthesize frameCount, frame_index, border, margin;
 
--(BOOL)animate {
-	animating = TRUE;
-	// TODO
-	return animating;
-}
--(void)pause {
-	animating = FALSE;
-}
--(void)stop {
-	animating = FALSE;
-	frame_index = 0;
-}
-
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
     if (!loaded) return FALSE;
 	
@@ -271,13 +258,27 @@ extern EmoEngine* engine;
 	frame_index = 0;
 	free(frames_vbos);
 }
--(BOOL)setFrameIndex:(NSInteger)index {
+-(BOOL)setFrameIndex:(NSInteger)index animating:(BOOL)value {
 	if (frameCount <= index) {
 		return FALSE;
 	}
 	frame_index = index;
+	animating = value;
 	return TRUE;
 }
+-(BOOL)animate {
+	animating = TRUE;
+	// TODO
+	return animating;
+}
+-(void)pause {
+	animating = FALSE;
+}
+-(void)stop {
+	animating = FALSE;
+	frame_index = 0;
+}
+
 -(void)dealloc {
 	[name release];
 	[super dealloc];
