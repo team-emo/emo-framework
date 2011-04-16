@@ -258,12 +258,12 @@ extern EmoEngine* engine;
 	frame_index = 0;
 	free(frames_vbos);
 }
--(BOOL)setFrameIndex:(NSInteger)index animating:(BOOL)value {
+-(BOOL)pauseAt:(NSInteger)index {
 	if (frameCount <= index) {
 		return FALSE;
 	}
 	frame_index = index;
-	animating = value;
+	animating = FALSE;
 	return TRUE;
 }
 -(BOOL)animate {
