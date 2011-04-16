@@ -689,13 +689,15 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
         return 1;
     }
     
-    if (!drawable->frameCount <= index) {
+    if (drawable->frameCount <= index) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
     drawable->frame_index = index;
     drawable->animating   = false;
+    
+    bindDrawableVertex(drawable);
     
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
