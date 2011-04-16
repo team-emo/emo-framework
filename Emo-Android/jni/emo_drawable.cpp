@@ -369,6 +369,7 @@ void initDrawable(struct Drawable* drawable) {
     drawable->hasBuffer  = false;
     drawable->loaded     = false;
     drawable->hasSheet   = false;
+    drawable->animating  = false;
 
     // color param RGBA
     drawable->param_color[0] = 1.0f;

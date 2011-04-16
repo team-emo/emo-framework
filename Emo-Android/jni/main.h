@@ -46,6 +46,8 @@ struct Drawable {
     bool       loaded;
     bool       hasTexture;
     bool       hasBuffer;
+    bool  hasSheet;
+    bool  animating;
 
     float      x;
     float      y;
@@ -60,7 +62,6 @@ struct Drawable {
 
     ImageInfo* texture;
 
-    bool  hasSheet;
     int border;
     int margin;
 };
