@@ -9,6 +9,7 @@
 
 #include "Constants.h"
 #include "Stage.h"
+#include "Drawable.h"
 #include "Audio.h"
 
 struct char_comparator {
@@ -16,6 +17,8 @@ struct char_comparator {
         return strcmp(s1, s2) == 0;
     }
 };
+
+typedef std::hash_map <const char *, emo::Drawable *, std::hash<const char*>, char_comparator> drawables_t;
 
 namespace emo {
     class Engine {
@@ -32,7 +35,6 @@ namespace emo {
         void    onInitGLSurface();
 
         void onInitEngine();
-        void onSensorEvent(ASensorEvent* event);
         void onDispose();
 
         void onTerminateDisplay();
@@ -41,8 +43,12 @@ namespace emo {
         void onLostFocus();
         void onGainedFocus();
         void onLowMemory();
-        void updateUptime();
 
+        void updateUptime();
+        int32_t getLastOnDrawDelta();
+        int32_t getLastOnDrawDrawablesDelta();
+
+        int32_t onSensorEvent(ASensorEvent* event);
         int32_t onMotionEvent(android_app* app, AInputEvent* event);
         int32_t onKeyEvent(android_app* app, AInputEvent* event);
 
@@ -62,7 +68,7 @@ namespace emo {
         void loadStage();
         void loadDrawables();
 
-        void onDrawStage();
+        void onDrawDrawables();
         
         void rebindStageBuffers();
         void rebindDrawableBuffers();
@@ -110,6 +116,8 @@ namespace emo {
         bool enableBackKey;
 
         Stage* stage;
+        drawables_t *drawables;
+        drawables_t *drawablesToRemove;
         Audio* audio;
 
         ASensorManager* sensorManager;

@@ -6,11 +6,17 @@
 
 namespace emo {
     Engine::Engine() {
-
+        this->focused = false;
+        this->loaded  = false;
+        this->loadedCalled = false;
+        this->initialized  = false;
     }
 
     Engine::~Engine() {
-
+        delete this->stage;
+        delete this->audio;
+        delete this->drawables;
+        delete this->drawablesToRemove;
     }
 
     void Engine::initScriptFunctions() {
@@ -74,6 +80,8 @@ namespace emo {
     }
 
     void Engine::onInitEngine() {
+        if (this->loaded) return;
+
         // initialize startup time
         ftime(&this->startTime);
 
@@ -97,6 +105,12 @@ namespace emo {
         // back key is enabled by default
         this->enableBackKey = true;
 
+        // create stage
+        stage = new Stage();
+
+        // create audio
+        audio = new Audio();
+
         // init Squirrel VM
         initSQVM(this->sqvm);
 
@@ -115,8 +129,9 @@ namespace emo {
         this->loadedCalled = false;
         this->initialized  = false;
 
-        stage = new Stage();
-        audio = new Audio();
+        this->drawables = new drawables_t();
+        this->drawablesToRemove = new drawables_t();
+
     }
 
 
@@ -207,7 +222,7 @@ namespace emo {
             this->rebindStageBuffers();
             this->rebindDrawableBuffers();
         } else {
-            this->loadStage();
+            this->stage->onLoad();
             this->loadDrawables();
 
             this->initialized = true;
@@ -216,11 +231,7 @@ namespace emo {
         this->lastOnDrawInterval  = this->uptime;
         this->lastOnDrawDrawablesInterval  = this->uptime;
 
-        this->onDrawStage();
-    }
-
-    void Engine::onSensorEvent(ASensorEvent* event) {
-
+        this->stage->onDrawFrame();
     }
 
     void Engine::onDispose() {
@@ -235,22 +246,35 @@ namespace emo {
             this->unloadDrawables();
             this->deleteStageBuffer();
 
-            delete this->stage;
-            delete this->audio;
-
             this->loaded = false;
         }
     }
 
-    void Engine::onLostFocus() {
-
-    }
-
     void Engine::onGainedFocus() {
+        if (!this->loaded) return;
 
+        this->focused = true;
+
+        this->updateUptime();
+        callSqFunction(this->sqvm, EMO_NAMESPACE, EMO_FUNC_ONGAINED_FOUCS);
+        this->animating = true;
     }
-    void Engine::onLowMemory() {
 
+    void Engine::onLostFocus() {
+        if (!this->loaded) return;
+
+        this->focused = false;
+
+        this->updateUptime();
+        callSqFunction(this->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOST_FOCUS);
+        this->animating = false;
+    }
+
+    void Engine::onLowMemory() {
+        if (!this->loaded) return;
+
+        this->updateUptime();
+        callSqFunction(this->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOW_MEMORY);
     }
 
     void Engine::updateUptime() {
@@ -261,11 +285,98 @@ namespace emo {
         this->uptime.millitm  = eventTime.millitm;
     }
 
+    int32_t Engine::getLastOnDrawDelta() {
+        int32_t deltaSec  = this->uptime.time - this->lastOnDrawInterval.time;
+        int32_t deltaMsec = this->uptime.millitm - this->lastOnDrawInterval.millitm;
+
+        return (deltaSec * 1000) + deltaMsec;
+    }
+
+    int32_t Engine::getLastOnDrawDrawablesDelta() {
+        int32_t deltaSec  = this->uptime.time - this->lastOnDrawDrawablesInterval.time;
+        int32_t deltaMsec = this->uptime.millitm - this->lastOnDrawDrawablesInterval.millitm;
+
+        return (deltaSec * 1000) + deltaMsec;
+    }
+
+    int32_t Engine::onSensorEvent(ASensorEvent* event) {
+        if (!this->loaded) return 0;
+        if (!this->focused) return 0;
+
+        this->updateUptime();
+        switch(event->sensor) {
+        case ASENSOR_TYPE_ACCELEROMETER:
+            this->accelerometerEventParamCache[0] = event->sensor;
+            this->accelerometerEventParamCache[1] = event->acceleration.x;
+            this->accelerometerEventParamCache[2] = event->acceleration.y;
+            this->accelerometerEventParamCache[3] = event->acceleration.z;
+            if (callSqFunction_Bool_Floats(this->sqvm, EMO_NAMESPACE, EMO_FUNC_SENSOREVENT, this->accelerometerEventParamCache, ACCELEROMETER_EVENT_PARAMS_SIZE, false)) {
+                return 1;
+            }
+            break;
+        }
+        return 0;
+    }
+
     int32_t Engine::onMotionEvent(android_app* app, AInputEvent* event) {
+        if (!this->loaded) return 0;
+        if (!this->focused) return 0;
+
+        size_t pointerCount =  AMotionEvent_getPointerCount(event);
+
+        this->updateUptime();
+
+        for (size_t i = 0; i < pointerCount; i++) {
+            size_t pointerId = AMotionEvent_getPointerId(event, i);
+            size_t action = AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK;
+            size_t pointerIndex = i;
+        
+            if (action == AMOTION_EVENT_ACTION_POINTER_DOWN || action == AMOTION_EVENT_ACTION_POINTER_UP) {
+                pointerIndex = (AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+                pointerId = AMotionEvent_getPointerId(event, pointerIndex);
+            }
+
+            this->touchEventParamCache[0] = pointerId;
+            this->touchEventParamCache[1] = action;
+            this->touchEventParamCache[2] = AMotionEvent_getX(event, pointerIndex);
+            this->touchEventParamCache[3] = AMotionEvent_getY(event, pointerIndex);
+            this->touchEventParamCache[4] = this->uptime.time;
+            this->touchEventParamCache[5] = this->uptime.millitm;
+            this->touchEventParamCache[6] = AInputEvent_getDeviceId(event);
+            this->touchEventParamCache[7] = AInputEvent_getSource(event);
+            
+            if (callSqFunction_Bool_Floats(this->sqvm, EMO_NAMESPACE, EMO_FUNC_MOTIONEVENT, this->touchEventParamCache, MOTION_EVENT_PARAMS_SIZE, false)) {
+                return 1;
+            }
+        }
         return 0;
     }
 
     int32_t Engine::onKeyEvent(android_app* app, AInputEvent* event) {
+        if (!this->loaded) return 0;
+        if (!this->focused) return 0;
+
+        this->updateUptime();
+
+        this->keyEventParamCache[0] = AKeyEvent_getAction(event);
+        this->keyEventParamCache[1] = AKeyEvent_getKeyCode(event);
+        this->keyEventParamCache[2] = AKeyEvent_getRepeatCount(event);
+        this->keyEventParamCache[3] = AKeyEvent_getMetaState(event);
+        this->keyEventParamCache[4] = this->uptime.time;
+        this->keyEventParamCache[5] = this->uptime.millitm;
+        this->keyEventParamCache[6] = AInputEvent_getDeviceId(event);
+        this->keyEventParamCache[7] = AInputEvent_getSource(event);
+
+        if (callSqFunction_Bool_Floats(this->sqvm, EMO_NAMESPACE,
+                    EMO_FUNC_KEYEVENT, this->keyEventParamCache, KEY_EVENT_PARAMS_SIZE, false)) {
+            return 1;
+        } else if (AKeyEvent_getKeyCode(event) == AKEYCODE_BACK && this->enableBackKey) {
+            if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN) {
+                emoRuntimeFinish(this->sqvm);
+            }
+            return 1;
+        }
+
         return 0;
     }
 
@@ -297,21 +408,34 @@ namespace emo {
             return;
         }
 
-// TODO
+        if (!this->loaded) return;
+        if (!this->focused) return;
+
+        this->updateUptime();
+
+        SQFloat delta = this->getLastOnDrawDelta();
+        if (this->enableOnDrawFrame && delta > this->onDrawFrameInterval) {
+            this->lastOnDrawInterval  = this->uptime;
+            callSqFunction_Bool_Float(this->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME, delta, SQFalse);
+        }
+
+        delta = this->getLastOnDrawDrawablesDelta();
+        if (delta < this->onDrawDrawablesInterval) {
+            return;
+        }
+        this->lastOnDrawDrawablesInterval  = this->uptime;
+
+        this->stage->onDrawFrame();
+        onDrawDrawables();
 
         eglSwapBuffers(this->display, this->surface);
-    }
-
-
-    void Engine::loadStage() {
-
     }
 
     void Engine::loadDrawables() {
 
     }
 
-    void Engine::onDrawStage() {
+    void Engine::onDrawDrawables() {
 
     }
 
