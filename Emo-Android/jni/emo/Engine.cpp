@@ -649,6 +649,10 @@ namespace emo {
         return this->app;
     }
 
+    int32_t Engine::getLastError() {
+        return this->lastError;
+    }
+
     void Engine::setLastError(int32_t error) {
         this->lastError = error;
     }
@@ -663,6 +667,10 @@ namespace emo {
 
     void Engine::setOnDrawListenerInterval(int value) {
         this->onDrawFrameInterval = value;
+    }
+
+    Audio* Engine::getAudio() {
+        return this->audio;
     }
 
 }

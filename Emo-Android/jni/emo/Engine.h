@@ -78,6 +78,9 @@ namespace emo {
         void deleteStageBuffer();
 
         android_app* getApp();
+        Audio* getAudio();
+
+        int32_t getLastError();
         void setLastError(int32_t error);
 
         HSQUIRRELVM getVm();
