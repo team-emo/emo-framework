@@ -1,0 +1,350 @@
+#include "Runtime.h"
+#include "Engine.h"
+#include "Constants.h"
+
+#include <math.h>
+
+#include <android/log.h>
+#include <android/native_activity.h>
+#include <android_native_app_glue.h>
+#include <android/window.h>
+#include <android/configuration.h>
+
+#include <EGL/egl.h>
+#include <GLES/gl.h>
+
+extern emo::Engine* g_engine;
+
+int32_t app_handle_input(struct android_app* app, AInputEvent* event) {
+    return g_engine->event_handle_input(app, event);
+}
+
+void app_handle_cmd(struct android_app* app, int32_t cmd) {
+    g_engine->event_handle_cmd(app, cmd);
+}
+
+/* Log INFO */
+void LOGI(const char* msg) {
+	((void)__android_log_print(ANDROID_LOG_INFO,  EMO_LOG_TAG, msg));
+}
+
+/* Log WARN */
+void LOGW(const char* msg) {
+	((void)__android_log_print(ANDROID_LOG_WARN,  EMO_LOG_TAG, msg));
+}
+
+/* Log ERROR */
+void LOGE(const char* msg) {
+	((void)__android_log_print(ANDROID_LOG_ERROR, EMO_LOG_TAG, msg));
+}
+
+/*
+ * clear all OpenGL errors
+ */
+void clearGLErrors(const char* msg) {
+    for (GLint error = glGetError(); error; error = glGetError()) {
+        if (error != GL_NO_ERROR) {
+            LOGI(msg);
+            char str[128];
+            sprintf(str, "err code=0x%x", error);
+            LOGI(str);
+        }
+    }
+}
+
+bool printGLErrors(const char* msg) {
+    bool result = true;
+    for (GLint error = glGetError(); error; error = glGetError()) {
+        if (error != GL_NO_ERROR) {
+            LOGE(msg);
+            char str[128];
+            sprintf(str, "err code=0x%x", error);
+            LOGE(str);
+            result = false;
+        }
+    }
+    return result;
+}
+
+/*
+ * callback function to read squirrel script
+ */
+static SQInteger sq_lexer(SQUserPointer asset) {
+	SQChar c;
+		if(AAsset_read((AAsset*)asset, &c, 1) > 0) {
+			return c;
+		}
+	return 0;
+}
+
+/*
+ * Load squirrel script from asset
+ */
+bool loadScriptFromAsset(const char* fname) {
+    /*
+     * read squirrel script from asset
+     */
+    AAssetManager* mgr = g_engine->getApp()->activity->assetManager;
+    if (mgr == NULL) {
+    	g_engine->setLastError(ERR_SCRIPT_LOAD);
+    	LOGE("loadScriptFromAsset: failed to load AAssetManager");
+    	return false;
+    }
+
+    AAsset* asset = AAssetManager_open(mgr, fname, AASSET_MODE_UNKNOWN);
+    if (asset == NULL) {
+    	g_engine->setLastError(ERR_SCRIPT_OPEN);
+    	LOGW("loadScriptFromAsset: failed to open main script file");
+        LOGW(fname);
+    	return false;
+    }
+
+    if(SQ_SUCCEEDED(sq_compile(g_engine->getVm(), sq_lexer, asset, fname, SQTrue))) {
+        sq_pushroottable(g_engine->getVm());
+        if (SQ_FAILED(sq_call(g_engine->getVm(), 1, SQFalse, SQTrue))) {
+        	g_engine->setLastError(ERR_SCRIPT_CALL_ROOT);
+            LOGW("loadScriptFromAsset: failed to sq_call");
+            LOGW(fname);
+            return false;
+        }
+    } else {
+    	g_engine->setLastError(ERR_SCRIPT_COMPILE);
+        LOGW("loadScriptFromAsset: failed to compile squirrel script");
+        LOGW(fname);
+        return false;
+    }
+
+    AAsset_close(asset);
+
+    return true;
+}
+
+/*
+ * Runtime logging
+ */
+SQInteger emoRuntimeLog(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    SQInteger level;
+    const SQChar *message;
+
+    if (nargs < 3) return 0;
+
+    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_STRING) {
+        sq_getinteger(v, 2, &level);
+        sq_tostring(v, 3);
+        sq_getstring(v, -1, &message);
+        sq_poptop(v);
+
+        switch(level) {
+        case LOG_INFO:
+            LOGI((char*)message);
+            break;
+        case LOG_ERROR:
+            LOGE((char*)message);
+            break;
+        case LOG_WARN:
+            LOGW((char*)message);
+            break;
+        }
+    }
+	return 0;
+}
+
+/*
+ * Runtime log info
+ */
+SQInteger emoRuntimeLogInfo(HSQUIRRELVM v) {
+    const SQChar *str;
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+        if (sq_gettype(v, n) == OT_STRING) {
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &str);
+
+            LOGI((char*)str);
+        }
+    }
+    return 0;
+}
+
+/*
+ * Runtime log error
+ */
+SQInteger emoRuntimeLogError(HSQUIRRELVM v) {
+    const SQChar *str;
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+        if (sq_gettype(v, n) == OT_STRING) {
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &str);
+
+            LOGE((char*)str);
+        }
+    }
+    return 0;
+}
+
+/*
+ * Runtime log warn
+ */
+SQInteger emoRuntimeLogWarn(HSQUIRRELVM v) {
+    const SQChar *str;
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+        if (sq_gettype(v, n) == OT_STRING) {
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &str);
+
+            LOGW((char*)str);
+        }
+    }
+    return 0;
+}
+
+
+/*
+ * Runtime echo
+ */
+SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
+	const SQChar *str;
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+    	if (sq_gettype(v, n) == OT_STRING) {
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &str);
+            sq_poptop(v);
+    	}
+    }
+	
+	if (str != NULL) {
+		sq_pushstring(v, str, -1);
+	}
+	
+	return 1;
+}
+
+/*
+ * Shutdown the runtime
+ */
+SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
+    g_engine->setAnimating(false);
+    ANativeActivity_finish(g_engine->getApp()->activity);
+    return 0;
+}
+
+/*
+ * Returns OS name
+ */
+SQInteger emoRuntimeGetOSName(HSQUIRRELVM v) {
+    sq_pushstring(v, OS_ANDROID, -1);
+    return 1;
+}
+
+/*
+ * Import function called from squirrel script
+ */
+SQInteger emoImportScript(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+    	if (sq_gettype(v, n) == OT_STRING) {
+    		const SQChar *fname;
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &fname);
+            sq_poptop(v);
+
+    		loadScriptFromAsset(fname);
+    	}
+    }
+	return 0;
+}
+
+/*
+ * set options function called from script
+ */
+SQInteger emoSetOptions(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+        if (sq_gettype(v, n) == OT_INTEGER) {
+            SQInteger value;
+            sq_getinteger(v, n, &value);
+
+            g_engine->updateOptions(value);
+        }
+    }
+    return 0;
+}
+
+/*
+ * register sensors function called from script
+ */
+SQInteger emoRegisterSensors(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+        if (sq_gettype(v, n) == OT_INTEGER) {
+            SQInteger value;
+            sq_getinteger(v, n, &value);
+
+            g_engine->createSensors(value);
+        }
+    }
+    return 0;
+}
+
+/*
+ * enable sensor
+ */
+SQInteger emoEnableSensor(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    if (nargs < 3) {
+        LOGE("Invalid call: emoEnableSensors(sensorType, interval)");
+        return 0;
+    }
+
+    SQInteger sensorType;
+    SQInteger interval;
+
+    sq_getinteger(v, 2, &sensorType);
+    sq_getinteger(v, 3, &interval);
+
+    g_engine->enableSensor(sensorType, interval);
+
+    return 0;
+}
+
+/*
+ * disable sensor
+ */
+SQInteger emoDisableSensor(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    if (nargs < 2) {
+        LOGE("Invalid call: emoDisableSensors(sensorType)");
+        return 0;
+    }
+
+    SQInteger sensorType;
+    sq_getinteger(v, 2, &sensorType);
+
+    g_engine->disableSensor(sensorType);
+
+    return 0;
+}
+
+SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
+    g_engine->enableOnDrawListener(true);
+
+    SQInteger nargs = sq_gettop(v);
+
+    if (nargs <= 2 && sq_gettype(v, 2) == OT_INTEGER) {
+        SQInteger interval;
+        sq_getinteger(v, 2, &interval);
+
+        g_engine->setOnDrawListenerInterval(interval);
+    }
+
+    return 0;
+}
+
+SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
+    g_engine->enableOnDrawListener(false);
+    return 0;
+}

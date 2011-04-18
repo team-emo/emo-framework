@@ -1,13 +1,15 @@
+#include <android_native_app_glue.h>
 #include <squirrel.h>
-#include <EGL/egl.h>
-#include <GLES/gl.h>
 
-void LOGI(const SQChar* msg);
-void LOGW(const SQChar* msg);
-void LOGE(const SQChar* msg);
+int32_t app_handle_input(struct android_app* app, AInputEvent* event);
+void app_handle_cmd(struct android_app* app, int32_t cmd);
 
-bool loadPngSizeFromAsset(const char *fname, int *width, int *height);
-bool loadPngFromAsset(const char* fname, struct ImageInfo* imageInfo);
+void LOGI(const char* msg);
+void LOGW(const char* msg);
+void LOGE(const char* msg);
+
+void clearGLErrors(const char* msg);
+bool printGLErrors(const char* msg);
 
 void emoUpdateOptions(SQInteger value);
 bool loadScriptFromAsset(const char* fname);
@@ -27,4 +29,3 @@ SQInteger emoEnableSensor(HSQUIRRELVM v);
 SQInteger emoDisableSensor(HSQUIRRELVM v);
 SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v);
 SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v);
-

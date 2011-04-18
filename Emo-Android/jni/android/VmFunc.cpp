@@ -11,9 +11,12 @@
 #include <sqstdstring.h>
 #include <sqstdsystem.h>
 
-#include <common.h>
-#include <sqfunc.h>
-#include <emo_engine_func.h>
+#include <Constants.h>
+#include <VmFunc.h>
+
+extern void LOGI(const char* msg);
+extern void LOGW(const char* msg);
+extern void LOGE(const char* msg);
 
 /*
  * Initialize Squirrel VM

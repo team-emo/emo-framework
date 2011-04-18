@@ -118,7 +118,7 @@ struct SQOuter;
 #endif
 
 #else
-typedef unsigned short wchar_t;
+// typedef unsigned short wchar_t; // not needed for android
 #endif
 
 typedef wchar_t SQChar;
