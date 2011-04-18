@@ -6,7 +6,7 @@
 #include "Engine.h"
 #include "Runtime.h"
 
-extern emo::Engine* g_engine;
+extern emo::Engine* engine;
 
 static SLresult checkOpenSLresult(const char* message, SLresult result) {
     if (SL_RESULT_SUCCESS != result) {
@@ -30,7 +30,7 @@ namespace emo {
 
     bool Audio::create(int channelCount) {
         if (this->running) {
-            g_engine->setLastError(ERR_AUDIO_ENGINE_CREATED);
+            engine->setLastError(ERR_AUDIO_ENGINE_CREATED);
             LOGE("emo_audio: audio engine is already created.");
             return false;
         }
@@ -49,7 +49,7 @@ namespace emo {
         const SLboolean engine_req[] = {SL_BOOLEAN_TRUE};
         result = slCreateEngine(&this->engineObject, 0, NULL, 1, engine_ids, engine_req);
         if (SL_RESULT_SUCCESS != result) {
-            g_engine->setLastError(ERR_AUDIO_ENGINE_INIT);
+            engine->setLastError(ERR_AUDIO_ENGINE_INIT);
             LOGE("emo_audio: failed to create audio engine");
             return false;
         }
@@ -57,7 +57,7 @@ namespace emo {
         // realize the engine
         result = (*this->engineObject)->Realize(this->engineObject, SL_BOOLEAN_FALSE);
         if (SL_RESULT_SUCCESS != result) {
-            g_engine->setLastError(ERR_AUDIO_ENGINE_INIT);
+            engine->setLastError(ERR_AUDIO_ENGINE_INIT);
             LOGE("emo_audio: failed to realize audio engine");
             return false;
         }
@@ -65,7 +65,7 @@ namespace emo {
         // get the engine interface, which is needed in order to create other objects
         result = (*this->engineObject)->GetInterface(this->engineObject, SL_IID_ENGINE, &this->engineEngine);
         if (SL_RESULT_SUCCESS != result) {
-            g_engine->setLastError(ERR_AUDIO_ENGINE_INIT);
+            engine->setLastError(ERR_AUDIO_ENGINE_INIT);
             LOGE("emo_audio: failed to get audio engine interface");
             return false;
         }
@@ -75,7 +75,7 @@ namespace emo {
         const SLboolean mix_req[1] = {SL_BOOLEAN_TRUE};
         result = (*this->engineEngine)->CreateOutputMix(this->engineEngine, &this->outputMixObject, 0, mix_ids, mix_req);
         if (SL_RESULT_SUCCESS != result) {
-            g_engine->setLastError(ERR_AUDIO_ENGINE_INIT);
+            engine->setLastError(ERR_AUDIO_ENGINE_INIT);
             LOGE("emo_audio: failed to create output mix object");
             return false;
         }
@@ -83,7 +83,7 @@ namespace emo {
         // realize the output mix
         result = (*this->outputMixObject)->Realize(this->outputMixObject, SL_BOOLEAN_FALSE);
         if (SL_RESULT_SUCCESS != result) {
-            g_engine->setLastError(ERR_AUDIO_ENGINE_INIT);
+            engine->setLastError(ERR_AUDIO_ENGINE_INIT);
             LOGE("emo_audio: failed to realize output mix object");
             return false;
         }
@@ -101,16 +101,16 @@ namespace emo {
             this->closeChannel(index);
         }
 
-        AAssetManager* mgr = g_engine->getApp()->activity->assetManager;
+        AAssetManager* mgr = engine->getApp()->activity->assetManager;
         if (mgr == NULL) {
-            g_engine->setLastError(ERR_ASSET_LOAD);
+            engine->setLastError(ERR_ASSET_LOAD);
                 LOGE("emo_audio: failed to load AAssetManager");
             return false;
         }
 
         AAsset* asset = AAssetManager_open(mgr, fname, AASSET_MODE_UNKNOWN);
         if (asset == NULL) {
-            g_engine->setLastError(ERR_ASSET_OPEN);
+            engine->setLastError(ERR_ASSET_OPEN);
             LOGE("emo_audio: failed to open an audio file");
             LOGE(fname);
             return false;
@@ -120,7 +120,7 @@ namespace emo {
         off_t start, length;
         int fd = AAsset_openFileDescriptor(asset, &start, &length);
         if (fd < 0) {
-            g_engine->setLastError(ERR_ASSET_OPEN);
+            engine->setLastError(ERR_ASSET_OPEN);
             LOGE("emo_audio: failed to open an audio file");
             LOGE(fname);
             return false;
@@ -142,7 +142,7 @@ namespace emo {
         result = (*engineEngine)->CreateAudioPlayer(this->engineEngine, &channel->playerObject, &audioSrc, &audioSnk,
                 3, player_ids, player_req);
         if (SL_RESULT_SUCCESS != result) {
-            g_engine->setLastError(ERR_AUDIO_ASSET_INIT);
+            engine->setLastError(ERR_AUDIO_ASSET_INIT);
             LOGE("emo_audio: failed to create an audio player");
             return false;
         }
@@ -150,7 +150,7 @@ namespace emo {
         // realize the player
         result = (*channel->playerObject)->Realize(channel->playerObject, SL_BOOLEAN_FALSE);
         if (SL_RESULT_SUCCESS != result) {
-            g_engine->setLastError(ERR_AUDIO_ASSET_INIT);
+            engine->setLastError(ERR_AUDIO_ASSET_INIT);
             LOGE("emo_audio: failed to realize an audio player");
             return false;
         }
@@ -160,7 +160,7 @@ namespace emo {
         // get the play interface
         result = (*channel->playerObject)->GetInterface(channel->playerObject, SL_IID_PLAY, &channel->playerPlay);
         if (SL_RESULT_SUCCESS != result) {
-            g_engine->setLastError(ERR_AUDIO_ASSET_INIT);
+            engine->setLastError(ERR_AUDIO_ASSET_INIT);
             LOGE("emo_audio: failed to get an audio player interface");
             return false;
         }
@@ -168,7 +168,7 @@ namespace emo {
         // get the seek interface
         result = (*channel->playerObject)->GetInterface(channel->playerObject, SL_IID_SEEK, &channel->playerSeek);
         if (SL_RESULT_SUCCESS != result) {
-            g_engine->setLastError(ERR_AUDIO_ASSET_INIT);
+            engine->setLastError(ERR_AUDIO_ASSET_INIT);
             LOGE("emo_audio: failed to get an audio seek interface");
             return false;
         }
@@ -176,7 +176,7 @@ namespace emo {
         // the volume interface
         result = (*channel->playerObject)->GetInterface(channel->playerObject, SL_IID_VOLUME, &channel->playerVolume);
         if (SL_RESULT_SUCCESS != result) {
-            g_engine->setLastError(ERR_AUDIO_ASSET_INIT);
+            engine->setLastError(ERR_AUDIO_ASSET_INIT);
             LOGE("emo_audio: failed to create an audio volume interface");
             return false;
         }
@@ -187,7 +187,7 @@ namespace emo {
     bool Audio::setChannelState(int index, SLuint32 state) {
         Channel* channel = &this->channels[index];
         if (!channel->loaded) {
-            g_engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
+            engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
             LOGE("emo_audio: audio channel is closed");
             return false;
         }
@@ -199,7 +199,7 @@ namespace emo {
     SLuint32 Audio::getChannelState(int index) {
         Channel* channel = &this->channels[index];
         if (!channel->loaded) {
-            g_engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
+            engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
             LOGE("emo_audio: audio channel is closed");
             return SL_PLAYSTATE_STOPPED;
         }
@@ -232,7 +232,7 @@ namespace emo {
     SLmillibel Audio::getChannelVolume(int index) {
         Channel* channel = &this->channels[index];
         if (!channel->loaded) {
-            g_engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
+            engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
             LOGE("emo_audio: audio channel is closed");
             return 0;
         }
@@ -246,7 +246,7 @@ namespace emo {
     SLmillibel Audio::setChannelVolume(int index, SLmillibel volumeLevel) {
         Channel* channel = &this->channels[index];
         if (!channel->loaded) {
-            g_engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
+            engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
             LOGE("emo_audio: audio channel is closed");
             return 0;
         }
@@ -259,7 +259,7 @@ namespace emo {
     SLmillibel Audio::getChannelMaxVolume(int index) {
         Channel* channel = &this->channels[index];
         if (!channel->loaded) {
-            g_engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
+            engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
             LOGE("emo_audio: audio channel is closed");
             return 0;
         }
@@ -274,7 +274,7 @@ namespace emo {
     bool Audio::seekChannel(int index, int pos, SLuint32 seekMode) {
         Channel* channel = &this->channels[index];
         if (!channel->loaded) {
-            g_engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
+            engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
             LOGE("emo_audio: audio channel is closed");
             return false;
         }
@@ -286,7 +286,7 @@ namespace emo {
     bool Audio::playChannel(int index) {
         Channel* channel = &this->channels[index];
         if (!channel->loaded) {
-            g_engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
+            engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
             LOGE("emo_audio: audio channel is closed");
             return false;
         }
@@ -299,7 +299,7 @@ namespace emo {
     bool Audio::pauseChannel(int index) {
         Channel* channel = &this->channels[index];
         if (!channel->loaded) {
-            g_engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
+            engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
             LOGE("emo_audio: audio channel is closed");
             return false;
         }
@@ -309,7 +309,7 @@ namespace emo {
     bool Audio::stopChannel(int index) {
         Channel* channel = &this->channels[index];
         if (!channel->loaded) {
-            g_engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
+            engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
             LOGE("emo_audio: audio channel is closed");
             return false;
         }
@@ -378,7 +378,7 @@ namespace emo {
  * SQInteger loadAudio(SQInteger audioIndex, SQChar* filename);
  */
 SQInteger emoLoadAudio(HSQUIRRELVM v) {
-    if (!g_engine->getAudio()->isRunning()) {
+    if (!engine->getAudio()->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -395,13 +395,13 @@ SQInteger emoLoadAudio(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= g_engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->getAudio()->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!g_engine->getAudio()->createChannelFromAsset(filename, channelIndex)) {
-        sq_pushinteger(v, g_engine->getLastError());
+    if (!engine->getAudio()->createChannelFromAsset(filename, channelIndex)) {
+        sq_pushinteger(v, engine->getLastError());
         return 1;
     }
 
@@ -411,7 +411,7 @@ SQInteger emoLoadAudio(HSQUIRRELVM v) {
 }
 
 SQInteger emoCreateAudioEngine(HSQUIRRELVM v) {
-    if (g_engine->getAudio()->isRunning()) {
+    if (engine->getAudio()->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CREATED);
         return 1;
     }
@@ -424,8 +424,8 @@ SQInteger emoCreateAudioEngine(HSQUIRRELVM v) {
         channelCount = DEFAULT_AUDIO_CHANNEL_COUNT;
     }
 
-    if (!g_engine->getAudio()->create(channelCount)) {
-        sq_pushinteger(v, g_engine->getLastError());
+    if (!engine->getAudio()->create(channelCount)) {
+        sq_pushinteger(v, engine->getLastError());
         return 1;
     }
 
@@ -435,7 +435,7 @@ SQInteger emoCreateAudioEngine(HSQUIRRELVM v) {
 }
 
 SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
-    if (!g_engine->getAudio()->isRunning()) {
+    if (!engine->getAudio()->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -449,12 +449,12 @@ SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= g_engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->getAudio()->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!g_engine->getAudio()->playChannel(channelIndex)) {
+    if (!engine->getAudio()->playChannel(channelIndex)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -465,7 +465,7 @@ SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
 }
 
 SQInteger emoPauseAudioChannel(HSQUIRRELVM v) {
-    if (!g_engine->getAudio()->isRunning()) {
+    if (!engine->getAudio()->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -479,12 +479,12 @@ SQInteger emoPauseAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= g_engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->getAudio()->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!g_engine->getAudio()->pauseChannel(channelIndex)) {
+    if (!engine->getAudio()->pauseChannel(channelIndex)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -495,7 +495,7 @@ SQInteger emoPauseAudioChannel(HSQUIRRELVM v) {
 }
 
 SQInteger emoStopAudioChannel(HSQUIRRELVM v) {
-    if (!g_engine->getAudio()->isRunning()) {
+    if (!engine->getAudio()->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -509,12 +509,12 @@ SQInteger emoStopAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= g_engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->getAudio()->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!g_engine->getAudio()->stopChannel(channelIndex)) {
+    if (!engine->getAudio()->stopChannel(channelIndex)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -526,7 +526,7 @@ SQInteger emoStopAudioChannel(HSQUIRRELVM v) {
 
 
 SQInteger emoSeekAudioChannel(HSQUIRRELVM v) {
-    if (!g_engine->getAudio()->isRunning()) {
+    if (!engine->getAudio()->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -542,12 +542,12 @@ SQInteger emoSeekAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= g_engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->getAudio()->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!g_engine->getAudio()->seekChannel(channelIndex, seekPosition, SL_SEEKMODE_ACCURATE)) {
+    if (!engine->getAudio()->seekChannel(channelIndex, seekPosition, SL_SEEKMODE_ACCURATE)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -558,7 +558,7 @@ SQInteger emoSeekAudioChannel(HSQUIRRELVM v) {
 }
 
 SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v) {
-    if (!g_engine->getAudio()->isRunning()) {
+    if (!engine->getAudio()->isRunning()) {
         LOGE("emoGetAudioChannelVolume: audio engine is closed");
         sq_pushinteger(v, 0);
         return 1;
@@ -574,19 +574,19 @@ SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= g_engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->getAudio()->getChannelCount()) {
         LOGE("emoGetAudioChannelVolume: invalid channel index");
         sq_pushinteger(v, 0);
         return 1;
     }
 
-    sq_pushinteger(v, g_engine->getAudio()->getChannelVolume(channelIndex));
+    sq_pushinteger(v, engine->getAudio()->getChannelVolume(channelIndex));
 
     return 1;
 }
 
 SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
-    if (!g_engine->getAudio()->isRunning()) {
+    if (!engine->getAudio()->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -602,12 +602,12 @@ SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= g_engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->getAudio()->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!g_engine->getAudio()->setChannelVolume(channelIndex, channelVolume)) {
+    if (!engine->getAudio()->setChannelVolume(channelIndex, channelVolume)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -618,7 +618,7 @@ SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
 }
 
 SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v) {
-    if (!g_engine->getAudio()->isRunning()) {
+    if (!engine->getAudio()->isRunning()) {
         LOGE("emoGetAudioChannelVolume: audio engine is closed");
         sq_pushinteger(v, 0);
         return 1;
@@ -634,19 +634,19 @@ SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= g_engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->getAudio()->getChannelCount()) {
         LOGE("emoGetAudioChannelVolume: invalid channel index");
         sq_pushinteger(v, 0);
         return 1;
     }
 
-    sq_pushinteger(v, g_engine->getAudio()->getChannelMaxVolume(channelIndex));
+    sq_pushinteger(v, engine->getAudio()->getChannelMaxVolume(channelIndex));
 
     return 1;
 }
 
 SQInteger emoGetAudioChannelCount(HSQUIRRELVM v) {
-    sq_pushinteger(v, g_engine->getAudio()->getChannelCount());
+    sq_pushinteger(v, engine->getAudio()->getChannelCount());
     return 1;
 
 }
@@ -658,7 +658,7 @@ SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v) {
 
 
 SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
-    if (!g_engine->getAudio()->isRunning()) {
+    if (!engine->getAudio()->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -674,12 +674,12 @@ SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= g_engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->getAudio()->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!g_engine->getAudio()->setChannelLooping(channelIndex, useLoop)) {
+    if (!engine->getAudio()->setChannelLooping(channelIndex, useLoop)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -690,7 +690,7 @@ SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
 }
 
 SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
-    if (!g_engine->getAudio()->isRunning()) {
+    if (!engine->getAudio()->isRunning()) {
         LOGE("emoGetAudioChannelLooping: audio engine is closed");
         sq_pushinteger(v, EMO_NO);
         return 1;
@@ -706,13 +706,13 @@ SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= g_engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->getAudio()->getChannelCount()) {
         LOGE("emoGetAudioChannelLooping: invalid channel index");
         sq_pushinteger(v, EMO_NO);
         return 1;
     }
 
-    if (g_engine->getAudio()->getChannelLooping(channelIndex)) {
+    if (engine->getAudio()->getChannelLooping(channelIndex)) {
         sq_pushinteger(v, EMO_YES);
     } else {
         sq_pushinteger(v, EMO_NO);
@@ -723,7 +723,7 @@ SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
 }
 
 SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
-    if (!g_engine->getAudio()->isRunning()) {
+    if (!engine->getAudio()->isRunning()) {
         LOGE("emoGetAudioChannelState: audio engine is closed");
         sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);
         return 1;
@@ -739,13 +739,13 @@ SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= g_engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->getAudio()->getChannelCount()) {
         LOGE("emoGetAudioChannelState: invalid channel index");
         sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);
         return 1;
     }
 
-    SLuint32 state = g_engine->getAudio()->getChannelState(channelIndex);
+    SLuint32 state = engine->getAudio()->getChannelState(channelIndex);
 
     switch(state) {
     case SL_PLAYSTATE_STOPPED:
@@ -765,7 +765,7 @@ SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
 
 
 SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
-    if (!g_engine->getAudio()->isRunning()) {
+    if (!engine->getAudio()->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -779,12 +779,12 @@ SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= g_engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->getAudio()->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    g_engine->getAudio()->closeChannel(channelIndex);
+    engine->getAudio()->closeChannel(channelIndex);
 
     sq_pushinteger(v, EMO_NO_ERROR);
 
@@ -792,12 +792,12 @@ SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
 }
 
 SQInteger emoCloseAudioEngine(HSQUIRRELVM v) {
-    if (!g_engine->getAudio()->isRunning()) {
+    if (!engine->getAudio()->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
 
-    g_engine->getAudio()->close();
+    engine->getAudio()->close();
 
     sq_pushinteger(v, EMO_NO_ERROR);
 

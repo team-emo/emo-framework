@@ -1,7 +1,7 @@
 #include "Engine.h"
 #include "Runtime.h"
 
-extern emo::Engine* g_engine;
+extern emo::Engine* engine;
 
 namespace emo {
     Stage::Stage() {
@@ -17,8 +17,8 @@ namespace emo {
         this->loaded    = false;
         this->dirty = true;
 
-        this->width  = ANativeWindow_getWidth(g_engine->getApp()->window);
-        this->height = ANativeWindow_getHeight(g_engine->getApp()->window);
+        this->width  = ANativeWindow_getWidth(engine->getApp()->window);
+        this->height = ANativeWindow_getHeight(engine->getApp()->window);
 
         this->viewport_width  = this->width;
         this->viewport_height = this->height;

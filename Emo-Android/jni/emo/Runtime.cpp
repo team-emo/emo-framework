@@ -13,14 +13,14 @@
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 
-extern emo::Engine* g_engine;
+extern emo::Engine* engine;
 
 int32_t app_handle_input(struct android_app* app, AInputEvent* event) {
-    return g_engine->event_handle_input(app, event);
+    return engine->event_handle_input(app, event);
 }
 
 void app_handle_cmd(struct android_app* app, int32_t cmd) {
-    g_engine->event_handle_cmd(app, cmd);
+    engine->event_handle_cmd(app, cmd);
 }
 
 /* Log INFO */
@@ -84,31 +84,31 @@ bool loadScriptFromAsset(const char* fname) {
     /*
      * read squirrel script from asset
      */
-    AAssetManager* mgr = g_engine->getApp()->activity->assetManager;
+    AAssetManager* mgr = engine->getApp()->activity->assetManager;
     if (mgr == NULL) {
-    	g_engine->setLastError(ERR_SCRIPT_LOAD);
+    	engine->setLastError(ERR_SCRIPT_LOAD);
     	LOGE("loadScriptFromAsset: failed to load AAssetManager");
     	return false;
     }
 
     AAsset* asset = AAssetManager_open(mgr, fname, AASSET_MODE_UNKNOWN);
     if (asset == NULL) {
-    	g_engine->setLastError(ERR_SCRIPT_OPEN);
+    	engine->setLastError(ERR_SCRIPT_OPEN);
     	LOGW("loadScriptFromAsset: failed to open main script file");
         LOGW(fname);
     	return false;
     }
 
-    if(SQ_SUCCEEDED(sq_compile(g_engine->getVm(), sq_lexer, asset, fname, SQTrue))) {
-        sq_pushroottable(g_engine->getVm());
-        if (SQ_FAILED(sq_call(g_engine->getVm(), 1, SQFalse, SQTrue))) {
-        	g_engine->setLastError(ERR_SCRIPT_CALL_ROOT);
+    if(SQ_SUCCEEDED(sq_compile(engine->getVm(), sq_lexer, asset, fname, SQTrue))) {
+        sq_pushroottable(engine->getVm());
+        if (SQ_FAILED(sq_call(engine->getVm(), 1, SQFalse, SQTrue))) {
+        	engine->setLastError(ERR_SCRIPT_CALL_ROOT);
             LOGW("loadScriptFromAsset: failed to sq_call");
             LOGW(fname);
             return false;
         }
     } else {
-    	g_engine->setLastError(ERR_SCRIPT_COMPILE);
+    	engine->setLastError(ERR_SCRIPT_COMPILE);
         LOGW("loadScriptFromAsset: failed to compile squirrel script");
         LOGW(fname);
         return false;
@@ -227,8 +227,8 @@ SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
  * Shutdown the runtime
  */
 SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
-    g_engine->setAnimating(false);
-    ANativeActivity_finish(g_engine->getApp()->activity);
+    engine->setAnimating(false);
+    ANativeActivity_finish(engine->getApp()->activity);
     return 0;
 }
 
@@ -268,7 +268,7 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
             SQInteger value;
             sq_getinteger(v, n, &value);
 
-            g_engine->updateOptions(value);
+            engine->updateOptions(value);
         }
     }
     return 0;
@@ -284,7 +284,7 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
             SQInteger value;
             sq_getinteger(v, n, &value);
 
-            g_engine->createSensors(value);
+            engine->createSensors(value);
         }
     }
     return 0;
@@ -306,7 +306,7 @@ SQInteger emoEnableSensor(HSQUIRRELVM v) {
     sq_getinteger(v, 2, &sensorType);
     sq_getinteger(v, 3, &interval);
 
-    g_engine->enableSensor(sensorType, interval);
+    engine->enableSensor(sensorType, interval);
 
     return 0;
 }
@@ -324,13 +324,13 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
     SQInteger sensorType;
     sq_getinteger(v, 2, &sensorType);
 
-    g_engine->disableSensor(sensorType);
+    engine->disableSensor(sensorType);
 
     return 0;
 }
 
 SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
-    g_engine->enableOnDrawListener(true);
+    engine->enableOnDrawListener(true);
 
     SQInteger nargs = sq_gettop(v);
 
@@ -338,13 +338,13 @@ SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
         SQInteger interval;
         sq_getinteger(v, 2, &interval);
 
-        g_engine->setOnDrawListenerInterval(interval);
+        engine->setOnDrawListenerInterval(interval);
     }
 
     return 0;
 }
 
 SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
-    g_engine->enableOnDrawListener(false);
+    engine->enableOnDrawListener(false);
     return 0;
 }
