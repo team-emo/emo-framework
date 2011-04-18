@@ -84,7 +84,7 @@ bool loadScriptFromAsset(const char* fname) {
     /*
      * read squirrel script from asset
      */
-    AAssetManager* mgr = engine->getApp()->activity->assetManager;
+    AAssetManager* mgr = engine->app->activity->assetManager;
     if (mgr == NULL) {
     	engine->setLastError(ERR_SCRIPT_LOAD);
     	LOGE("loadScriptFromAsset: failed to load AAssetManager");
@@ -227,8 +227,8 @@ SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
  * Shutdown the runtime
  */
 SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
-    engine->setAnimating(false);
-    ANativeActivity_finish(engine->getApp()->activity);
+    engine->animating = false;
+    ANativeActivity_finish(engine->app->activity);
     return 0;
 }
 

@@ -8,8 +8,8 @@ namespace emo {
         ~Stage();
         bool onLoad();
         void onDrawFrame();
-    protected:
         bool dirty;
+    protected:
         bool loaded;
 
         GLuint vbo[2];

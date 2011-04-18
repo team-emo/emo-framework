@@ -55,18 +55,20 @@ namespace emo {
 
 SQInteger emoLoadAudio(HSQUIRRELVM v);
 SQInteger emoCreateAudioEngine(HSQUIRRELVM v);
-SQInteger emoPlayChannel(HSQUIRRELVM v);
-SQInteger emoPauseChannel(HSQUIRRELVM v);
-SQInteger emoStopChannel(HSQUIRRELVM v);
-SQInteger emoSeekChannel(HSQUIRRELVM v);
-SQInteger emoCloseChannel(HSQUIRRELVM v);
+SQInteger emoPlayAudioChannel(HSQUIRRELVM v);
+SQInteger emoPauseAudioChannel(HSQUIRRELVM v);
+SQInteger emoStopAudioChannel(HSQUIRRELVM v);
+SQInteger emoSeekAudioChannel(HSQUIRRELVM v);
+SQInteger emoCloseAudioChannel(HSQUIRRELVM v);
 SQInteger emoCloseAudioEngine(HSQUIRRELVM v);
 
-SQInteger emoGetChannelVolume(HSQUIRRELVM v);
-SQInteger emoSetChannelVolume(HSQUIRRELVM v);
-SQInteger emoGetChannelMaxVolume(HSQUIRRELVM v);
-SQInteger emoGetChannelMinVolume(HSQUIRRELVM v);
+SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v);
+SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v);
+SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v);
+SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v);
 
-SQInteger emoSetChannelLooping(HSQUIRRELVM v);
-SQInteger emoGetChannelLooping(HSQUIRRELVM v);
-SQInteger emoGetChannelState(HSQUIRRELVM v);
+SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v);
+SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v);
+SQInteger emoGetAudioChannelState(HSQUIRRELVM v);
+
+SQInteger emoGetAudioChannelCount(HSQUIRRELVM v);

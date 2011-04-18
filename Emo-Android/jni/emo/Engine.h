@@ -29,8 +29,6 @@ namespace emo {
         int32_t event_handle_input(android_app* app, AInputEvent* event);
         void    event_handle_cmd(android_app* app, int32_t cmd);
 
-        void setApp(android_app* app);
-
         int32_t onInitDisplay();
         void    onInitGLSurface();
 
@@ -62,9 +60,6 @@ namespace emo {
         void enableOnDrawListener(bool enable);
         void setOnDrawListenerInterval(int value);
 
-        bool isAnimating();
-        void setAnimating(bool animating);
-
         void loadStage();
         void loadDrawables();
 
@@ -77,21 +72,20 @@ namespace emo {
         void deleteDrawableBuffers();
         void deleteStageBuffer();
 
-        android_app* getApp();
-        Audio* getAudio();
+        android_app* app;
+        bool animating;
+        Audio* audio;
 
         int32_t getLastError();
         void setLastError(int32_t error);
 
         HSQUIRRELVM getVm();
     protected:
-        bool animating;
         bool loaded;
         bool focused;
         bool loadedCalled;
         bool initialized;
 
-        android_app* app;
         EGLDisplay display;
         EGLSurface surface;
         EGLContext context;
@@ -121,7 +115,6 @@ namespace emo {
         Stage* stage;
         drawables_t *drawables;
         drawables_t *drawablesToRemove;
-        Audio* audio;
 
         ASensorManager* sensorManager;
         ASensorEventQueue* sensorEventQueue;

@@ -3,19 +3,18 @@
 #include "emo/Runtime.h"
 #include "emo/Engine.h"
 
-emo::Engine* g_engine;
+emo::Engine* engine;
 
 void android_main(struct android_app* state) {
 
     app_dummy();
 
-    emo::Engine* engine = new emo::Engine();
-    g_engine = engine;
+    engine = new emo::Engine();
 
     state->userData = engine;
     state->onAppCmd = app_handle_cmd;
     state->onInputEvent = app_handle_input;
-    engine->setApp(state);
+    engine->app = state;
 
     engine->onInitEngine();
 
@@ -24,7 +23,7 @@ void android_main(struct android_app* state) {
         int events;
         struct android_poll_source* source;
 
-        while ((ident=ALooper_pollAll(engine->isAnimating(), NULL, &events,
+        while ((ident=ALooper_pollAll(engine->animating, NULL, &events,
                 (void**)&source)) >= 0) {
 
             // Process this event.
@@ -51,7 +50,7 @@ void android_main(struct android_app* state) {
             }
         }
 
-        if (engine->isAnimating()) {
+        if (engine->animating) {
             engine->onDrawFrame();
         }
     }

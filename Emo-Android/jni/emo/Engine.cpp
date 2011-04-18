@@ -42,6 +42,26 @@ namespace emo {
         this->registerClassFunc(this->sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
         this->registerClassFunc(this->sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
 
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "seek",           emoSeekAudioChannel);
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "getChannelCount",emoGetAudioChannelCount);
+
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "getVolume",      emoGetAudioChannelVolume);
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "setVolume",      emoSetAudioChannelVolume);
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "getMaxVolume",   emoGetAudioChannelMaxVolume);
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "getMinVolume",   emoGetAudioChannelMinVolume);
+
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "setLoop",        emoSetAudioChannelLooping);
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "isLoop",         emoGetAudioChannelLooping);
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "getState",       emoGetAudioChannelState);
+
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "close",          emoCloseAudioChannel);
+        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "closeEngine",    emoCloseAudioEngine);
+
     }
 
     int32_t Engine::event_handle_input(android_app* app, AInputEvent* event) {
@@ -633,22 +653,6 @@ namespace emo {
         return sensorEventQueue;
     }
 
-    void Engine::setAnimating(bool anim) {
-        this->animating = anim;
-    }
-
-    bool Engine::isAnimating() {
-        return this->animating;
-    }
-
-    void Engine::setApp(android_app* _app) {
-        this->app = _app;
-    }
-
-    android_app* Engine::getApp() {
-        return this->app;
-    }
-
     int32_t Engine::getLastError() {
         return this->lastError;
     }
@@ -667,10 +671,6 @@ namespace emo {
 
     void Engine::setOnDrawListenerInterval(int value) {
         this->onDrawFrameInterval = value;
-    }
-
-    Audio* Engine::getAudio() {
-        return this->audio;
     }
 
 }

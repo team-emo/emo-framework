@@ -5,7 +5,7 @@ extern emo::Engine* engine;
 
 namespace emo {
     Stage::Stage() {
-        dirty = true;
+
     }
 
     Stage::~Stage() {
@@ -17,8 +17,8 @@ namespace emo {
         this->loaded    = false;
         this->dirty = true;
 
-        this->width  = ANativeWindow_getWidth(engine->getApp()->window);
-        this->height = ANativeWindow_getHeight(engine->getApp()->window);
+        this->width  = ANativeWindow_getWidth(engine->app->window);
+        this->height = ANativeWindow_getHeight(engine->app->window);
 
         this->viewport_width  = this->width;
         this->viewport_height = this->height;

@@ -101,7 +101,7 @@ namespace emo {
             this->closeChannel(index);
         }
 
-        AAssetManager* mgr = engine->getApp()->activity->assetManager;
+        AAssetManager* mgr = engine->app->activity->assetManager;
         if (mgr == NULL) {
             engine->setLastError(ERR_ASSET_LOAD);
                 LOGE("emo_audio: failed to load AAssetManager");
@@ -378,7 +378,7 @@ namespace emo {
  * SQInteger loadAudio(SQInteger audioIndex, SQChar* filename);
  */
 SQInteger emoLoadAudio(HSQUIRRELVM v) {
-    if (!engine->getAudio()->isRunning()) {
+    if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -395,12 +395,12 @@ SQInteger emoLoadAudio(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->audio->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!engine->getAudio()->createChannelFromAsset(filename, channelIndex)) {
+    if (!engine->audio->createChannelFromAsset(filename, channelIndex)) {
         sq_pushinteger(v, engine->getLastError());
         return 1;
     }
@@ -411,7 +411,7 @@ SQInteger emoLoadAudio(HSQUIRRELVM v) {
 }
 
 SQInteger emoCreateAudioEngine(HSQUIRRELVM v) {
-    if (engine->getAudio()->isRunning()) {
+    if (engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CREATED);
         return 1;
     }
@@ -424,7 +424,7 @@ SQInteger emoCreateAudioEngine(HSQUIRRELVM v) {
         channelCount = DEFAULT_AUDIO_CHANNEL_COUNT;
     }
 
-    if (!engine->getAudio()->create(channelCount)) {
+    if (!engine->audio->create(channelCount)) {
         sq_pushinteger(v, engine->getLastError());
         return 1;
     }
@@ -435,7 +435,7 @@ SQInteger emoCreateAudioEngine(HSQUIRRELVM v) {
 }
 
 SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
-    if (!engine->getAudio()->isRunning()) {
+    if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -449,12 +449,12 @@ SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->audio->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!engine->getAudio()->playChannel(channelIndex)) {
+    if (!engine->audio->playChannel(channelIndex)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -465,7 +465,7 @@ SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
 }
 
 SQInteger emoPauseAudioChannel(HSQUIRRELVM v) {
-    if (!engine->getAudio()->isRunning()) {
+    if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -479,12 +479,12 @@ SQInteger emoPauseAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->audio->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!engine->getAudio()->pauseChannel(channelIndex)) {
+    if (!engine->audio->pauseChannel(channelIndex)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -495,7 +495,7 @@ SQInteger emoPauseAudioChannel(HSQUIRRELVM v) {
 }
 
 SQInteger emoStopAudioChannel(HSQUIRRELVM v) {
-    if (!engine->getAudio()->isRunning()) {
+    if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -509,12 +509,12 @@ SQInteger emoStopAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->audio->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!engine->getAudio()->stopChannel(channelIndex)) {
+    if (!engine->audio->stopChannel(channelIndex)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -526,7 +526,7 @@ SQInteger emoStopAudioChannel(HSQUIRRELVM v) {
 
 
 SQInteger emoSeekAudioChannel(HSQUIRRELVM v) {
-    if (!engine->getAudio()->isRunning()) {
+    if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -542,12 +542,12 @@ SQInteger emoSeekAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->audio->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!engine->getAudio()->seekChannel(channelIndex, seekPosition, SL_SEEKMODE_ACCURATE)) {
+    if (!engine->audio->seekChannel(channelIndex, seekPosition, SL_SEEKMODE_ACCURATE)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -558,7 +558,7 @@ SQInteger emoSeekAudioChannel(HSQUIRRELVM v) {
 }
 
 SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v) {
-    if (!engine->getAudio()->isRunning()) {
+    if (!engine->audio->isRunning()) {
         LOGE("emoGetAudioChannelVolume: audio engine is closed");
         sq_pushinteger(v, 0);
         return 1;
@@ -574,19 +574,19 @@ SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->audio->getChannelCount()) {
         LOGE("emoGetAudioChannelVolume: invalid channel index");
         sq_pushinteger(v, 0);
         return 1;
     }
 
-    sq_pushinteger(v, engine->getAudio()->getChannelVolume(channelIndex));
+    sq_pushinteger(v, engine->audio->getChannelVolume(channelIndex));
 
     return 1;
 }
 
 SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
-    if (!engine->getAudio()->isRunning()) {
+    if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -602,12 +602,12 @@ SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->audio->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!engine->getAudio()->setChannelVolume(channelIndex, channelVolume)) {
+    if (!engine->audio->setChannelVolume(channelIndex, channelVolume)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -618,7 +618,7 @@ SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
 }
 
 SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v) {
-    if (!engine->getAudio()->isRunning()) {
+    if (!engine->audio->isRunning()) {
         LOGE("emoGetAudioChannelVolume: audio engine is closed");
         sq_pushinteger(v, 0);
         return 1;
@@ -634,19 +634,19 @@ SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->audio->getChannelCount()) {
         LOGE("emoGetAudioChannelVolume: invalid channel index");
         sq_pushinteger(v, 0);
         return 1;
     }
 
-    sq_pushinteger(v, engine->getAudio()->getChannelMaxVolume(channelIndex));
+    sq_pushinteger(v, engine->audio->getChannelMaxVolume(channelIndex));
 
     return 1;
 }
 
 SQInteger emoGetAudioChannelCount(HSQUIRRELVM v) {
-    sq_pushinteger(v, engine->getAudio()->getChannelCount());
+    sq_pushinteger(v, engine->audio->getChannelCount());
     return 1;
 
 }
@@ -658,7 +658,7 @@ SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v) {
 
 
 SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
-    if (!engine->getAudio()->isRunning()) {
+    if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -674,12 +674,12 @@ SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->audio->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    if (!engine->getAudio()->setChannelLooping(channelIndex, useLoop)) {
+    if (!engine->audio->setChannelLooping(channelIndex, useLoop)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -690,7 +690,7 @@ SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
 }
 
 SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
-    if (!engine->getAudio()->isRunning()) {
+    if (!engine->audio->isRunning()) {
         LOGE("emoGetAudioChannelLooping: audio engine is closed");
         sq_pushinteger(v, EMO_NO);
         return 1;
@@ -706,13 +706,13 @@ SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->audio->getChannelCount()) {
         LOGE("emoGetAudioChannelLooping: invalid channel index");
         sq_pushinteger(v, EMO_NO);
         return 1;
     }
 
-    if (engine->getAudio()->getChannelLooping(channelIndex)) {
+    if (engine->audio->getChannelLooping(channelIndex)) {
         sq_pushinteger(v, EMO_YES);
     } else {
         sq_pushinteger(v, EMO_NO);
@@ -723,7 +723,7 @@ SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
 }
 
 SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
-    if (!engine->getAudio()->isRunning()) {
+    if (!engine->audio->isRunning()) {
         LOGE("emoGetAudioChannelState: audio engine is closed");
         sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);
         return 1;
@@ -739,13 +739,13 @@ SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->audio->getChannelCount()) {
         LOGE("emoGetAudioChannelState: invalid channel index");
         sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);
         return 1;
     }
 
-    SLuint32 state = engine->getAudio()->getChannelState(channelIndex);
+    SLuint32 state = engine->audio->getChannelState(channelIndex);
 
     switch(state) {
     case SL_PLAYSTATE_STOPPED:
@@ -765,7 +765,7 @@ SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
 
 
 SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
-    if (!engine->getAudio()->isRunning()) {
+    if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
@@ -779,12 +779,12 @@ SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (channelIndex >= engine->getAudio()->getChannelCount()) {
+    if (channelIndex >= engine->audio->getChannelCount()) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
 
-    engine->getAudio()->closeChannel(channelIndex);
+    engine->audio->closeChannel(channelIndex);
 
     sq_pushinteger(v, EMO_NO_ERROR);
 
@@ -792,12 +792,12 @@ SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
 }
 
 SQInteger emoCloseAudioEngine(HSQUIRRELVM v) {
-    if (!engine->getAudio()->isRunning()) {
+    if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
         return 1;
     }
 
-    engine->getAudio()->close();
+    engine->audio->close();
 
     sq_pushinteger(v, EMO_NO_ERROR);
 
