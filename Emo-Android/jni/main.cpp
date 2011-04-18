@@ -1,7 +1,7 @@
 #include <android_native_app_glue.h>
 
-#include <android/Runtime.h>
-#include <android/Engine.h>
+#include "emo/Runtime.h"
+#include "emo/Engine.h"
 
 emo::Engine* g_engine;
 

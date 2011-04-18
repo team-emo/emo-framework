@@ -5,9 +5,11 @@
 #include <sys/timeb.h>
 #include <EGL/egl.h>
 #include <GLES/gl.h>
+#include "squirrel.h"
 
 #include "Constants.h"
-#include "squirrel.h"
+#include "Stage.h"
+#include "Audio.h"
 
 struct char_comparator {
     bool operator()(const char* s1, const char* s2) const {
@@ -33,7 +35,6 @@ namespace emo {
         void onSensorEvent(ASensorEvent* event);
         void onDispose();
 
-        void onUnloadDisplay();
         void onTerminateDisplay();
 
         void onDrawFrame();
@@ -66,6 +67,7 @@ namespace emo {
         void rebindStageBuffers();
         void rebindDrawableBuffers();
 
+        void unloadDrawables();
         void deleteDrawableBuffers();
         void deleteStageBuffer();
 
@@ -106,6 +108,9 @@ namespace emo {
         bool enablePerspectiveNicest;
         bool enableOnDrawFrame;
         bool enableBackKey;
+
+        Stage* stage;
+        Audio* audio;
 
         ASensorManager* sensorManager;
         ASensorEventQueue* sensorEventQueue;

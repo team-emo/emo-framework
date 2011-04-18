@@ -48,7 +48,6 @@ namespace emo {
     }
 
     void Engine::event_handle_cmd(android_app* app, int32_t cmd) {
-        emo::Engine* engine = (emo::Engine*)app->userData;
         switch (cmd) {
             case APP_CMD_INIT_WINDOW:
                     if (this->app->window != NULL) {
@@ -116,6 +115,8 @@ namespace emo {
         this->loadedCalled = false;
         this->initialized  = false;
 
+        stage = new Stage();
+        audio = new Audio();
     }
 
 
@@ -187,7 +188,7 @@ namespace emo {
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
 
-        clearGLErrors("emo_init_display");
+        clearGLErrors("emo::Engine::onInitGLSurface");
 
         if (!this->loadedCalled) {
             callSqFunction(this->sqvm, EMO_NAMESPACE, EMO_FUNC_ONLOAD);
@@ -223,7 +224,22 @@ namespace emo {
     }
 
     void Engine::onDispose() {
+        if (this->loaded) {
+            if (this->audio->isRunning()) {
+                this->audio->close();
+            }
+            this->updateUptime();
+            callSqFunction(this->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDISPOSE);
+            sq_close(this->sqvm);
 
+            this->unloadDrawables();
+            this->deleteStageBuffer();
+
+            delete this->stage;
+            delete this->audio;
+
+            this->loaded = false;
+        }
     }
 
     void Engine::onLostFocus() {
@@ -253,16 +269,12 @@ namespace emo {
         return 0;
     }
 
-    void Engine::onUnloadDisplay() {
-        this->deleteDrawableBuffers();
-        this->deleteStageBuffer();
-    }
-
     void Engine::onTerminateDisplay() {
         if (this->display != EGL_NO_DISPLAY) {
 
             if (this->loaded) {
-                this->onUnloadDisplay();
+                this->deleteDrawableBuffers();
+                this->deleteStageBuffer();
             }
 
             eglMakeCurrent(this->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
@@ -308,6 +320,10 @@ namespace emo {
     }
 
     void Engine::rebindDrawableBuffers() {
+
+    }
+
+    void Engine::unloadDrawables() {
 
     }
 
