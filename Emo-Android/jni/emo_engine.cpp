@@ -170,6 +170,9 @@ void emo_init_engine(engine* engine) {
     engine->loaded  = true;
     engine->loadedCalled = false;
     engine->initialized  = false;
+
+    engine->drawables = new drawables_t();
+    engine->drawablesToRemove = new drawables_t();
 }
 
 /*
@@ -272,6 +275,9 @@ void emo_dispose_engine(engine* engine) {
 
         unloadDrawables(engine);
         deleteStageBuffer(engine->stage);
+
+        delete engine->drawablesToRemove;
+        delete engine->drawables;
 
         free(engine->stage);
 

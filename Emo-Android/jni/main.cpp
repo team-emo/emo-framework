@@ -170,11 +170,6 @@ void android_main(struct android_app* state) {
         engine.state = *(struct saved_state*)state->savedState;
     }
 
-    drawables_t drawables;
-    drawables_t drawablesToRemove;
-    engine.drawables = &drawables;
-    engine.drawablesToRemove = &drawablesToRemove;
-
     g_engine = &engine;
 
     // Initialize the framework
