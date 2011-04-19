@@ -13,7 +13,7 @@
 #define EMO_RUNTIME_CLASS  "Runtime"
 #define EMO_EVENT_CLASS    "Event"
 #define EMO_STAGE_CLASS    "Stage"
-#define EMO_AUDIO_CLASS    "AudioManager"
+#define EMO_AUDIO_CLASS    "Audio"
 
 #define EMO_FUNC_ONLOAD         "_onLoad"
 #define EMO_FUNC_ONGAINED_FOUCS "_onGainedFocus"

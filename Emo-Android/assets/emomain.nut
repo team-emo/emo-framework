@@ -14,7 +14,6 @@ class Level_1 {
 
     function onGainedFocus() {
         print("Level_1:onGainedFocus"); 
-
     }
 
     function onLostFocus() {
@@ -27,8 +26,7 @@ class Level_1 {
     }
 
     function onDrawFrame(dt) {
-        print("Level_1:onDrawFrame"); 
-
+        print("Level_1:onDrawFrame:" + dt); 
     }
 
     function onMotionEvent(motionEvent) {
