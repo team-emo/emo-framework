@@ -1,5 +1,5 @@
-#import "emo_engine_func.h"
-#import "common.h"
+#import "EmoEngine_glue.h"
+#import "Constants.h"
 #import "png.h"
 
 #import <OpenGLES/ES1/gl.h>

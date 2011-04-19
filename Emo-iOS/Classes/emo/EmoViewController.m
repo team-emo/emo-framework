@@ -2,8 +2,8 @@
 
 #import "EmoViewController.h"
 #import "EmoView.h"
-#import "common.h"
-#import "emo_engine_func.h"
+#import "Constants.h"
+#import "EmoEngine_glue.h"
 
 EmoEngine* engine;
 

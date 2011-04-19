@@ -1,3 +1,7 @@
+#if __cplusplus
+extern "C" {
+#endif
+
 #include <math.h>
 
 bool isPowerOfTwo(int x) {
@@ -16,4 +20,6 @@ int nextPowerOfTwo(int minimum) {
 		}
 	}
 }
-
+#if __cplusplus
+}   // Extern C
+#endif

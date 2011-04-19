@@ -4,7 +4,7 @@
 
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
-#import <common.h>
+#import <Constants.h>
 #import <EmoEngine.h>
 #import <EmoView.h>
 

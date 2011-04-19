@@ -1,8 +1,9 @@
-#import "emo_drawable_func.h"
-#import "emo_engine_func.h"
-#import "common.h"
+#import "EmoDrawable_glue.h"
+#import "EmoEngine_glue.h"
+#import "Constants.h"
 #import "EmoEngine.h"
 #import "EmoDrawable.h"
+#import "Util.h"
 
 extern EmoEngine* engine;
 

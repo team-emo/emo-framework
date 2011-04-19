@@ -1,5 +1,5 @@
 #import "EmoStage.h"
-#import "emo_engine_func.h"
+#import "EmoEngine_glue.h"
 
 @implementation EmoStage
 @synthesize width, height, viewport_width, viewport_height;

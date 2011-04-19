@@ -1,7 +1,7 @@
 #import "EmoAudio.h"
 #import "EmoEngine.h"
-#import "common.h"
-#import "emo_engine_func.h"
+#import "Constants.h"
+#import "EmoEngine_glue.h"
 
 extern EmoEngine* engine;
 

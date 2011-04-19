@@ -1,5 +1,5 @@
 #import "squirrel.h"
-#import "common.h"
+#import "Constants.h"
 #import "EmoAudio.h"
 #import "EmoDrawable.h"
 #import "EmoStage.h"

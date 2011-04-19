@@ -1,11 +1,16 @@
 #include <EmoDrawable.h>
 #include <squirrel.h>
-#include <common.h>
-#include <sqfunc.h>
+#include <Constants.h>
+#include <VmFunc.h>
 #include <EmoEngine.h>
-#include <emo_engine_func.h>
+#include <EmoEngine_glue.h>
 
 extern EmoEngine* engine;
+
+@implementation EmoDrawableAnimation 
+@synthesize name;
+@synthesize start, current, end, loop, interval; 
+@end
 
 @interface EmoDrawable (PrivateMethods)
 -(NSInteger)tex_coord_frame_startX;

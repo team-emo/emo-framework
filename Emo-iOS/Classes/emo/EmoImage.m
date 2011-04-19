@@ -1,5 +1,5 @@
 #import "EmoImage.h"
-#import "emo_engine_func.h"
+#import "EmoEngine_glue.h"
 
 @implementation EmoImage
 @synthesize filename;
