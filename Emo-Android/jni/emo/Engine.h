@@ -97,6 +97,7 @@ namespace emo {
         bool focused;
         bool loadedCalled;
         bool initialized;
+        bool scriptLoaded;
 
         EGLDisplay display;
         EGLSurface surface;

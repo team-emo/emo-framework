@@ -88,33 +88,27 @@ namespace emo {
         // back key is enabled by default
         this->enableBackKey = true;
 
+        // force fullscreen
+        this->updateOptions(OPT_WINDOW_FORCE_FULLSCREEN);
+
         // create stage
         stage = new Stage();
 
         // create audio
         audio = new Audio();
 
-        // init Squirrel VM
-        initSQVM(this->sqvm);
-
-        // register class and functions for script
-        this->initScriptFunctions();
-
-        // load runtime and main script
-        loadScriptFromAsset(SQUIRREL_RUNTIME_SCRIPT);
-        loadScriptFromAsset(SQUIRREL_MAIN_SCRIPT);
-
-        // force fullscreen
-        this->updateOptions(OPT_WINDOW_FORCE_FULLSCREEN);
-
         this->focused = false;
-        this->loaded  = true;
         this->loadedCalled = false;
         this->initialized  = false;
+        this->scriptLoaded = false;
 
         this->drawables = new drawables_t();
         this->drawablesToRemove = new drawables_t();
 
+        // init Squirrel VM
+        initSQVM(this->sqvm);
+
+        this->loaded  = true;
     }
 
 
@@ -158,6 +152,17 @@ namespace emo {
         this->surface = surface;
         this->width   = w;
         this->height  = h;
+
+        if (!this->scriptLoaded) {
+            // register class and functions for script
+            this->initScriptFunctions();
+
+            // load runtime and main script
+            loadScriptFromAsset(SQUIRREL_RUNTIME_SCRIPT);
+            loadScriptFromAsset(SQUIRREL_MAIN_SCRIPT);
+
+            this->scriptLoaded = true;
+        }
 
         this->onInitGLSurface();
 
