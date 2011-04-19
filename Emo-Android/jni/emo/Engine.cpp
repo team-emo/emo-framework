@@ -42,6 +42,29 @@ namespace emo {
         this->registerClassFunc(this->sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
         this->registerClassFunc(this->sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
 
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "setColor",       emoDrawableColor);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "remove",         emoDrawableRemove);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "viewport",       emoSetViewport);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "ortho",          emoSetStageSize);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "windowWidth",    emoGetWindowWidth);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "windowHeight",   emoGetWindowHeight);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "show",           emoDrawableShow);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "hide",           emoDrawableHide);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "red",            emoDrawableColorRed);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "green",          emoDrawableColorGreen);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "blue",           emoDrawableColorBlue);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "alpha",          emoDrawableColorAlpha);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "pauseAt",        emoDrawablePauseAt);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "pause",          emoDrawablePause);
+        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "stop",           emoDrawableStop);
+
         this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
         this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
         this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
@@ -239,7 +262,7 @@ namespace emo {
 
         if (this->initialized) {
             // return onPause so re-create buffers
-            this->rebindStageBuffers();
+            this->stage->rebindBuffer();
             this->rebindDrawableBuffers();
         } else {
             this->stage->onLoad();
@@ -264,7 +287,7 @@ namespace emo {
             sq_close(this->sqvm);
 
             this->unloadDrawables();
-            this->deleteStageBuffer();
+            this->stage->deleteBuffer();
 
             this->loaded = false;
         }
@@ -405,7 +428,7 @@ namespace emo {
 
             if (this->loaded) {
                 this->deleteDrawableBuffers();
-                this->deleteStageBuffer();
+                this->stage->deleteBuffer();
             }
 
             eglMakeCurrent(this->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
@@ -452,43 +475,100 @@ namespace emo {
     }
 
     void Engine::addDrawable(const char* _key, Drawable* drawable) {
-
+        const char* key = strdup(_key);
+        this->drawables->insert(std::make_pair(key, drawable)); 
     }
 
     bool Engine::removeDrawable(const char* key) {
+        drawables_t::iterator iter = this->drawables->find(key);
+        if (iter != this->drawables->end()) {
+            Drawable* drawable = iter->second;
+            this->addDrawableToRemove(iter->first, iter->second);
+            return true;
+        }
         return false;
     }
 
+    void Engine::addDrawableToRemove(const char* _key, Drawable* drawable) {
+        const char* key = strdup(_key);
+        this->drawablesToRemove->insert(std::make_pair(key, drawable));
+    }
+
     Drawable* Engine::getDrawable(const char* key) {
+        drawables_t::iterator iter = this->drawables->find(key);
+        if (iter != this->drawables->end()) {
+            return iter->second;
+        }
         return NULL;
     }
 
     void Engine::loadDrawables() {
-
+        drawables_t::iterator iter;
+        for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
+            Drawable* drawable = iter->second;
+            drawable->load();
+        }
     }
+
+    bool Engine::freeDrawable(const char* key) {
+        drawables_t::iterator iter = this->drawables->find(key);
+        if (iter != this->drawables->end()) {
+            Drawable* drawable = iter->second;
+            drawable->deleteBuffer();
+            if (this->drawables->erase(iter->first)){
+                drawable->unload();
+                delete drawable;
+                free((char*)iter->first);
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     void Engine::onDrawDrawables() {
+        drawables_t::iterator iter;
+        for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
+            Drawable* drawable = iter->second;
+            if (drawable->loaded) {
+                drawable->onDrawFrame();
+            }
+        }
 
-    }
-
-    void Engine::rebindStageBuffers() {
-
+        if (this->drawablesToRemove->size() > 0) {
+            for(iter = this->drawablesToRemove->begin(); iter != this->drawablesToRemove->end(); iter++) {
+                this->freeDrawable(iter->first);
+            }
+            this->drawablesToRemove->clear();
+        }
     }
 
     void Engine::rebindDrawableBuffers() {
-
+        drawables_t::iterator iter;
+        for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
+            Drawable* drawable = iter->second;
+            drawable->load();
+            drawable->bindVertex();
+        }
     }
 
     void Engine::unloadDrawables() {
-
+        drawables_t::iterator iter;
+        for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
+            Drawable* drawable = iter->second;
+            drawable->unload();
+            free((char*)iter->first);
+            delete iter->second;
+        }
+        this->drawables->clear();
     }
 
     void Engine::deleteDrawableBuffers() {
-
-    }
-
-    void Engine::deleteStageBuffer() {
-
+        drawables_t::iterator iter;
+        for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
+            Drawable* drawable = iter->second;
+            drawable->deleteBuffer();
+        }
     }
 
     void Engine::updateOptions(int value) {

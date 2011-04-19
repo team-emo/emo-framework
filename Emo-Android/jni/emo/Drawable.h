@@ -13,6 +13,7 @@ namespace emo {
 
         void init();
         void load();
+        void unload();
 
         void genTextures();
         bool bindVertex();
@@ -23,9 +24,13 @@ namespace emo {
         int  getFrameCount();
 
         GLuint getCurrentBufferId();
+        bool isCurrentTexBufferLoaded();
+
         void setFrameIndex(int index);
 
         void setTexture(Image* image);
+
+        void deleteBuffer();
 
         const char* name;
 
@@ -57,5 +62,14 @@ namespace emo {
         int        frameCount;
 
         Image*     texture;
+
+        bool deleteVBOAtFrame(int index);
+        int clearVBOs();
+        int tex_coord_frame_startX();
+        int tex_coord_frame_startY();
+        float getTexCoordStartX();
+        float getTexCoordEndX();
+        float getTexCoordStartY();
+        float getTexCoordEndY();
     };
 }

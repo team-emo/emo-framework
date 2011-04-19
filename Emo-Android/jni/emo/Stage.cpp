@@ -79,4 +79,33 @@ namespace emo {
         glClearColor(0, 0, 1, 1);
         glClear(GL_COLOR_BUFFER_BIT);
     }
+
+    void Stage::deleteBuffer() {
+        if (!this->loaded) return;
+
+        glDeleteBuffers(2, this->vbo);
+        this->loaded = false;
+
+        this->vbo[0] = 0;
+        this->vbo[1] = 0;
+    }
+
+    void Stage::rebindBuffer() {
+        glGenBuffers(2, this->vbo);
+
+        glBindBuffer(GL_ARRAY_BUFFER, this->vbo[0]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12 , this->positions, GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo[1]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(short) * 4, this->indices, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+        printGLErrors("Could not create OpenGL buffers");
+
+        this->dirty = true;
+        this->loaded = true;
+}
+
+
 }

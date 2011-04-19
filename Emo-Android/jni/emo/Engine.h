@@ -10,6 +10,7 @@
 #include "Constants.h"
 #include "Stage.h"
 #include "Drawable.h"
+#include "Drawable_glue.h"
 #include "Audio.h"
 
 struct char_comparator {
@@ -61,20 +62,18 @@ namespace emo {
         void setOnDrawListenerInterval(int value);
 
         void addDrawable(const char* _key, Drawable* drawable);
+        void addDrawableToRemove(const char* _key, Drawable* drawable);
         bool removeDrawable(const char* key);
+        bool freeDrawable(const char* key);
         Drawable* getDrawable(const char* key);
-
-        void loadStage();
-        void loadDrawables();
 
         void onDrawDrawables();
         
-        void rebindStageBuffers();
         void rebindDrawableBuffers();
 
+        void loadDrawables();
         void unloadDrawables();
         void deleteDrawableBuffers();
-        void deleteStageBuffer();
 
         int32_t getLastError();
         void setLastError(int32_t error);
