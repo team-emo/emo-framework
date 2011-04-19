@@ -307,13 +307,13 @@ class emo.Sprite {
 
     id     = -1;
     loaded = false;
-    hasSheet = false;
 
     /*
      * sprite = Sprite("aaa.png");
      */
     function constructor(_name) {
 		name = _name;
+        id = stage.createSprite(name);
     }
 
     /*
@@ -324,8 +324,6 @@ class emo.Sprite {
         local status = EMO_NO_ERROR;
         if (!loaded) {
 
-            id = stage.createSprite(name);
-
             status = stage.loadSprite(id, x, y, width, height);
 
             if (status == EMO_NO_ERROR) {
@@ -334,68 +332,7 @@ class emo.Sprite {
         }
         return status;
     }
-
-    /*
-     * sprite.loadSheet(x, y, frameIndex, frameWidth, frameHeight);
-     * sprite.loadSheet(x, y, frameIndex, frameWidth, frameHeight, border);
-     * sprite.loadSheet(x, y, frameIndex, frameWidth, frameHeight, border, margin);
-     */
-    function loadSheet(x, y, frameIndex, frameWidth, frameHeight, border = 0, margin = 0) {
-        local status = EMO_NO_ERROR;
-        if (!loaded) {
-
-            id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border, margin);
-
-            status = stage.loadSprite(id, x, y);
-
-            if (status == EMO_NO_ERROR) {
-                loaded = true;
-                hasSheet = true;
-            }
-        }
-        return status;
-    }
-
-    /*
-     * sprite.animate(startFrame, frameCount, interval);
-     * sprite.animate(startFrame, frameCount, interval, loopCount = 0);
-     */
-    function animate(startFrame, frameCount, interval, loopCount = 0) {
-        if (hasSheet) {
-            return stage.animate(id, startFrame, frameCount, interval, loopCount);
-        } else {
-            return ERR_NOT_SUPPORTED;
-        }
-    }
-
-    function pause() {
-        if (hasSheet) {
-            return stage.pause(id);
-        } else {
-            return ERR_NOT_SUPPORTED;
-        }
-    }
-
-    function pauseAt(frameIndex) {
-        if (hasSheet) {
-            return stage.pauseAt(id, frameIndex);
-        } else {
-            return ERR_NOT_SUPPORTED;
-        }
-    }
-
-    function setFrame(frameIndex) {
-        return pauseAt(frameIndex);
-    }
-
-    function stop() {
-        if (hasSheet) {
-            return stage.stop(id);
-        } else {
-            return ERR_NOT_SUPPORTED;
-        }
-    }
-
+	
     function show() { return stage.show(id); }
     function hide() { return stage.hide(id); }
     function alpha(a = null) { return stage.alpha(id, a); }
@@ -450,9 +387,59 @@ class emo.Sprite {
     }
 }
 
+class emo.SpriteSheet extends emo.Sprite {
+
+	function constructor(_name, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
+		name = _name;
+        id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border, margin);
+	}
+	
+    /*
+     * sprite.loadSheet(x, y);
+     * sprite.loadSheet(x, y, frameIndex);
+     */
+    function load(x, y, frameIndex = 0) {
+        local status = EMO_NO_ERROR;
+        if (!loaded) {
+			setFrame(frameIndex);
+            status = stage.loadSprite(id, x, y);
+
+            if (status == EMO_NO_ERROR) {
+                loaded = true;
+            }
+        }
+        return status;
+    }
+
+    /*
+     * sprite.animate(startFrame, frameCount, interval);
+     * sprite.animate(startFrame, frameCount, interval, loopCount = 0);
+     */
+    function animate(startFrame, frameCount, interval, loopCount = 0) {
+        return stage.animate(id, startFrame, frameCount, interval, loopCount);
+    }
+
+    function pause() {
+        return stage.pause(id);
+    }
+
+    function pauseAt(frameIndex) {
+        return stage.pauseAt(id, frameIndex);
+    }
+
+    function setFrame(frameIndex) {
+        return pauseAt(frameIndex);
+    }
+
+    function stop() {
+        return stage.stop(id);
+    }
+}
+
 class emo.Rectangle extends emo.Sprite {
 	function constructor() {
 		name = null;
+        id = stage.createSprite(name);
 	}
 }
 

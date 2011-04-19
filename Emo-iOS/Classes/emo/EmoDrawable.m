@@ -27,6 +27,11 @@ extern EmoEngine* engine;
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
     if (!loaded) return FALSE;
 	
+	if (frameChanged) {
+		[self bindVertex];
+		frameChanged = FALSE;
+	}
+	
 	if (frames_vbos[frame_index] <= 0) {
 		[self bindVertex];
 	}
@@ -99,6 +104,7 @@ extern EmoEngine* engine;
 	loaded     = FALSE;
 	hasSheet   = FALSE;
 	animating  = FALSE;
+	frameChanged = FALSE;
 
 	// color param RGBA
     param_color[0] = 1.0f;
@@ -277,8 +283,8 @@ extern EmoEngine* engine;
 	}
 	frame_index = index;
 	animating = FALSE;
-	
-	[self bindVertex];
+
+	frameChanged = TRUE;
 	
 	return TRUE;
 }
