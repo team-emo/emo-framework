@@ -78,7 +78,7 @@ namespace emo {
         int32_t getLastError();
         void setLastError(int32_t error);
 
-        HSQUIRRELVM getVm();
+        HSQUIRRELVM sqvm;
 
         bool animating;
 
@@ -89,6 +89,9 @@ namespace emo {
 
         int32_t onDrawFrameInterval;
         int32_t onDrawDrawablesInterval;
+
+        void registerClass(HSQUIRRELVM v, const char *cname);
+        void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);
     protected:
         bool loaded;
         bool focused;
@@ -101,7 +104,6 @@ namespace emo {
 
         int32_t width;
         int32_t height;
-        HSQUIRRELVM sqvm;
         int32_t lastError;
 
         timeb startTime;
@@ -131,7 +133,5 @@ namespace emo {
         const ASensor* proximitySensor;
 
         void initScriptFunctions();
-        void registerClass(HSQUIRRELVM v, const char *cname);
-        void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);
     };
 }

@@ -15,6 +15,27 @@
 
 extern emo::Engine* engine;
 
+void initRuntimeFunctions() {
+    engine->registerClass(engine->sqvm, EMO_RUNTIME_CLASS);
+    engine->registerClass(engine->sqvm, EMO_EVENT_CLASS);
+
+    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
+    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
+    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
+    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
+    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "info",            emoRuntimeLogInfo);
+    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
+    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
+    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
+    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);
+
+    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
+    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
+    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
+    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
+    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+}
+
 int32_t app_handle_input(struct android_app* app, AInputEvent* event) {
     return engine->event_handle_input(app, event);
 }
@@ -99,9 +120,9 @@ bool loadScriptFromAsset(const char* fname) {
     	return false;
     }
 
-    if(SQ_SUCCEEDED(sq_compile(engine->getVm(), sq_lexer, asset, fname, SQTrue))) {
-        sq_pushroottable(engine->getVm());
-        if (SQ_FAILED(sq_call(engine->getVm(), 1, SQFalse, SQTrue))) {
+    if(SQ_SUCCEEDED(sq_compile(engine->sqvm, sq_lexer, asset, fname, SQTrue))) {
+        sq_pushroottable(engine->sqvm);
+        if (SQ_FAILED(sq_call(engine->sqvm, 1, SQFalse, SQTrue))) {
         	engine->setLastError(ERR_SCRIPT_CALL_ROOT);
             LOGW("loadScriptFromAsset: failed to sq_call");
             LOGW(fname);

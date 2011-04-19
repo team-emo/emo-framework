@@ -53,6 +53,8 @@ namespace emo {
     };
 }
 
+void initAudioFunctions();
+
 SQInteger emoLoadAudio(HSQUIRRELVM v);
 SQInteger emoCreateAudioEngine(HSQUIRRELVM v);
 SQInteger emoPlayAudioChannel(HSQUIRRELVM v);

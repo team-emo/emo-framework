@@ -21,70 +21,10 @@ namespace emo {
 
     void Engine::initScriptFunctions() {
         register_table(this->sqvm, EMO_NAMESPACE);
-        this->registerClass(this->sqvm, EMO_RUNTIME_CLASS);
-        this->registerClass(this->sqvm, EMO_EVENT_CLASS);
-        this->registerClass(this->sqvm, EMO_STAGE_CLASS);
-        this->registerClass(this->sqvm, EMO_AUDIO_CLASS);
 
-        this->registerClassFunc(this->sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
-        this->registerClassFunc(this->sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
-        this->registerClassFunc(this->sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
-        this->registerClassFunc(this->sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
-        this->registerClassFunc(this->sqvm, EMO_RUNTIME_CLASS, "info",            emoRuntimeLogInfo);
-        this->registerClassFunc(this->sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
-        this->registerClassFunc(this->sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
-        this->registerClassFunc(this->sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
-        this->registerClassFunc(this->sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);;
-
-        this->registerClassFunc(this->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
-        this->registerClassFunc(this->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
-        this->registerClassFunc(this->sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
-        this->registerClassFunc(this->sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
-        this->registerClassFunc(this->sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
-
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "setColor",       emoDrawableColor);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "remove",         emoDrawableRemove);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "viewport",       emoSetViewport);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "ortho",          emoSetStageSize);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "windowWidth",    emoGetWindowWidth);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "windowHeight",   emoGetWindowHeight);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "show",           emoDrawableShow);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "hide",           emoDrawableHide);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "red",            emoDrawableColorRed);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "green",          emoDrawableColorGreen);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "blue",           emoDrawableColorBlue);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "alpha",          emoDrawableColorAlpha);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "pauseAt",        emoDrawablePauseAt);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "pause",          emoDrawablePause);
-        this->registerClassFunc(this->sqvm, EMO_STAGE_CLASS,    "stop",           emoDrawableStop);
-
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "seek",           emoSeekAudioChannel);
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "getChannelCount",emoGetAudioChannelCount);
-
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "getVolume",      emoGetAudioChannelVolume);
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "setVolume",      emoSetAudioChannelVolume);
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "getMaxVolume",   emoGetAudioChannelMaxVolume);
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "getMinVolume",   emoGetAudioChannelMinVolume);
-
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "setLoop",        emoSetAudioChannelLooping);
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "isLoop",         emoGetAudioChannelLooping);
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "getState",       emoGetAudioChannelState);
-
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "close",          emoCloseAudioChannel);
-        this->registerClassFunc(this->sqvm, EMO_AUDIO_CLASS,    "closeEngine",    emoCloseAudioEngine);
-
+        initRuntimeFunctions();
+        initDrawableFunctions();
+        initAudioFunctions();
     }
 
     int32_t Engine::event_handle_input(android_app* app, AInputEvent* event) {
@@ -746,10 +686,6 @@ namespace emo {
 
     void Engine::setLastError(int32_t error) {
         this->lastError = error;
-    }
-
-    HSQUIRRELVM Engine::getVm() {
-        return sqvm;
     }
 
     void Engine::enableOnDrawListener(bool enable) {

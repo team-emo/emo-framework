@@ -7,6 +7,33 @@
 
 extern emo::Engine* engine;
 
+void initDrawableFunctions() {
+    engine->registerClass(engine->sqvm, EMO_STAGE_CLASS);
+
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setColor",       emoDrawableColor);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "remove",         emoDrawableRemove);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "viewport",       emoSetViewport);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "ortho",          emoSetStageSize);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "windowWidth",    emoGetWindowWidth);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "windowHeight",   emoGetWindowHeight);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "show",           emoDrawableShow);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "hide",           emoDrawableHide);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "red",            emoDrawableColorRed);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "green",          emoDrawableColorGreen);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "blue",           emoDrawableColorBlue);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "alpha",          emoDrawableColorAlpha);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pauseAt",        emoDrawablePauseAt);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pause",          emoDrawablePause);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "stop",           emoDrawableStop);
+}
+
 /*
  * create drawable instance (single sprite)
  */

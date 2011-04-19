@@ -8,6 +8,31 @@
 
 extern emo::Engine* engine;
 
+void initAudioFunctions() {
+    engine->registerClass(engine->sqvm, EMO_AUDIO_CLASS);
+
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "seek",           emoSeekAudioChannel);
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getChannelCount",emoGetAudioChannelCount);
+
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getVolume",      emoGetAudioChannelVolume);
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "setVolume",      emoSetAudioChannelVolume);
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getMaxVolume",   emoGetAudioChannelMaxVolume);
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getMinVolume",   emoGetAudioChannelMinVolume);
+
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "setLoop",        emoSetAudioChannelLooping);
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "isLoop",         emoGetAudioChannelLooping);
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getState",       emoGetAudioChannelState);
+
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "close",          emoCloseAudioChannel);
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "closeEngine",    emoCloseAudioEngine);
+
+}
+
 static SLresult checkOpenSLresult(const char* message, SLresult result) {
     if (SL_RESULT_SUCCESS != result) {
         LOGE(message);

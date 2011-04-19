@@ -1,5 +1,7 @@
 #include <squirrel.h>
 
+void initDrawableFunctions();
+
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);
 SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v);
 SQInteger emoDrawableLoad(HSQUIRRELVM v);

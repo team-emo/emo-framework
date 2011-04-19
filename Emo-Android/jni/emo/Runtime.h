@@ -1,6 +1,8 @@
 #include <android_native_app_glue.h>
 #include <squirrel.h>
 
+void initRuntimeFunctions();
+
 int32_t app_handle_input(struct android_app* app, AInputEvent* event);
 void app_handle_cmd(struct android_app* app, int32_t cmd);
 
