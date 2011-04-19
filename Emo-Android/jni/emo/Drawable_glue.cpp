@@ -85,7 +85,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
 
     emo::Drawable* drawable = new emo::Drawable();
 
-    const SQChar* name;
+    const SQChar* name = NULL;
     SQInteger nargs = sq_gettop(v);
     if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
         sq_tostring(v, 2);
@@ -117,7 +117,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     int width  = 0;
     int height = 0;
 
-    if (!loadPngSizeFromAsset(name, &width, &height) || 
+    if (name != NULL && !loadPngSizeFromAsset(name, &width, &height) || 
           width <= 0 || height <= 0 || frameWidth <= 0 || frameHeight <= 0) {
         free(drawable);
         sq_pushinteger(v, -1);
@@ -129,8 +129,6 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     drawable->height = frameHeight;
     drawable->border = border;
 
-    drawable->setFrameIndex(frameIndex);
-
     if (margin == 0 && border != 0) {
         drawable->margin = border;
     } else {
@@ -140,6 +138,8 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     drawable->setFrameCount((int)floor(width / (float)(frameWidth  + border)) 
                                        * floor(height /(float)(frameHeight + border)));
     if (drawable->getFrameCount() <= 0) drawable->setFrameCount(1);
+
+    drawable->setFrameIndex(frameIndex);
 
     drawable->load();
 
@@ -197,7 +197,6 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
             return 1;
         }
     }
-
 
     // drawable x
     if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
@@ -752,8 +751,10 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
     drawable->setFrameIndex(index);
     drawable->animating   = false;
     
-    drawable->bindVertex();
-    
+    if (drawable->loaded) {
+        drawable->bindVertex();
+    }
+
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }
