@@ -433,7 +433,7 @@ class emo.Sprite {
      * sprite.color(red, green, blue, alpha);
      */
     function color(red, green, blue, alpha = null) {
-        return stage.setColor(id, red, green, blue, alpha);
+        return stage.color(id, red, green, blue, alpha);
     }
 
     function remove() {

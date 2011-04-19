@@ -17,7 +17,7 @@ void initDrawableFunctions() {
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
-	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setColor",       emoDrawableColor);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "color",          emoDrawableColor);
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "remove",         emoDrawableRemove);
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "viewport",       emoSetViewport);
