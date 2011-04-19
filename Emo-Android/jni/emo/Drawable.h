@@ -63,13 +63,13 @@ namespace emo {
 
         Image*     texture;
 
-        bool deleteVBOAtFrame(int index);
-        int clearVBOs();
         int tex_coord_frame_startX();
         int tex_coord_frame_startY();
         float getTexCoordStartX();
         float getTexCoordEndX();
         float getTexCoordStartY();
         float getTexCoordEndY();
+
+        bool frameCountLoaded;
     };
 }

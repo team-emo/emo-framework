@@ -273,8 +273,6 @@ namespace emo {
 
         this->lastOnDrawInterval  = this->uptime;
         this->lastOnDrawDrawablesInterval  = this->uptime;
-
-        this->stage->onDrawFrame();
     }
 
     void Engine::onDispose() {
@@ -469,7 +467,7 @@ namespace emo {
         this->lastOnDrawDrawablesInterval  = this->uptime;
 
         this->stage->onDrawFrame();
-        onDrawDrawables();
+        this->onDrawDrawables();
 
         eglSwapBuffers(this->display, this->surface);
     }
@@ -514,7 +512,6 @@ namespace emo {
         drawables_t::iterator iter = this->drawables->find(key);
         if (iter != this->drawables->end()) {
             Drawable* drawable = iter->second;
-            drawable->deleteBuffer();
             if (this->drawables->erase(iter->first)){
                 drawable->unload();
                 delete drawable;
@@ -528,18 +525,18 @@ namespace emo {
 
     void Engine::onDrawDrawables() {
         drawables_t::iterator iter;
-        for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
-            Drawable* drawable = iter->second;
-            if (drawable->loaded) {
-                drawable->onDrawFrame();
-            }
-        }
-
         if (this->drawablesToRemove->size() > 0) {
             for(iter = this->drawablesToRemove->begin(); iter != this->drawablesToRemove->end(); iter++) {
                 this->freeDrawable(iter->first);
             }
             this->drawablesToRemove->clear();
+        }
+
+        for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
+            Drawable* drawable = iter->second;
+            if (drawable->loaded) {
+                drawable->onDrawFrame();
+            }
         }
     }
 

@@ -15,6 +15,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     emo::Drawable* drawable = new emo::Drawable();
 
     drawable->init();
+    drawable->setFrameCount(1);
     drawable->load();
 
     const SQChar* name;

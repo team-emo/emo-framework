@@ -14,7 +14,6 @@ namespace emo {
     }
 
     Drawable::~Drawable() {
-        free(this->frames_vbos);
     }
 
     void Drawable::init() {
@@ -24,6 +23,7 @@ namespace emo {
         this->loaded     = false;
         this->hasSheet   = false;
         this->animating  = false;
+        this->frameCountLoaded = false;
 
         // color param RGBA
         this->param_color[0] = 1.0f;
@@ -54,17 +54,10 @@ namespace emo {
         this->frame_index = 0;
         this->border      = 0;
         this->margin      = 0;
-
     }
 
     void Drawable::load() {
-        this->frames_vbos = (GLuint *)malloc(sizeof(GLuint) * this->frameCount);
-
         if (this->hasBuffer) return;
-
-        for (int i = 0; i < this->frameCount; i++) {
-            this->frames_vbos[i] = 0;
-        }
 
         // generate buffer for current frame index
         glGenBuffers(1, &this->frames_vbos[this->frame_index]);
@@ -87,32 +80,17 @@ namespace emo {
             free(this->texture->data);
             delete this->texture;
         }
+        if (this->frameCountLoaded) {
+            delete[] this->frames_vbos;
+            this->frameCountLoaded = false;
+        }
+        this->hasTexture = false;
+        this->hasBuffer  = false;
+        this->loaded     = false;
     }
 
     bool Drawable::isCurrentTexBufferLoaded() {
         return this->frames_vbos[this->frame_index] > 0;
-    }
-
-    bool Drawable::deleteVBOAtFrame(int index) {
-        const GLuint value = this->frames_vbos[index];
-        if (value > 0) {
-            glDeleteBuffers(1, &value);
-            this->frames_vbos[index] = 0;
-            return true;
-        }
-        return false;
-    }
-
-    int Drawable::clearVBOs() {
-        int count = 0;
-        for (int i = 0; i < this->frameCount; i++) {
-            if (this->frames_vbos[i] > 0) {
-                glDeleteBuffers(1, &this->frames_vbos[i]);
-                this->frames_vbos[i] = 0;
-                count++;
-            }
-        }
-        return count;
     }
 
     void Drawable::deleteBuffer() {
@@ -121,10 +99,17 @@ namespace emo {
             glDeleteTextures(1, &this->texture->textureId);
         }
 
-        this->clearVBOs();
+        for (int i = 0; i < this->frameCount; i++) {
+            if (this->frames_vbos[i] > 0) {
+                glDeleteBuffers(1, &this->frames_vbos[i]);
+                this->frames_vbos[i] = 0;
+            }
+        }
+
         this->hasBuffer = false;
 
         this->texture->textureId = 0;
+        this->texture->loaded    = false;
     }
 
 
@@ -284,7 +269,17 @@ namespace emo {
     }
 
     void Drawable::setFrameCount(int count) {
+        if (this->frameCountLoaded) {
+            delete[] this->frames_vbos;
+        }
+        this->frames_vbos = new GLuint[count];
         this->frameCount = count;
+
+        for (int i = 0; i < this->frameCount; i++) {
+            this->frames_vbos[i] = 0;
+        }
+
+        this->frameCountLoaded = true;
     }
 
     int Drawable::getFrameCount() {
