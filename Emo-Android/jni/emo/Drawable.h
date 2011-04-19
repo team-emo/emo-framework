@@ -11,9 +11,7 @@ namespace emo {
         Drawable();
         ~Drawable();
 
-        void init();
         void load();
-        void unload();
 
         void genTextures();
         bool bindVertex();

@@ -1,6 +1,8 @@
 namespace emo {
     class Image {
     public:
+        Image();
+        ~Image();
         const char* filename;
         GLuint   textureId;
         int      width;
@@ -10,6 +12,7 @@ namespace emo {
         int      glHeight;
 
         GLubyte* data;
+        bool     hasData;
         bool     hasAlpha;
         bool     loaded;
     };

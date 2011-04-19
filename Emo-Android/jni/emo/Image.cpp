@@ -7,6 +7,17 @@
 
 extern emo::Engine* engine;
 
+namespace emo {
+    Image::Image() {
+        this->hasData = false;
+    }
+    Image::~Image() {
+        if (this->hasData) {
+            free(this->data);
+        }
+    }
+}
+
 /*
  * callback function to read png image
  */
@@ -132,6 +143,8 @@ bool loadPngFromAsset(const char *fname, emo::Image* imageInfo) {
 
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
     AAsset_close(asset);
+
+    imageInfo->hasData = true;
 
     return true;
 }

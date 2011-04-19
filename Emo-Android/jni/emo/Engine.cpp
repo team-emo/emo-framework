@@ -513,7 +513,6 @@ namespace emo {
         if (iter != this->drawables->end()) {
             Drawable* drawable = iter->second;
             if (this->drawables->erase(iter->first)){
-                drawable->unload();
                 delete drawable;
                 free((char*)iter->first);
             }
@@ -553,9 +552,8 @@ namespace emo {
         drawables_t::iterator iter;
         for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
             Drawable* drawable = iter->second;
-            drawable->unload();
+            delete drawable;
             free((char*)iter->first);
-            delete iter->second;
         }
         this->drawables->clear();
     }

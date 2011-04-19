@@ -10,13 +10,6 @@ extern emo::Engine* engine;
 namespace emo {
 
     Drawable::Drawable() {
-
-    }
-
-    Drawable::~Drawable() {
-    }
-
-    void Drawable::init() {
         this->name       = NULL;
         this->hasTexture = false;
         this->hasBuffer  = false;
@@ -56,6 +49,16 @@ namespace emo {
         this->margin      = 0;
     }
 
+    Drawable::~Drawable() {
+        this->deleteBuffer();
+        if (this->hasTexture) {
+            delete this->texture;
+        }
+        if (this->frameCountLoaded) {
+            delete[] this->frames_vbos;
+        }
+    }
+
     void Drawable::load() {
         if (this->hasBuffer) return;
 
@@ -72,21 +75,6 @@ namespace emo {
         if (this->hasTexture) {
             glGenTextures(1, &this->texture->textureId);
         }
-    }
-
-    void Drawable::unload() {
-        this->deleteBuffer();
-        if (this->hasTexture) {
-            free(this->texture->data);
-            delete this->texture;
-        }
-        if (this->frameCountLoaded) {
-            delete[] this->frames_vbos;
-            this->frameCountLoaded = false;
-        }
-        this->hasTexture = false;
-        this->hasBuffer  = false;
-        this->loaded     = false;
     }
 
     bool Drawable::isCurrentTexBufferLoaded() {
