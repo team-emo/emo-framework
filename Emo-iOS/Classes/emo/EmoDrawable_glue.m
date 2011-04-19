@@ -173,57 +173,62 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         return 1;
     }
 	
-	EmoImage* imageInfo = [[EmoImage alloc]init];
-    if (drawable.name != nil && loadPngFromResource(drawable.name, imageInfo)) {
+	if (drawable.name != nil) {
+		EmoImage* imageInfo = [[EmoImage alloc]init];
+		if (loadPngFromResource(drawable.name, imageInfo)) {
 		
-        // calculate the size of power of two
-        imageInfo.glWidth  = nextPowerOfTwo(imageInfo.width);
-        imageInfo.glHeight = nextPowerOfTwo(imageInfo.height);
-		imageInfo.loaded = FALSE;
+			// calculate the size of power of two
+			imageInfo.glWidth  = nextPowerOfTwo(imageInfo.width);
+			imageInfo.glHeight = nextPowerOfTwo(imageInfo.height);
+			imageInfo.loaded = FALSE;
 		
-        drawable.texture = imageInfo;
-        drawable.hasTexture = TRUE;
+			drawable.texture = imageInfo;
+			drawable.hasTexture = TRUE;
 		
-		if (!drawable.hasSheet) {
-			drawable.width  = imageInfo.width;
-			drawable.height = imageInfo.height;
-        }
+			if (!drawable.hasSheet) {
+				drawable.width  = imageInfo.width;
+				drawable.height = imageInfo.height;
+			}
 		
-        // assign OpenGL texture id
-		[imageInfo genTextures];
-    } else {
-        [imageInfo release];
-        sq_pushinteger(v, ERR_ASSET_LOAD);
-        return 1;
-    }
+			// assign OpenGL texture id
+			[imageInfo genTextures];
+		} else {
+			[imageInfo release];
+			sq_pushinteger(v, ERR_ASSET_LOAD);
+			return 1;
+		}
+	}
 	
     // drawable x
-    if (nargs >= 3) {
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQFloat x;
         sq_getfloat(v, 3, &x);
         drawable.x = x;
     }
 	
     // drawable y
-    if (nargs >= 4) {
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
         SQFloat y;
         sq_getfloat(v, 4, &y);
         drawable.y = y;
     }
 	
     // drawable width
-    if (nargs >= 5) {
-        SQFloat width;
-        sq_getfloat(v, 5, &width);
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
+        SQInteger width;
+        sq_getinteger(v, 5, &width);
         drawable.width = width;
     }
 	
     // drawable height
-    if (nargs >= 6) {
-        SQFloat height;
-        sq_getfloat(v, 6, &height);
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
+        SQInteger height;
+        sq_getinteger(v, 6, &height);
         drawable.height = height;
     }
+	
+	if (drawable.width == 0)  drawable.width  = 1;
+	if (drawable.height == 0) drawable.height = 1;
 	
     if ([drawable bindVertex]) {
         sq_pushinteger(v, EMO_NO_ERROR);

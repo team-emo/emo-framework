@@ -313,20 +313,20 @@ class emo.Sprite {
      * sprite = Sprite("aaa.png");
      */
     function constructor(_name) {
-        name = _name;
+		name = _name;
     }
 
     /*
      * sprite.load();
      * sprite.load(x, y);
      */
-    function load(x = 0, y = 0) {
+    function load(x = 0, y = 0, width = null, height = null) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
 
             id = stage.createSprite(name);
 
-            status = stage.loadSprite(id, x, y);
+            status = stage.loadSprite(id, x, y, width, height);
 
             if (status == EMO_NO_ERROR) {
                 loaded = true;
@@ -448,6 +448,12 @@ class emo.Sprite {
     function getId() {
         return id;
     }
+}
+
+class emo.Rectangle extends emo.Sprite {
+	function constructor() {
+		name = null;
+	}
 }
 
 function emo::Stage::load(obj) {

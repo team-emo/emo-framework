@@ -2,23 +2,6 @@
 #include <EmoImage.h>
 #include <EmoStage.h>
 
-@interface EmoDrawableAnimation : NSObject {
-	NSString* name;
-	
-	NSInteger start;
-	NSInteger current;
-	NSInteger end;
-	NSInteger loop;
-	
-	NSInteger interval;
-	
-	NSTimeInterval lastAnimationInterval;
-}
-@property (copy, readwrite) NSString* name;
-@property (readwrite) NSInteger start, current, end;
-@property (readwrite) NSInteger loop, interval;
-@end
-
 @interface EmoDrawable : NSObject {
 	GLuint* frames_vbos;
 	NSString* name;

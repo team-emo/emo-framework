@@ -7,11 +7,6 @@
 
 extern EmoEngine* engine;
 
-@implementation EmoDrawableAnimation 
-@synthesize name;
-@synthesize start, current, end, loop, interval; 
-@end
-
 @interface EmoDrawable (PrivateMethods)
 -(NSInteger)tex_coord_frame_startX;
 -(NSInteger) tex_coord_frame_startY;
@@ -68,14 +63,14 @@ extern EmoEngine* engine;
     glBindBuffer(GL_ARRAY_BUFFER, [stage getPositionPointer]);
     glVertexPointer(3, GL_FLOAT, 0, 0);
 	
+	// bind a texture
     if (hasTexture) {
-        // bind a texture
         glBindTexture(GL_TEXTURE_2D, texture.textureId);
-		
-        // bind texture coords
-        glBindBuffer(GL_ARRAY_BUFFER, frames_vbos[frame_index]);
-        glTexCoordPointer(2, GL_FLOAT, 0, 0);
-    }
+	}
+	
+    // bind texture coords
+    glBindBuffer(GL_ARRAY_BUFFER, frames_vbos[frame_index]);
+    glTexCoordPointer(2, GL_FLOAT, 0, 0);
 	
     // bind indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [stage getIndicePointer]);
@@ -139,7 +134,7 @@ extern EmoEngine* engine;
 }
 
 -(float)getTexCoordStartX {
-    if (hasSheet) {
+	if (hasSheet) {
         return [self tex_coord_frame_startX] / (float)texture.glWidth;
     } else {
         return 0;
@@ -147,7 +142,9 @@ extern EmoEngine* engine;
 }
 
 -(float)getTexCoordEndX {
-    if (hasSheet) {
+	if (!hasTexture) {
+		return 1;
+    } else if (hasSheet) {
         return (float)([self tex_coord_frame_startX] + width) / (float)texture.glWidth;
     } else {
         return (float)texture.width / (float)texture.glWidth;
@@ -155,7 +152,9 @@ extern EmoEngine* engine;
 }
 
 -(float)getTexCoordStartY {
-    if (hasSheet) {
+	if (!hasTexture) {
+		return 1;
+	} else if (hasSheet) {
         return (float)([self tex_coord_frame_startY] + height) / (float)texture.glHeight;
     } else {
         return (float)texture.height / (float)texture.glHeight;
@@ -189,13 +188,13 @@ extern EmoEngine* engine;
 		glGenBuffers (1, &frames_vbos[frame_index]);
 	}
 	
+	glEnable(GL_TEXTURE_2D);
     glBindBuffer(GL_ARRAY_BUFFER, frames_vbos[frame_index]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, vertex_tex_coords, GL_STATIC_DRAW);
 	
 	printGLErrors("Could not create OpenGL vertex");
 	
     if (hasTexture && !texture.loaded) {
-		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, texture.textureId);
 		
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
