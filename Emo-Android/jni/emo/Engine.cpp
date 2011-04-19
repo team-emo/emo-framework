@@ -451,6 +451,18 @@ namespace emo {
         eglSwapBuffers(this->display, this->surface);
     }
 
+    void Engine::addDrawable(const char* _key, Drawable* drawable) {
+
+    }
+
+    bool Engine::removeDrawable(const char* key) {
+        return false;
+    }
+
+    Drawable* Engine::getDrawable(const char* key) {
+        return NULL;
+    }
+
     void Engine::loadDrawables() {
 
     }

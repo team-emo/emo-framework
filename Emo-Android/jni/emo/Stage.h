@@ -9,6 +9,11 @@ namespace emo {
         bool onLoad();
         void onDrawFrame();
         bool dirty;
+
+        int width;
+        int height;
+        int viewport_width;
+        int viewport_height;
     protected:
         bool loaded;
 
@@ -17,9 +22,5 @@ namespace emo {
         short  indices[4];
         float  positions[12];
 
-        int width;
-        int height;
-        int viewport_width;
-        int viewport_height;
     };
 }

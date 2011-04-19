@@ -60,6 +60,10 @@ namespace emo {
         void enableOnDrawListener(bool enable);
         void setOnDrawListenerInterval(int value);
 
+        void addDrawable(const char* _key, Drawable* drawable);
+        bool removeDrawable(const char* key);
+        Drawable* getDrawable(const char* key);
+
         void loadStage();
         void loadDrawables();
 
@@ -72,14 +76,20 @@ namespace emo {
         void deleteDrawableBuffers();
         void deleteStageBuffer();
 
-        android_app* app;
-        bool animating;
-        Audio* audio;
-
         int32_t getLastError();
         void setLastError(int32_t error);
 
         HSQUIRRELVM getVm();
+
+        bool animating;
+
+        android_app* app;
+        Audio* audio;
+        Stage* stage;
+        timeb uptime;
+
+        int32_t onDrawFrameInterval;
+        int32_t onDrawDrawablesInterval;
     protected:
         bool loaded;
         bool focused;
@@ -96,25 +106,21 @@ namespace emo {
         int32_t lastError;
 
         timeb startTime;
-        timeb uptime;
 
         float touchEventParamCache[MOTION_EVENT_PARAMS_SIZE];
         float keyEventParamCache[KEY_EVENT_PARAMS_SIZE];
         float accelerometerEventParamCache[ACCELEROMETER_EVENT_PARAMS_SIZE];
 
-        int32_t onDrawFrameInterval;
         timeb   lastOnDrawInterval;
 
-        int32_t onDrawDrawablesInterval;
         timeb   lastOnDrawDrawablesInterval;
 
         bool enablePerspectiveNicest;
         bool enableOnDrawFrame;
         bool enableBackKey;
 
-        Stage* stage;
-        drawables_t *drawables;
-        drawables_t *drawablesToRemove;
+        drawables_t* drawables;
+        drawables_t* drawablesToRemove;
 
         ASensorManager* sensorManager;
         ASensorEventQueue* sensorEventQueue;
