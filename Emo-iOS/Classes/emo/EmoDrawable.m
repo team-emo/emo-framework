@@ -65,7 +65,10 @@ extern EmoEngine* engine;
 	
 	// bind a texture
     if (hasTexture) {
+		glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture.textureId);
+	} else {
+		glDisable(GL_TEXTURE_2D);
 	}
 	
     // bind texture coords

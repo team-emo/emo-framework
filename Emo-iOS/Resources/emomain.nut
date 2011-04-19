@@ -5,13 +5,15 @@ local stage   = emo.Stage();
 class Level_1 {
 
     dogSprite  = emo.Sprite("dog.png");
-	rectangle  = emo.Rectangle();
+    logoSprite = emo.Sprite("logo.png");
+    rectangle  = emo.Rectangle();
 
     function onLoad() {
         print("Level_1:onLoad"); 
         event.enableOnDrawCallback(5000);
-        print(dogSprite.loadSheet(0, 0, 6, 34, 42, 1));
-		print(rectangle.load(100, 100, 100, 20));
+        print(dogSprite.loadSheet(100, 100, 6, 34, 42, 1));
+        print(logoSprite.load());
+        print(rectangle.load(150, 150, 1, 1));
     }
 
     function onGainedFocus() {
