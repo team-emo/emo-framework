@@ -3,9 +3,37 @@
 #import "Constants.h"
 #import "EmoEngine.h"
 #import "EmoDrawable.h"
+#import "EmoRuntime.h"
 #import "Util.h"
 
 extern EmoEngine* engine;
+
+void initDrawableFunctions() {
+	registerEmoClass(engine.sqvm, EMO_STAGE_CLASS);
+	
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createSpriteSheet", emoDrawableCreateSpriteSheet);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setColor",       emoDrawableColor);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "remove",         emoDrawableRemove);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "viewport",       emoSetViewport);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "ortho",          emoSetStageSize);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "windowWidth",    emoGetWindowWidth);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "windowHeight",   emoGetWindowHeight);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "show",           emoDrawableShow);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "hide",           emoDrawableHide);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "red",            emoDrawableColorRed);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "green",          emoDrawableColorGreen);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "blue",           emoDrawableColorBlue);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "alpha",          emoDrawableColorAlpha);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "pauseAt",        emoDrawablePauseAt);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "pause",          emoDrawablePause);
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "stop",           emoDrawableStop);	
+}
 
 /*
  * create drawable instance(single sprite)

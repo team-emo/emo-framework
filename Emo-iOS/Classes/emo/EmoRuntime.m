@@ -6,6 +6,26 @@
 
 extern EmoEngine* engine;
 
+void initRuntimeFunctions() {
+	registerEmoClass(engine.sqvm, EMO_RUNTIME_CLASS);
+	registerEmoClass(engine.sqvm, EMO_EVENT_CLASS);
+	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
+	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
+	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
+	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
+	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "info",            emoRuntimeLogInfo);
+	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
+	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
+	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
+	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);
+	
+	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
+	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
+	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
+	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
+	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+}
+
 /*
  * Register new class for emo framework
  */

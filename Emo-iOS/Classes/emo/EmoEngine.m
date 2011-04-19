@@ -30,71 +30,11 @@
  * register classes and functions for script
  */
 - (void)initScriptFunctions {
-	
 	register_table(sqvm, EMO_NAMESPACE);
-	registerEmoClass(sqvm, EMO_RUNTIME_CLASS);
-	registerEmoClass(sqvm, EMO_EVENT_CLASS);
-	registerEmoClass(sqvm, EMO_STAGE_CLASS);
-	registerEmoClass(sqvm, EMO_AUDIO_CLASS);
 	
-	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
-	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
-	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
-	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
-	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "info",            emoRuntimeLogInfo);
-	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
-	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
-	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
-	registerEmoClassFunc(sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);
-	
-	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
-	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
-	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
-	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
-	registerEmoClassFunc(sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
-	
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "createSpriteSheet", emoDrawableCreateSpriteSheet);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "setColor",       emoDrawableColor);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "remove",         emoDrawableRemove);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "viewport",       emoSetViewport);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "ortho",          emoSetStageSize);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "windowWidth",    emoGetWindowWidth);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "windowHeight",   emoGetWindowHeight);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "show",           emoDrawableShow);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "hide",           emoDrawableHide);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "red",            emoDrawableColorRed);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "green",          emoDrawableColorGreen);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "blue",           emoDrawableColorBlue);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "alpha",          emoDrawableColorAlpha);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "pauseAt",        emoDrawablePauseAt);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "pause",          emoDrawablePause);
-	registerEmoClassFunc(sqvm, EMO_STAGE_CLASS,    "stop",           emoDrawableStop);
-	
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "seek",           emoSeekAudioChannel);
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "getChannelCount",emoGetAudioChannelCount);
-	
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "getVolume",      emoGetAudioChannelVolume);
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "setVolume",      emoSetAudioChannelVolume);
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "getMaxVolume",   emoGetAudioChannelMaxVolume);
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "getMinVolume",   emoGetAudioChannelMinVolume);
-	
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "setLoop",        emoSetAudioChannelLooping);
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "isLoop",         emoGetAudioChannelLooping);
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "getState",       emoGetAudioChannelState);
-
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "close",          emoCloseAudioChannel);
-	registerEmoClassFunc(sqvm, EMO_AUDIO_CLASS,    "closeEngine",    emoCloseAudioEngine);
+	initRuntimeFunctions();
+	initDrawableFunctions();
+	initAudioFunctions();
 }
 
 /*

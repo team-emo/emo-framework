@@ -2,8 +2,33 @@
 #import "EmoEngine_glue.h"
 #import "Constants.h"
 #import "EmoEngine.h"
+#import "EmoRuntime.h"
 
 extern EmoEngine* engine;
+
+void initAudioFunctions() {
+	registerEmoClass(engine.sqvm, EMO_AUDIO_CLASS);
+
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "seek",           emoSeekAudioChannel);
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "getChannelCount",emoGetAudioChannelCount);
+
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "getVolume",      emoGetAudioChannelVolume);
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "setVolume",      emoSetAudioChannelVolume);
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "getMaxVolume",   emoGetAudioChannelMaxVolume);
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "getMinVolume",   emoGetAudioChannelMinVolume);
+
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "setLoop",        emoSetAudioChannelLooping);
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "isLoop",         emoGetAudioChannelLooping);
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "getState",       emoGetAudioChannelState);
+
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "close",          emoCloseAudioChannel);
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "closeEngine",    emoCloseAudioEngine);
+}
 
 /*
  * SQInteger loadAudio(SQInteger audioIndex, SQChar* filename);

@@ -14,7 +14,6 @@
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
 		F937BBB11331890D00DCE63B /* EmoEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = F937BBAE1331890D00DCE63B /* EmoEngine.m */; };
-		F937BBB21331890D00DCE63B /* sqfunc.m in Sources */ = {isa = PBXBuildFile; fileRef = F937BBB01331890D00DCE63B /* sqfunc.m */; };
 		F937BBE41331891900DCE63B /* sqstdaux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F937BBBD1331891900DCE63B /* sqstdaux.cpp */; };
 		F937BBE51331891900DCE63B /* sqstdblob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F937BBBE1331891900DCE63B /* sqstdblob.cpp */; };
 		F937BBE61331891900DCE63B /* sqstdio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F937BBC01331891900DCE63B /* sqstdio.cpp */; };
@@ -37,7 +36,6 @@
 		F937BBF71331891900DCE63B /* sqvm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F937BBE21331891900DCE63B /* sqvm.cpp */; };
 		F937BBFE1331898800DCE63B /* emomain.nut in Resources */ = {isa = PBXBuildFile; fileRef = F937BBFD1331898800DCE63B /* emomain.nut */; };
 		F93C58421343187A002C29E5 /* EmoAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = F93C58411343187A002C29E5 /* EmoAudio.m */; };
-		F93C591013433BD2002C29E5 /* emo_engine_func.m in Sources */ = {isa = PBXBuildFile; fileRef = F93C590F13433BD2002C29E5 /* emo_engine_func.m */; };
 		F94593DA1331935E00290114 /* EmoView.m in Sources */ = {isa = PBXBuildFile; fileRef = F94593D91331935E00290114 /* EmoView.m */; };
 		F94594221331975600290114 /* EmoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94594211331975600290114 /* EmoViewController.m */; };
 		F94998761354548200EF10B1 /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = F94998751354548200EF10B1 /* dog.png */; };
@@ -63,13 +61,15 @@
 		F9C7DE6C134AB99F0053065E /* pngwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE5C134AB99F0053065E /* pngwrite.c */; };
 		F9C7DE6D134AB99F0053065E /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE5D134AB99F0053065E /* pngwtran.c */; };
 		F9C7DE6E134AB99F0053065E /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE5E134AB99F0053065E /* pngwutil.c */; };
-		F9C7DE70134AB9FA0053065E /* common.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE6F134AB9FA0053065E /* common.m */; };
 		F9C7DE94134ABBDE0053065E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C7DE93134ABBDE0053065E /* libz.dylib */; };
 		F9C7DEAA134ACAE90053065E /* EmoImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DEA9134ACAE90053065E /* EmoImage.m */; };
 		F9C849D0133E09EB0095EA37 /* EmoDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849CF133E09EB0095EA37 /* EmoDrawable.m */; };
-		F9C849D3133E0A180095EA37 /* emo_runtime_func.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849D2133E0A180095EA37 /* emo_runtime_func.m */; };
-		F9CBCE8F13593D7900FE1C65 /* emo_drawable_func.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CBCE8E13593D7900FE1C65 /* emo_drawable_func.m */; };
-		F9CBCEB113593F1600FE1C65 /* emo_audio_func.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CBCEB013593F1600FE1C65 /* emo_audio_func.m */; };
+		F9D00E52135D44CA00D51C64 /* VmFunc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9D00E51135D44CA00D51C64 /* VmFunc.cpp */; };
+		F9D00E58135D453B00D51C64 /* Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9D00E57135D453B00D51C64 /* Util.cpp */; };
+		F9D00EA4135D48E800D51C64 /* EmoAudio_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D00E9D135D48E800D51C64 /* EmoAudio_glue.m */; };
+		F9D00EA5135D48E800D51C64 /* EmoDrawable_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D00E9F135D48E800D51C64 /* EmoDrawable_glue.m */; };
+		F9D00EA6135D48E800D51C64 /* EmoEngine_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D00EA1135D48E800D51C64 /* EmoEngine_glue.m */; };
+		F9D00EA7135D48E800D51C64 /* EmoRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D00EA3135D48E800D51C64 /* EmoRuntime.m */; };
 		F9D17BEC133B0F7B00F577C4 /* emoruntime.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */; };
 		F9E41A43134494DE0009385D /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E41A42134494DE0009385D /* OpenAL.framework */; };
 		F9F89ECD1350218C00B005AF /* EmoStage.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F89ECC1350218C00B005AF /* EmoStage.m */; };
@@ -86,11 +86,8 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Emo_iOS_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emo_iOS_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Emo_iOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Emo_iOS-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
-		F937BBAC1331890D00DCE63B /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
 		F937BBAD1331890D00DCE63B /* EmoEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoEngine.h; sourceTree = "<group>"; };
 		F937BBAE1331890D00DCE63B /* EmoEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoEngine.m; sourceTree = "<group>"; };
-		F937BBAF1331890D00DCE63B /* sqfunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqfunc.h; sourceTree = "<group>"; };
-		F937BBB01331890D00DCE63B /* sqfunc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = sqfunc.m; sourceTree = "<group>"; };
 		F937BBB51331891900DCE63B /* sqstdaux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqstdaux.h; sourceTree = "<group>"; };
 		F937BBB61331891900DCE63B /* sqstdblob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqstdblob.h; sourceTree = "<group>"; };
 		F937BBB71331891900DCE63B /* sqstdio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqstdio.h; sourceTree = "<group>"; };
@@ -139,7 +136,6 @@
 		F937BBFD1331898800DCE63B /* emomain.nut */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; name = emomain.nut; path = Resources/emomain.nut; sourceTree = "<group>"; };
 		F93C58401343187A002C29E5 /* EmoAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoAudio.h; sourceTree = "<group>"; };
 		F93C58411343187A002C29E5 /* EmoAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoAudio.m; sourceTree = "<group>"; };
-		F93C590F13433BD2002C29E5 /* emo_engine_func.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = emo_engine_func.m; sourceTree = "<group>"; };
 		F94593D81331935E00290114 /* EmoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoView.h; sourceTree = "<group>"; };
 		F94593D91331935E00290114 /* EmoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoView.m; sourceTree = "<group>"; };
 		F94594201331975600290114 /* EmoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoViewController.h; sourceTree = "<group>"; };
@@ -152,7 +148,6 @@
 		F9C31C731346012100B066DC /* clang.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = clang.wav; path = Resources/clang.wav; sourceTree = "<group>"; };
 		F9C31C741346012100B066DC /* drums.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = drums.wav; path = Resources/drums.wav; sourceTree = "<group>"; };
 		F9C31C771346012D00B066DC /* tada.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = tada.wav; path = Resources/tada.wav; sourceTree = "<group>"; };
-		F9C5E8421342E83D00F985B0 /* emo_engine_func.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emo_engine_func.h; sourceTree = "<group>"; };
 		F9C7DE4B134AB99E0053065E /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = libpng/config.h; sourceTree = "<group>"; };
 		F9C7DE4D134AB99E0053065E /* png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = png.c; path = libpng/png.c; sourceTree = "<group>"; };
 		F9C7DE4E134AB99E0053065E /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = png.h; path = libpng/png.h; sourceTree = "<group>"; };
@@ -172,18 +167,24 @@
 		F9C7DE5C134AB99F0053065E /* pngwrite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwrite.c; path = libpng/pngwrite.c; sourceTree = "<group>"; };
 		F9C7DE5D134AB99F0053065E /* pngwtran.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwtran.c; path = libpng/pngwtran.c; sourceTree = "<group>"; };
 		F9C7DE5E134AB99F0053065E /* pngwutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwutil.c; path = libpng/pngwutil.c; sourceTree = "<group>"; };
-		F9C7DE6F134AB9FA0053065E /* common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = common.m; sourceTree = "<group>"; };
 		F9C7DE93134ABBDE0053065E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F9C7DEA8134ACAE90053065E /* EmoImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoImage.h; sourceTree = "<group>"; };
 		F9C7DEA9134ACAE90053065E /* EmoImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoImage.m; sourceTree = "<group>"; };
 		F9C849CE133E09EB0095EA37 /* EmoDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDrawable.h; sourceTree = "<group>"; };
 		F9C849CF133E09EB0095EA37 /* EmoDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDrawable.m; sourceTree = "<group>"; };
-		F9C849D1133E0A180095EA37 /* emo_runtime_func.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emo_runtime_func.h; sourceTree = "<group>"; };
-		F9C849D2133E0A180095EA37 /* emo_runtime_func.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = emo_runtime_func.m; sourceTree = "<group>"; };
-		F9CBCE8D13593D7900FE1C65 /* emo_drawable_func.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emo_drawable_func.h; sourceTree = "<group>"; };
-		F9CBCE8E13593D7900FE1C65 /* emo_drawable_func.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = emo_drawable_func.m; sourceTree = "<group>"; };
-		F9CBCEAF13593F1600FE1C65 /* emo_audio_func.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emo_audio_func.h; sourceTree = "<group>"; };
-		F9CBCEB013593F1600FE1C65 /* emo_audio_func.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = emo_audio_func.m; sourceTree = "<group>"; };
+		F9D00E50135D44CA00D51C64 /* VmFunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VmFunc.h; sourceTree = "<group>"; };
+		F9D00E51135D44CA00D51C64 /* VmFunc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VmFunc.cpp; sourceTree = "<group>"; };
+		F9D00E56135D452C00D51C64 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		F9D00E57135D453B00D51C64 /* Util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Util.cpp; sourceTree = "<group>"; };
+		F9D00E5F135D463700D51C64 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		F9D00E9C135D48E800D51C64 /* EmoAudio_glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoAudio_glue.h; sourceTree = "<group>"; };
+		F9D00E9D135D48E800D51C64 /* EmoAudio_glue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoAudio_glue.m; sourceTree = "<group>"; };
+		F9D00E9E135D48E800D51C64 /* EmoDrawable_glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDrawable_glue.h; sourceTree = "<group>"; };
+		F9D00E9F135D48E800D51C64 /* EmoDrawable_glue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDrawable_glue.m; sourceTree = "<group>"; };
+		F9D00EA0135D48E800D51C64 /* EmoEngine_glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoEngine_glue.h; sourceTree = "<group>"; };
+		F9D00EA1135D48E800D51C64 /* EmoEngine_glue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoEngine_glue.m; sourceTree = "<group>"; };
+		F9D00EA2135D48E800D51C64 /* EmoRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoRuntime.h; sourceTree = "<group>"; };
+		F9D00EA3135D48E800D51C64 /* EmoRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoRuntime.m; sourceTree = "<group>"; };
 		F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoruntime.nut; path = Resources/emoruntime.nut; sourceTree = "<group>"; };
 		F9E41A42134494DE0009385D /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		F9F89ECB1350218C00B005AF /* EmoStage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoStage.h; sourceTree = "<group>"; };
@@ -407,18 +408,19 @@
 		F9C7DE9F134ACA920053065E /* common */ = {
 			isa = PBXGroup;
 			children = (
-				F937BBAC1331890D00DCE63B /* common.h */,
-				F9C7DE6F134AB9FA0053065E /* common.m */,
-				F937BBAF1331890D00DCE63B /* sqfunc.h */,
-				F937BBB01331890D00DCE63B /* sqfunc.m */,
-				F9C5E8421342E83D00F985B0 /* emo_engine_func.h */,
-				F93C590F13433BD2002C29E5 /* emo_engine_func.m */,
-				F9C849D1133E0A180095EA37 /* emo_runtime_func.h */,
-				F9C849D2133E0A180095EA37 /* emo_runtime_func.m */,
-				F9CBCE8D13593D7900FE1C65 /* emo_drawable_func.h */,
-				F9CBCE8E13593D7900FE1C65 /* emo_drawable_func.m */,
-				F9CBCEAF13593F1600FE1C65 /* emo_audio_func.h */,
-				F9CBCEB013593F1600FE1C65 /* emo_audio_func.m */,
+				F9D00E5F135D463700D51C64 /* Util.h */,
+				F9D00E57135D453B00D51C64 /* Util.cpp */,
+				F9D00E56135D452C00D51C64 /* Constants.h */,
+				F9D00E50135D44CA00D51C64 /* VmFunc.h */,
+				F9D00E51135D44CA00D51C64 /* VmFunc.cpp */,
+				F9D00E9C135D48E800D51C64 /* EmoAudio_glue.h */,
+				F9D00E9D135D48E800D51C64 /* EmoAudio_glue.m */,
+				F9D00E9E135D48E800D51C64 /* EmoDrawable_glue.h */,
+				F9D00E9F135D48E800D51C64 /* EmoDrawable_glue.m */,
+				F9D00EA0135D48E800D51C64 /* EmoEngine_glue.h */,
+				F9D00EA1135D48E800D51C64 /* EmoEngine_glue.m */,
+				F9D00EA2135D48E800D51C64 /* EmoRuntime.h */,
+				F9D00EA3135D48E800D51C64 /* EmoRuntime.m */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -494,7 +496,6 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* Emo_iOSAppDelegate.m in Sources */,
 				F937BBB11331890D00DCE63B /* EmoEngine.m in Sources */,
-				F937BBB21331890D00DCE63B /* sqfunc.m in Sources */,
 				F937BBE41331891900DCE63B /* sqstdaux.cpp in Sources */,
 				F937BBE51331891900DCE63B /* sqstdblob.cpp in Sources */,
 				F937BBE61331891900DCE63B /* sqstdio.cpp in Sources */,
@@ -518,9 +519,7 @@
 				F94593DA1331935E00290114 /* EmoView.m in Sources */,
 				F94594221331975600290114 /* EmoViewController.m in Sources */,
 				F9C849D0133E09EB0095EA37 /* EmoDrawable.m in Sources */,
-				F9C849D3133E0A180095EA37 /* emo_runtime_func.m in Sources */,
 				F93C58421343187A002C29E5 /* EmoAudio.m in Sources */,
-				F93C591013433BD2002C29E5 /* emo_engine_func.m in Sources */,
 				F9C7DE60134AB99F0053065E /* png.c in Sources */,
 				F9C7DE61134AB99F0053065E /* pngerror.c in Sources */,
 				F9C7DE62134AB99F0053065E /* pngget.c in Sources */,
@@ -536,11 +535,14 @@
 				F9C7DE6C134AB99F0053065E /* pngwrite.c in Sources */,
 				F9C7DE6D134AB99F0053065E /* pngwtran.c in Sources */,
 				F9C7DE6E134AB99F0053065E /* pngwutil.c in Sources */,
-				F9C7DE70134AB9FA0053065E /* common.m in Sources */,
 				F9C7DEAA134ACAE90053065E /* EmoImage.m in Sources */,
 				F9F89ECD1350218C00B005AF /* EmoStage.m in Sources */,
-				F9CBCE8F13593D7900FE1C65 /* emo_drawable_func.m in Sources */,
-				F9CBCEB113593F1600FE1C65 /* emo_audio_func.m in Sources */,
+				F9D00E52135D44CA00D51C64 /* VmFunc.cpp in Sources */,
+				F9D00E58135D453B00D51C64 /* Util.cpp in Sources */,
+				F9D00EA4135D48E800D51C64 /* EmoAudio_glue.m in Sources */,
+				F9D00EA5135D48E800D51C64 /* EmoDrawable_glue.m in Sources */,
+				F9D00EA6135D48E800D51C64 /* EmoEngine_glue.m in Sources */,
+				F9D00EA7135D48E800D51C64 /* EmoRuntime.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

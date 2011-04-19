@@ -296,7 +296,7 @@ class emo.AudioChannel {
     function close() { return manager.close(id); }
 }
 
-function emo::AudioManager::createChannel(id) {
+function emo::Audio::createChannel(id) {
     return emo.AudioChannel(id, this);
 }
 
