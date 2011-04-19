@@ -66,15 +66,9 @@ namespace emo {
         glGenBuffers(1, &this->frames_vbos[this->frame_index]);
 
         if (this->hasTexture) {
-            glGenTextures(1, &this->texture->textureId);
+            this->texture->genTextures();
         }
         this->hasBuffer = true;
-    }
-
-    void Drawable::genTextures() {
-        if (this->hasTexture) {
-            glGenTextures(1, &this->texture->textureId);
-        }
     }
 
     bool Drawable::isCurrentTexBufferLoaded() {
@@ -96,8 +90,10 @@ namespace emo {
 
         this->hasBuffer = false;
 
-        this->texture->textureId = 0;
-        this->texture->loaded    = false;
+        if (this->hasTexture) {
+            this->texture->textureId = 0;
+            this->texture->loaded    = false;
+        }
     }
 
 
@@ -121,7 +117,9 @@ namespace emo {
     }
 
     float Drawable::getTexCoordEndX() {
-        if (this->hasSheet) {
+        if (!this->hasTexture) {
+            return 1;
+        } else if (this->hasSheet) {
             return (float)(this->tex_coord_frame_startX() + this->width) / (float)this->texture->glWidth;
         } else {
             return (float)this->texture->width / (float)this->texture->glWidth;
@@ -129,7 +127,9 @@ namespace emo {
     }
 
     float Drawable::getTexCoordStartY() {
-        if (this->hasSheet) {
+        if (!this->hasTexture) {
+            return 1;
+        } else if (this->hasSheet) {
             return (float)(this->tex_coord_frame_startY() + this->height) / (float)this->texture->glHeight;
         } else {
             return (float)this->texture->height / (float)this->texture->glHeight;
@@ -170,11 +170,14 @@ namespace emo {
         printGLErrors("Could not create OpenGL vertex");
 
         if (this->hasTexture && !this->texture->loaded) {
+            glEnable(GL_TEXTURE_2D);
             glBindTexture   (GL_TEXTURE_2D, this->texture->textureId);
 
             glPixelStorei   (GL_UNPACK_ALIGNMENT, 1);
             glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
             if (this->texture->hasAlpha) {
                 GLubyte* holder = (GLubyte*)malloc(sizeof(GLubyte) * this->texture->glWidth * this->texture->glHeight * 4);
@@ -191,10 +194,9 @@ namespace emo {
             }
             this->texture->loaded = true;
             printGLErrors("Could not bind OpenGL textures");
-        }
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindTexture(GL_TEXTURE_2D, 0);
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
 
         this->loaded = true;
 
@@ -203,6 +205,10 @@ namespace emo {
 
     void Drawable::onDrawFrame() {
         if (!this->loaded) return;
+
+        if (this->frames_vbos[frame_index] <= 0) {
+            this->bindVertex();
+        }
 
         glMatrixMode (GL_MODELVIEW);
         glLoadIdentity (); 
@@ -236,14 +242,17 @@ namespace emo {
         glBindBuffer(GL_ARRAY_BUFFER, engine->stage->vbo[0]);
         glVertexPointer(3, GL_FLOAT, 0, 0);
 
-        if (this->hasTexture && this->isCurrentTexBufferLoaded()) {
-            // bind a texture
+        // bind a texture
+        if (this->hasTexture) {
+            glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, this->texture->textureId);
-
-            // bind texture coords
-            glBindBuffer(GL_ARRAY_BUFFER, this->getCurrentBufferId());
-            glTexCoordPointer(2, GL_FLOAT, 0, 0);
+        } else {
+            glDisable(GL_TEXTURE_2D);
         }
+
+        // bind texture coords
+        glBindBuffer(GL_ARRAY_BUFFER, this->getCurrentBufferId());
+        glTexCoordPointer(2, GL_FLOAT, 0, 0);
 
         // bind indices
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, engine->stage->vbo[1]);
@@ -253,6 +262,7 @@ namespace emo {
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 

@@ -3,6 +3,9 @@ namespace emo {
     public:
         Image();
         ~Image();
+
+        void genTextures();
+
         const char* filename;
         GLuint   textureId;
         int      width;

@@ -10,11 +10,15 @@ extern emo::Engine* engine;
 namespace emo {
     Image::Image() {
         this->hasData = false;
+        this->textureId = 0;
     }
     Image::~Image() {
         if (this->hasData) {
             free(this->data);
         }
+    }
+    void Image::genTextures() {
+        glGenTextures(1, &this->textureId);
     }
 }
 

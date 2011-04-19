@@ -13,7 +13,6 @@ namespace emo {
 
         void load();
 
-        void genTextures();
         bool bindVertex();
 
         void onDrawFrame();

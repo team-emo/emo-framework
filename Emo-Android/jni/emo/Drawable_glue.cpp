@@ -55,6 +55,18 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
         }
     }
 
+    SQFloat x = 0;
+    SQFloat y = 0;
+    SQFloat z = 0;
+	
+    if (nargs >= 3) sq_getfloat(v, 3, &x);
+    if (nargs >= 4) sq_getfloat(v, 4, &y);
+    if (nargs >= 5) sq_getfloat(v, 5, &z);
+	
+    drawable->x    = x;
+    drawable->y    = y;
+    drawable->z    = z;
+
     char key[DRAWABLE_KEY_LENGTH];
     sprintf(key, "%d%d-%d", 
                 engine->uptime.time, engine->uptime.millitm, drawable->getCurrentBufferId());
@@ -161,28 +173,31 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         return 1;
     }
 
-    emo::Image* image = new emo::Image();
-    if (drawable->name != NULL && loadPngFromAsset(drawable->name, image)) {
+    if (drawable->name != NULL) {
+        emo::Image* image = new emo::Image();
+        if (loadPngFromAsset(drawable->name, image)) {
 
-        // calculate the size of power of two
-        image->glWidth  = nextPowerOfTwo(image->width);
-        image->glHeight = nextPowerOfTwo(image->height);
-        image->loaded   = false;
+            // calculate the size of power of two
+            image->glWidth  = nextPowerOfTwo(image->width);
+            image->glHeight = nextPowerOfTwo(image->height);
+            image->loaded   = false;
 
-        drawable->setTexture(image);
-        drawable->hasTexture = true;
+            drawable->setTexture(image);
+            drawable->hasTexture = true;
 
-        if (!drawable->hasSheet) {
-            drawable->width  = image->width;
-            drawable->height = image->height;
+            if (!drawable->hasSheet) {
+                drawable->width  = image->width;
+                drawable->height = image->height;
+            }
+
+            image->genTextures();
+        } else {
+            delete image;
+            sq_pushinteger(v, ERR_ASSET_LOAD);
+            return 1;
         }
-
-        drawable->genTextures();
-    } else {
-        delete image;
-        sq_pushinteger(v, ERR_ASSET_LOAD);
-        return 1;
     }
+
 
     // drawable x
     if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
@@ -197,6 +212,23 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         sq_getfloat(v, 4, &y);
         drawable->y = y;
     }
+
+    // drawable width
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
+        SQInteger width;
+        sq_getinteger(v, 5, &width);
+        drawable->width = width;
+    }
+
+    // drawable height
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
+        SQInteger height;
+        sq_getinteger(v, 6, &height);
+        drawable->height = height;
+    }
+    
+    if (drawable->width  == 0) drawable->width  = 1;
+    if (drawable->height == 0) drawable->height = 1;
 
     if (drawable->bindVertex()) {
         sq_pushinteger(v, EMO_NO_ERROR);
