@@ -9,6 +9,17 @@ extern emo::Engine* engine;
 
 namespace emo {
 
+    AnimationFrame::AnimationFrame() {
+        this->name  = NULL;
+        this->start = 0;
+        this->frameCount = 1;
+        this->interval   = 0;
+        this->loop       = 0;
+    }
+
+    AnimationFrame::~AnimationFrame() {
+    }
+
     Drawable::Drawable() {
         this->name       = NULL;
         this->hasTexture = false;
@@ -47,9 +58,13 @@ namespace emo {
         this->frame_index = 0;
         this->border      = 0;
         this->margin      = 0;
+
+        this->animations = new animations_t();
+        this->animationName = NULL;
     }
 
     Drawable::~Drawable() {
+        this->deleteAnimations();
         this->deleteBuffer();
         if (this->hasTexture) {
             delete this->texture;
@@ -57,6 +72,19 @@ namespace emo {
         if (this->frameCountLoaded) {
             delete[] this->frames_vbos;
         }
+        delete this->animations;
+
+        if (this->name != NULL) {
+            free(this->name);
+        }
+    }
+
+    void Drawable::setName(const char* _name) {
+        this->name = strdup(_name);
+    }
+
+    char* Drawable::getName() {
+        return this->name;
     }
 
     void Drawable::load() {
@@ -95,7 +123,6 @@ namespace emo {
             this->texture->loaded    = false;
         }
     }
-
 
     int Drawable::tex_coord_frame_startX() {
         int xindex = this->frame_index % (int)round((this->texture->width - (this->margin * 2) + this->border) / (float)(this->width  + this->border));
@@ -296,4 +323,46 @@ namespace emo {
         this->texture = image;
     }
 
+    void Drawable::addAnimation(AnimationFrame* animation) {
+
+        this->deleteAnimation(animation->name);
+
+        const char* key = strdup(animation->name);
+        this->animations->insert(std::make_pair(key, animation)); 
+    }
+
+    void Drawable::setAnimation(const char* _name) {
+        this->animationName = strdup(_name);
+    }
+
+    AnimationFrame* Drawable::getAnimation(const char* name) {
+        animations_t::iterator iter = this->animations->find(name);
+        if (iter != this->animations->end()) {
+            return iter->second;
+        }
+        return NULL;
+    }
+
+    bool Drawable::deleteAnimation(const char* name) {
+        animations_t::iterator iter = this->animations->find(name);
+        if (iter != this->animations->end()) {
+            AnimationFrame* animation = iter->second;
+            if (this->animations->erase(iter->first)){
+                delete animation;
+                free((char*)iter->first);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    void Drawable::deleteAnimations() {
+        animations_t::iterator iter;
+        for(iter = this->animations->begin(); iter != this->animations->end(); iter++) {
+            AnimationFrame* animation = iter->second;
+            delete animation;
+            free((char*)iter->first);
+        }
+        this->animations->clear();
+    }
 }

@@ -20,7 +20,7 @@ include $(LOCAL_PATH)/squirrel/Android.mk
 include $(LOCAL_PATH)/libpng/Android.mk
 include $(LOCAL_PATH)/sqlite/Android.mk
 
-SQUIRREL_CFLAGS := -O2
+SQUIRREL_CFLAGS := -O2 -Wall
 
 APP_OPTIM       := release
 LOCAL_MODULE    := emo-android

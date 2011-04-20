@@ -12,17 +12,13 @@
 #include "Drawable.h"
 #include "Drawable_glue.h"
 #include "Audio.h"
-
-struct char_comparator {
-    bool operator()(const char* s1, const char* s2) const {
-        return strcmp(s1, s2) == 0;
-    }
-};
+#include "Util.h"
 
 typedef std::hash_map <const char *, emo::Drawable *, std::hash<const char*>, char_comparator> drawables_t;
 
 namespace emo {
     class Engine {
+
     public:
         Engine();
         ~Engine();

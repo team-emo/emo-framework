@@ -425,7 +425,6 @@ namespace emo {
     bool Engine::removeDrawable(const char* key) {
         drawables_t::iterator iter = this->drawables->find(key);
         if (iter != this->drawables->end()) {
-            Drawable* drawable = iter->second;
             this->addDrawableToRemove(iter->first, iter->second);
             return true;
         }
@@ -465,7 +464,6 @@ namespace emo {
         }
         return false;
     }
-
 
     void Engine::onDrawDrawables() {
         drawables_t::iterator iter;

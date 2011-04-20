@@ -32,6 +32,7 @@ void initDrawableFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pauseAt",        emoDrawablePauseAt);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pause",          emoDrawablePause);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "stop",           emoDrawableStop);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "animate",        emoDrawableAnimate);
 }
 
 /*
@@ -51,7 +52,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
         sq_getstring(v, -1, &name);
 
         if (strlen(name) > 0) {
-            drawable->name = name;
+            drawable->setName(name);
         }
     }
 
@@ -68,7 +69,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     drawable->z    = z;
 
     char key[DRAWABLE_KEY_LENGTH];
-    sprintf(key, "%d%d-%d", 
+    sprintf(key, "%ld%d-%d", 
                 engine->uptime.time, engine->uptime.millitm, drawable->getCurrentBufferId());
 
     engine->addDrawable(key, drawable);
@@ -92,7 +93,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
         sq_getstring(v, -1, &name);
 
         if (strlen(name) > 0) {
-            drawable->name = name;
+            drawable->setName(name);
         }
     }
 
@@ -117,8 +118,8 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     int width  = 0;
     int height = 0;
 
-    if (name != NULL && !loadPngSizeFromAsset(name, &width, &height) || 
-          width <= 0 || height <= 0 || frameWidth <= 0 || frameHeight <= 0) {
+    if (name != NULL && (!loadPngSizeFromAsset(name, &width, &height) || 
+          width <= 0 || height <= 0 || frameWidth <= 0 || frameHeight <= 0)) {
         free(drawable);
         sq_pushinteger(v, -1);
         return 1;
@@ -144,7 +145,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     drawable->load();
 
     char key[DRAWABLE_KEY_LENGTH];
-    sprintf(key, "%d%d-%d", 
+    sprintf(key, "%ld%d-%d", 
                 engine->uptime.time, engine->uptime.millitm, drawable->getCurrentBufferId());
 
     engine->addDrawable(key, drawable);
@@ -173,9 +174,9 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (drawable->name != NULL) {
+    if (drawable->getName() != NULL) {
         emo::Image* image = new emo::Image();
-        if (loadPngFromAsset(drawable->name, image)) {
+        if (loadPngFromAsset(drawable->getName(), image)) {
 
             // calculate the size of power of two
             image->glWidth  = nextPowerOfTwo(image->width);
@@ -809,3 +810,55 @@ SQInteger emoDrawableStop(HSQUIRRELVM v) {
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }
+
+SQInteger emoDrawableAnimate(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+    
+    SQInteger start = 0;
+    SQInteger count = 1;
+    SQInteger interval = 0;
+    SQInteger loop  = 0;
+    
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        sq_getinteger(v, 3, &start);
+    }
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
+        sq_getinteger(v, 4, &count);
+    }
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
+        sq_getinteger(v, 5, &interval);
+    }
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
+        sq_getinteger(v, 6, &loop);
+    }
+
+    emo::AnimationFrame* animation = new emo::AnimationFrame();
+    animation->name  = DEFAULT_ANIMATION_NAME;
+    animation->start = start;
+    animation->frameCount = count;
+    animation->interval   = interval;
+    animation->loop       = loop;
+    
+    drawable->addAnimation(animation), 
+    drawable->setAnimation(animation->name);
+    
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
