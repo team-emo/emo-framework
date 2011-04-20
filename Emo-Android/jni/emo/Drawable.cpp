@@ -51,10 +51,6 @@ namespace emo {
 
         int nextIndex = this->currentCount + this->start;
 
-char str[256];
-sprintf(str, "currentLoopCount=%d, currentCount=%d, next=%d, max=%d", this->currentLoopCount, this->currentCount, nextIndex, frameCount);
-LOGI(str);
-
         return nextIndex;
     }
 
