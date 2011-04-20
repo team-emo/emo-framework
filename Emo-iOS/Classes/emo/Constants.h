@@ -34,6 +34,8 @@
 #define DEFAULT_AUDIO_CHANNEL_COUNT 3
 #define DRAWABLE_KEY_LENGTH 26
 
+#define DEFAULT_ANIMATION_NAME "EMO::DEFAULT"
+
 #define EMO_NO              0
 #define EMO_YES             1
 
