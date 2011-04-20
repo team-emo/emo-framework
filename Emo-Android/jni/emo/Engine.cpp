@@ -399,8 +399,8 @@ namespace emo {
 
         this->updateUptime();
 
-        SQFloat delta = this->getLastOnDrawDelta();
-        if (this->enableOnDrawFrame && delta > this->onDrawFrameInterval) {
+        int32_t delta = this->getLastOnDrawDelta();
+        if (this->enableOnDrawFrame && delta >= this->onDrawFrameInterval) {
             this->lastOnDrawInterval  = this->uptime;
             callSqFunction_Bool_Float(this->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME, delta, SQFalse);
         }

@@ -750,11 +750,7 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
     }
 
     drawable->setFrameIndex(index);
-    drawable->animating   = false;
-    
-    if (drawable->loaded) {
-        drawable->bindVertex();
-    }
+    drawable->enableAnimation(false);
 
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
@@ -779,7 +775,7 @@ SQInteger emoDrawablePause(HSQUIRRELVM v) {
         return 1;
     }
 
-    drawable->animating = false;
+    drawable->enableAnimation(false);
 
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
@@ -804,8 +800,8 @@ SQInteger emoDrawableStop(HSQUIRRELVM v) {
         return 1;
     }
     
-    drawable->animating   = false;
     drawable->setFrameIndex(0);
+    drawable->enableAnimation(false);
     
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
@@ -857,6 +853,7 @@ SQInteger emoDrawableAnimate(HSQUIRRELVM v) {
     
     drawable->addAnimation(animation), 
     drawable->setAnimation(animation->name);
+    drawable->enableAnimation(true);
     
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;

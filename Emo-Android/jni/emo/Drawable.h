@@ -1,6 +1,7 @@
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 
+#include <sys/timeb.h>
 #include <string>
 #include <hash_map>
 #include <squirrel.h>
@@ -16,7 +17,11 @@ namespace emo {
         int   start;
         int   frameCount;
         int   loop;
-        unsigned long interval;
+        int   current;
+        int32_t interval;
+
+        int32_t getLastOnAnimationDelta();
+        timeb lastOnAnimationInterval;
     };
 
     typedef std::hash_map <std::string, emo::AnimationFrame *> animations_t;
@@ -47,11 +52,11 @@ namespace emo {
 
         void deleteBuffer();
 
-        bool  hasSheet;
-        bool  animating;
-        bool  loaded;
-        bool  hasTexture;
-        bool  hasBuffer;
+        bool hasSheet;
+        bool animating;
+        bool loaded;
+        bool hasTexture;
+        bool hasBuffer;
 
         int border;
         int margin;
@@ -68,13 +73,12 @@ namespace emo {
         float      param_color[4];
 
         void addAnimation(AnimationFrame* animation);
-        void setAnimation(std::string name);
+        bool setAnimation(std::string name);
         AnimationFrame* getAnimation(std::string name);
         bool deleteAnimation(std::string name);
 
+        bool enableAnimation(bool enable);
     protected:
-
-        std::string animationName;
 
         float      vertex_tex_coords[8];
 
@@ -96,5 +100,7 @@ namespace emo {
         void deleteAnimations();
         animations_t* animations;
 
+        std::string animationName;
+        AnimationFrame* currentAnimation;
     };
 }

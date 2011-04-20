@@ -17,6 +17,8 @@ class Level_1 {
         print(logoSprite.load());
         print(dogSprite.load(100, 100, 6));
         print(rectangle.load(150, 150, 10, 10));
+
+        dogSprite.animate(0, 5, 1000, 0);
     }
 
     function onGainedFocus() {

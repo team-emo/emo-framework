@@ -10,14 +10,25 @@ extern emo::Engine* engine;
 namespace emo {
 
     AnimationFrame::AnimationFrame() {
-        this->start = 0;
+        this->start      = 0;
         this->frameCount = 1;
         this->interval   = 0;
         this->loop       = 0;
+        this->current    = 0;
+        this->lastOnAnimationInterval = engine->uptime;
     }
 
     AnimationFrame::~AnimationFrame() {
+
     }
+
+    int32_t AnimationFrame::getLastOnAnimationDelta() {
+        int32_t deltaSec  = engine->uptime.time - this->lastOnAnimationInterval.time;
+        int32_t deltaMsec = engine->uptime.millitm - this->lastOnAnimationInterval.millitm;
+
+        return (deltaSec * 1000) + deltaMsec;
+    }
+
 
     Drawable::Drawable() {
         this->hasTexture = false;
@@ -218,6 +229,16 @@ namespace emo {
     void Drawable::onDrawFrame() {
         if (!this->loaded) return;
 
+        engine->updateUptime();
+
+        if (this->animating && this->currentAnimation != NULL && this->currentAnimation->interval > 0) {
+            int32_t delta = this->currentAnimation->getLastOnAnimationDelta();
+            if (delta >= this->currentAnimation->interval) {
+// TODO update frame_index
+                this->currentAnimation->lastOnAnimationInterval = engine->uptime;
+            }
+        }
+
         if (this->frames_vbos[frame_index] <= 0) {
             this->bindVertex();
         }
@@ -309,13 +330,17 @@ namespace emo {
     }
 
     void Drawable::addAnimation(AnimationFrame* animation) {
-
         this->deleteAnimation(animation->name);
         this->animations->insert(std::make_pair(animation->name, animation)); 
     }
 
-    void Drawable::setAnimation(std::string name) {
-        this->animationName = name;
+    bool Drawable::setAnimation(std::string name) {
+        if (this->getAnimation(name) == NULL) {
+            return false;
+        } else {
+            this->animationName = name;
+        }
+        return true;
     }
 
     AnimationFrame* Drawable::getAnimation(std::string name) {
@@ -345,5 +370,24 @@ namespace emo {
             delete animation;
         }
         this->animations->clear();
+    }
+
+    bool Drawable::enableAnimation(bool enable) {
+        this->animating = enable;
+
+        this->currentAnimation = NULL;
+
+        if (enable) {
+            if (this->animationName.empty()) return false;
+            AnimationFrame* animation = this->getAnimation(this->animationName);
+            if (animation == NULL) {
+                return false;
+            } else {
+                this->currentAnimation = animation;
+                engine->updateUptime();
+                animation->lastOnAnimationInterval = engine->uptime;
+            }
+        }
+        return true;
     }
 }

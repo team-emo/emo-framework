@@ -109,7 +109,6 @@ namespace emo {
         float accelerometerEventParamCache[ACCELEROMETER_EVENT_PARAMS_SIZE];
 
         timeb   lastOnDrawInterval;
-
         timeb   lastOnDrawDrawablesInterval;
 
         bool enablePerspectiveNicest;
