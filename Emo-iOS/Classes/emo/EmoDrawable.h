@@ -15,7 +15,6 @@
 	BOOL loaded;
 	BOOL hasSheet;
 	BOOL animating;
-	BOOL frameChanged;
 	
     float      vertex_tex_coords[8];
 	

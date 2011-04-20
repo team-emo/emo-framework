@@ -29,7 +29,7 @@ class Level_1 {
 
     function onDispose() {
         print("Level_1:onDispose"); 
-        dogSprite.remove();
+        dogSprite.remove;
 		rectangle.remove();
     }
 
@@ -53,12 +53,12 @@ class Level_1 {
 
 class Level_2 {
 
-    kingSprite = emo.Sprite("king.png");
+    kingSprite = emo.SpriteSheet("king.png", 31, 49, 3, 2);
 
     function onLoad() {
         print("Level_2:onLoad"); 
         event.enableOnDrawCallback(5000);
-        print(kingSprite.loadSheet(100, 100, 6, 31, 49, 3, 2));
+        print(kingSprite.load(200, 200, 6));
     }
 
     function onGainedFocus() {
