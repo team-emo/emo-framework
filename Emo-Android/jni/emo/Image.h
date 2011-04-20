@@ -1,3 +1,5 @@
+#include <string>
+
 namespace emo {
     class Image {
     public:
@@ -6,7 +8,7 @@ namespace emo {
 
         void genTextures();
 
-        const char* filename;
+        std::string filename;
         GLuint   textureId;
         int      width;
         int      height;

@@ -52,7 +52,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
         sq_getstring(v, -1, &name);
 
         if (strlen(name) > 0) {
-            drawable->setName(name);
+            drawable->name = name;
         }
     }
 
@@ -93,7 +93,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
         sq_getstring(v, -1, &name);
 
         if (strlen(name) > 0) {
-            drawable->setName(name);
+            drawable->name = name;
         }
     }
 
@@ -174,9 +174,9 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (drawable->getName() != NULL) {
+    if (!drawable->name.empty()) {
         emo::Image* image = new emo::Image();
-        if (loadPngFromAsset(drawable->getName(), image)) {
+        if (loadPngFromAsset(drawable->name.c_str(), image)) {
 
             // calculate the size of power of two
             image->glWidth  = nextPowerOfTwo(image->width);

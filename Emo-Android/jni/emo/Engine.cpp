@@ -417,12 +417,11 @@ namespace emo {
         eglSwapBuffers(this->display, this->surface);
     }
 
-    void Engine::addDrawable(const char* _key, Drawable* drawable) {
-        const char* key = strdup(_key);
+    void Engine::addDrawable(std::string key, Drawable* drawable) {
         this->drawables->insert(std::make_pair(key, drawable)); 
     }
 
-    bool Engine::removeDrawable(const char* key) {
+    bool Engine::removeDrawable(std::string key) {
         drawables_t::iterator iter = this->drawables->find(key);
         if (iter != this->drawables->end()) {
             this->addDrawableToRemove(iter->first, iter->second);
@@ -431,12 +430,11 @@ namespace emo {
         return false;
     }
 
-    void Engine::addDrawableToRemove(const char* _key, Drawable* drawable) {
-        const char* key = strdup(_key);
+    void Engine::addDrawableToRemove(std::string key, Drawable* drawable) {
         this->drawablesToRemove->insert(std::make_pair(key, drawable));
     }
 
-    Drawable* Engine::getDrawable(const char* key) {
+    Drawable* Engine::getDrawable(std::string key) {
         drawables_t::iterator iter = this->drawables->find(key);
         if (iter != this->drawables->end()) {
             return iter->second;
@@ -452,13 +450,12 @@ namespace emo {
         }
     }
 
-    bool Engine::freeDrawable(const char* key) {
+    bool Engine::freeDrawable(std::string key) {
         drawables_t::iterator iter = this->drawables->find(key);
         if (iter != this->drawables->end()) {
             Drawable* drawable = iter->second;
             if (this->drawables->erase(iter->first)){
                 delete drawable;
-                free((char*)iter->first);
             }
             return true;
         }
@@ -494,9 +491,7 @@ namespace emo {
     void Engine::unloadDrawables() {
         drawables_t::iterator iter;
         for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
-            Drawable* drawable = iter->second;
-            delete drawable;
-            free((char*)iter->first);
+            delete iter->second;
         }
         this->drawables->clear();
     }

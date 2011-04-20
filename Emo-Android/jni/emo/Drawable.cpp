@@ -10,7 +10,6 @@ extern emo::Engine* engine;
 namespace emo {
 
     AnimationFrame::AnimationFrame() {
-        this->name  = NULL;
         this->start = 0;
         this->frameCount = 1;
         this->interval   = 0;
@@ -21,7 +20,6 @@ namespace emo {
     }
 
     Drawable::Drawable() {
-        this->name       = NULL;
         this->hasTexture = false;
         this->hasBuffer  = false;
         this->loaded     = false;
@@ -60,7 +58,6 @@ namespace emo {
         this->margin      = 0;
 
         this->animations = new animations_t();
-        this->animationName = NULL;
     }
 
     Drawable::~Drawable() {
@@ -73,18 +70,6 @@ namespace emo {
             delete[] this->frames_vbos;
         }
         delete this->animations;
-
-        if (this->name != NULL) {
-            free(this->name);
-        }
-    }
-
-    void Drawable::setName(const char* _name) {
-        this->name = strdup(_name);
-    }
-
-    char* Drawable::getName() {
-        return this->name;
     }
 
     void Drawable::load() {
@@ -326,16 +311,14 @@ namespace emo {
     void Drawable::addAnimation(AnimationFrame* animation) {
 
         this->deleteAnimation(animation->name);
-
-        const char* key = strdup(animation->name);
-        this->animations->insert(std::make_pair(key, animation)); 
+        this->animations->insert(std::make_pair(animation->name, animation)); 
     }
 
-    void Drawable::setAnimation(const char* _name) {
-        this->animationName = strdup(_name);
+    void Drawable::setAnimation(std::string name) {
+        this->animationName = name;
     }
 
-    AnimationFrame* Drawable::getAnimation(const char* name) {
+    AnimationFrame* Drawable::getAnimation(std::string name) {
         animations_t::iterator iter = this->animations->find(name);
         if (iter != this->animations->end()) {
             return iter->second;
@@ -343,13 +326,12 @@ namespace emo {
         return NULL;
     }
 
-    bool Drawable::deleteAnimation(const char* name) {
+    bool Drawable::deleteAnimation(std::string name) {
         animations_t::iterator iter = this->animations->find(name);
         if (iter != this->animations->end()) {
             AnimationFrame* animation = iter->second;
             if (this->animations->erase(iter->first)){
                 delete animation;
-                free((char*)iter->first);
             }
             return true;
         }
@@ -361,7 +343,6 @@ namespace emo {
         for(iter = this->animations->begin(); iter != this->animations->end(); iter++) {
             AnimationFrame* animation = iter->second;
             delete animation;
-            free((char*)iter->first);
         }
         this->animations->clear();
     }

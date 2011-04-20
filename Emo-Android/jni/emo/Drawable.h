@@ -1,6 +1,7 @@
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 
+#include <string>
 #include <hash_map>
 #include <squirrel.h>
 #include "Image.h"
@@ -11,14 +12,14 @@ namespace emo {
     public:
         AnimationFrame();
         ~AnimationFrame();
-        const char* name;
+        std::string name;
         int   start;
         int   frameCount;
         int   loop;
         unsigned long interval;
     };
 
-    typedef std::hash_map <const char *, emo::AnimationFrame *, std::hash<const char*>, char_comparator> animations_t;
+    typedef std::hash_map <std::string, emo::AnimationFrame *> animations_t;
 
     class Drawable {
     public:
@@ -26,6 +27,7 @@ namespace emo {
         Drawable();
         ~Drawable();
 
+        std::string name;
 
         void load();
 
@@ -66,16 +68,13 @@ namespace emo {
         float      param_color[4];
 
         void addAnimation(AnimationFrame* animation);
-        void setAnimation(const char* name);
-        AnimationFrame* getAnimation(const char* name);
-        bool deleteAnimation(const char* name);
-
-        void setName(const char* name);
-        char* getName();
+        void setAnimation(std::string name);
+        AnimationFrame* getAnimation(std::string name);
+        bool deleteAnimation(std::string name);
 
     protected:
 
-        char* name;
+        std::string animationName;
 
         float      vertex_tex_coords[8];
 
@@ -96,6 +95,6 @@ namespace emo {
 
         void deleteAnimations();
         animations_t* animations;
-        const char*   animationName;
+
     };
 }

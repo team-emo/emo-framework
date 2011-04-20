@@ -12,9 +12,8 @@
 #include "Drawable.h"
 #include "Drawable_glue.h"
 #include "Audio.h"
-#include "Util.h"
 
-typedef std::hash_map <const char *, emo::Drawable *, std::hash<const char*>, char_comparator> drawables_t;
+typedef std::hash_map <std::string, emo::Drawable *> drawables_t;
 
 namespace emo {
     class Engine {
@@ -57,11 +56,11 @@ namespace emo {
         void enableOnDrawListener(bool enable);
         void setOnDrawListenerInterval(int value);
 
-        void addDrawable(const char* _key, Drawable* drawable);
-        void addDrawableToRemove(const char* _key, Drawable* drawable);
-        bool removeDrawable(const char* key);
-        bool freeDrawable(const char* key);
-        Drawable* getDrawable(const char* key);
+        void addDrawable(std::string key, Drawable* drawable);
+        void addDrawableToRemove(std::string key, Drawable* drawable);
+        bool removeDrawable(std::string key);
+        bool freeDrawable(std::string key);
+        Drawable* getDrawable(std::string key);
 
         void onDrawDrawables();
         
