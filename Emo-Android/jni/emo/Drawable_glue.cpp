@@ -120,7 +120,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
 
     if (name != NULL && (!loadPngSizeFromAsset(name, &width, &height) || 
           width <= 0 || height <= 0 || frameWidth <= 0 || frameHeight <= 0)) {
-        free(drawable);
+        delete drawable;
         sq_pushinteger(v, -1);
         return 1;
     }
