@@ -15,13 +15,17 @@ namespace emo {
         ~AnimationFrame();
         std::string name;
         int   start;
-        int   frameCount;
+        int   count;
         int   loop;
-        int   current;
         int32_t interval;
+
+        int   currentLoopCount;
+        int   currentCount;
 
         int32_t getLastOnAnimationDelta();
         timeb lastOnAnimationInterval;
+        
+        int getNextIndex(int frameCount, int currentIndex);
     };
 
     typedef std::hash_map <std::string, emo::AnimationFrame *> animations_t;
@@ -99,6 +103,9 @@ namespace emo {
 
         void deleteAnimations();
         animations_t* animations;
+
+        bool frameIndexChanged;
+        int  nextFrameIndex;
 
         std::string animationName;
         AnimationFrame* currentAnimation;

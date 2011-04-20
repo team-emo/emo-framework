@@ -2,10 +2,13 @@ local runtime = emo.Runtime();
 local event   = emo.Event();
 local stage   = emo.Stage();
 
+local frameIndex = 0;
+
 class Level_1 {
 
     logoSprite = emo.Sprite("logo.png");
     dogSprite  = emo.SpriteSheet("dog.png", 34, 42, 1);
+
     rectangle  = emo.Rectangle();
 
     function onLoad() {

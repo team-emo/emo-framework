@@ -11,10 +11,11 @@ namespace emo {
 
     AnimationFrame::AnimationFrame() {
         this->start      = 0;
-        this->frameCount = 1;
+        this->count      = 1;
         this->interval   = 0;
         this->loop       = 0;
-        this->current    = 0;
+        this->currentLoopCount = 0;
+        this->currentCount = 0;
         this->lastOnAnimationInterval = engine->uptime;
     }
 
@@ -29,6 +30,34 @@ namespace emo {
         return (deltaSec * 1000) + deltaMsec;
     }
 
+    int AnimationFrame::getNextIndex(int frameCount, int currentIndex) {
+
+        if (this->currentLoopCount > this->loop) {
+            return currentIndex;
+        }
+
+        this->currentCount++;
+
+        if (currentCount >= this->count) {
+            this->currentCount = 0;
+            if (this->loop > 0) {
+                this->currentLoopCount++;
+            }
+        }
+
+        if (this->currentCount + this->start >= frameCount) {
+            currentCount = 0;
+        }
+
+        int nextIndex = this->currentCount + this->start;
+
+char str[256];
+sprintf(str, "currentLoopCount=%d, currentCount=%d, next=%d, max=%d", this->currentLoopCount, this->currentCount, nextIndex, frameCount);
+LOGI(str);
+
+        return nextIndex;
+    }
+
 
     Drawable::Drawable() {
         this->hasTexture = false;
@@ -37,6 +66,7 @@ namespace emo {
         this->hasSheet   = false;
         this->animating  = false;
         this->frameCountLoaded = false;
+        this->frameIndexChanged = false;
 
         // color param RGBA
         this->param_color[0] = 1.0f;
@@ -121,13 +151,15 @@ namespace emo {
     }
 
     int Drawable::tex_coord_frame_startX() {
-        int xindex = this->frame_index % (int)round((this->texture->width - (this->margin * 2) + this->border) / (float)(this->width  + this->border));
+        int xcount = (int)round((this->texture->width - (this->margin * 2) + this->border) / (float)(this->width  + this->border));
+        int xindex = this->frame_index % xcount;
         return ((this->border + this->width) * xindex) + this->margin;
     }
 
     int Drawable::tex_coord_frame_startY() {
+        int xcount = (int)round((this->texture->width - (this->margin * 2) + this->border) / (float)(this->width  + this->border));
         int ycount = (int)round((this->texture->height - (this->margin * 2) + this->border) / (float)(this->height + this->border));
-        int yindex = ycount - 1 - ((this->frame_index + 1) / (int)round((this->texture->width - (this->margin * 2) + this->border) / (float)(this->width  + this->border)));
+        int yindex = ycount - (this->frame_index / xcount) - 1;
         return ((this->border + this->height) * yindex) + this->margin;
     }
 
@@ -229,13 +261,19 @@ namespace emo {
     void Drawable::onDrawFrame() {
         if (!this->loaded) return;
 
+        if (this->frameIndexChanged) {
+            this->frame_index = nextFrameIndex;
+            frameIndexChanged = false;
+        }
+
         engine->updateUptime();
 
-        if (this->animating && this->currentAnimation != NULL && this->currentAnimation->interval > 0) {
-            int32_t delta = this->currentAnimation->getLastOnAnimationDelta();
-            if (delta >= this->currentAnimation->interval) {
-// TODO update frame_index
-                this->currentAnimation->lastOnAnimationInterval = engine->uptime;
+        if (this->animating && this->currentAnimation != NULL) {
+            AnimationFrame* animation = this->currentAnimation;
+            int32_t delta = animation->getLastOnAnimationDelta();
+            if (delta >= animation->interval) {
+                this->setFrameIndex(animation->getNextIndex(this->frameCount, this->frame_index));
+                animation->lastOnAnimationInterval = engine->uptime;
             }
         }
 
@@ -318,7 +356,9 @@ namespace emo {
     }
 
     void Drawable::setFrameIndex(int index) {
-        this->frame_index = index;
+        if (index >= this->frameCount) return;
+        this->nextFrameIndex = index;
+        this->frameIndexChanged = true;
     }
 
     GLuint Drawable::getCurrentBufferId() {

@@ -847,7 +847,7 @@ SQInteger emoDrawableAnimate(HSQUIRRELVM v) {
     emo::AnimationFrame* animation = new emo::AnimationFrame();
     animation->name  = DEFAULT_ANIMATION_NAME;
     animation->start = start;
-    animation->frameCount = count;
+    animation->count = count;
     animation->interval   = interval;
     animation->loop       = loop;
     
