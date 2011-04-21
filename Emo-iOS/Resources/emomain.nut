@@ -24,12 +24,8 @@ class Level_1 {
         print(rectangle.load(150, 150, 10, 10));
 
         dogSprite.animate(0, 5, 1000, 0);
-		
 		audioCh0.load("tada.wav");
-		audioCh0.close();
-
-		audioCh0.load("tada.wav");
-		audioCh0.close();
+		audioCh0.play();
     }
 
     function onGainedFocus() {
@@ -48,9 +44,6 @@ class Level_1 {
 
     function onDrawFrame(dt) {
         //print("Level_1:onDrawFrame"); 
-        local sprite = emo.Sprite("logo.png");
-		sprite.load(200, 200);
-		sprite.remove();		
     }
 
     function onMotionEvent(motionEvent) {

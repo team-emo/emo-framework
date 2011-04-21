@@ -73,22 +73,29 @@ extern EmoEngine* engine;
 		return FALSE;
 	}
 	
+	bool    audioLoaded;
 	void*   audioData;
 	ALsizei dataSize;
 	ALenum  dataFormat;
 	ALsizei sampleRate;
-	audioData = GetOpenALAudioData((CFURLRef)[NSURL fileURLWithPath:path], &dataSize, &dataFormat, &sampleRate);
-	
+	audioData = GetOpenALAudioData((CFURLRef)[NSURL fileURLWithPath:path], &dataSize, &dataFormat, &sampleRate, &audioLoaded);
+
+	if (!audioLoaded) return FALSE;
+		
 	alBufferData(buffers[index], dataFormat, audioData, dataSize, sampleRate);
 	if ([self isALError:alGetError() at:@"alBufferData"]) {
+		free(audioData);
 		LOGE(fname);
 		return FALSE;
 	}
 	alSourcei(sources[index], AL_BUFFER, buffers[index]);
 	if ([self isALError:alGetError() at:@"alSourcei"]) {
+		free(audioData);
 		LOGE(fname);
 		return FALSE;
 	}
+	
+	free(audioData);
 	
 	loaded[index] = TRUE;
 	

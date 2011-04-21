@@ -172,10 +172,12 @@ BOOL loadPngFromResource(NSString* filename, EmoImage* imageInfo) {
 }
 
 void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
-						 ALenum* dataFormat, ALsizei *sampleRate) {
+						 ALenum* dataFormat, ALsizei *sampleRate, bool *loaded) {
     OSStatus    err;
     UInt32      size;
     
+	*loaded = false;
+	
     ExtAudioFileRef audioFile;
     err = ExtAudioFileOpenURL(fileURL, &audioFile);
     if (err) {
@@ -238,6 +240,7 @@ void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
     *dataFormat = (outputFormat.mChannelsPerFrame > 1) ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
     *sampleRate = (ALsizei)outputFormat.mSampleRate;
     
+	*loaded = true;
 Exit:
     if (audioFile) {
         ExtAudioFileDispose(audioFile);
