@@ -90,6 +90,7 @@ namespace emo {
 
         std::string getJavaPackageName();
         std::string getDatabasePath(std::string name);
+        std::string createDatabase(std::string name, jint mode);
     protected:
         bool loaded;
         bool focused;

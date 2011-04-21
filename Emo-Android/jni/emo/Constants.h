@@ -35,6 +35,7 @@
 #define DRAWABLE_KEY_LENGTH 26
 
 #define DEFAULT_ANIMATION_NAME "EMO::DEFAULT"
+#define DEFAULT_DATABASE_NAME  "emoruntime.db"
 
 #define EMO_NO              0
 #define EMO_YES             1
@@ -119,6 +120,10 @@
 #define AXIS_X 0
 #define AXIS_Y 1
 #define AXIS_Z 2
+
+#define MODE_PRIVATE         0x00000000
+#define MODE_WORLD_READABLE  0x00000001
+#define MODE_WORLD_WRITEABLE 0x00000002
 
 bool isPowerOfTwo(int x);
 int nextPowerOfTwo(int minimum);

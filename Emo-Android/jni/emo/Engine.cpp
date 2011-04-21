@@ -181,9 +181,7 @@ namespace emo {
         jclass clazz = env->GetObjectClass(this->app->activity->clazz);
         jmethodID methodj = env->GetMethodID(clazz, "getPackageName", "()Ljava/lang/String;");
         jstring jstr = (jstring)env->CallObjectMethod(this->app->activity->clazz, methodj);
-        if (jstr == NULL) {
-            LOGE("emo_engine: failed to get package name");
-        } else {
+        if (jstr != NULL) {
             const char* str = env->GetStringUTFChars(jstr, NULL);
             packageName = str;
             env->ReleaseStringUTFChars(jstr, str);
@@ -203,13 +201,10 @@ namespace emo {
         jclass clazz = env->GetObjectClass(this->app->activity->clazz);
         jmethodID methodj = env->GetMethodID(clazz, "getDatabasePath", "(Ljava/lang/String;)Ljava/io/File;");
         jobject filej = env->CallObjectMethod(this->app->activity->clazz, methodj, env->NewStringUTF(name.c_str()));
-        if (filej == NULL) {
-            LOGE("emo_engine: failed to get database directory");
-        } else {
+        if (filej != NULL) {
             clazz = env->GetObjectClass(filej);
             methodj = env->GetMethodID(clazz, "getPath", "()Ljava/lang/String;");
             jstring jstr = (jstring)env->CallObjectMethod(filej, methodj);
-
             if (jstr != NULL) {
                 const char* str = env->GetStringUTFChars(jstr, NULL);
                 databasePath = str;
@@ -219,6 +214,33 @@ namespace emo {
         vm->DetachCurrentThread();
 
         return databasePath;
+    }
+
+    std::string Engine::createDatabase(std::string name, jint mode) {
+        std::string filename;
+        JNIEnv* env;
+        JavaVM* vm = this->app->activity->vm;
+        
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(this->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "openOrCreateDatabase", "(Ljava/lang/String;ILandroid/database/sqlite/SQLiteDatabase/CursorFactory;)Landroid/database/sqlite/SQLiteDatabase;");
+        jobject jdb = env->CallObjectMethod(this->app->activity->clazz, methodj,  env->NewStringUTF(name.c_str()), mode, NULL);
+        if (jdb != NULL) {
+            clazz = env->GetObjectClass(jdb);
+            methodj = env->GetMethodID(clazz, "getPath", "()Ljava/lang/String;");
+            jstring jstr = (jstring)env->CallObjectMethod(jdb, methodj);
+            if (jstr != NULL) {
+                const char* str = env->GetStringUTFChars(jstr, NULL);
+                filename = str;
+                env->ReleaseStringUTFChars(jstr, str);
+            }
+            methodj = env->GetMethodID(clazz, "close", "()V");
+            env->CallVoidMethod(jdb, methodj);
+        }
+        vm->DetachCurrentThread();
+
+        return filename;
     }
 
     void Engine::onInitGLSurface() {
