@@ -351,10 +351,11 @@ namespace emo {
         return this->frameCount;
     }
 
-    void Drawable::setFrameIndex(int index) {
-        if (index >= this->frameCount) return;
+    bool Drawable::setFrameIndex(int index) {
+        if (index < 0 || this->frameCount <= index) return false;
         this->nextFrameIndex = index;
         this->frameIndexChanged = true;
+        return true;
     }
 
     GLuint Drawable::getCurrentBufferId() {

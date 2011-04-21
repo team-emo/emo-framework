@@ -50,7 +50,7 @@ namespace emo {
         GLuint getCurrentBufferId();
         bool isCurrentTexBufferLoaded();
 
-        void setFrameIndex(int index);
+        bool setFrameIndex(int index);
 
         void setTexture(Image* image);
 
