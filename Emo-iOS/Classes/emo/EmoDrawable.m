@@ -61,6 +61,7 @@ extern EmoEngine* engine;
 -(float)getTexCoordEndX;
 -(float)getTexCoordStartY;
 -(float)getTexCoordEndY;
+-(void)garbage;
 @end
 
 @implementation EmoDrawable
@@ -83,7 +84,6 @@ extern EmoEngine* engine;
 		EmoAnimationFrame* animation = currentAnimation;
 		NSTimeInterval delta = [animation getLastOnAnimationDelta:[engine uptime]];
 		if (delta >= animation.interval) {
-			LOGI("onAnimation");
 			[self setFrameIndex:[animation getNextIndex:frameCount withIndex:frame_index]];
 			animation.lastOnAnimationInterval = [engine uptime];
 		}
@@ -424,10 +424,16 @@ extern EmoEngine* engine;
 	}
 	return TRUE;
 }
-
+-(void)garbage {
+	int retainCount = [name retainCount];
+	for (int i = 0; i < retainCount; i++) {
+		[name release];
+	}
+	name = nil;
+}
 -(void)dealloc {
 	[animations release];
-	[name release];
+	[self garbage];
 	[super dealloc];
 }
 @end

@@ -40,7 +40,7 @@ void initDrawableFunctions() {
  * create drawable instance(single sprite)
  */
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
-	EmoDrawable* drawable = [[[EmoDrawable alloc]init] autorelease];
+	EmoDrawable* drawable = [[EmoDrawable alloc] init];
 	
     [drawable initDrawable];
 	
@@ -82,7 +82,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
  * create drawable instance (sprite sheet)
  */
 SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
-	EmoDrawable* drawable = [[[EmoDrawable alloc]init] autorelease];
+	EmoDrawable* drawable = [[EmoDrawable alloc] init];
 	
     [drawable initDrawable];
 	

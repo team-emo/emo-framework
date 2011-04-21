@@ -1,6 +1,7 @@
 local runtime = emo.Runtime();
 local event   = emo.Event();
 local stage   = emo.Stage();
+local audio   = emo.Audio();
 
 local frameIndex = 0;
 
@@ -10,9 +11,11 @@ class Level_1 {
     dogSprite  = emo.SpriteSheet("dog.png", 34, 42, 1);
     rectangle  = emo.Rectangle();
 
+	audioCh0 = audio.createChannel(0);
+		
     function onLoad() {
         print("Level_1:onLoad"); 
-        event.enableOnDrawCallback(5000);
+        event.enableOnDrawCallback(100);
 		
 		rectangle.color(1, 0, 0, 1);
 		
@@ -21,6 +24,12 @@ class Level_1 {
         print(rectangle.load(150, 150, 10, 10));
 
         dogSprite.animate(0, 5, 1000, 0);
+		
+		audioCh0.load("tada.wav");
+		audioCh0.close();
+
+		audioCh0.load("tada.wav");
+		audioCh0.close();
     }
 
     function onGainedFocus() {
@@ -38,17 +47,16 @@ class Level_1 {
     }
 
     function onDrawFrame(dt) {
-        print("Level_1:onDrawFrame"); 
-
+        //print("Level_1:onDrawFrame"); 
+        local sprite = emo.Sprite("logo.png");
+		sprite.load(200, 200);
+		sprite.remove();		
     }
 
     function onMotionEvent(motionEvent) {
         print("Level_1:onMotionEvent " + motionEvent.toString()); 
         if (motionEvent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-		dogSprite.pauseAt(frameIndex);
-		print("frame: " + frameIndex);
-		frameIndex++;
-            //stage.load(Level_2());
+            stage.load(Level_2());
         }
     }
 

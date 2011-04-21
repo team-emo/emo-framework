@@ -59,7 +59,7 @@
 	EmoAnimationFrame* currentAnimation;
 	NSString* animationName;
 }
-@property (copy, readwrite) NSString* name;
+@property (assign, readwrite) NSString* name;
 @property (readwrite) float x;
 @property (readwrite) float y;
 @property (readwrite) float z;
