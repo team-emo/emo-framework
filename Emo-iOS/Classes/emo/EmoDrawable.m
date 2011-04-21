@@ -7,6 +7,53 @@
 
 extern EmoEngine* engine;
 
+@implementation EmoAnimationFrame
+@synthesize name;
+@synthesize start, count, loop, interval;
+@synthesize lastOnAnimationInterval;
+- (id)init {
+    self = [super init];
+    if (self != nil) {
+        start      = 0;
+        count      = 1;
+        interval   = 0;
+        loop       = 0;
+        currentLoopCount = 0;
+        currentCount = 0;
+        lastOnAnimationInterval = [engine uptime];
+    }
+    return self;
+}
+
+-(NSInteger)getNextIndex:(NSInteger)frameCount withIndex:(NSInteger)currentIndex {
+	
+	if (currentLoopCount > loop) {
+		return currentIndex;
+	}
+	
+	currentCount++;
+	
+	if (currentCount >= count) {
+		currentCount = 0;
+		if (loop > 0) {
+			currentLoopCount++;
+		}
+	}
+	
+	if (currentCount + start >= frameCount) {
+		currentCount = 0;
+	}
+	
+	int nextIndex = currentCount + start;
+	
+	return nextIndex;
+}
+-(NSTimeInterval)getLastOnAnimationDelta:(NSTimeInterval)uptime {
+	return (uptime - lastOnAnimationInterval) * 1000;
+}
+@end
+
+
 @interface EmoDrawable (PrivateMethods)
 -(NSInteger)tex_coord_frame_startX;
 -(NSInteger) tex_coord_frame_startY;
@@ -26,7 +73,22 @@ extern EmoEngine* engine;
 
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
     if (!loaded) return FALSE;
-		
+	
+	if (frameIndexChanged) {
+		frame_index = nextFrameIndex;
+		frameIndexChanged = FALSE;
+	}
+
+	if (animating && currentAnimation != nil) {
+		EmoAnimationFrame* animation = currentAnimation;
+		NSTimeInterval delta = [animation getLastOnAnimationDelta:[engine uptime]];
+		if (delta >= animation.interval) {
+			LOGI("onAnimation");
+			[self setFrameIndex:[animation getNextIndex:frameCount withIndex:frame_index]];
+			animation.lastOnAnimationInterval = [engine uptime];
+		}
+	}
+	
 	if (frames_vbos[frame_index] <= 0) {
 		[self bindVertex];
 	}
@@ -123,17 +185,23 @@ extern EmoEngine* engine;
     border      = 0;
     margin      = 0;
 	
+	animations        = [[NSMutableDictionary alloc]init];
+	nextFrameIndex    = 0;
+	frameIndexChanged = FALSE;
+	currentAnimation  = nil;
 }
 
 -(NSInteger)tex_coord_frame_startX {
-    int xindex = frame_index % (int)round((texture.width - (margin * 2) + border) / (float)(width  + border));
-    return ((border + width) * xindex) + margin;
+	int xcount = (int)round((texture.width - (margin * 2) + border) / (float)(width  + border));
+	int xindex = frame_index % xcount;
+	return ((border + width) * xindex) + margin;
 }
 
 -(NSInteger) tex_coord_frame_startY {
-    int ycount = (int)round((texture.height - (margin * 2) + border) / (float)(height + border));
-    int yindex = ycount - 1 - ((frame_index + 1) / (int)round((texture.width - (margin * 2) + border) / (float)(width  + border)));
-    return ((border + height) * yindex) + margin;
+	int xcount = (int)round((texture.width - (margin * 2) + border) / (float)(width  + border));
+	int ycount = (int)round((texture.height - (margin * 2) + border) / (float)(height + border));
+	int yindex = ycount - (frame_index / xcount) - 1;
+	return ((border + height) * yindex) + margin;
 }
 
 -(float)getTexCoordStartX {
@@ -270,12 +338,21 @@ extern EmoEngine* engine;
 	frameCount  = 1;
 	frame_index = 0;
 	free(frames_vbos);
+	
+	[self deleteAnimations];
 }
--(BOOL)pauseAt:(NSInteger)index {
-	if (frameCount <= index) {
+-(BOOL)setFrameIndex:(NSInteger)index {
+	if (index < 0 || frameCount <= index) {
 		return FALSE;
 	}
-	frame_index = index;
+	nextFrameIndex = index;
+	frameIndexChanged = TRUE;
+	return TRUE;
+}
+-(BOOL)pauseAt:(NSInteger)index {
+	if (![self setFrameIndex:index]) {
+		return FALSE;
+	}
 	animating = FALSE;
 	
 	return TRUE;
@@ -290,10 +367,66 @@ extern EmoEngine* engine;
 }
 -(void)stop {
 	animating = FALSE;
-	frame_index = 0;
+	[self setFrameIndex:0];
+}
+
+-(void)addAnimation:(EmoAnimationFrame*)animation {
+	[self deleteAnimation:animation.name];
+	[animations setObject:animation forKey:animation.name];
+}
+
+-(BOOL)setAnimation:(NSString*)_name {
+	if ([self getAnimation:_name] == nil) {
+		animationName = nil;
+		return FALSE;
+	} else {
+		animationName = _name;
+	}
+	return TRUE;
+}
+
+-(EmoAnimationFrame*)getAnimation:(NSString*)_name {
+	return [animations objectForKey:_name];
+}
+
+-(BOOL)deleteAnimation:(NSString*)_name {
+	EmoAnimationFrame* animation = [self getAnimation:_name];
+
+	if (animation == nil) return FALSE;
+	
+	[animation release];
+	[animations removeObjectForKey:_name];
+	
+	return TRUE;
+}
+
+-(void)deleteAnimations {
+	for (NSString* key in animations) {
+		[[animations objectForKey:key] release];
+	}
+	[animations removeAllObjects];
+}
+
+-(BOOL)enableAnimation:(BOOL)enable {
+	animating = enable;
+	
+	currentAnimation = nil;
+	
+	if (enable) {
+		if (animationName == nil) return FALSE;
+		EmoAnimationFrame* animation = [self getAnimation:animationName];
+		if (animation == nil) {
+			return FALSE;
+		} else {
+			currentAnimation = animation;
+			animation.lastOnAnimationInterval = [engine uptime];
+		}
+	}
+	return TRUE;
 }
 
 -(void)dealloc {
+	[animations release];
 	[name release];
 	[super dealloc];
 }

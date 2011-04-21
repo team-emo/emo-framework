@@ -33,6 +33,7 @@ void initDrawableFunctions() {
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "pauseAt",        emoDrawablePauseAt);
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "pause",          emoDrawablePause);
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "stop",           emoDrawableStop);	
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "animate",        emoDrawableAnimate);
 }
 
 /*
@@ -785,6 +786,58 @@ SQInteger emoDrawableStop(HSQUIRRELVM v) {
 	
 	[drawable stop];
 	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDrawableAnimate(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+		sq_pushinteger(v, ERR_INVALID_ID);
+		return 1;
+	}
+    
+    SQInteger start = 0;
+    SQInteger count = 1;
+    SQInteger interval = 0;
+    SQInteger loop  = 0;
+    
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        sq_getinteger(v, 3, &start);
+    }
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
+        sq_getinteger(v, 4, &count);
+    }
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
+        sq_getinteger(v, 5, &interval);
+    }
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
+        sq_getinteger(v, 6, &loop);
+    }
+	
+    EmoAnimationFrame* animation = [[EmoAnimationFrame alloc] init];
+    animation.name  = @DEFAULT_ANIMATION_NAME;
+    animation.start = start;
+    animation.count = count;
+    animation.interval   = interval;
+    animation.loop       = loop;
+    
+    [drawable addAnimation:animation];
+    [drawable setAnimation:animation.name];
+    [drawable enableAnimation:TRUE];
+    
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }

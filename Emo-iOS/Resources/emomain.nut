@@ -2,6 +2,8 @@ local runtime = emo.Runtime();
 local event   = emo.Event();
 local stage   = emo.Stage();
 
+local frameIndex = 0;
+
 class Level_1 {
 
     logoSprite = emo.Sprite("logo.png");
@@ -17,6 +19,8 @@ class Level_1 {
         print(logoSprite.load());
         print(dogSprite.load(100, 100, 6));
         print(rectangle.load(150, 150, 10, 10));
+
+        dogSprite.animate(0, 5, 1000, 0);
     }
 
     function onGainedFocus() {
@@ -29,7 +33,7 @@ class Level_1 {
 
     function onDispose() {
         print("Level_1:onDispose"); 
-        dogSprite.remove;
+        dogSprite.remove();
 		rectangle.remove();
     }
 
@@ -41,7 +45,10 @@ class Level_1 {
     function onMotionEvent(motionEvent) {
         print("Level_1:onMotionEvent " + motionEvent.toString()); 
         if (motionEvent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            stage.load(Level_2());
+		dogSprite.pauseAt(frameIndex);
+		print("frame: " + frameIndex);
+		frameIndex++;
+            //stage.load(Level_2());
         }
     }
 

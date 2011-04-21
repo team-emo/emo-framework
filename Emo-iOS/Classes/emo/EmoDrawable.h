@@ -2,6 +2,30 @@
 #include <EmoImage.h>
 #include <EmoStage.h>
 
+@interface EmoAnimationFrame : NSObject {
+	NSString*   name;
+	NSInteger   start;
+	NSInteger   count;
+	NSInteger   loop;
+	NSInteger   interval;
+	
+	NSInteger   currentLoopCount;
+	NSInteger   currentCount;
+	
+	NSTimeInterval lastOnAnimationInterval;
+}
+@property (copy, readwrite) NSString* name;
+@property (readwrite)NSInteger start;
+@property (readwrite)NSInteger count;
+@property (readwrite)NSInteger loop;
+@property (readwrite)NSInteger interval;
+@property (readwrite)NSTimeInterval lastOnAnimationInterval;
+
+-(NSInteger)getNextIndex:(NSInteger)frameCount withIndex:(NSInteger)currentIndex;
+-(NSTimeInterval)getLastOnAnimationDelta:(NSTimeInterval)uptime;
+@end
+
+
 @interface EmoDrawable : NSObject {
 	GLuint* frames_vbos;
 	NSString* name;
@@ -29,8 +53,11 @@
 	
 	EmoImage*  texture;
 	
+	NSInteger nextFrameIndex;
+	BOOL frameIndexChanged;
 	NSMutableDictionary* animations;
-	NSString* currentAnimation;
+	EmoAnimationFrame* currentAnimation;
+	NSString* animationName;
 }
 @property (copy, readwrite) NSString* name;
 @property (readwrite) float x;
@@ -54,6 +81,7 @@
 -(void)setScale:(NSInteger)index withValue:(float)value;
 -(void)setRotate:(NSInteger)index withValue:(float)value;
 -(void)setColor:(NSInteger)index withValue:(float)value;
+-(BOOL)setFrameIndex:(NSInteger)index;
 -(BOOL)pauseAt:(NSInteger)index;
 -(float)getColor:(NSInteger)index;
 -(float)getTexCoordStartX;
@@ -64,4 +92,10 @@
 -(BOOL)animate;
 -(void)pause;
 -(void)stop;
+-(void)addAnimation:(EmoAnimationFrame*)animation;
+-(BOOL)setAnimation:(NSString*)_name;
+-(EmoAnimationFrame*)getAnimation:(NSString*)_name;
+-(BOOL)deleteAnimation:(NSString*)_name;
+-(void)deleteAnimations;
+-(BOOL)enableAnimation:(BOOL)enable;
 @end
