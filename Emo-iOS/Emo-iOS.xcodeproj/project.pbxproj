@@ -593,6 +593,7 @@
 					Classes/emo,
 					Classes/squirrel/include,
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				IPHONE_OPTIMIZE_OPTIONS = "-skip-PNGs";
 				PREBINDING = NO;
 				SDKROOT = iphoneos;
