@@ -98,7 +98,8 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     }
 	
     SQInteger frameIndex = 0;
-    SQInteger frameWidth, frameHeight;
+    SQInteger frameWidth = 0;
+	SQInteger frameHeight = 0;
     SQInteger border = 0;
     SQInteger margin = 0;
     if (nargs >= 5 && sq_gettype(v, 3) != OT_NULL && sq_gettype(v, 4) != OT_NULL && sq_gettype(v, 5) != OT_NULL) {
