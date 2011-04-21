@@ -87,6 +87,9 @@ namespace emo {
 
         void registerClass(HSQUIRRELVM v, const char *cname);
         void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);
+
+        std::string getJavaPackageName();
+        std::string getDatabasePath(std::string name);
     protected:
         bool loaded;
         bool focused;

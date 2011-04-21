@@ -3,6 +3,7 @@
 #include "VmFunc.h"
 
 #include <android/window.h>
+#include <jni.h>
 
 namespace emo {
     Engine::Engine() {
@@ -167,6 +168,57 @@ namespace emo {
         this->onInitGLSurface();
 
         return 0;
+    }
+
+    std::string Engine::getJavaPackageName() {
+        std::string packageName;
+
+        JNIEnv* env;
+        JavaVM* vm = this->app->activity->vm;
+        
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(this->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "getPackageName", "()Ljava/lang/String;");
+        jstring jstr = (jstring)env->CallObjectMethod(this->app->activity->clazz, methodj);
+        if (jstr == NULL) {
+            LOGE("emo_engine: failed to get package name");
+        } else {
+            const char* str = env->GetStringUTFChars(jstr, NULL);
+            packageName = str;
+            env->ReleaseStringUTFChars(jstr, str);
+        }
+        vm->DetachCurrentThread();
+
+        return packageName;
+    }
+
+    std::string Engine::getDatabasePath(std::string name) {
+        std::string databasePath;
+        JNIEnv* env;
+        JavaVM* vm = this->app->activity->vm;
+        
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(this->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "getDatabasePath", "(Ljava/lang/String;)Ljava/io/File;");
+        jobject filej = env->CallObjectMethod(this->app->activity->clazz, methodj, env->NewStringUTF(name.c_str()));
+        if (filej == NULL) {
+            LOGE("emo_engine: failed to get database directory");
+        } else {
+            clazz = env->GetObjectClass(filej);
+            methodj = env->GetMethodID(clazz, "getPath", "()Ljava/lang/String;");
+            jstring jstr = (jstring)env->CallObjectMethod(filej, methodj);
+
+            if (jstr != NULL) {
+                const char* str = env->GetStringUTFChars(jstr, NULL);
+                databasePath = str;
+                env->ReleaseStringUTFChars(jstr, str);
+            }
+        }
+        vm->DetachCurrentThread();
+
+        return databasePath;
     }
 
     void Engine::onInitGLSurface() {
