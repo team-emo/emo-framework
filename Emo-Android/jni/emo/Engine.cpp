@@ -18,6 +18,7 @@ namespace emo {
         delete this->audio;
         delete this->drawables;
         delete this->drawablesToRemove;
+        delete this->database;
     }
 
     void Engine::initScriptFunctions() {
@@ -92,11 +93,14 @@ namespace emo {
         // force fullscreen
         this->updateOptions(OPT_WINDOW_FORCE_FULLSCREEN);
 
-        // create stage
+        // create stage instance
         stage = new Stage();
 
-        // create audio
+        // create audio instance
         audio = new Audio();
+
+        // create database instance
+        database = new Database();
 
         this->focused = false;
         this->loadedCalled = false;
@@ -189,58 +193,6 @@ namespace emo {
         vm->DetachCurrentThread();
 
         return packageName;
-    }
-
-    std::string Engine::getDatabasePath(std::string name) {
-        std::string databasePath;
-        JNIEnv* env;
-        JavaVM* vm = this->app->activity->vm;
-        
-        vm->AttachCurrentThread(&env, NULL);
-
-        jclass clazz = env->GetObjectClass(this->app->activity->clazz);
-        jmethodID methodj = env->GetMethodID(clazz, "getDatabasePath", "(Ljava/lang/String;)Ljava/io/File;");
-        jobject filej = env->CallObjectMethod(this->app->activity->clazz, methodj, env->NewStringUTF(name.c_str()));
-        if (filej != NULL) {
-            clazz = env->GetObjectClass(filej);
-            methodj = env->GetMethodID(clazz, "getPath", "()Ljava/lang/String;");
-            jstring jstr = (jstring)env->CallObjectMethod(filej, methodj);
-            if (jstr != NULL) {
-                const char* str = env->GetStringUTFChars(jstr, NULL);
-                databasePath = str;
-                env->ReleaseStringUTFChars(jstr, str);
-            }
-        }
-        vm->DetachCurrentThread();
-
-        return databasePath;
-    }
-
-    std::string Engine::createDatabase(std::string name, jint mode) {
-        std::string filename;
-        JNIEnv* env;
-        JavaVM* vm = this->app->activity->vm;
-        
-        vm->AttachCurrentThread(&env, NULL);
-
-        jclass clazz = env->GetObjectClass(this->app->activity->clazz);
-        jmethodID methodj = env->GetMethodID(clazz, "openOrCreateDatabase", "(Ljava/lang/String;ILandroid/database/sqlite/SQLiteDatabase/CursorFactory;)Landroid/database/sqlite/SQLiteDatabase;");
-        jobject jdb = env->CallObjectMethod(this->app->activity->clazz, methodj,  env->NewStringUTF(name.c_str()), mode, NULL);
-        if (jdb != NULL) {
-            clazz = env->GetObjectClass(jdb);
-            methodj = env->GetMethodID(clazz, "getPath", "()Ljava/lang/String;");
-            jstring jstr = (jstring)env->CallObjectMethod(jdb, methodj);
-            if (jstr != NULL) {
-                const char* str = env->GetStringUTFChars(jstr, NULL);
-                filename = str;
-                env->ReleaseStringUTFChars(jstr, str);
-            }
-            methodj = env->GetMethodID(clazz, "close", "()V");
-            env->CallVoidMethod(jdb, methodj);
-        }
-        vm->DetachCurrentThread();
-
-        return filename;
     }
 
     void Engine::onInitGLSurface() {

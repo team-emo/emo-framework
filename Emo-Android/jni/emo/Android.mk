@@ -7,6 +7,7 @@ EMO_SRC_FILES :=\
 	emo/Audio.cpp \
 	emo/VmFunc.cpp \
 	emo/Image.cpp \
+	emo/Database.cpp \
 	emo/Util.cpp
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/emo

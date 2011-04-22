@@ -12,6 +12,7 @@
 #include "Drawable.h"
 #include "Drawable_glue.h"
 #include "Audio.h"
+#include "Database.h"
 
 typedef std::hash_map <std::string, emo::Drawable *> drawables_t;
 
@@ -80,6 +81,7 @@ namespace emo {
         android_app* app;
         Audio* audio;
         Stage* stage;
+        Database* database;
         timeb uptime;
 
         int32_t onDrawFrameInterval;
@@ -89,8 +91,6 @@ namespace emo {
         void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);
 
         std::string getJavaPackageName();
-        std::string getDatabasePath(std::string name);
-        std::string createDatabase(std::string name, jint mode);
     protected:
         bool loaded;
         bool focused;
