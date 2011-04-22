@@ -284,7 +284,13 @@ class emo.AudioChannel {
         manager = _manager;
     }
 
-    function load(file) { return manager.load(id, file); }
+    function load(file) {
+        local runtime = emo.Runtime();
+        if (runtime.os() == OS_ANDROID) {
+            file = ANDROID_SOUNDS_DIR + file;
+        }
+	    return manager.load(id, file);
+	}
     function play()  { return manager.play(id); }
     function pause() { return manager.pause(id); }
     function stop()  { return manager.stop(id); }
@@ -305,13 +311,6 @@ class emo.AudioChannel {
 
 function emo::Audio::createChannel(id) {
     return emo.AudioChannel(id, this);
-}
-
-function emo::Audio::load(name) {
-    if (runtime.os() == OS_ANDROID) {
-        name = ANDROID_SOUNDS_DIR + name;
-    }
-    return this.loadResource(name);
 }
 
 class emo.Sprite {
