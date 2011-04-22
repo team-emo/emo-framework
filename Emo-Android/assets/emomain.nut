@@ -6,8 +6,8 @@ local frameIndex = 0;
 
 class Level_1 {
 
-    logoSprite = emo.Sprite("logo.png");
-    dogSprite  = emo.SpriteSheet("dog.png", 34, 42, 1);
+    logoSprite = emo.Sprite("graphics/logo.png");
+    dogSprite  = emo.SpriteSheet("graphics/dog.png", 34, 42, 1);
 
     rectangle  = emo.Rectangle();
 
@@ -58,7 +58,7 @@ class Level_1 {
 
 class Level_2 {
 
-    kingSprite = emo.SpriteSheet("king.png", 31, 49, 3, 2);
+    kingSprite = emo.SpriteSheet("graphics/king.png", 31, 49, 3, 2);
 
     function onLoad() {
         print("Level_2:onLoad"); 
