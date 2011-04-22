@@ -38,14 +38,14 @@
 		F93C58421343187A002C29E5 /* EmoAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = F93C58411343187A002C29E5 /* EmoAudio.m */; };
 		F94593DA1331935E00290114 /* EmoView.m in Sources */ = {isa = PBXBuildFile; fileRef = F94593D91331935E00290114 /* EmoView.m */; };
 		F94594221331975600290114 /* EmoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94594211331975600290114 /* EmoViewController.m */; };
-		F94998761354548200EF10B1 /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = F94998751354548200EF10B1 /* dog.png */; };
-		F9891D851354409100F7498D /* robot.png in Resources */ = {isa = PBXBuildFile; fileRef = F9891D841354409100F7498D /* robot.png */; };
-		F9891D93135440BC00F7498D /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F9891D92135440BC00F7498D /* logo.png */; };
-		F9BF1703135832FB0086230E /* king.png in Resources */ = {isa = PBXBuildFile; fileRef = F9BF1702135832FB0086230E /* king.png */; };
 		F9C31C191345FC8600B066DC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C31C181345FC8600B066DC /* AudioToolbox.framework */; };
-		F9C31C751346012100B066DC /* clang.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C31C731346012100B066DC /* clang.wav */; };
-		F9C31C761346012100B066DC /* drums.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C31C741346012100B066DC /* drums.wav */; };
-		F9C31C781346012D00B066DC /* tada.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C31C771346012D00B066DC /* tada.wav */; };
+		F9C350ED13610E6600B21AE9 /* clang.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C350EA13610E6600B21AE9 /* clang.wav */; };
+		F9C350EE13610E6600B21AE9 /* drums.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C350EB13610E6600B21AE9 /* drums.wav */; };
+		F9C350EF13610E6600B21AE9 /* tada.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9C350EC13610E6600B21AE9 /* tada.wav */; };
+		F9C350F313610E7B00B21AE9 /* king.png in Resources */ = {isa = PBXBuildFile; fileRef = F9C350F013610E7B00B21AE9 /* king.png */; };
+		F9C350F413610E7B00B21AE9 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F9C350F113610E7B00B21AE9 /* logo.png */; };
+		F9C350F513610E7B00B21AE9 /* robot.png in Resources */ = {isa = PBXBuildFile; fileRef = F9C350F213610E7B00B21AE9 /* robot.png */; };
+		F9C350F713610E8800B21AE9 /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = F9C350F613610E8800B21AE9 /* dog.png */; };
 		F9C7DE60134AB99F0053065E /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE4D134AB99E0053065E /* png.c */; };
 		F9C7DE61134AB99F0053065E /* pngerror.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE50134AB99E0053065E /* pngerror.c */; };
 		F9C7DE62134AB99F0053065E /* pngget.c in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DE51134AB99E0053065E /* pngget.c */; };
@@ -140,14 +140,14 @@
 		F94593D91331935E00290114 /* EmoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoView.m; sourceTree = "<group>"; };
 		F94594201331975600290114 /* EmoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoViewController.h; sourceTree = "<group>"; };
 		F94594211331975600290114 /* EmoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoViewController.m; sourceTree = "<group>"; };
-		F94998751354548200EF10B1 /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dog.png; path = Resources/dog.png; sourceTree = "<group>"; };
-		F9891D841354409100F7498D /* robot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = robot.png; path = Resources/robot.png; sourceTree = "<group>"; };
-		F9891D92135440BC00F7498D /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = Resources/logo.png; sourceTree = "<group>"; };
-		F9BF1702135832FB0086230E /* king.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = king.png; path = Resources/king.png; sourceTree = "<group>"; };
 		F9C31C181345FC8600B066DC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		F9C31C731346012100B066DC /* clang.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = clang.wav; path = Resources/clang.wav; sourceTree = "<group>"; };
-		F9C31C741346012100B066DC /* drums.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = drums.wav; path = Resources/drums.wav; sourceTree = "<group>"; };
-		F9C31C771346012D00B066DC /* tada.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = tada.wav; path = Resources/tada.wav; sourceTree = "<group>"; };
+		F9C350EA13610E6600B21AE9 /* clang.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = clang.wav; path = Resources/sounds/clang.wav; sourceTree = "<group>"; };
+		F9C350EB13610E6600B21AE9 /* drums.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = drums.wav; path = Resources/sounds/drums.wav; sourceTree = "<group>"; };
+		F9C350EC13610E6600B21AE9 /* tada.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = tada.wav; path = Resources/sounds/tada.wav; sourceTree = "<group>"; };
+		F9C350F013610E7B00B21AE9 /* king.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = king.png; path = Resources/graphics/king.png; sourceTree = "<group>"; };
+		F9C350F113610E7B00B21AE9 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = Resources/graphics/logo.png; sourceTree = "<group>"; };
+		F9C350F213610E7B00B21AE9 /* robot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = robot.png; path = Resources/graphics/robot.png; sourceTree = "<group>"; };
+		F9C350F613610E8800B21AE9 /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dog.png; path = Resources/graphics/dog.png; sourceTree = "<group>"; };
 		F9C7DE4B134AB99E0053065E /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = libpng/config.h; sourceTree = "<group>"; };
 		F9C7DE4D134AB99E0053065E /* png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = png.c; path = libpng/png.c; sourceTree = "<group>"; };
 		F9C7DE4E134AB99E0053065E /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = png.h; path = libpng/png.h; sourceTree = "<group>"; };
@@ -253,13 +253,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				F9BF1702135832FB0086230E /* king.png */,
-				F94998751354548200EF10B1 /* dog.png */,
-				F9891D92135440BC00F7498D /* logo.png */,
-				F9891D841354409100F7498D /* robot.png */,
-				F9C31C771346012D00B066DC /* tada.wav */,
-				F9C31C731346012100B066DC /* clang.wav */,
-				F9C31C741346012100B066DC /* drums.wav */,
+				F9C350E913610E5500B21AE9 /* sounds */,
+				F9C350E813610E4C00B21AE9 /* graphics */,
 				F9D17BEB133B0F7B00F577C4 /* emoruntime.nut */,
 				F937BBFD1331898800DCE63B /* emomain.nut */,
 				8D1107310486CEB800E47090 /* Emo_iOS-Info.plist */,
@@ -379,6 +374,27 @@
 			path = squirrel;
 			sourceTree = "<group>";
 		};
+		F9C350E813610E4C00B21AE9 /* graphics */ = {
+			isa = PBXGroup;
+			children = (
+				F9C350F613610E8800B21AE9 /* dog.png */,
+				F9C350F013610E7B00B21AE9 /* king.png */,
+				F9C350F113610E7B00B21AE9 /* logo.png */,
+				F9C350F213610E7B00B21AE9 /* robot.png */,
+			);
+			name = graphics;
+			sourceTree = "<group>";
+		};
+		F9C350E913610E5500B21AE9 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				F9C350EA13610E6600B21AE9 /* clang.wav */,
+				F9C350EB13610E6600B21AE9 /* drums.wav */,
+				F9C350EC13610E6600B21AE9 /* tada.wav */,
+			);
+			name = sounds;
+			sourceTree = "<group>";
+		};
 		F9C7DE4A134AB97E0053065E /* libpng */ = {
 			isa = PBXGroup;
 			children = (
@@ -476,13 +492,13 @@
 			files = (
 				F937BBFE1331898800DCE63B /* emomain.nut in Resources */,
 				F9D17BEC133B0F7B00F577C4 /* emoruntime.nut in Resources */,
-				F9C31C751346012100B066DC /* clang.wav in Resources */,
-				F9C31C761346012100B066DC /* drums.wav in Resources */,
-				F9C31C781346012D00B066DC /* tada.wav in Resources */,
-				F9891D851354409100F7498D /* robot.png in Resources */,
-				F9891D93135440BC00F7498D /* logo.png in Resources */,
-				F94998761354548200EF10B1 /* dog.png in Resources */,
-				F9BF1703135832FB0086230E /* king.png in Resources */,
+				F9C350ED13610E6600B21AE9 /* clang.wav in Resources */,
+				F9C350EE13610E6600B21AE9 /* drums.wav in Resources */,
+				F9C350EF13610E6600B21AE9 /* tada.wav in Resources */,
+				F9C350F313610E7B00B21AE9 /* king.png in Resources */,
+				F9C350F413610E7B00B21AE9 /* logo.png in Resources */,
+				F9C350F513610E7B00B21AE9 /* robot.png in Resources */,
+				F9C350F713610E8800B21AE9 /* dog.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
