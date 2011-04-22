@@ -10,7 +10,7 @@ void initAudioFunctions() {
 	registerEmoClass(engine.sqvm, EMO_AUDIO_CLASS);
 
 	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
-	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
+	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "loadResource",   emoLoadAudio);
 	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
 	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
 	registerEmoClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);

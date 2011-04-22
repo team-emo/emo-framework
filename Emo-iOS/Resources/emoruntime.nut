@@ -8,6 +8,9 @@
 OS_ANDROID <- "Android";
 OS_IOS     <- "iOS";
 
+ANDROID_GRAPHICS_DIR <- "graphics/";
+ANDROID_SOUNDS_DIR   <- "sounds/";
+
 EMO_NO          <- 0;
 EMO_YES         <- 1;
 
@@ -304,10 +307,18 @@ function emo::Audio::createChannel(id) {
     return emo.AudioChannel(id, this);
 }
 
+function emo::Audio::load(name) {
+    if (runtime.os() == OS_ANDROID) {
+        name = ANDROID_SOUNDS_DIR + name;
+    }
+    return this.loadResource(name);
+}
+
 class emo.Sprite {
 
     name   = null;
     stage  = emo.Stage();
+    runtime = emo.Runtime();
 
     id     = -1;
     loaded = false;
@@ -316,8 +327,15 @@ class emo.Sprite {
      * sprite = Sprite("aaa.png");
      */
     function constructor(_name) {
-		name = _name;
+        name = this.normalizeResouce(_name);
         id = stage.createSprite(name);
+    }
+
+    function normalizeResouce(_name) {
+        if (runtime.os() == OS_ANDROID) {
+            _name = ANDROID_GRAPHICS_DIR + _name;
+        }
+        return _name;
     }
 
     /*
@@ -394,7 +412,7 @@ class emo.Sprite {
 class emo.SpriteSheet extends emo.Sprite {
 
 	function constructor(_name, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
-		name = _name;
+        name = base.normalizeResouce(_name);
         id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border, margin);
 	}
 	

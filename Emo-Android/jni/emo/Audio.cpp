@@ -13,7 +13,7 @@ void initAudioFunctions() {
     engine->registerClass(engine->sqvm, EMO_AUDIO_CLASS);
 
     engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
-    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
+    engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "loadResource",   emoLoadAudio);
     engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
     engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
     engine->registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);
