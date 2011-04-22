@@ -2,6 +2,9 @@ local runtime = emo.Runtime();
 local event   = emo.Event();
 local stage   = emo.Stage();
 
+local audio = emo.Audio();
+local audioCh0 = audio.createChannel(0);
+
 local frameIndex = 0;
 
 class Level_1 {
@@ -22,6 +25,9 @@ class Level_1 {
         print(rectangle.load(150, 150, 10, 10));
 
         dogSprite.animate(0, 5, 1000, 0);
+		
+		audioCh0.load("tada.wav");
+		audioCh0.play();
     }
 
     function onGainedFocus() {
