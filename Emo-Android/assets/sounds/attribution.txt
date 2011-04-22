@@ -1,0 +1,5 @@
+Sounds are from soundbible.com:
+License: Attribution 3.0
+drums: http://soundbible.com/1512-Civil-War-Drummer-.html
+clang: http://soundbible.com/1217-Metal-Clang.html
+tada:  http://soundbible.com/1003-Ta-Da.html
