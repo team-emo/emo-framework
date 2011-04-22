@@ -120,7 +120,7 @@ bool loadScriptFromAsset(const char* fname) {
     	return false;
     }
 
-    if(SQ_SUCCEEDED(sq_compile(engine->sqvm, sq_lexer, asset, (SQChar*)fname, SQTrue))) {
+    if(SQ_SUCCEEDED(sq_compile(engine->sqvm, sq_lexer, asset, fname, SQTrue))) {
         sq_pushroottable(engine->sqvm);
         if (SQ_FAILED(sq_call(engine->sqvm, 1, SQFalse, SQTrue))) {
         	engine->setLastError(ERR_SCRIPT_CALL_ROOT);

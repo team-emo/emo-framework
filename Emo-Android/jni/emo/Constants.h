@@ -1,4 +1,3 @@
-#define _UNICODE
 #define PNG_NO_PEDANTIC_WARNINGS
 
 #define EMO_LOG_TAG "EmoFramework"
@@ -121,9 +120,9 @@
 #define AXIS_Y 1
 #define AXIS_Z 2
 
-#define MODE_PRIVATE         0x00000000
-#define MODE_WORLD_READABLE  0x00000001
-#define MODE_WORLD_WRITEABLE 0x00000002
+#define FILE_MODE_PRIVATE         0x0000
+#define FILE_MODE_WORLD_READABLE  0x0001
+#define FILE_MODE_WORLD_WRITEABLE 0x0002
 
 bool isPowerOfTwo(int x);
 int nextPowerOfTwo(int minimum);
