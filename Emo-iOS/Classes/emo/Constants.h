@@ -1,3 +1,6 @@
+#ifndef EMO_CONSTANT_H
+#define EMO_CONSTANT_H
+
 #define PNG_NO_PEDANTIC_WARNINGS
 
 #define EMO_LOG_TAG "EmoFramework"
@@ -124,5 +127,4 @@
 #define FILE_MODE_WORLD_READABLE  0x0001
 #define FILE_MODE_WORLD_WRITEABLE 0x0002
 
-bool isPowerOfTwo(int x);
-int nextPowerOfTwo(int minimum);
+#endif
