@@ -325,16 +325,16 @@ class emo.Sprite {
     /*
      * sprite = Sprite("aaa.png");
      */
-    function constructor(_name) {
-        name = this.normalizeResouce(_name);
+    function constructor(rawname) {
+        name = this.getResourceName(rawname);
         id = stage.createSprite(name);
     }
 
-    function normalizeResouce(_name) {
+    function getResourceName(rawname) {
         if (runtime.os() == OS_ANDROID) {
-            _name = ANDROID_GRAPHICS_DIR + _name;
+            rawname = ANDROID_GRAPHICS_DIR + rawname;
         }
-        return _name;
+        return rawname;
     }
 
     /*
@@ -410,8 +410,8 @@ class emo.Sprite {
 
 class emo.SpriteSheet extends emo.Sprite {
 
-	function constructor(_name, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
-        name = base.normalizeResouce(_name);
+	function constructor(rawname, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
+        name = base.getResourceName(rawname);
         id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border, margin);
 	}
 	
