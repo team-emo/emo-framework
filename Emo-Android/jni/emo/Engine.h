@@ -1,3 +1,6 @@
+#ifndef EMO_ENGINE_H
+#define EMO_ENGINE_H
+
 #include <android_native_app_glue.h>
 #include <android/sensor.h>
 
@@ -13,6 +16,7 @@
 #include "Drawable_glue.h"
 #include "Audio.h"
 #include "Database.h"
+#include "Engine.h"
 
 typedef std::hash_map <std::string, emo::Drawable *> drawables_t;
 
@@ -134,3 +138,4 @@ namespace emo {
         void initScriptFunctions();
     };
 }
+#endif

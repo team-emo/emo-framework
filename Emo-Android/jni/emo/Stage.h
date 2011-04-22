@@ -1,3 +1,6 @@
+#ifndef EMO_STAGE_H
+#define EMO_STAGE_H
+
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 
@@ -25,3 +28,4 @@ namespace emo {
 
     };
 }
+#endif

@@ -5,6 +5,7 @@
 #include "Constants.h"
 #include "Engine.h"
 #include "Runtime.h"
+#include "Audio.h"
 
 extern emo::Engine* engine;
 

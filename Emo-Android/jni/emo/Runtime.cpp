@@ -1,7 +1,3 @@
-#include "Runtime.h"
-#include "Engine.h"
-#include "Constants.h"
-
 #include <math.h>
 
 #include <android/log.h>
@@ -12,6 +8,10 @@
 
 #include <EGL/egl.h>
 #include <GLES/gl.h>
+
+#include "Constants.h"
+#include "Runtime.h"
+#include "Engine.h"
 
 extern emo::Engine* engine;
 
@@ -120,7 +120,7 @@ bool loadScriptFromAsset(const char* fname) {
     	return false;
     }
 
-    if(SQ_SUCCEEDED(sq_compile(engine->sqvm, sq_lexer, asset, fname, SQTrue))) {
+    if(SQ_SUCCEEDED(sq_compile(engine->sqvm, sq_lexer, asset, (SQChar*)fname, SQTrue))) {
         sq_pushroottable(engine->sqvm);
         if (SQ_FAILED(sq_call(engine->sqvm, 1, SQFalse, SQTrue))) {
         	engine->setLastError(ERR_SCRIPT_CALL_ROOT);
@@ -257,7 +257,7 @@ SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
  * Returns OS name
  */
 SQInteger emoRuntimeGetOSName(HSQUIRRELVM v) {
-    sq_pushstring(v, OS_ANDROID, -1);
+    sq_pushstring(v, (SQChar*)OS_ANDROID, -1);
     return 1;
 }
 
@@ -273,7 +273,7 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
             sq_getstring(v, -1, &fname);
             sq_poptop(v);
 
-    		loadScriptFromAsset(fname);
+    		loadScriptFromAsset((char*)fname);
     	}
     }
 	return 0;

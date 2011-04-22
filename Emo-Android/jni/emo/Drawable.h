@@ -1,3 +1,6 @@
+#ifndef EMO_DRAWABLE_H
+#define EMO_DRAWABLE_H
+
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 
@@ -111,3 +114,4 @@ namespace emo {
         AnimationFrame* currentAnimation;
     };
 }
+#endif

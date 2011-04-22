@@ -1,9 +1,10 @@
 #include <android_native_app_glue.h>
 
 #include "Constants.h"
-#include "png.h"
 #include "Engine.h"
 #include "Runtime.h"
+#include "Image.h"
+#include "png.h"
 
 extern emo::Engine* engine;
 

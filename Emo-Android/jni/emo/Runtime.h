@@ -1,3 +1,6 @@
+#ifndef EMO_RUNTIME_H
+#define EMO_RUNTIME_H
+
 #include <android_native_app_glue.h>
 #include <squirrel.h>
 
@@ -31,3 +34,5 @@ SQInteger emoEnableSensor(HSQUIRRELVM v);
 SQInteger emoDisableSensor(HSQUIRRELVM v);
 SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v);
 SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v);
+
+#endif

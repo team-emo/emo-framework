@@ -4,6 +4,7 @@
 
 #include "Constants.h"
 #include "Engine.h"
+#include "Drawable_glue.h"
 
 extern emo::Engine* engine;
 

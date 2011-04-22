@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "Runtime.h"
+#include "Stage.h"
 
 extern emo::Engine* engine;
 

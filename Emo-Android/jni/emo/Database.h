@@ -1,3 +1,5 @@
+#ifndef EMO_DATABASE_H
+#define EMO_DATABASE_H
 namespace emo {
     class Database {
     public:
@@ -7,3 +9,4 @@ namespace emo {
         std::string createDatabase(std::string name, jint mode);
     };
 }
+#endif

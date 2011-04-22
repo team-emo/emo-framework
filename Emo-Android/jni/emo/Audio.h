@@ -1,3 +1,6 @@
+#ifndef EMO_AUDIO_H
+#define EMO_AUDIO_H
+
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
 #include <squirrel.h>
@@ -74,3 +77,4 @@ SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v);
 SQInteger emoGetAudioChannelState(HSQUIRRELVM v);
 
 SQInteger emoGetAudioChannelCount(HSQUIRRELVM v);
+#endif // EMO_AUDIO_H

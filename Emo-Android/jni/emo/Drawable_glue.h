@@ -1,3 +1,6 @@
+#ifndef EMO_DRAWABLE_GLUE_H
+#define EMO_DRAWABLE_GLUE_H
+
 #include <squirrel.h>
 
 void initDrawableFunctions();
@@ -27,3 +30,5 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v);
 SQInteger emoDrawablePause(HSQUIRRELVM v);
 SQInteger emoDrawableStop(HSQUIRRELVM v);
 SQInteger emoDrawableAnimate(HSQUIRRELVM v);
+
+#endif

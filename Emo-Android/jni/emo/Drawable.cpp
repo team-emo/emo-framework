@@ -4,6 +4,7 @@
 #include "Constants.h"
 #include "Runtime.h"
 #include "Engine.h"
+#include "Database.h"
 
 extern emo::Engine* engine;
 

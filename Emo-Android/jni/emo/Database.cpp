@@ -68,6 +68,4 @@ namespace emo {
 
         return filename;
     }
-
-
 }

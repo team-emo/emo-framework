@@ -1,3 +1,6 @@
+#ifndef EMO_IMAGE_H
+#define EMO_IMAGE_H
+
 #include <string>
 
 namespace emo {
@@ -25,3 +28,5 @@ namespace emo {
 
 bool loadPngSizeFromAsset(const char *fname, int *width, int *height);
 bool loadPngFromAsset(const char *fname, emo::Image* image);
+
+#endif
