@@ -25,4 +25,6 @@
             </intent-filter>
         </activity>
     </application>
+    <!--  Uncomment below if the application needs internet access -->
+    <!-- uses-permission android:name="android.permission.INTERNET" / -->
 </manifest> 

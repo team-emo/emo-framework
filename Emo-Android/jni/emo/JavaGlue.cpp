@@ -52,6 +52,37 @@ std::string javaEcho(std::string echo) {
     return echoValue;
 }
 
+void javaAsyncHttpGetRequest(std::string name, jint timeout, std::string url, std::string method, kvs_t* params) {
+    int count = (params->size() * 2) + 2;
+
+    JNIEnv* env;
+    JavaVM* vm = engine->app->activity->vm;
+
+    vm->AttachCurrentThread(&env, NULL);
+
+    jobjectArray jstrArray= (jobjectArray)env->NewObjectArray(count,
+         env->FindClass("java/lang/String"),
+         env->NewStringUTF(""));
+
+    env->SetObjectArrayElement(jstrArray, 0, env->NewStringUTF(url.c_str()));
+    env->SetObjectArrayElement(jstrArray, 1, env->NewStringUTF(method.c_str()));
+
+    int i = 2;
+    kvs_t::iterator iter;
+    for(iter = params->begin(); iter != params->end(); iter++) {
+        env->SetObjectArrayElement(jstrArray, i, env->NewStringUTF(iter->first.c_str()));
+        i++;
+        env->SetObjectArrayElement(jstrArray, i, env->NewStringUTF(iter->second.c_str()));
+        i++;
+    }
+
+    jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+    jmethodID methodj = env->GetMethodID(clazz, "asyncHttpRequest", "(Ljava/lang/String;I[Ljava/lang/String;)V");
+    env->CallVoidMethod(engine->app->activity->clazz, methodj,  env->NewStringUTF(name.c_str()), timeout, jstrArray);
+
+    vm->DetachCurrentThread();
+}
+
 static int registerNativeMethods(JNIEnv* env, 
                               JNINativeMethod* gMethods, int numMethods) {
 
@@ -93,7 +124,7 @@ void initJavaGlueFunctions() {
 }
 
 /*
- * echo using jni
+ * echo method that uses jni
  */
 SQInteger emoJavaEcho(HSQUIRRELVM v) {
 	const SQChar *str;
@@ -113,4 +144,3 @@ SQInteger emoJavaEcho(HSQUIRRELVM v) {
 	
 	return 1;
 }
-
