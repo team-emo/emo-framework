@@ -114,6 +114,9 @@ namespace emo {
         // init Squirrel VM
         initSQVM(this->sqvm);
 
+        // register activity's native methods
+        registerJavaGlue();
+
         this->loaded  = true;
     }
 
@@ -169,7 +172,6 @@ namespace emo {
 
             this->scriptLoaded = true;
         }
-
         this->onInitGLSurface();
 
         return 0;
