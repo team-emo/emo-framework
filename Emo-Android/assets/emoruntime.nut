@@ -578,3 +578,12 @@ function emo::_onSensorEvent(...) {
     }
 }
 
+function emo::_onCallback(...) {
+    if (emo.rawin("onCallback")) {
+        emo.onCallback(vargv[0], vargv[1]);
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onCallback")) {
+        EMO_RUNTIME_DELEGATE.onCallback(vargv[0], vargv[1]);
+    }
+}

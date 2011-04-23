@@ -88,4 +88,29 @@ bool registerJavaGlue() {
     return result == JNI_TRUE;
 }
 
+void initJavaGlueFunctions() {
+    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoJavaEcho);
+}
+
+/*
+ * echo using jni
+ */
+SQInteger emoJavaEcho(HSQUIRRELVM v) {
+	const SQChar *str;
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+    	if (sq_gettype(v, n) == OT_STRING) {
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &str);
+            sq_poptop(v);
+    	}
+    }
+	
+	if (str != NULL) {
+        std::string value = javaEcho(str);
+		sq_pushstring(v, value.c_str(), -1);
+	}
+	
+	return 1;
+}
 

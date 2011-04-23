@@ -31,7 +31,7 @@ class Level_1 {
     }
 
     function onGainedFocus() {
-        print("Level_1:onGainedFocus"); 
+        print("Level_1:onGainedFocus");
     }
 
     function onLostFocus() {
@@ -47,6 +47,11 @@ class Level_1 {
     function onDrawFrame(dt) {
         print("Level_1:onDrawFrame"); 
 
+    }
+
+    function onCallback(name, value) {
+        print("name: "  + name);
+        print("value: " + value);
     }
 
     function onMotionEvent(motionEvent) {
