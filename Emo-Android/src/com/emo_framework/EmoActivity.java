@@ -29,15 +29,20 @@ public class EmoActivity extends NativeActivity {
     
     public static final String ENGINE_TAG = "EmoFramework";
 
-    protected String lastError;
+    protected String lastErrorMessage;
+    protected String lastErrorType;
     
     public String echo(String str) {
         callback(ECHO, str);
         return str;
     }
     
-    public String getLastError() {
-    	return lastError;
+    public String getLastErrorMessage() {
+    	return lastErrorMessage;
+    }
+    
+    public String getLastErrorType() {
+    	return lastErrorType;
     }
 
     public void asyncHttpRequest(final String name, final int timeout, final String... params) {
@@ -105,6 +110,11 @@ public class EmoActivity extends NativeActivity {
         	}
         }
     }
+    
+    protected void saveError(Exception e) {
+    	lastErrorType    = e.getClass().getName();
+    	lastErrorMessage = e.getMessage();
+    }
 
     public String httpRequestByGET(String url, int timeout) {
         String response = "";
@@ -127,7 +137,7 @@ public class EmoActivity extends NativeActivity {
                 inputStream.close();
             }
         } catch (IOException e) {
-        	lastError = e.getClass().getName() + ": " + e.getMessage();
+        	saveError(e);
             return null;
         }
         return response;
@@ -155,7 +165,7 @@ public class EmoActivity extends NativeActivity {
             }
         	
         } catch (IOException e) {
-        	lastError = e.getClass().getName() + ": " + e.getMessage();
+        	saveError(e);
         	return null;
         }
     	return response;
