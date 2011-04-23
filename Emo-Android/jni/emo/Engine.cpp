@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Runtime.h"
 #include "VmFunc.h"
+#include "JavaGlue.h"
 
 #include <android/window.h>
 #include <jni.h>

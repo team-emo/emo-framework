@@ -8,7 +8,8 @@ EMO_SRC_FILES :=\
 	emo/VmFunc.cpp \
 	emo/Image.cpp \
 	emo/Database.cpp \
-	emo/Util.cpp
+	emo/Util.cpp \
+	emo/JavaGlue.cpp
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/emo
 
