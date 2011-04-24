@@ -361,6 +361,30 @@ class emo.Sprite {
     function green(g = null) { return stage.green(id, g); }
     function blue (b = null) { return stage.blue (id, b); }
 
+    function isLoaded() { return loaded; }
+
+    function getX() { return stage.getX(id); }
+    function getY() { return stage.getY(id); }
+    function getZ() { return stage.getZ(id); }
+    function getWidth()  { return stage.getWidth(id); }
+    function getHeight() { return stage.getHeight(id); }
+
+    function contains(x, y) {
+        return x >= this.getX() && x <= getX() + getWidth() &&
+               y >= this.getY() && y <= getY() + getHeight();
+    }
+
+    function collidesWith(other) {
+        return this.getX() < other.getX() + other.getWidth() && other.getX() < this.getX() + this.getWidth() &&
+            this.getY() < other.getY() + other.getHeight() && other.getY() < this.getY() + this.getHeight();
+    }
+
+    function _cmp(other) {
+        if (this.getId() == other.getId())  return 0;
+        if (this.getId() >  other.getId())  return 1;
+        return -1;
+    }
+
     /*
      * sprite.move(x, y);
      * sprite.move(x, y, z);

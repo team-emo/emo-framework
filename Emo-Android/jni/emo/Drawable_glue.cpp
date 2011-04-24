@@ -14,6 +14,13 @@ void initDrawableFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
+
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getX",           emoDrawableGetX);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getY",           emoDrawableGetY);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getZ",           emoDrawableGetZ);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getWidth",       emoDrawableGetWidth);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getHeight",      emoDrawableGetHeight);
+
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
@@ -624,8 +631,6 @@ SQInteger emoDrawableColorRed(HSQUIRRELVM v) {
         SQFloat color;
         sq_getfloat(v, 3, &color);
         drawable->param_color[0] = color;
-    } else {
-
     }
 
     sq_pushinteger(v, drawable->param_color[0]);
@@ -653,8 +658,6 @@ SQInteger emoDrawableColorGreen(HSQUIRRELVM v) {
         SQFloat color;
         sq_getfloat(v, 3, &color);
         drawable->param_color[1] = color;
-    } else {
-
     }
 
     sq_pushinteger(v, drawable->param_color[1]);
@@ -682,8 +685,6 @@ SQInteger emoDrawableColorBlue(HSQUIRRELVM v) {
         SQFloat color;
         sq_getfloat(v, 3, &color);
         drawable->param_color[2] = color;
-    } else {
-
     }
 
     sq_pushinteger(v, drawable->param_color[2]);
@@ -711,8 +712,6 @@ SQInteger emoDrawableColorAlpha(HSQUIRRELVM v) {
         SQFloat color;
         sq_getfloat(v, 3, &color);
         drawable->param_color[3] = color;
-    } else {
-
     }
 
     sq_pushinteger(v, drawable->param_color[3]);
@@ -858,6 +857,111 @@ SQInteger emoDrawableAnimate(HSQUIRRELVM v) {
     drawable->enableAnimation(true);
     
     sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDrawableGetX(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    sq_pushinteger(v, drawable->x);
+    return 1;
+}
+
+SQInteger emoDrawableGetY(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    sq_pushinteger(v, drawable->y);
+    return 1;
+}
+
+SQInteger emoDrawableGetZ(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    sq_pushinteger(v, drawable->z);
+    return 1;
+}
+
+SQInteger emoDrawableGetWidth(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    sq_pushinteger(v, drawable->width);
+    return 1;
+}
+
+SQInteger emoDrawableGetHeight(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    sq_pushinteger(v, drawable->height);
     return 1;
 }
 
