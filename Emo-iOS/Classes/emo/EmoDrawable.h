@@ -89,7 +89,6 @@
 -(float)getTexCoordEndX;
 -(float)getTexCoordEndY;
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
--(BOOL)animate;
 -(void)pause;
 -(void)stop;
 -(void)addAnimation:(EmoAnimationFrame*)animation;
@@ -98,4 +97,7 @@
 -(BOOL)deleteAnimation:(NSString*)_name;
 -(void)deleteAnimations;
 -(BOOL)enableAnimation:(BOOL)enable;
+-(float)getScaleX;
+-(float)getScaleY;
+-(float)getAngle;
 @end

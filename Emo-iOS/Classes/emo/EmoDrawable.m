@@ -315,6 +315,15 @@ extern EmoEngine* engine;
 -(float)getColor:(NSInteger)index {
 	return param_color[index];
 }
+-(float)getScaleX {
+	return param_scale[0];
+}
+-(float)getScaleY {
+	return param_scale[1];
+}
+-(float)getAngle {
+	return param_rotate[0];
+}
 
 -(void)createTextureBuffer {
     frames_vbos = (GLuint *)malloc(sizeof(GLuint) * frameCount);
@@ -356,11 +365,6 @@ extern EmoEngine* engine;
 	animating = FALSE;
 	
 	return TRUE;
-}
--(BOOL)animate {
-	animating = TRUE;
-	// TODO
-	return animating;
 }
 -(void)pause {
 	animating = FALSE;
