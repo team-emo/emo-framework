@@ -57,12 +57,10 @@ extern EmoEngine* engine;
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-	NSMutableString* desc = [NSMutableString stringWithString:name];
-	[desc appendString:@": "];
-	[desc appendString:[error localizedDescription]];
+	engine.lastErrorDescription = [error localizedDescription];
     callSqFunction_Bool_TwoStrings(engine.sqvm, 
 								   EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, 
-								   "ERROR", [desc UTF8String], SQFalse);
+								   "ERROR", [name UTF8String], SQFalse);
 	[engine removeNetTask:name];
 }
 -(void)dealloc {

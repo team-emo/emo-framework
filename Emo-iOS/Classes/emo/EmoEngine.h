@@ -11,6 +11,7 @@ NSString* data2ns(NSData* data);
 @interface EmoEngine : NSObject<UIAccelerometerDelegate> {
 	HSQUIRRELVM sqvm;
 	NSInteger lastError;
+	NSString* lastErrorDescription;
 	BOOL isFrameInitialized;
 	BOOL isRunning;
 	NSDate* startTime;
@@ -35,6 +36,7 @@ NSString* data2ns(NSData* data);
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readwrite) int  lastError;
+@property (readwrite, copy) NSString* lastErrorDescription;
 @property (readonly) BOOL isFrameInitialized;
 @property (readonly) BOOL isRunning;
 @property (readwrite) BOOL enablePerspectiveNicest;

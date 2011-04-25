@@ -27,6 +27,7 @@ NSString* data2ns(NSData* data) {
 @implementation EmoEngine
 @synthesize sqvm;
 @synthesize lastError;
+@synthesize lastErrorDescription;
 @synthesize isFrameInitialized;
 @synthesize isRunning;
 @synthesize enablePerspectiveNicest;
