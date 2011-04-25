@@ -985,7 +985,7 @@ SQInteger emoDrawableGetScaleX(HSQUIRRELVM v) {
         return 0;
     }
 
-    sq_pushinteger(v, drawable->param_scale[0]);
+    sq_pushfloat(v, drawable->param_scale[0]);
     return 1;
 }
 
@@ -1006,7 +1006,7 @@ SQInteger emoDrawableGetScaleY(HSQUIRRELVM v) {
         return 0;
     }
 
-    sq_pushinteger(v, drawable->param_scale[1]);
+    sq_pushfloat(v, drawable->param_scale[1]);
     return 1;
 }
 
@@ -1027,7 +1027,7 @@ SQInteger emoDrawableGetAngle(HSQUIRRELVM v) {
         return 0;
     }
 
-    sq_pushinteger(v, drawable->param_rotate[0]);
+    sq_pushfloat(v, drawable->param_rotate[0]);
     return 1;
 }
 
