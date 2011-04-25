@@ -1,10 +1,14 @@
 #include "JavaGlue.h"
 #include "Constants.h"
-#include "Engine.h"
 #include "Runtime.h"
 #include "VmFunc.h"
+#include "Engine.h"
 
 extern emo::Engine* engine;
+
+void initJavaGlueFunctions() {
+    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoJavaEcho);
+}
 
 /*
  * Class:     com_emo_framework_EmoActivity
@@ -31,101 +35,97 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_callback
     free(value);
 }
 
-std::string javaEcho(std::string echo) {
-    std::string echoValue;
+namespace emo {
+    std::string JavaGlue::echo(std::string echo) {
+        std::string echoValue;
 
-    JNIEnv* env;
-    JavaVM* vm = engine->app->activity->vm;
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
 
-    vm->AttachCurrentThread(&env, NULL);
+        vm->AttachCurrentThread(&env, NULL);
 
-    jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
-    jmethodID methodj = env->GetMethodID(clazz, "echo", "(Ljava/lang/String;)Ljava/lang/String;");
-    jstring jstr = (jstring)env->CallObjectMethod(engine->app->activity->clazz, methodj,  env->NewStringUTF(echo.c_str()));
-    if (jstr != NULL) {
-        const char* str = env->GetStringUTFChars(jstr, NULL);
-        echoValue = str;
-        env->ReleaseStringUTFChars(jstr, str);
-    }
-    vm->DetachCurrentThread();
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "echo", "(Ljava/lang/String;)Ljava/lang/String;");
+        jstring jstr = (jstring)env->CallObjectMethod(engine->app->activity->clazz, methodj,  env->NewStringUTF(echo.c_str()));
+        if (jstr != NULL) {
+            const char* str = env->GetStringUTFChars(jstr, NULL);
+            echoValue = str;
+            env->ReleaseStringUTFChars(jstr, str);
+        }
+        vm->DetachCurrentThread();
 
-    return echoValue;
-}
-
-void javaAsyncHttpGetRequest(std::string name, jint timeout, std::string url, std::string method, kvs_t* params) {
-    int count = (params->size() * 2) + 2;
-
-    JNIEnv* env;
-    JavaVM* vm = engine->app->activity->vm;
-
-    vm->AttachCurrentThread(&env, NULL);
-
-    jobjectArray jstrArray= (jobjectArray)env->NewObjectArray(count,
-         env->FindClass("java/lang/String"),
-         env->NewStringUTF(""));
-
-    env->SetObjectArrayElement(jstrArray, 0, env->NewStringUTF(url.c_str()));
-    env->SetObjectArrayElement(jstrArray, 1, env->NewStringUTF(method.c_str()));
-
-    int i = 2;
-    kvs_t::iterator iter;
-    for(iter = params->begin(); iter != params->end(); iter++) {
-        env->SetObjectArrayElement(jstrArray, i, env->NewStringUTF(iter->first.c_str()));
-        i++;
-        env->SetObjectArrayElement(jstrArray, i, env->NewStringUTF(iter->second.c_str()));
-        i++;
+        return echoValue;
     }
 
-    jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
-    jmethodID methodj = env->GetMethodID(clazz, "asyncHttpRequest", "(Ljava/lang/String;I[Ljava/lang/String;)V");
-    env->CallVoidMethod(engine->app->activity->clazz, methodj,  env->NewStringUTF(name.c_str()), timeout, jstrArray);
+    void JavaGlue::asyncHttpGetRequest(std::string name, jint timeout, std::string url, std::string method, kvs_t* params) {
+        int count = (params->size() * 2) + 2;
 
-    vm->DetachCurrentThread();
-}
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
 
-static int registerNativeMethods(JNIEnv* env, 
+        vm->AttachCurrentThread(&env, NULL);
+
+        jobjectArray jstrArray= (jobjectArray)env->NewObjectArray(count,
+             env->FindClass("java/lang/String"),
+             env->NewStringUTF(""));
+
+        env->SetObjectArrayElement(jstrArray, 0, env->NewStringUTF(url.c_str()));
+        env->SetObjectArrayElement(jstrArray, 1, env->NewStringUTF(method.c_str()));
+
+        int i = 2;
+        kvs_t::iterator iter;
+        for(iter = params->begin(); iter != params->end(); iter++) {
+            env->SetObjectArrayElement(jstrArray, i, env->NewStringUTF(iter->first.c_str()));
+            i++;
+            env->SetObjectArrayElement(jstrArray, i, env->NewStringUTF(iter->second.c_str()));
+            i++;
+        }
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "asyncHttpRequest", "(Ljava/lang/String;I[Ljava/lang/String;)V");
+        env->CallVoidMethod(engine->app->activity->clazz, methodj,  env->NewStringUTF(name.c_str()), timeout, jstrArray);
+
+        vm->DetachCurrentThread();
+    }
+
+
+    int JavaGlue::registerNativeMethods(JNIEnv* env, 
                               JNINativeMethod* gMethods, int numMethods) {
 
-    jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
 
-    if (clazz == NULL) {
-        return JNI_FALSE;
-    } else  if (env->RegisterNatives(clazz, gMethods, numMethods) < 0) {
-        return JNI_FALSE;
+        if (clazz == NULL) {
+            return JNI_FALSE;
+        } else  if (env->RegisterNatives(clazz, gMethods, numMethods) < 0) {
+            return JNI_FALSE;
+        }
+
+        return JNI_TRUE;
+
     }
 
-    return JNI_TRUE;
+    bool JavaGlue::registerJavaGlue() {
 
-}
-
-static JNINativeMethod methods[] = {
-
-    { "callback", "(Ljava/lang/String;Ljava/lang/String;)V",
+        JNINativeMethod methods[] = {
+            { "callback", "(Ljava/lang/String;Ljava/lang/String;)V",
                   (void *)Java_com_emo_1framework_EmoActivity_callback }
 
-};
+        };
 
-bool registerJavaGlue() {
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+        vm->AttachCurrentThread(&env, NULL);
 
-    JNIEnv* env;
-    JavaVM* vm = engine->app->activity->vm;
-    vm->AttachCurrentThread(&env, NULL);
-
-    int result = registerNativeMethods(env, 
+        int result = registerNativeMethods(env, 
                              methods, sizeof(methods) / sizeof(methods[0]));
 
-    vm->DetachCurrentThread();
+        vm->DetachCurrentThread();
 
-    return result == JNI_TRUE;
+        return result == JNI_TRUE;
+    }
 }
 
-void initJavaGlueFunctions() {
-    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoJavaEcho);
-}
 
-/*
- * echo method that uses jni
- */
 SQInteger emoJavaEcho(HSQUIRRELVM v) {
 	const SQChar *str;
     SQInteger nargs = sq_gettop(v);
@@ -138,9 +138,10 @@ SQInteger emoJavaEcho(HSQUIRRELVM v) {
     }
 	
 	if (str != NULL) {
-        std::string value = javaEcho(str);
+        std::string value = engine->javaGlue->echo(str);
 		sq_pushstring(v, value.c_str(), -1);
 	}
 	
 	return 1;
 }
+

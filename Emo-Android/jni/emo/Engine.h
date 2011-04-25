@@ -11,15 +11,13 @@
 #include "squirrel.h"
 
 #include "Constants.h"
+#include "Types.h"
 #include "Stage.h"
 #include "Drawable.h"
 #include "Drawable_glue.h"
 #include "Audio.h"
 #include "Database.h"
-#include "Engine.h"
-
-typedef std::hash_map <std::string, std::string> kvs_t;
-typedef std::hash_map <std::string, emo::Drawable *> drawables_t;
+#include "JavaGlue.h"
 
 namespace emo {
     class Engine {
@@ -87,6 +85,7 @@ namespace emo {
         Audio* audio;
         Stage* stage;
         Database* database;
+        JavaGlue* javaGlue;
         timeb uptime;
 
         int32_t onDrawFrameInterval;

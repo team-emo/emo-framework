@@ -1,7 +1,6 @@
 #include "Engine.h"
 #include "Runtime.h"
 #include "VmFunc.h"
-#include "JavaGlue.h"
 
 #include <android/window.h>
 #include <jni.h>
@@ -20,6 +19,7 @@ namespace emo {
         delete this->drawables;
         delete this->drawablesToRemove;
         delete this->database;
+        delete this->javaGlue;
     }
 
     void Engine::initScriptFunctions() {
@@ -104,6 +104,9 @@ namespace emo {
         // create database instance
         database = new Database();
 
+        // create JavaGlue instance
+        javaGlue = new JavaGlue();
+
         this->focused = false;
         this->loadedCalled = false;
         this->initialized  = false;
@@ -116,7 +119,7 @@ namespace emo {
         initSQVM(this->sqvm);
 
         // register activity's native methods
-        registerJavaGlue();
+        this->javaGlue->registerJavaGlue();
 
         this->loaded  = true;
     }
