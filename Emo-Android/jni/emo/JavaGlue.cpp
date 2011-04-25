@@ -8,6 +8,9 @@ extern emo::Engine* engine;
 
 void initJavaGlueFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoJavaEcho);
+
+    engine->registerClass(engine->sqvm, EMO_NET_CLASS);
+    engine->registerClassFunc(engine->sqvm, EMO_NET_CLASS, "request",   emoJavaAsyncHttpRequest);
 }
 
 /*
@@ -57,7 +60,7 @@ namespace emo {
         return echoValue;
     }
 
-    void JavaGlue::asyncHttpGetRequest(std::string name, jint timeout, std::string url, std::string method, kvs_t* params) {
+    void JavaGlue::asyncHttpRequest(std::string name, jint timeout, std::string url, std::string method, kvs_t* params) {
         int count = (params->size() * 2) + 2;
 
         JNIEnv* env;
@@ -142,6 +145,71 @@ SQInteger emoJavaEcho(HSQUIRRELVM v) {
 		sq_pushstring(v, value.c_str(), -1);
 	}
 	
+	return 1;
+}
+
+SQInteger emoJavaAsyncHttpRequest(HSQUIRRELVM v) {
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    const SQChar* url;
+    const SQChar* method;
+    SQInteger timeout = 5000;
+
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_STRING) {
+        sq_tostring(v, 3);
+        sq_getstring(v, -1, &url);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    if (nargs >= 4 && sq_gettype(v, 4) == OT_STRING) {
+        sq_tostring(v, 4);
+        sq_getstring(v, -1, &method);
+        sq_poptop(v);
+    } else {
+        method = "GET";
+    }
+
+    if (nargs >= 5 && sq_gettype(v, 5) == OT_INTEGER) {
+        sq_getinteger(v, 5, &timeout);
+    }
+
+    kvs_t* params = new kvs_t();
+    std::string param_key;
+    for(SQInteger n = 6; n <= nargs; n++) {
+
+        const SQChar* param;
+        sq_tostring(v, n);
+        sq_getstring(v, -1, &param);
+        sq_poptop(v);
+
+        if (n % 2 == 0) {
+            param_key = param;
+        } else if (!param_key.empty()) {
+            params->insert(std::make_pair(param_key, param));
+            param_key.clear();
+        }
+    }
+
+	if (url != NULL) {
+        engine->javaGlue->asyncHttpRequest(name, timeout, url, method, params);
+	}
+	
+
+    delete params;
+
+    sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
 

@@ -20,11 +20,12 @@ namespace emo {
     class JavaGlue {
     public:
         std::string echo(std::string echo);
-        void asyncHttpGetRequest(std::string name, jint timeout, std::string url, std::string method, kvs_t* params);
+        void asyncHttpRequest(std::string name, jint timeout, std::string url, std::string method, kvs_t* params);
         bool registerJavaGlue();
         int registerNativeMethods(JNIEnv* env, JNINativeMethod* gMethods, int numMethods);
     };
 }
 
 SQInteger emoJavaEcho(HSQUIRRELVM v);
+SQInteger emoJavaAsyncHttpRequest(HSQUIRRELVM v);
 #endif
