@@ -369,6 +369,11 @@ class emo.Sprite {
     function getWidth()  { return stage.getWidth(id); }
     function getHeight() { return stage.getHeight(id); }
 
+    function getScale()  { return stage.getScaleX(id); }
+    function getScaleX() { return stage.getScaleX(id); }
+    function getScaleY() { return stage.getScaleY(id); }
+    function getAngle()  { return stage.getAngle(id); }
+
     function contains(x, y) {
         return x >= this.getX() && x <= getX() + getWidth() &&
                y >= this.getY() && y <= getY() + getHeight();

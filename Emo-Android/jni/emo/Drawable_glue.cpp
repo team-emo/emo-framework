@@ -20,6 +20,9 @@ void initDrawableFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getZ",           emoDrawableGetZ);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getWidth",       emoDrawableGetWidth);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getHeight",      emoDrawableGetHeight);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getScaleX",      emoDrawableGetScaleX);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getScaleY",      emoDrawableGetScaleY);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getAngle",       emoDrawableGetAngle);
 
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
@@ -962,6 +965,69 @@ SQInteger emoDrawableGetHeight(HSQUIRRELVM v) {
     }
 
     sq_pushinteger(v, drawable->height);
+    return 1;
+}
+
+SQInteger emoDrawableGetScaleX(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    sq_pushinteger(v, drawable->param_scale[0]);
+    return 1;
+}
+
+SQInteger emoDrawableGetScaleY(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    sq_pushinteger(v, drawable->param_scale[1]);
+    return 1;
+}
+
+SQInteger emoDrawableGetAngle(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    sq_pushinteger(v, drawable->param_rotate[0]);
     return 1;
 }
 

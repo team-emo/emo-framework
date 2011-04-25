@@ -361,6 +361,35 @@ class emo.Sprite {
     function green(g = null) { return stage.green(id, g); }
     function blue (b = null) { return stage.blue (id, b); }
 
+    function isLoaded() { return loaded; }
+
+    function getX() { return stage.getX(id); }
+    function getY() { return stage.getY(id); }
+    function getZ() { return stage.getZ(id); }
+    function getWidth()  { return stage.getWidth(id); }
+    function getHeight() { return stage.getHeight(id); }
+
+    function getScale()  { return stage.getScaleX(id); }
+    function getScaleX() { return stage.getScaleX(id); }
+    function getScaleY() { return stage.getScaleY(id); }
+    function getAngle()  { return stage.getAngle(id); }
+
+    function contains(x, y) {
+        return x >= this.getX() && x <= getX() + getWidth() &&
+               y >= this.getY() && y <= getY() + getHeight();
+    }
+
+    function collidesWith(other) {
+        return this.getX() < other.getX() + other.getWidth() && other.getX() < this.getX() + this.getWidth() &&
+            this.getY() < other.getY() + other.getHeight() && other.getY() < this.getY() + this.getHeight();
+    }
+
+    function _cmp(other) {
+        if (this.getId() == other.getId())  return 0;
+        if (this.getId() >  other.getId())  return 1;
+        return -1;
+    }
+
     /*
      * sprite.move(x, y);
      * sprite.move(x, y, z);
@@ -578,3 +607,12 @@ function emo::_onSensorEvent(...) {
     }
 }
 
+function emo::_onCallback(...) {
+    if (emo.rawin("onCallback")) {
+        emo.onCallback(vargv[0], vargv[1]);
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onCallback")) {
+        EMO_RUNTIME_DELEGATE.onCallback(vargv[0], vargv[1]);
+    }
+}
