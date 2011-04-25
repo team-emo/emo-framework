@@ -1,5 +1,21 @@
 #import "squirrel.h"
 
+@interface EmoNetTask : NSObject
+{
+	NSURLConnection* connection;
+	NSMutableData* content;
+
+	NSString* name;
+	NSInteger timeout;
+	NSString* method;
+}
+@property (readwrite, copy) NSString* name;
+@property (readwrite, copy) NSString* method;
+@property (readwrite) NSInteger timeout;
+
+-(void)asyncHttpRequest:(NSString*)url withParam:(NSMutableDictionary*)params;
+@end
+
 void initRuntimeFunctions();
 
 void registerEmoClass(HSQUIRRELVM v, const char *cname);
@@ -20,3 +36,5 @@ SQInteger emoRuntimeLogInfo(HSQUIRRELVM v);
 SQInteger emoRuntimeLogError(HSQUIRRELVM v);
 SQInteger emoRuntimeLogWarn(HSQUIRRELVM v);
 SQInteger emoRuntimeFinish(HSQUIRRELVM v);
+
+SQInteger emoAsyncHttpRequest(HSQUIRRELVM v);

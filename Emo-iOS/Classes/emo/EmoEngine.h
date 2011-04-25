@@ -3,6 +3,10 @@
 #import "EmoAudio.h"
 #import "EmoDrawable.h"
 #import "EmoStage.h"
+#import "EmoRuntime.h"
+
+NSString* char2ns(const SQChar* str);
+NSString* data2ns(NSData* data);
 
 @interface EmoEngine : NSObject<UIAccelerometerDelegate> {
 	HSQUIRRELVM sqvm;
@@ -27,6 +31,7 @@
 	EmoStage* stage;
 	
 	NSMutableDictionary* drawables;
+	NSMutableDictionary* netTasks;
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readwrite) int  lastError;
@@ -59,6 +64,9 @@
 - (EmoDrawable*)getDrawable:(const char*)key;
 - (void)clearDrawables;
 - (BOOL)removeDrawable:(const char*)key;
+
+-(EmoNetTask*)createNetTask:(NSString*)taskName;
+-(void)removeNetTask:(NSString*)taskName;
 
 - (NSTimeInterval)uptime;
 @end

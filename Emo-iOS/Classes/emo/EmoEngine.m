@@ -7,6 +7,16 @@
 #import "EmoEngine.h"
 #import "EmoDrawable.h"
 
+
+NSString* char2ns(const SQChar* str) {
+	return [NSString stringWithCString:(char*)str 
+							  encoding:NSUTF8StringEncoding];
+}
+
+NSString* data2ns(NSData* data) {
+	return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+}
+
 @interface EmoEngine (PrivateMethods)
 - (void)initEngine;
 - (void)updateEngineStatus;
@@ -53,6 +63,7 @@
 	audioManager = [[EmoAudioManager alloc]init];
 	drawables    = [[NSMutableDictionary alloc]init];
 	stage        = [[EmoStage alloc]init];
+	netTasks     = [[NSMutableDictionary alloc]init];
 	
 	[stage setSize:width height:height];
 	
@@ -100,6 +111,9 @@
 	stage = nil;
 	
 	[startTime release];
+	
+	[netTasks release];
+	netTasks = nil;
 	
 	return TRUE;
 }
@@ -347,12 +361,12 @@
 }
 
 - (EmoDrawable*)getDrawable:(const char*)key {
-	return [drawables objectForKey:[NSString stringWithCString:(char*)key 
-													  encoding:NSUTF8StringEncoding]];
+	return [drawables objectForKey:char2ns(key)];
 }
+
 -(BOOL)removeDrawable:(const char*)key {
-	NSString* _key = [NSString stringWithCString:(char*)key 
-										encoding:NSUTF8StringEncoding];
+	NSString* _key = char2ns(key);
+
 	[_key retain];
 	EmoDrawable* drawable = [drawables objectForKey:_key];
 	[drawable doUnload];
@@ -374,7 +388,22 @@
 }
 
 -(void)addDrawable:(EmoDrawable*)drawable withKey:(const char*)key {
-	[drawables setObject:drawable forKey: [NSString stringWithCString:(char*)key 
-															 encoding:NSUTF8StringEncoding]];
+	[drawables setObject:drawable forKey: char2ns(key)];
 }
+
+-(EmoNetTask*)createNetTask:(NSString*)taskName {
+	EmoNetTask* net = [[EmoNetTask alloc] init];
+	net.name = taskName;
+	
+	[netTasks setObject:net forKey:taskName];
+	
+	return net;
+}
+
+-(void)removeNetTask:(NSString*)taskName {
+	EmoNetTask* netTask = [netTasks objectForKey:taskName];
+	[netTask release];
+	[netTasks removeObjectForKey:taskName];
+}
+
 @end

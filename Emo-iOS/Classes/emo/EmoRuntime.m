@@ -6,9 +6,74 @@
 
 extern EmoEngine* engine;
 
+@implementation EmoNetTask
+@synthesize name, method;
+@synthesize timeout;
+
+-(void)asyncHttpRequest:(NSString*)baseUrl withParam:(NSMutableDictionary*)params {
+	
+	NSMutableString* paramsAsStr = [NSMutableString string];
+	
+	int count = 0;
+	for (NSString* key in params) {
+		count++;
+		[paramsAsStr appendString:key];
+		[paramsAsStr appendString:@"="];
+		[paramsAsStr appendString:[params objectForKey:key]];
+		if (count < [params count]) {
+			[paramsAsStr appendString:@"&"];
+		}
+	}
+
+	NSMutableString* url = [NSMutableString stringWithString:baseUrl];
+	if ([method isEqualToString:@"GET"] && [params count] > 0) {
+		[url appendString:@"?"];
+		[url appendString:paramsAsStr];
+	}
+	
+	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+	if ([method isEqualToString:@"POST"]) {
+		NSData* requestData = [paramsAsStr dataUsingEncoding:NSUTF8StringEncoding];
+		[request setHTTPMethod: @"POST"];
+		[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+		[request setHTTPBody: requestData];
+	}
+   	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+}
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+	content = [[NSMutableData alloc] initWithData:0];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+	[content appendData:data];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+	NSString* response = data2ns(content);
+    callSqFunction_Bool_TwoStrings(engine.sqvm, 
+			EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, 
+				[name UTF8String], [response UTF8String], SQFalse);
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+	NSString* description = [error localizedDescription];
+    callSqFunction_Bool_TwoStrings(engine.sqvm, 
+								   EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, 
+								   "ERROR", [description UTF8String], SQFalse);
+	
+}
+-(void)dealloc {
+	[connection release];
+	[content release];
+	[super dealloc];
+}
+@end
+
 void initRuntimeFunctions() {
 	registerEmoClass(engine.sqvm, EMO_RUNTIME_CLASS);
 	registerEmoClass(engine.sqvm, EMO_EVENT_CLASS);
+    registerEmoClass(engine.sqvm, EMO_NET_CLASS);
+	
 	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
 	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
 	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
@@ -24,6 +89,9 @@ void initRuntimeFunctions() {
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+
+    registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoRuntimeEcho);	
+    registerEmoClassFunc(engine.sqvm, EMO_NET_CLASS,     "request",      emoAsyncHttpRequest);
 }
 
 /*
@@ -296,4 +364,76 @@ SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
 SQInteger emoRuntimeGetOSName(HSQUIRRELVM v) {
     sq_pushstring(v, OS_IOS, -1);
     return 1;
+}
+
+/*
+ * Asynchronous http request
+ */
+SQInteger emoAsyncHttpRequest(HSQUIRRELVM v) {
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+		
+    const SQChar* url;
+    const SQChar* method;
+    SQInteger timeout = 5000;
+	
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_STRING) {
+        sq_tostring(v, 3);
+        sq_getstring(v, -1, &url);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    if (nargs >= 4 && sq_gettype(v, 4) == OT_STRING) {
+        sq_tostring(v, 4);
+        sq_getstring(v, -1, &method);
+        sq_poptop(v);
+    } else {
+        method = "GET";
+    }
+	
+    if (nargs >= 5 && sq_gettype(v, 5) == OT_INTEGER) {
+        sq_getinteger(v, 5, &timeout);
+    }
+	
+	NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+	NSString* param_key;
+    for(SQInteger n = 6; n <= nargs; n++) {
+		
+        const SQChar* param;
+        sq_tostring(v, n);
+        sq_getstring(v, -1, &param);
+        sq_poptop(v);
+		
+		NSString* paramStr = char2ns(param);
+		
+        if (n % 2 == 0) {
+			param_key = paramStr;
+        } else if ([param_key length] > 0) {
+            [params setObject:paramStr forKey:param_key];
+        }
+    }
+	
+	if (url != NULL) {
+		EmoNetTask* net = [engine createNetTask:char2ns(name)];
+		net.method = char2ns(method);
+		net.timeout = timeout;
+		
+        [net asyncHttpRequest: char2ns(url) withParam:params];
+	}
+
+	[params release];
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
 }
