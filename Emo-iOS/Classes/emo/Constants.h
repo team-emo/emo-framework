@@ -16,6 +16,7 @@
 #define EMO_EVENT_CLASS    "Event"
 #define EMO_STAGE_CLASS    "Stage"
 #define EMO_AUDIO_CLASS    "Audio"
+#define EMO_NET_CLASS      "Net"
 
 #define EMO_FUNC_ONLOAD         "_onLoad"
 #define EMO_FUNC_ONGAINED_FOUCS "_onGainedFocus"
@@ -27,6 +28,7 @@
 #define EMO_FUNC_MOTIONEVENT    "_onMotionEvent"
 #define EMO_FUNC_KEYEVENT       "_onKeyEvent"
 #define EMO_FUNC_SENSOREVENT    "_onSensorEvent"
+#define EMO_FUNC_ONCALLBACK     "_onCallback"
 
 #define MOTION_EVENT_PARAMS_SIZE 8
 #define KEY_EVENT_PARAMS_SIZE    8
