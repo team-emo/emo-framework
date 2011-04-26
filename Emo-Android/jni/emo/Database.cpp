@@ -207,7 +207,7 @@ namespace emo {
         bool result = this->openOrCreate(DEFAULT_DATABASE_NAME, FILE_MODE_PRIVATE);
         if (!result) return false;
 
-        char* sql = sqlite3_mprintf("CREATE TABLE IF NOT EXISTS %q (KEY TEXT, VALUE TEXT)", PREFERENCE_TABLE_NAME);
+        char* sql = sqlite3_mprintf("CREATE TABLE IF NOT EXISTS %q (KEY TEXT PRIMARY KEY, VALUE TEXT)", PREFERENCE_TABLE_NAME);
         int rcode = this->exec(sql);
         sqlite3_free(sql);
 
