@@ -3,8 +3,11 @@
 
 #include <string>
 #include <vector>
-#include <sqlite3.h>
 #include <jni.h>
+#include "sqlite3.h"
+#include "squirrel.h"
+
+void initDatabaseFunctions();
 
 namespace emo {
     class Database {
@@ -15,21 +18,35 @@ namespace emo {
         std::string create(std::string name, jint mode);
         int lastError;
         std::string lastErrorMessage;
-        bool openOrCreate(std::string name);
+        bool openOrCreate(std::string name, jint mode);
         bool open(std::string name);
-        int  exec(std::string sql);
-        int  exec_count(std::string sql, int* count);
-        int  query_vector(std::string sql, std::vector<std::string>* values);
         bool close();
+        bool deleteDatabase(std::string name);
         bool openOrCreatePreference();
         bool openPreference();
-        std::string getPreference(std::string key, bool forceClose);
-        bool setPreference(std::string key, std::string value, bool forceClose);
-        std::vector<std::string> getPreferenceKeys(std::string key, bool forceClose);
-        bool deletePreference(std::string key, bool forceClose);
+        std::string getPreference(std::string key);
+        bool setPreference(std::string key, std::string value);
+        std::vector<std::string> getPreferenceKeys(std::string key);
+        bool deletePreference(std::string key);
     protected:
         sqlite3* db;
         bool isOpen;
+        int  exec(std::string sql);
+        int  exec_count(std::string sql, int* count);
+        int  query_vector(std::string sql, std::vector<std::string>* values);
     };
 }
+
+SQInteger emoDatabaseOpenOrCreate(HSQUIRRELVM v);
+SQInteger emoDatabaseOpen(HSQUIRRELVM v);
+SQInteger emoDatabaseClose(HSQUIRRELVM v);
+SQInteger emoDatabaseGetPath(HSQUIRRELVM v);
+SQInteger emoDatabaseGetLastError(HSQUIRRELVM v);
+SQInteger emoDatabaseGetLastErrorMessage(HSQUIRRELVM v);
+SQInteger emoDatabaseOpenPreference(HSQUIRRELVM v);
+SQInteger emoDatabaseOpenOrCreatePreference(HSQUIRRELVM v);
+SQInteger emoDatabaseGetPreference(HSQUIRRELVM v);
+SQInteger emoDatabaseSetPreference(HSQUIRRELVM v);
+SQInteger emoDatabaseDeletePreference(HSQUIRRELVM v);
+SQInteger emoDatabaseDeleteDatabase(HSQUIRRELVM v);
 #endif

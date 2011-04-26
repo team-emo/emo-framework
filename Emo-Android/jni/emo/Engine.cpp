@@ -29,6 +29,7 @@ namespace emo {
         initDrawableFunctions();
         initAudioFunctions();
         initJavaGlueFunctions();
+        initDatabaseFunctions();
     }
 
     int32_t Engine::event_handle_input(android_app* app, AInputEvent* event) {

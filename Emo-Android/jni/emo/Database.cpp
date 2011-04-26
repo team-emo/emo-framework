@@ -9,6 +9,27 @@
 
 extern emo::Engine* engine;
 
+
+void initDatabaseFunctions() {
+    engine->registerClass(engine->sqvm, EMO_DATABASE_CLASS);
+    engine->registerClass(engine->sqvm, EMO_PREFERENCE_CLASS);
+
+    engine->registerClassFunc(engine->sqvm, EMO_DATABASE_CLASS, "openOrCreate", emoDatabaseOpenOrCreate);
+    engine->registerClassFunc(engine->sqvm, EMO_DATABASE_CLASS, "open",         emoDatabaseOpen);
+    engine->registerClassFunc(engine->sqvm, EMO_DATABASE_CLASS, "close",        emoDatabaseClose);
+    engine->registerClassFunc(engine->sqvm, EMO_DATABASE_CLASS, "getPath",      emoDatabaseGetPath);
+    engine->registerClassFunc(engine->sqvm, EMO_DATABASE_CLASS, "getLastError", emoDatabaseGetLastError);
+    engine->registerClassFunc(engine->sqvm, EMO_DATABASE_CLASS, "getLastErrorMessage", emoDatabaseGetLastErrorMessage);
+    engine->registerClassFunc(engine->sqvm, EMO_DATABASE_CLASS, "deleteDatabase", emoDatabaseDeleteDatabase);
+
+    engine->registerClassFunc(engine->sqvm, EMO_PREFERENCE_CLASS, "open",         emoDatabaseOpenPreference);
+    engine->registerClassFunc(engine->sqvm, EMO_PREFERENCE_CLASS, "openOrCreate", emoDatabaseOpenOrCreatePreference);
+    engine->registerClassFunc(engine->sqvm, EMO_PREFERENCE_CLASS, "get",          emoDatabaseGetPreference);
+    engine->registerClassFunc(engine->sqvm, EMO_PREFERENCE_CLASS, "set",          emoDatabaseSetPreference);
+    engine->registerClassFunc(engine->sqvm, EMO_PREFERENCE_CLASS, "del",          emoDatabaseDeletePreference);
+    engine->registerClassFunc(engine->sqvm, EMO_PREFERENCE_CLASS, "close",        emoDatabaseClose);
+}
+
 static int database_preference_callback(void *arg, int argc, char **argv, char **column)  {
     std::string* value = (std::string*)arg;
     if (argc > 0) *value = argv[0];
@@ -75,7 +96,7 @@ namespace emo {
         vm->AttachCurrentThread(&env, NULL);
 
         jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
-        jmethodID methodj = env->GetMethodID(clazz, "openOrCreateDatabase", "(Ljava/lang/String;ILandroid/database/sqlite/SQLiteDatabase/CursorFactory;)Landroid/database/sqlite/SQLiteDatabase;");
+        jmethodID methodj = env->GetMethodID(clazz, "openOrCreateDatabase", "(Ljava/lang/String;ILandroid/database/sqlite/SQLiteDatabase$CursorFactory;)Landroid/database/sqlite/SQLiteDatabase;");
         jobject jdb = env->CallObjectMethod(engine->app->activity->clazz, methodj,  env->NewStringUTF(name.c_str()), mode, NULL);
         if (jdb != NULL) {
             clazz = env->GetObjectClass(jdb);
@@ -94,10 +115,24 @@ namespace emo {
         return filename;
     }
 
-    bool Database::openOrCreate(std::string name) {
+    bool Database::deleteDatabase(std::string name) {
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+        
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "deleteDatabase", "(Ljava/lang/String;)Z");
+        jboolean deleted = env->CallBooleanMethod(engine->app->activity->clazz, methodj, env->NewStringUTF(name.c_str()));
+        vm->DetachCurrentThread();
+
+        return deleted;
+    }
+
+    bool Database::openOrCreate(std::string name, jint mode) {
         if (this->isOpen) return false;
         
-        std::string path = this->create(name, FILE_MODE_PRIVATE);
+        std::string path = this->create(name, mode);
         
         int rcode = sqlite3_open(path.c_str(), &this->db);
         
@@ -169,17 +204,29 @@ namespace emo {
     }
 
     bool Database::openOrCreatePreference() {
-        return this->openOrCreate(DEFAULT_DATABASE_NAME);
+        bool result = this->openOrCreate(DEFAULT_DATABASE_NAME, FILE_MODE_PRIVATE);
+        if (!result) return false;
+
+        char* sql = sqlite3_mprintf("CREATE TABLE IF NOT EXISTS %q (KEY TEXT, VALUE TEXT)", PREFERENCE_TABLE_NAME);
+        int rcode = this->exec(sql);
+        sqlite3_free(sql);
+
+        return rcode == SQLITE_OK;
     }
 
     bool Database::openPreference() {
         return this->open(DEFAULT_DATABASE_NAME);
     }
 
-    std::string Database::getPreference(std::string key, bool forceClose) {
-        if (!this->isOpen) return false;
-        std::string value;
+    std::string Database::getPreference(std::string key) {
+        bool forceClose = false;
 
+        if (!this->isOpen) {
+            this->openOrCreatePreference();
+            forceClose = true;
+        }
+
+        std::string value;
         char* sql = sqlite3_mprintf("SELECT VALUE FROM %q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, key.c_str());
 
         char* error;
@@ -189,6 +236,7 @@ namespace emo {
             this->lastErrorMessage = error;
             sqlite3_free(error);
         }
+        sqlite3_free(sql);
 
         if (forceClose) {
             this->close();
@@ -196,8 +244,12 @@ namespace emo {
         return value;
     }
 
-    bool Database::setPreference(std::string key, std::string value, bool forceClose) {
-        if (!this->isOpen) return false;
+    bool Database::setPreference(std::string key, std::string value) {
+        bool forceClose = false;
+        if (!this->isOpen) {
+            this->openOrCreatePreference();
+            forceClose = true;
+        }
 
         int count;
         char *csql = sqlite3_mprintf("SELECT COUNT(*) FROM %q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, key.c_str());
@@ -222,10 +274,14 @@ namespace emo {
         return rcode == SQLITE_OK;
     }
 
-    std::vector<std::string> Database::getPreferenceKeys(std::string key, bool forceClose) {
-        std::vector<std::string> keys;
-        if (!this->isOpen) return keys;
+    std::vector<std::string> Database::getPreferenceKeys(std::string key) {
+        bool forceClose = false;
+        if (!this->isOpen) {
+            this->openOrCreatePreference();
+            forceClose = true;
+        }
 
+        std::vector<std::string> keys;
         char *sql = sqlite3_mprintf("SELECT KEY FROM %q", PREFERENCE_TABLE_NAME);
         query_vector(sql, &keys);
         sqlite3_free(sql);
@@ -236,8 +292,12 @@ namespace emo {
         return keys;
     }
 
-    bool Database::deletePreference(std::string key, bool forceClose) {
-        if (!this->isOpen) return false;
+    bool Database::deletePreference(std::string key) {
+        bool forceClose = false;
+        if (!this->isOpen) {
+            this->openOrCreatePreference();
+            forceClose = true;
+        }
 
         char *sql = sqlite3_mprintf("DELETE FROM %q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, key.c_str());
         int rcode = this->exec(sql);
@@ -250,3 +310,199 @@ namespace emo {
     }
 
 }
+SQInteger emoDatabaseOpenOrCreate(HSQUIRRELVM v) {
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    SQInteger mode = FILE_MODE_PRIVATE;
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_INTEGER) {
+        sq_getinteger(v, 3, &mode);
+    }
+
+    if (!engine->database->openOrCreate(name, mode)) {
+        sq_pushinteger(v, ERR_DATABASE_OPEN);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDatabaseOpen(HSQUIRRELVM v) {
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    if (!engine->database->open(name)) {
+        sq_pushinteger(v, ERR_DATABASE_OPEN);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDatabaseClose(HSQUIRRELVM v) {
+    if (!engine->database->close()) {
+        sq_pushinteger(v, ERR_DATABASE_CLOSE);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDatabaseGetPath(HSQUIRRELVM v) {
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    const char* path = engine->database->getPath(name).c_str();
+
+    sq_pushstring(v, path, strlen(path));
+
+    return 1;
+}
+
+SQInteger emoDatabaseGetLastError(HSQUIRRELVM v) {
+    sq_pushinteger(v, engine->database->lastError);
+    return 1;
+}
+
+SQInteger emoDatabaseGetLastErrorMessage(HSQUIRRELVM v) {
+    const char* str = engine->database->lastErrorMessage.c_str();
+    sq_pushstring(v, str, strlen(str));
+    return 1;
+}
+
+SQInteger emoDatabaseOpenPreference(HSQUIRRELVM v) {
+    if (!engine->database->openPreference()) {
+        sq_pushinteger(v, ERR_DATABASE_OPEN);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDatabaseOpenOrCreatePreference(HSQUIRRELVM v) {
+    if (!engine->database->openOrCreatePreference()) {
+        sq_pushinteger(v, ERR_DATABASE_OPEN);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDatabaseGetPreference(HSQUIRRELVM v) {
+    const SQChar* key;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &key);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    const char* str = engine->database->getPreference(key).c_str();
+
+    sq_pushstring(v, str, strlen(str));
+    return 1;
+}
+
+SQInteger emoDatabaseSetPreference(HSQUIRRELVM v) {
+    const SQChar* key;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &key);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    const SQChar* value;
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_STRING) {
+        sq_tostring(v, 3);
+        sq_getstring(v, -1, &value);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    if (!engine->database->setPreference(key, value)) {
+        sq_pushinteger(v, ERR_DATABASE);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDatabaseDeleteDatabase(HSQUIRRELVM v) {
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+    if (!engine->database->deleteDatabase(name)) {
+        sq_pushinteger(v, ERR_DATABASE);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+
+}
+
+SQInteger emoDatabaseDeletePreference(HSQUIRRELVM v) {
+    const SQChar* key;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &key);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+    if (!engine->database->deletePreference(key)) {
+        sq_pushinteger(v, ERR_DATABASE);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+
