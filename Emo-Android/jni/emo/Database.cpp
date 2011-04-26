@@ -27,6 +27,7 @@ void initDatabaseFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_PREFERENCE_CLASS, "get",          emoDatabaseGetPreference);
     engine->registerClassFunc(engine->sqvm, EMO_PREFERENCE_CLASS, "set",          emoDatabaseSetPreference);
     engine->registerClassFunc(engine->sqvm, EMO_PREFERENCE_CLASS, "del",          emoDatabaseDeletePreference);
+    engine->registerClassFunc(engine->sqvm, EMO_PREFERENCE_CLASS, "keys",         emoDatabaseGetPreferenceKeys);
     engine->registerClassFunc(engine->sqvm, EMO_PREFERENCE_CLASS, "close",        emoDatabaseClose);
 }
 
@@ -124,6 +125,7 @@ namespace emo {
         jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
         jmethodID methodj = env->GetMethodID(clazz, "deleteDatabase", "(Ljava/lang/String;)Z");
         jboolean deleted = env->CallBooleanMethod(engine->app->activity->clazz, methodj, env->NewStringUTF(name.c_str()));
+
         vm->DetachCurrentThread();
 
         return deleted;
@@ -274,7 +276,7 @@ namespace emo {
         return rcode == SQLITE_OK;
     }
 
-    std::vector<std::string> Database::getPreferenceKeys(std::string key) {
+    std::vector<std::string> Database::getPreferenceKeys() {
         bool forceClose = false;
         if (!this->isOpen) {
             this->openOrCreatePreference();
@@ -505,4 +507,19 @@ SQInteger emoDatabaseDeletePreference(HSQUIRRELVM v) {
     return 1;
 }
 
+SQInteger emoDatabaseGetPreferenceKeys(HSQUIRRELVM v) {
+
+    std::vector<std::string> keys = engine->database->getPreferenceKeys();
+
+    sq_newarray(v, 0);
+
+    for (unsigned int i = 0; i < keys.size(); i++) {
+        sq_pushstring(v, keys[i].c_str(), -1);
+        sq_arrayappend(v, -2);
+    }
+
+    sq_push(v, -1);
+
+    return 1;
+}
 

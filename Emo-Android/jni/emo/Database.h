@@ -26,7 +26,7 @@ namespace emo {
         bool openPreference();
         std::string getPreference(std::string key);
         bool setPreference(std::string key, std::string value);
-        std::vector<std::string> getPreferenceKeys(std::string key);
+        std::vector<std::string> getPreferenceKeys();
         bool deletePreference(std::string key);
     protected:
         sqlite3* db;
@@ -48,5 +48,6 @@ SQInteger emoDatabaseOpenOrCreatePreference(HSQUIRRELVM v);
 SQInteger emoDatabaseGetPreference(HSQUIRRELVM v);
 SQInteger emoDatabaseSetPreference(HSQUIRRELVM v);
 SQInteger emoDatabaseDeletePreference(HSQUIRRELVM v);
+SQInteger emoDatabaseGetPreferenceKeys(HSQUIRRELVM v);
 SQInteger emoDatabaseDeleteDatabase(HSQUIRRELVM v);
 #endif
