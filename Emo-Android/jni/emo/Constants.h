@@ -40,6 +40,7 @@
 
 #define DEFAULT_ANIMATION_NAME "EMO::DEFAULT"
 #define DEFAULT_DATABASE_NAME  "emoruntime.db"
+#define PREFERENCE_TABLE_NAME  "preferences"
 
 #define EMO_NO              0
 #define EMO_YES             1
