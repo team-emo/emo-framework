@@ -15,7 +15,7 @@ void initDrawableFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSprite",     emoDrawableCreateSprite);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSprite",       emoDrawableLoad);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadTiledSprite",  emoDrawableLoadTiledSprite);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadMapSprite",    emoDrawableLoadMapSprite);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "addTileRow",       emoDrawableAddTileRow);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "clearTiles",       emoDrawableClearTiles);
 
@@ -254,7 +254,7 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
     return 1;
 }
 
-SQInteger emoDrawableLoadTiledSprite(HSQUIRRELVM v) {
+SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
     if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
@@ -298,7 +298,7 @@ SQInteger emoDrawableLoadTiledSprite(HSQUIRRELVM v) {
     }
 
     // create parent sprite
-    emo::TiledDrawable* parent = new emo::TiledDrawable(drawable);
+    emo::MapDrawable* parent = new emo::MapDrawable(drawable);
 
     parent->setFrameCount(1);
     parent->load();

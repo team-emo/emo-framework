@@ -7,7 +7,7 @@ void initDrawableFunctions();
 
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);
 SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v);
-SQInteger emoDrawableLoadTiledSprite(HSQUIRRELVM v);
+SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v);
 SQInteger emoDrawableAddTileRow(HSQUIRRELVM v);
 SQInteger emoDrawableClearTiles(HSQUIRRELVM v);
 SQInteger emoDrawableLoad(HSQUIRRELVM v);

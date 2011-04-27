@@ -432,19 +432,19 @@ namespace emo {
         return true;
     }
 
-    TiledDrawable::TiledDrawable(Drawable* drawable) : Drawable() {
+    MapDrawable::MapDrawable(Drawable* drawable) : Drawable() {
         this->drawable = drawable;
         this->tiles = new std::vector<std::vector<int>*>;
     }
 
-    TiledDrawable::~TiledDrawable() {
+    MapDrawable::~MapDrawable() {
         for (unsigned int i = 0; i < this->tiles->size(); i++) {
             delete this->tiles->at(i);
         }
         delete this->tiles;
     }
 
-    void TiledDrawable::addRow(int rowdata[], int count) {
+    void MapDrawable::addRow(int rowdata[], int count) {
         std::vector<int>* row = new std::vector<int>;
         for (int i = 0; i < count; i++) {
             row->push_back(rowdata[i]);
@@ -455,21 +455,21 @@ namespace emo {
         this->rows    = this->tiles->size();
     }
 
-    bool TiledDrawable::clearTiles() {
+    bool MapDrawable::clearTiles() {
         this->tiles->clear();
         return true;
     }
 
-    void TiledDrawable::load() {
+    void MapDrawable::load() {
         Drawable::load();
     }
 
-    bool TiledDrawable::bindVertex() {
+    bool MapDrawable::bindVertex() {
         this->loaded = this->drawable->bindVertex();
         return this->loaded;
     }
 
-    void TiledDrawable::onDrawFrame() {
+    void MapDrawable::onDrawFrame() {
         int columnCount = (int)ceil(this->width  / (double)this->drawable->width);
         int rowCount    = (int)ceil(this->height / (double)this->drawable->height);
         
@@ -493,7 +493,7 @@ namespace emo {
         }
     }
 
-    void TiledDrawable::deleteBuffer() {
+    void MapDrawable::deleteBuffer() {
         this->deleteBuffer();
         this->drawable->deleteBuffer();
     }

@@ -117,10 +117,10 @@ namespace emo {
         AnimationFrame* currentAnimation;
     };
 
-    class TiledDrawable : public Drawable {
+    class MapDrawable : public Drawable {
     public:
-        TiledDrawable(Drawable* drawable);
-        virtual ~TiledDrawable();
+        MapDrawable(Drawable* drawable);
+        virtual ~MapDrawable();
 
         virtual void load();
         virtual bool bindVertex();
