@@ -14,6 +14,7 @@ void initDrawableFunctions() {
 
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSprite",     emoDrawableCreateSprite);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createMapSprite",     emoDrawableCreateMapSprite);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSprite",       emoDrawableLoad);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadMapSprite",    emoDrawableLoadMapSprite);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "addTileRow",       emoDrawableAddTileRow);
@@ -254,7 +255,7 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
     return 1;
 }
 
-SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
+SQInteger emoDrawableCreateMapSprite(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
     if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
@@ -266,12 +267,55 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
     }
 
     emo::Drawable* drawable = engine->getDrawable(id);
-    drawable->independent = false;
 
     if (drawable == NULL) {
-        return 0;
+        sq_pushinteger(v, 0);
+        return 1;
     }
 
+    // create parent sprite
+    emo::MapDrawable* parent = new emo::MapDrawable(drawable);
+    drawable->independent = false;
+
+    parent->setFrameCount(1);
+    parent->load();
+
+    char key[DRAWABLE_KEY_LENGTH];
+    sprintf(key, "%ld%d-%d", 
+                engine->uptime.time, engine->uptime.millitm, parent->getCurrentBufferId());
+    engine->addDrawable(key, parent);
+
+    sq_pushstring(v, key, strlen(key));
+
+    return 1;
+}
+
+SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    emo::Drawable* parent   = engine->getDrawable(id);
+
+    if (parent == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+
+    emo::Drawable* drawable = parent->getChild();
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+
+    // load drawable texture
     if (!drawable->name.empty()) {
         emo::Image* image = new emo::Image();
         if (loadPngFromAsset(drawable->name.c_str(), image)) {
@@ -297,36 +341,39 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
         }
     }
 
-    // create parent sprite
-    emo::MapDrawable* parent = new emo::MapDrawable(drawable);
-
-    parent->setFrameCount(1);
-    parent->load();
-
-    char key[DRAWABLE_KEY_LENGTH];
-    sprintf(key, "%ld%d-%d", 
-                engine->uptime.time, engine->uptime.millitm, parent->getCurrentBufferId());
-    engine->addDrawable(key, parent);
-
-    // drawable width
-    SQInteger width = engine->getWidth();
-    if (nargs >= 3 && sq_gettype(v, 3) == OT_INTEGER) {
-        sq_getinteger(v, 3, &width);
+    // parent x
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat x;
+        sq_getfloat(v, 3, &x);
+        parent->x = x;
     }
 
-    // drawable height
+    // parent y
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
+        SQFloat y;
+        sq_getfloat(v, 4, &y);
+        parent->y = y;
+    }
+
+    // parent width
+    SQInteger width = engine->getWidth();
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
+        sq_getinteger(v, 5, &width);
+    }
+
+    // parent height
     SQInteger height = engine->getHeight();
-    if (nargs >= 4 && sq_gettype(v, 4) == OT_INTEGER) {
-        sq_getinteger(v, 4, &height);
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
+        sq_getinteger(v, 6, &height);
     }
 
     parent->width  = width;
     parent->height = height;
 
     if (parent->bindVertex()) {
-        sq_pushstring(v, key, strlen(key));
+        sq_pushinteger(v, EMO_NO_ERROR);
     } else {
-        return 0;
+        sq_pushinteger(v, ERR_CREATE_VERTEX);
     }
 
     return 1;

@@ -86,6 +86,9 @@ namespace emo {
 
         bool enableAnimation(bool enable);
 
+        virtual void setChild(Drawable* child);
+        virtual Drawable* getChild();
+
         virtual void addRow(int rowdata[], int count){}
         virtual bool clearTiles() { return false; }
     protected:
@@ -97,6 +100,7 @@ namespace emo {
         int        frameCount;
 
         Image*     texture;
+        Drawable*  child;
 
         int tex_coord_frame_startX();
         int tex_coord_frame_startY();
@@ -126,6 +130,9 @@ namespace emo {
         virtual bool bindVertex();
         virtual void onDrawFrame();
         virtual void deleteBuffer();
+
+        virtual void setChild(Drawable* child);
+        virtual Drawable* getChild();
 
         virtual void addRow(int rowdata[], int count);
         virtual bool clearTiles();

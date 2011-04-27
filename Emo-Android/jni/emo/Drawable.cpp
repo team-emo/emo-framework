@@ -370,6 +370,14 @@ namespace emo {
         this->texture = image;
     }
 
+    void Drawable::setChild(Drawable* child) {
+        this->child = child;
+    }
+
+    Drawable* Drawable::getChild() {
+        return this->child;
+    }
+
     void Drawable::addAnimation(AnimationFrame* animation) {
         this->deleteAnimation(animation->name);
         this->animations->insert(std::make_pair(animation->name, animation)); 
@@ -435,6 +443,7 @@ namespace emo {
     MapDrawable::MapDrawable(Drawable* drawable) : Drawable() {
         this->drawable = drawable;
         this->tiles = new std::vector<std::vector<int>*>;
+        this->setChild(drawable);
     }
 
     MapDrawable::~MapDrawable() {
@@ -462,6 +471,14 @@ namespace emo {
 
     void MapDrawable::load() {
         Drawable::load();
+    }
+
+    Drawable* MapDrawable::getChild() {
+        return Drawable::getChild();
+    }
+
+    void MapDrawable::setChild(Drawable* child) {
+        Drawable::setChild(child);
     }
 
     bool MapDrawable::bindVertex() {
