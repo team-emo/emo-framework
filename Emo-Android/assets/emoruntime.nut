@@ -319,8 +319,9 @@ class emo.Sprite {
     stage  = emo.Stage();
     runtime = emo.Runtime();
 
-    id     = -1;
-    loaded = false;
+    id       = -1;
+    childId  = -1;
+    loaded   = false;
 
     /*
      * sprite = Sprite("aaa.png");
@@ -500,8 +501,20 @@ class emo.Rectangle extends emo.Sprite {
 class emo.MapSprite extends emo.Sprite {
     function constructor(rawname, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
         local sprite = emo.SpriteSheet(rawname, frameWidth, frameHeight, border, margin, frameIndex);
-        name = sprite.getName();
-        id = stage.loadMapSprite(sprite.getId());
+        name         = sprite.getName();
+        childId      = sprite.getId();
+        id           = stage.createMapSprite(sprite.getId());
+    }
+
+    function load(x = 0, y = 0, width = null, height = null) {
+        local status = EMO_NO_ERROR;
+        if (!loaded) {
+            status = stage.loadMapSprite(id, x, y, width, height);
+            if (status == EMO_NO_ERROR) {
+                loaded = true;
+            }
+        }
+        return status;
     }
 
     function addRow(tiles) {
@@ -514,6 +527,13 @@ class emo.MapSprite extends emo.Sprite {
             this.addRow(tiles[i]);
         }
     }
+
+    function show() { return stage.show(childId); }
+    function hide() { return stage.hide(childId); }
+    function alpha(a = null) { return stage.alpha(childId, a); }
+    function red  (r = null) { return stage.red  (childId, r); }
+    function green(g = null) { return stage.green(childId, g); }
+    function blue (b = null) { return stage.blue (childId, b); }
 }
 
 function emo::Stage::load(obj) {
