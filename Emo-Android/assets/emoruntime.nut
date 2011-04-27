@@ -498,7 +498,8 @@ class emo.Rectangle extends emo.Sprite {
 }
 
 class emo.TiledSprite extends emo.Sprite {
-    function constructor(sprite) {
+    function constructor(rawname, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
+        local sprite = emo.SpriteSheet(rawname, frameWidth, frameHeight, border, margin, frameIndex);
         name = sprite.getName();
         id = stage.loadTiledSprite(sprite.getId());
     }
