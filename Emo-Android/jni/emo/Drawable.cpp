@@ -473,10 +473,10 @@ namespace emo {
         int columnCount = (int)ceil(this->width  / (double)this->drawable->width);
         int rowCount    = (int)ceil(this->height / (double)this->drawable->height);
         
-        int firstColumn = max(0, min(this->columns, (x / this->drawable->width)));
+        int firstColumn = max(0, min(this->columns, (this->x / this->drawable->width)));
         int lastColumn  = min(firstColumn + columnCount + 1, this->columns);
         
-        int firstRow = max(0, min(this->rows, (y / this->drawable->height)));
+        int firstRow = max(0, min(this->rows, (this->y / this->drawable->height)));
         int lastRow  = min(firstRow + rowCount + 1, this->rows);
 
         for (int i = firstRow; i < lastRow; i++) {
