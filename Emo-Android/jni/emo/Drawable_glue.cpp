@@ -17,6 +17,7 @@ void initDrawableFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSprite",       emoDrawableLoad);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadTiledSprite",  emoDrawableLoadTiledSprite);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "addTileRow",       emoDrawableAddTileRow);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "clearTiles",       emoDrawableClearTiles);
 
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getX",           emoDrawableGetX);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getY",           emoDrawableGetY);
@@ -381,6 +382,33 @@ SQInteger emoDrawableAddTileRow(HSQUIRRELVM v) {
     return 1;
 }
 
+SQInteger emoDrawableClearTiles(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+
+    if (drawable->clearTiles()) {
+        sq_pushinteger(v, EMO_NO_ERROR);
+        return 1;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+}
 /*
  * move drawable
  */

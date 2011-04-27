@@ -87,6 +87,7 @@ namespace emo {
         bool enableAnimation(bool enable);
 
         virtual void addRow(int rowdata[], int count){}
+        virtual bool clearTiles() { return false; }
     protected:
 
         float      vertex_tex_coords[8];
@@ -127,6 +128,7 @@ namespace emo {
         virtual void deleteBuffer();
 
         virtual void addRow(int rowdata[], int count);
+        virtual bool clearTiles();
     protected:
         std::vector<std::vector<int>*>* tiles;
         Drawable* drawable;

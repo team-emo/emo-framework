@@ -435,6 +435,10 @@ class emo.Sprite {
     function getId() {
         return id;
     }
+
+    function getName() {
+        return name;
+    }
 }
 
 class emo.SpriteSheet extends emo.Sprite {
@@ -491,6 +495,24 @@ class emo.Rectangle extends emo.Sprite {
 		name = null;
         id = stage.createSprite(name);
 	}
+}
+
+class emo.TiledSprite extends emo.Sprite {
+    function constructor(sprite) {
+        name = sprite.getName();
+        id = stage.loadTiledSprite(sprite.getId());
+    }
+
+    function addRow(tiles) {
+        return stage.addTileRow(id, tiles);
+    }
+
+    function setTile(tiles) {
+        stage.clearTiles(id);
+        for (local i = 0; i < tiles.len(); i++) {
+            this.addRow(tiles[i]);
+        }
+    }
 }
 
 function emo::Stage::load(obj) {

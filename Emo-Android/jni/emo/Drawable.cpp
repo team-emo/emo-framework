@@ -455,6 +455,11 @@ namespace emo {
         this->rows    = this->tiles->size();
     }
 
+    bool TiledDrawable::clearTiles() {
+        this->tiles->clear();
+        return true;
+    }
+
     void TiledDrawable::load() {
         Drawable::load();
     }
@@ -479,6 +484,8 @@ namespace emo {
                if (((int)tiles->size()) <= i || ((int)tiles->at(i)->size()) <= j) break;
                 this->drawable->x = j * this->drawable->width  - this->x;
                 this->drawable->y = i * this->drawable->height - this->y;
+
+                if (tiles->at(i)->at(j) < 0) continue;
 
                 this->drawable->setFrameIndex(tiles->at(i)->at(j));
                 this->drawable->onDrawFrame();
