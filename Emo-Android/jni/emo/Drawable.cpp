@@ -487,21 +487,29 @@ namespace emo {
     }
 
     void MapDrawable::onDrawFrame() {
+
+        int invertX = -this->x;
+        int invertY = -this->y;
+
+        if (this->x > 0 && this->x  > this->width)  return;
+        if (this->y > 0 && this->y  > this->height) return;
+        if (this->x < 0 && invertX > this->drawable->width  * this->columns) return;
+        if (this->y < 0 && invertY > this->drawable->height * this->rows) return;
+
         int columnCount = (int)ceil(this->width  / (double)this->drawable->width);
         int rowCount    = (int)ceil(this->height / (double)this->drawable->height);
         
-        int firstColumn = max(0, min(this->columns, (this->x / this->drawable->width)));
+        int firstColumn = max(0, min(this->columns, (invertX / this->drawable->width)));
         int lastColumn  = min(firstColumn + columnCount + 1, this->columns);
         
-        int firstRow = max(0, min(this->rows, (this->y / this->drawable->height)));
+        int firstRow = max(0, min(this->rows, (invertY / this->drawable->height)));
         int lastRow  = min(firstRow + rowCount + 1, this->rows);
 
         for (int i = firstRow; i < lastRow; i++) {
             for (int j = firstColumn; j < lastColumn; j++) {
                if (((int)tiles->size()) <= i || ((int)tiles->at(i)->size()) <= j) break;
-                this->drawable->x = j * this->drawable->width  - this->x;
-                this->drawable->y = i * this->drawable->height - this->y;
-
+                this->drawable->x = j * this->drawable->width  - invertX;
+                this->drawable->y = i * this->drawable->height - invertY;
                 if (tiles->at(i)->at(j) < 0) continue;
 
                 this->drawable->setFrameIndex(tiles->at(i)->at(j));
