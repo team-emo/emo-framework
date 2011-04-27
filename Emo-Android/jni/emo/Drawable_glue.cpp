@@ -5,16 +5,18 @@
 #include "Constants.h"
 #include "Engine.h"
 #include "Drawable_glue.h"
+#include "Runtime.h"
 
 extern emo::Engine* engine;
 
 void initDrawableFunctions() {
     engine->registerClass(engine->sqvm, EMO_STAGE_CLASS);
 
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSprite",     emoDrawableCreateSprite);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadTiles",      emoDrawableLoadTiledSprite);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSprite",       emoDrawableLoad);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadTiledSprite",  emoDrawableLoadTiledSprite);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "addTileRow",       emoDrawableAddTileRow);
 
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getX",           emoDrawableGetX);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getY",           emoDrawableGetY);
@@ -134,8 +136,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     if (name != NULL && (!loadPngSizeFromAsset(name, &width, &height) || 
           width <= 0 || height <= 0 || frameWidth <= 0 || frameHeight <= 0)) {
         delete drawable;
-        sq_pushinteger(v, -1);
-        return 1;
+        return 0;
     }
 
     drawable->hasSheet = true;
@@ -260,16 +261,14 @@ SQInteger emoDrawableLoadTiledSprite(HSQUIRRELVM v) {
         sq_getstring(v, -1, &id);
         sq_poptop(v);
     } else {
-        sq_pushinteger(v, ERR_INVALID_PARAM);
-        return 1;
+        return 0;
     }
 
     emo::Drawable* drawable = engine->getDrawable(id);
     drawable->independent = false;
 
     if (drawable == NULL) {
-        sq_pushinteger(v, ERR_INVALID_ID);
-        return 1;
+        return 0;
     }
 
     if (!drawable->name.empty()) {
@@ -308,13 +307,13 @@ SQInteger emoDrawableLoadTiledSprite(HSQUIRRELVM v) {
                 engine->uptime.time, engine->uptime.millitm, parent->getCurrentBufferId());
     engine->addDrawable(key, parent);
 
-    // parent width
+    // drawable width
     SQInteger width = engine->getWidth();
     if (nargs >= 3 && sq_gettype(v, 3) == OT_INTEGER) {
         sq_getinteger(v, 3, &width);
     }
 
-    // parent height
+    // drawable height
     SQInteger height = engine->getHeight();
     if (nargs >= 4 && sq_gettype(v, 4) == OT_INTEGER) {
         sq_getinteger(v, 4, &height);
@@ -324,11 +323,61 @@ SQInteger emoDrawableLoadTiledSprite(HSQUIRRELVM v) {
     parent->height = height;
 
     if (parent->bindVertex()) {
-        sq_pushinteger(v, EMO_NO_ERROR);
+        sq_pushstring(v, key, strlen(key));
     } else {
-        sq_pushinteger(v, ERR_CREATE_VERTEX);
+        return 0;
     }
 
+    return 1;
+}
+
+SQInteger emoDrawableAddTileRow(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_ARRAY) {
+        SQInteger size = sq_getsize(v, 3);
+        int* tile = new int[size];
+        sq_pushnull(v);
+        int idx = 0;
+        while(SQ_SUCCEEDED(sq_next(v, -2))) {
+            if (idx >= size) break;
+            if (sq_gettype(v, -1) == OT_INTEGER) {
+                SQInteger value;
+                sq_getinteger(v, -1, &value);
+                tile[idx] = value;
+            } else {
+                tile[idx] = 0;
+            }
+            idx++;
+            sq_pop(v, 2);
+        }
+
+        drawable->addRow(tile, size);
+
+        sq_pop(v, 1);
+        delete tile;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }
 

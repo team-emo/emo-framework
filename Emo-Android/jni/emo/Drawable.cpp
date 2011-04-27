@@ -442,7 +442,6 @@ namespace emo {
             delete this->tiles->at(i);
         }
         delete this->tiles;
-        delete this->drawable;
     }
 
     void TiledDrawable::addRow(int rowdata[], int count) {

@@ -91,7 +91,7 @@ namespace emo {
         this->enablePerspectiveNicest = SQTrue;
 
         // engine does not handle the back key by default
-        this->enableBackKey = false;
+        this->enableBackKey = true;
 
         // force fullscreen
         this->updateOptions(OPT_WINDOW_FORCE_FULLSCREEN);
