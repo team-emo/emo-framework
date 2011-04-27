@@ -90,8 +90,8 @@ namespace emo {
         // enable perspective hint to nicest (default)
         this->enablePerspectiveNicest = SQTrue;
 
-        // back key is enabled by default
-        this->enableBackKey = true;
+        // engine does not handle the back key by default
+        this->enableBackKey = false;
 
         // force fullscreen
         this->updateOptions(OPT_WINDOW_FORCE_FULLSCREEN);
@@ -180,6 +180,14 @@ namespace emo {
         this->onInitGLSurface();
 
         return 0;
+    }
+
+    int32_t Engine::getWidth() {
+        return this->width;
+    }
+
+    int32_t Engine::getHeight() {
+        return this->height;
     }
 
     std::string Engine::getJavaPackageName() {
@@ -507,7 +515,7 @@ namespace emo {
 
         for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
             Drawable* drawable = iter->second;
-            if (drawable->loaded) {
+            if (drawable->loaded && drawable->independent) {
                 drawable->onDrawFrame();
             }
         }

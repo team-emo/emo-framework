@@ -1,10 +1,12 @@
 #include "stdlib.h"
 #include "math.h"
 
+#include "Drawable.h"
 #include "Constants.h"
 #include "Runtime.h"
 #include "Engine.h"
 #include "Database.h"
+#include "Util.h"
 
 extern emo::Engine* engine;
 
@@ -64,6 +66,7 @@ namespace emo {
         this->animating  = false;
         this->frameCountLoaded = false;
         this->frameIndexChanged = false;
+        this->independent = true;
 
         // color param RGBA
         this->param_color[0] = 1.0f;
@@ -428,4 +431,65 @@ namespace emo {
         }
         return true;
     }
+
+    TiledDrawable::TiledDrawable(Drawable* drawable) : Drawable() {
+        this->drawable = drawable;
+        this->tiles = new std::vector<std::vector<int>*>;
+    }
+
+    TiledDrawable::~TiledDrawable() {
+        for (unsigned int i = 0; i < this->tiles->size(); i++) {
+            delete this->tiles->at(i);
+        }
+        delete this->tiles;
+        delete this->drawable;
+    }
+
+    void TiledDrawable::addRow(int rowdata[], int count) {
+        std::vector<int>* row = new std::vector<int>;
+        for (int i = 0; i < count; i++) {
+            row->push_back(rowdata[i]);
+        }
+        this->tiles->push_back(row);
+
+        this->columns = count;
+        this->rows    = this->tiles->size();
+    }
+
+    void TiledDrawable::load() {
+        Drawable::load();
+    }
+
+    bool TiledDrawable::bindVertex() {
+        this->loaded = this->drawable->bindVertex();
+        return this->loaded;
+    }
+
+    void TiledDrawable::onDrawFrame() {
+        int columnCount = (int)ceil(this->width  / (double)this->drawable->width);
+        int rowCount    = (int)ceil(this->height / (double)this->drawable->height);
+        
+        int firstColumn = max(0, min(this->columns, (x / this->drawable->width)));
+        int lastColumn  = min(firstColumn + columnCount + 1, this->columns);
+        
+        int firstRow = max(0, min(this->rows, (y / this->drawable->height)));
+        int lastRow  = min(firstRow + rowCount + 1, this->rows);
+
+        for (int i = firstRow; i < lastRow; i++) {
+            for (int j = firstColumn; j < lastColumn; j++) {
+               if (((int)tiles->size()) <= i || ((int)tiles->at(i)->size()) <= j) break;
+                this->drawable->x = j * this->drawable->width  - this->x;
+                this->drawable->y = i * this->drawable->height - this->y;
+
+                this->drawable->setFrameIndex(tiles->at(i)->at(j));
+                this->drawable->onDrawFrame();
+            }
+        }
+    }
+
+    void TiledDrawable::deleteBuffer() {
+        this->deleteBuffer();
+        this->drawable->deleteBuffer();
+    }
+
 }

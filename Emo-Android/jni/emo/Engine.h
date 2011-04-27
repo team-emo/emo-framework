@@ -42,6 +42,9 @@ namespace emo {
         void onGainedFocus();
         void onLowMemory();
 
+        int32_t getWidth();
+        int32_t getHeight();
+
         void updateUptime();
         int32_t getLastOnDrawDelta();
         int32_t getLastOnDrawDrawablesDelta();

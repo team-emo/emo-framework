@@ -7,6 +7,7 @@
 #include <sys/timeb.h>
 #include <string>
 #include <hash_map>
+#include <vector>
 #include <squirrel.h>
 #include "Image.h"
 #include "Util.h"
@@ -37,15 +38,14 @@ namespace emo {
     public:
 
         Drawable();
-        ~Drawable();
+        virtual ~Drawable();
 
         std::string name;
 
-        void load();
-
-        bool bindVertex();
-
-        void onDrawFrame();
+        virtual void load();
+        virtual bool bindVertex();
+        virtual void onDrawFrame();
+        virtual void deleteBuffer();
 
         void setFrameCount(int count);
         int  getFrameCount();
@@ -57,13 +57,13 @@ namespace emo {
 
         void setTexture(Image* image);
 
-        void deleteBuffer();
 
         bool hasSheet;
         bool animating;
         bool loaded;
         bool hasTexture;
         bool hasBuffer;
+        bool independent;
 
         int border;
         int margin;
@@ -112,6 +112,25 @@ namespace emo {
 
         std::string animationName;
         AnimationFrame* currentAnimation;
+    };
+
+    class TiledDrawable : public Drawable {
+    public:
+        TiledDrawable(Drawable* drawable);
+        virtual ~TiledDrawable();
+
+        virtual void load();
+        virtual bool bindVertex();
+        virtual void onDrawFrame();
+        virtual void deleteBuffer();
+
+        void addRow(int rowdata[], int count);
+    protected:
+        std::vector<std::vector<int>*>* tiles;
+        Drawable* drawable;
+
+        int columns;
+        int rows;
     };
 }
 #endif

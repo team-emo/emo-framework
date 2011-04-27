@@ -14,6 +14,7 @@ void initDrawableFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadTiles",      emoDrawableLoadTiledSprite);
 
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getX",           emoDrawableGetX);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getY",           emoDrawableGetY);
@@ -243,6 +244,86 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
     if (drawable->height == 0) drawable->height = 1;
 
     if (drawable->bindVertex()) {
+        sq_pushinteger(v, EMO_NO_ERROR);
+    } else {
+        sq_pushinteger(v, ERR_CREATE_VERTEX);
+    }
+
+    return 1;
+}
+
+SQInteger emoDrawableLoadTiledSprite(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+    drawable->independent = false;
+
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+
+    if (!drawable->name.empty()) {
+        emo::Image* image = new emo::Image();
+        if (loadPngFromAsset(drawable->name.c_str(), image)) {
+
+            // calculate the size of power of two
+            image->glWidth  = nextPowerOfTwo(image->width);
+            image->glHeight = nextPowerOfTwo(image->height);
+            image->loaded   = false;
+
+            drawable->setTexture(image);
+            drawable->hasTexture = true;
+
+            if (!drawable->hasSheet) {
+                drawable->width  = image->width;
+                drawable->height = image->height;
+            }
+
+            image->genTextures();
+        } else {
+            delete image;
+            sq_pushinteger(v, ERR_ASSET_LOAD);
+            return 1;
+        }
+    }
+
+    // create parent sprite
+    emo::TiledDrawable* parent = new emo::TiledDrawable(drawable);
+
+    parent->setFrameCount(1);
+    parent->load();
+
+    char key[DRAWABLE_KEY_LENGTH];
+    sprintf(key, "%ld%d-%d", 
+                engine->uptime.time, engine->uptime.millitm, parent->getCurrentBufferId());
+    engine->addDrawable(key, parent);
+
+    // parent width
+    SQInteger width = engine->getWidth();
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_INTEGER) {
+        sq_getinteger(v, 3, &width);
+    }
+
+    // parent height
+    SQInteger height = engine->getHeight();
+    if (nargs >= 4 && sq_gettype(v, 4) == OT_INTEGER) {
+        sq_getinteger(v, 4, &height);
+    }
+
+    parent->width  = width;
+    parent->height = height;
+
+    if (parent->bindVertex()) {
         sq_pushinteger(v, EMO_NO_ERROR);
     } else {
         sq_pushinteger(v, ERR_CREATE_VERTEX);
