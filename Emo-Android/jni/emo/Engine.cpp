@@ -6,12 +6,17 @@
 #include <jni.h>
 
 namespace emo {
+    bool drawable_z_compare(const Drawable* left, const Drawable* right) {
+        return left->z < right->z;
+    }
+
     Engine::Engine() {
         this->focused = false;
         this->loaded  = false;
         this->loadedCalled = false;
         this->initialized  = false;
         this->finishing = false;
+        this->sortOrderDirty = true;
     }
 
     Engine::~Engine() {
@@ -21,6 +26,7 @@ namespace emo {
         delete this->drawablesToRemove;
         delete this->database;
         delete this->javaGlue;
+        delete this->sortedDrawables;
     }
 
     void Engine::initScriptFunctions() {
@@ -116,6 +122,7 @@ namespace emo {
 
         this->drawables = new drawables_t();
         this->drawablesToRemove = new drawables_t();
+        this->sortedDrawables = new std::vector<Drawable*>;
 
         // init Squirrel VM
         initSQVM(this->sqvm);
@@ -470,6 +477,7 @@ namespace emo {
 
     void Engine::addDrawable(std::string key, Drawable* drawable) {
         this->drawables->insert(std::make_pair(key, drawable)); 
+        this->sortOrderDirty = true;
     }
 
     bool Engine::removeDrawable(std::string key) {
@@ -506,6 +514,7 @@ namespace emo {
         if (iter != this->drawables->end()) {
             Drawable* drawable = iter->second;
             if (this->drawables->erase(iter->first)){
+                this->sortOrderDirty = true;
                 delete drawable;
             }
             return true;
@@ -522,8 +531,17 @@ namespace emo {
             this->drawablesToRemove->clear();
         }
 
-        for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
-            Drawable* drawable = iter->second;
+        if (this->sortOrderDirty) {
+            this->sortedDrawables->clear();
+            for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
+                this->sortedDrawables->push_back(iter->second);
+            }
+            std::sort(this->sortedDrawables->begin(),
+                      this->sortedDrawables->end(), drawable_z_compare);
+            this->sortOrderDirty = false;
+        }
+        for (unsigned int i = 0; i < this->sortedDrawables->size(); i++) {
+            Drawable* drawable = this->sortedDrawables->at(i);
             if (drawable->loaded && drawable->independent) {
                 drawable->onDrawFrame();
             }
@@ -540,6 +558,9 @@ namespace emo {
     }
 
     void Engine::unloadDrawables() {
+        this->sortedDrawables->clear();
+        this->sortOrderDirty = true;
+
         drawables_t::iterator iter;
         for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
             delete iter->second;

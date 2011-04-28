@@ -1008,6 +1008,7 @@ SQInteger emoDrawableSetZ(HSQUIRRELVM v) {
         SQFloat z;
         sq_getfloat(v, 3, &z);
         drawable->z = z;
+        engine->sortOrderDirty = true;
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;

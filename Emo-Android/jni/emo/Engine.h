@@ -5,6 +5,9 @@
 #include <android/sensor.h>
 
 #include <hash_map>
+#include <vector>
+#include <iterator>
+#include <algorithm>
 #include <sys/timeb.h>
 #include <EGL/egl.h>
 #include <GLES/gl.h>
@@ -84,6 +87,7 @@ namespace emo {
 
         bool animating;
         bool finishing;
+        bool sortOrderDirty;
 
         android_app* app;
         Audio* audio;
@@ -129,6 +133,7 @@ namespace emo {
 
         drawables_t* drawables;
         drawables_t* drawablesToRemove;
+        std::vector<Drawable*>* sortedDrawables;
 
         ASensorManager* sensorManager;
         ASensorEventQueue* sensorEventQueue;
