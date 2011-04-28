@@ -342,7 +342,7 @@ class emo.Sprite {
      * sprite.load();
      * sprite.load(x, y);
      */
-    function load(x = 0, y = 0, width = null, height = null) {
+    function load(x = null, y = null, width = null, height = null) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
 
@@ -453,10 +453,10 @@ class emo.SpriteSheet extends emo.Sprite {
      * sprite.loadSheet(x, y);
      * sprite.loadSheet(x, y, frameIndex);
      */
-    function load(x, y, frameIndex = 0) {
+    function load(x = null, y = null, frameIndex = null) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
-			setFrame(frameIndex);
+            if (frameIndex != null) setFrame(frameIndex);
             status = stage.loadSprite(id, x, y);
 
             if (status == EMO_NO_ERROR) {
@@ -506,7 +506,7 @@ class emo.MapSprite extends emo.Sprite {
         id           = stage.createMapSprite(sprite.getId());
     }
 
-    function load(x = 0, y = 0, width = null, height = null) {
+    function load(x = null, y = null, width = null, height = null) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
             status = stage.loadMapSprite(id, x, y, width, height);

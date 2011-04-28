@@ -79,18 +79,6 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
         }
     }
 
-    SQFloat x = 0;
-    SQFloat y = 0;
-    SQFloat z = 0;
-	
-    if (nargs >= 3) sq_getfloat(v, 3, &x);
-    if (nargs >= 4) sq_getfloat(v, 4, &y);
-    if (nargs >= 5) sq_getfloat(v, 5, &z);
-	
-    drawable->x    = x;
-    drawable->y    = y;
-    drawable->z    = z;
-
     char key[DRAWABLE_KEY_LENGTH];
     sprintf(key, "%ld%d-%d", 
                 engine->uptime.time, engine->uptime.millitm, drawable->getCurrentBufferId());
