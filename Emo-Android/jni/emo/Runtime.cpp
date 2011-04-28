@@ -248,8 +248,7 @@ SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
  * Shutdown the runtime
  */
 SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
-    engine->animating = false;
-    ANativeActivity_finish(engine->app->activity);
+    engine->finishing = true;
     return 0;
 }
 

@@ -11,6 +11,7 @@ namespace emo {
         this->loaded  = false;
         this->loadedCalled = false;
         this->initialized  = false;
+        this->finishing = false;
     }
 
     Engine::~Engine() {
@@ -457,6 +458,14 @@ namespace emo {
         this->onDrawDrawables();
 
         eglSwapBuffers(this->display, this->surface);
+
+        if (this->finishing) {
+
+            this->unloadDrawables();
+
+            this->animating = false;
+            ANativeActivity_finish(this->app->activity);
+        }
     }
 
     void Engine::addDrawable(std::string key, Drawable* drawable) {

@@ -83,6 +83,7 @@ namespace emo {
         HSQUIRRELVM sqvm;
 
         bool animating;
+        bool finishing;
 
         android_app* app;
         Audio* audio;
