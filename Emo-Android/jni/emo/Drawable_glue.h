@@ -45,4 +45,9 @@ SQInteger emoDrawableGetScaleX(HSQUIRRELVM v);
 SQInteger emoDrawableGetScaleY(HSQUIRRELVM v);
 SQInteger emoDrawableGetAngle(HSQUIRRELVM v);
 
+SQInteger emoDrawableSetX(HSQUIRRELVM v);
+SQInteger emoDrawableSetY(HSQUIRRELVM v);
+SQInteger emoDrawableSetWidth(HSQUIRRELVM v);
+SQInteger emoDrawableSetHeight(HSQUIRRELVM v);
+SQInteger emoDrawableSetSize(HSQUIRRELVM v);
 #endif
