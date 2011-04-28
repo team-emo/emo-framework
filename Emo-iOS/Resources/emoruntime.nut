@@ -319,8 +319,9 @@ class emo.Sprite {
     stage  = emo.Stage();
     runtime = emo.Runtime();
 
-    id     = -1;
-    loaded = false;
+    id       = -1;
+    childId  = -1;
+    loaded   = false;
 
     /*
      * sprite = Sprite("aaa.png");
@@ -341,7 +342,7 @@ class emo.Sprite {
      * sprite.load();
      * sprite.load(x, y);
      */
-    function load(x = 0, y = 0, width = null, height = null) {
+    function load(x = null, y = null, width = null, height = null) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
 
@@ -368,6 +369,14 @@ class emo.Sprite {
     function getZ() { return stage.getZ(id); }
     function getWidth()  { return stage.getWidth(id); }
     function getHeight() { return stage.getHeight(id); }
+
+    function setX(x) { return stage.setX(id, x); }
+    function setY(y) { return stage.setY(id, y); }
+    function setZ(z) { return stage.setZ(id, z); }
+
+    function setWidth(w)   { return stage.setWidth(id, w); }
+    function setHeight(h)  { return stage.setHeight(id, h); }
+    function setSize(w, h) { return stage.setSize(id, w, h); }
 
     function getScale()  { return stage.getScaleX(id); }
     function getScaleX() { return stage.getScaleX(id); }
@@ -396,6 +405,10 @@ class emo.Sprite {
      */
     function move(x, y, z = 0) {
         return stage.move(id, x, y, z);
+    }
+
+    function pos(x, y, z = 0) {
+        return move(x, y, z);
     }
 
     /*
@@ -435,6 +448,10 @@ class emo.Sprite {
     function getId() {
         return id;
     }
+
+    function getName() {
+        return name;
+    }
 }
 
 class emo.SpriteSheet extends emo.Sprite {
@@ -448,10 +465,10 @@ class emo.SpriteSheet extends emo.Sprite {
      * sprite.loadSheet(x, y);
      * sprite.loadSheet(x, y, frameIndex);
      */
-    function load(x, y, frameIndex = 0) {
+    function load(x = null, y = null, frameIndex = null) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
-			setFrame(frameIndex);
+            if (frameIndex != null) setFrame(frameIndex);
             status = stage.loadSprite(id, x, y);
 
             if (status == EMO_NO_ERROR) {
@@ -491,6 +508,44 @@ class emo.Rectangle extends emo.Sprite {
 		name = null;
         id = stage.createSprite(name);
 	}
+}
+
+class emo.MapSprite extends emo.Sprite {
+    function constructor(rawname, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
+        local sprite = emo.SpriteSheet(rawname, frameWidth, frameHeight, border, margin, frameIndex);
+        name         = sprite.getName();
+        childId      = sprite.getId();
+        id           = stage.createMapSprite(sprite.getId());
+    }
+
+    function load(x = null, y = null, width = null, height = null) {
+        local status = EMO_NO_ERROR;
+        if (!loaded) {
+            status = stage.loadMapSprite(id, x, y, width, height);
+            if (status == EMO_NO_ERROR) {
+                loaded = true;
+            }
+        }
+        return status;
+    }
+
+    function addRow(tiles) {
+        return stage.addTileRow(id, tiles);
+    }
+
+    function setTile(tiles) {
+        stage.clearTiles(id);
+        for (local i = 0; i < tiles.len(); i++) {
+            this.addRow(tiles[i]);
+        }
+    }
+
+    function show() { return stage.show(childId); }
+    function hide() { return stage.hide(childId); }
+    function alpha(a = null) { return stage.alpha(childId, a); }
+    function red  (r = null) { return stage.red  (childId, r); }
+    function green(g = null) { return stage.green(childId, g); }
+    function blue (b = null) { return stage.blue (childId, b); }
 }
 
 function emo::Stage::load(obj) {

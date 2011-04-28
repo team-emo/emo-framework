@@ -9,25 +9,82 @@ local frameIndex = 0;
 
 class Level_1 {
 
-    logoSprite = emo.Sprite("logo.png");
-    dogSprite  = emo.SpriteSheet("dog.png", 34, 42, 1);
-
-    rectangle  = emo.Rectangle();
+    rectangle   = emo.Rectangle();
+    logoSprite  = emo.Sprite("logo.png");
+    dogSprite   = emo.SpriteSheet("dog.png", 34, 42, 1);
+    mapSprite   = emo.MapSprite("blocks.png", 33, 33, 1);
 
     function onLoad() {
         print("Level_1:onLoad"); 
-        event.enableOnDrawCallback(5000);
+
+		rectangle.color(1, 0, 0, 1);
+        rectangle.setSize(150, 10);
+
+        dogSprite.animate(0, 5, 1000, 0);
+
+        mapSprite.setZ(0);
+        logoSprite.setZ(1);
+        dogSprite.setZ(2);
+        rectangle.setZ(3);
+
+        logoSprite.load();
+        dogSprite.load();
+        rectangle.load();
+
+        local tiles = [
+                       [ 0,  1,  2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12],
+                       [11, 12, 13, 14, 15, 16, 17, -1, -1, -1, 0, 1, 2],
+                       [-1,  6,  7,  8,  9, 10, 11, -1, -1, 0, 1, 2, 3],
+                       [ 0,  1,  2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12],
+                       [11, 12, 13, 14, 15, 16, 17, -1, -1, -1, 0, 1, 2],
+                       [-1,  6,  7,  8,  9, 10, 11, -1, -1, 0, 1, 2, 3],
+                       [ 0,  1,  2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12],
+                       [11, 12, 13, 14, 15, 16, 17, -1, -1, -1, 0, 1, 2],
+                       [-1,  6,  7,  8,  9, 10, 11, -1, -1, 0, 1, 2, 3],
+                       [ 0,  1,  2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12],
+                       [11, 12, 13, 14, 15, 16, 17, -1, -1, -1, 0, 1, 2],
+                       [-1,  6,  7,  8,  9, 10, 11, -1, -1, 0, 1, 2, 3],
+                       [ 0,  1,  2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12],
+                       [11, 12, 13, 14, 15, 16, 17, -1, -1, -1, 0, 1, 2],
+                       [-1,  6,  7,  8,  9, 10, 11, -1, -1, 0, 1, 2, 3]
+                      ];
+        mapSprite.setTile(tiles);
+        mapSprite.load();
+/*
+        event.enableOnDrawCallback(100);
+        //stage.interval(500);
 		
 		rectangle.color(1, 0, 0, 1);
 		
-        print(logoSprite.load());
-        print(dogSprite.load(100, 100, 6));
-        print(rectangle.load(150, 150, 10, 10));
+        logoSprite.load();
+        dogSprite.load(100, 100, 6);
+        rectangle.load(150, 150, 10, 10);
 
         dogSprite.animate(0, 5, 1000, 0);
 		
 		audioCh0.load("tada.wav");
 		audioCh0.play();
+
+        local tiles = [
+                       [ 0,  1,  2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12],
+                       [11, 12, 13, 14, 15, 16, 17, -1, -1, -1, 0, 1, 2],
+                       [-1,  6,  7,  8,  9, 10, 11, -1, -1, 0, 1, 2, 3],
+                       [ 0,  1,  2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12],
+                       [11, 12, 13, 14, 15, 16, 17, -1, -1, -1, 0, 1, 2],
+                       [-1,  6,  7,  8,  9, 10, 11, -1, -1, 0, 1, 2, 3],
+                       [ 0,  1,  2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12],
+                       [11, 12, 13, 14, 15, 16, 17, -1, -1, -1, 0, 1, 2],
+                       [-1,  6,  7,  8,  9, 10, 11, -1, -1, 0, 1, 2, 3],
+                       [ 0,  1,  2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12],
+                       [11, 12, 13, 14, 15, 16, 17, -1, -1, -1, 0, 1, 2],
+                       [-1,  6,  7,  8,  9, 10, 11, -1, -1, 0, 1, 2, 3],
+                       [ 0,  1,  2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12],
+                       [11, 12, 13, 14, 15, 16, 17, -1, -1, -1, 0, 1, 2],
+                       [-1,  6,  7,  8,  9, 10, 11, -1, -1, 0, 1, 2, 3]
+                      ];
+        mapSprite.setTile(tiles);
+        mapSprite.load(0);
+*/
     }
 
     function onGainedFocus() {
@@ -40,13 +97,13 @@ class Level_1 {
 
     function onDispose() {
         print("Level_1:onDispose"); 
-        dogSprite.remove;
-		rectangle.remove();
+        mapSprite.remove();
+        //dogSprite.remove();
+		//rectangle.remove();
     }
 
     function onDrawFrame(dt) {
-        print("Level_1:onDrawFrame"); 
-
+        mapSprite.move(mapSprite.getX(), mapSprite.getY() - 2);
     }
 
     function onCallback(name, value) {
@@ -57,7 +114,8 @@ class Level_1 {
     function onMotionEvent(motionEvent) {
         print("Level_1:onMotionEvent " + motionEvent.toString()); 
         if (motionEvent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            stage.load(Level_2());
+            //stage.load(Level_2());
+            mapSprite.remove();
         }
     }
 

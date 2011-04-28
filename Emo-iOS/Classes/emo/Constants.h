@@ -17,6 +17,8 @@
 #define EMO_STAGE_CLASS    "Stage"
 #define EMO_AUDIO_CLASS    "Audio"
 #define EMO_NET_CLASS      "Net"
+#define EMO_DATABASE_CLASS "Database"
+#define EMO_PREFERENCE_CLASS "Preference"
 
 #define EMO_FUNC_ONLOAD         "_onLoad"
 #define EMO_FUNC_ONGAINED_FOUCS "_onGainedFocus"
@@ -40,6 +42,7 @@
 
 #define DEFAULT_ANIMATION_NAME "EMO::DEFAULT"
 #define DEFAULT_DATABASE_NAME  "emoruntime.db"
+#define PREFERENCE_TABLE_NAME  "preferences"
 
 #define EMO_NO              0
 #define EMO_YES             1
@@ -71,6 +74,9 @@
 #define ERR_FILE_OPEN             0x0118
 #define ERR_CREATE_VERTEX         0x0119
 #define ERR_NOT_SUPPORTED         0x0120
+#define ERR_DATABASE              0x0121
+#define ERR_DATABASE_OPEN         0x0122
+#define ERR_DATABASE_CLOSE        0x0123
 
 #define OPT_ENABLE_PERSPECTIVE_NICEST   0x1000
 #define OPT_ENABLE_PERSPECTIVE_FASTEST  0x1001
