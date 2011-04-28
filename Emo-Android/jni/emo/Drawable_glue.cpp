@@ -31,11 +31,11 @@ void initDrawableFunctions() {
 
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setX",           emoDrawableSetX);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setY",           emoDrawableSetY);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setZ",           emoDrawableSetZ);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setWidth",       emoDrawableSetWidth);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setHeight",      emoDrawableSetHeight);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setSize",        emoDrawableSetSize);
     
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pos",            emoDrawableMove);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
@@ -976,6 +976,38 @@ SQInteger emoDrawableSetY(HSQUIRRELVM v) {
         SQFloat y;
         sq_getfloat(v, 3, &y);
         drawable->y = y;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDrawableSetZ(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat z;
+        sq_getfloat(v, 3, &z);
+        drawable->z = z;
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;

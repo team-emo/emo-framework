@@ -370,6 +370,14 @@ class emo.Sprite {
     function getWidth()  { return stage.getWidth(id); }
     function getHeight() { return stage.getHeight(id); }
 
+    function setX(x) { return stage.setX(id, x); }
+    function setY(y) { return stage.setY(id, y); }
+    function setZ(z) { return stage.setZ(id, z); }
+
+    function setWidth(w)   { return stage.setWidth(id, w); }
+    function setHeight(h)  { return stage.setHeight(id, h); }
+    function setSize(w, h) { return stage.setSize(id, w, h); }
+
     function getScale()  { return stage.getScaleX(id); }
     function getScaleX() { return stage.getScaleX(id); }
     function getScaleY() { return stage.getScaleY(id); }
@@ -397,6 +405,10 @@ class emo.Sprite {
      */
     function move(x, y, z = 0) {
         return stage.move(id, x, y, z);
+    }
+
+    function pos(x, y, z = 0) {
+        return move(x, y, z);
     }
 
     /*
