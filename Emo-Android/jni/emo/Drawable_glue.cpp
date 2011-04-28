@@ -19,6 +19,8 @@ void initDrawableFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadMapSprite",    emoDrawableLoadMapSprite);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "addTileRow",       emoDrawableAddTileRow);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "clearTiles",       emoDrawableClearTiles);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setTileAt",        emoDrawableSetTileAt);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTileAt",        emoDrawableGetTileAt);
 
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getX",           emoDrawableGetX);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getY",           emoDrawableGetY);
@@ -451,6 +453,79 @@ SQInteger emoDrawableClearTiles(HSQUIRRELVM v) {
         return 1;
     }
 }
+
+SQInteger emoDrawableSetTileAt(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+
+    if (nargs >= 5 && sq_gettype(v, 3) == OT_INTEGER &&
+                      sq_gettype(v, 4) == OT_INTEGER &&
+                      sq_gettype(v, 5) == OT_INTEGER) {
+        SQInteger row;
+        SQInteger column;
+        SQInteger value;
+        sq_getinteger(v, 3, &row);
+        sq_getinteger(v, 4, &column);
+        sq_getinteger(v, 5, &value);
+
+        drawable->setTileAt(row, column, value);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDrawableGetTileAt(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    if (nargs >= 4 && sq_gettype(v, 3) == OT_INTEGER &&
+                      sq_gettype(v, 4) == OT_INTEGER) {
+        SQInteger row;
+        SQInteger column;
+        sq_getinteger(v, 3, &row);
+        sq_getinteger(v, 4, &column);
+
+        sq_pushinteger(v, drawable->getTileAt(row, column));
+    } else {
+        return 0;
+    }
+
+    return 1;
+}
+
+
 /*
  * move drawable
  */

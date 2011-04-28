@@ -91,6 +91,8 @@ namespace emo {
 
         virtual void addRow(int rowdata[], int count){}
         virtual bool clearTiles() { return false; }
+        virtual bool setTileAt(int row, int column, int value) { return false; }
+        virtual int  getTileAt(int row, int column) { return -1; }
     protected:
 
         float      vertex_tex_coords[8];
@@ -136,6 +138,8 @@ namespace emo {
 
         virtual void addRow(int rowdata[], int count);
         virtual bool clearTiles();
+        virtual bool setTileAt(int row, int column, int value);
+        virtual int  getTileAt(int row, int column);
     protected:
         std::vector<std::vector<int>*>* tiles;
         Drawable* drawable;

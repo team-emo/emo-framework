@@ -464,6 +464,22 @@ namespace emo {
         this->rows    = this->tiles->size();
     }
 
+    bool MapDrawable::setTileAt(int row, int column, int value) {
+        if (row    >= (int)this->tiles->size())          return false;
+        if (column >= (int)this->tiles->at(row)->size()) return false;
+
+        this->tiles->at(row)->at(column) = value;
+        return true;
+    }
+
+    int MapDrawable::getTileAt(int row, int column) {
+        if (row    >= (int)this->tiles->size())          return -1;
+        if (column >= (int)this->tiles->at(row)->size()) return -1;
+
+        return this->tiles->at(row)->at(column);
+    }
+
+
     bool MapDrawable::clearTiles() {
         this->tiles->clear();
         return true;
