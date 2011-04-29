@@ -67,6 +67,7 @@ struct SQRefCounted
 	virtual ~SQRefCounted();
 	SQWeakRef *GetWeakRef(SQObjectType type);
 	virtual void Release()=0;
+	
 };
 
 struct SQWeakRef : SQRefCounted
@@ -133,6 +134,12 @@ struct SQObjectPtr;
 #define tointeger(num) ((type(num)==OT_FLOAT)?(SQInteger)_float(num):_integer(num))
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
+#if defined(SQUSEDOUBLE) && !defined(_SQ64) || !defined(SQUSEDOUBLE) && defined(_SQ64)
+#define SQ_REFOBJECT_INIT()	SQ_OBJECT_RAWINIT()
+#else
+#define SQ_REFOBJECT_INIT()
+#endif
+
 #define _REF_TYPE_DECL(type,_class,sym) \
 	SQObjectPtr(_class * x) \
 	{ \
@@ -149,6 +156,7 @@ struct SQObjectPtr;
 		tOldType=_type; \
 		unOldVal=_unVal; \
 		_type = type; \
+		SQ_REFOBJECT_INIT() \
 		_unVal.sym = x; \
 		_unVal.pRefCounted->_uiRef++; \
 		__Release(tOldType,unOldVal); \
@@ -166,6 +174,7 @@ struct SQObjectPtr;
 	{  \
 		__Release(_type,_unVal); \
 		_type = type; \
+		SQ_OBJECT_RAWINIT() \
 		_unVal.sym = x; \
 		return *this; \
 	}
@@ -218,6 +227,7 @@ struct SQObjectPtr : public SQObject
 	inline SQObjectPtr& operator=(bool b)
 	{ 
 		__Release(_type,_unVal);
+		SQ_OBJECT_RAWINIT()
 		_type = OT_BOOL;
 		_unVal.nInteger = b?1:0;
 		return *this;
@@ -256,11 +266,22 @@ struct SQObjectPtr : public SQObject
 	{
 		__Release(_type ,_unVal);
 		_type = OT_NULL;
-		_unVal.pUserPointer = NULL;
+		_unVal.raw = NULL;
 	}
 	private:
 		SQObjectPtr(const SQChar *){} //safety
 };
+
+
+inline void _Swap(SQObject &a,SQObject &b)
+{
+	SQObjectType tOldType = a._type;
+	SQObjectValue unOldVal = a._unVal;
+	a._type = b._type;
+	a._unVal = b._unVal;
+	b._type = tOldType;
+	b._unVal = unOldVal;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////
 #ifndef NO_GARBAGE_COLLECTOR
@@ -269,6 +290,7 @@ struct SQCollectable : public SQRefCounted {
 	SQCollectable *_next;
 	SQCollectable *_prev;
 	SQSharedState *_sharedstate;
+	virtual SQObjectType GetType()=0;
 	virtual void Release()=0;
 	virtual void Mark(SQCollectable **chain)=0;
 	void UnMark();
