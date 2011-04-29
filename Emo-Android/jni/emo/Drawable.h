@@ -89,10 +89,16 @@ namespace emo {
         virtual void setChild(Drawable* child);
         virtual Drawable* getChild();
 
+        /* 
+         * virtual methods for MapDrawable
+         */
         virtual void addRow(int rowdata[], int count){}
         virtual bool clearTiles() { return false; }
         virtual bool setTileAt(int row, int column, int value) { return false; }
         virtual int  getTileAt(int row, int column) { return -1; }
+        virtual std::vector<int> getTileIndexAtCoord(float x, float y) { std::vector<int> p; return p; }
+        virtual std::vector<float> getTilePositionAtCoord(float x, float y) { std::vector<float> p; return p; }
+
     protected:
 
         float      vertex_tex_coords[8];
@@ -140,6 +146,8 @@ namespace emo {
         virtual bool clearTiles();
         virtual bool setTileAt(int row, int column, int value);
         virtual int  getTileAt(int row, int column);
+        virtual std::vector<int> getTileIndexAtCoord(float x, float y);
+        virtual std::vector<float> getTilePositionAtCoord(float x, float y);
     protected:
         std::vector<std::vector<int>*>* tiles;
         Drawable* drawable;

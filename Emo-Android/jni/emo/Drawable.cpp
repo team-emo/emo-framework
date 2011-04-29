@@ -479,6 +479,30 @@ namespace emo {
         return this->tiles->at(row)->at(column);
     }
 
+    std::vector<int> MapDrawable::getTileIndexAtCoord(float x, float y) {
+        std::vector<int> index;
+
+        int col = (int)floor((x - this->x) / (double)this->drawable->width);
+        int row = (int)floor((y - this->y) / (double)this->drawable->height);
+
+        index.push_back(col);
+        index.push_back(row);
+
+        return index;
+    }
+
+    std::vector<float> MapDrawable::getTilePositionAtCoord(float x, float y) {
+        std::vector<float> index;
+
+        std::vector<int> tile = this->getTileIndexAtCoord(x, y);
+        int col = tile.at(0);
+        int row = tile.at(1);
+        
+        index.push_back((col * this->drawable->width)  + this->x);
+        index.push_back((row * this->drawable->height) + this->y);
+        
+        return index;
+    }
 
     bool MapDrawable::clearTiles() {
         this->tiles->clear();

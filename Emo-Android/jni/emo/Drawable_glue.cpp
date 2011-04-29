@@ -21,6 +21,8 @@ void initDrawableFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "clearTiles",       emoDrawableClearTiles);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setTileAt",        emoDrawableSetTileAt);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTileAt",        emoDrawableGetTileAt);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTileIndexAtCoord",    emoDrawableGetTileIndexAtCoord);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTilePositionAtCoord", emoDrawableGetTilePositionAtCoord);
 
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getX",           emoDrawableGetX);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getY",           emoDrawableGetY);
@@ -518,6 +520,94 @@ SQInteger emoDrawableGetTileAt(HSQUIRRELVM v) {
         sq_getinteger(v, 4, &column);
 
         sq_pushinteger(v, drawable->getTileAt(row, column));
+    } else {
+        return 0;
+    }
+
+    return 1;
+}
+
+SQInteger emoDrawableGetTileIndexAtCoord(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    if (nargs >= 4 && sq_gettype(v, 3) != OT_NULL &&
+                      sq_gettype(v, 4) != OT_NULL) {
+        SQFloat x;
+        SQFloat y;
+        sq_getfloat(v, 3, &x);
+        sq_getfloat(v, 4, &y);
+
+        std::vector<int> index = drawable->getTileIndexAtCoord(x, y);
+
+        if (index.size() < 2) return 0;
+
+        sq_newarray(v, 0);
+
+        sq_pushinteger(v, index.at(0));
+        sq_arrayappend(v, -2);
+
+        sq_pushinteger(v, index.at(1));
+        sq_arrayappend(v, -2);
+
+        sq_push(v, -1);
+    } else {
+        return 0;
+    }
+
+    return 1;
+}
+
+SQInteger emoDrawableGetTilePositionAtCoord(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        return 0;
+    }
+
+    if (nargs >= 4 && sq_gettype(v, 3) != OT_NULL &&
+                      sq_gettype(v, 4) != OT_NULL) {
+        SQFloat x;
+        SQFloat y;
+        sq_getfloat(v, 3, &x);
+        sq_getfloat(v, 4, &y);
+
+        std::vector<float> position = drawable->getTilePositionAtCoord(x, y);
+
+        if (position.size() < 2) return 0;
+
+        sq_newarray(v, 0);
+
+        sq_pushfloat(v, position.at(0));
+        sq_arrayappend(v, -2);
+
+        sq_pushfloat(v, position.at(1));
+        sq_arrayappend(v, -2);
+
+        sq_push(v, -1);
     } else {
         return 0;
     }

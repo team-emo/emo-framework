@@ -13,6 +13,8 @@ SQInteger emoDrawableAddTileRow(HSQUIRRELVM v);
 SQInteger emoDrawableClearTiles(HSQUIRRELVM v);
 SQInteger emoDrawableSetTileAt(HSQUIRRELVM v);
 SQInteger emoDrawableGetTileAt(HSQUIRRELVM v);
+SQInteger emoDrawableGetTileIndexAtCoord(HSQUIRRELVM v);
+SQInteger emoDrawableGetTilePositionAtCoord(HSQUIRRELVM v);
 SQInteger emoDrawableLoad(HSQUIRRELVM v);
 SQInteger emoDrawableMove(HSQUIRRELVM v);
 SQInteger emoDrawableScale(HSQUIRRELVM v);
