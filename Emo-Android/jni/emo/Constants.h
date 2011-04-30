@@ -9,7 +9,7 @@
 
 #define SQUIRREL_VM_INITIAL_STACK_SIZE 1024
 #define SQUIRREL_RUNTIME_SCRIPT "runtime.nut"
-#define SQUIRREL_MAIN_SCRIPT "game.nut"
+#define SQUIRREL_MAIN_SCRIPT "main.nut"
 
 #define EMO_NAMESPACE  "emo"
 #define EMO_RUNTIME_CLASS  "Runtime"
