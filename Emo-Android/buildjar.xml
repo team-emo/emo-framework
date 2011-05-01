@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="all" name="emo_framework">
+
+	<property environment="env" />
+	<property name="target" value="1.6" />
+	<property name="source" value="1.6" />
+	<property name="bin" value="bin" />
+	<property name="src" value="src" />
+	
+	<property name="binfile" value="export/emo_framework.jar" />
+	<property name="sofile"  value="libs/armeabi/libemo-android.so" />
+	<property name="bin_to"  value="../Android-Examples/libs/e3roid.jar" />
+	<property name="so_to"   value="../Android-Examples/libs/armeabi/libemo-android.so" />
+   
+	<target name="buildjar">
+		<jar destfile="${binfile}">
+			<zipfileset dir="${bin}">
+				<include name="**/*.properties" />
+				<include name="**/*.class" />
+				<exclude name="**/R.class" />
+				<exclude name="**/R$*.class" />
+			</zipfileset>
+		</jar>
+	</target>
+	
+	<target name="copyjar">
+		<copy file="${binfile}" tofile="${bin_to}"/>
+		<copy file="${sofile}"  tofile="${so_to}"/>
+		<eclipse.refreshLocal resource="${bin_to}" depth="infinite"/>
+	</target>
+
+	<target name="all">
+	    <antcall target="buildjar"/>
+	    <antcall target="copyjar"/>
+	</target>
+</project>
