@@ -290,9 +290,6 @@ namespace emo {
         // update position
         glTranslatef(this->x, this->y, this->z);
 
-        // update width and height
-        glScalef(this->width, this->height, 1);
-
         // rotate
         glTranslatef(this->param_rotate[1], this->param_rotate[2], 0);
         if (this->param_rotate[3] == AXIS_X) {
@@ -308,6 +305,9 @@ namespace emo {
         glTranslatef(this->param_scale[2], this->param_scale[3], 0);
         glScalef(this->param_scale[0], this->param_scale[1], 1);
         glTranslatef(-this->param_scale[2], -this->param_scale[3], 0);
+
+        // update width and height
+        glScalef(this->width, this->height, 1);
 
         // bind vertex positions
         glBindBuffer(GL_ARRAY_BUFFER, engine->stage->vbo[0]);
