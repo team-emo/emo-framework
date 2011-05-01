@@ -33,6 +33,7 @@ public class Launcher extends ExpandableListActivity {
     		"Drawing a Sprite"
     	},
     	{
+    		"Periodic Update",
     		"Multi touch"
     	}
     };
@@ -42,6 +43,7 @@ public class Launcher extends ExpandableListActivity {
     		".SpriteExample"
     	},
     	{
+    		".PeriodicUpdateExample",
     		".MultiTouchExample"
     	}
     };

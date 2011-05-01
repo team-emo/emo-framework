@@ -803,6 +803,10 @@ SQInteger emoDrawableRotate(HSQUIRRELVM v) {
     if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 3, &f);
+
+        // to avoid overflow
+        if (f >= 360)  f = f - (360 * floor(f / 360));
+  
         drawable->param_rotate[0] = f;
     }
 
