@@ -77,7 +77,7 @@ namespace emo {
             this->dirty = false;
         }
 
-        glClearColor(0, 0, 1, 1);
+        glClearColor(0, 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
