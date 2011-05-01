@@ -9,8 +9,9 @@
 	
 	<property name="binfile" value="export/emo_framework.jar" />
 	<property name="sofile"  value="libs/armeabi/libemo-android.so" />
-	<property name="bin_to"  value="../Android-Examples/libs/e3roid.jar" />
-	<property name="so_to"   value="../Android-Examples/libs/armeabi/libemo-android.so" />
+	<property name="to_dir"  value="../Android-Examples/libs/" />
+	<property name="bin_to"  value="emo_framework.jar" />
+	<property name="so_to"   value="armeabi/libemo-android.so" />
    
 	<target name="buildjar">
 		<jar destfile="${binfile}">
@@ -24,9 +25,9 @@
 	</target>
 	
 	<target name="copyjar">
-		<copy file="${binfile}" tofile="${bin_to}"/>
-		<copy file="${sofile}"  tofile="${so_to}"/>
-		<eclipse.refreshLocal resource="${bin_to}" depth="infinite"/>
+		<copy file="${binfile}" tofile="${to_dir}${bin_to}"/>
+		<copy file="${sofile}"  tofile="${to_dir}${so_to}"/>
+		<eclipse.refreshLocal resource="${to_dir}" depth="infinite"/>
 	</target>
 
 	<target name="all">
