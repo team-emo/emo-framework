@@ -1,5 +1,8 @@
 local stage = emo.Stage();
 
+/*
+ * This example shows one rectangular shape that moves to the position of touch-down event.
+ */
 class Main {
 
     rectangle = emo.Rectangle();
@@ -22,7 +25,7 @@ class Main {
 		// set rectangle color(RGBA)
 		rectangle.color(1, 0, 0, 1);
 
-		// set rectangle size (60x60)		
+		// initial rectangle size is 1x1 so update the size to 60x60
         rectangle.setSize(width, height);
 
 		// load rectangle to the screen

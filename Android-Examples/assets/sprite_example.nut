@@ -1,5 +1,8 @@
 local stage = emo.Stage();
 
+/*
+ * This example shows single sprite that rotates and scales when touch-down event is fired.
+ */
 class Main {
 
     block = emo.Sprite("block.png");
