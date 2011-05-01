@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListAdapter;
 import android.widget.SimpleExpandableListAdapter;
@@ -35,7 +33,7 @@ public class Launcher extends ExpandableListActivity {
     		"Drawing a Sprite"
     	},
     	{
-    		"Removing a Sprite"
+    		"Multi touch"
     	}
     };
     private static final String[][] activities = {
@@ -44,15 +42,13 @@ public class Launcher extends ExpandableListActivity {
     		".SpriteExample"
     	},
     	{
-    		".SpriteRemoveExample"
+    		".MultiTouchExample"
     	}
     };
     
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		this.requestFullScreen();
 
 		for (int i = 0; i < groupNames.length; i++) {
 			String groupName = groupNames[i];
@@ -92,17 +88,7 @@ public class Launcher extends ExpandableListActivity {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		intent.setComponent(new ComponentName(PACKAGE_NAME, 
 					     PACKAGE_NAME + activities[groupPosition][childPosition]));
-        intent.removeCategory(Intent.CATEGORY_DEFAULT);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 		return super.onChildClick(parent, view, groupPosition, childPosition, id);
-	}
-
-	private void requestFullScreen() {
-		Window window = this.getWindow();
-		window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-		window.requestFeature(Window.FEATURE_NO_TITLE);
 	}
 }

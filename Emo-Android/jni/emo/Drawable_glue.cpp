@@ -83,6 +83,15 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
         }
     }
 
+    int width  = 0;
+    int height = 0;
+    if (name != NULL && (!loadPngSizeFromAsset(name, &width, &height) || width <= 0 || height <= 0)) {
+        delete drawable;
+        return 0;
+    }
+    drawable->width  = width;
+    drawable->height = height;
+
     char key[DRAWABLE_KEY_LENGTH];
     sprintf(key, "%ld%d-%d", 
                 engine->uptime.time, engine->uptime.millitm, drawable->getCurrentBufferId());

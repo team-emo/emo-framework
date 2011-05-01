@@ -43,17 +43,6 @@
                        android:value="sprite_example.nut" />
         </activity-alias>
 
-        <activity-alias android:name=".SpriteRemoveExample"
-            android:targetActivity=".Main"
-            android:label="@string/sprite_remove_example_name">
-            <meta-data android:name="android.app.lib_name"
-                       android:value="emo-android" />
-            <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
-            <meta-data android:name="emo.script.main"
-                       android:value="sprite_remove_example.nut" />
-        </activity-alias>
-
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest> 
