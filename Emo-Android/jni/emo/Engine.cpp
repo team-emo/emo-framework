@@ -180,8 +180,8 @@ namespace emo {
             this->initScriptFunctions();
 
             // load runtime and main script
-            loadScriptFromAsset(SQUIRREL_RUNTIME_SCRIPT);
-            loadScriptFromAsset(SQUIRREL_MAIN_SCRIPT);
+            loadScriptFromAsset(this->getRuntimeScriptName().c_str());
+            loadScriptFromAsset(this->getMainScriptName().c_str());
 
             this->scriptLoaded = true;
         }
@@ -196,6 +196,52 @@ namespace emo {
 
     int32_t Engine::getHeight() {
         return this->height;
+    }
+
+    std::string Engine::getRuntimeScriptName() {
+        std::string scriptName;
+
+        JNIEnv* env;
+        JavaVM* vm = this->app->activity->vm;
+        
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(this->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "getRuntimeScriptName", "()Ljava/lang/String;");
+        jstring jstr = (jstring)env->CallObjectMethod(this->app->activity->clazz, methodj);
+        if (jstr != NULL) {
+            const char* str = env->GetStringUTFChars(jstr, NULL);
+            scriptName = str;
+            env->ReleaseStringUTFChars(jstr, str);
+        } else {
+            scriptName = SQUIRREL_RUNTIME_SCRIPT;
+        }
+        vm->DetachCurrentThread();
+
+        return scriptName;
+    }
+
+    std::string Engine::getMainScriptName() {
+        std::string scriptName;
+
+        JNIEnv* env;
+        JavaVM* vm = this->app->activity->vm;
+        
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(this->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "getMainScriptName", "()Ljava/lang/String;");
+        jstring jstr = (jstring)env->CallObjectMethod(this->app->activity->clazz, methodj);
+        if (jstr != NULL) {
+            const char* str = env->GetStringUTFChars(jstr, NULL);
+            scriptName = str;
+            env->ReleaseStringUTFChars(jstr, str);
+        } else {
+            scriptName = SQUIRREL_MAIN_SCRIPT;
+        }
+        vm->DetachCurrentThread();
+
+        return scriptName;
     }
 
     std::string Engine::getJavaPackageName() {

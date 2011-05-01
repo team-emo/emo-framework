@@ -1,6 +1,8 @@
 package com.emo_framework;
 
 import android.app.NativeActivity;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -171,6 +173,26 @@ public class EmoActivity extends NativeActivity {
     	return response;
     }
     
+    public String getRuntimeScriptName() {
+    	try {
+    	    ActivityInfo ai = getPackageManager().
+    	    	getActivityInfo(this.getComponentName(), PackageManager.GET_META_DATA);
+    	    return ai.metaData.getString("emo.script.runtime");
+    	} catch (Exception e) {
+    		return null;
+    	}
+    }
+
+    public String getMainScriptName() {
+    	try {
+    	    ActivityInfo ai = getPackageManager().
+    	    	getActivityInfo(this.getComponentName(), PackageManager.GET_META_DATA);
+    	    return ai.metaData.getString("emo.script.main");
+    	} catch (Exception e) {
+    		return null;
+    	}
+    }
+
     public void LOGI(String message) {
     	Log.i(ENGINE_TAG, message, null);
     }

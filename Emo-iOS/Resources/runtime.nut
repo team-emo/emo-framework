@@ -533,11 +533,27 @@ class emo.MapSprite extends emo.Sprite {
         return stage.addTileRow(id, tiles);
     }
 
-    function setTile(tiles) {
+    function setMap(tiles) {
         stage.clearTiles(id);
         for (local i = 0; i < tiles.len(); i++) {
             this.addRow(tiles[i]);
         }
+    }
+
+    function setTileAt(row, column, value) {
+        return stage.setTileAt(id, row, column, value);
+    }
+
+    function getTileAt(row, column) {
+        return stage.getTileAt(id, row, column);
+    }
+
+    function getTileIndexAtCoord(x, y) {
+        return stage.getTileIndexAtCoord(id, x, y);
+    }
+
+    function getTilePositionAtCoord(x, y) {
+        return stage.getTilePositionAtCoord(id, x, y);
     }
 
     function show() { return stage.show(childId); }

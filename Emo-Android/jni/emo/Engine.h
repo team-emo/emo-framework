@@ -145,6 +145,9 @@ namespace emo {
         const ASensor* proximitySensor;
 
         void initScriptFunctions();
+
+        std::string getRuntimeScriptName();
+        std::string getMainScriptName();
     };
 }
 #endif
