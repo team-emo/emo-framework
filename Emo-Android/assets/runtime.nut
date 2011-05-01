@@ -579,6 +579,14 @@ function emo::Stage::load(obj) {
     }
 }
 
+function emo::Stage::getWindowWidth() {
+	return this.windowWidth();
+}
+
+function emo::Stage::getWindowHeight() {
+	return this.windowHeight();
+}
+
 function emo::_onLoad() { 
     if (emo.rawin("onLoad")) {
         emo.onLoad();
