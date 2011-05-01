@@ -4,6 +4,8 @@ local event = emo.Event();
 class Main {
 
     block = emo.Sprite("block.png");
+    distantX = 10;
+    distantY = 10;
 
 	/*
 	 * Called when this class is loaded
@@ -32,11 +34,18 @@ class Main {
     }
     
     /*
-     * Called when onDrawCalleback event is enabled
+     * Called when onDrawCalleback event is enabled by enableOnDrawCallback
      * dt parameter is delta time (millisecond)
      */
     function onDrawFrame(dt) {
+    	local x = block.getX() + distantX;
+    	local y = block.getY() + distantY;
+    	
+    	if (x + block.getWidth()  >= stage.getWindowWidth()  || x <= 0) distantX = -distantX;
+    	if (y + block.getHeight() >= stage.getWindowHeight() || y <= 0) distantY = -distantY;
+    	
     	block.rotate(block.getAngle() + 3);
+    	block.move(x, y);
     }
 
 	/*
