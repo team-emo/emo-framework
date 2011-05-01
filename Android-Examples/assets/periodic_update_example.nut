@@ -7,6 +7,7 @@ local event = emo.Event();
 class Main {
 
     block = emo.Sprite("block.png");
+    
     distantX = 10;
     distantY = 10;
 
