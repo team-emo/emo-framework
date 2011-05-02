@@ -4,7 +4,7 @@
 #import "EmoEngine.h"
 #import "EmoDrawable.h"
 #import "EmoRuntime.h"
-#import "Util.h"engine.sqvm
+#import "Util.h"
 
 extern EmoEngine* engine;
 
