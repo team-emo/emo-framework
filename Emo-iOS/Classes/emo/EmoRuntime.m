@@ -57,7 +57,8 @@ extern EmoEngine* engine;
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-	engine.lastErrorDescription = [error localizedDescription];
+	engine.lastCallbackErrorMessage = [error localizedDescription];
+	engine.lastCallbackErrorType = @"NSURLConnection";
     callSqFunction_Bool_TwoStrings(engine.sqvm, 
 								   EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, 
 								   "ERROR", [name UTF8String], SQFalse);
@@ -90,6 +91,9 @@ void initRuntimeFunctions() {
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+	
+	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "getLastErrorMessage",   emoGetLastCallbackErrorMessage);
+	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "getLastErrorType",      emoGetLastCallbackErrorType);
 
     registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoRuntimeEcho);	
     registerEmoClassFunc(engine.sqvm, EMO_NET_CLASS,     "request",      emoAsyncHttpRequest);
@@ -364,6 +368,22 @@ SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
  */
 SQInteger emoRuntimeGetOSName(HSQUIRRELVM v) {
     sq_pushstring(v, OS_IOS, -1);
+    return 1;
+}
+
+/*
+ * Returns last callback error message
+ */
+SQInteger emoGetLastCallbackErrorMessage(HSQUIRRELVM v) {
+    sq_pushstring(v, [engine.lastCallbackErrorMessage UTF8String], -1);
+    return 1;
+}
+
+/*
+ * Returns last callback error type (class name or exception name)
+ */
+SQInteger emoGetLastCallbackErrorType(HSQUIRRELVM v) {
+    sq_pushstring(v, [engine.lastCallbackErrorType UTF8String], -1);
     return 1;
 }
 

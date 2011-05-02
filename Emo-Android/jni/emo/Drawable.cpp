@@ -288,7 +288,7 @@ namespace emo {
         glColor4f(this->param_color[0], this->param_color[1], this->param_color[2], this->param_color[3]);
 
         // update position
-        glTranslatef(this->x, this->y, this->z);
+        glTranslatef(this->x, this->y, 0);
 
         // rotate
         glTranslatef(this->param_rotate[1], this->param_rotate[2], 0);

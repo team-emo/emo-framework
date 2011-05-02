@@ -4,7 +4,7 @@
 #import "EmoEngine.h"
 #import "EmoDrawable.h"
 #import "EmoRuntime.h"
-#import "Util.h"
+#import "Util.h"engine.sqvm
 
 extern EmoEngine* engine;
 
@@ -14,6 +14,33 @@ void initDrawableFunctions() {
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createSpriteSheet", emoDrawableCreateSpriteSheet);
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
+	/*
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createMapSprite",     emoDrawableCreateMapSprite);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSprite",       emoDrawableLoad);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadMapSprite",    emoDrawableLoadMapSprite);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "addTileRow",       emoDrawableAddTileRow);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "clearTiles",       emoDrawableClearTiles);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setTileAt",        emoDrawableSetTileAt);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getTileAt",        emoDrawableGetTileAt);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getTileIndexAtCoord",    emoDrawableGetTileIndexAtCoord);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getTilePositionAtCoord", emoDrawableGetTilePositionAtCoord);
+	*/
+	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getX",           emoDrawableGetX);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getY",           emoDrawableGetY);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getZ",           emoDrawableGetZ);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getWidth",       emoDrawableGetWidth);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getHeight",      emoDrawableGetHeight);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getScaleX",      emoDrawableGetScaleX);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getScaleY",      emoDrawableGetScaleY);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getAngle",       emoDrawableGetAngle);
+	
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setX",           emoDrawableSetX);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setY",           emoDrawableSetY);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setZ",           emoDrawableSetZ);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setWidth",       emoDrawableSetWidth);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setHeight",      emoDrawableSetHeight);
+    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setSize",        emoDrawableSetSize);
+	
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
@@ -53,7 +80,21 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
         if (strlen(name) > 0) {
             drawable.name = [[NSString alloc] initWithUTF8String:name];
         }
+    } else {
+		drawable.name = nil;
+	}
+	
+    int width  = 0;
+    int height = 0;
+	
+    if (drawable.name != nil && (!loadPngSizeFromAsset(drawable.name, 
+				&width, &height) || width <= 0 || height <= 0)) {
+        [drawable release];
+        return 0;
     }
+	
+	drawable.width  = width;
+	drawable.height = height;
 	
     [drawable createTextureBuffer];
 	
@@ -107,11 +148,10 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     int width  = 0;
     int height = 0;
 	
-    if (!loadPngSizeFromAsset(drawable.name, &width, &height) || 
+    if (drawable.name != nil && !loadPngSizeFromAsset(drawable.name, &width, &height) || 
 		width <= 0 || height <= 0 || frameWidth <= 0 || frameHeight <= 0) {
-        free(drawable);
-        sq_pushinteger(v, -1);
-        return 1;
+        [drawable release];
+        return 0;
     }
 	
     drawable.hasSheet = true;
@@ -294,21 +334,21 @@ SQInteger emoDrawableScale(HSQUIRRELVM v) {
     }
 	
     // scale x
-    if (nargs >= 3) {
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 3, &f);
         [drawable setScale:0 withValue:f];
     }
 	
     // scale y
-    if (nargs >= 4) {
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 4, &f);
         [drawable setScale:1 withValue:f];
     }
 	
     // center x
-    if (nargs >= 5) {
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 5, &f);
         [drawable setScale:2 withValue:f];
@@ -317,7 +357,7 @@ SQInteger emoDrawableScale(HSQUIRRELVM v) {
     }
 	
     // center y
-    if (nargs >= 6) {
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 6, &f);
         [drawable setScale:3 withValue:f];
@@ -351,14 +391,14 @@ SQInteger emoDrawableRotate(HSQUIRRELVM v) {
     }
 	
     // angle
-    if (nargs >= 3) {
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 3, &f);
         [drawable setRotate:0 withValue:f];
     }
 	
     // center x
-    if (nargs >= 4) {
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 4, &f);
         [drawable setRotate:1 withValue:f];
@@ -367,7 +407,7 @@ SQInteger emoDrawableRotate(HSQUIRRELVM v) {
     }
 	
     // center y
-    if (nargs >= 5) {
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 5, &f);
         [drawable setRotate:2 withValue:f];
@@ -376,7 +416,7 @@ SQInteger emoDrawableRotate(HSQUIRRELVM v) {
     }
 	
     // rotate axis
-    if (nargs >= 6) {
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
         SQFloat f;
         sq_getfloat(v, 6, &f);
         [drawable setRotate:3 withValue:f];
@@ -690,6 +730,208 @@ SQInteger emoDrawableColorAlpha(HSQUIRRELVM v) {
     }
 	
     sq_pushinteger(v, [drawable getColor:3]);
+    return 1;
+}
+
+SQInteger emoDrawableSetX(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat x;
+        sq_getfloat(v, 3, &x);
+        drawable.x = x;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDrawableSetY(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat y;
+        sq_getfloat(v, 3, &y);
+        drawable.y = y;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDrawableSetZ(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat z;
+        sq_getfloat(v, 3, &z);
+        drawable.z = z;
+        engine.sortOrderDirty = TRUE;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDrawableSetWidth(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQInteger w;
+        sq_getinteger(v, 3, &w);
+        drawable.width = w;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDrawableSetHeight(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQInteger h;
+        sq_getinteger(v, 3, &h);
+        drawable.height = h;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDrawableSetSize(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQInteger w;
+        sq_getinteger(v, 3, &w);
+        drawable.width = w;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
+        SQInteger h;
+        sq_getinteger(v, 4, &h);
+        drawable.height = h;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }
 

@@ -12,17 +12,20 @@ class Level_1 {
     rectangle   = emo.Rectangle();
     logoSprite  = emo.Sprite("logo.png");
     dogSprite   = emo.SpriteSheet("dog.png", 34, 42, 1);
-    mapSprite   = emo.MapSprite("blocks.png", 33, 33, 1);
+    //mapSprite   = emo.MapSprite("blocks.png", 33, 33, 1);
 
     function onLoad() {
         print("Level_1:onLoad"); 
 
+		rectangle.getId();
+		rectangle.move(100, 100);
 		rectangle.color(1, 0, 0, 1);
         rectangle.setSize(150, 10);
 
+		dogSprite.move(150, 150);
         dogSprite.animate(0, 5, 1000, 0);
-
-        mapSprite.setZ(0);
+		
+		// mapSprite.setZ(0);
         logoSprite.setZ(1);
         dogSprite.setZ(2);
         rectangle.setZ(3);
@@ -31,6 +34,7 @@ class Level_1 {
         dogSprite.load();
         rectangle.load();
 
+/*
         local tiles = [
                        [ 0,  1,  2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12],
                        [11, 12, 13, 14, 15, 16, 17, -1, -1, -1, 0, 1, 2],
@@ -50,7 +54,7 @@ class Level_1 {
                       ];
         mapSprite.setMap(tiles);
         mapSprite.load();
-/*
+		
         event.enableOnDrawCallback(100);
         //stage.interval(500);
 		
@@ -97,13 +101,13 @@ class Level_1 {
 
     function onDispose() {
         print("Level_1:onDispose"); 
-        mapSprite.remove();
+        //mapSprite.remove();
         //dogSprite.remove();
-		//rectangle.remove();
+		rectangle.remove();
     }
 
     function onDrawFrame(dt) {
-        mapSprite.move(mapSprite.getX(), mapSprite.getY() - 2);
+        //mapSprite.move(mapSprite.getX(), mapSprite.getY() - 2);
     }
 
     function onCallback(name, value) {
@@ -115,7 +119,7 @@ class Level_1 {
         print("Level_1:onMotionEvent " + motionEvent.toString()); 
         if (motionEvent.getAction() == MOTION_EVENT_ACTION_DOWN) {
             //stage.load(Level_2());
-            mapSprite.remove();
+            //mapSprite.remove();
         }
     }
 

@@ -100,10 +100,7 @@ extern EmoEngine* engine;
     glColor4f(param_color[0], param_color[1], param_color[2], param_color[3]);
 	
     // update position
-    glTranslatef(x, y, z);
-	
-    // update width and height
-    glScalef(width, height, 1);
+    glTranslatef(x, y, 0);
 	
     // rotate
     glTranslatef(param_rotate[1], param_rotate[2], 0);
@@ -120,6 +117,9 @@ extern EmoEngine* engine;
     glTranslatef(param_scale[2], param_scale[3], 0);
     glScalef(param_scale[0], param_scale[1], 1);
     glTranslatef(-param_scale[2], -param_scale[3], 0);
+	
+    // update width and height
+    glScalef(width, height, 1);
 	
     // bind vertex positions
     glBindBuffer(GL_ARRAY_BUFFER, [stage getPositionPointer]);

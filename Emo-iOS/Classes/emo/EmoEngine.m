@@ -27,9 +27,11 @@ NSString* data2ns(NSData* data) {
 @implementation EmoEngine
 @synthesize sqvm;
 @synthesize lastError;
-@synthesize lastErrorDescription;
+@synthesize lastCallbackErrorMessage;
+@synthesize lastCallbackErrorType;
 @synthesize isFrameInitialized;
 @synthesize isRunning;
+@synthesize sortOrderDirty;
 @synthesize enablePerspectiveNicest;
 @synthesize enableOnDrawFrame;
 @synthesize onDrawFrameInterval;
@@ -56,6 +58,7 @@ NSString* data2ns(NSData* data) {
 	isFrameInitialized = FALSE;
 	lastError = EMO_NO_ERROR;
 	isRunning = TRUE;
+	sortOrderDirty = TRUE;
 	
 	enablePerspectiveNicest = TRUE;
 	enableOnDrawFrame = FALSE;

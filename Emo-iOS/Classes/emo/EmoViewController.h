@@ -19,10 +19,15 @@
 	NSMutableDictionary *touchIdMaster;
 	float touchEventParamCache[MOTION_EVENT_PARAMS_SIZE];
 	NSInteger nextTouchId;
+	
+	NSString* runtimeScript;
+	NSString* mainScript;
 }
 
 @property (readonly, nonatomic, getter=isAnimating) BOOL animating;
 @property (nonatomic) NSInteger animationFrameInterval;
+@property (readwrite, copy) NSString* runtimeScript;
+@property (readwrite, copy) NSString* mainScript;
 
 - (void)onLoad;
 - (void)startAnimation;

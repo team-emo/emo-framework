@@ -11,9 +11,11 @@ NSString* data2ns(NSData* data);
 @interface EmoEngine : NSObject<UIAccelerometerDelegate> {
 	HSQUIRRELVM sqvm;
 	NSInteger lastError;
-	NSString* lastErrorDescription;
+	NSString* lastCallbackErrorMessage;
+	NSString* lastCallbackErrorType;
 	BOOL isFrameInitialized;
 	BOOL isRunning;
+	BOOL sortOrderDirty;
 	NSDate* startTime;
 	NSTimeInterval lastOnDrawInterval;
 	NSTimeInterval lastOnDrawDrawablesInterval;
@@ -36,7 +38,8 @@ NSString* data2ns(NSData* data);
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readwrite) int  lastError;
-@property (readwrite, copy) NSString* lastErrorDescription;
+@property (readwrite, copy) NSString* lastCallbackErrorMessage;
+@property (readwrite, copy) NSString* lastCallbackErrorType;
 @property (readonly) BOOL isFrameInitialized;
 @property (readonly) BOOL isRunning;
 @property (readwrite) BOOL enablePerspectiveNicest;
@@ -45,6 +48,7 @@ NSString* data2ns(NSData* data);
 @property (readwrite) int onDrawDrawablesInterval;
 @property (readonly) EmoAudioManager* audioManager;
 @property (readonly) EmoStage* stage;
+@property (readwrite) BOOL sortOrderDirty;
 
 - (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 - (void)registerAccelerometerSensor:(BOOL)enable;

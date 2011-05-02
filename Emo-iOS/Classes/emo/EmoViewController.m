@@ -18,6 +18,7 @@ EmoEngine* engine;
 @implementation EmoViewController
 
 @synthesize animating, context, displayLink;
+@synthesize runtimeScript, mainScript;
 
 - (void)awakeFromNib
 {
@@ -150,15 +151,23 @@ EmoEngine* engine;
 }
 
 - (void)onLoad {
+	
+	if (runtimeScript == nil) {
+		runtimeScript = @SQUIRREL_RUNTIME_SCRIPT;
+	}
+	if (mainScript == nil) {
+		mainScript = @SQUIRREL_MAIN_SCRIPT;
+	}
+	
 	if (![engine startEngine:((EmoView *)self.view).width withHeight:((EmoView *)self.view).height]) {
 		NSLOGE(@"Failed to start engine");
 	}
 	
-	if ([engine loadScriptFromResource:SQUIRREL_RUNTIME_SCRIPT vm:engine.sqvm] != EMO_NO_ERROR) {
+	if ([engine loadScriptFromResource:[runtimeScript UTF8String] vm:engine.sqvm] != EMO_NO_ERROR) {
 		NSLOGE(@"Failed to load runtime script");
 	}
 
-	if ([engine loadScriptFromResource:SQUIRREL_MAIN_SCRIPT vm:engine.sqvm] != EMO_NO_ERROR) {
+	if ([engine loadScriptFromResource:[mainScript UTF8String] vm:engine.sqvm] != EMO_NO_ERROR) {
 		NSLOGE(@"Failed to load main script");
 	}
 	

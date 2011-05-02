@@ -4,6 +4,16 @@ void initDrawableFunctions();
 
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);
 SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v);
+/*
+SQInteger emoDrawableCreateMapSprite(HSQUIRRELVM v);
+SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v);
+SQInteger emoDrawableAddTileRow(HSQUIRRELVM v);
+SQInteger emoDrawableClearTiles(HSQUIRRELVM v);
+SQInteger emoDrawableSetTileAt(HSQUIRRELVM v);
+SQInteger emoDrawableGetTileAt(HSQUIRRELVM v);
+SQInteger emoDrawableGetTileIndexAtCoord(HSQUIRRELVM v);
+SQInteger emoDrawableGetTilePositionAtCoord(HSQUIRRELVM v);
+*/
 SQInteger emoDrawableLoad(HSQUIRRELVM v);
 SQInteger emoDrawableMove(HSQUIRRELVM v);
 SQInteger emoDrawableScale(HSQUIRRELVM v);
@@ -36,3 +46,11 @@ SQInteger emoDrawableGetHeight(HSQUIRRELVM v);
 SQInteger emoDrawableGetScaleX(HSQUIRRELVM v);
 SQInteger emoDrawableGetScaleY(HSQUIRRELVM v);
 SQInteger emoDrawableGetAngle(HSQUIRRELVM v);
+
+SQInteger emoDrawableSetX(HSQUIRRELVM v);
+SQInteger emoDrawableSetY(HSQUIRRELVM v);
+SQInteger emoDrawableSetZ(HSQUIRRELVM v);
+SQInteger emoDrawableSetWidth(HSQUIRRELVM v);
+SQInteger emoDrawableSetHeight(HSQUIRRELVM v);
+SQInteger emoDrawableSetSize(HSQUIRRELVM v);
+
