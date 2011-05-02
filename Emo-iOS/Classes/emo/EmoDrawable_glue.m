@@ -3,6 +3,7 @@
 #import "Constants.h"
 #import "EmoEngine.h"
 #import "EmoDrawable.h"
+#import "EmoMapDrawable.h"
 #import "EmoRuntime.h"
 #import "Util.h"
 
@@ -14,7 +15,7 @@ void initDrawableFunctions() {
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createSpriteSheet", emoDrawableCreateSpriteSheet);
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
-	/*
+
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createMapSprite",     emoDrawableCreateMapSprite);
     registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSprite",       emoDrawableLoad);
     registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadMapSprite",    emoDrawableLoadMapSprite);
@@ -24,7 +25,7 @@ void initDrawableFunctions() {
     registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getTileAt",        emoDrawableGetTileAt);
     registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getTileIndexAtCoord",    emoDrawableGetTileIndexAtCoord);
     registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getTilePositionAtCoord", emoDrawableGetTilePositionAtCoord);
-	*/
+
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getX",           emoDrawableGetX);
     registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getY",           emoDrawableGetY);
     registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getZ",           emoDrawableGetZ);
@@ -264,6 +265,366 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
         sq_pushinteger(v, EMO_NO_ERROR);
     } else {
         sq_pushinteger(v, ERR_CREATE_VERTEX);
+    }
+	
+    return 1;
+}
+
+SQInteger emoDrawableCreateMapSprite(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, 0);
+        return 1;
+    }
+	
+    // create parent sprite
+    EmoMapDrawable* parent = [[EmoMapDrawable alloc] init];
+	[parent setChild:drawable];
+    [parent initDrawable];
+	
+    drawable.independent = FALSE;
+	
+    [parent setFrameCount:1];
+    [parent createTextureBuffer];
+	
+    char key[DRAWABLE_KEY_LENGTH];
+	[parent updateKey:key];
+    [engine addDrawable:parent withKey:key];
+	
+    sq_pushstring(v, key, strlen(key));
+	
+    return 1;
+}
+
+SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoMapDrawable* parent = (EmoMapDrawable*)[engine getDrawable:id];
+	
+    if (parent == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    EmoDrawable* drawable = [parent getChild];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    // load drawable texture
+	if (drawable.name != nil) {
+		EmoImage* imageInfo = [[EmoImage alloc]init];
+		if (loadPngFromResource(drawable.name, imageInfo)) {
+			
+			// calculate the size of power of two
+			imageInfo.glWidth  = nextPowerOfTwo(imageInfo.width);
+			imageInfo.glHeight = nextPowerOfTwo(imageInfo.height);
+			imageInfo.loaded = FALSE;
+			
+			drawable.texture = imageInfo;
+			drawable.hasTexture = TRUE;
+			
+			if (!drawable.hasSheet) {
+				drawable.width  = imageInfo.width;
+				drawable.height = imageInfo.height;
+			}
+			
+			// assign OpenGL texture id
+			[imageInfo genTextures];
+		} else {
+			[imageInfo release];
+			sq_pushinteger(v, ERR_ASSET_LOAD);
+			return 1;
+		}
+	}
+	
+    // parent x
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat x;
+        sq_getfloat(v, 3, &x);
+        parent.x = x;
+    }
+	
+    // parent y
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
+        SQFloat y;
+        sq_getfloat(v, 4, &y);
+        parent.y = y;
+    }
+	
+    // parent width
+    SQInteger width = engine.stage.width;
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
+        sq_getinteger(v, 5, &width);
+    }
+	
+    // parent height
+    SQInteger height = engine.stage.height;
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
+        sq_getinteger(v, 6, &height);
+    }
+	
+    parent.width  = width;
+    parent.height = height;
+	
+    if ([parent bindVertex]) {
+        sq_pushinteger(v, EMO_NO_ERROR);
+    } else {
+        sq_pushinteger(v, ERR_CREATE_VERTEX);
+    }
+	
+    return 1;
+}
+
+SQInteger emoDrawableAddTileRow(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoMapDrawable* drawable = (EmoMapDrawable*)[engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_ARRAY) {
+		NSMutableArray *tile = [NSMutableArray array];
+        sq_pushnull(v);
+        while(SQ_SUCCEEDED(sq_next(v, -2))) {
+            if (sq_gettype(v, -1) == OT_INTEGER) {
+                SQInteger value;
+                sq_getinteger(v, -1, &value);
+                [tile addObject: [NSNumber numberWithInt:value]];
+            } else {
+                [tile addObject: [NSNumber numberWithInt:0]];
+            }
+            sq_pop(v, 2);
+        }
+		
+        [drawable addRow:tile];
+		
+        sq_pop(v, 1);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDrawableClearTiles(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoMapDrawable* drawable = (EmoMapDrawable*)[engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    if ([drawable clearTiles]) {
+        sq_pushinteger(v, EMO_NO_ERROR);
+        return 1;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+}
+
+SQInteger emoDrawableSetTileAt(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoMapDrawable* drawable = (EmoMapDrawable*)[engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    if (nargs >= 5 && sq_gettype(v, 3) == OT_INTEGER &&
+		sq_gettype(v, 4) == OT_INTEGER &&
+		sq_gettype(v, 5) == OT_INTEGER) {
+        SQInteger row;
+        SQInteger column;
+        SQInteger value;
+        sq_getinteger(v, 3, &row);
+        sq_getinteger(v, 4, &column);
+        sq_getinteger(v, 5, &value);
+		
+        [drawable setTileAt:row column:column value:value];
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDrawableGetTileAt(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+	
+    EmoMapDrawable* drawable = (EmoMapDrawable*)[engine getDrawable:id];
+	
+    if (drawable == nil) {
+        return 0;
+    }
+	
+    if (nargs >= 4 && sq_gettype(v, 3) == OT_INTEGER &&
+		sq_gettype(v, 4) == OT_INTEGER) {
+        SQInteger row;
+        SQInteger column;
+        sq_getinteger(v, 3, &row);
+        sq_getinteger(v, 4, &column);
+		
+        sq_pushinteger(v, [drawable getTileAt:row column:column]);
+    } else {
+        return 0;
+    }
+	
+    return 1;
+}
+
+SQInteger emoDrawableGetTileIndexAtCoord(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+	
+    EmoMapDrawable* drawable = (EmoMapDrawable*)[engine getDrawable:id];
+	
+    if (drawable == nil) {
+        return 0;
+    }
+	
+    if (nargs >= 4 && sq_gettype(v, 3) != OT_NULL &&
+		sq_gettype(v, 4) != OT_NULL) {
+        SQFloat x;
+        SQFloat y;
+        sq_getfloat(v, 3, &x);
+        sq_getfloat(v, 4, &y);
+		
+        NSArray* index = [drawable getTileIndexAtCoord:x y:y];
+		
+        if ([index count] < 2) return 0;
+		
+        sq_newarray(v, 0);
+		
+        sq_pushinteger(v, [[index objectAtIndex:0] intValue]);
+        sq_arrayappend(v, -2);
+		
+        sq_pushinteger(v, [[index objectAtIndex:1] intValue]);
+        sq_arrayappend(v, -2);
+		
+        sq_push(v, -1);
+    } else {
+        return 0;
+    }
+	
+    return 1;
+}
+
+SQInteger emoDrawableGetTilePositionAtCoord(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+	
+    EmoMapDrawable* drawable = (EmoMapDrawable*)[engine getDrawable:id];
+	
+    if (drawable == nil) {
+        return 0;
+    }
+	
+    if (nargs >= 4 && sq_gettype(v, 3) != OT_NULL &&
+		sq_gettype(v, 4) != OT_NULL) {
+        SQFloat x;
+        SQFloat y;
+        sq_getfloat(v, 3, &x);
+        sq_getfloat(v, 4, &y);
+		
+        NSArray* position = [drawable getTilePositionAtCoord:x y:y];
+		
+        if ([position count] < 2) return 0;
+		
+        sq_newarray(v, 0);
+		
+        sq_pushfloat(v, [[position objectAtIndex:0] intValue]);
+        sq_arrayappend(v, -2);
+		
+        sq_pushfloat(v, [[position objectAtIndex:1] intValue]);
+        sq_arrayappend(v, -2);
+		
+        sq_push(v, -1);
+    } else {
+        return 0;
     }
 	
     return 1;

@@ -233,7 +233,10 @@ NSString* data2ns(NSData* data) {
 	lastOnDrawDrawablesInterval = [self uptime];
 	[stage onDrawFrame:delta];
 	for (id key in drawables) {
-		[[drawables objectForKey:key] onDrawFrame:delta withStage:stage];
+		EmoDrawable* drawable = [drawables objectForKey:key];
+		if (drawable.loaded && drawable.independent) {
+			[drawable onDrawFrame:delta withStage:stage];
+		}
 	}
 	
 	return FALSE;

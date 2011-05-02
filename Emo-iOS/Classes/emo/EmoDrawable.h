@@ -25,7 +25,6 @@
 -(NSTimeInterval)getLastOnAnimationDelta:(NSTimeInterval)uptime;
 @end
 
-
 @interface EmoDrawable : NSObject {
 	GLuint* frames_vbos;
 	NSString* name;
@@ -39,6 +38,7 @@
 	BOOL loaded;
 	BOOL hasSheet;
 	BOOL animating;
+	BOOL independent;
 	
     float      vertex_tex_coords[8];
 	
@@ -72,6 +72,8 @@
 @property (readwrite) NSInteger border;
 @property (readwrite) NSInteger margin;
 @property (assign, readwrite, nonatomic) EmoImage* texture;
+@property (readwrite) BOOL independent;
+@property (readonly) BOOL loaded;
 
 -(void)doUnload;
 -(void)initDrawable;

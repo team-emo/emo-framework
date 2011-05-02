@@ -71,6 +71,8 @@ extern EmoEngine* engine;
 @synthesize hasTexture, hasSheet;
 @synthesize texture;
 @synthesize frameCount, frame_index, border, margin;
+@synthesize independent;
+@synthesize loaded;
 
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
     if (!loaded) return FALSE;
@@ -161,6 +163,7 @@ extern EmoEngine* engine;
 	loaded     = FALSE;
 	hasSheet   = FALSE;
 	animating  = FALSE;
+	independent = TRUE;
 
 	// color param RGBA
     param_color[0] = 1.0f;
@@ -334,6 +337,8 @@ extern EmoEngine* engine;
 	glGenBuffers (1, &frames_vbos[frame_index]);
 }
 -(void)doUnload {
+	if (!loaded) return;
+	
 	if (hasTexture) {
 		[texture doUnload];
 		[texture release];
@@ -349,6 +354,8 @@ extern EmoEngine* engine;
 	free(frames_vbos);
 	
 	[self deleteAnimations];
+	
+	loaded = FALSE;
 }
 -(BOOL)setFrameIndex:(NSInteger)index {
 	if (index < 0 || frameCount <= index) {
