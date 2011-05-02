@@ -17,7 +17,6 @@ void initDrawableFunctions() {
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
 
 	registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createMapSprite",     emoDrawableCreateMapSprite);
-    registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSprite",       emoDrawableLoad);
     registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadMapSprite",    emoDrawableLoadMapSprite);
     registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "addTileRow",       emoDrawableAddTileRow);
     registerEmoClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "clearTiles",       emoDrawableClearTiles);
