@@ -435,6 +435,15 @@ extern EmoEngine* engine;
 	}
 	return TRUE;
 }
+- (NSComparisonResult) compareZ:(EmoDrawable*)other {
+	if (self.z < other.z) {
+		return NSOrderedAscending;
+	} else if (self.z > other.z) {
+		return NSOrderedDescending;
+	} else {
+		return NSOrderedSame;
+	}
+}
 -(void)garbage {
 	int retainCount = [name retainCount];
 	for (int i = 0; i < retainCount; i++) {

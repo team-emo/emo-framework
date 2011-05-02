@@ -35,6 +35,7 @@ NSString* data2ns(NSData* data);
 	
 	NSMutableDictionary* drawables;
 	NSMutableDictionary* netTasks;
+	NSArray* drawablesToDraw;
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readwrite) int  lastError;

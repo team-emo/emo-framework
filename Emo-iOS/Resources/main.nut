@@ -12,14 +12,11 @@ class Level_1 {
     function onLoad() {
         print("Level_1:onLoad"); 
 
-		mapSprite.getId();
-
-		rectangle.getId();
-		rectangle.move(100, 100);
+		rectangle.move(15, 15);
 		rectangle.color(1, 0, 0, 1);
         rectangle.setSize(150, 10);
 
-		dogSprite.move(150, 150);
+		dogSprite.move(10, 10);
         dogSprite.animate(0, 5, 1000, 0);
 		
 		mapSprite.setZ(0);
@@ -50,7 +47,7 @@ class Level_1 {
                       ];
         mapSprite.setMap(tiles);
         mapSprite.load();
-        event.enableOnDrawCallback(33);
+        //event.enableOnDrawCallback(33);
 
 /*		
         //stage.interval(500);

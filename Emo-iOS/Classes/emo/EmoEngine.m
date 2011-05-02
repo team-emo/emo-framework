@@ -79,6 +79,8 @@ NSString* data2ns(NSData* data) {
 	onDrawFrameInterval = 0;
 	onDrawDrawablesInterval = 0;
 	
+	drawablesToDraw  = [NSArray alloc];
+	
 	sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
 	
 	initSQVM(sqvm);
@@ -115,6 +117,7 @@ NSString* data2ns(NSData* data) {
 	stage = nil;
 	
 	[startTime release];
+	[drawablesToDraw release];
 	
 	[netTasks release];
 	netTasks = nil;
@@ -218,6 +221,12 @@ NSString* data2ns(NSData* data) {
 		return FALSE;
 	}
 	
+	if (sortOrderDirty) {
+		[drawablesToDraw release];
+		drawablesToDraw = [[[drawables allValues] sortedArrayUsingSelector:@selector(compareZ:)] retain];
+		sortOrderDirty = FALSE;
+	}
+	
 	NSTimeInterval delta = [self getLastOnDrawDelta];
 	if (enableOnDrawFrame && delta > onDrawFrameInterval) {
 		lastOnDrawInterval = [self uptime];
@@ -232,8 +241,8 @@ NSString* data2ns(NSData* data) {
 
 	lastOnDrawDrawablesInterval = [self uptime];
 	[stage onDrawFrame:delta];
-	for (id key in drawables) {
-		EmoDrawable* drawable = [drawables objectForKey:key];
+	for (int i = 0; i < [drawablesToDraw count]; i++) {
+		EmoDrawable* drawable = [drawablesToDraw objectAtIndex:i];
 		if (drawable.loaded && drawable.independent) {
 			[drawable onDrawFrame:delta withStage:stage];
 		}
@@ -381,6 +390,7 @@ NSString* data2ns(NSData* data) {
 	[drawables removeObjectForKey:_key];
 	[_key release];
 	
+	sortOrderDirty = TRUE;
 	return TRUE;
 	
 }
@@ -392,10 +402,13 @@ NSString* data2ns(NSData* data) {
 	}
 	
 	[drawables removeAllObjects];
+	
+	sortOrderDirty = TRUE;
 }
 
 -(void)addDrawable:(EmoDrawable*)drawable withKey:(const char*)key {
 	[drawables setObject:drawable forKey: char2ns(key)];
+	sortOrderDirty = TRUE;
 }
 
 -(EmoNetTask*)createNetTask:(NSString*)taskName {
