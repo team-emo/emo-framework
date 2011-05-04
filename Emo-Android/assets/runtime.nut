@@ -208,6 +208,8 @@ const AUDIO_CHANNEL_PAUSED    = 2;
 const AUDIO_CHANNEL_PLAYING   = 3;
 
 EMO_RUNTIME_DELEGATE    <- null;
+EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
+EMO_RUNTIME_ACTIVETIME  <- 0;
 
 class emo.MotionEvent {
     param = null;
@@ -564,6 +566,9 @@ function emo::_onLoad() {
 }
 
 function emo::_onGainedFocus() {
+
+    EMO_RUNTIME_STOPWATCH.start();
+
     if (emo.rawin("onGainedFocus")) {
         emo.onGainedFocus();
     }
@@ -581,6 +586,9 @@ function emo::_onLostFocus() {
              EMO_RUNTIME_DELEGATE.rawin("onLostFocus")) {
         EMO_RUNTIME_DELEGATE.onLostFocus();
     }
+
+    EMO_RUNTIME_ACTIVETIME = EMO_RUNTIME_STOPWATCH.elapsed();
+    EMO_RUNTIME_STOPWATCH.stop();
 }
 
 function emo::_onDispose() {

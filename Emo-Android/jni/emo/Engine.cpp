@@ -119,6 +119,7 @@ namespace emo {
         this->loadedCalled = false;
         this->initialized  = false;
         this->scriptLoaded = false;
+        this->stopwatchStarted = false;
 
         this->drawables = new drawables_t();
         this->drawablesToRemove = new drawables_t();
@@ -379,6 +380,34 @@ namespace emo {
         int32_t deltaMsec = this->uptime.millitm - this->lastOnDrawDrawablesInterval.millitm;
 
         return (deltaSec * 1000) + deltaMsec;
+    }
+
+    int32_t Engine::getLastStopwatchElapsedDelta() {
+        int32_t deltaSec  = this->uptime.time - this->stopwatchStartTime.time;
+        int32_t deltaMsec = this->uptime.millitm - this->stopwatchStartTime.millitm;
+
+        return (deltaSec * 1000) + deltaMsec;
+     }
+
+    void Engine::stopwatchStart() {
+        this->updateUptime();
+        this->stopwatchStartTime = this->uptime;
+        this->stopwatchStarted = true;
+    }
+
+    void Engine::stopwatchStop() {
+        this->updateUptime();
+        this->stopwatchElapsedTime = this->getLastStopwatchElapsedDelta();
+        this->stopwatchStarted = false;
+    }
+
+    int32_t Engine::stopwatchElapsed() {
+        if (this->stopwatchStarted) {
+            this->updateUptime();
+            this->stopwatchElapsedTime = this->getLastStopwatchElapsedDelta();
+        }
+
+        return this->stopwatchElapsedTime;
     }
 
     int32_t Engine::onSensorEvent(ASensorEvent* event) {

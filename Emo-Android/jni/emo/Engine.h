@@ -103,6 +103,10 @@ namespace emo {
         void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);
 
         std::string getJavaPackageName();
+
+        void stopwatchStart();
+        void stopwatchStop();
+        int32_t stopwatchElapsed();
     protected:
         bool loaded;
         bool focused;
@@ -126,6 +130,11 @@ namespace emo {
 
         timeb   lastOnDrawInterval;
         timeb   lastOnDrawDrawablesInterval;
+
+        bool      stopwatchStarted;
+        timeb     stopwatchStartTime;
+        int32_t   stopwatchElapsedTime;
+        int32_t   getLastStopwatchElapsedDelta();
 
         bool enablePerspectiveNicest;
         bool enableOnDrawFrame;

@@ -18,6 +18,7 @@ extern emo::Engine* engine;
 void initRuntimeFunctions() {
     engine->registerClass(engine->sqvm, EMO_RUNTIME_CLASS);
     engine->registerClass(engine->sqvm, EMO_EVENT_CLASS);
+    engine->registerClass(engine->sqvm, EMO_STOPWATCH_CLASS);
 
     engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
     engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
@@ -28,6 +29,9 @@ void initRuntimeFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
     engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
     engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);
+    engine->registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "start",         emoRuntimeStopwatchStart);
+    engine->registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
+    engine->registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
 
     engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
     engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
@@ -258,6 +262,31 @@ SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
 SQInteger emoRuntimeGetOSName(HSQUIRRELVM v) {
     sq_pushstring(v, (SQChar*)OS_ANDROID, -1);
     return 1;
+}
+
+
+/*
+ * start stopwatch
+ */
+SQInteger emoRuntimeStopwatchStart(HSQUIRRELVM v) {
+    engine->stopwatchStart();
+    return 0;
+}
+
+/*
+ * get elapsed time from stop watch
+ */
+SQInteger emoRuntimeStopwatchElapsed(HSQUIRRELVM v) {
+    sq_pushinteger(v, engine->stopwatchElapsed());
+    return 1;
+}
+
+/*
+ * stop stopwatch
+ */
+SQInteger emoRuntimeStopwatchStop(HSQUIRRELVM v) {
+    engine->stopwatchStop();
+    return 0;
 }
 
 /*
