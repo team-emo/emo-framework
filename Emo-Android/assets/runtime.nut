@@ -217,6 +217,9 @@ class emo.ModifierManager {
 	}
 	
 	function add(modifier) {
+		if (modifiers.len() == 0) {
+			emo.Event().enableOnUpdateCallback();
+		}
 		modifiers.append(modifier);
 	}
 	
@@ -224,6 +227,9 @@ class emo.ModifierManager {
 		local idx = modifiers.find(modifier);
 		if (idx != null) {
 			modifiers.remove(idx);
+		}
+		if (modifiers.len() == 0) {
+			emo.Event().disableOnUpdateCallback();
 		}
 	}
 	
@@ -768,9 +774,6 @@ function emo::_onError(msg) {
 }
 
 function emo::_onDrawFrame(dt) {
-
-	EMO_MODIFIER_MANAGER.onUpdate();
-
     if (emo.rawin("onDrawFrame")) {
         emo.onDrawFrame(dt);
     }
@@ -778,6 +781,10 @@ function emo::_onDrawFrame(dt) {
              EMO_RUNTIME_DELEGATE.rawin("onDrawFrame")) {
         EMO_RUNTIME_DELEGATE.onDrawFrame(dt);
     }
+}
+
+function emo::_onUpdate(dt) {
+    EMO_MODIFIER_MANAGER.onUpdate();
 }
 
 function emo::_onLowMemory() {

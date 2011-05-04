@@ -17,6 +17,7 @@ namespace emo {
         this->initialized  = false;
         this->finishing = false;
         this->sortOrderDirty = true;
+        this->enableOnUpdate = false;
     }
 
     Engine::~Engine() {
@@ -524,7 +525,14 @@ namespace emo {
 
         this->updateUptime();
 
+
+        if (this->enableOnUpdate) {
+            int32_t _delta = this->getLastOnDrawDelta();
+            callSqFunction_Bool_Float(this->sqvm, EMO_NAMESPACE, EMO_FUNC_ON_UPDATE, _delta, SQFalse);
+        }
+
         int32_t delta = this->getLastOnDrawDelta();
+
         if (this->enableOnDrawFrame && delta >= this->onDrawFrameInterval) {
             this->lastOnDrawInterval  = this->uptime;
             callSqFunction_Bool_Float(this->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME, delta, SQFalse);
@@ -820,7 +828,6 @@ namespace emo {
             v, EMO_NAMESPACE, cname, fname, func);
     }
 
-
     ASensorEventQueue* Engine::getSensorEventQueue() {
         return sensorEventQueue;
     }
@@ -841,5 +848,8 @@ namespace emo {
         this->onDrawFrameInterval = value;
     }
 
+    void Engine::enableOnUpdateListener(bool enable) {
+        this->enableOnUpdate = enable;
+    }
 }
 

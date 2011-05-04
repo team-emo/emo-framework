@@ -25,10 +25,6 @@ class Main {
         
         // add modifier
         block.addModifier(emo.RotateModifier(0, 360, 5000, emo.easing.Linear));
-        
-		// onDrawFrame(dt) will be called on every 33 milliseconds
-		// onDrawCallback must be enabled if sprite uses modifiers.
-		event.enableOnDrawCallback(33);
     }
 
 	/*
@@ -38,14 +34,6 @@ class Main {
         print("onGainedFocus");
     }
     
-    /*
-     * Called when onDrawCalleback event is enabled by enableOnDrawCallback
-     * dt parameter is delta time (millisecond)
-     */
-    function onDrawFrame(dt) {
-
-    }
-
 	/*
 	 * Called when the app has lost focus
 	 */

@@ -66,6 +66,8 @@ namespace emo {
         void enableOnDrawListener(bool enable);
         void setOnDrawListenerInterval(int value);
 
+        void enableOnUpdateListener(bool enable);
+
         void addDrawable(std::string key, Drawable* drawable);
         void addDrawableToRemove(std::string key, Drawable* drawable);
         bool removeDrawable(std::string key);
@@ -139,6 +141,7 @@ namespace emo {
         bool enablePerspectiveNicest;
         bool enableOnDrawFrame;
         bool enableBackKey;
+        bool enableOnUpdate;
 
         drawables_t* drawables;
         drawables_t* drawablesToRemove;

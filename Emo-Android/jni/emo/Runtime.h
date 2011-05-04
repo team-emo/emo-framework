@@ -38,4 +38,6 @@ SQInteger emoDisableSensor(HSQUIRRELVM v);
 SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v);
 SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v);
 
+SQInteger emoEnableOnUpdateCallback(HSQUIRRELVM v);
+SQInteger emoDisableOnUpdateCallback(HSQUIRRELVM v);
 #endif

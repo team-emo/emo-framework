@@ -38,6 +38,8 @@ void initRuntimeFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
     engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
     engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnUpdateCallback",  emoEnableOnUpdateCallback);
+    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnUpdateCallback", emoDisableOnUpdateCallback);
 }
 
 int32_t app_handle_input(struct android_app* app, AInputEvent* event) {
@@ -395,5 +397,14 @@ SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
 
 SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
     engine->enableOnDrawListener(false);
+    return 0;
+}
+
+SQInteger emoEnableOnUpdateCallback(HSQUIRRELVM v) {
+    engine->enableOnUpdateListener(true);
+    return 0;
+}
+SQInteger emoDisableOnUpdateCallback(HSQUIRRELVM v) {
+    engine->enableOnUpdateListener(false);
     return 0;
 }

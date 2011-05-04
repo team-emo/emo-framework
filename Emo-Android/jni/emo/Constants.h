@@ -32,6 +32,7 @@
 #define EMO_FUNC_KEYEVENT       "_onKeyEvent"
 #define EMO_FUNC_SENSOREVENT    "_onSensorEvent"
 #define EMO_FUNC_ONCALLBACK     "_onCallback"
+#define EMO_FUNC_ON_UPDATE      "_onUpdate"
 
 #define MOTION_EVENT_PARAMS_SIZE 8
 #define KEY_EVENT_PARAMS_SIZE    8
