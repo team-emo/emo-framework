@@ -19,15 +19,31 @@
 	viewController = [[EmoViewController alloc] init];
 	viewController.view = [[EmoView alloc] initWithFrame:frame];
 	[viewController awakeFromNib];
-	rootViewReLoaded = FALSE;
+	didReturnRootView = FALSE;
+	
+	sections = [[NSArray alloc] initWithObjects:@"Basic", @"Event", nil];
+	examples = [[NSMutableArray alloc] init];
+	
+	// Basic
+	[examples addObject: [NSArray arrayWithObjects:
+		[NSArray arrayWithObjects:@"Drawing a Shape",  @"shape_example.nut", nil],
+		[NSArray arrayWithObjects:@"Drawing a Sprite", @"sprite_example.nut", nil],
+		[NSArray arrayWithObjects:@"Drawing Tiles",    @"tiles_example.nut", nil],
+		nil]];
+	
+	// Event
+	[examples addObject: [NSArray arrayWithObjects:
+		[NSArray arrayWithObjects:@"Periodic Update",  @"periodic_update_example.nut", nil],
+		nil]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	if (rootViewReLoaded) {
+	// dispose emo view controller before returning to the root menu
+	if (didReturnRootView) {
 		[viewController onLostFocus];
 		[viewController stopAnimation];
 		[viewController onDispose];
-		rootViewReLoaded = FALSE;
+		didReturnRootView = FALSE;
 	}
     [super viewWillAppear:animated];
 }
@@ -36,24 +52,18 @@
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return [examples count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    switch( section ) {
-        case 0: return 3;
-        case 1: return 1;
-        default: return 0;
-    }
+	if (section >= [examples count]) return 0;
+	return [[examples objectAtIndex:section] count];
 }
 
 - (NSString *) tableView:(UITableView *) tableView titleForHeaderInSection:(NSInteger) section {
-	
-    switch( section ) {
-        case 0: return @"Basic";
-        case 1: return @"Event";
-    }
-    return nil;
+
+	if (section >= [sections count]) return nil;
+	return [sections objectAtIndex:section];
 }
 
 // Customize the appearance of table view cells.
@@ -66,19 +76,10 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    if( indexPath.section == 0 ) {
-        if( indexPath.row == 0 ) {
-            [[cell textLabel] setText:@"Drawing a Shape"];
-        }else if( indexPath.row == 1 ) {
-            [[cell textLabel] setText:@"Drawing a Sprite"];
-        }else if( indexPath.row == 2 ) {
-            [[cell textLabel] setText:@"Drawing a Map"];
-        }
-    }else if( indexPath.section == 1 ) {
-        if( indexPath.row == 0 ) {
-            [[cell textLabel] setText:@"Periodic Update"];
-        }
-    }
+	if (indexPath.section >= [examples count]) return cell;
+	if (indexPath.row >= [[examples objectAtIndex:indexPath.section] count]) return cell;
+	[[cell textLabel] setText:[[[examples objectAtIndex:indexPath.section]
+								objectAtIndex:indexPath.row] objectAtIndex:0]];
 	
     return cell;
 }
@@ -88,11 +89,12 @@
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-	if (indexPath.section == 0) {
-		viewController.runtimeScript = @"runtime.nut";
-		viewController.mainScript = @"periodic_update_example.nut";
-	}
+	if (indexPath.section >= [examples count]) return;
+	if (indexPath.row >= [[examples objectAtIndex:indexPath.section] count]) return;
+	
+	viewController.runtimeScript = @"runtime.nut";
+	viewController.mainScript = [[[examples objectAtIndex:indexPath.section] 
+								  objectAtIndex:indexPath.row] objectAtIndex:1];
 	
 	[viewController onLoad];
 	[viewController onGainedFocus];
@@ -100,7 +102,7 @@
 	
 	[self.navigationController pushViewController:viewController animated:YES];			
 	
-	rootViewReLoaded = TRUE;
+	didReturnRootView = TRUE;
 }
 
 
@@ -112,6 +114,7 @@
 }
 
 - (void)viewDidUnload {
+	[examples release];
 	[viewController release];
 }
 

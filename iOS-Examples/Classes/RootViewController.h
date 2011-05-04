@@ -3,7 +3,9 @@
 
 @interface RootViewController : UITableViewController {
 	EmoViewController* viewController;
-	BOOL rootViewReLoaded;
+	BOOL didReturnRootView;
+	NSMutableArray* examples;
+	NSArray* sections;
 }
 
 @end

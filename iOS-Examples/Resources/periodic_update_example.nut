@@ -8,8 +8,8 @@ class Main {
 
     block = emo.Sprite("block.png");
     
-    distantX = 10;
-    distantY = 10;
+    distantX = 1;
+    distantY = 1;
 
 	/*
 	 * Called when this class is loaded
