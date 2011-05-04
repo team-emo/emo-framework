@@ -212,8 +212,10 @@ EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 
 class emo.ModifierManager {
 	modifiers = null;
+	modifiersToRemove = null;
 	function constructor() {
 		modifiers = [];
+		modifiersToRemove = [];
 	}
 	
 	function add(modifier) {
@@ -224,18 +226,24 @@ class emo.ModifierManager {
 	}
 	
 	function remove(modifier) {
-		local idx = modifiers.find(modifier);
-		if (idx != null) {
-			modifiers.remove(idx);
-		}
-		if (modifiers.len() == 0) {
-			emo.Event().disableOnUpdateCallback();
-		}
+		modifiersToRemove.append(modifier);
 	}
 	
 	function onUpdate() {
 		for (local i = 0; i < modifiers.len(); i++) {
 			modifiers[i].onUpdate();
+		}
+		if (modifiersToRemove.len() > 0) {
+			for (local i = 0; i < modifiersToRemove.len(); i++) {
+				local idx = modifiers.find(modifiersToRemove[i]);
+				if (idx != null) {
+					modifiers.remove(idx);
+				}
+			}
+			if (modifiers.len() == 0) {
+				emo.Event().disableOnUpdateCallback();
+			}
+			modifiersToRemove.clear();
 		}
 	}
 	
@@ -327,42 +335,31 @@ function emo::easing::Linear(elapsed, duration) {
 	return elapsed / duration;
 }
 
-function emo::easing::SquareIn(elapsed, duration) {
+function emo::easing::CubicIn(elapsed, duration) {
 	return (elapsed = elapsed / duration) * pow(elapsed, 2);
 }
 
-function emo::easing::CubicIn(elapsed, duration) {
-	return (elapsed = elapsed / duration) * pow(elapsed, 3);
-}
-
-function emo::easing::SquareOut(elapsed, duration) {
-	return -1 * ((elapsed = elapsed / duration - 1) * pow(elapsed, 2) - 1);
-}
-
 function emo::easing::CubicOut(elapsed, duration) {
-	return -1 * ((elapsed = elapsed / duration - 1) * pow(elapsed, 3) - 1);
-}
-
-function emo::easing::SquareInOut(elapsed, duration) {
-	if((elapsed = elapsed / duration * 0.5) < 1) {
-		return 1 * 0.5 * elapsed * pow(elapsed, 2);
-	}
-	return -1 * 0.5 * ((elapsed -= 2) * pow(elapsed, 2) - 2);
+	return (elapsed = elapsed / d - 1) * pow(elapsed, 2) + 1;
 }
 
 function emo::easing::CubicInOut(elapsed, duration) {
-	if((elapsed = elapsed / duration * 0.5) < 1) {
-		return 1 * 0.5 * elapsed * pow(elapsed, 3);
-	}
-	return -1 * 0.5 * ((elapsed -= 2) * pow(elapsed, 3) - 2);
+	if ((elapsed /= duration / 2) < 1) return 1 / 2 * pow(elapsed, 3);
+	return 1 / 2 * ((elapsed -= 2) * pow(elapsed, 2) + 2);
 }
 
 function emo::easing::BackIn(elapsed, duration) {
-	return (elapsed = elapsed / duration) * elapsed * ((1.70158 + 1) * elapsed - 1.70158);
+	return (elapsed /= duration) * elapsed * ((1.70158 + 1) * elapsed - 1.70158);
 }
 
 function emo::easing::BackOut(elapsed, duration) {
 	return ((elapsed = elapsed / duration - 1) * elapsed * ((1.70158 + 1) * elapsed + 1.70158) + 1);
+}
+
+function emo::easing::BackInOut(elapsed, duration) {
+	local s = 1.70158;
+	if ((elapsed /= duration / 2) < 1) return 1 / 2 * (elapsed * elapsed * (((s *= (1.525)) + 1) * elapsed - s));
+	return 1 / 2 * ((elapsed -= 2) * elapsed * (((s *= (1.525)) + 1) * elapsed + s) + 2);
 }
 
 class emo.MotionEvent {

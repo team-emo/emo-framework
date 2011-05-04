@@ -19,6 +19,7 @@
 #define EMO_NET_CLASS      "Net"
 #define EMO_DATABASE_CLASS "Database"
 #define EMO_PREFERENCE_CLASS "Preference"
+#define EMO_STOPWATCH_CLASS "Stopwatch"
 
 #define EMO_FUNC_ONLOAD         "_onLoad"
 #define EMO_FUNC_ONGAINED_FOUCS "_onGainedFocus"
@@ -31,6 +32,7 @@
 #define EMO_FUNC_KEYEVENT       "_onKeyEvent"
 #define EMO_FUNC_SENSOREVENT    "_onSensorEvent"
 #define EMO_FUNC_ONCALLBACK     "_onCallback"
+#define EMO_FUNC_ON_UPDATE      "_onUpdate"
 
 #define MOTION_EVENT_PARAMS_SIZE 8
 #define KEY_EVENT_PARAMS_SIZE    8

@@ -212,24 +212,38 @@ EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 
 class emo.ModifierManager {
 	modifiers = null;
+	modifiersToRemove = null;
 	function constructor() {
 		modifiers = [];
+		modifiersToRemove = [];
 	}
 	
 	function add(modifier) {
+		if (modifiers.len() == 0) {
+			emo.Event().enableOnUpdateCallback();
+		}
 		modifiers.append(modifier);
 	}
 	
 	function remove(modifier) {
-		local idx = modifiers.find(modifier);
-		if (idx != null) {
-			modifiers.remove(idx);
-		}
+		modifiersToRemove.append(modifier);
 	}
 	
 	function onUpdate() {
 		for (local i = 0; i < modifiers.len(); i++) {
 			modifiers[i].onUpdate();
+		}
+		if (modifiersToRemove.len() > 0) {
+			for (local i = 0; i < modifiersToRemove.len(); i++) {
+				local idx = modifiers.find(modifiersToRemove[i]);
+				if (idx != null) {
+					modifiers.remove(idx);
+				}
+			}
+			if (modifiers.len() == 0) {
+				emo.Event().disableOnUpdateCallback();
+			}
+			modifiersToRemove.clear();
 		}
 	}
 	
@@ -272,13 +286,7 @@ class emo.Modifier {
 		return EMO_RUNTIME_STOPWATCH.elapsed() - startTime;
 	}
 	function currentValue() {
-		local current = minValue + (easing(elapsed(), duration) * (maxValue - minValue));
-		if (current >= maxValue) {
-			onModify(maxValue);
-			EMO_MODIFIER_MANAGER.remove(this);
-			return;
-		}
-		return current;
+		return minValue + (easing(elapsed().tofloat(), duration.tofloat()) * (maxValue - minValue));
 	}
 	function onPause() {
 		pausedTime = EMO_RUNTIME_STOPWATCH.elapsed();
@@ -287,7 +295,13 @@ class emo.Modifier {
 		startTime = startTime + (EMO_RUNTIME_STOPWATCH.elapsed() - pausedTime);
 	}
 	function onUpdate() {
-		onModify(currentValue());
+		local current = currentValue();
+		if (current >= maxValue) {
+			onModify(maxValue);
+			EMO_MODIFIER_MANAGER.remove(this);
+			return;
+		}
+		onModify(current);
 	}
 	// subclass must override this method
 	function onModify(currentValue) {
@@ -318,39 +332,46 @@ class emo.RotateModifier extends emo.Modifier {
 
 emo.easing <- {};
 function emo::easing::Linear(elapsed, duration) {
-	return elapsed.tofloat() / duration.tofloat();
+	return elapsed / duration;
 }
 
 function emo::easing::SquareIn(elapsed, duration) {
-	return (elapsed = elapsed.tofloat() / duration.tofloat()) * pow(elapsed, 2);
+	return (elapsed = elapsed / duration) * pow(elapsed, 2);
 }
 
 function emo::easing::CubicIn(elapsed, duration) {
-	return (elapsed = elapsed.tofloat() / duration.tofloat()) * pow(elapsed, 3);
+	return (elapsed = elapsed / duration) * pow(elapsed, 3);
 }
 
 function emo::easing::SquareOut(elapsed, duration) {
-	return -1 * ((elapsed = elapsed.tofloat() / duration.tofloat() - 1) * pow(elapsed, 2) - 1);
+	return -1 * ((elapsed = elapsed / duration - 1) * pow(elapsed, 2) - 1);
 }
 
 function emo::easing::CubicOut(elapsed, duration) {
-	return -1 * ((elapsed = elapsed.tofloat() / duration.tofloat() - 1) * pow(elapsed, 3) - 1);
+	return -1 * ((elapsed = elapsed / duration - 1) * pow(elapsed, 3) - 1);
 }
 
 function emo::easing::SquareInOut(elapsed, duration) {
-	if(((elapsed = elapsed.tofloat() / duration.tofloat() * 0.5f) < 1) {
-		return 1 * 0.5f * elapsed * pow(elapsed, 2);
+	if((elapsed = elapsed / duration * 0.5) < 1) {
+		return 1 * 0.5 * elapsed * pow(elapsed, 2);
 	}
-	return -1 * 0.5f * ((elapsed -= 2) * pow(elapsed, 2) - 2);
+	return -1 * 0.5 * ((elapsed -= 2) * pow(elapsed, 2) - 2);
 }
 
 function emo::easing::CubicInOut(elapsed, duration) {
-	if(((elapsed = elapsed.tofloat() / duration.tofloat() * 0.5f) < 1) {
-		return 1 * 0.5f * elapsed * pow(elapsed, 3);
+	if((elapsed = elapsed / duration * 0.5) < 1) {
+		return 1 * 0.5 * elapsed * pow(elapsed, 3);
 	}
-	return -1 * 0.5f * ((elapsed -= 2) * pow(elapsed, 3) - 2);
+	return -1 * 0.5 * ((elapsed -= 2) * pow(elapsed, 3) - 2);
 }
 
+function emo::easing::BackIn(elapsed, duration) {
+	return (elapsed = elapsed / duration) * elapsed * ((1.70158 + 1) * elapsed - 1.70158);
+}
+
+function emo::easing::BackOut(elapsed, duration) {
+	return ((elapsed = elapsed / duration - 1) * elapsed * ((1.70158 + 1) * elapsed + 1.70158) + 1);
+}
 
 class emo.MotionEvent {
     param = null;
@@ -761,9 +782,6 @@ function emo::_onError(msg) {
 }
 
 function emo::_onDrawFrame(dt) {
-
-	EMO_MODIFIER_MANAGER.onUpdate();
-
     if (emo.rawin("onDrawFrame")) {
         emo.onDrawFrame(dt);
     }
@@ -771,6 +789,10 @@ function emo::_onDrawFrame(dt) {
              EMO_RUNTIME_DELEGATE.rawin("onDrawFrame")) {
         EMO_RUNTIME_DELEGATE.onDrawFrame(dt);
     }
+}
+
+function emo::_onUpdate(dt) {
+    EMO_MODIFIER_MANAGER.onUpdate();
 }
 
 function emo::_onLowMemory() {
