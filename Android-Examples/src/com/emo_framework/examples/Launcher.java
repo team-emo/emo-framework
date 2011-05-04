@@ -34,7 +34,7 @@ public class Launcher extends ExpandableListActivity {
     	},
     	{
     		"Periodic Update",
-    		"Multi touch"
+    		"Using with Modifiers"
     	}
     };
     private static final String[][] activities = {
@@ -44,7 +44,7 @@ public class Launcher extends ExpandableListActivity {
     	},
     	{
     		".PeriodicUpdateExample",
-    		".MultiTouchExample"
+    		".RotateModifierExample"
     	}
     };
     

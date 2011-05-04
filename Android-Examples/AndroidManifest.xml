@@ -53,6 +53,17 @@
             <meta-data android:name="emo.script.main"
                        android:value="periodic_update_example.nut" />
         </activity-alias>
+        
+        <activity-alias android:name=".RotateModifierExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="modifier_rotate_example.nut" />
+        </activity-alias>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest> 

@@ -209,7 +209,155 @@ const AUDIO_CHANNEL_PLAYING   = 3;
 
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
-EMO_RUNTIME_ACTIVETIME  <- 0;
+
+class emo.ModifierManager {
+	modifiers = null;
+	function constructor() {
+		modifiers = [];
+	}
+	
+	function add(modifier) {
+		modifiers.append(modifier);
+	}
+	
+	function remove(modifier) {
+		local idx = modifiers.find(modifier);
+		if (idx != null) {
+			modifiers.remove(idx);
+		}
+	}
+	
+	function onUpdate() {
+		for (local i = 0; i < modifiers.len(); i++) {
+			modifiers[i].onUpdate();
+		}
+	}
+	
+	function onPause() {
+		for (local i = 0; i < modifiers.len(); i++) {
+			modifiers[i].onPause();
+		}
+	}
+	
+	function onResume() {
+		for (local i = 0; i < modifiers.len(); i++) {
+			modifiers[i].onResume();
+		}
+	}
+}
+
+EMO_MODIFIER_MANAGER    <- emo.ModifierManager();
+
+class emo.Modifier {
+	targetObj = null;
+	startTime   = null;
+	elapsedTime = null;
+	pausedTime  = null;
+	minValue = null;
+	maxValue = null;
+	duration = null;
+	easing   = null;
+	cmpId    = null;
+	function constructor(_minValue, _maxValue, _duration, _easing) {
+		startTime   = EMO_RUNTIME_STOPWATCH.elapsed();
+		elapsedTime = 0;
+		pausedTime  = startTime;
+		
+		minValue = _minValue;
+		maxValue = _maxValue;
+		duration = _duration;
+		easing   = _easing;
+	}
+	function elapsed() {
+		return EMO_RUNTIME_STOPWATCH.elapsed() - startTime;
+	}
+	function currentValue() {
+		return minValue + (easing(elapsed().tofloat(), duration.tofloat()) * (maxValue - minValue));
+	}
+	function onPause() {
+		pausedTime = EMO_RUNTIME_STOPWATCH.elapsed();
+	}
+	function onResume() {
+		startTime = startTime + (EMO_RUNTIME_STOPWATCH.elapsed() - pausedTime);
+	}
+	function onUpdate() {
+		local current = currentValue();
+		if (current >= maxValue) {
+			onModify(maxValue);
+			EMO_MODIFIER_MANAGER.remove(this);
+			return;
+		}
+		onModify(current);
+	}
+	// subclass must override this method
+	function onModify(currentValue) {
+	
+	}
+	function setObject(obj) {
+		targetObj = obj;
+	}
+}
+
+class emo.AlphaModifier extends emo.Modifier {
+	function onModify(currentValue) {
+		targetObj.alpha(currentValue);
+	}
+}
+
+class emo.ScaleModifier extends emo.Modifier {
+	function onModify(currentValue) {
+		targetObj.scale(currentValue, currentValue);
+	}
+}
+
+class emo.RotateModifier extends emo.Modifier {
+	function onModify(currentValue) {
+		targetObj.rotate(currentValue);
+	}
+}
+
+emo.easing <- {};
+function emo::easing::Linear(elapsed, duration) {
+	return elapsed / duration;
+}
+
+function emo::easing::SquareIn(elapsed, duration) {
+	return (elapsed = elapsed / duration) * pow(elapsed, 2);
+}
+
+function emo::easing::CubicIn(elapsed, duration) {
+	return (elapsed = elapsed / duration) * pow(elapsed, 3);
+}
+
+function emo::easing::SquareOut(elapsed, duration) {
+	return -1 * ((elapsed = elapsed / duration - 1) * pow(elapsed, 2) - 1);
+}
+
+function emo::easing::CubicOut(elapsed, duration) {
+	return -1 * ((elapsed = elapsed / duration - 1) * pow(elapsed, 3) - 1);
+}
+
+function emo::easing::SquareInOut(elapsed, duration) {
+	if((elapsed = elapsed / duration * 0.5) < 1) {
+		return 1 * 0.5 * elapsed * pow(elapsed, 2);
+	}
+	return -1 * 0.5 * ((elapsed -= 2) * pow(elapsed, 2) - 2);
+}
+
+function emo::easing::CubicInOut(elapsed, duration) {
+	if((elapsed = elapsed / duration * 0.5) < 1) {
+		return 1 * 0.5 * elapsed * pow(elapsed, 3);
+	}
+	return -1 * 0.5 * ((elapsed -= 2) * pow(elapsed, 3) - 2);
+}
+
+function emo::easing::BackIn(elapsed, duration) {
+	return (elapsed = elapsed / duration) * elapsed * ((1.70158 + 1) * elapsed - 1.70158);
+}
+
+function emo::easing::BackOut(elapsed, duration) {
+	return ((elapsed = elapsed / duration - 1) * elapsed * ((1.70158 + 1) * elapsed + 1.70158) + 1);
+}
 
 class emo.MotionEvent {
     param = null;
@@ -432,6 +580,11 @@ class emo.Sprite {
     function getName() {
         return name;
     }
+    
+    function addModifier(modifier) {
+    	modifier.setObject(this);
+    	EMO_MODIFIER_MANAGER.add(modifier);
+    }
 }
 
 class emo.SpriteSheet extends emo.Sprite {
@@ -568,6 +721,7 @@ function emo::_onLoad() {
 function emo::_onGainedFocus() {
 
     EMO_RUNTIME_STOPWATCH.start();
+	EMO_MODIFIER_MANAGER.onResume();
 
     if (emo.rawin("onGainedFocus")) {
         emo.onGainedFocus();
@@ -579,6 +733,9 @@ function emo::_onGainedFocus() {
 }
 
 function emo::_onLostFocus() {
+
+	EMO_MODIFIER_MANAGER.onPause();
+	
     if (emo.rawin("onLostFocus")) {
         emo.onLostFocus();
     }
@@ -587,7 +744,6 @@ function emo::_onLostFocus() {
         EMO_RUNTIME_DELEGATE.onLostFocus();
     }
 
-    EMO_RUNTIME_ACTIVETIME = EMO_RUNTIME_STOPWATCH.elapsed();
     EMO_RUNTIME_STOPWATCH.stop();
 }
 
@@ -612,6 +768,9 @@ function emo::_onError(msg) {
 }
 
 function emo::_onDrawFrame(dt) {
+
+	EMO_MODIFIER_MANAGER.onUpdate();
+
     if (emo.rawin("onDrawFrame")) {
         emo.onDrawFrame(dt);
     }
