@@ -378,12 +378,12 @@ function emo::easing::CubicIn(elapsed, duration) {
 }
 
 function emo::easing::CubicOut(elapsed, duration) {
-	return (elapsed = elapsed / d - 1) * pow(elapsed, 2) + 1;
+	return (elapsed = elapsed / duration - 1) * pow(elapsed, 2) + 1;
 }
 
 function emo::easing::CubicInOut(elapsed, duration) {
-	if ((elapsed /= duration / 2) < 1) return 1 / 2 * pow(elapsed, 3);
-	return 1 / 2 * ((elapsed -= 2) * pow(elapsed, 2) + 2);
+	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * pow(elapsed, 3);
+	return 1.0 / 2.0 * ((elapsed -= 2) * pow(elapsed, 2) + 2);
 }
 
 function emo::easing::BackIn(elapsed, duration) {
@@ -396,30 +396,30 @@ function emo::easing::BackOut(elapsed, duration) {
 
 function emo::easing::BackInOut(elapsed, duration) {
 	local s = 1.70158;
-	if ((elapsed /= duration / 2) < 1) return 1 / 2 * (elapsed * elapsed * (((s *= (1.525)) + 1) * elapsed - s));
-	return 1 / 2 * ((elapsed -= 2) * elapsed * (((s *= (1.525)) + 1) * elapsed + s) + 2);
+	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * (elapsed * elapsed * (((s *= (1.525)) + 1) * elapsed - s));
+	return 1.0 / 2.0 * ((elapsed -= 2) * elapsed * (((s *= (1.525)) + 1) * elapsed + s) + 2);
 }
 
 function emo::easing::ElasticIn(elapsed, duration) {
 	if ((elapsed /= duration) == 1) return 1;
 	local p = duration * 0.3;
 	local s = p / 4.0;
-	return -(pow(2, 10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2 * PI) / p));
+	return -(pow(2, 10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2.0 * PI) / p));
 }
 
 function emo::easing::ElasticOut(elapsed, duration) {
 	if ((elapsed /= duration) == 1) return 1;
 	local p = duration * 0.3;
 	local s = p / 4.0;
-	return (pow(2, -10 * elapsed) * sin((elapsed * duration - s) * (2 * PI) / p) + 1);
+	return (pow(2, -10 * elapsed) * sin((elapsed * duration - s) * (2.0 * PI) / p) + 1);
 }
 
 function emo::easing::ElasticInOut(elapsed, duration) {
-	if ((elapsed /= duration / 2) == 2) return 1;
+	if ((elapsed /= duration / 2.0) == 2) return 1;
 	local p = duration * (0.3 * 1.5);
 	local s = p / 4.0;
-	if (elapsed < 1) return -0.5 * (pow(2, 10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2 * PI) / p));
-	return pow(2, -10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2 * PI) / p) * 0.5 + 1;
+	if (elapsed < 1) return -0.5 * (pow(2, 10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2.0 * PI) / p));
+	return pow(2, -10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2.0 * PI) / p) * 0.5 + 1;
 }
 
 class emo.MotionEvent {
