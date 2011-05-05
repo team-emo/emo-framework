@@ -2,7 +2,7 @@ local stage = emo.Stage();
 local event = emo.Event();
 
 /*
- * This example shows one block sprite that moves around the screen.
+ * This example shows one block sprite that rotates with modifier.
  */
 class Main {
 
