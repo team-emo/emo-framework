@@ -16,12 +16,13 @@
 	CGRect frame = [self.tableView bounds];
 	frame.size.height = frame.size.height - [self.navigationController.navigationBar frame].size.height;
 	
+	// initialize emo framework
 	viewController = [[EmoViewController alloc] init];
 	viewController.view = [[EmoView alloc] initWithFrame:frame];
 	[viewController awakeFromNib];
 	didReturnRootView = FALSE;
 	
-	sections = [[NSArray alloc] initWithObjects:@"Basic", @"Event", nil];
+	sections = [[NSArray alloc] initWithObjects:@"Basic", @"Animation", nil];
 	examples = [[NSMutableArray alloc] init];
 	
 	// Basic
@@ -34,11 +35,12 @@
 	// Event
 	[examples addObject: [NSArray arrayWithObjects:
 		[NSArray arrayWithObjects:@"Periodic Update",  @"periodic_update_example.nut", nil],
+		[NSArray arrayWithObjects:@"Using Modifiers",  @"modifier_rotate_example.nut", nil],
 		nil]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	// dispose emo view controller before returning to the root menu
+	// dispose emo framework before returning to the root menu
 	if (didReturnRootView) {
 		[viewController onLostFocus];
 		[viewController stopAnimation];
@@ -92,6 +94,7 @@
 	if (indexPath.section >= [examples count]) return;
 	if (indexPath.row >= [[examples objectAtIndex:indexPath.section] count]) return;
 	
+	// start emo framework with parameters
 	viewController.runtimeScript = @"runtime.nut";
 	viewController.mainScript = [[[examples objectAtIndex:indexPath.section] 
 								  objectAtIndex:indexPath.row] objectAtIndex:1];

@@ -75,6 +75,7 @@ void initRuntimeFunctions() {
 	registerEmoClass(engine.sqvm, EMO_RUNTIME_CLASS);
 	registerEmoClass(engine.sqvm, EMO_EVENT_CLASS);
     registerEmoClass(engine.sqvm, EMO_NET_CLASS);
+    registerEmoClass(engine.sqvm, EMO_STOPWATCH_CLASS);
 	
 	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
 	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
@@ -85,12 +86,17 @@ void initRuntimeFunctions() {
 	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
 	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
 	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);
+    registerEmoClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "start",         emoRuntimeStopwatchStart);
+    registerEmoClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
+    registerEmoClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
 	
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+    registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnUpdateCallback",  emoEnableOnUpdateCallback);
+    registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnUpdateCallback", emoDisableOnUpdateCallback);
 	
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "getLastErrorMessage",   emoGetLastCallbackErrorMessage);
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "getLastErrorType",      emoGetLastCallbackErrorType);
@@ -458,3 +464,37 @@ SQInteger emoAsyncHttpRequest(HSQUIRRELVM v) {
     sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * start stopwatch
+ */
+SQInteger emoRuntimeStopwatchStart(HSQUIRRELVM v) {
+    [engine stopwatchStart];
+    return 0;
+}
+
+/*
+ * get elapsed time from stop watch
+ */
+SQInteger emoRuntimeStopwatchElapsed(HSQUIRRELVM v) {
+    sq_pushinteger(v, [engine stopwatchElapsed]);
+    return 1;
+}
+
+/*
+ * stop stopwatch
+ */
+SQInteger emoRuntimeStopwatchStop(HSQUIRRELVM v) {
+    [engine stopwatchStop];
+    return 0;
+}
+
+SQInteger emoEnableOnUpdateCallback(HSQUIRRELVM v) {
+    [engine enableOnUpdateListener:true];
+    return 0;
+}
+SQInteger emoDisableOnUpdateCallback(HSQUIRRELVM v) {
+    [engine enableOnUpdateListener:false];
+    return 0;
+}
+

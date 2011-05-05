@@ -84,6 +84,7 @@
 		F92B720F136FD38000DD803C /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B720E136FD38000DD803C /* OpenGLES.framework */; };
 		F92B7219136FD39100DD803C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B7218136FD39100DD803C /* libz.dylib */; };
 		F92B7253136FD42F00DD803C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B7252136FD42F00DD803C /* QuartzCore.framework */; };
+		F97C156F13722E1A00551C94 /* modifier_rotate_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -213,6 +214,7 @@
 		F92B720E136FD38000DD803C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		F92B7218136FD39100DD803C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F92B7252136FD42F00DD803C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = modifier_rotate_example.nut; path = Resources/modifier_rotate_example.nut; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -282,6 +284,7 @@
 			children = (
 				F921CC99136FFBAC00F058FF /* graphics */,
 				F921CCA2136FFBAC00F058FF /* sounds */,
+				F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */,
 				F921CC9F136FFBAC00F058FF /* periodic_update_example.nut */,
 				F921CCA0136FFBAC00F058FF /* runtime.nut */,
 				F921CCA1136FFBAC00F058FF /* shape_example.nut */,
@@ -543,6 +546,7 @@
 				F921CCB2136FFBAC00F058FF /* drums.wav in Resources */,
 				F921CCB3136FFBAC00F058FF /* tada.wav in Resources */,
 				F921CCB4136FFBAC00F058FF /* sprite_example.nut in Resources */,
+				F97C156F13722E1A00551C94 /* modifier_rotate_example.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

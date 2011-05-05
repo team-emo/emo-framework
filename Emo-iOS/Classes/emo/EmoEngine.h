@@ -26,6 +26,8 @@ NSString* data2ns(NSData* data);
 	BOOL enablePerspectiveNicest;
 	BOOL enableOnDrawFrame;
 	BOOL accelerometerSensorRegistered;
+	BOOL enableOnUpdate;
+	
 	NSInteger onDrawFrameInterval;
 	NSInteger onDrawDrawablesInterval;
 	
@@ -36,6 +38,10 @@ NSString* data2ns(NSData* data);
 	NSMutableDictionary* drawables;
 	NSMutableDictionary* netTasks;
 	NSArray* drawablesToDraw;
+	
+	BOOL stopwatchStarted;
+	NSTimeInterval stopwatchStartTime;
+	NSTimeInterval stopwatchElapsedTime;
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readwrite) int  lastError;
@@ -74,6 +80,11 @@ NSString* data2ns(NSData* data);
 
 -(EmoNetTask*)createNetTask:(NSString*)taskName;
 -(void)removeNetTask:(NSString*)taskName;
+
+-(void)stopwatchStart;
+-(void)stopwatchStop;
+-(NSInteger)stopwatchElapsed;
+-(void)enableOnUpdateListener:(BOOL)enable;
 
 - (NSTimeInterval)uptime;
 @end

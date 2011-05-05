@@ -59,10 +59,12 @@ NSString* data2ns(NSData* data) {
 	lastError = EMO_NO_ERROR;
 	isRunning = TRUE;
 	sortOrderDirty = TRUE;
+	stopwatchStarted = FALSE;
 	
 	enablePerspectiveNicest = TRUE;
 	enableOnDrawFrame = FALSE;
 	accelerometerSensorRegistered = FALSE;
+	enableOnUpdate = FALSE;
 	
 	audioManager = [[EmoAudioManager alloc]init];
 	drawables    = [[NSMutableDictionary alloc]init];
@@ -227,10 +229,15 @@ NSString* data2ns(NSData* data) {
 		sortOrderDirty = FALSE;
 	}
 	
+	if (enableOnUpdate) {
+		NSTimeInterval _delta = [self getLastOnDrawDelta];
+		callSqFunction_Bool_Float(sqvm, EMO_NAMESPACE, EMO_FUNC_ON_UPDATE, _delta, SQFalse);
+	}
+	
 	NSTimeInterval delta = [self getLastOnDrawDelta];
 	if (enableOnDrawFrame && delta > onDrawFrameInterval) {
 		lastOnDrawInterval = [self uptime];
-		return callSqFunction_Bool_Float(sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME, delta, SQFalse);
+		callSqFunction_Bool_Float(sqvm, EMO_NAMESPACE, EMO_FUNC_ONDRAW_FRAME, delta, SQFalse);
 	}
 
 	// check if the engine have to continue to draw
@@ -424,6 +431,27 @@ NSString* data2ns(NSData* data) {
 	EmoNetTask* netTask = [netTasks objectForKey:taskName];
 	[netTask release];
 	[netTasks removeObjectForKey:taskName];
+}
+
+-(void)stopwatchStart {
+	stopwatchStartTime = [self uptime];
+	stopwatchStarted = TRUE;
+}
+
+-(void)stopwatchStop {
+	stopwatchElapsedTime = [self uptime] - stopwatchStartTime;
+	stopwatchStarted = FALSE;
+}
+
+-(NSInteger)stopwatchElapsed {
+	if (stopwatchStarted) {
+		stopwatchElapsedTime = [self uptime] - stopwatchStartTime;
+	}
+	return (NSInteger)(stopwatchElapsedTime * 1000);
+}
+
+-(void)enableOnUpdateListener:(BOOL)enable {
+	enableOnUpdate = enable;
 }
 
 @end
