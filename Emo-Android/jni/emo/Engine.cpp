@@ -527,7 +527,7 @@ namespace emo {
 
 
         if (this->enableOnUpdate) {
-            int32_t _delta = this->getLastOnDrawDelta();
+            int32_t _delta = this->getLastOnDrawDrawablesDelta();
             callSqFunction_Bool_Float(this->sqvm, EMO_NAMESPACE, EMO_FUNC_ON_UPDATE, _delta, SQFalse);
         }
 
