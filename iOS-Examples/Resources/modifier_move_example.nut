@@ -35,33 +35,33 @@ class Main {
         block4.load();
         block5.load();
         
-		// block1 moves along axis by Linear transition in 5 seconds 
+		// block1 moves along axis by Linear equation  in 5 seconds 
         block1.addModifier(emo.MoveModifier(
 			[block1.getX(), block1.getY()],
 			[block1.getX(), y],
 			5000, emo.easing.Linear));
 			
-		// block2 moves along axis by BackInOut transition in 5 seconds 
+		// block2 moves along axis by BackInOut equation  in 5 seconds 
         block2.addModifier(emo.MoveModifier(
 			[block2.getX(), block2.getY()],
 			[block2.getX(), y],
 			5000, emo.easing.BackInOut));
 
-		// block3 moves along axis by ElasticOut transition in 5 seconds 
+		// block3 moves along axis by ElasticOut equation  in 5 seconds 
         block3.addModifier(emo.MoveModifier(
 			[block3.getX(), block3.getY()],
 			[block3.getX(), y],
 			5000, emo.easing.ElasticOut));
 			
-		// block4 moves along axis by ElasticInOut transition in 5 seconds 
+		// block4 moves along axis by ElasticInOut equation  in 5 seconds 
         block4.addModifier(emo.MoveModifier(
 			[block4.getX(), block4.getY()],
 			[block4.getX(), y],
 			5000, emo.easing.ElasticInOut));
 		
 		// all sprites are able to have multiple modifiers:
-		// block5 moves along axis by Linear transition and
-		// rotates 360 degree by CubicIn transition
+		// block5 moves along axis by Linear equation  and
+		// rotates 360 degree by CubicIn equation 
 		// in 5 seconds 
         block5.addModifier(emo.MoveModifier(
 			[block5.getX(), block5.getY()],

@@ -23,7 +23,7 @@ class Main {
 		// load sprite to the screen
         block.load();
         
-        // rotate the block 0 to 360 degree in 5 seconds using linear transition.
+        // rotate the block 0 to 360 degree in 5 seconds using Linear equation
         block.addModifier(emo.RotateModifier(0, 360, 5000, emo.easing.Linear));
     }
 
