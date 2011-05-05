@@ -288,8 +288,8 @@ class emo.Modifier {
 	function elapsed() {
 		return EMO_RUNTIME_STOPWATCH.elapsed() - startTime;
 	}
-	function currentValue(min, max) {
-		return min + (easing(elapsed().tofloat(), duration.tofloat()) * (max - min));
+	function currentValue(min, max, percent) {
+		return min + (percent * (max - min));
 	}
 	function onPause() {
 		pausedTime = EMO_RUNTIME_STOPWATCH.elapsed();
@@ -298,8 +298,10 @@ class emo.Modifier {
 		startTime = startTime + (EMO_RUNTIME_STOPWATCH.elapsed() - pausedTime);
 	}
 	function onUpdate() {
-		local current = currentValue(minValue, maxValue);
-		if (current >= maxValue) {
+		local elapsedf = elapsed().tofloat();
+		local percent  = easing(elapsedf, duration.tofloat());
+		local current  = currentValue(minValue, maxValue, percent);
+		if (elapsedf >= duration) {
 			onModify(maxValue);
 			if (repeatCount == currentCount) {
 				EMO_MODIFIER_MANAGER.remove(this);
@@ -323,9 +325,10 @@ class emo.Modifier {
 class emo.MultiModifier extends emo.Modifier {
 	function onUpdate() {
 		local current = [];
+		local elapsedf = elapsed().tofloat();
+		local percent  = easing(elapsedf, duration.tofloat());
 		for (local i = 0; i < minValue.len(); i++) {
-			current.append(currentValue(minValue[i], maxValue[i]));
-			if (current[i] >= maxValue[i]) {
+			if (elapsedf >= duration) {
 				onModify(maxValue);
 				if (repeatCount == currentCount) {
 					EMO_MODIFIER_MANAGER.remove(this);
@@ -335,6 +338,7 @@ class emo.MultiModifier extends emo.Modifier {
 				}
 				return;
 			}
+			current.append(currentValue(minValue[i], maxValue[i], percent));
 		}
 		onModify(current);
 	}
@@ -394,6 +398,28 @@ function emo::easing::BackInOut(elapsed, duration) {
 	local s = 1.70158;
 	if ((elapsed /= duration / 2) < 1) return 1 / 2 * (elapsed * elapsed * (((s *= (1.525)) + 1) * elapsed - s));
 	return 1 / 2 * ((elapsed -= 2) * elapsed * (((s *= (1.525)) + 1) * elapsed + s) + 2);
+}
+
+function emo::easing::ElasticIn(elapsed, duration) {
+	if ((elapsed /= duration) == 1) return 1;
+	local p = duration * 0.3;
+	local s = p / 4.0;
+	return -(pow(2, 10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2 * PI) / p));
+}
+
+function emo::easing::ElasticOut(elapsed, duration) {
+	if ((elapsed /= duration) == 1) return 1;
+	local p = duration * 0.3;
+	local s = p / 4.0;
+	return (pow(2, -10 * elapsed) * sin((elapsed * duration - s) * (2 * PI) / p) + 1);
+}
+
+function emo::easing::ElasticInOut(elapsed, duration) {
+	if ((elapsed /= duration / 2) == 2) return 1;
+	local p = duration * (0.3 * 1.5);
+	local s = p / 4.0;
+	if (elapsed < 1) return -0.5 * (pow(2, 10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2 * PI) / p));
+	return pow(2, -10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2 * PI) / p) * 0.5 + 1;
 }
 
 class emo.MotionEvent {
