@@ -271,8 +271,9 @@ class emo.Modifier {
 	maxValue = null;
 	duration = null;
 	easing   = null;
-	cmpId    = null;
-	function constructor(_minValue, _maxValue, _duration, _easing) {
+	repeatCount = null;
+	currentCount = null;
+	function constructor(_minValue, _maxValue, _duration, _easing, _repeatCount = 0) {
 		startTime   = EMO_RUNTIME_STOPWATCH.elapsed();
 		elapsedTime = 0;
 		pausedTime  = startTime;
@@ -281,6 +282,8 @@ class emo.Modifier {
 		maxValue = _maxValue;
 		duration = _duration;
 		easing   = _easing;
+		repeatCount  = _repeatCount;
+		currentCount = 0;
 	}
 	function elapsed() {
 		return EMO_RUNTIME_STOPWATCH.elapsed() - startTime;
@@ -298,7 +301,12 @@ class emo.Modifier {
 		local current = currentValue();
 		if (current >= maxValue) {
 			onModify(maxValue);
-			EMO_MODIFIER_MANAGER.remove(this);
+			if (repeatCount == currentCount) {
+				EMO_MODIFIER_MANAGER.remove(this);
+			} else {
+				startTime = EMO_RUNTIME_STOPWATCH.elapsed();
+				currentCount++;
+			}
 			return;
 		}
 		onModify(current);
