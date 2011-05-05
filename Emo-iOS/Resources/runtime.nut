@@ -288,8 +288,8 @@ class emo.Modifier {
 	function elapsed() {
 		return EMO_RUNTIME_STOPWATCH.elapsed() - startTime;
 	}
-	function currentValue() {
-		return minValue + (easing(elapsed().tofloat(), duration.tofloat()) * (maxValue - minValue));
+	function currentValue(min, max) {
+		return min + (easing(elapsed().tofloat(), duration.tofloat()) * (max - min));
 	}
 	function onPause() {
 		pausedTime = EMO_RUNTIME_STOPWATCH.elapsed();
@@ -298,7 +298,7 @@ class emo.Modifier {
 		startTime = startTime + (EMO_RUNTIME_STOPWATCH.elapsed() - pausedTime);
 	}
 	function onUpdate() {
-		local current = currentValue();
+		local current = currentValue(minValue, maxValue);
 		if (current >= maxValue) {
 			onModify(maxValue);
 			if (repeatCount == currentCount) {
@@ -320,6 +320,26 @@ class emo.Modifier {
 	}
 }
 
+class emo.MultiModifier extends emo.Modifier {
+	function onUpdate() {
+		local current = [];
+		for (local i = 0; i < minValue.len(); i++) {
+			current.append(currentValue(minValue[i], maxValue[i]));
+			if (current[i] >= maxValue[i]) {
+				onModify(maxValue);
+				if (repeatCount == currentCount) {
+					EMO_MODIFIER_MANAGER.remove(this);
+				} else {
+					startTime = EMO_RUNTIME_STOPWATCH.elapsed();
+					currentCount++;
+				}
+				return;
+			}
+		}
+		onModify(current);
+	}
+}
+
 class emo.AlphaModifier extends emo.Modifier {
 	function onModify(currentValue) {
 		targetObj.alpha(currentValue);
@@ -335,6 +355,12 @@ class emo.ScaleModifier extends emo.Modifier {
 class emo.RotateModifier extends emo.Modifier {
 	function onModify(currentValue) {
 		targetObj.rotate(currentValue);
+	}
+}
+
+class emo.MoveModifier extends emo.MultiModifier {
+	function onModify(currentValue) {
+		targetObj.move(currentValue[0], currentValue[1]);
 	}
 }
 
