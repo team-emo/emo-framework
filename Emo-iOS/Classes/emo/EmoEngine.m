@@ -230,7 +230,7 @@ NSString* data2ns(NSData* data) {
 	}
 	
 	if (enableOnUpdate) {
-		NSTimeInterval _delta = [self getLastOnDrawDelta];
+		NSTimeInterval _delta = [self getLastOnDrawDrawablesDelta];
 		callSqFunction_Bool_Float(sqvm, EMO_NAMESPACE, EMO_FUNC_ON_UPDATE, _delta, SQFalse);
 	}
 	
