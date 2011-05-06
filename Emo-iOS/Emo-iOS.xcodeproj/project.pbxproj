@@ -63,6 +63,9 @@
 		F9D00EA6135D48E800D51C64 /* EmoEngine_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D00EA1135D48E800D51C64 /* EmoEngine_glue.m */; };
 		F9D00EA7135D48E800D51C64 /* EmoRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D00EA3135D48E800D51C64 /* EmoRuntime.m */; };
 		F9D1FD57136E3A0F0085D2BF /* EmoMapDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D1FD56136E3A0F0085D2BF /* EmoMapDrawable.m */; };
+		F9D9235D137396A2001AA3E0 /* EmoDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D9235C137396A2001AA3E0 /* EmoDatabase.m */; };
+		F9D9236013739869001AA3E0 /* EmoDatabase_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D9235F13739869001AA3E0 /* EmoDatabase_glue.m */; };
+		F9D9239E1373D14A001AA3E0 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D9239D1373D14A001AA3E0 /* libsqlite3.dylib */; };
 		F9DB370A136E257C00340476 /* main.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9DB3708136E257C00340476 /* main.nut */; };
 		F9DB370B136E257C00340476 /* runtime.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9DB3709136E257C00340476 /* runtime.nut */; };
 		F9E41A43134494DE0009385D /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E41A42134494DE0009385D /* OpenAL.framework */; };
@@ -173,6 +176,11 @@
 		F9D00EA3135D48E800D51C64 /* EmoRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoRuntime.m; sourceTree = "<group>"; };
 		F9D1FD55136E3A0F0085D2BF /* EmoMapDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoMapDrawable.h; sourceTree = "<group>"; };
 		F9D1FD56136E3A0F0085D2BF /* EmoMapDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoMapDrawable.m; sourceTree = "<group>"; };
+		F9D9235B137396A2001AA3E0 /* EmoDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDatabase.h; sourceTree = "<group>"; };
+		F9D9235C137396A2001AA3E0 /* EmoDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDatabase.m; sourceTree = "<group>"; };
+		F9D9235E13739869001AA3E0 /* EmoDatabase_glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDatabase_glue.h; sourceTree = "<group>"; };
+		F9D9235F13739869001AA3E0 /* EmoDatabase_glue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDatabase_glue.m; sourceTree = "<group>"; };
+		F9D9239D1373D14A001AA3E0 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		F9DB3708136E257C00340476 /* main.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.nut; path = Resources/main.nut; sourceTree = "<group>"; };
 		F9DB3709136E257C00340476 /* runtime.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = runtime.nut; path = Resources/runtime.nut; sourceTree = "<group>"; };
 		F9E41A42134494DE0009385D /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
@@ -192,6 +200,7 @@
 				F9E41A43134494DE0009385D /* OpenAL.framework in Frameworks */,
 				F9C31C191345FC8600B066DC /* AudioToolbox.framework in Frameworks */,
 				F9C7DE94134ABBDE0053065E /* libz.dylib in Frameworks */,
+				F9D9239E1373D14A001AA3E0 /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +270,7 @@
 				F9E41A42134494DE0009385D /* OpenAL.framework */,
 				F9C31C181345FC8600B066DC /* AudioToolbox.framework */,
 				F9C7DE93134ABBDE0053065E /* libz.dylib */,
+				F9D9239D1373D14A001AA3E0 /* libsqlite3.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -285,6 +295,8 @@
 				F9C7DEA9134ACAE90053065E /* EmoImage.m */,
 				F9F89ECB1350218C00B005AF /* EmoStage.h */,
 				F9F89ECC1350218C00B005AF /* EmoStage.m */,
+				F9D9235B137396A2001AA3E0 /* EmoDatabase.h */,
+				F9D9235C137396A2001AA3E0 /* EmoDatabase.m */,
 			);
 			path = emo;
 			sourceTree = "<group>";
@@ -421,6 +433,8 @@
 				F9D00EA1135D48E800D51C64 /* EmoEngine_glue.m */,
 				F9D00EA2135D48E800D51C64 /* EmoRuntime.h */,
 				F9D00EA3135D48E800D51C64 /* EmoRuntime.m */,
+				F9D9235E13739869001AA3E0 /* EmoDatabase_glue.h */,
+				F9D9235F13739869001AA3E0 /* EmoDatabase_glue.m */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -537,6 +551,8 @@
 				F9D00EA6135D48E800D51C64 /* EmoEngine_glue.m in Sources */,
 				F9D00EA7135D48E800D51C64 /* EmoRuntime.m in Sources */,
 				F9D1FD57136E3A0F0085D2BF /* EmoMapDrawable.m in Sources */,
+				F9D9235D137396A2001AA3E0 /* EmoDatabase.m in Sources */,
+				F9D9236013739869001AA3E0 /* EmoDatabase_glue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

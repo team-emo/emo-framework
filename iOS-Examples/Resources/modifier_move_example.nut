@@ -2,7 +2,7 @@ local stage = emo.Stage();
 local event = emo.Event();
 
 /*
- * This example shows block sprites that use Modifiers.
+ * This example shows block sprites using Modifiers.
  */
 class Main {
 
@@ -37,9 +37,9 @@ class Main {
         
 		// block1 moves along axis by Linear equation  in 5 seconds 
         block1.addModifier(emo.MoveModifier(
-			[block1.getX(), block1.getY()],
-			[block1.getX(), y],
-			5000, emo.easing.Linear));
+			[block1.getX(), block1.getY()],  // from [x, y]
+			[block1.getX(), y],              // to   [x, y]
+			5000, emo.easing.Linear));       // duration, equation
 			
 		// block2 moves along axis by BackInOut equation  in 5 seconds 
         block2.addModifier(emo.MoveModifier(
@@ -64,9 +64,9 @@ class Main {
 		// rotates 360 degree by CubicIn equation 
 		// in 5 seconds 
         block5.addModifier(emo.MoveModifier(
-			[block5.getX(), block5.getY()],
-			[block5.getX(), y],
-			5000, emo.easing.Linear));
+			[block5.getX(), block5.getY()], // from [x, y]
+			[block5.getX(), y],             // to   [x, y]
+			5000, emo.easing.Linear));      // duratin, equation
         block5.addModifier(emo.RotateModifier(
 			0, 360, 5000, emo.easing.CubicIn));
     }

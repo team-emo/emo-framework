@@ -38,6 +38,7 @@ NSString* data2ns(NSData* data) {
 @synthesize onDrawDrawablesInterval;
 @synthesize audioManager;
 @synthesize stage;
+@synthesize database;
 
 /*
  * register classes and functions for script
@@ -70,6 +71,7 @@ NSString* data2ns(NSData* data) {
 	drawables    = [[NSMutableDictionary alloc]init];
 	stage        = [[EmoStage alloc]init];
 	netTasks     = [[NSMutableDictionary alloc]init];
+	database     = [[EmoDatabase alloc]init];
 	
 	[stage setSize:width height:height];
 	
@@ -123,6 +125,9 @@ NSString* data2ns(NSData* data) {
 	
 	[netTasks release];
 	netTasks = nil;
+	
+	[database release];
+	database = nil;
 	
 	return TRUE;
 }

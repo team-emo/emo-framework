@@ -4,6 +4,7 @@
 #import "EmoDrawable.h"
 #import "EmoStage.h"
 #import "EmoRuntime.h"
+#import "EmoDatabase.h"
 
 NSString* char2ns(const SQChar* str);
 NSString* data2ns(NSData* data);
@@ -32,6 +33,7 @@ NSString* data2ns(NSData* data);
 	NSInteger onDrawDrawablesInterval;
 	
 	EmoAudioManager* audioManager;
+	EmoDatabase* database;
 	
 	EmoStage* stage;
 	
@@ -56,6 +58,7 @@ NSString* data2ns(NSData* data);
 @property (readonly) EmoAudioManager* audioManager;
 @property (readonly) EmoStage* stage;
 @property (readwrite) BOOL sortOrderDirty;
+@property (readonly) EmoDatabase* database;
 
 - (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 - (void)registerAccelerometerSensor:(BOOL)enable;

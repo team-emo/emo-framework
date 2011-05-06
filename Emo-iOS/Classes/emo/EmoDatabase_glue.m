@@ -1,0 +1,260 @@
+#import "EmoDatabase_glue.h"
+#import "Constants.h"
+#import "EmoEngine.h"
+
+extern EmoEngine* engine;
+
+void initDatabaseFunctions() {
+    registerEmoClass(engine.sqvm, EMO_DATABASE_CLASS);
+    registerEmoClass(engine.sqvm, EMO_PREFERENCE_CLASS);
+	
+    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "openOrCreate", emoDatabaseOpenOrCreate);
+    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "open",         emoDatabaseOpen);
+    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "close",        emoDatabaseClose);
+    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "getPath",      emoDatabaseGetPath);
+    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "getLastError", emoDatabaseGetLastError);
+    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "getLastErrorMessage", emoDatabaseGetLastErrorMessage);
+    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "deleteDatabase", emoDatabaseDeleteDatabase);
+	
+    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "open",         emoDatabaseOpenPreference);
+    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "openOrCreate", emoDatabaseOpenOrCreatePreference);
+    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "get",          emoDatabaseGetPreference);
+    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "set",          emoDatabaseSetPreference);
+    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "del",          emoDatabaseDeletePreference);
+    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "keys",         emoDatabaseGetPreferenceKeys);
+    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "close",        emoDatabaseClose);
+}
+
+SQInteger emoDatabaseOpenOrCreate(HSQUIRRELVM v) {
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    SQInteger mode = FILE_MODE_PRIVATE;
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_INTEGER) {
+        sq_getinteger(v, 3, &mode);
+    }
+	
+	NSString* nsname = [[NSString alloc]initWithUTF8String:name];
+    if (![engine.database openOrCreate:nsname mode:mode]) {
+        sq_pushinteger(v, ERR_DATABASE_OPEN);
+		[nsname release];
+        return 1;
+    }
+	[nsname release];
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDatabaseOpen(HSQUIRRELVM v) {
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+	NSString* nsname = [[NSString alloc]initWithUTF8String:name];
+    if (![engine.database open:nsname]) {
+        sq_pushinteger(v, ERR_DATABASE_OPEN);
+		[nsname release];
+        return 1;
+    }
+	[nsname release];
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDatabaseClose(HSQUIRRELVM v) {
+    if (![engine.database close]) {
+        sq_pushinteger(v, ERR_DATABASE_CLOSE);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDatabaseGetPath(HSQUIRRELVM v) {
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+	NSString* nsname = [[NSString alloc]initWithUTF8String:name];
+    const char* path = [[engine.database getPath:nsname] UTF8String];
+	[nsname release];
+	
+    sq_pushstring(v, path, strlen(path));
+	
+    return 1;
+}
+
+SQInteger emoDatabaseGetLastError(HSQUIRRELVM v) {
+    sq_pushinteger(v, [engine.database getLastError]);
+    return 1;
+}
+
+SQInteger emoDatabaseGetLastErrorMessage(HSQUIRRELVM v) {
+    const char* str = [[engine.database getLastErrorMessage] UTF8String];
+    sq_pushstring(v, str, strlen(str));
+    return 1;
+}
+
+SQInteger emoDatabaseOpenPreference(HSQUIRRELVM v) {
+    if (![engine.database openPreference]) {
+        sq_pushinteger(v, ERR_DATABASE_OPEN);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDatabaseOpenOrCreatePreference(HSQUIRRELVM v) {
+    if (![engine.database openOrCreatePreference]) {
+        sq_pushinteger(v, ERR_DATABASE_OPEN);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDatabaseGetPreference(HSQUIRRELVM v) {
+    const SQChar* key;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &key);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+	
+	NSString* nskey = [[NSString alloc]initWithUTF8String:key];
+    const char* str = [[engine.database getPreference:nskey] UTF8String];
+	[nskey release];
+	
+    sq_pushstring(v, str, strlen(str));
+    return 1;
+}
+
+SQInteger emoDatabaseSetPreference(HSQUIRRELVM v) {
+    const SQChar* key;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &key);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    const SQChar* value;
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_STRING) {
+        sq_tostring(v, 3);
+        sq_getstring(v, -1, &value);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+	NSString* nskey   = [[NSString alloc]initWithUTF8String:key];
+	NSString* nsvalue = [[NSString alloc]initWithUTF8String:value];
+    if (![engine.database setPreference:nskey value:nsvalue]) {
+        sq_pushinteger(v, ERR_DATABASE);
+		[nskey release];
+		[nsvalue release];
+        return 1;
+    }
+	[nskey release];
+	[nsvalue release];
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDatabaseDeleteDatabase(HSQUIRRELVM v) {
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	NSString* nsname = [[NSString alloc]initWithUTF8String:name];
+    if (![engine.database deleteDatabase:nsname]) {
+        sq_pushinteger(v, ERR_DATABASE);
+		[nsname release];
+        return 1;
+    }
+	[nsname release];
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+	
+}
+
+SQInteger emoDatabaseDeletePreference(HSQUIRRELVM v) {
+    const SQChar* key;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &key);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	NSString* nskey   = [[NSString alloc]initWithUTF8String:key];
+    if (![engine.database deletePreference:nskey]) {
+        sq_pushinteger(v, ERR_DATABASE);
+		[nskey release];
+        return 1;
+    }
+	[nskey release];
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoDatabaseGetPreferenceKeys(HSQUIRRELVM v) {
+	
+    NSArray* keys = [engine.database getPreferenceKeys];
+	
+    sq_newarray(v, 0);
+	
+    for (int i = 0; i < [keys count]; i++) {
+		const char* key = [[keys objectAtIndex:i] UTF8String];
+        sq_pushstring(v, key, -1);
+        sq_arrayappend(v, -2);
+    }
+	
+    sq_push(v, -1);
+	
+    return 1;
+}
+
