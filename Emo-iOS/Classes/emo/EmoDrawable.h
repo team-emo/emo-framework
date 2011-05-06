@@ -59,7 +59,7 @@
 	EmoAnimationFrame* currentAnimation;
 	NSString* animationName;
 }
-@property (assign, readwrite) NSString* name;
+@property (copy, readwrite) NSString* name;
 @property (readwrite) float x;
 @property (readwrite) float y;
 @property (readwrite) float z;
@@ -71,7 +71,7 @@
 @property (readwrite) NSInteger frame_index;
 @property (readwrite) NSInteger border;
 @property (readwrite) NSInteger margin;
-@property (assign, readwrite, nonatomic) EmoImage* texture;
+@property (retain, readwrite, nonatomic) EmoImage* texture;
 @property (readwrite) BOOL independent;
 @property (readonly) BOOL loaded;
 

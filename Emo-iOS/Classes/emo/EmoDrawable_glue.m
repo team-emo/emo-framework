@@ -78,7 +78,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
         sq_getstring(v, -1, &name);
 		
         if (strlen(name) > 0) {
-            drawable.name = [[NSString alloc] initWithUTF8String:name];
+			drawable.name = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
         }
     } else {
 		drawable.name = nil;
@@ -104,6 +104,8 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 	
     sq_pushstring(v, key, strlen(key));
 	
+	[drawable release];
+	
     return 1;
 }
 
@@ -122,7 +124,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
         sq_getstring(v, -1, &name);
 		
         if (strlen(name) > 0) {
-            drawable.name = [[NSString alloc] initWithUTF8String:name];
+			drawable.name = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
         }
     }
 	
@@ -178,6 +180,8 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
 	
     sq_pushstring(v, key, strlen(key));
 	
+	[drawable release];
+	
     return 1;
 }
 
@@ -227,6 +231,7 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 			sq_pushinteger(v, ERR_ASSET_LOAD);
 			return 1;
 		}
+		[imageInfo release];
 	}
 	
     // drawable x
@@ -302,6 +307,8 @@ SQInteger emoDrawableCreateMapSprite(HSQUIRRELVM v) {
     [engine addDrawable:parent withKey:key];
 	
     sq_pushstring(v, key, strlen(key));
+	
+	[parent release];
 	
     return 1;
 }
@@ -1428,7 +1435,9 @@ SQInteger emoDrawableAnimate(HSQUIRRELVM v) {
     [drawable addAnimation:animation];
     [drawable setAnimation:animation.name];
     [drawable enableAnimation:TRUE];
-    
+
+	[animation release];
+	
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }

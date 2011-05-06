@@ -84,6 +84,9 @@
 		F92B720F136FD38000DD803C /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B720E136FD38000DD803C /* OpenGLES.framework */; };
 		F92B7219136FD39100DD803C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B7218136FD39100DD803C /* libz.dylib */; };
 		F92B7253136FD42F00DD803C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B7252136FD42F00DD803C /* QuartzCore.framework */; };
+		F92BBE861373E51800796475 /* EmoDatabase_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F92BBE831373E51800796475 /* EmoDatabase_glue.m */; };
+		F92BBE871373E51800796475 /* EmoDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F92BBE851373E51800796475 /* EmoDatabase.m */; };
+		F92BBE991373E53000796475 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F92BBE981373E53000796475 /* libsqlite3.dylib */; };
 		F967A8ED1372A3F800BEF871 /* modifier_move_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F967A8C21372A17800BEF871 /* modifier_move_example.nut */; };
 		F97C156F13722E1A00551C94 /* modifier_rotate_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */; };
 /* End PBXBuildFile section */
@@ -215,6 +218,11 @@
 		F92B720E136FD38000DD803C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		F92B7218136FD39100DD803C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F92B7252136FD42F00DD803C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F92BBE821373E51800796475 /* EmoDatabase_glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDatabase_glue.h; sourceTree = "<group>"; };
+		F92BBE831373E51800796475 /* EmoDatabase_glue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDatabase_glue.m; sourceTree = "<group>"; };
+		F92BBE841373E51800796475 /* EmoDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDatabase.h; sourceTree = "<group>"; };
+		F92BBE851373E51800796475 /* EmoDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDatabase.m; sourceTree = "<group>"; };
+		F92BBE981373E53000796475 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		F967A8C21372A17800BEF871 /* modifier_move_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = modifier_move_example.nut; path = Resources/modifier_move_example.nut; sourceTree = "<group>"; };
 		F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = modifier_rotate_example.nut; path = Resources/modifier_rotate_example.nut; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -232,6 +240,7 @@
 				F92B720F136FD38000DD803C /* OpenGLES.framework in Frameworks */,
 				F92B7219136FD39100DD803C /* libz.dylib in Frameworks */,
 				F92B7253136FD42F00DD803C /* QuartzCore.framework in Frameworks */,
+				F92BBE991373E53000796475 /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +319,7 @@
 				F92B720E136FD38000DD803C /* OpenGLES.framework */,
 				F92B7218136FD39100DD803C /* libz.dylib */,
 				F92B7252136FD42F00DD803C /* QuartzCore.framework */,
+				F92BBE981373E53000796475 /* libsqlite3.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -342,6 +352,10 @@
 		F92B7170136FD2C000DD803C /* emo */ = {
 			isa = PBXGroup;
 			children = (
+				F92BBE821373E51800796475 /* EmoDatabase_glue.h */,
+				F92BBE831373E51800796475 /* EmoDatabase_glue.m */,
+				F92BBE841373E51800796475 /* EmoDatabase.h */,
+				F92BBE851373E51800796475 /* EmoDatabase.m */,
 				F92B7171136FD2C000DD803C /* Constants.h */,
 				F92B7172136FD2C000DD803C /* EmoAudio.h */,
 				F92B7173136FD2C000DD803C /* EmoAudio.m */,
@@ -613,6 +627,8 @@
 				F92B7205136FD2E300DD803C /* sqstate.cpp in Sources */,
 				F92B7206136FD2E300DD803C /* sqtable.cpp in Sources */,
 				F92B7207136FD2E300DD803C /* sqvm.cpp in Sources */,
+				F92BBE861373E51800796475 /* EmoDatabase_glue.m in Sources */,
+				F92BBE871373E51800796475 /* EmoDatabase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

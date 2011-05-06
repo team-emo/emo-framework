@@ -244,5 +244,9 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
 			NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	return [NSString stringWithFormat:@"%@/%@", docDir, name];
 }
+-(void)dealloc {
+	[lastErrorMessage release];
+	[super dealloc];
+}
 
 @end

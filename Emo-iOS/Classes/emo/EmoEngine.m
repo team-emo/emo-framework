@@ -401,7 +401,7 @@ NSString* data2ns(NSData* data) {
 	[drawable release];
 	[drawables removeObjectForKey:_key];
 	[_key release];
-	
+
 	sortOrderDirty = TRUE;
 	return TRUE;
 	
@@ -419,6 +419,7 @@ NSString* data2ns(NSData* data) {
 }
 
 -(void)addDrawable:(EmoDrawable*)drawable withKey:(const char*)key {
+	[drawable retain];
 	[drawables setObject:drawable forKey: char2ns(key)];
 	sortOrderDirty = TRUE;
 }
@@ -458,5 +459,9 @@ NSString* data2ns(NSData* data) {
 -(void)enableOnUpdateListener:(BOOL)enable {
 	enableOnUpdate = enable;
 }
-
+-(void)dealloc {
+	[lastCallbackErrorMessage release];
+	[lastCallbackErrorType release];
+	[super dealloc];
+}
 @end

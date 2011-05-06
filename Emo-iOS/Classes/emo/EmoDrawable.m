@@ -51,6 +51,18 @@ extern EmoEngine* engine;
 -(NSTimeInterval)getLastOnAnimationDelta:(NSTimeInterval)uptime {
 	return (uptime - lastOnAnimationInterval) * 1000;
 }
+-(void)garbage {
+	int retainCount = [name retainCount];
+	for (int i = 0; i < retainCount; i++) {
+		[name release];
+	}
+	name = nil;
+}
+-(void)dealloc {
+	[self garbage];
+	[super dealloc];
+}
+
 @end
 
 
@@ -61,7 +73,6 @@ extern EmoEngine* engine;
 -(float)getTexCoordEndX;
 -(float)getTexCoordStartY;
 -(float)getTexCoordEndY;
--(void)garbage;
 @end
 
 @implementation EmoDrawable
@@ -382,6 +393,7 @@ extern EmoEngine* engine;
 }
 
 -(void)addAnimation:(EmoAnimationFrame*)animation {
+	[animation retain];
 	[self deleteAnimation:animation.name];
 	[animations setObject:animation forKey:animation.name];
 }
@@ -453,6 +465,8 @@ extern EmoEngine* engine;
 }
 -(void)dealloc {
 	[animations release];
+	animations = nil;
+	
 	[self garbage];
 	[super dealloc];
 }

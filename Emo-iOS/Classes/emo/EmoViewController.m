@@ -55,6 +55,9 @@ EmoEngine* engine;
     if ([EAGLContext currentContext] == context)
         [EAGLContext setCurrentContext:nil];
     
+	[runtimeScript release];
+	[mainScript release];
+	
     [context release];
 	[engine release];
 	[touchIdMaster release];

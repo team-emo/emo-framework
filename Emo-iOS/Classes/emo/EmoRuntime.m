@@ -67,6 +67,9 @@ extern EmoEngine* engine;
 -(void)dealloc {
 	[connection release];
 	[content release];
+	[name release];
+	[method release];
+	
 	[super dealloc];
 }
 @end
