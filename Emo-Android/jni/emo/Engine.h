@@ -68,6 +68,9 @@ namespace emo {
 
         void enableOnUpdateListener(bool enable);
 
+        void enableOnFpsListener(bool enable);
+        void setOnFpsListenerInterval(int value);
+
         void addDrawable(std::string key, Drawable* drawable);
         void addDrawableToRemove(std::string key, Drawable* drawable);
         bool removeDrawable(std::string key);
@@ -100,6 +103,7 @@ namespace emo {
 
         int32_t onDrawFrameInterval;
         int32_t onDrawDrawablesInterval;
+        int32_t onFpsInterval;
 
         void registerClass(HSQUIRRELVM v, const char *cname);
         void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);
@@ -133,6 +137,9 @@ namespace emo {
         timeb   lastOnDrawInterval;
         timeb   lastOnDrawDrawablesInterval;
 
+        int32_t onFpsIntervalDelta;
+        int32_t frameCount;
+
         bool      stopwatchStarted;
         timeb     stopwatchStartTime;
         int32_t   stopwatchElapsedTime;
@@ -142,6 +149,7 @@ namespace emo {
         bool enableOnDrawFrame;
         bool enableBackKey;
         bool enableOnUpdate;
+        bool enableOnFps;
 
         drawables_t* drawables;
         drawables_t* drawablesToRemove;

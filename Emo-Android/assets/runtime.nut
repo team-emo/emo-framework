@@ -1004,3 +1004,13 @@ function emo::_onCallback(...) {
         EMO_RUNTIME_DELEGATE.onCallback(vargv[0], vargv[1]);
     }
 }
+
+function emo::_onFps(fps) {
+    if (emo.rawin("onFps")) {
+        emo.onFps(fps);
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onFps")) {
+        EMO_RUNTIME_DELEGATE.onFps(fps);
+    }
+}

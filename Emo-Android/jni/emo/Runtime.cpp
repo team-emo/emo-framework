@@ -40,6 +40,8 @@ void initRuntimeFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
     engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnUpdateCallback",  emoEnableOnUpdateCallback);
     engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnUpdateCallback", emoDisableOnUpdateCallback);
+    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnFpsCallback",     emoEnableOnFpsCallback);
+    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnFpsCallback",    emoDisableOnFpsCallback);
 }
 
 int32_t app_handle_input(struct android_app* app, AInputEvent* event) {
@@ -406,5 +408,25 @@ SQInteger emoEnableOnUpdateCallback(HSQUIRRELVM v) {
 }
 SQInteger emoDisableOnUpdateCallback(HSQUIRRELVM v) {
     engine->enableOnUpdateListener(false);
+    return 0;
+}
+
+SQInteger emoEnableOnFpsCallback(HSQUIRRELVM v) {
+    engine->enableOnFpsListener(true);
+
+    SQInteger nargs = sq_gettop(v);
+
+    if (nargs <= 2 && sq_gettype(v, 2) == OT_INTEGER) {
+        SQInteger interval;
+        sq_getinteger(v, 2, &interval);
+
+        engine->setOnFpsListenerInterval(interval);
+    }
+
+    return 0;
+}
+
+SQInteger emoDisableOnFpsCallback(HSQUIRRELVM v) {
+    engine->enableOnFpsListener(false);
     return 0;
 }

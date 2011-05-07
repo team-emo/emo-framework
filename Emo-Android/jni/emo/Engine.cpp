@@ -95,6 +95,11 @@ namespace emo {
         this->onDrawDrawablesInterval = 0;
         this->lastOnDrawDrawablesInterval = this->uptime;
 
+        this->frameCount         = 0;
+        this->onFpsInterval      = 0;
+        this->onFpsIntervalDelta = 0;
+        this->enableOnFps        = false;
+
         // enable perspective hint to nicest (default)
         this->enablePerspectiveNicest = SQTrue;
 
@@ -542,6 +547,18 @@ namespace emo {
         if (delta < this->onDrawDrawablesInterval) {
             return;
         }
+
+        if (this->enableOnFps) {
+            this->frameCount++;
+            this->onFpsIntervalDelta += delta;
+            if (this->onFpsIntervalDelta >= this->onFpsInterval) {
+                float fps = 1000.0 / (this->onFpsIntervalDelta / (float)this->frameCount);
+                callSqFunction_Bool_Float(this->sqvm, EMO_NAMESPACE, EMO_FUNC_ON_FPS, fps, SQFalse);
+                this->onFpsIntervalDelta = 0;
+                this->frameCount         = 0;
+            }
+        }
+
         this->lastOnDrawDrawablesInterval  = this->uptime;
 
         this->stage->onDrawFrame();
@@ -850,6 +867,15 @@ namespace emo {
 
     void Engine::enableOnUpdateListener(bool enable) {
         this->enableOnUpdate = enable;
+    }
+
+    void Engine::enableOnFpsListener(bool enable) {
+        this->frameCount  = 0;
+        this->enableOnFps = enable;
+    }
+
+    void Engine::setOnFpsListenerInterval(int value) {
+        this->onFpsInterval = value;
     }
 }
 

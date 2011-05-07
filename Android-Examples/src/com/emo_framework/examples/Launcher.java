@@ -24,7 +24,7 @@ public class Launcher extends ExpandableListActivity {
     private List<List<Map<String, String>>> childData = new ArrayList<List<Map<String, String>>>();
     
     private static final String[] groupNames = {
-    	"Basic", "Event"
+    	"Basic", "Animation"
     };
     
     private static final String[][] childNames = {
