@@ -1,12 +1,15 @@
 local stage = emo.Stage();
 
 /*
- * This example shows single sprite that changes frame index when touch-down event is fired.
+ * This example shows one block sprite sheet that changes frame index on touch-down event
  */
 class Main {
 
+    // defines a sprite sheet that consists of 32x32 block with 2 pixel border.
     block = emo.SpriteSheet("blocks.png", 32, 32, 2);
-	currentFrame = 0;
+
+    // current frame index
+    currentFrame = 0;
 
 	/*
 	 * Called when this class is loaded
@@ -52,7 +55,7 @@ class Main {
 	 * touch event
 	 */
 	function onMotionEvent(mevent) {
-		// change frame index when touch down event occurs.
+		// change frame index on touch down event
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
 			currentFrame++;
 			if (currentFrame >= block.getFrameCount()) {
