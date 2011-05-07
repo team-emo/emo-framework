@@ -818,25 +818,25 @@ SQInteger emoDrawableColor(HSQUIRRELVM v) {
         return 1;
     }
 	
-    if (nargs >= 3) {
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQFloat r;
         sq_getfloat(v, 3, &r);
         [drawable setColor:0 withValue:r];
     }
 	
-    if (nargs >= 4) {
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
         SQFloat g;
         sq_getfloat(v, 4, &g);
         [drawable setColor:1 withValue:g];
     }
 	
-    if (nargs >= 5) {
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
         SQFloat b;
         sq_getfloat(v, 5, &b);
         [drawable setColor:2 withValue:b];
     }
 	
-    if (nargs >= 6) {
+    if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
         SQFloat a;
         sq_getfloat(v, 6, &a);
         [drawable setColor:3 withValue:a];
