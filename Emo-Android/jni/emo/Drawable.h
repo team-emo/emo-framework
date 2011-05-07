@@ -54,6 +54,7 @@ namespace emo {
         bool isCurrentTexBufferLoaded();
 
         bool setFrameIndex(int index);
+        int  getFrameIndex();
 
         void setTexture(Image* image);
 

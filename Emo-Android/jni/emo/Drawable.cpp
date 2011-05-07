@@ -362,6 +362,10 @@ namespace emo {
         return true;
     }
 
+    int Drawable::getFrameIndex() {
+        return this->frame_index;
+    }
+
     GLuint Drawable::getCurrentBufferId() {
         return this->frames_vbos[this->frame_index];
     }

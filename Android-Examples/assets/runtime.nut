@@ -797,6 +797,14 @@ class emo.SpriteSheet extends emo.Sprite {
     function stop() {
         return stage.stop(id);
     }
+	
+	function getFrameIndex() {
+		return stage.getFrameIndex(id);
+	}
+	
+	function getFrameCount() {
+		return stage.getFrameCount(id);
+	}
 }
 
 class emo.Rectangle extends emo.Sprite {

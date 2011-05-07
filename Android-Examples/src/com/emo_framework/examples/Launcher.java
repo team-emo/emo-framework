@@ -30,21 +30,25 @@ public class Launcher extends ExpandableListActivity {
     private static final String[][] childNames = {
     	{
     		"Drawing a Shape",
-    		"Drawing a Sprite"
+    		"Drawing a Sprite",
+			"Drawing Tiles"
     	},
     	{
     		"Periodic Update",
-    		"Using with Modifiers"
+    		"Using Modifiers",
+    		"Modifier with Easing"
     	}
     };
     private static final String[][] activities = {
     	{
     		".ShapeExample",
-    		".SpriteExample"
+    		".SpriteExample",
+			".TileExample"
     	},
     	{
     		".PeriodicUpdateExample",
-    		".RotateModifierExample"
+    		".RotateModifierExample",
+    		".MoveModifierExample"
     	}
     };
     

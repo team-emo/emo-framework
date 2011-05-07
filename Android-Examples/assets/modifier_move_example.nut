@@ -1,0 +1,105 @@
+local stage = emo.Stage();
+local event = emo.Event();
+
+/*
+ * This example shows block sprites using Modifiers.
+ */
+class Main {
+
+    block1 = emo.Sprite("block.png");
+    block2 = emo.Sprite("block.png");
+    block3 = emo.Sprite("block.png");
+    block4 = emo.Sprite("block.png");
+    block5 = emo.Sprite("block.png");
+    
+	/*
+	 * Called when this class is loaded
+	 */
+    function onLoad() {
+        print("onLoad"); 
+		
+		// move sprite to the center of the screen
+		local x = stage.getWindowWidth() / 5;
+		local y = stage.getWindowHeight() - block1.getHeight();
+		
+		block1.move(x * 0, block1.getHeight());
+		block2.move(x * 1, block2.getHeight());
+		block3.move(x * 2, block3.getHeight());
+		block4.move(x * 3, block4.getHeight());
+		block5.move(x * 4, block5.getHeight());
+
+		// load sprite to the screen
+        block1.load();
+        block2.load();
+        block3.load();
+        block4.load();
+        block5.load();
+        
+		// block1 moves along axis by Linear equation in 5 seconds 
+        block1.addModifier(emo.MoveModifier(
+			[block1.getX(), block1.getY()],  // from [x, y]
+			[block1.getX(), y],              // to   [x, y]
+			5000, emo.easing.Linear));       // duration, equation
+			
+		// block2 moves along axis by BackInOut equation in 5 seconds 
+        block2.addModifier(emo.MoveModifier(
+			[block2.getX(), block2.getY()],
+			[block2.getX(), y],
+			5000, emo.easing.BackInOut));
+
+		// block3 moves along axis by ElasticOut equation in 5 seconds 
+        block3.addModifier(emo.MoveModifier(
+			[block3.getX(), block3.getY()],
+			[block3.getX(), y],
+			5000, emo.easing.ElasticOut));
+			
+		// block4 moves along axis by ElasticInOut equation in 5 seconds 
+        block4.addModifier(emo.MoveModifier(
+			[block4.getX(), block4.getY()],
+			[block4.getX(), y],
+			5000, emo.easing.ElasticInOut));
+		
+		// all sprites are able to have multiple modifiers:
+		// block5 moves along axis by Linear equation  and
+		// rotates 360 degree by CubicIn equation 
+		// in 5 seconds 
+        block5.addModifier(emo.MoveModifier(
+			[block5.getX(), block5.getY()], // from [x, y]
+			[block5.getX(), y],             // to   [x, y]
+			5000, emo.easing.Linear));      // duratin, equation
+        block5.addModifier(emo.RotateModifier(
+			0, 360, 5000, emo.easing.CubicIn));
+    }
+
+	/*
+	 * Called when the app has gained focus
+	 */
+    function onGainedFocus() {
+        print("onGainedFocus");
+    }
+    
+	/*
+	 * Called when the app has lost focus
+	 */
+    function onLostFocus() {
+        print("onLostFocus"); 
+    }
+
+	/*
+	 * Called when this class will be disposed
+	 */
+    function onDispose() {
+        print("onDispose");
+        
+        // remove sprite from the screen
+        block1.remove();
+        block2.remove();
+        block3.remove();
+        block4.remove();
+        block5.remove();
+    }
+}
+
+function emo::onLoad() {
+    stage.load(Main());
+}

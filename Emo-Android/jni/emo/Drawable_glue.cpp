@@ -60,6 +60,8 @@ void initDrawableFunctions() {
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pause",          emoDrawablePause);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "stop",           emoDrawableStop);
     engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "animate",        emoDrawableAnimate);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getFrameIndex",  emoDrawableGetFrameIndex);
+    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getFrameCount",  emoDrawableGetFrameCount);
 }
 
 /*
@@ -1612,3 +1614,44 @@ SQInteger emoDrawableGetAngle(HSQUIRRELVM v) {
     return 1;
 }
 
+SQInteger emoDrawableGetFrameIndex(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+		return 0;
+    }
+	
+    emo::Drawable* drawable = engine->getDrawable(id);
+	
+    if (drawable == NULL) {
+		return 0;
+    }
+	
+    sq_pushinteger(v, drawable->getFrameIndex());
+    return 1;
+}
+
+SQInteger emoDrawableGetFrameCount(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+		return 0;
+    }
+	
+    emo::Drawable* drawable = engine->getDrawable(id);
+	
+    if (drawable == NULL) {
+		return 0;
+    }
+	
+    sq_pushinteger(v, drawable->getFrameCount());
+    return 1;
+}

@@ -1,13 +1,13 @@
 local stage = emo.Stage();
-local event = emo.Event();
 
 /*
- * This example shows one block sprite that rotates using modifier.
+ * This example shows single sprite that changes frame index when touch-down event is fired.
  */
 class Main {
 
-    block = emo.Sprite("block.png");
-    
+    block = emo.SpriteSheet("blocks.png", 32, 32, 2);
+	currentFrame = 0;
+
 	/*
 	 * Called when this class is loaded
 	 */
@@ -22,9 +22,6 @@ class Main {
 
 		// load sprite to the screen
         block.load();
-        
-        // rotate the block from 0 to 360 degree in 5 seconds using Linear equation
-        block.addModifier(emo.RotateModifier(0, 360, 5000, emo.easing.Linear));
     }
 
 	/*
@@ -33,7 +30,7 @@ class Main {
     function onGainedFocus() {
         print("onGainedFocus");
     }
-    
+
 	/*
 	 * Called when the app has lost focus
 	 */
@@ -50,6 +47,20 @@ class Main {
         // remove sprite from the screen
         block.remove();
     }
+
+	/*
+	 * touch event
+	 */
+	function onMotionEvent(mevent) {
+		// change frame index when touch down event occurs.
+		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+			currentFrame++;
+			if (currentFrame >= block.getFrameCount()) {
+				currentFrame = 0;
+			}
+			block.setFrame(currentFrame);
+		}
+	}
 }
 
 function emo::onLoad() {
