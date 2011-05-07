@@ -100,6 +100,8 @@ void initRuntimeFunctions() {
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
     registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnUpdateCallback",  emoEnableOnUpdateCallback);
     registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnUpdateCallback", emoDisableOnUpdateCallback);
+    registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnFpsCallback",  emoEnableOnFpsCallback);
+    registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnFpsCallback", emoDisableOnFpsCallback);
 	
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "getLastErrorMessage",   emoGetLastCallbackErrorMessage);
 	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "getLastErrorType",      emoGetLastCallbackErrorType);
@@ -501,3 +503,22 @@ SQInteger emoDisableOnUpdateCallback(HSQUIRRELVM v) {
     return 0;
 }
 
+SQInteger emoEnableOnFpsCallback(HSQUIRRELVM v) {
+    [engine enableOnFpsListener:TRUE];
+	
+    SQInteger nargs = sq_gettop(v);
+	
+    if (nargs <= 2 && sq_gettype(v, 2) == OT_INTEGER) {
+        SQInteger interval;
+        sq_getinteger(v, 2, &interval);
+		
+        [engine setOnFpsListenerInterval:interval];
+    }
+	
+    return 0;
+}
+
+SQInteger emoDisableOnFpsCallback(HSQUIRRELVM v) {
+    [engine enableOnFpsListener:FALSE];
+    return 0;
+}

@@ -83,6 +83,11 @@ NSString* data2ns(NSData* data) {
 	onDrawFrameInterval = 0;
 	onDrawDrawablesInterval = 0;
 	
+	frameCount         = 0;
+	onFpsInterval      = 0;
+	onFpsIntervalDelta = 0;
+	enableOnFps        = FALSE;
+	
 	drawablesToDraw  = [NSArray alloc];
 	
 	sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
@@ -250,7 +255,19 @@ NSString* data2ns(NSData* data) {
 	if (delta < onDrawDrawablesInterval) {
 		return FALSE;
 	}
-
+	
+	if (enableOnFps) {
+		frameCount++;
+		onFpsIntervalDelta += delta;
+		if (onFpsIntervalDelta >= onFpsInterval) {
+			float fps = 1000.0 / (onFpsIntervalDelta / (float)frameCount);
+			callSqFunction_Bool_Float(sqvm, EMO_NAMESPACE, EMO_FUNC_ON_FPS, fps, SQFalse);
+			onFpsIntervalDelta = 0;
+			frameCount         = 0;
+		}
+	}
+	
+	
 	lastOnDrawDrawablesInterval = [self uptime];
 	[stage onDrawFrame:delta];
 	for (int i = 0; i < [drawablesToDraw count]; i++) {
@@ -459,6 +476,16 @@ NSString* data2ns(NSData* data) {
 -(void)enableOnUpdateListener:(BOOL)enable {
 	enableOnUpdate = enable;
 }
+
+-(void)enableOnFpsListener:(BOOL)enable {
+	frameCount  = 0;
+	enableOnFps = enable;
+}
+
+-(void)setOnFpsListenerInterval:(NSInteger)value {
+	onFpsInterval = value;
+}
+
 -(void)dealloc {
 	[lastCallbackErrorMessage release];
 	[lastCallbackErrorType release];

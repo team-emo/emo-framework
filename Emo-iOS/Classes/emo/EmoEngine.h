@@ -29,6 +29,11 @@ NSString* data2ns(NSData* data);
 	BOOL accelerometerSensorRegistered;
 	BOOL enableOnUpdate;
 	
+	BOOL enableOnFps;
+	NSInteger frameCount;
+	NSInteger onFpsInterval;
+	NSInteger onFpsIntervalDelta;
+	
 	NSInteger onDrawFrameInterval;
 	NSInteger onDrawDrawablesInterval;
 	
@@ -88,6 +93,9 @@ NSString* data2ns(NSData* data);
 -(void)stopwatchStop;
 -(NSInteger)stopwatchElapsed;
 -(void)enableOnUpdateListener:(BOOL)enable;
+
+-(void)enableOnFpsListener:(BOOL)enable;
+-(void)setOnFpsListenerInterval:(NSInteger)value;
 
 - (NSTimeInterval)uptime;
 @end
