@@ -35,25 +35,25 @@ class Main {
         block4.load();
         block5.load();
         
-		// block1 moves along axis by Linear equation  in 5 seconds 
+		// block1 moves along axis by Linear equation in 5 seconds 
         block1.addModifier(emo.MoveModifier(
 			[block1.getX(), block1.getY()],  // from [x, y]
 			[block1.getX(), y],              // to   [x, y]
 			5000, emo.easing.Linear));       // duration, equation
 			
-		// block2 moves along axis by BackInOut equation  in 5 seconds 
+		// block2 moves along axis by BackInOut equation in 5 seconds 
         block2.addModifier(emo.MoveModifier(
 			[block2.getX(), block2.getY()],
 			[block2.getX(), y],
 			5000, emo.easing.BackInOut));
 
-		// block3 moves along axis by ElasticOut equation  in 5 seconds 
+		// block3 moves along axis by ElasticOut equation in 5 seconds 
         block3.addModifier(emo.MoveModifier(
 			[block3.getX(), block3.getY()],
 			[block3.getX(), y],
 			5000, emo.easing.ElasticOut));
 			
-		// block4 moves along axis by ElasticInOut equation  in 5 seconds 
+		// block4 moves along axis by ElasticInOut equation in 5 seconds 
         block4.addModifier(emo.MoveModifier(
 			[block4.getX(), block4.getY()],
 			[block4.getX(), y],

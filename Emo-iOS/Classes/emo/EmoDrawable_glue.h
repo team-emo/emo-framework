@@ -53,4 +53,6 @@ SQInteger emoDrawableSetZ(HSQUIRRELVM v);
 SQInteger emoDrawableSetWidth(HSQUIRRELVM v);
 SQInteger emoDrawableSetHeight(HSQUIRRELVM v);
 SQInteger emoDrawableSetSize(HSQUIRRELVM v);
+SQInteger emoDrawableGetFrameIndex(HSQUIRRELVM v);
+SQInteger emoDrawableGetFrameCount(HSQUIRRELVM v);
 

@@ -1,15 +1,12 @@
 local stage = emo.Stage();
-local event = emo.Event();
 
 /*
- * This example shows one block sprite that moves around the screen.
+ * This example shows single sprite that rotates and scales when touch-down event is fired.
  */
 class Main {
 
-    block = emo.Sprite("block.png");
-    
-    distantX = 1;
-    distantY = 1;
+    block = emo.SpriteSheet("blocks.png", 32, 32, 2);
+	currentFrame = 0;
 
 	/*
 	 * Called when this class is loaded
@@ -25,9 +22,6 @@ class Main {
 
 		// load sprite to the screen
         block.load();
-        
-		// onDrawFrame(dt) will be called on every 33 milliseconds
-		event.enableOnDrawCallback(33);
     }
 
 	/*
@@ -35,21 +29,6 @@ class Main {
 	 */
     function onGainedFocus() {
         print("onGainedFocus");
-    }
-    
-    /*
-     * Enabled after onDrawCalleback event is enabled by enableOnDrawCallback
-     * dt parameter is a delta time (millisecond)
-     */
-    function onDrawFrame(dt) {
-    	local x = block.getX() + distantX;
-    	local y = block.getY() + distantY;
-    	
-    	if (x + block.getWidth()  >= stage.getWindowWidth()  || x <= 0) distantX = -distantX;
-    	if (y + block.getHeight() >= stage.getWindowHeight() || y <= 0) distantY = -distantY;
-    	
-    	block.rotate(block.getAngle() + 3);
-    	block.move(x, y);
     }
 
 	/*
@@ -68,6 +47,20 @@ class Main {
         // remove sprite from the screen
         block.remove();
     }
+
+	/*
+	 * touch event
+	 */
+	function onMotionEvent(mevent) {
+		// change frame index when touch down event occurs.
+		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+			currentFrame++;
+			if (currentFrame >= block.getFrameCount()) {
+				currentFrame = 0;
+			}
+			block.setFrame(currentFrame);
+		}
+	}
 }
 
 function emo::onLoad() {
