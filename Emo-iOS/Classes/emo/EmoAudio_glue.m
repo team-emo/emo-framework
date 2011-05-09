@@ -42,7 +42,7 @@ SQInteger emoLoadAudio(HSQUIRRELVM v) {
     SQInteger channelIndex;
     const SQChar* filename;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_STRING) {
+    if (sq_gettype(v, 2) != OT_NULL && sq_gettype(v, 3) == OT_STRING) {
         sq_getinteger(v, 2, &channelIndex);
         sq_tostring(v, 3);
         sq_getstring(v, -1, &filename);
@@ -74,7 +74,7 @@ SQInteger emoCreateAudioEngine(HSQUIRRELVM v) {
 	
     SQInteger channelCount;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL) {
         sq_getinteger(v, 2, &channelCount);
     } else {
         channelCount = DEFAULT_AUDIO_CHANNEL_COUNT;
@@ -98,7 +98,7 @@ SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
 	
     SQInteger channelIndex;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
@@ -128,7 +128,7 @@ SQInteger emoPauseAudioChannel(HSQUIRRELVM v) {
 	
     SQInteger channelIndex;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
@@ -158,7 +158,7 @@ SQInteger emoStopAudioChannel(HSQUIRRELVM v) {
 	
     SQInteger channelIndex;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
@@ -190,10 +190,7 @@ SQInteger emoSeekAudioChannel(HSQUIRRELVM v) {
     SQInteger channelIndex;
     SQFloat seekPosition;
 	
-	SQObjectType vtype = sq_gettype(v, 3);
-	
-    if (sq_gettype(v, 2) == OT_INTEGER &&
-		(vtype == OT_INTEGER || vtype == OT_FLOAT)) {
+    if (sq_gettype(v, 2) != OT_NULL && sq_gettype(v, 3) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
         sq_getfloat(v, 3, &seekPosition);
     } else {
@@ -225,7 +222,7 @@ SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v) {
 	
     SQInteger channelIndex;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
     } else {
         sq_pushinteger(v, 0);
@@ -259,10 +256,7 @@ SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
     SQInteger channelIndex;
     SQFloat   channelVolume;
 	
-	SQObjectType vtype = sq_gettype(v, 3);
-	
-    if (sq_gettype(v, 2) == OT_INTEGER &&
-		(vtype == OT_INTEGER || vtype == OT_FLOAT)) {
+    if (sq_gettype(v, 2) != OT_NULL && sq_gettype(v, 3) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
         sq_getfloat(v, 3, &channelVolume);
     } else {
@@ -294,7 +288,7 @@ SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v) {
 	
     SQInteger channelIndex;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
     } else {
         sq_pushinteger(v, 0);
@@ -334,7 +328,7 @@ SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v) {
 	
     SQInteger channelIndex;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
     } else {
         sq_pushinteger(v, 0);
@@ -368,7 +362,7 @@ SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
 	
     SQInteger channelIndex;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
@@ -399,7 +393,7 @@ SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
     SQInteger channelIndex;
     SQInteger useLoop;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL && sq_gettype(v, 3) == OT_INTEGER) {
         sq_getinteger(v, 2, &channelIndex);
         sq_getinteger(v, 3, &useLoop);
     } else {
@@ -431,7 +425,7 @@ SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
 	
     SQInteger channelIndex;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
     } else {
         sq_pushinteger(v, EMO_NO);
@@ -464,7 +458,7 @@ SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
 	
     SQInteger channelIndex;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
     } else {
         sq_pushinteger(v, AUDIO_CHANNEL_STOPPED);

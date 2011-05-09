@@ -181,7 +181,7 @@ SQInteger emoJavaAsyncHttpRequest(HSQUIRRELVM v) {
         method = "GET";
     }
 
-    if (nargs >= 5 && sq_gettype(v, 5) == OT_INTEGER) {
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
         sq_getinteger(v, 5, &timeout);
     }
 

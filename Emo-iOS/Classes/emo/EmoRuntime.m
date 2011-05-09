@@ -186,7 +186,7 @@ SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
 	
 	SQInteger nargs = sq_gettop(v);
 	
-    if (nargs <= 2 && sq_gettype(v, 2) == OT_INTEGER) {
+    if (nargs <= 2 && sq_gettype(v, 2) != OT_NULL) {
         SQInteger interval;
         sq_getinteger(v, 2, &interval);
 		
@@ -434,7 +434,7 @@ SQInteger emoAsyncHttpRequest(HSQUIRRELVM v) {
         method = "GET";
     }
 	
-    if (nargs >= 5 && sq_gettype(v, 5) == OT_INTEGER) {
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
         sq_getinteger(v, 5, &timeout);
     }
 	
@@ -508,7 +508,7 @@ SQInteger emoEnableOnFpsCallback(HSQUIRRELVM v) {
 	
     SQInteger nargs = sq_gettop(v);
 	
-    if (nargs <= 2 && sq_gettype(v, 2) == OT_INTEGER) {
+    if (nargs <= 2 && sq_gettype(v, 2) != OT_NULL) {
         SQInteger interval;
         sq_getinteger(v, 2, &interval);
 		

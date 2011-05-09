@@ -415,7 +415,7 @@ SQInteger emoDrawableAddTileRow(HSQUIRRELVM v) {
         int idx = 0;
         while(SQ_SUCCEEDED(sq_next(v, -2))) {
             if (idx >= size) break;
-            if (sq_gettype(v, -1) == OT_INTEGER) {
+            if (sq_gettype(v, -1) != OT_NULL) {
                 SQInteger value;
                 sq_getinteger(v, -1, &value);
                 tile[idx] = value;
@@ -486,9 +486,9 @@ SQInteger emoDrawableSetTileAt(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (nargs >= 5 && sq_gettype(v, 3) == OT_INTEGER &&
-                      sq_gettype(v, 4) == OT_INTEGER &&
-                      sq_gettype(v, 5) == OT_INTEGER) {
+    if (nargs >= 5 && sq_gettype(v, 3) != OT_NULL &&
+                      sq_gettype(v, 4) != OT_NULL &&
+                      sq_gettype(v, 5) != OT_NULL) {
         SQInteger row;
         SQInteger column;
         SQInteger value;
@@ -523,8 +523,8 @@ SQInteger emoDrawableGetTileAt(HSQUIRRELVM v) {
         return 0;
     }
 
-    if (nargs >= 4 && sq_gettype(v, 3) == OT_INTEGER &&
-                      sq_gettype(v, 4) == OT_INTEGER) {
+    if (nargs >= 4 && sq_gettype(v, 3) != OT_NULL &&
+                      sq_gettype(v, 4) != OT_NULL) {
         SQInteger row;
         SQInteger column;
         sq_getinteger(v, 3, &row);
@@ -880,7 +880,7 @@ SQInteger emoDrawableRemove(HSQUIRRELVM v) {
 SQInteger emoSetOnDrawInterval(HSQUIRRELVM v) {
     SQInteger oldInterval = engine->onDrawDrawablesInterval;
 	
-    if (sq_gettype(v, 2) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL) {
         SQInteger interval;
         sq_getinteger(v, 2, &interval);
         engine->onDrawDrawablesInterval = interval;
@@ -895,7 +895,7 @@ SQInteger emoSetViewport(HSQUIRRELVM v) {
     SQInteger width  = engine->stage->viewport_width;
     SQInteger height = engine->stage->viewport_height;
 
-    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL && sq_gettype(v, 3) != OT_NULL) {
         sq_getinteger(v, 2, &width);
         sq_getinteger(v, 3, &height);
     } else {
@@ -915,7 +915,7 @@ SQInteger emoSetStageSize(HSQUIRRELVM v) {
     SQInteger width  = engine->stage->width;
     SQInteger height = engine->stage->height;
 
-    if (sq_gettype(v, 2) == OT_INTEGER && sq_gettype(v, 3) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_NULL && sq_gettype(v, 3) != OT_NULL) {
         sq_getinteger(v, 2, &width);
         sq_getinteger(v, 3, &height);
     } else {
