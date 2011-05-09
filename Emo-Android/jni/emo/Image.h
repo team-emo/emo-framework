@@ -23,6 +23,8 @@ namespace emo {
         bool     hasData;
         bool     hasAlpha;
         bool     loaded;
+
+        int      referenceCount;
     };
 }
 

@@ -113,6 +113,11 @@ namespace emo {
         void stopwatchStart();
         void stopwatchStop();
         int32_t stopwatchElapsed();
+
+        bool hasCachedImage(std::string key);
+        Image* getCachedImage(std::string key);
+        void addCachedImage(std::string key, Image* image);
+        bool removeCachedImage(std::string key);
     protected:
         bool loaded;
         bool focused;
@@ -154,6 +159,7 @@ namespace emo {
         drawables_t* drawables;
         drawables_t* drawablesToRemove;
         std::vector<Drawable*>* sortedDrawables;
+        images_t* imageCache;
 
         ASensorManager* sensorManager;
         ASensorEventQueue* sensorEventQueue;

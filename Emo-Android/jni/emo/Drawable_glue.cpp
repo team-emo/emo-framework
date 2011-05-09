@@ -201,14 +201,30 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
     }
 
     if (!drawable->name.empty()) {
-        emo::Image* image = new emo::Image();
-        if (loadPngFromAsset(drawable->name.c_str(), image)) {
+         emo::Image* image = NULL;
 
-            // calculate the size of power of two
-            image->glWidth  = nextPowerOfTwo(image->width);
-            image->glHeight = nextPowerOfTwo(image->height);
-            image->loaded   = false;
+        if (engine->hasCachedImage(drawable->name)) {
+            image = engine->getCachedImage(drawable->name);
+        } else {
+            image = new emo::Image();
+            if (loadPngFromAsset(drawable->name.c_str(), image)) {
 
+                // calculate the size of power of two
+                image->glWidth  = nextPowerOfTwo(image->width);
+                image->glHeight = nextPowerOfTwo(image->height);
+                image->loaded   = false;
+
+                image->genTextures();
+
+                engine->addCachedImage(drawable->name, image);
+            } else {
+                delete image;
+                sq_pushinteger(v, ERR_ASSET_LOAD);
+                return 1;
+            }
+        }
+
+        if (image != NULL) {
             drawable->setTexture(image);
             drawable->hasTexture = true;
 
@@ -217,11 +233,7 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
                 drawable->height = image->height;
             }
 
-            image->genTextures();
-        } else {
-            delete image;
-            sq_pushinteger(v, ERR_ASSET_LOAD);
-            return 1;
+            image->referenceCount++;
         }
     }
 

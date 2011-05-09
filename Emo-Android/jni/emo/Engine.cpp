@@ -28,6 +28,7 @@ namespace emo {
         delete this->database;
         delete this->javaGlue;
         delete this->sortedDrawables;
+        delete this->imageCache;
     }
 
     void Engine::initScriptFunctions() {
@@ -130,6 +131,8 @@ namespace emo {
         this->drawables = new drawables_t();
         this->drawablesToRemove = new drawables_t();
         this->sortedDrawables = new std::vector<Drawable*>;
+
+        this->imageCache = new images_t();
 
         // init Squirrel VM
         initSQVM(this->sqvm);
@@ -876,6 +879,30 @@ namespace emo {
 
     void Engine::setOnFpsListenerInterval(int value) {
         this->onFpsInterval = value;
+    }
+
+    bool Engine::hasCachedImage(std::string key) {
+        images_t::iterator iter = this->imageCache->find(key);
+        if (iter != this->imageCache->end()) {
+            return true;
+        }
+        return false;
+    }
+
+    Image* Engine::getCachedImage(std::string key) {
+        images_t::iterator iter = this->imageCache->find(key);
+        if (iter != this->imageCache->end()) {
+            return iter->second;
+        }
+        return NULL;
+    }
+
+    void Engine::addCachedImage(std::string key, Image* image) {
+        this->imageCache->insert(std::make_pair(key, image));
+    }
+
+    bool Engine::removeCachedImage(std::string key) {
+        return this->imageCache->erase(key);
     }
 }
 

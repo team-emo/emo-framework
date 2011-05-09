@@ -7,5 +7,6 @@
 
 typedef std::hash_map <std::string, std::string> kvs_t;
 typedef std::hash_map <std::string, emo::Drawable *> drawables_t;
+typedef std::hash_map <std::string, emo::Image *> images_t;
 
 #endif

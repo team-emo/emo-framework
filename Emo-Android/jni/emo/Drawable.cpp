@@ -105,7 +105,11 @@ namespace emo {
         this->deleteAnimations();
         this->deleteBuffer();
         if (this->hasTexture) {
-            delete this->texture;
+            this->texture->referenceCount--;
+            if (this->texture->referenceCount <= 0) {
+                engine->removeCachedImage(this->name);
+                delete this->texture;
+            }
         }
         if (this->frameCountLoaded) {
             delete[] this->frames_vbos;
@@ -131,7 +135,7 @@ namespace emo {
 
     void Drawable::deleteBuffer() {
         if (!this->hasBuffer) return;
-        if (this->hasTexture) {
+        if (this->hasTexture && this->texture->referenceCount <= 1) {
             glDeleteTextures(1, &this->texture->textureId);
         }
 
@@ -144,7 +148,7 @@ namespace emo {
 
         this->hasBuffer = false;
 
-        if (this->hasTexture) {
+        if (this->hasTexture && this->texture->referenceCount <= 1) {
             this->texture->textureId = 0;
             this->texture->loaded    = false;
         }
