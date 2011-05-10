@@ -210,30 +210,49 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
     }
 	
 	if (drawable.name != nil) {
-		EmoImage* imageInfo = [[EmoImage alloc]init];
-		if (loadPngFromResource(drawable.name, imageInfo)) {
+		EmoImage* imageInfo = nil;
 		
-			// calculate the size of power of two
-			imageInfo.glWidth  = nextPowerOfTwo(imageInfo.width);
-			imageInfo.glHeight = nextPowerOfTwo(imageInfo.height);
-			imageInfo.loaded = FALSE;
-		
+		if ([engine hasCachedImage:drawable.name]) {
+			imageInfo = [engine getCachedImage:drawable.name];
+			
 			drawable.texture = imageInfo;
 			drawable.hasTexture = TRUE;
-		
+			
 			if (!drawable.hasSheet) {
 				drawable.width  = imageInfo.width;
 				drawable.height = imageInfo.height;
 			}
-		
-			// assign OpenGL texture id
-			[imageInfo genTextures];
+			
+			imageInfo.referenceCount++;
 		} else {
+			imageInfo = [[EmoImage alloc]init];
+			if (loadPngFromResource(drawable.name, imageInfo)) {
+		
+				// calculate the size of power of two
+				imageInfo.glWidth  = nextPowerOfTwo(imageInfo.width);
+				imageInfo.glHeight = nextPowerOfTwo(imageInfo.height);
+				imageInfo.loaded = FALSE;
+		
+				drawable.texture = imageInfo;
+				drawable.hasTexture = TRUE;
+			
+				if (!drawable.hasSheet) {
+					drawable.width  = imageInfo.width;
+					drawable.height = imageInfo.height;
+				}
+				imageInfo.referenceCount++;
+		
+				// assign OpenGL texture id
+				[imageInfo genTextures];
+				
+				[engine addCachedImage:drawable.name value:imageInfo];
+			} else {
+				[imageInfo release];
+				sq_pushinteger(v, ERR_ASSET_LOAD);
+				return 1;
+			}
 			[imageInfo release];
-			sq_pushinteger(v, ERR_ASSET_LOAD);
-			return 1;
 		}
-		[imageInfo release];
 	}
 	
     // drawable x
@@ -343,13 +362,10 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
 	
     // load drawable texture
 	if (drawable.name != nil) {
-		EmoImage* imageInfo = [[EmoImage alloc]init];
-		if (loadPngFromResource(drawable.name, imageInfo)) {
-			
-			// calculate the size of power of two
-			imageInfo.glWidth  = nextPowerOfTwo(imageInfo.width);
-			imageInfo.glHeight = nextPowerOfTwo(imageInfo.height);
-			imageInfo.loaded = FALSE;
+		EmoImage* imageInfo = nil;
+		
+		if ([engine hasCachedImage:drawable.name]) {
+			imageInfo = [engine getCachedImage:drawable.name];
 			
 			drawable.texture = imageInfo;
 			drawable.hasTexture = TRUE;
@@ -359,15 +375,38 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
 				drawable.height = imageInfo.height;
 			}
 			
-			// assign OpenGL texture id
-			[imageInfo genTextures];
+			imageInfo.referenceCount++;
 		} else {
+			imageInfo = [[EmoImage alloc]init];
+			if (loadPngFromResource(drawable.name, imageInfo)) {
+				
+				// calculate the size of power of two
+				imageInfo.glWidth  = nextPowerOfTwo(imageInfo.width);
+				imageInfo.glHeight = nextPowerOfTwo(imageInfo.height);
+				imageInfo.loaded = FALSE;
+				
+				drawable.texture = imageInfo;
+				drawable.hasTexture = TRUE;
+				
+				if (!drawable.hasSheet) {
+					drawable.width  = imageInfo.width;
+					drawable.height = imageInfo.height;
+				}
+				imageInfo.referenceCount++;
+				
+				// assign OpenGL texture id
+				[imageInfo genTextures];
+				
+				[engine addCachedImage:drawable.name value:imageInfo];
+			} else {
+				[imageInfo release];
+				sq_pushinteger(v, ERR_ASSET_LOAD);
+				return 1;
+			}
 			[imageInfo release];
-			sq_pushinteger(v, ERR_ASSET_LOAD);
-			return 1;
 		}
 	}
-	
+		
     // parent x
     if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQFloat x;

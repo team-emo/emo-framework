@@ -45,6 +45,7 @@ NSString* data2ns(NSData* data);
 	NSMutableDictionary* drawables;
 	NSMutableDictionary* netTasks;
 	NSArray* drawablesToDraw;
+	NSMutableDictionary* imageCache;
 	
 	BOOL stopwatchStarted;
 	NSTimeInterval stopwatchStartTime;
@@ -96,6 +97,11 @@ NSString* data2ns(NSData* data);
 
 -(void)enableOnFpsListener:(BOOL)enable;
 -(void)setOnFpsListenerInterval:(NSInteger)value;
+
+-(BOOL)hasCachedImage:(NSString*)key;
+-(EmoImage*)getCachedImage:(NSString*)key;
+-(void)addCachedImage:(NSString*)key value:(EmoImage*)image;
+-(void)removeCachedImage:(NSString*)key;
 
 - (NSTimeInterval)uptime;
 @end

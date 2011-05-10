@@ -351,8 +351,12 @@ extern EmoEngine* engine;
 	if (!loaded) return;
 	
 	if (hasTexture) {
-		[texture doUnload];
-		[texture release];
+		texture.referenceCount--;
+		if (texture.referenceCount <= 0) {
+			[texture doUnload];
+			[texture release];
+			[engine removeCachedImage:name];
+		}
 		hasTexture = FALSE;
 	}
 	for (int i = 0; i < frameCount; i++) {
@@ -466,7 +470,6 @@ extern EmoEngine* engine;
 -(void)dealloc {
 	[animations release];
 	animations = nil;
-	
 	[self garbage];
 	[super dealloc];
 }

@@ -72,6 +72,7 @@ NSString* data2ns(NSData* data) {
 	stage        = [[EmoStage alloc]init];
 	netTasks     = [[NSMutableDictionary alloc]init];
 	database     = [[EmoDatabase alloc]init];
+	imageCache   = [[NSMutableDictionary alloc]init];
 	
 	[stage setSize:width height:height];
 	
@@ -127,6 +128,7 @@ NSString* data2ns(NSData* data) {
 	
 	[startTime release];
 	[drawablesToDraw release];
+	[imageCache release];
 	
 	[netTasks release];
 	netTasks = nil;
@@ -484,6 +486,22 @@ NSString* data2ns(NSData* data) {
 
 -(void)setOnFpsListenerInterval:(NSInteger)value {
 	onFpsInterval = value;
+}
+
+-(BOOL)hasCachedImage:(NSString*)key {
+	return [imageCache objectForKey:key] != nil;
+}
+
+-(EmoImage*)getCachedImage:(NSString*)key {
+	return [imageCache objectForKey:key];
+}
+
+-(void)addCachedImage:(NSString*)key value:(EmoImage*)image {
+	[imageCache setObject:image forKey:key];
+}
+
+-(void)removeCachedImage:(NSString*)key {
+	[imageCache removeObjectForKey:key];
 }
 
 -(void)dealloc {

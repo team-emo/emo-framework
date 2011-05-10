@@ -96,8 +96,12 @@ class Main {
         block2.remove();
         block3.remove();
         block4.remove();
-        block5.remove();
     }
+	function onMotionEvent(mevent) {
+		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+        block5.remove();
+		}
+	}
 }
 
 function emo::onLoad() {

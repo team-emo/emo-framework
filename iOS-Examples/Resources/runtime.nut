@@ -1069,7 +1069,7 @@ function emo::_onMotionEvent(...) {
         EMO_RUNTIME_DELEGATE.onMotionEvent(mevent);
     }
 
-    for (int i = 0; i < MOTION_EVENT_LISTENERS.len(); i++) {
+    for (local i = 0; i < MOTION_EVENT_LISTENERS.len(); i++) {
         if (MOTION_EVENT_LISTENERS[i].rawin("onMotionEvent")) {
             MOTION_EVENT_LISTENERS[i].onMotionEvent(mevent);
         }
@@ -1086,7 +1086,7 @@ function emo::_onKeyEvent(...) {
         EMO_RUNTIME_DELEGATE.onKeyEvent(kevent);
     }
 
-    for (int i = 0; i < KEY_EVENT_LISTENERS.len(); i++) {
+    for (local i = 0; i < KEY_EVENT_LISTENERS.len(); i++) {
         if (KEY_EVENT_LISTENERS[i].rawin("onKeyEvent")) {
             KEY_EVENT_LISTENERS[i].onKeyEvent(kevent);
         }
@@ -1103,7 +1103,7 @@ function emo::_onSensorEvent(...) {
         EMO_RUNTIME_DELEGATE.onSensorEvent(sevent);
     }
 
-    for (int i = 0; i < SENSOR_EVENT_LISTENERS.len(); i++) {
+    for (local i = 0; i < SENSOR_EVENT_LISTENERS.len(); i++) {
         if (SENSOR_EVENT_LISTENERS[i].rawin("onSensorEvent")) {
             SENSOR_EVENT_LISTENERS[i].onSensorEvent(sevent);
         }
