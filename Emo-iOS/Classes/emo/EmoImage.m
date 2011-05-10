@@ -31,4 +31,8 @@
 	free(data);
 	textureId = 0;
 }
+-(void)dealloc {
+	[filename release];
+	[super dealloc];
+}
 @end

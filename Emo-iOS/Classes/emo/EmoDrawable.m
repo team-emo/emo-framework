@@ -349,14 +349,13 @@ extern EmoEngine* engine;
 }
 -(void)doUnload {
 	if (!loaded) return;
-	
 	if (hasTexture) {
 		texture.referenceCount--;
 		if (texture.referenceCount <= 0) {
 			[texture doUnload];
-			[texture release];
 			[engine removeCachedImage:name];
 		}
+		[texture release];
 		hasTexture = FALSE;
 	}
 	for (int i = 0; i < frameCount; i++) {
