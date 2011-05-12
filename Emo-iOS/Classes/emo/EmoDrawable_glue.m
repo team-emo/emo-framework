@@ -699,19 +699,19 @@ SQInteger emoDrawableMove(HSQUIRRELVM v) {
         return 1;
     }
 	
-    if (nargs >= 3) {
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQFloat x;
         sq_getfloat(v, 3, &x);
         drawable.x = x;
     }
 	
-    if (nargs >= 4) {
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
         SQFloat y;
         sq_getfloat(v, 4, &y);
         drawable.y = y;
     }
 	
-    if (nargs >= 5) {
+    if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
         SQFloat z;
         sq_getfloat(v, 5, &z);
         drawable.z = z;
