@@ -216,10 +216,6 @@ const AUDIO_CHANNEL_PLAYING   = 3;
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 
-MOTION_EVENT_LISTENERS <- [];
-KEY_EVENT_LISTENERS    <- [];
-SENSOR_EVENT_LISTENERS <- [];
-
 class emo.ModifierManager {
 	modifiers = null;
 	modifiersToRemove = null;
@@ -776,11 +772,11 @@ class emo.Sprite {
         return -1;
     }
 
-    function move(x, y, z = 0) {
+    function move(x, y, z = null) {
         return stage.move(id, x, y, z);
     }
 
-    function pos(x, y, z = 0) {
+    function pos(x, y, z = null) {
         return move(x, y, z);
     }
 
@@ -956,30 +952,6 @@ function emo::Stage::getWindowHeight() {
 	return this.windowHeight();
 }
 
-function emo::Event::addMotionEventListener(listener) {
-	MOTION_EVENT_LISTENERS.append(listener);
-}
-
-function emo::Event::addKeyEventListener(listener) {
-	KEY_EVENT_LISTENERS.append(listener);
-}
-
-function emo::Event::addSensorEventListener(listener) {
-	SENSOR_EVENT_LISTENERS.append(listener);
-}
-
-function emo::Event::removeMotionEventListener(listener) {
-	MOTION_EVENT_LISTENERS.remove(listener);
-}
-
-function emo::Event::removeKeyEventListener(listener) {
-	KEY_EVENT_LISTENERS.remove(listener);
-}
-
-function emo::Event::removeSensorEventListener(listener) {
-	SENSOR_EVENT_LISTENERS.remove(listener);
-}
-
 function emo::_onLoad() { 
     if (emo.rawin("onLoad")) {
         emo.onLoad();
@@ -1068,12 +1040,6 @@ function emo::_onMotionEvent(...) {
              EMO_RUNTIME_DELEGATE.rawin("onMotionEvent")) {
         EMO_RUNTIME_DELEGATE.onMotionEvent(mevent);
     }
-
-    for (local i = 0; i < MOTION_EVENT_LISTENERS.len(); i++) {
-        if (MOTION_EVENT_LISTENERS[i].rawin("onMotionEvent")) {
-            MOTION_EVENT_LISTENERS[i].onMotionEvent(mevent);
-        }
-    }
 }
 
 function emo::_onKeyEvent(...) {
@@ -1085,12 +1051,6 @@ function emo::_onKeyEvent(...) {
              EMO_RUNTIME_DELEGATE.rawin("onKeyEvent")) {
         EMO_RUNTIME_DELEGATE.onKeyEvent(kevent);
     }
-
-    for (local i = 0; i < KEY_EVENT_LISTENERS.len(); i++) {
-        if (KEY_EVENT_LISTENERS[i].rawin("onKeyEvent")) {
-            KEY_EVENT_LISTENERS[i].onKeyEvent(kevent);
-        }
-    }
 }
 
 function emo::_onSensorEvent(...) {
@@ -1101,12 +1061,6 @@ function emo::_onSensorEvent(...) {
     if (EMO_RUNTIME_DELEGATE != null &&
              EMO_RUNTIME_DELEGATE.rawin("onSensorEvent")) {
         EMO_RUNTIME_DELEGATE.onSensorEvent(sevent);
-    }
-
-    for (local i = 0; i < SENSOR_EVENT_LISTENERS.len(); i++) {
-        if (SENSOR_EVENT_LISTENERS[i].rawin("onSensorEvent")) {
-            SENSOR_EVENT_LISTENERS[i].onSensorEvent(sevent);
-        }
     }
 }
 

@@ -772,11 +772,11 @@ class emo.Sprite {
         return -1;
     }
 
-    function move(x, y, z = 0) {
+    function move(x, y, z = null) {
         return stage.move(id, x, y, z);
     }
 
-    function pos(x, y, z = 0) {
+    function pos(x, y, z = null) {
         return move(x, y, z);
     }
 
