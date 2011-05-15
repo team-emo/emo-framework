@@ -833,21 +833,6 @@ namespace emo {
         }
     }
 
-    /*
-     * Register new class for emo framework
-     */
-    void Engine::registerClass(HSQUIRRELVM v, const char *cname) {
-        register_class_with_namespace(v, EMO_NAMESPACE, cname);
-    }
-
-    /*
-     * Register class method for emo framework
-     */
-    void Engine::registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func) {
-        register_class_func_with_namespace(
-            v, EMO_NAMESPACE, cname, fname, func);
-    }
-
     ASensorEventQueue* Engine::getSensorEventQueue() {
         return sensorEventQueue;
     }

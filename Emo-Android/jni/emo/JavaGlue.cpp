@@ -7,10 +7,10 @@
 extern emo::Engine* engine;
 
 void initJavaGlueFunctions() {
-    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoJavaEcho);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoJavaEcho);
 
-    engine->registerClass(engine->sqvm, EMO_NET_CLASS);
-    engine->registerClassFunc(engine->sqvm, EMO_NET_CLASS, "request",   emoJavaAsyncHttpRequest);
+    registerClass(engine->sqvm, EMO_NET_CLASS);
+    registerClassFunc(engine->sqvm, EMO_NET_CLASS, "request",   emoJavaAsyncHttpRequest);
 }
 
 /*

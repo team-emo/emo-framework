@@ -6,62 +6,63 @@
 #include "Engine.h"
 #include "Drawable_glue.h"
 #include "Runtime.h"
+#include "VmFunc.h"
 
 extern emo::Engine* engine;
 
 void initDrawableFunctions() {
-    engine->registerClass(engine->sqvm, EMO_STAGE_CLASS);
+    registerClass(engine->sqvm, EMO_STAGE_CLASS);
 
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSprite",     emoDrawableCreateSprite);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createMapSprite",     emoDrawableCreateMapSprite);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSprite",       emoDrawableLoad);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadMapSprite",    emoDrawableLoadMapSprite);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "addTileRow",       emoDrawableAddTileRow);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "clearTiles",       emoDrawableClearTiles);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setTileAt",        emoDrawableSetTileAt);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTileAt",        emoDrawableGetTileAt);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTileIndexAtCoord",    emoDrawableGetTileIndexAtCoord);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTilePositionAtCoord", emoDrawableGetTilePositionAtCoord);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSprite",     emoDrawableCreateSprite);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createMapSprite",     emoDrawableCreateMapSprite);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSprite",       emoDrawableLoad);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadMapSprite",    emoDrawableLoadMapSprite);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "addTileRow",       emoDrawableAddTileRow);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "clearTiles",       emoDrawableClearTiles);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setTileAt",        emoDrawableSetTileAt);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTileAt",        emoDrawableGetTileAt);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTileIndexAtCoord",    emoDrawableGetTileIndexAtCoord);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTilePositionAtCoord", emoDrawableGetTilePositionAtCoord);
 
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getX",           emoDrawableGetX);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getY",           emoDrawableGetY);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getZ",           emoDrawableGetZ);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getWidth",       emoDrawableGetWidth);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getHeight",      emoDrawableGetHeight);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getScaleX",      emoDrawableGetScaleX);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getScaleY",      emoDrawableGetScaleY);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getAngle",       emoDrawableGetAngle);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getX",           emoDrawableGetX);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getY",           emoDrawableGetY);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getZ",           emoDrawableGetZ);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getWidth",       emoDrawableGetWidth);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getHeight",      emoDrawableGetHeight);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getScaleX",      emoDrawableGetScaleX);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getScaleY",      emoDrawableGetScaleY);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getAngle",       emoDrawableGetAngle);
 
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setX",           emoDrawableSetX);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setY",           emoDrawableSetY);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setZ",           emoDrawableSetZ);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setWidth",       emoDrawableSetWidth);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setHeight",      emoDrawableSetHeight);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setSize",        emoDrawableSetSize);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setX",           emoDrawableSetX);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setY",           emoDrawableSetY);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setZ",           emoDrawableSetZ);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setWidth",       emoDrawableSetWidth);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setHeight",      emoDrawableSetHeight);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setSize",        emoDrawableSetSize);
     
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "color",          emoDrawableColor);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "remove",         emoDrawableRemove);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "viewport",       emoSetViewport);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "ortho",          emoSetStageSize);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "windowWidth",    emoGetWindowWidth);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "windowHeight",   emoGetWindowHeight);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "show",           emoDrawableShow);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "hide",           emoDrawableHide);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "red",            emoDrawableColorRed);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "green",          emoDrawableColorGreen);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "blue",           emoDrawableColorBlue);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "alpha",          emoDrawableColorAlpha);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pauseAt",        emoDrawablePauseAt);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pause",          emoDrawablePause);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "stop",           emoDrawableStop);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "animate",        emoDrawableAnimate);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getFrameIndex",  emoDrawableGetFrameIndex);
-    engine->registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getFrameCount",  emoDrawableGetFrameCount);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "rotate",         emoDrawableRotate);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "color",          emoDrawableColor);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "remove",         emoDrawableRemove);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "interval",       emoSetOnDrawInterval);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "viewport",       emoSetViewport);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "ortho",          emoSetStageSize);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "windowWidth",    emoGetWindowWidth);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "windowHeight",   emoGetWindowHeight);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "show",           emoDrawableShow);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "hide",           emoDrawableHide);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "red",            emoDrawableColorRed);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "green",          emoDrawableColorGreen);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "blue",           emoDrawableColorBlue);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "alpha",          emoDrawableColorAlpha);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pauseAt",        emoDrawablePauseAt);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pause",          emoDrawablePause);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "stop",           emoDrawableStop);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "animate",        emoDrawableAnimate);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getFrameIndex",  emoDrawableGetFrameIndex);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getFrameCount",  emoDrawableGetFrameCount);
 }
 
 /*

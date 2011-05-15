@@ -12,36 +12,37 @@
 #include "Constants.h"
 #include "Runtime.h"
 #include "Engine.h"
+#include "VmFunc.h"
 
 extern emo::Engine* engine;
 
 void initRuntimeFunctions() {
-    engine->registerClass(engine->sqvm, EMO_RUNTIME_CLASS);
-    engine->registerClass(engine->sqvm, EMO_EVENT_CLASS);
-    engine->registerClass(engine->sqvm, EMO_STOPWATCH_CLASS);
+    registerClass(engine->sqvm, EMO_RUNTIME_CLASS);
+    registerClass(engine->sqvm, EMO_EVENT_CLASS);
+    registerClass(engine->sqvm, EMO_STOPWATCH_CLASS);
 
-    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
-    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
-    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
-    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
-    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "info",            emoRuntimeLogInfo);
-    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
-    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
-    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
-    engine->registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);
-    engine->registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "start",         emoRuntimeStopwatchStart);
-    engine->registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
-    engine->registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "info",            emoRuntimeLogInfo);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);
+    registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "start",         emoRuntimeStopwatchStart);
+    registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
+    registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
 
-    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
-    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
-    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
-    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
-    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
-    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnUpdateCallback",  emoEnableOnUpdateCallback);
-    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnUpdateCallback", emoDisableOnUpdateCallback);
-    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnFpsCallback",     emoEnableOnFpsCallback);
-    engine->registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnFpsCallback",    emoDisableOnFpsCallback);
+    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
+    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
+    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
+    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
+    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnUpdateCallback",  emoEnableOnUpdateCallback);
+    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnUpdateCallback", emoDisableOnUpdateCallback);
+    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnFpsCallback",     emoEnableOnFpsCallback);
+    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnFpsCallback",    emoDisableOnFpsCallback);
 }
 
 int32_t app_handle_input(struct android_app* app, AInputEvent* event) {

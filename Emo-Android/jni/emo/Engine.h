@@ -105,9 +105,6 @@ namespace emo {
         int32_t onDrawDrawablesInterval;
         int32_t onFpsInterval;
 
-        void registerClass(HSQUIRRELVM v, const char *cname);
-        void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);
-
         std::string getJavaPackageName();
 
         void stopwatchStart();
