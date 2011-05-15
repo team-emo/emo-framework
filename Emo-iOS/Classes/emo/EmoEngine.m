@@ -6,6 +6,7 @@
 #import "EmoAudio_glue.h"
 #import "EmoEngine.h"
 #import "EmoDrawable.h"
+#import "EmoPhysics.h"
 
 NSString* char2ns(const SQChar* str) {
 	return [NSString stringWithCString:(char*)str 
@@ -48,6 +49,7 @@ NSString* data2ns(NSData* data) {
 	initRuntimeFunctions();
 	initDrawableFunctions();
 	initAudioFunctions();
+	initPhysicsFunctions();
 }
 
 /*

@@ -20,6 +20,7 @@
 #define EMO_DATABASE_CLASS "Database"
 #define EMO_PREFERENCE_CLASS "Preference"
 #define EMO_STOPWATCH_CLASS "Stopwatch"
+#define EMO_PHYSICS_CLASS "Physics"
 
 #define EMO_FUNC_ONLOAD         "_onLoad"
 #define EMO_FUNC_ONGAINED_FOUCS "_onGainedFocus"

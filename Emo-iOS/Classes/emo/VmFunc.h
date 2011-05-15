@@ -20,3 +20,4 @@ void register_class_func_with_namespace(HSQUIRRELVM v, const char* nname, const 
 void register_table(HSQUIRRELVM v, const char *name);
 void registerClass(HSQUIRRELVM v, const char *cname);
 void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);
+void getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat* value);
