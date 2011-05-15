@@ -7,7 +7,6 @@
 #import "EmoEngine.h"
 #import "EmoDrawable.h"
 
-
 NSString* char2ns(const SQChar* str) {
 	return [NSString stringWithCString:(char*)str 
 							  encoding:NSUTF8StringEncoding];
