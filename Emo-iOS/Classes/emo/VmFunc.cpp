@@ -281,7 +281,21 @@ void register_table(HSQUIRRELVM v, const char *name) {
     sq_createslot(v, -3);
     sq_pop(v, 1);
 }
-
+	
+/*
+ * Register new class for emo framework
+ */
+void registerClass(HSQUIRRELVM v, const char *cname) {
+	register_class_with_namespace(v, EMO_NAMESPACE, cname);
+}
+	
+/*
+ * Register class method for emo framework
+ */
+void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func) {
+	register_class_func_with_namespace(
+				   v, EMO_NAMESPACE, cname, fname, func);
+}
 #if __cplusplus
 }   // Extern C
 #endif

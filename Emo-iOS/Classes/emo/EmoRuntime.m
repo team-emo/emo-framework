@@ -75,54 +75,39 @@ extern EmoEngine* engine;
 @end
 
 void initRuntimeFunctions() {
-	registerEmoClass(engine.sqvm, EMO_RUNTIME_CLASS);
-	registerEmoClass(engine.sqvm, EMO_EVENT_CLASS);
-    registerEmoClass(engine.sqvm, EMO_NET_CLASS);
-    registerEmoClass(engine.sqvm, EMO_STOPWATCH_CLASS);
+	registerClass(engine.sqvm, EMO_RUNTIME_CLASS);
+	registerClass(engine.sqvm, EMO_EVENT_CLASS);
+    registerClass(engine.sqvm, EMO_NET_CLASS);
+    registerClass(engine.sqvm, EMO_STOPWATCH_CLASS);
 	
-	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
-	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
-	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
-	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
-	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "info",            emoRuntimeLogInfo);
-	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
-	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
-	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
-	registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);
-    registerEmoClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "start",         emoRuntimeStopwatchStart);
-    registerEmoClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
-    registerEmoClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "info",            emoRuntimeLogInfo);
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);
+    registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "start",         emoRuntimeStopwatchStart);
+    registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
+    registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
 	
-	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
-	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
-	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
-	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
-	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
-    registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnUpdateCallback",  emoEnableOnUpdateCallback);
-    registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnUpdateCallback", emoDisableOnUpdateCallback);
-    registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnFpsCallback",  emoEnableOnFpsCallback);
-    registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnFpsCallback", emoDisableOnFpsCallback);
+	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
+	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
+	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
+	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnDrawCallback",  emoEnableOnDrawCallback);
+	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnDrawCallback", emoDisableOnDrawCallback);
+    registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnUpdateCallback",  emoEnableOnUpdateCallback);
+    registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnUpdateCallback", emoDisableOnUpdateCallback);
+    registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnFpsCallback",  emoEnableOnFpsCallback);
+    registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnFpsCallback", emoDisableOnFpsCallback);
 	
-	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "getLastErrorMessage",   emoGetLastCallbackErrorMessage);
-	registerEmoClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "getLastErrorType",      emoGetLastCallbackErrorType);
+	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "getLastErrorMessage",   emoGetLastCallbackErrorMessage);
+	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "getLastErrorType",      emoGetLastCallbackErrorType);
 
-    registerEmoClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoRuntimeEcho);	
-    registerEmoClassFunc(engine.sqvm, EMO_NET_CLASS,     "request",      emoAsyncHttpRequest);
-}
-
-/*
- * Register new class for emo framework
- */
-void registerEmoClass(HSQUIRRELVM v, const char *cname) {
-    register_class_with_namespace(v, EMO_NAMESPACE, cname);
-}
-
-/*
- * Register class method for emo framework
- */
-void registerEmoClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func) {
-	register_class_func_with_namespace(
-			   v, EMO_NAMESPACE, cname, fname, func);
+    registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoRuntimeEcho);	
+    registerClassFunc(engine.sqvm, EMO_NET_CLASS,     "request",      emoAsyncHttpRequest);
 }
 
 /*

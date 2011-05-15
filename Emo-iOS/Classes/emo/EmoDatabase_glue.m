@@ -1,28 +1,29 @@
 #import "EmoDatabase_glue.h"
 #import "Constants.h"
 #import "EmoEngine.h"
+#import "VmFunc.h"
 
 extern EmoEngine* engine;
 
 void initDatabaseFunctions() {
-    registerEmoClass(engine.sqvm, EMO_DATABASE_CLASS);
-    registerEmoClass(engine.sqvm, EMO_PREFERENCE_CLASS);
+    registerClass(engine.sqvm, EMO_DATABASE_CLASS);
+    registerClass(engine.sqvm, EMO_PREFERENCE_CLASS);
 	
-    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "openOrCreate", emoDatabaseOpenOrCreate);
-    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "open",         emoDatabaseOpen);
-    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "close",        emoDatabaseClose);
-    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "getPath",      emoDatabaseGetPath);
-    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "getLastError", emoDatabaseGetLastError);
-    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "getLastErrorMessage", emoDatabaseGetLastErrorMessage);
-    registerEmoClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "deleteDatabase", emoDatabaseDeleteDatabase);
+    registerClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "openOrCreate", emoDatabaseOpenOrCreate);
+    registerClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "open",         emoDatabaseOpen);
+    registerClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "close",        emoDatabaseClose);
+    registerClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "getPath",      emoDatabaseGetPath);
+    registerClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "getLastError", emoDatabaseGetLastError);
+    registerClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "getLastErrorMessage", emoDatabaseGetLastErrorMessage);
+    registerClassFunc(engine.sqvm, EMO_DATABASE_CLASS, "deleteDatabase", emoDatabaseDeleteDatabase);
 	
-    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "open",         emoDatabaseOpenPreference);
-    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "openOrCreate", emoDatabaseOpenOrCreatePreference);
-    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "get",          emoDatabaseGetPreference);
-    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "set",          emoDatabaseSetPreference);
-    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "del",          emoDatabaseDeletePreference);
-    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "keys",         emoDatabaseGetPreferenceKeys);
-    registerEmoClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "close",        emoDatabaseClose);
+    registerClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "open",         emoDatabaseOpenPreference);
+    registerClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "openOrCreate", emoDatabaseOpenOrCreatePreference);
+    registerClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "get",          emoDatabaseGetPreference);
+    registerClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "set",          emoDatabaseSetPreference);
+    registerClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "del",          emoDatabaseDeletePreference);
+    registerClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "keys",         emoDatabaseGetPreferenceKeys);
+    registerClassFunc(engine.sqvm, EMO_PREFERENCE_CLASS, "close",        emoDatabaseClose);
 }
 
 SQInteger emoDatabaseOpenOrCreate(HSQUIRRELVM v) {
