@@ -5,7 +5,7 @@ function emo::onLoad() {
 	local world = emo.physics.World(gravity, EMO_YES);
 	
 	local shape = emo.physics.PolygonShape();
-	world.close();
+	print(world);
 	print(shape);
 }
 

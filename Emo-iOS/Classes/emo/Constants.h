@@ -147,4 +147,15 @@
 #define PHYSICS_SHAPE_CIRCLE   0
 #define PHYSICS_SHAPE_POLYGON  1
 
+#define JOINT_TYPE_UNKNOWN   0
+#define JOINT_TYPE_EVOLUTE   1
+#define JOINT_TYPE_PRISMATIC 2
+#define JOINT_TYPE_DISTANCE  3
+#define JOINT_TYPE_PULLEY    4
+#define JOINT_TYPE_MOUSE     5
+#define JOINT_TYPE_GEAR      6
+#define JOINT_TYPE_LINE      7
+#define JOINT_TYPE_WELD      8
+#define JOINT_TYPE_FRICTION  9
+
 #endif

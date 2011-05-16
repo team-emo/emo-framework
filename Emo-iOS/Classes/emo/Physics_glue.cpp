@@ -18,11 +18,16 @@ static void getVec2Instance(HSQUIRRELVM v, int idx, b2Vec2* vec2) {
 	getInstanceMemberAsFloat(v, idx, "y", &vec2->y);
 }
 	
+static SQInteger b2WorldReleaseHook(SQUserPointer ptr, SQInteger size) {
+	delete reinterpret_cast<b2World*>(ptr);
+	return 0;
+}
+	
 static SQInteger b2ShapeReleaseHook(SQUserPointer ptr, SQInteger size) {
 	delete reinterpret_cast<b2Shape*>(ptr);
 	return 0;
 }
-
+	
 SQInteger emoPhysicsNewWorld(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 	
@@ -41,21 +46,12 @@ SQInteger emoPhysicsNewWorld(HSQUIRRELVM v) {
 	
 	b2World* world = new b2World(gravity, doSleep);
 	
-	sq_pushuserpointer(v, world);
-	return 1;
-}
-SQInteger emoPhysicsDeleteObj(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-	
-	if (nargs >= 2 && sq_gettype(v, 2) != OT_USERPOINTER) {
-		sq_pushinteger(v, ERR_INVALID_PARAM);
-		return 1;
+	SQInteger result = createSQObject(v, 
+				"emo", "Instance", world, b2WorldReleaseHook);
+	if (result == 0) {
+		delete world;
+		return 0;
 	}
-	SQUserPointer* obj;
-	sq_getuserpointer(v, 2, (SQUserPointer*)&obj);
-	delete obj;
-	
-	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
 SQInteger emoPhysicsNewShape(HSQUIRRELVM v) {
