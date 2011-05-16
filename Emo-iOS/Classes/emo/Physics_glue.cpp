@@ -17,6 +17,11 @@ static void getVec2Instance(HSQUIRRELVM v, int idx, b2Vec2* vec2) {
 	getInstanceMemberAsFloat(v, idx, "y", &vec2->y);
 }
 
+static SQInteger objectReleaseHook(SQUserPointer ptr, SQInteger size) {
+	delete (SQUserPointer*)ptr;
+	return 0;
+}
+	
 SQInteger emoPhysicsNewWorld(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 	
@@ -59,14 +64,24 @@ SQInteger emoPhysicsNewShape(HSQUIRRELVM v) {
 		sq_getinteger(v, 2, &sType);
 	}
 	b2Shape* shape;
+	const char* classname;
 	if (sType == PHYSICS_SHAPE_CIRCLE) {
 		shape = new b2CircleShape();
+		classname = "CircleShape";
 	} else if (sType == PHYSICS_SHAPE_POLYGON) {
 		shape = new b2PolygonShape();
+		classname = "PolygonShape";
 	} else {
 		return 0;
 	}
-	sq_pushuserpointer(v, shape);
+	SQInteger result = createSQObject(v, 
+			"emo", "physics", classname, shape, objectReleaseHook);
+	
+	if (result == 0) {
+		delete shape;
+		return 0;
+	}
+	
 	return 1;
 }
 #if __cplusplus

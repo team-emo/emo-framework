@@ -308,6 +308,34 @@ bool getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat*
 	sq_pop(v, 1);
 	return true;
 }
+
+SQInteger createSQObject(HSQUIRRELVM v, 
+				const char* name1, const char* name2, const char* name3,
+				SQUserPointer ptr, SQRELEASEHOOK releaseHook) {
+	sq_pushroottable(v);
+	
+	sq_pushstring(v, name1, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, -2))) return 0;
+		
+	if (name2 != NULL) {
+		sq_pushstring(v, name2, -1);
+		if (!SQ_SUCCEEDED(sq_get(v, -2))) return 0;
+	}
+	if (name3 != NULL) {
+		sq_pushstring(v, name3, -1);
+		if (!SQ_SUCCEEDED(sq_get(v, -2))) return 0;
+	}
+	
+	sq_createinstance(v, -1);
+	sq_setinstanceup(v, -1, ptr);
+	if (releaseHook != NULL) {
+		sq_setreleasehook(v, -1, releaseHook);
+	}
+	sq_remove(v, -2);
+	sq_remove(v, -2);
+	
+	return 1;
+}
 #if __cplusplus
 }   // Extern C
 #endif

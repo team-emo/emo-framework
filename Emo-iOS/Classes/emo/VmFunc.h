@@ -21,3 +21,4 @@ void register_table(HSQUIRRELVM v, const char *name);
 void registerClass(HSQUIRRELVM v, const char *cname);
 void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);
 bool getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat* value);
+SQInteger createSQObject(HSQUIRRELVM v, const char* name1, const char* name2, const char* name3, SQUserPointer ptr, SQRELEASEHOOK releaseHook);
