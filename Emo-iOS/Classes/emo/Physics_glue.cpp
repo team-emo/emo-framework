@@ -1,4 +1,5 @@
 #include "Box2D/Box2D.h"
+#include "squirrel.h"
 
 #if __cplusplus
 extern "C" {
@@ -16,12 +17,12 @@ static void getVec2Instance(HSQUIRRELVM v, int idx, b2Vec2* vec2) {
 	getInstanceMemberAsFloat(v, idx, "x", &vec2->x);
 	getInstanceMemberAsFloat(v, idx, "y", &vec2->y);
 }
-
-static SQInteger objectReleaseHook(SQUserPointer ptr, SQInteger size) {
-	delete (SQUserPointer*)ptr;
+	
+static SQInteger b2ShapeReleaseHook(SQUserPointer ptr, SQInteger size) {
+	delete reinterpret_cast<b2Shape*>(ptr);
 	return 0;
 }
-	
+
 SQInteger emoPhysicsNewWorld(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 	
@@ -72,7 +73,7 @@ SQInteger emoPhysicsNewShape(HSQUIRRELVM v) {
 		return 0;
 	}
 	SQInteger result = createSQObject(v, 
-			"emo", "Instance", shape, objectReleaseHook);
+			"emo", "Instance", shape, b2ShapeReleaseHook);
 	
 	if (result == 0) {
 		delete shape;
