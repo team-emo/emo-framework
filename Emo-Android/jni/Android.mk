@@ -19,16 +19,17 @@ include $(LOCAL_PATH)/emo/Android.mk
 include $(LOCAL_PATH)/squirrel/Android.mk
 include $(LOCAL_PATH)/libpng/Android.mk
 include $(LOCAL_PATH)/sqlite/Android.mk
+include $(LOCAL_PATH)/Box2D/Android.mk
 
 SQUIRREL_CFLAGS := -O2 -Wall
 
 APP_OPTIM       := release
 LOCAL_MODULE    := emo-android
 LOCAL_ARM_MODE  := arm
-LOCAL_SRC_FILES := main.cpp $(EMO_SRC_FILES) $(SQUIRREL_SRC_FILES) $(LIBPNG_SRC_FILES) $(SQLITE_SRC_FILES)
+LOCAL_SRC_FILES := main.cpp $(EMO_SRC_FILES) $(SQUIRREL_SRC_FILES) $(LIBPNG_SRC_FILES) $(SQLITE_SRC_FILES) $(BOX2D_SRC_FILES)
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lOpenSLES -lz
 LOCAL_STATIC_LIBRARIES := android_native_app_glue
-LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/squirrel/include $(LOCAL_PATH)/libpng $(LOCAL_PATH)/sqlite $(LOCAL_PATH)/emo
+LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/squirrel/include $(LOCAL_PATH)/libpng $(LOCAL_PATH)/sqlite $(LOCAL_PATH)/emo $(LOCAL_PATH)/Box2D
 LOCAL_CFLAGS    := $(SQUIRREL_CFLAGS) $(SQLITE_CFLAGS)
 
 include $(BUILD_SHARED_LIBRARY)
