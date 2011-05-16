@@ -224,6 +224,10 @@ const SHAPE_TYPE_POLYGON =  1;
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 
+class emo.Instance {
+	type = null;
+}
+
 class emo.ModifierManager {
 	modifiers = null;
 	modifiersToRemove = null;

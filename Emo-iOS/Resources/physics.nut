@@ -122,18 +122,14 @@ class emo.physics.JointDef {
 	collideConnected = null;
 }
 
-class emo.physics.Shape {
-	m_type   = SHAPE_TYPE_UNKNOWN;
-	m_radius = null;
-}
-
-class emo.physics.PolygonShape extends emo.physics.Shape {
-	m_type = SHAPE_TYPE_POLYGON;
-	m_centroid    = null;
-	m_verticles   = null;
-	m_normals     = null;
-	m_vertexCount = null;
+class emo.physics.PolygonShape {
+	id      = null;
 	physics = emo.Physics();
+	
+	function constructor() {
+		id = physics.newShape(SHAPE_TYPE_POLYGON);
+		id.type = "emo.physics.PolygonShape";
+	}
 
 	function set(vertices, vertexCount) {
 		physics.polygonShape_set(id, vertices, vertexCount);
@@ -144,7 +140,11 @@ class emo.physics.PolygonShape extends emo.physics.Shape {
 	}
 }
 
-class emo.physics.CircleShape extends emo.physics.Shape {
-	m_type = SHAPE_TYPE_CIRCLE;
-	m_p = null;
+class emo.physics.CircleShape {
+	id      = null;
+	physics = emo.Physics();
+	function constructor() {
+		id = physics.newShape(SHAPE_TYPE_CIRCLE);
+		id.type = "emo.physics.CircleShape";
+	}
 }

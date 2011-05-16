@@ -10,5 +10,4 @@ void initPhysicsFunctions() {
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "newWorld",      emoPhysicsNewWorld);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "deleteWorld",   emoPhysicsDeleteObj);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "newShape",      emoPhysicsNewShape);
-    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "deleteShape",   emoPhysicsDeleteObj);
 }
