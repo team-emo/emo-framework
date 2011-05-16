@@ -9,7 +9,9 @@ EMO_SRC_FILES :=\
 	emo/Image.cpp \
 	emo/Database.cpp \
 	emo/Util.cpp \
-	emo/JavaGlue.cpp
+	emo/JavaGlue.cpp \
+	emo/Physics.cpp \
+	emo/Physics_glue.cpp
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/emo
 

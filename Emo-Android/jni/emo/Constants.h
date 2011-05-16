@@ -20,6 +20,7 @@
 #define EMO_DATABASE_CLASS "Database"
 #define EMO_PREFERENCE_CLASS "Preference"
 #define EMO_STOPWATCH_CLASS "Stopwatch"
+#define EMO_PHYSICS_CLASS "Physics"
 
 #define EMO_FUNC_ONLOAD         "_onLoad"
 #define EMO_FUNC_ONGAINED_FOUCS "_onGainedFocus"
@@ -137,5 +138,13 @@
 #define FILE_MODE_PRIVATE         0x0000
 #define FILE_MODE_WORLD_READABLE  0x0001
 #define FILE_MODE_WORLD_WRITEABLE 0x0002
+
+#define PHYSICS_BODY_STATIC    0
+#define PHYSICS_BODY_KINEMATIC 1
+#define PHYSICS_BODY_DYNAMIC   2
+
+#define PHYSICS_SHAPE_UNKNOWN -1
+#define PHYSICS_SHAPE_CIRCLE   0
+#define PHYSICS_SHAPE_POLYGON  1
 
 #endif

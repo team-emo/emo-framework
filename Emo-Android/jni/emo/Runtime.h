@@ -42,4 +42,5 @@ SQInteger emoEnableOnUpdateCallback(HSQUIRRELVM v);
 SQInteger emoDisableOnUpdateCallback(HSQUIRRELVM v);
 SQInteger emoEnableOnFpsCallback(HSQUIRRELVM v);
 SQInteger emoDisableOnFpsCallback(HSQUIRRELVM v);
+SQInteger emoRuntimeGC(HSQUIRRELVM v);
 #endif

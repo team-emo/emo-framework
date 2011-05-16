@@ -292,3 +292,44 @@ void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFU
 	register_class_func_with_namespace(
 				   v, EMO_NAMESPACE, cname, fname, func);
 }
+
+/*
+ * get instance member value as float
+ */
+bool getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat* value) {
+	if (sq_gettype(v, idx) == OT_NULL) return false;
+	sq_pushstring(v, name, -1);
+	sq_get(v, idx);
+	sq_getfloat(v, -1, value);
+	sq_pop(v, 1);
+	return true;
+}
+
+SQInteger createSQObject(HSQUIRRELVM v, 
+				const char* name1, const char* name2, const char* name3,
+				SQUserPointer ptr, SQRELEASEHOOK releaseHook) {
+	sq_pushroottable(v);
+	
+	sq_pushstring(v, name1, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, -2))) return 0;
+		
+	if (name2 != NULL) {
+		sq_pushstring(v, name2, -1);
+		if (!SQ_SUCCEEDED(sq_get(v, -2))) return 0;
+	}
+	if (name3 != NULL) {
+		sq_pushstring(v, name3, -1);
+		if (!SQ_SUCCEEDED(sq_get(v, -2))) return 0;
+	}
+	
+	sq_createinstance(v, -1);
+	sq_setinstanceup(v, -1, ptr);
+	if (releaseHook != NULL) {
+		sq_setreleasehook(v, -1, releaseHook);
+	}
+	sq_remove(v, -2);
+	sq_remove(v, -2);
+	
+	return 1;
+}
+

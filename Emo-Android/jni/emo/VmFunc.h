@@ -1,6 +1,3 @@
-#ifndef EMO_VM_FUNC_H
-#define EMO_VM_FUNC_H
-
 #include <squirrel.h>
 
 void initSQVM(HSQUIRRELVM v); 
@@ -23,5 +20,5 @@ void register_class_func_with_namespace(HSQUIRRELVM v, const char* nname, const 
 void register_table(HSQUIRRELVM v, const char *name);
 void registerClass(HSQUIRRELVM v, const char *cname);
 void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);
-
-#endif
+bool getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat* value);
+SQInteger createSQObject(HSQUIRRELVM v, const char* name1, const char* name2, const char* name3, SQUserPointer ptr, SQRELEASEHOOK releaseHook);
