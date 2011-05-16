@@ -89,6 +89,7 @@ void initRuntimeFunctions() {
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);
+    registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "gc",              emoRuntimeGC);
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "start",         emoRuntimeStopwatchStart);
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
@@ -506,4 +507,9 @@ SQInteger emoEnableOnFpsCallback(HSQUIRRELVM v) {
 SQInteger emoDisableOnFpsCallback(HSQUIRRELVM v) {
     [engine enableOnFpsListener:FALSE];
     return 0;
+}
+
+SQInteger emoRuntimeGC(HSQUIRRELVM v) {
+	sq_pushinteger(v, sq_collectgarbage(v));
+	return 1;
 }

@@ -296,14 +296,18 @@ void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFU
 	register_class_func_with_namespace(
 				   v, EMO_NAMESPACE, cname, fname, func);
 }
-	
-void getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat* value) {
+
+/*
+ * get instance member value as float
+ */
+bool getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat* value) {
+	if (sq_gettype(v, idx) == OT_NULL) return false;
 	sq_pushstring(v, name, -1);
 	sq_get(v, idx);
 	sq_getfloat(v, -1, value);
 	sq_pop(v, 1);
+	return true;
 }
-	
 #if __cplusplus
 }   // Extern C
 #endif

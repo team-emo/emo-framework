@@ -1,4 +1,5 @@
 #include "squirrel.h"
 
 SQInteger emoPhysicsNewWorld(HSQUIRRELVM v);
-SQInteger emoPhysicsDeleteWorld(HSQUIRRELVM v);
+SQInteger emoPhysicsDeleteObj(HSQUIRRELVM v);
+SQInteger emoPhysicsNewShape(HSQUIRRELVM v);
