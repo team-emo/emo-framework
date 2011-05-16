@@ -213,8 +213,20 @@ const AUDIO_CHANNEL_STOPPED   = 1;
 const AUDIO_CHANNEL_PAUSED    = 2;
 const AUDIO_CHANNEL_PLAYING   = 3;
 
+const BODY_TYPE_STATIC    = 0;
+const BODY_TYPE_KINEMATIC = 1;
+const BODY_TYPE_DYNAMIC   = 2;
+
+const SHAPE_TYPE_UNKNOWN = -1;
+const SHAPE_TYPE_CIRCLE  =  0;
+const SHAPE_TYPE_POLYGON =  1;
+
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
+
+class emo.Instance {
+	type = null;
+}
 
 class emo.ModifierManager {
 	modifiers = null;

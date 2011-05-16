@@ -60,18 +60,15 @@ SQInteger emoPhysicsNewShape(HSQUIRRELVM v) {
 		sq_getinteger(v, 2, &sType);
 	}
 	b2Shape* shape;
-	const char* classname;
 	if (sType == PHYSICS_SHAPE_CIRCLE) {
 		shape = new b2CircleShape();
-		classname = "CircleShape";
 	} else if (sType == PHYSICS_SHAPE_POLYGON) {
 		shape = new b2PolygonShape();
-		classname = "PolygonShape";
 	} else {
 		return 0;
 	}
 	SQInteger result = createSQObject(v, 
-			"emo", "physics", classname, shape, objectReleaseHook);
+			"emo", "Instance", shape, objectReleaseHook);
 	
 	if (result == 0) {
 		delete shape;
