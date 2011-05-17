@@ -23,5 +23,5 @@ void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFU
 bool getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat* value);
 bool getInstanceMemberAsBool(HSQUIRRELVM v, int idx, const char *name, bool* value);
 bool getInstanceMemberAsTable(HSQUIRRELVM v, int idx, const char *cname, const char *name, SQFloat* value);
-bool getInstanceMemberAsUserPointer(HSQUIRRELVM v, int idx, const char *name, SQUserPointer* value);
+bool getInstanceMemberAsUserPointer(HSQUIRRELVM v, int idx, const char *cname, const char *name, SQUserPointer* value);
 SQInteger createSQObject(HSQUIRRELVM v, const char* package_name, const char* name, SQUserPointer ptr, SQRELEASEHOOK releaseHook);

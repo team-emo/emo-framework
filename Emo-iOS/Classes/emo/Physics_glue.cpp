@@ -45,7 +45,7 @@ static void getFixtureDefInstance(HSQUIRRELVM v, int idx, b2FixtureDef* def) {
 	getInstanceMemberAsBool(v,   idx, "isSensor",    &def->isSensor);
 	
 	SQUserPointer ptr_shape;
-	if (getInstanceMemberAsUserPointer(v, idx, "shape", &ptr_shape)) {
+	if (getInstanceMemberAsUserPointer(v, idx, "shape", "id", &ptr_shape)) {
 		def->shape = reinterpret_cast<b2Shape*>(ptr_shape); 
 	}
 }
@@ -56,6 +56,11 @@ static SQInteger b2WorldReleaseHook(SQUserPointer ptr, SQInteger size) {
 	
 static SQInteger b2ShapeReleaseHook(SQUserPointer ptr, SQInteger size) {
 	delete reinterpret_cast<b2Shape*>(ptr);
+	return 0;
+}
+	
+static SQInteger b2JointDefReleaseHook(SQUserPointer ptr, SQInteger size) {
+	delete reinterpret_cast<b2JointDef*>(ptr);
 	return 0;
 }
 	
@@ -90,16 +95,16 @@ SQInteger emoPhysicsCreateBody(HSQUIRRELVM v) {
 	if (nargs < 3) {
 		return 0;
 	}
-	if (sq_gettype(v, 2) != OT_USERPOINTER || sq_gettype(v, 3) != OT_USERPOINTER) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER || sq_gettype(v, 3) != OT_INSTANCE) {
 		return 0;
 	}
 	b2World* world = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&world);
 	
-	b2BodyDef* def = NULL;
-	sq_getuserpointer(v, 3, (SQUserPointer*)&def);
+	b2BodyDef def;
+	getBodyDefInstance(v, 3, &def);
 	
-	sq_pushuserpointer(v, world->CreateBody(def));
+	sq_pushuserpointer(v, world->CreateBody(&def));
 	
 	return 1;
 }
@@ -122,6 +127,57 @@ SQInteger emoPhysicsDestroyBody(HSQUIRRELVM v) {
 	world->DestroyBody(body);
 	
 	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsNewJointDef(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+	if (nargs < 2 || sq_gettype(v, 2) != OT_INTEGER) {
+		return 0;
+	}
+
+	SQInteger jtype;
+	sq_getinteger(v, 2, &jtype);
+	
+	b2JointDef* def = NULL;
+	switch (jtype) {
+		case JOINT_TYPE_REVOLUTE:
+			def = new b2RevoluteJointDef();
+			break;
+		case JOINT_TYPE_PRISMATIC:
+			def = new b2PrismaticJointDef();
+			break;
+		case JOINT_TYPE_DISTANCE:
+			def = new b2DistanceJointDef();
+			break;
+		case JOINT_TYPE_PULLEY:
+			def = new b2PulleyJointDef();
+			break;
+		case JOINT_TYPE_MOUSE:
+			def = new b2MouseJointDef();
+			break;
+		case JOINT_TYPE_GEAR:
+			def = new b2GearJointDef();
+			break;
+		case JOINT_TYPE_LINE:
+			def = new b2LineJointDef();
+			break;
+		case JOINT_TYPE_WELD:
+			def = new b2WeldJointDef();
+			break;
+		case JOINT_TYPE_FRICTION:
+			def = new b2FrictionJointDef();
+			break;
+		default:
+			return 0;
+	}
+
+	SQInteger result = createSQObject(v, 
+				  "emo", "Instance", def, b2JointDefReleaseHook);
+	
+	if (result == 0) {
+		delete def;
+		return 0;
+	}
 	return 1;
 }
 SQInteger emoPhysicsCreateJoint(HSQUIRRELVM v) {
@@ -199,6 +255,45 @@ SQInteger emoPhysicsWorld_ClearForces(HSQUIRRELVM v) {
 	sq_getuserpointer(v, 2, (SQUserPointer*)&world);
 	
 	world->ClearForces();
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsCreateFixture(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+	if (nargs < 3) {
+		return 0;
+	}
+	if (sq_gettype(v, 2) != OT_USERPOINTER && sq_gettype(v, 3) != OT_INSTANCE) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	b2FixtureDef def;
+	getFixtureDefInstance(v, 3, &def);
+	
+	sq_pushuserpointer(v, body->CreateFixture(&def));
+	
+	return 1;
+}
+SQInteger emoPhysicsDestroyFixture(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+	if (nargs < 3) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	if (sq_gettype(v, 2) != OT_USERPOINTER && sq_gettype(v, 3) != OT_USERPOINTER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	b2Fixture* fixture = NULL;
+	sq_getuserpointer(v, 3, (SQUserPointer*)&fixture);
+	
+	body->DestroyFixture(fixture);
 	
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;

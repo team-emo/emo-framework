@@ -56,7 +56,7 @@ class emo.physics.World {
 	}
 	
 	function createJoint(jointdef) {
-		return emo.physics.Joint(physics.createJoint(id, jointdef));
+		return emo.physics.Joint(physics.createJoint(id, jointdef.id));
 	}
 	
 	function destroyJoint(joint) {
@@ -262,14 +262,15 @@ class emo.physics.BodyDef {
 }
 
 class emo.physics.Fixture {
-	id = null;
-	function constructor(_id) {
-		id = _id;
+	id     = null;
+	bodyId = null;
+	function constructor(_bodyId, _id) {
+		bodyId = _bodyId;
+		id     = _id;
 	}
 }
 
 class emo.physics.FixtureDef {
-	id          = null;
 	shape       = null;
 	friction    = null;
 	restitution = null;

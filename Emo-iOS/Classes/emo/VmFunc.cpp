@@ -346,14 +346,16 @@ bool getInstanceMemberAsTable(HSQUIRRELVM v, int idx, const char *cname, const c
 /*
  * get instance member value as user pointer
  */
-bool getInstanceMemberAsUserPointer(HSQUIRRELVM v, int idx, const char *name, SQUserPointer* value) {
+bool getInstanceMemberAsUserPointer(HSQUIRRELVM v, int idx, 
+					const char *cname, const char *name, SQUserPointer* value) {
 	if (sq_gettype(v, idx) == OT_NULL) return false;
-	sq_pushstring(v, name, -1);
+	sq_pushstring(v, cname, -1);
 	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
-	if (sq_gettype(v, -1) != OT_USERPOINTER)  return false;
+	sq_pushstring(v, name, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, -2))) return false;
+	if (sq_gettype(v, -1) != OT_USERPOINTER) return false;
 	sq_getuserpointer(v, -1, value);
 	sq_pop(v, 1);
-	
 	return true;
 }
 	
