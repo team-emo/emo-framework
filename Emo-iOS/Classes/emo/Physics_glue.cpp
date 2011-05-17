@@ -20,10 +20,23 @@ static void getVec2Instance(HSQUIRRELVM v, int idx, b2Vec2* vec2) {
 
 static void getVec2InstanceFromMember(HSQUIRRELVM v, int idx, const char* member, b2Vec2* vec2) {
 	getInstanceMemberAsTable(v, idx, member, "x", &vec2->x);
-	getInstanceMemberAsTable(v, idx, member, "y", &vec2->x);
+	getInstanceMemberAsTable(v, idx, member, "y", &vec2->y);
 }
 	
 static void getBodyDefInstance(HSQUIRRELVM v, int idx, b2BodyDef* def) {
+	SQInteger btype;
+	getInstanceMemberAsInteger(v, idx, "type", &btype);
+	switch(btype) {
+		case PHYSICS_BODY_STATIC:
+			def->type = b2_staticBody;
+			break;
+		case PHYSICS_BODY_KINEMATIC:
+			def->type = b2_kinematicBody;
+			break;
+		case PHYSICS_BODY_DYNAMIC:
+			def->type = b2_dynamicBody;
+			break;
+	}
 	getVec2InstanceFromMember(v, idx, "position", &def->position);
 	getInstanceMemberAsFloat(v,  idx, "angle",    &def->angle);
 	getVec2InstanceFromMember(v, idx, "linearVelocity",  &def->linearVelocity);
@@ -45,7 +58,7 @@ static void getFixtureDefInstance(HSQUIRRELVM v, int idx, b2FixtureDef* def) {
 	getInstanceMemberAsBool(v,   idx, "isSensor",    &def->isSensor);
 	
 	SQUserPointer ptr_shape;
-	if (getInstanceMemberAsUserPointer(v, idx, "shape", "id", &ptr_shape)) {
+	if (getInstanceMemberAsInstance(v, idx, "shape", "id", &ptr_shape)) {
 		def->shape = reinterpret_cast<b2Shape*>(ptr_shape); 
 	}
 }
@@ -95,11 +108,12 @@ SQInteger emoPhysicsCreateBody(HSQUIRRELVM v) {
 	if (nargs < 3) {
 		return 0;
 	}
-	if (sq_gettype(v, 2) != OT_USERPOINTER || sq_gettype(v, 3) != OT_INSTANCE) {
+	
+	if (sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) != OT_INSTANCE) {
 		return 0;
 	}
 	b2World* world = NULL;
-	sq_getuserpointer(v, 2, (SQUserPointer*)&world);
+	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
 	
 	b2BodyDef def;
 	getBodyDefInstance(v, 3, &def);
@@ -114,12 +128,12 @@ SQInteger emoPhysicsDestroyBody(HSQUIRRELVM v) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
-	if (sq_gettype(v, 2) != OT_USERPOINTER || sq_gettype(v, 3) != OT_USERPOINTER) {
+	if (sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
 	b2World* world = NULL;
-	sq_getuserpointer(v, 2, (SQUserPointer*)&world);
+	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
 	
 	b2Body* body = NULL;
 	sq_getuserpointer(v, 3, (SQUserPointer*)&body);
@@ -185,14 +199,14 @@ SQInteger emoPhysicsCreateJoint(HSQUIRRELVM v) {
 	if (nargs < 3) {
 		return 0;
 	}
-	if (sq_gettype(v, 2) != OT_USERPOINTER || sq_gettype(v, 3) != OT_USERPOINTER) {
+	if (sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) != OT_INSTANCE) {
 		return 0;
 	}
 	b2World* world = NULL;
-	sq_getuserpointer(v, 2, (SQUserPointer*)&world);
+	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
 	
 	b2JointDef* def = NULL;
-	sq_getuserpointer(v, 3, (SQUserPointer*)&def);
+	sq_getinstanceup(v, 3, (SQUserPointer*)&def, 0);
 	
 	sq_pushuserpointer(v, world->CreateJoint(def));
 	
@@ -204,12 +218,12 @@ SQInteger emoPhysicsDestroyJoint(HSQUIRRELVM v) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
-	if (sq_gettype(v, 2) != OT_USERPOINTER || sq_gettype(v, 3) != OT_USERPOINTER) {
+	if (sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
 	b2World* world = NULL;
-	sq_getuserpointer(v, 2, (SQUserPointer*)&world);
+	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
 	
 	b2Joint* joint = NULL;
 	sq_getuserpointer(v, 3, (SQUserPointer*)&joint);
@@ -225,12 +239,12 @@ SQInteger emoPhysicsWorld_Step(HSQUIRRELVM v) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
-	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
 	b2World* world = NULL;
-	sq_getuserpointer(v, 2, (SQUserPointer*)&world);
+	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
 	
 	SQFloat timeStep;
 	SQInteger velocityIter;
@@ -247,12 +261,12 @@ SQInteger emoPhysicsWorld_Step(HSQUIRRELVM v) {
 }
 SQInteger emoPhysicsWorld_ClearForces(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
-	if (nargs < 2 || sq_gettype(v, 2) != OT_USERPOINTER) {
+	if (nargs < 2 || sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
 	b2World* world = NULL;
-	sq_getuserpointer(v, 2, (SQUserPointer*)&world);
+	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
 	
 	world->ClearForces();
 	
