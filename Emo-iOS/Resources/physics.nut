@@ -48,35 +48,27 @@ class emo.physics.World {
 	}
 	
 	function createBody(bodydef) {
-		return emo.physics.Body(physics.createBody(bodydef));
+		return emo.physics.Body(physics.createBody(id, bodydef));
 	}
 	
 	function destroyBody(body) {
-		physics.destroyBody(body.id);
+		physics.destroyBody(id, body.id);
 	}
 	
 	function createJoint(jointdef) {
-		return emo.physics.Joint(physics.createJoint(jointdef));
+		return emo.physics.Joint(physics.createJoint(id, jointdef));
 	}
 	
 	function destroyJoint(joint) {
-		physics.destroyJoint(joint.id);
+		physics.destroyJoint(id, joint.id);
 	}
 	
 	function step(timeStep, velocityIterations, positionIterations) {
-		physics.world_step(timeStep, velocityIterations, positionIterations);
+		physics.world_step(id, timeStep, velocityIterations, positionIterations);
 	}
 	
 	function clearForces() {
-		physics.world_clearForces();
-	}
-	
-	function setAutoClearorces(flag) {
-		physics.world_setAutoClearForces(flg);
-	}
-	
-	function getAutoClearForces() {
-		return physics.world_getAutoClearForces();
+		physics.world_clearForces(id);
 	}
 }
 
@@ -266,7 +258,6 @@ class emo.physics.BodyDef {
 	fixedRotation   = null;
 	bullet          = null;
 	active          = null;
-	userData        = null;
 	inertiaScale    = null;
 }
 
@@ -297,7 +288,6 @@ class emo.physics.Joint {
 class emo.physics.JointDef {
 	id       = null;
 	type     = null;
-	userData = null;
 	bodyA    = null;
 	bodyB    = null;
 	physics  = emo.Physics();
@@ -456,6 +446,6 @@ class emo.physics.CircleShape {
 	}
 	
 	function update() {
-		physics.circleShape_update(id, m_radius, m_p);
+		physics.updateCircleShape(id, this);
 	}
 }

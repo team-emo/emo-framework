@@ -303,9 +303,57 @@ void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFU
 bool getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat* value) {
 	if (sq_gettype(v, idx) == OT_NULL) return false;
 	sq_pushstring(v, name, -1);
-	sq_get(v, idx);
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
+	if (sq_gettype(v, -1) == OT_NULL)  return false;
 	sq_getfloat(v, -1, value);
 	sq_pop(v, 1);
+	
+	return true;
+}
+	
+/*
+ * get instance member value as bool
+ */
+bool getInstanceMemberAsBool(HSQUIRRELVM v, int idx, const char *name, bool* value) {
+	if (sq_gettype(v, idx) == OT_NULL) return false;
+	SQInteger iflag;
+	sq_pushstring(v, name, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
+	if (sq_gettype(v, -1) == OT_NULL)  return false;
+	sq_getinteger(v, -1, &iflag);
+	sq_pop(v, 1);
+	
+	*value = iflag == EMO_YES;
+	
+	return true;
+}
+
+/*
+ * get instance member value as table
+ */
+bool getInstanceMemberAsTable(HSQUIRRELVM v, int idx, const char *cname, const char *name, SQFloat* value) {
+	if (sq_gettype(v, idx) == OT_NULL) return false;
+	sq_pushstring(v, cname, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
+	sq_pushstring(v, name, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, -2))) return false;
+	if (sq_gettype(v, -1) == OT_NULL) return false;
+	sq_getfloat(v, -1, value);
+	sq_pop(v, 1);
+	return true;
+}
+
+/*
+ * get instance member value as user pointer
+ */
+bool getInstanceMemberAsUserPointer(HSQUIRRELVM v, int idx, const char *name, SQUserPointer* value) {
+	if (sq_gettype(v, idx) == OT_NULL) return false;
+	sq_pushstring(v, name, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
+	if (sq_gettype(v, -1) != OT_USERPOINTER)  return false;
+	sq_getuserpointer(v, -1, value);
+	sq_pop(v, 1);
+	
 	return true;
 }
 	
