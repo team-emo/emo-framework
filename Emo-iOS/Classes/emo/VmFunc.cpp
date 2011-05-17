@@ -308,7 +308,7 @@ bool getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat*
 	sq_pop(v, 1);
 	return true;
 }
-
+	
 SQInteger createSQObject(HSQUIRRELVM v, 
 				const char* package_name, const char* name,
 				SQUserPointer ptr, SQRELEASEHOOK releaseHook) {

@@ -14,7 +14,7 @@ const SHAPE_TYPE_CIRCLE  =  0;
 const SHAPE_TYPE_POLYGON =  1;
 
 const JOINT_TYPE_UNKNOWN   = 0;
-const JOINT_TYPE_EVOLUTE   = 1;
+const JOINT_TYPE_REVOLUTE  = 1;
 const JOINT_TYPE_PRISMATIC = 2;
 const JOINT_TYPE_DISTANCE  = 3;
 const JOINT_TYPE_PULLEY    = 4;
@@ -295,11 +295,156 @@ class emo.physics.Joint {
 }
 
 class emo.physics.JointDef {
+	id       = null;
 	type     = null;
 	userData = null;
 	bodyA    = null;
 	bodyB    = null;
+	physics  = emo.Physics();
 	collideConnected = null;
+}
+
+class emo.physics.DistanceJointDef extends emo.physics.JointDef {
+	type = JOINT_TYPE_DISTANCE;
+	localAnchorA = null;
+	localAnchorB = null;
+	length       = null;
+	frequencyHz  = null;
+	dampingRatio = null;
+	
+	function constructor() {
+		id = physics.newJointDef(type);
+	}
+	function update() {
+		physics.updateJointDef(id, this);
+	}
+	
+	function initialize(bodyA, bodyB, anchorA, anchorB) {
+		physics.initDistanceJointDef(id, this, bodyA, bodyB, anchorA, anchorB);
+	}
+}
+class emo.physics.FrictionJointDef extends emo.physics.JointDef {
+	type = JOINT_TYPE_FRICTION;
+	localAnchorA = null;
+	localAnchorB = null;
+	maxForce     = null;
+	maxTorque    = null;
+	function constructor() {
+		id = physics.newJointDef(type);
+	}
+	function update() {
+		physics.updateJointDef(id, this);
+	}
+}
+class emo.physics.GearJointDef extends emo.physics.JointDef {
+	type = JOINT_TYPE_GEAR;
+	joint1 = null;
+	joint2 = null;
+	ratio  = null;
+	function constructor() {
+		id = physics.newJointDef(type);
+	}
+	function update() {
+		physics.updateJointDef(id, this);
+	}
+}
+class emo.physics.LineJointDef extends emo.physics.JointDef {
+	type = JOINT_TYPE_LINE;
+	localAnchorA = null;
+	localAnchorB = null;
+	localAxisA   = null;
+	enableLimit  = null;
+	lowerTranslation = null;
+	upperTranslation = null;
+	enableMotor   = null;
+	maxMotorForce = null;
+	motorSpeed    = null;
+	function constructor() {
+		id = physics.newJointDef(type);
+	}
+	function update() {
+		physics.updateJointDef(id, this);
+	}
+}
+class emo.physics.MouseJointDef extends emo.physics.JointDef {
+	type = JOINT_TYPE_MOUSE;
+	target       = null;
+	maxForce     = null;
+	frequencyHz  = null;
+	dampingRatio = null;
+	function constructor() {
+		id = physics.newJointDef(type);
+	}
+	function update() {
+		physics.updateJointDef(id, this);
+	}
+}
+class emo.physics.PrismaticJointDef extends emo.physics.JointDef {
+	type = JOINT_TYPE_PRISMATIC;
+	localAnchorA = null;
+	localAnchorB = null;
+	localAxis1   = null;
+	referenceAngle = null;
+	enableLimit    = null;
+	lowerTranslation = null;
+	upperTranslation = null;
+	enableMotor   = null;
+	maxMotorForce = null;
+	motorSpeed    = null;
+	function constructor() {
+		id = physics.newJointDef(type);
+	}
+	function update() {
+		physics.updateJointDef(id, this);
+	}
+}
+class emo.physics.PulleyJointDef extends emo.physics.JointDef {
+	type = JOINT_TYPE_PULLEY;
+	groundAnchorA = null;
+	groundAnchorB = null;
+	localAnchorA  = null;
+	localAnchorB  = null;
+	lengthA    = null;
+	maxLengthA = null;
+	lengthB    = null;
+	maxLengthB = null;
+	ratio      = null;
+	function constructor() {
+		id = physics.newJointDef(type);
+	}
+	function update() {
+		physics.updateJointDef(id, this);
+	}
+}
+class emo.physics.RevoluteJointDef extends emo.physics.JointDef {
+	type = JOINT_TYPE_REVOLUTE;
+	localAnchorA = null;
+	localAnchorB = null;
+	referenceAngle = null;
+	enableLimit = null;
+	lowerAngle  = null;
+	upperAngle  = null;
+	enableMotor = null;
+	motorSpeed  = null;
+	maxMotorTorque = null;
+	function constructor() {
+		id = physics.newJointDef(type);
+	}
+	function update() {
+		physics.updateJointDef(id, this);
+	}
+}
+class emo.physics.WeldJointDef extends emo.physics.JointDef {
+	type = JOINT_TYPE_WELD;
+	localAnchorA   = null;
+	localAnchorB   = null;
+	referenceAngle = null;
+	function constructor() {
+		id = physics.newJointDef(type);
+	}
+	function update() {
+		physics.updateJointDef(id, this);
+	}
 }
 
 class emo.physics.PolygonShape {
