@@ -302,38 +302,33 @@ class emo.physics.JointDef {
 	bodyB    = null;
 	physics  = emo.Physics();
 	collideConnected = null;
+	function update() {
+		physics.updateJointDef(id, this);
+	}
 }
 
 class emo.physics.DistanceJointDef extends emo.physics.JointDef {
 	type = JOINT_TYPE_DISTANCE;
-	localAnchorA = null;
-	localAnchorB = null;
-	length       = null;
 	frequencyHz  = null;
 	dampingRatio = null;
 	
 	function constructor() {
 		id = physics.newJointDef(type);
 	}
-	function update() {
-		physics.updateJointDef(id, this);
-	}
 	
 	function initialize(bodyA, bodyB, anchorA, anchorB) {
-		physics.initDistanceJointDef(id, this, bodyA, bodyB, anchorA, anchorB);
+		physics.initDistanceJointDef(id, bodyA, bodyB, anchorA, anchorB);
 	}
 }
 class emo.physics.FrictionJointDef extends emo.physics.JointDef {
 	type = JOINT_TYPE_FRICTION;
-	localAnchorA = null;
-	localAnchorB = null;
 	maxForce     = null;
 	maxTorque    = null;
 	function constructor() {
 		id = physics.newJointDef(type);
 	}
-	function update() {
-		physics.updateJointDef(id, this);
+	function initialize(bodyA, bodyB, anchor) {
+		physics.initFrictionJointDef(id, bodyA, bodyB, anchor);
 	}
 }
 class emo.physics.GearJointDef extends emo.physics.JointDef {
@@ -344,15 +339,9 @@ class emo.physics.GearJointDef extends emo.physics.JointDef {
 	function constructor() {
 		id = physics.newJointDef(type);
 	}
-	function update() {
-		physics.updateJointDef(id, this);
-	}
 }
 class emo.physics.LineJointDef extends emo.physics.JointDef {
 	type = JOINT_TYPE_LINE;
-	localAnchorA = null;
-	localAnchorB = null;
-	localAxisA   = null;
 	enableLimit  = null;
 	lowerTranslation = null;
 	upperTranslation = null;
@@ -362,8 +351,8 @@ class emo.physics.LineJointDef extends emo.physics.JointDef {
 	function constructor() {
 		id = physics.newJointDef(type);
 	}
-	function update() {
-		physics.updateJointDef(id, this);
+	function initialize(bodyA, bodyB, anchor, axis) {
+		physics.initLineJointDef(id, bodyA, bodyB, anchor, axis);
 	}
 }
 class emo.physics.MouseJointDef extends emo.physics.JointDef {
@@ -375,16 +364,9 @@ class emo.physics.MouseJointDef extends emo.physics.JointDef {
 	function constructor() {
 		id = physics.newJointDef(type);
 	}
-	function update() {
-		physics.updateJointDef(id, this);
-	}
 }
 class emo.physics.PrismaticJointDef extends emo.physics.JointDef {
 	type = JOINT_TYPE_PRISMATIC;
-	localAnchorA = null;
-	localAnchorB = null;
-	localAxis1   = null;
-	referenceAngle = null;
 	enableLimit    = null;
 	lowerTranslation = null;
 	upperTranslation = null;
@@ -394,33 +376,22 @@ class emo.physics.PrismaticJointDef extends emo.physics.JointDef {
 	function constructor() {
 		id = physics.newJointDef(type);
 	}
-	function update() {
-		physics.updateJointDef(id, this);
+	function initialize(bodyA, bodyB, anchor, axis) {
+		physics.initPrismaticJointDef(id, bodyA, bodyB, anchor, axis);
 	}
 }
 class emo.physics.PulleyJointDef extends emo.physics.JointDef {
 	type = JOINT_TYPE_PULLEY;
-	groundAnchorA = null;
-	groundAnchorB = null;
-	localAnchorA  = null;
-	localAnchorB  = null;
-	lengthA    = null;
-	maxLengthA = null;
-	lengthB    = null;
-	maxLengthB = null;
-	ratio      = null;
 	function constructor() {
 		id = physics.newJointDef(type);
 	}
-	function update() {
-		physics.updateJointDef(id, this);
+	function initialize(bodyA, bodyB, groundAnchorA, groundAnchorB, anchorA, anchorB, ratio) {
+		physics.initPulleyJointDef(id, bodyA, bodyB,
+			groundAnchorA, groundAnchorB, anchorA, anchorB, ratio);
 	}
 }
 class emo.physics.RevoluteJointDef extends emo.physics.JointDef {
 	type = JOINT_TYPE_REVOLUTE;
-	localAnchorA = null;
-	localAnchorB = null;
-	referenceAngle = null;
 	enableLimit = null;
 	lowerAngle  = null;
 	upperAngle  = null;
@@ -430,20 +401,17 @@ class emo.physics.RevoluteJointDef extends emo.physics.JointDef {
 	function constructor() {
 		id = physics.newJointDef(type);
 	}
-	function update() {
-		physics.updateJointDef(id, this);
+	function initialize(bodyA, bodyB, anchor) {
+		physics.initRevoluteJointDef(id, bodyA, bodyB, anchor);
 	}
 }
 class emo.physics.WeldJointDef extends emo.physics.JointDef {
 	type = JOINT_TYPE_WELD;
-	localAnchorA   = null;
-	localAnchorB   = null;
-	referenceAngle = null;
 	function constructor() {
 		id = physics.newJointDef(type);
 	}
-	function update() {
-		physics.updateJointDef(id, this);
+	function initialize(bodyA, bodyB, anchor) {
+		physics.initWeldJointDef(id, bodyA, bodyB, anchor);
 	}
 }
 
