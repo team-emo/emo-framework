@@ -414,7 +414,7 @@ SQInteger emoPhysicsPolygonShape_SetAsBox(HSQUIRRELVM v) {
 	
 	float32 hx, hy;
 	sq_getfloat(v, 3, &hx);
-	sq_getfloat(v, 3, &hy);
+	sq_getfloat(v, 4, &hy);
 	
 	b2Vec2 center;
 	if (sq_gettype(v, 5) == OT_INSTANCE) {
