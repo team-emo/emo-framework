@@ -13,5 +13,9 @@ function emo::onLoad() {
 	
 	print(groundBox.setAsBox(50, 10));
 	print(groundBox.getVertexCount());
-	print(groundBox.getVertex(0).x);
+	
+	local v = groundBox.getVertex(0);
+	
+	print(v.x);
+	print(v.y);
 }

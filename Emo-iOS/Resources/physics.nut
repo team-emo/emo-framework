@@ -36,6 +36,11 @@ class emo.Vec2 {
 		x = _x;
 		y = _y;
 	}
+	
+	function getInstance(arg) {
+		if (arg == null || arg.len() < 2) return null;
+		return emo.Vec2(arg[0], arg[1]);
+	}
 }
 
 emo.physics <- {};
@@ -105,15 +110,15 @@ class emo.physics.Body {
 	}
 	
 	function destroyFixture(fixture) {
-		physics.destroyFixture(id, fixture.id);
+		return physics.destroyFixture(id, fixture.id);
 	}
 	
 	function setTransform(position, angle) {
-		physics.body_setTransform(id, position, angle);
+		return physics.body_setTransform(id, position, angle);
 	}
 	
 	function getPosition() {
-		return physics.body_getPosition(id);
+		return emo.Vec2.getInstance(physics.body_getPosition(id));
 	}
 	
 	function getAngle() {
@@ -121,11 +126,11 @@ class emo.physics.Body {
 	}
 	
 	function getWorldCenter() {
-		return physics.body_getWorldCenter(id);
+		return emo.Vec2.getInstance(physics.body_getWorldCenter(id));
 	}
 	
 	function getLocalCenter() {
-		return physics.body_getLocalCenter(id);
+		return emo.Vec2.getInstance(physics.body_getLocalCenter(id));
 	}
 	
 	function setLinearVelocity(v) {
@@ -133,7 +138,7 @@ class emo.physics.Body {
 	}
 	
 	function getLinearVelocity() {
-		return physics.body_getLinearVelocity(id);
+		return emo.Vec2.getInstance(physics.body_getLinearVelocity(id));
 	}
 	
 	function setAngularVelocity(omega) {
@@ -168,32 +173,28 @@ class emo.physics.Body {
 		return physics.body_getInertia(id);
 	}
 	
-	function resetMassData() {
-		return physics.body_getMassData(id);
-	}
-	
 	function getWorldPoint(localPoint) {
-		return physics.body_getWorldPoint(id, localPoint);
+		return emo.Vec2.getInstance(physics.body_getWorldPoint(id, localPoint));
 	}
 	
 	function getWorldVector(localVector) {
-		return physics.body_getWorldVector(id, localVector);
+		return emo.Vec2.getInstance(physics.body_getWorldVector(id, localVector));
 	}
 	
 	function getLocalPoint(worldPoint) {
-		return physics.body_getLocalPoint(id, worldPoint);
+		return emo.Vec2.getInstance(physics.body_getLocalPoint(id, worldPoint));
 	}
 	
 	function getLocalVector(worldVector) {
-		return physics.body_getLocalVector(id, worldVector);
+		return emo.Vec2.getInstance(physics.body_getLocalVector(id, worldVector));
 	}
 	
 	function getLinearVelocityFromWorldPoint(worldPoint) {
-		return physics.body_getLinearVelocityFromWorldPoint(id, worldPoint);
+		return emo.Vec2.getInstance(physics.body_getLinearVelocityFromWorldPoint(id, worldPoint));
 	}
 	
 	function getLinearVelocityFromLocalPoint(localPoint) {
-		return physics.body_getLinearVelocityFromLocalPoint(id, localPoint);
+		return emo.Vec2.getInstance(physics.body_getLinearVelocityFromLocalPoint(id, localPoint));
 	}
 	
 	function getLinearDamping() {
@@ -225,7 +226,7 @@ class emo.physics.Body {
 	}
 	
 	function isBullet() {
-		return physics.body_isBullet(id);
+		return physics.body_isBullet(id) == EMO_YES;
 	}
 	
 	function setSleepingAllowed(flag) {
@@ -233,7 +234,7 @@ class emo.physics.Body {
 	}
 	
 	function isSleepingAllowed() {
-		return physics.body_isSleepingAllowed(id);
+		return physics.body_isSleepingAllowed(id) == EMO_YES;
 	}
 	
 	function setAwake(flag) {
@@ -241,7 +242,7 @@ class emo.physics.Body {
 	}
 	
 	function isAwake() {
-		return physics.body_isAwake(id);
+		return physics.body_isAwake(id) == EMO_YES;
 	}
 	
 	function setActive(flag) {
@@ -249,7 +250,7 @@ class emo.physics.Body {
 	}
 	
 	function isActive() {
-		return physics.isActive(id);
+		return physics.isActive(id) == EMO_YES;
 	}
 	
 	function setFixedRotation(flag) {
@@ -257,7 +258,7 @@ class emo.physics.Body {
 	}
 	
 	function isFixedRotation() {
-		return physics.body_isFixedRotation(id);
+		return physics.body_isFixedRotation(id) == EMO_YES;
 	}
 }
 
@@ -444,9 +445,7 @@ class emo.physics.PolygonShape {
 	}
 	
 	function getVertex(idx) {
-		local v = physics.polygonShape_getVertex(id, idx);
-		if (v == null) return null;
-		return emo.Vec2(v[0], v[1]);
+		return emo.Vec2.getInstance(physics.polygonShape_getVertex(id, idx));
 	}
 	
 	function getVertexCount() {
@@ -457,14 +456,16 @@ class emo.physics.PolygonShape {
 class emo.physics.CircleShape {
 	id       = null;
 	physics  = emo.Physics();
-	m_radius = null;
-	m_p      = null;
 	function constructor() {
 		id = physics.newShape(SHAPE_TYPE_CIRCLE);
 		id.type = "emo.physics.CircleShape";
 	}
+
+	function setPosition(position) {
+		return physics.circleShape_position(position);
+	}
 	
-	function update() {
-		physics.updateCircleShape(id, this);
+	function setRadius(radius) {
+		return physics.circleShape_radius(radius);
 	}
 }

@@ -22,7 +22,17 @@ static void getVec2InstanceFromMember(HSQUIRRELVM v, int idx, const char* member
 	getInstanceMemberAsTable(v, idx, member, "x", &vec2->x);
 	getInstanceMemberAsTable(v, idx, member, "y", &vec2->y);
 }
+static void pushVec2(HSQUIRRELVM v, b2Vec2 vec2) {
+	sq_newarray(v, 0);
 	
+	sq_pushfloat(v, vec2.x);
+	sq_arrayappend(v, -2);
+	
+	sq_pushfloat(v, vec2.y);
+	sq_arrayappend(v, -2);
+	
+	sq_push(v, -1);
+}	
 static void getBodyDefInstance(HSQUIRRELVM v, int idx, b2BodyDef* def) {
 	SQInteger btype;
 	getInstanceMemberAsInteger(v, idx, "type", &btype);
@@ -305,11 +315,7 @@ SQInteger emoPhysicsWorld_GetAutoClearForces(HSQUIRRELVM v) {
 	return 1;
 }
 SQInteger emoPhysicsCreateFixture(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-	if (nargs < 3) {
-		return 0;
-	}
-	if (sq_gettype(v, 2) != OT_USERPOINTER && sq_gettype(v, 3) != OT_INSTANCE) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
 	}
 	b2Body* body = NULL;
@@ -328,7 +334,7 @@ SQInteger emoPhysicsDestroyFixture(HSQUIRRELVM v) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
-	if (sq_gettype(v, 2) != OT_USERPOINTER && sq_gettype(v, 3) != OT_USERPOINTER) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER || sq_gettype(v, 3) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
@@ -454,17 +460,7 @@ SQInteger emoPhysicsPolygonShape_GetVertex(HSQUIRRELVM v) {
 	SQInteger idx;
 	sq_getinteger(v, 3, &idx);
 	
-	b2Vec2 vec2 = shape->GetVertex(idx);
-	
-	sq_newarray(v, 0);
-	
-	sq_pushfloat(v, vec2.x);
-	sq_arrayappend(v, -2);
-	
-	sq_pushfloat(v, vec2.y);
-	sq_arrayappend(v, -2);
-	
-	sq_push(v, -1);
+	pushVec2(v, shape->GetVertex(idx));
 	
 	return 1;
 }
@@ -477,6 +473,531 @@ SQInteger emoPhysicsPolygonShape_GetVertexCount(HSQUIRRELVM v) {
 	sq_getinstanceup(v, 2, (SQUserPointer*)&shape, 0);
 	
 	sq_pushinteger(v, shape->GetVertexCount());
+	return 1;
+}
+SQInteger emoPhysicsBody_SetTransform(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER
+			&& sq_gettype(v, 3) != OT_INSTANCE) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	b2Vec2 position;
+	getVec2Instance(v, 3, &position);
+	
+	SQFloat angle;
+	sq_getfloat(v, 4, &angle);
+	
+	body->SetTransform(position, angle);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_GetPosition(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	pushVec2(v, body->GetPosition());
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_GetAngle(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	sq_pushfloat(v, body->GetAngle());
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_GetWorldCenter(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	pushVec2(v, body->GetWorldCenter());
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_GetLocalCenter(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	pushVec2(v, body->GetLocalCenter());
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_SetLinearVelocity(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER
+		&& sq_gettype(v, 3) != OT_INSTANCE) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	b2Vec2 value;
+	getVec2Instance(v, 3, &value);
+	
+	body->SetLinearVelocity(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_GetLinearVelocity(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	pushVec2(v, body->GetLinearVelocity());
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_SetAngularVelocity(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER
+		&& sq_gettype(v, 3) != OT_INSTANCE) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	body->SetAngularVelocity(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_GetAngularVelocity(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	sq_pushfloat(v, body->GetAngularVelocity());
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_ApplyForce(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	b2Vec2 force;
+	getVec2Instance(v, 3, &force);
+	
+	b2Vec2 point;
+	getVec2Instance(v, 4, &point);
+	
+	body->ApplyForce(force, point);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_ApplyTorque(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	body->ApplyTorque(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_ApplyLinearImpulse(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	b2Vec2 value1;
+	getVec2Instance(v, 3, &value1);
+	
+	b2Vec2 value2;
+	getVec2Instance(v, 4, &value2);
+	
+	body->ApplyLinearImpulse(value1, value2);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_ApplyAngularImpulse(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	body->ApplyAngularImpulse(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_GetMass(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	sq_pushfloat(v, body->GetMass());
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_GetInertia(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	sq_pushfloat(v, body->GetInertia());
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_GetWorldPoint(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER
+		&& sq_gettype(v, 3) != OT_INSTANCE) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	b2Vec2 value;
+	getVec2Instance(v, 3, &value);
+	
+	pushVec2(v, body->GetWorldPoint(value));
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_GetWorldVector(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER
+		&& sq_gettype(v, 3) != OT_INSTANCE) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	b2Vec2 value;
+	getVec2Instance(v, 3, &value);
+	
+	pushVec2(v, body->GetWorldVector(value));
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_GetLocalPoint(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER
+		&& sq_gettype(v, 3) != OT_INSTANCE) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	b2Vec2 value;
+	getVec2Instance(v, 3, &value);
+	
+	pushVec2(v, body->GetLocalPoint(value));
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_GetLocalVector(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER
+		&& sq_gettype(v, 3) != OT_INSTANCE) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	b2Vec2 value;
+	getVec2Instance(v, 3, &value);
+	
+	pushVec2(v, body->GetLocalVector(value));
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_GetLinearVelocityFromWorldPoint(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER
+		&& sq_gettype(v, 3) != OT_INSTANCE) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	b2Vec2 value;
+	getVec2Instance(v, 3, &value);
+	
+	pushVec2(v, body->GetLinearVelocityFromWorldPoint(value));
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_GetLinearVelocityFromLocalPoint(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER
+		&& sq_gettype(v, 3) != OT_INSTANCE) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	b2Vec2 value;
+	getVec2Instance(v, 3, &value);
+	
+	pushVec2(v, body->GetLinearVelocityFromLocalPoint(value));
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_GetLinearDamping(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	sq_pushfloat(v, body->GetLinearDamping());
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_SetLinearDamping(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	body->SetLinearDamping(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_GetAngularDamping(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	sq_pushfloat(v, body->GetAngularDamping());
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_SetAngularDamping(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	body->SetAngularDamping(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_SetType(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	SQInteger value;
+	sq_getinteger(v, 3, &value);
+	
+	switch(value) {
+		case PHYSICS_BODY_STATIC:
+			body->SetType(b2_staticBody);
+			break;
+		case PHYSICS_BODY_KINEMATIC:
+			body->SetType(b2_kinematicBody);
+			break;
+		case PHYSICS_BODY_DYNAMIC:
+			body->SetType(b2_dynamicBody);
+			break;
+	}
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_GetType(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+
+	int bodyType = PHYSICS_BODY_STATIC;
+	switch(body->GetType()) {
+		case b2_staticBody:
+			bodyType = PHYSICS_BODY_STATIC;
+			break;
+		case b2_kinematicBody:
+			bodyType = PHYSICS_BODY_KINEMATIC;
+			break;
+		case b2_dynamicBody:
+			bodyType = PHYSICS_BODY_DYNAMIC;
+			break;
+	}
+	sq_pushinteger(v, bodyType);
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_SetBullet(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	SQInteger flag;
+	sq_getinteger(v, 3, &flag);
+	
+	body->SetBullet(flag == EMO_YES);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_IsBullet(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	sq_pushinteger(v, body->IsBullet() ? EMO_YES : EMO_NO);
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_SetSleepingAllowed(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	SQInteger flag;
+	sq_getinteger(v, 3, &flag);
+	
+	body->SetSleepingAllowed(flag == EMO_YES);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_IsSleepingAllowed(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	sq_pushinteger(v, body->IsSleepingAllowed() ? EMO_YES : EMO_NO);
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_SetAwake(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	SQInteger flag;
+	sq_getinteger(v, 3, &flag);
+	
+	body->SetAwake(flag == EMO_YES);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_IsAwake(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	sq_pushinteger(v, body->IsAwake() ? EMO_YES : EMO_NO);
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_SetActive(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+
+	SQInteger flag;
+	sq_getinteger(v, 3, &flag);
+	
+	body->SetActive(flag == EMO_YES);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_IsActive(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	sq_pushinteger(v, body->IsActive() ? EMO_YES : EMO_NO);
+	
+	return 1;
+}
+SQInteger emoPhysicsBody_SetFixedRotation(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	SQInteger flag;
+	sq_getinteger(v, 3, &flag);
+	
+	body->SetFixedRotation(flag == EMO_YES);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsBody_IsFixedRotation(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+	
+	sq_pushinteger(v, body->IsFixedRotation() ? EMO_YES : EMO_NO);
+	
 	return 1;
 }
 #if __cplusplus
