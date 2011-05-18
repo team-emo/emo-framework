@@ -10,4 +10,8 @@ function emo::onLoad() {
 	local groundBody = world.createBody(groundBodyDef);
 	local groundBox = emo.physics.PolygonShape();
 	local fixture = groundBody.createFixture(groundBox, 0);
+	
+	print(groundBox.setAsBox(50, 10));
+	print(groundBox.getVertexCount());
+	print(groundBox.getVertex(0).x);
 }

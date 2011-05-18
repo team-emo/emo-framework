@@ -70,6 +70,14 @@ class emo.physics.World {
 	function clearForces() {
 		physics.world_clearForces(id);
 	}
+	
+	function setAutoClearForces(flag) {
+		physics.world_setAutoClearForces(id, flag);
+	}
+	
+	function getAutoClearForces() {
+		return physics.world_getAutoClearForces(id);
+	}
 }
 
 class emo.physics.AABB {
@@ -423,20 +431,22 @@ class emo.physics.PolygonShape {
 		id.type = "emo.physics.PolygonShape";
 	}
 
-	function set(vertices, vertexCount) {
-		physics.polygonShape_set(id, vertices, vertexCount);
+	function set(vertices) {
+		return physics.polygonShape_set(id, vertices);
 	}
 	
 	function setAsBox(hx, hy, center = null, angle = null) {
-		physics.polygonShape_setAsBox(id, hx, hy, center, angle);
+		return physics.polygonShape_setAsBox(id, hx, hy, center, angle);
 	}
 	
 	function setAsEdge(v1, v2) {
-		physics.polygonShape_setAsEdge(id, v1, v2);
+		return physics.polygonShape_setAsEdge(id, v1, v2);
 	}
 	
 	function getVertex(idx) {
-		return physics.polygonShape_getVertex(id, idx);
+		local v = physics.polygonShape_getVertex(id, idx);
+		if (v == null) return null;
+		return emo.Vec2(v[0], v[1]);
 	}
 	
 	function getVertexCount() {

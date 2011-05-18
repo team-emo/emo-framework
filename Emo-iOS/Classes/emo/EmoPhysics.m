@@ -18,4 +18,11 @@ void initPhysicsFunctions() {
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "createFixture", emoPhysicsCreateFixture);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "destroyFixture",emoPhysicsDestroyFixture);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "newJointDef",   emoPhysicsNewJointDef);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "world_setAutoClearForces", emoPhysicsWorld_SetAutoClearForces);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "world_getAutoClearForces", emoPhysicsWorld_GetAutoClearForces);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "polygonShape_set",   emoPhysicsPolygonShape_Set);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "polygonShape_setAsBox",   emoPhysicsPolygonShape_SetAsBox);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "polygonShape_setAsEdge",   emoPhysicsPolygonShape_SetAsEdge);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "polygonShape_getVertex",   emoPhysicsPolygonShape_GetVertex);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "polygonShape_getVertexCount",   emoPhysicsPolygonShape_GetVertexCount);
 }

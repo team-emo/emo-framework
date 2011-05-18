@@ -273,6 +273,37 @@ SQInteger emoPhysicsWorld_ClearForces(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+SQInteger emoPhysicsWorld_SetAutoClearForces(HSQUIRRELVM v) {
+	SQInteger nargs = sq_gettop(v);
+	if (nargs < 3 || sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) != OT_INTEGER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2World* world = NULL;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
+	
+	SQInteger iflag;
+	sq_getinteger(v, 3, &iflag);
+	
+	world->SetAutoClearForces(iflag == EMO_YES);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsWorld_GetAutoClearForces(HSQUIRRELVM v) {
+	SQInteger nargs = sq_gettop(v);
+	if (nargs < 2 || sq_gettype(v, 2) != OT_INSTANCE) {
+		sq_pushinteger(v, EMO_NO);
+		return 1;
+	}
+	b2World* world = NULL;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
+	
+	bool flag = world->GetAutoClearForces();
+	
+	sq_pushinteger(v, flag ? EMO_YES : EMO_NO);
+	return 1;
+}
 SQInteger emoPhysicsCreateFixture(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 	if (nargs < 3) {
@@ -334,6 +365,118 @@ SQInteger emoPhysicsNewShape(HSQUIRRELVM v) {
 		return 0;
 	}
 	
+	return 1;
+}
+SQInteger emoPhysicsPolygonShape_Set(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+	if (nargs < 3 || sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) != OT_ARRAY) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2PolygonShape* shape;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&shape, 0);
+
+	int size = 2; // b2PolygonShape->Set accepts only 2 vertices
+	b2Vec2* vec2 = new b2Vec2[size];
+	
+	for (int i = 0; i < size; i++)
+	{
+		sq_pushinteger(v, i);
+		sq_get(v, 3);
+		
+		getVec2Instance(v, sq_gettop(v), &vec2[i]);
+		
+		sq_pop(v, 1);
+	}
+	
+	shape->Set(vec2, size);
+	
+	delete vec2;
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsPolygonShape_SetAsBox(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+	if (nargs < 4 || sq_gettype(v, 2) != OT_INSTANCE
+			|| sq_gettype(v, 3) == OT_NULL || sq_gettype(v, 4) == OT_NULL) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2PolygonShape* shape;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&shape, 0);
+	
+	float32 hx, hy;
+	sq_getfloat(v, 3, &hx);
+	sq_getfloat(v, 3, &hy);
+	
+	b2Vec2 center;
+	if (sq_gettype(v, 5) == OT_INSTANCE) {
+		getVec2Instance(v, 5, &center);
+	}
+	float32 angle;
+	if (sq_gettype(v, 6) != OT_NULL) {
+		sq_getfloat(v, 6, &angle);
+	}
+	
+	shape->SetAsBox(hx, hy, center, angle);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsPolygonShape_SetAsEdge(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+	if (nargs < 4 || sq_gettype(v, 2) != OT_INSTANCE
+		|| sq_gettype(v, 3) != OT_INSTANCE || sq_gettype(v, 4) != OT_INSTANCE) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2PolygonShape* shape;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&shape, 0);
+	
+	b2Vec2 v1, v2;
+	getVec2Instance(v, 3, &v1);
+	getVec2Instance(v, 4, &v2);
+	
+	shape->SetAsEdge(v1, v2);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsPolygonShape_GetVertex(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+	if (nargs < 3 || sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) == OT_NULL) {
+		return 0;
+	}
+	b2PolygonShape* shape;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&shape, 0);
+	
+	SQInteger idx;
+	sq_getinteger(v, 3, &idx);
+	
+	b2Vec2 vec2 = shape->GetVertex(idx);
+	
+	sq_newarray(v, 0);
+	
+	sq_pushfloat(v, vec2.x);
+	sq_arrayappend(v, -2);
+	
+	sq_pushfloat(v, vec2.y);
+	sq_arrayappend(v, -2);
+	
+	sq_push(v, -1);
+	
+	return 1;
+}
+SQInteger emoPhysicsPolygonShape_GetVertexCount(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+	if (nargs < 2 || sq_gettype(v, 2) != OT_INSTANCE) {
+		return 0;
+	}
+	b2PolygonShape* shape;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&shape, 0);
+	
+	sq_pushinteger(v, shape->GetVertexCount());
 	return 1;
 }
 #if __cplusplus
