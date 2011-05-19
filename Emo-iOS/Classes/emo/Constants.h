@@ -158,4 +158,9 @@
 #define JOINT_TYPE_WELD      8
 #define JOINT_TYPE_FRICTION  9
 
+#define PHYSICS_STATE_NULL    -1
+#define PHYSICS_STATE_ADD     0
+#define PHYSICS_STATE_PERSIST 1
+#define PHYSICS_STATE_REMOVE  2
+
 #endif

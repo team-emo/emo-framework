@@ -57,6 +57,8 @@
 		F9C7DE94134ABBDE0053065E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C7DE93134ABBDE0053065E /* libz.dylib */; };
 		F9C7DEAA134ACAE90053065E /* EmoImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C7DEA9134ACAE90053065E /* EmoImage.m */; };
 		F9C849D0133E09EB0095EA37 /* EmoDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849CF133E09EB0095EA37 /* EmoDrawable.m */; };
+		F9C8CE16138541310063D189 /* Physics_contact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9C8CE15138541310063D189 /* Physics_contact.cpp */; };
+		F9C8CE1F1385451D0063D189 /* Physics_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9C8CE1E1385451D0063D189 /* Physics_util.cpp */; };
 		F9D00E52135D44CA00D51C64 /* VmFunc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9D00E51135D44CA00D51C64 /* VmFunc.cpp */; };
 		F9D00E58135D453B00D51C64 /* Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9D00E57135D453B00D51C64 /* Util.cpp */; };
 		F9D00EA4135D48E800D51C64 /* EmoAudio_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D00E9D135D48E800D51C64 /* EmoAudio_glue.m */; };
@@ -200,6 +202,10 @@
 		F9C7DEA9134ACAE90053065E /* EmoImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoImage.m; sourceTree = "<group>"; };
 		F9C849CE133E09EB0095EA37 /* EmoDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDrawable.h; sourceTree = "<group>"; };
 		F9C849CF133E09EB0095EA37 /* EmoDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDrawable.m; sourceTree = "<group>"; };
+		F9C8CE14138541310063D189 /* Physics_contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Physics_contact.h; sourceTree = "<group>"; };
+		F9C8CE15138541310063D189 /* Physics_contact.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Physics_contact.cpp; sourceTree = "<group>"; };
+		F9C8CE1D1385451D0063D189 /* Physics_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Physics_util.h; sourceTree = "<group>"; };
+		F9C8CE1E1385451D0063D189 /* Physics_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Physics_util.cpp; sourceTree = "<group>"; };
 		F9D00E50135D44CA00D51C64 /* VmFunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VmFunc.h; sourceTree = "<group>"; };
 		F9D00E51135D44CA00D51C64 /* VmFunc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VmFunc.cpp; sourceTree = "<group>"; };
 		F9D00E56135D452C00D51C64 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -555,6 +561,10 @@
 				F9D9235F13739869001AA3E0 /* EmoDatabase_glue.m */,
 				F9DF2C6B138008B70057247A /* Physics_glue.h */,
 				F9DF2C6C138008B70057247A /* Physics_glue.cpp */,
+				F9C8CE14138541310063D189 /* Physics_contact.h */,
+				F9C8CE15138541310063D189 /* Physics_contact.cpp */,
+				F9C8CE1D1385451D0063D189 /* Physics_util.h */,
+				F9C8CE1E1385451D0063D189 /* Physics_util.cpp */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -837,6 +847,8 @@
 				F9DF2C5A138007810057247A /* b2WeldJoint.cpp in Sources */,
 				F9DF2C6D138008B70057247A /* Physics_glue.cpp in Sources */,
 				F9DF2C70138009670057247A /* EmoPhysics.m in Sources */,
+				F9C8CE16138541310063D189 /* Physics_contact.cpp in Sources */,
+				F9C8CE1F1385451D0063D189 /* Physics_util.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

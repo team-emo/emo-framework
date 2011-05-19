@@ -11,6 +11,7 @@ SQInteger emoPhysicsWorld_ClearForces(HSQUIRRELVM v);
 SQInteger emoPhysicsCreateFixture(HSQUIRRELVM v);
 SQInteger emoPhysicsDestroyFixture(HSQUIRRELVM v);
 SQInteger emoPhysicsNewJointDef(HSQUIRRELVM v);
+SQInteger emoPhysicsWorld_EnableContactListener(HSQUIRRELVM v);
 SQInteger emoPhysicsWorld_SetAutoClearForces(HSQUIRRELVM v);
 SQInteger emoPhysicsWorld_GetAutoClearForces(HSQUIRRELVM v);
 SQInteger emoPhysicsPolygonShape_Set(HSQUIRRELVM v);

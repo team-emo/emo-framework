@@ -1,0 +1,13 @@
+void getVec2Instance(HSQUIRRELVM v, int idx, b2Vec2* vec2);
+void getVec2InstanceFromMember(HSQUIRRELVM v, int idx, const char* member, b2Vec2* vec2);
+void pushVec2(HSQUIRRELVM v, b2Vec2 vec2);
+void getBodyDefInstance(HSQUIRRELVM v, int idx, b2BodyDef* def);
+void getFixtureDefInstance(HSQUIRRELVM v, int idx, b2FixtureDef* def);
+SQInteger updateDistanceJointDef(HSQUIRRELVM v, int idx, b2DistanceJointDef* def);
+SQInteger updateFrictionJointDef(HSQUIRRELVM v, int idx, b2FrictionJointDef* def);
+SQInteger updateGearJointDef(HSQUIRRELVM v, int idx, b2GearJointDef* def);
+SQInteger updateLineJointDef(HSQUIRRELVM v, int idx, b2LineJointDef* def);
+SQInteger updatePrismaticJointDef(HSQUIRRELVM v, int idx, b2PrismaticJointDef* def);
+SQInteger updatePulleyJointDef(HSQUIRRELVM v, int idx, b2PulleyJointDef* def);
+SQInteger updateRevoluteJointDef(HSQUIRRELVM v, int idx, b2RevoluteJointDef* def);
+SQInteger updateWeldJointDef(HSQUIRRELVM v, int idx, b2WeldJointDef* def);
