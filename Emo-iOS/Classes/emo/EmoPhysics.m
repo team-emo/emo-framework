@@ -65,7 +65,6 @@ void initPhysicsFunctions() {
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "body_isActive",   emoPhysicsBody_IsActive);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "body_setFixedRotation",   emoPhysicsBody_SetFixedRotation);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "body_isFixedRotation",   emoPhysicsBody_IsFixedRotation);
-	
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getAnchorA",   emoPhysicsJoint_GetAnchorA);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getAnchorB",   emoPhysicsJoint_GetAnchorB);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getReactionForce",   emoPhysicsJoint_GetReactionForce);
@@ -101,4 +100,13 @@ void initPhysicsFunctions() {
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getGroundAnchorB",   emoPhysicsJoint_GetGroundAnchorB);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getLength1",   emoPhysicsJoint_GetLength1);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getLength2",   emoPhysicsJoint_GetLength2);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "updateJointDef",     emoPhysicsJointDef_Update);
+
+	registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "initDistanceJointDef",     emoPhysicsInitDistanceJointDef);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "initFrictionJointDef",     emoPhysicsInitFrictionJointDef);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "initLineJointDef",         emoPhysicsInitLineJointDef);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "initPrismaticJointDef",    emoPhysicsInitPrismaticJointDef);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "initPulleyJointDef",       emoPhysicsInitPulleyJointDef);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "initRevoluteJointDef",     emoPhysicsInitRevoluteJointDef);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "initWeldJointDef",         emoPhysicsInitWeldJointDef);
 }

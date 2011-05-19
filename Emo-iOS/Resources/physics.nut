@@ -60,6 +60,7 @@ class emo.physics.World {
 	}
 	
 	function createJoint(jointdef) {
+		jointdef.update();
 		switch(jointdef.type) {
 		case JOINT_TYPE_DISTANCE:
 			return emo.physics.DistanceJoint(physics.createJoint(id, jointdef.id));
@@ -558,7 +559,7 @@ class emo.physics.JointDef {
 	physics  = emo.Physics();
 	collideConnected = null;
 	function update() {
-		physics.updateJointDef(id, this);
+		physics.updateJointDef(id);
 	}
 }
 
@@ -572,7 +573,7 @@ class emo.physics.DistanceJointDef extends emo.physics.JointDef {
 	}
 	
 	function initialize(bodyA, bodyB, anchorA, anchorB) {
-		physics.initDistanceJointDef(id, bodyA, bodyB, anchorA, anchorB);
+		physics.initDistanceJointDef(id, bodyA.id, bodyB.id, anchorA, anchorB);
 	}
 }
 class emo.physics.FrictionJointDef extends emo.physics.JointDef {
@@ -583,7 +584,7 @@ class emo.physics.FrictionJointDef extends emo.physics.JointDef {
 		id = physics.newJointDef(type);
 	}
 	function initialize(bodyA, bodyB, anchor) {
-		physics.initFrictionJointDef(id, bodyA, bodyB, anchor);
+		physics.initFrictionJointDef(id, bodyA.id, bodyB.id, anchor);
 	}
 }
 class emo.physics.GearJointDef extends emo.physics.JointDef {
@@ -607,7 +608,7 @@ class emo.physics.LineJointDef extends emo.physics.JointDef {
 		id = physics.newJointDef(type);
 	}
 	function initialize(bodyA, bodyB, anchor, axis) {
-		physics.initLineJointDef(id, bodyA, bodyB, anchor, axis);
+		physics.initLineJointDef(id, bodyA.id, bodyB.id, anchor, axis);
 	}
 }
 class emo.physics.PrismaticJointDef extends emo.physics.JointDef {
@@ -622,7 +623,7 @@ class emo.physics.PrismaticJointDef extends emo.physics.JointDef {
 		id = physics.newJointDef(type);
 	}
 	function initialize(bodyA, bodyB, anchor, axis) {
-		physics.initPrismaticJointDef(id, bodyA, bodyB, anchor, axis);
+		physics.initPrismaticJointDef(id, bodyA.id, bodyB.id, anchor, axis);
 	}
 }
 class emo.physics.PulleyJointDef extends emo.physics.JointDef {
@@ -631,7 +632,7 @@ class emo.physics.PulleyJointDef extends emo.physics.JointDef {
 		id = physics.newJointDef(type);
 	}
 	function initialize(bodyA, bodyB, groundAnchorA, groundAnchorB, anchorA, anchorB, ratio) {
-		physics.initPulleyJointDef(id, bodyA, bodyB,
+		physics.initPulleyJointDef(id, bodyA.id, bodyB.id,
 			groundAnchorA, groundAnchorB, anchorA, anchorB, ratio);
 	}
 }
@@ -647,7 +648,7 @@ class emo.physics.RevoluteJointDef extends emo.physics.JointDef {
 		id = physics.newJointDef(type);
 	}
 	function initialize(bodyA, bodyB, anchor) {
-		physics.initRevoluteJointDef(id, bodyA, bodyB, anchor);
+		physics.initRevoluteJointDef(id, bodyA.id, bodyB.id, anchor);
 	}
 }
 class emo.physics.WeldJointDef extends emo.physics.JointDef {
@@ -656,7 +657,7 @@ class emo.physics.WeldJointDef extends emo.physics.JointDef {
 		id = physics.newJointDef(type);
 	}
 	function initialize(bodyA, bodyB, anchor) {
-		physics.initWeldJointDef(id, bodyA, bodyB, anchor);
+		physics.initWeldJointDef(id, bodyA.id, bodyB.id, anchor);
 	}
 }
 
