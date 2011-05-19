@@ -329,6 +329,20 @@ SQInteger emoPhysicsWorld_Step(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+SQInteger emoPhysicsWorld_EnableContactListener(HSQUIRRELVM v) {
+	SQInteger nargs = sq_gettop(v);
+	if (nargs < 2 || sq_gettype(v, 2) != OT_INSTANCE) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2World* world = NULL;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
+	
+	world->SetContactListener(world);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
 SQInteger emoPhysicsWorld_ClearForces(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 	if (nargs < 2 || sq_gettype(v, 2) != OT_INSTANCE) {

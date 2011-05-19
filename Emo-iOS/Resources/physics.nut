@@ -36,7 +36,7 @@ class emo.Vec2 {
 		y = _y;
 	}
 	
-	function getInstance(arg) {
+	function fromArray(arg) {
 		if (arg == null || arg.len() < 2) return null;
 		return emo.Vec2(arg[0], arg[1]);
 	}
@@ -143,7 +143,7 @@ class emo.physics.Body {
 	}
 	
 	function getPosition() {
-		return emo.Vec2.getInstance(physics.body_getPosition(id));
+		return emo.Vec2.fromArray(physics.body_getPosition(id));
 	}
 	
 	function getAngle() {
@@ -151,11 +151,11 @@ class emo.physics.Body {
 	}
 	
 	function getWorldCenter() {
-		return emo.Vec2.getInstance(physics.body_getWorldCenter(id));
+		return emo.Vec2.fromArray(physics.body_getWorldCenter(id));
 	}
 	
 	function getLocalCenter() {
-		return emo.Vec2.getInstance(physics.body_getLocalCenter(id));
+		return emo.Vec2.fromArray(physics.body_getLocalCenter(id));
 	}
 	
 	function setLinearVelocity(v) {
@@ -163,7 +163,7 @@ class emo.physics.Body {
 	}
 	
 	function getLinearVelocity() {
-		return emo.Vec2.getInstance(physics.body_getLinearVelocity(id));
+		return emo.Vec2.fromArray(physics.body_getLinearVelocity(id));
 	}
 	
 	function setAngularVelocity(omega) {
@@ -199,27 +199,27 @@ class emo.physics.Body {
 	}
 	
 	function getWorldPoint(localPoint) {
-		return emo.Vec2.getInstance(physics.body_getWorldPoint(id, localPoint));
+		return emo.Vec2.fromArray(physics.body_getWorldPoint(id, localPoint));
 	}
 	
 	function getWorldVector(localVector) {
-		return emo.Vec2.getInstance(physics.body_getWorldVector(id, localVector));
+		return emo.Vec2.fromArray(physics.body_getWorldVector(id, localVector));
 	}
 	
 	function getLocalPoint(worldPoint) {
-		return emo.Vec2.getInstance(physics.body_getLocalPoint(id, worldPoint));
+		return emo.Vec2.fromArray(physics.body_getLocalPoint(id, worldPoint));
 	}
 	
 	function getLocalVector(worldVector) {
-		return emo.Vec2.getInstance(physics.body_getLocalVector(id, worldVector));
+		return emo.Vec2.fromArray(physics.body_getLocalVector(id, worldVector));
 	}
 	
 	function getLinearVelocityFromWorldPoint(worldPoint) {
-		return emo.Vec2.getInstance(physics.body_getLinearVelocityFromWorldPoint(id, worldPoint));
+		return emo.Vec2.fromArray(physics.body_getLinearVelocityFromWorldPoint(id, worldPoint));
 	}
 	
 	function getLinearVelocityFromLocalPoint(localPoint) {
-		return emo.Vec2.getInstance(physics.body_getLinearVelocityFromLocalPoint(id, localPoint));
+		return emo.Vec2.fromArray(physics.body_getLinearVelocityFromLocalPoint(id, localPoint));
 	}
 	
 	function getLinearDamping() {
@@ -332,16 +332,16 @@ class emo.physics.Joint {
 		return type;
 	}
 	function getAnchorA() {
-		return emo.Vec2.getInstance(physics.joint_getAnchorA(id));
+		return emo.Vec2.fromArray(physics.joint_getAnchorA(id));
 	}
 	function getAnchorB() {
-		return emo.Vec2.getInstance(physics.joint_getAnchorB(id));
+		return emo.Vec2.fromArray(physics.joint_getAnchorB(id));
 	}
 	function getReactionForce(inv_dt) {
-		return emo.Vec2.getInstance(physics.joint_getReactionForce(id, inv_dt));
+		return emo.Vec2.fromArray(physics.joint_getReactionForce(id, inv_dt));
 	}
 	function getReactionTorque(inv_dt) {
-		return emo.Vec2.getInstance(physics.joint_getReactionTorque(id, inv_dt));
+		return emo.Vec2.fromArray(physics.joint_getReactionTorque(id, inv_dt));
 	}
 }
 class emo.physics.DistanceJoint extends emo.physics.Joint {
@@ -488,10 +488,10 @@ class emo.physics.PulleyJoint extends emo.physics.Joint {
 		type = JOINT_TYPE_PULLEY;
 	}
 	function getGroundAnchorA() {
-		return emo.Vec2.getInstance(physics.joint_getGroundAnchorA(id));
+		return emo.Vec2.fromArray(physics.joint_getGroundAnchorA(id));
 	}
 	function getGroundAnchorB() {
-		return emo.Vec2.getInstance(physics.joint_getGroundAnchorB(id));
+		return emo.Vec2.fromArray(physics.joint_getGroundAnchorB(id));
 	}
 	function getLength1() {
 		return physics.joint_getLength1(id);
@@ -683,7 +683,7 @@ class emo.physics.PolygonShape {
 	}
 	
 	function getVertex(idx) {
-		return emo.Vec2.getInstance(physics.polygonShape_getVertex(id, idx));
+		return emo.Vec2.fromArray(physics.polygonShape_getVertex(id, idx));
 	}
 	
 	function getVertexCount() {
