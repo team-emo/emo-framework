@@ -18,7 +18,6 @@ JOINT_TYPE_REVOLUTE  <-  1;
 JOINT_TYPE_PRISMATIC <-  2;
 JOINT_TYPE_DISTANCE  <-  3;
 JOINT_TYPE_PULLEY    <-  4;
-JOINT_TYPE_MOUSE     <-  5;
 JOINT_TYPE_GEAR      <-  6;
 JOINT_TYPE_LINE      <-  7;
 JOINT_TYPE_WELD      <-  8;
@@ -61,7 +60,32 @@ class emo.physics.World {
 	}
 	
 	function createJoint(jointdef) {
-		return emo.physics.Joint(physics.createJoint(id, jointdef.id));
+		switch(jointdef.type) {
+		case JOINT_TYPE_DISTANCE:
+			return emo.physics.DistanceJoint(physics.createJoint(id, jointdef.id));
+			break;
+		case JOINT_TYPE_FRICTION:
+			return emo.physics.FrictionJoint(physics.createJoint(id, jointdef.id));
+			break;
+		case JOINT_TYPE_GEAR:
+			return emo.physics.GearJoint(physics.createJoint(id, jointdef.id));
+			break;
+		case JOINT_TYPE_LINE:
+			return emo.physics.LineJoint(physics.createJoint(id, jointdef.id));
+			break;
+		case JOINT_TYPE_PRISMATIC:
+			return emo.physics.PrismaticJoint(physics.createJoint(id, jointdef.id));
+			break;
+		case JOINT_TYPE_PULLEY:
+			return emo.physics.PulleyJoint(physics.createJoint(id, jointdef.id));
+			break;
+		case JOINT_TYPE_REVOLUTE:
+			return emo.physics.RevoluteJoint(physics.createJoint(id, jointdef.id));
+			break;
+		case JOINT_TYPE_WELD:
+			return emo.physics.WeldJoint(physics.createJoint(id, jointdef.id));
+			break;
+		}
 	}
 	
 	function destroyJoint(joint) {
@@ -297,12 +321,235 @@ class emo.physics.FixtureDef {
 }
 
 class emo.physics.Joint {
-	id = null;
+	id    = null;
+	type = null;
+	physics  = emo.Physics();
 	function constructor(_id) {
 		id = _id;
 	}
+	function getType() {
+		return type;
+	}
+	function getAnchorA() {
+		return emo.Vec2.getInstance(physics.joint_getAnchorA(id));
+	}
+	function getAnchorB() {
+		return emo.Vec2.getInstance(physics.joint_getAnchorB(id));
+	}
+	function getReactionForce(inv_dt) {
+		return emo.Vec2.getInstance(physics.joint_getReactionForce(id, inv_dt));
+	}
+	function getReactionTorque(inv_dt) {
+		return emo.Vec2.getInstance(physics.joint_getReactionTorque(id, inv_dt));
+	}
 }
-
+class emo.physics.DistanceJoint extends emo.physics.Joint {
+	function constructor(_id) {
+		id = _id;
+		type = JOINT_TYPE_DISTANCE;
+	}
+	function setLength(length) {
+		return physics.joint_setLength(id, length);
+	}
+	function getLength() {
+		return physics.joint_getLength(id);
+	}
+	function setFrequency(hz) {
+		return physics.joint_setFrequency(id, hz);
+	}
+	function getFrequency() {
+		return physics.joint_getFrequency(id);
+	}
+	function setDampingRatio(ratio) {
+		return physics.joint_setDampingRatio(id, ratio);
+	}
+	function getDampingRatio() {
+		return physics.joint_getDampingRatio(id);
+	}
+}
+class emo.physics.FrictionJoint extends emo.physics.Joint {
+	function constructor(_id) {
+		id = _id;
+		type = JOINT_TYPE_FRICTION;
+	}
+	function setMaxForce(force) {
+		return physics.joint_setMaxForce(id, force);
+	}
+	function getMaxForce() {
+		return physics.joint_getMaxForce(id);
+	}
+	function setMaxTorque(torque) {
+		return physics.joint_setMaxTorque(id, torque);
+	}
+	function getMaxTorque() {
+		return physics.joint_getMaxTorque(id);
+	}
+}
+class emo.physics.GearJoint extends emo.physics.Joint {
+	function constructor(_id) {
+		id = _id;
+		type = JOINT_TYPE_GEAR;
+	}
+	function setRatio(ratio) {
+		return physics.joint_setRatio(id, ratio);
+	}
+	function getRatio() {
+		return physics.joint_getRatio(id);
+	}
+}
+class emo.physics.LineJoint extends emo.physics.Joint {
+	function constructor(_id) {
+		id = _id;
+		type = JOINT_TYPE_LINE;
+	}
+	function getJointTranslation() {
+		return physics.joint_getJointTranslation(id);
+	}
+	function getJointSpeed() {
+		return physics.joint_getJointSpeed(id);
+	}
+	function isLimitedEnabled() {
+		return physics.joint_isLimitedEnabled(id);
+	}
+	function enableLimit(flag) {
+		return physics.joint_enableLimit(id, flag);
+	}
+	function getLowerLimit() {
+		return physics.joint_getLowerLimit(id);
+	}
+	function getUpperLimit() {
+		return physics.joint_getUpperLimit(id);
+	}
+	function setLimits(lower, upper) {
+		return physics.joint_setLimits(id, lower, upper);
+	}
+	function isMotorEnabled() {
+		return physics.joint_isMotorEnabled(id);
+	}
+	function enableMotor(flag) {
+		return physics.joint_enableMotor(id, flag);
+	}
+	function setMotorSpeed(speed) {
+		return physics.joint_setMotorSpeed(id, speed);
+	}
+	function setMaxMotorForce(force) {
+		return physics.joint_setMaxMotorForce(id, force);
+	}
+	function getMotorForce() {
+		return physics.joint_getMotorForce(id);
+	}
+}
+class emo.physics.PrismaticJoint extends emo.physics.Joint {
+	function constructor(_id) {
+		id = _id;
+		type = JOINT_TYPE_PRISMATIC;
+	}
+	function getJointTranslation() {
+		return physics.joint_getJointTranslation(id);
+	}
+	function getJointSpeed() {
+		return physics.joint_getJointSpeed(id);
+	}
+	function isLimitedEnabled() {
+		return physics.joint_isLimitedEnabled(id);
+	}
+	function enableLimit(flag) {
+		return physics.joint_enableLimit(id, flag);
+	}
+	function getLowerLimit() {
+		return physics.joint_getLowerLimit(id);
+	}
+	function getUpperLimit() {
+		return physics.joint_getUpperLimit(id);
+	}
+	function setLimits(lower, upper) {
+		return physics.joint_setLimits(id, lower, upper);
+	}
+	function isMotorEnabled() {
+		return physics.joint_isMoterEnabled(id);
+	}
+	function enableMoter(flag) {
+		return physics.joint_enableMoter(id, flag);
+	}
+	function setMotorSpeed(speed) {
+		return physics.joint_setMotorSpeed(id, speed);
+	}
+	function setMaxMotorForce(force) {
+		return physics.joint_setMaxMotorForce(id, force);
+	}
+	function getMotorForce() {
+		return physics.joint_getMotorForce(id);
+	}
+}
+class emo.physics.PulleyJoint extends emo.physics.Joint {
+	function constructor(_id) {
+		id = _id;
+		type = JOINT_TYPE_PULLEY;
+	}
+	function getGroundAnchorA() {
+		return emo.Vec2.getInstance(physics.joint_getGroundAnchorA(id));
+	}
+	function getGroundAnchorB() {
+		return emo.Vec2.getInstance(physics.joint_getGroundAnchorB(id));
+	}
+	function getLength1() {
+		return physics.joint_getLength1(id);
+	}
+	function getLength2() {
+		return physics.joint_getLength2(id);
+	}
+	function getRatio() {
+		return physics.joint_getRatio(id);
+	}
+}
+class emo.physics.RevoluteJoint extends emo.physics.Joint {
+	function constructor(_id) {
+		id = _id;
+		type = JOINT_TYPE_REVOLUTE;
+	}
+	function getJointAngle() {
+		return physics.joint_getJointAngle(id);
+	}
+	function getJointSpeed() {
+		return physics.joint_getJointSpeed(id);
+	}
+	function isLimitedEnabled() {
+		return physics.joint_isLimitedEnabled(id);
+	}
+	function enableLimit(flag) {
+		return physics.joint_enableLimit(id, flag);
+	}
+	function getLowerLimit() {
+		return physics.joint_getLowerLimit(id);
+	}
+	function getUpperLimit() {
+		return physics.joint_getUpperLimit(id);
+	}
+	function setLimits(lower, upper) {
+		return physics.joint_setLimits(id, lower, upper);
+	}
+	function isMotorEnabled() {
+		return physics.joint_isMoterEnabled(id);
+	}
+	function enableMoter(flag) {
+		return physics.joint_enableMoter(id, flag);
+	}
+	function setMotorSpeed(speed) {
+		return physics.joint_setMotorSpeed(id, speed);
+	}
+	function setMaxMotorTorque(torque) {
+		return physics.joint_setMaxMotorTorque(id, torque);
+	}
+	function getMotorTorque() {
+		return physics.joint_getMotorTorque(id);
+	}
+}
+class emo.physics.WeldJoint extends emo.physics.Joint {
+	function constructor(_id) {
+		id = _id;
+		type = JOINT_TYPE_WELD;
+	}
+}
 class emo.physics.JointDef {
 	id       = null;
 	type     = null;
@@ -361,16 +608,6 @@ class emo.physics.LineJointDef extends emo.physics.JointDef {
 	}
 	function initialize(bodyA, bodyB, anchor, axis) {
 		physics.initLineJointDef(id, bodyA, bodyB, anchor, axis);
-	}
-}
-class emo.physics.MouseJointDef extends emo.physics.JointDef {
-	type = JOINT_TYPE_MOUSE;
-	target       = null;
-	maxForce     = null;
-	frequencyHz  = null;
-	dampingRatio = null;
-	function constructor() {
-		id = physics.newJointDef(type);
 	}
 }
 class emo.physics.PrismaticJointDef extends emo.physics.JointDef {
@@ -451,6 +688,10 @@ class emo.physics.PolygonShape {
 	function getVertexCount() {
 		return physics.polygonShape_getVertexCount(id);
 	}
+	
+	function setRadius(radius) {
+		return physics.polygonShape_radius(id, radius);
+	}
 }
 
 class emo.physics.CircleShape {
@@ -462,10 +703,10 @@ class emo.physics.CircleShape {
 	}
 
 	function setPosition(position) {
-		return physics.circleShape_position(position);
+		return physics.circleShape_position(id, position);
 	}
 	
 	function setRadius(radius) {
-		return physics.circleShape_radius(radius);
+		return physics.circleShape_radius(id, radius);
 	}
 }

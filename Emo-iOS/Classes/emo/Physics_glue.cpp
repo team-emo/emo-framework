@@ -1000,6 +1000,628 @@ SQInteger emoPhysicsBody_IsFixedRotation(HSQUIRRELVM v) {
 	
 	return 1;
 }
+SQInteger emoPhysicsCircleShape_position(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_INSTANCE) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2CircleShape* shape;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&shape, 0);
+
+	b2Vec2 value;
+	getVec2Instance(v, 3, &value);
+	
+	shape->m_p = value;
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsCircleShape_radius(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_INSTANCE) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2CircleShape* shape;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&shape, 0);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	shape->m_radius = value;
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsPolygonShape_radius(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_INSTANCE) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2PolygonShape* shape;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&shape, 0);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	shape->m_radius = value;
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetAnchorA(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	pushVec2(v, joint->GetAnchorA());
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetAnchorB(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	pushVec2(v, joint->GetAnchorB());
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetReactionForce(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	pushVec2(v, joint->GetReactionForce(value));
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetReactionTorque(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	sq_pushfloat(v, joint->GetReactionTorque(value));
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_SetLength(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2DistanceJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	joint->SetLength(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetLength(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2DistanceJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	sq_pushfloat(v, joint->GetLength());
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_SetFrequency(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2DistanceJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	joint->SetFrequency(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetFrequency(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2DistanceJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	sq_pushfloat(v, joint->GetFrequency());
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_SetDampingRatio(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2DistanceJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	joint->SetDampingRatio(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetDampingRatio(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2DistanceJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	sq_pushfloat(v, joint->GetDampingRatio());
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_SetMaxForce(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2FrictionJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	joint->SetMaxForce(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetMaxForce(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2FrictionJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	sq_pushfloat(v, joint->GetMaxForce());
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_SetMaxTorque(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2FrictionJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	joint->SetMaxTorque(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetMaxTorque(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2FrictionJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	sq_pushfloat(v, joint->GetMaxTorque());
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_SetRatio(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2GearJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	joint->SetRatio(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetRatio(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2GearJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	sq_pushfloat(v, joint->GetRatio());
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetJointTranslation(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	if (joint->GetType() == e_lineJoint) {
+		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);
+		sq_pushfloat(v, _joint->GetJointTranslation());
+	} else if (joint->GetType() == e_prismaticJoint) {
+		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
+		sq_pushfloat(v, _joint->GetJointTranslation());
+	} else {
+		return 0;
+	}
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetJointSpeed(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	if (joint->GetType() == e_lineJoint) {
+		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);
+		sq_pushfloat(v, _joint->GetJointSpeed());
+	} else if (joint->GetType() == e_prismaticJoint) {
+		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
+		sq_pushfloat(v, _joint->GetJointSpeed());
+	} else if (joint->GetType() == e_revoluteJoint) {
+		b2RevoluteJoint* _joint = reinterpret_cast<b2RevoluteJoint*>(joint);
+		sq_pushfloat(v, _joint->GetJointSpeed());
+	} else {
+		return 0;
+	}
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetJointAngle(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2RevoluteJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	sq_pushfloat(v, joint->GetJointAngle());
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_IsLimitedEnabled(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	if (joint->GetType() == e_lineJoint) {
+		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);
+		sq_pushinteger(v, _joint->IsLimitEnabled() ? EMO_YES : EMO_NO);
+	} else if (joint->GetType() == e_prismaticJoint) {
+		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
+		sq_pushinteger(v, _joint->IsLimitEnabled() ? EMO_YES : EMO_NO);
+	} else if (joint->GetType() == e_revoluteJoint) {
+		b2RevoluteJoint* _joint = reinterpret_cast<b2RevoluteJoint*>(joint);
+		sq_pushinteger(v, _joint->IsLimitEnabled() ? EMO_YES : EMO_NO);
+	} else {
+		return 0;
+	}
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_EnableLimit(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	SQInteger value;
+	sq_getinteger(v, 3, &value);
+	bool flag = value == EMO_YES ? true : false;
+	
+	if (joint->GetType() == e_lineJoint) {
+		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);
+		_joint->EnableLimit(flag);
+	} else if (joint->GetType() == e_prismaticJoint) {
+		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
+		_joint->EnableLimit(flag);
+	} else if (joint->GetType() == e_revoluteJoint) {
+		b2RevoluteJoint* _joint = reinterpret_cast<b2RevoluteJoint*>(joint);
+		_joint->EnableLimit(flag);
+	} else {
+		return 0;
+	}
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetLowerLimit(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	if (joint->GetType() == e_lineJoint) {
+		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);
+		sq_pushfloat(v, _joint->GetLowerLimit());
+	} else if (joint->GetType() == e_prismaticJoint) {
+		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
+		sq_pushfloat(v, _joint->GetLowerLimit());
+	} else if (joint->GetType() == e_revoluteJoint) {
+		b2RevoluteJoint* _joint = reinterpret_cast<b2RevoluteJoint*>(joint);
+		sq_pushfloat(v, _joint->GetLowerLimit());
+	} else {
+		return 0;
+	}
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetUpperLimit(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	if (joint->GetType() == e_lineJoint) {
+		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);
+		sq_pushfloat(v, _joint->GetUpperLimit());
+	} else if (joint->GetType() == e_prismaticJoint) {
+		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
+		sq_pushfloat(v, _joint->GetUpperLimit());
+	} else if (joint->GetType() == e_revoluteJoint) {
+		b2RevoluteJoint* _joint = reinterpret_cast<b2RevoluteJoint*>(joint);
+		sq_pushfloat(v, _joint->GetUpperLimit());
+	} else {
+		return 0;
+	}
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_SetLimits(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	SQFloat lower, upper;
+	sq_getfloat(v, 3, &lower);
+	sq_getfloat(v, 4, &upper);
+	
+	if (joint->GetType() == e_lineJoint) {
+		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);
+		_joint->SetLimits(lower, upper);
+	} else if (joint->GetType() == e_prismaticJoint) {
+		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
+		_joint->SetLimits(lower, upper);
+	} else if (joint->GetType() == e_revoluteJoint) {
+		b2RevoluteJoint* _joint = reinterpret_cast<b2RevoluteJoint*>(joint);
+		_joint->SetLimits(lower, upper);
+	} else {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsJoint_IsMotorEnabled(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	if (joint->GetType() == e_prismaticJoint) {
+		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
+		sq_pushinteger(v, _joint->IsMotorEnabled() ? EMO_YES : EMO_NO);
+	} else if (joint->GetType() == e_revoluteJoint) {
+		b2RevoluteJoint* _joint = reinterpret_cast<b2RevoluteJoint*>(joint);
+		sq_pushinteger(v, _joint->IsMotorEnabled() ? EMO_YES : EMO_NO);
+	} else {
+		return 0;
+	}
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_EnableMotor(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	SQInteger value;
+	sq_getinteger(v, 3, &value);
+	bool flag = value == EMO_YES ? true : false;
+	
+	if (joint->GetType() == e_lineJoint) {
+		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);
+		_joint->EnableMotor(flag);
+	} else if (joint->GetType() == e_prismaticJoint) {
+		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
+		_joint->EnableMotor(flag);
+	} else if (joint->GetType() == e_revoluteJoint) {
+		b2RevoluteJoint* _joint = reinterpret_cast<b2RevoluteJoint*>(joint);
+		_joint->EnableMotor(flag);
+	} else {
+		return 0;
+	}
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsJoint_SetMotorSpeed(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	if (joint->GetType() == e_lineJoint) {
+		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);
+		_joint->SetMotorSpeed(value);
+	} else if (joint->GetType() == e_prismaticJoint) {
+		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
+		_joint->SetMotorSpeed(value);
+	} else if (joint->GetType() == e_revoluteJoint) {
+		b2RevoluteJoint* _joint = reinterpret_cast<b2RevoluteJoint*>(joint);
+		_joint->SetMotorSpeed(value);
+	} else {
+		return 0;
+	}
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsJoint_SetMaxMotorForce(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	if (joint->GetType() == e_lineJoint) {
+		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);
+		_joint->SetMaxMotorForce(value);
+	} else if (joint->GetType() == e_prismaticJoint) {
+		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
+		_joint->SetMaxMotorForce(value);
+	} else {
+		return 0;
+	}
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetMotorForce(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Joint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	if (joint->GetType() == e_lineJoint) {
+		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);
+		sq_pushfloat(v, _joint->GetMotorForce());
+	} else if (joint->GetType() == e_prismaticJoint) {
+		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
+		sq_pushfloat(v, _joint->GetMotorForce());
+	} else {
+		return 0;
+	}
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_SetMaxMotorTorque(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 0;
+	}
+	b2RevoluteJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	SQFloat value;
+	sq_getfloat(v, 3, &value);
+	
+	joint->SetMaxMotorTorque(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetMotorTorque(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2RevoluteJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	sq_pushfloat(v, joint->GetMotorTorque());
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetGroundAnchorA(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2PulleyJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	pushVec2(v, joint->GetGroundAnchorA());
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetGroundAnchorB(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2PulleyJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	pushVec2(v, joint->GetGroundAnchorB());
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetLength1(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2PulleyJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	sq_pushfloat(v, joint->GetLength1());
+	
+	return 1;
+}
+SQInteger emoPhysicsJoint_GetLength2(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2PulleyJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	sq_pushfloat(v, joint->GetLength2());
+	
+	return 1;
+}
+
 #if __cplusplus
 }   // Extern C
 #endif

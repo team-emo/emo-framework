@@ -25,7 +25,9 @@ void initPhysicsFunctions() {
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "polygonShape_setAsEdge",   emoPhysicsPolygonShape_SetAsEdge);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "polygonShape_getVertex",   emoPhysicsPolygonShape_GetVertex);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "polygonShape_getVertexCount",   emoPhysicsPolygonShape_GetVertexCount);
-	
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "polygonShape_radius",    emoPhysicsPolygonShape_radius);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "circleShape_radius",     emoPhysicsCircleShape_radius);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "circleShape_position",   emoPhysicsCircleShape_position);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "body_setTransform",   emoPhysicsBody_SetTransform);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "body_getPosition",   emoPhysicsBody_GetPosition);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "body_getAngle",   emoPhysicsBody_GetAngle);
@@ -63,4 +65,40 @@ void initPhysicsFunctions() {
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "body_isActive",   emoPhysicsBody_IsActive);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "body_setFixedRotation",   emoPhysicsBody_SetFixedRotation);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "body_isFixedRotation",   emoPhysicsBody_IsFixedRotation);
+	
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getAnchorA",   emoPhysicsJoint_GetAnchorA);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getAnchorB",   emoPhysicsJoint_GetAnchorB);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getReactionForce",   emoPhysicsJoint_GetReactionForce);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getReactionTorque",   emoPhysicsJoint_GetReactionTorque);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_setLength",   emoPhysicsJoint_SetLength);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getLength",   emoPhysicsJoint_GetLength);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_setFrequency",   emoPhysicsJoint_SetFrequency);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getFrequency",   emoPhysicsJoint_GetFrequency);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_setDampingRatio",   emoPhysicsJoint_SetDampingRatio);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getDampingRatio",   emoPhysicsJoint_GetDampingRatio);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_setMaxForce",   emoPhysicsJoint_SetMaxForce);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getMaxForce",   emoPhysicsJoint_GetMaxForce);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_setMaxTorque",   emoPhysicsJoint_SetMaxTorque);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getMaxTorque",   emoPhysicsJoint_GetMaxTorque);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_setRatio",   emoPhysicsJoint_SetRatio);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getRatio",   emoPhysicsJoint_GetRatio);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getJointTranslation",   emoPhysicsJoint_GetJointTranslation);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getJointSpeed",   emoPhysicsJoint_GetJointSpeed);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getJointAngle",   emoPhysicsJoint_GetJointAngle);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_isLimitedEnabled",   emoPhysicsJoint_IsLimitedEnabled);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_enableLimit",   emoPhysicsJoint_EnableLimit);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getLowerLimit",   emoPhysicsJoint_GetLowerLimit);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getUpperLimit",   emoPhysicsJoint_GetUpperLimit);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_setLimits",   emoPhysicsJoint_SetLimits);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_isMotorEnabled",   emoPhysicsJoint_IsMotorEnabled);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_enableMotor",   emoPhysicsJoint_EnableMotor);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_setMotorSpeed",   emoPhysicsJoint_SetMotorSpeed);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_setMaxMotorTorque",   emoPhysicsJoint_SetMaxMotorTorque);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getMotorForce",   emoPhysicsJoint_GetMotorForce);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_setMaxMotorForce",   emoPhysicsJoint_SetMaxMotorForce);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getMotorTorque",   emoPhysicsJoint_GetMotorTorque);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getGroundAnchorA",   emoPhysicsJoint_GetGroundAnchorA);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getGroundAnchorB",   emoPhysicsJoint_GetGroundAnchorB);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getLength1",   emoPhysicsJoint_GetLength1);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getLength2",   emoPhysicsJoint_GetLength2);
 }
