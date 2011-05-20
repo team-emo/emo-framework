@@ -13,9 +13,6 @@ const OS_IOS     = "iOS";
 const ANDROID_GRAPHICS_DIR = "graphics/";
 const ANDROID_SOUNDS_DIR   = "sounds/";
 
-const EMO_NO          = 0;
-const EMO_YES         = 1;
-
 const EMO_NO_ERROR    = 0x0000;
 const EMO_ERROR       = 0x0001;
 const LOG_INFO        = 0x0002;
@@ -213,16 +210,16 @@ const AUDIO_CHANNEL_STOPPED   = 1;
 const AUDIO_CHANNEL_PAUSED    = 2;
 const AUDIO_CHANNEL_PLAYING   = 3;
 
-const BODY_TYPE_STATIC    = 0;
-const BODY_TYPE_KINEMATIC = 1;
-const BODY_TYPE_DYNAMIC   = 2;
-
-const SHAPE_TYPE_UNKNOWN = -1;
-const SHAPE_TYPE_CIRCLE  =  0;
-const SHAPE_TYPE_POLYGON =  1;
-
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
+
+function emo::toRadian(degree) {
+	return degree * PI / 180.0;
+}
+
+function emo::toDegree(radian) {
+	return radian * 180.0 / PI;
+}
 
 class emo.Instance {
 	type = null;
@@ -690,10 +687,10 @@ class emo.AudioChannel {
     function getMaxVolume() { return manager.getMaxVolume(id); }
     function getMinVolume() { return manager.getMinVolume(id); }
     function setLoop(enable) {
-        return manager.setLoop(id, enable ? EMO_YES : EMO_NO);
+        return manager.setLoop(id, enable);
     }
     function isLoop() {
-        return manager.isLoop(id) == EMO_YES ? true : false;
+        return manager.isLoop(id);
     }
     function getState() { return manager.getState(id); }
     function close() { return manager.close(id); }

@@ -22,7 +22,7 @@
 	[viewController awakeFromNib];
 	didReturnRootView = FALSE;
 	
-	sections = [[NSArray alloc] initWithObjects:@"Basic", @"Animation", nil];
+	sections = [[NSArray alloc] initWithObjects:@"Basic", @"Animation", @"Physics", nil];
 	examples = [[NSMutableArray alloc] init];
 	
 	// Basic
@@ -38,6 +38,11 @@
 		[NSArray arrayWithObjects:@"Using Modifier",   @"modifier_rotate_example.nut", nil],
 		[NSArray arrayWithObjects:@"Modifiers with Easing", @"modifier_move_example.nut", nil],
 		nil]];
+
+	// Physics
+	[examples addObject: [NSArray arrayWithObjects:
+						  [NSArray arrayWithObjects:@"Hello, world (No Graphics)", @"box2d_helloworld.nut", nil],
+						  nil]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

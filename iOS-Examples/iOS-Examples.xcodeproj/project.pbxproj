@@ -15,6 +15,9 @@
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
+		F908827613872BFD0065EC77 /* box2d_helloworld.nut in Resources */ = {isa = PBXBuildFile; fileRef = F908827513872BEA0065EC77 /* box2d_helloworld.nut */; };
+		F908828713872D780065EC77 /* Physics_contact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F908828313872D780065EC77 /* Physics_contact.cpp */; };
+		F908828813872D780065EC77 /* Physics_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F908828513872D780065EC77 /* Physics_util.cpp */; };
 		F921CCA8136FFBAC00F058FF /* block.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9A136FFBAC00F058FF /* block.png */; };
 		F921CCA9136FFBAC00F058FF /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9B136FFBAC00F058FF /* blocks.png */; };
 		F921CCAA136FFBAC00F058FF /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9C136FFBAC00F058FF /* dog.png */; };
@@ -127,6 +130,7 @@
 		F967A8ED1372A3F800BEF871 /* modifier_move_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F967A8C21372A17800BEF871 /* modifier_move_example.nut */; };
 		F97C156F13722E1A00551C94 /* modifier_rotate_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */; };
 		F9856D8E1375576B00F6C00F /* tiles_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9856D8D1375576B00F6C00F /* tiles_example.nut */; };
+		F9D78CD313872E8A0076C937 /* physics.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D78CD213872E8A0076C937 /* physics.nut */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -143,6 +147,11 @@
 		28F335F01007B36200424DE2 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* iOS_Examples-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iOS_Examples-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		F908827513872BEA0065EC77 /* box2d_helloworld.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = box2d_helloworld.nut; path = Resources/box2d_helloworld.nut; sourceTree = "<group>"; };
+		F908828313872D780065EC77 /* Physics_contact.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Physics_contact.cpp; sourceTree = "<group>"; };
+		F908828413872D780065EC77 /* Physics_contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Physics_contact.h; sourceTree = "<group>"; };
+		F908828513872D780065EC77 /* Physics_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Physics_util.cpp; sourceTree = "<group>"; };
+		F908828613872D780065EC77 /* Physics_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Physics_util.h; sourceTree = "<group>"; };
 		F921CC9A136FFBAC00F058FF /* block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.png; sourceTree = "<group>"; };
 		F921CC9B136FFBAC00F058FF /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blocks.png; sourceTree = "<group>"; };
 		F921CC9C136FFBAC00F058FF /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dog.png; sourceTree = "<group>"; };
@@ -339,6 +348,7 @@
 		F967A8C21372A17800BEF871 /* modifier_move_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = modifier_move_example.nut; path = Resources/modifier_move_example.nut; sourceTree = "<group>"; };
 		F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = modifier_rotate_example.nut; path = Resources/modifier_rotate_example.nut; sourceTree = "<group>"; };
 		F9856D8D1375576B00F6C00F /* tiles_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = tiles_example.nut; path = Resources/tiles_example.nut; sourceTree = "<group>"; };
+		F9D78CD213872E8A0076C937 /* physics.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics.nut; path = Resources/physics.nut; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -417,9 +427,11 @@
 				F967A8C21372A17800BEF871 /* modifier_move_example.nut */,
 				F921CC9F136FFBAC00F058FF /* periodic_update_example.nut */,
 				F921CCA0136FFBAC00F058FF /* runtime.nut */,
+				F9D78CD213872E8A0076C937 /* physics.nut */,
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* iOS_Examples-Info.plist */,
+				F908827513872BEA0065EC77 /* box2d_helloworld.nut */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -468,6 +480,10 @@
 		F92B7170136FD2C000DD803C /* emo */ = {
 			isa = PBXGroup;
 			children = (
+				F908828313872D780065EC77 /* Physics_contact.cpp */,
+				F908828413872D780065EC77 /* Physics_contact.h */,
+				F908828513872D780065EC77 /* Physics_util.cpp */,
+				F908828613872D780065EC77 /* Physics_util.h */,
 				F94C2BD71384849C00D12D13 /* EmoPhysics.h */,
 				F94C2BD81384849C00D12D13 /* EmoPhysics.m */,
 				F94C2BD91384849C00D12D13 /* Physics_glue.cpp */,
@@ -813,6 +829,8 @@
 				F97C156F13722E1A00551C94 /* modifier_rotate_example.nut in Resources */,
 				F967A8ED1372A3F800BEF871 /* modifier_move_example.nut in Resources */,
 				F9856D8E1375576B00F6C00F /* tiles_example.nut in Resources */,
+				F908827613872BFD0065EC77 /* box2d_helloworld.nut in Resources */,
+				F9D78CD313872E8A0076C937 /* physics.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -914,6 +932,8 @@
 				F94C2BD61384848900D12D13 /* b2WeldJoint.cpp in Sources */,
 				F94C2BDB1384849C00D12D13 /* EmoPhysics.m in Sources */,
 				F94C2BDC1384849C00D12D13 /* Physics_glue.cpp in Sources */,
+				F908828713872D780065EC77 /* Physics_contact.cpp in Sources */,
+				F908828813872D780065EC77 /* Physics_util.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
