@@ -8,14 +8,36 @@ function emo::onLoad() {
 	groundBodyDef.position = emo.Vec2(0, -10);
 	
 	local groundBody = world.createBody(groundBodyDef);
+	
 	local groundBox = emo.physics.PolygonShape();
-	local fixture = groundBody.createFixture(groundBox, 0);
+	groundBox.setAsBox(50, 10);
+	groundBody.createFixture(groundBox, 0);
+
+	local bodyDef = emo.physics.BodyDef();
+	bodyDef.type = PHYSICS_BODY_TYPE_DYNAMIC;
+	bodyDef.position = emo.Vec2(0, 4);
+	local body = world.createBody(bodyDef);
 	
-	print(groundBox.setAsBox(50, 10));
-	print(groundBox.getVertexCount());
+	local dynamicBox = emo.physics.PolygonShape();
+	dynamicBox.setAsBox(1, 1);
 	
-	local v = groundBox.getVertex(0);
+	local fixtureDef = emo.physics.FixtureDef();
+	fixtureDef.shape = dynamicBox;
+	fixtureDef.density  = 1;
+	fixtureDef.friction = 0.3;
+	body.createFixture(fixtureDef);
 	
-	print(v.x);
-	print(v.y);
+	local timeStep = 1.0 / 60.0;
+	local velocityIterations = 6;
+	local positionIterations  = 2;
+	
+	for (local i = 0; i < 60; ++i) {
+		world.step(timeStep, velocityIterations, positionIterations);
+		world.clearForces();
+		
+		local position = body.getPosition();
+		local angle = body.getAngle();
+		
+		print(position.x + " " + position.y + " " + angle);
+	}
 }

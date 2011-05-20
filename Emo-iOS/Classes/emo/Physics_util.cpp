@@ -5,10 +5,15 @@
 extern "C" {
 #endif
 
+#include "stdio.h"
 #include "Physics_util.h"
 #include "Constants.h"
 #include "VmFunc.h"
 
+extern void LOGI(const char* msg);
+extern void LOGW(const char* msg);
+extern void LOGE(const char* msg);
+	
 /*
  * Get b2Vec2 from emo.Vec2
  */
@@ -82,7 +87,7 @@ void getFixtureDefInstance(HSQUIRRELVM v, int idx, b2FixtureDef* def) {
 	
 	SQUserPointer ptr_shape;
 	if (getInstanceMemberAsInstance(v, idx, "shape", "id", &ptr_shape)) {
-		def->shape = reinterpret_cast<b2Shape*>(ptr_shape); 
+		def->shape = reinterpret_cast<b2Shape*>(ptr_shape);
 	}
 }
 

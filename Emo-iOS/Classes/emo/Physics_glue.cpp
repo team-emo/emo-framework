@@ -378,16 +378,17 @@ SQInteger emoPhysicsPolygonShape_SetAsBox(HSQUIRRELVM v) {
 	sq_getfloat(v, 3, &hx);
 	sq_getfloat(v, 4, &hy);
 	
-	b2Vec2 center;
-	if (sq_gettype(v, 5) == OT_INSTANCE) {
+	if (sq_gettype(v, 5) == OT_INSTANCE && sq_gettype(v, 6) != OT_NULL) {
+		b2Vec2 center;
 		getVec2Instance(v, 5, &center);
-	}
-	float32 angle;
-	if (sq_gettype(v, 6) != OT_NULL) {
+		
+		float32 angle;
 		sq_getfloat(v, 6, &angle);
+		
+		shape->SetAsBox(hx, hy, center, angle);
+	} else {
+		shape->SetAsBox(hx, hy);
 	}
-	
-	shape->SetAsBox(hx, hy, center, angle);
 	
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
