@@ -19,11 +19,10 @@
 #ifndef B2_BROAD_PHASE_H
 #define B2_BROAD_PHASE_H
 
-#include "Box2D/Common/b2Settings.h"
-#include "Box2D/Collision/b2Collision.h"
-#include "Box2D/Collision/b2DynamicTree.h"
-#include <stdlib.h>
-//#include <algorithm>
+#include <Box2D/Common/b2Settings.h>
+#include <Box2D/Collision/b2Collision.h>
+#include <Box2D/Collision/b2DynamicTree.h>
+#include <algorithm>
 
 struct b2Pair
 {
@@ -159,36 +158,6 @@ inline int32 b2BroadPhase::ComputeHeight() const
 	return m_tree.ComputeHeight();
 }
 
-//The return value of this function should represent whether elem1 is considered less than,
-//equal to, or greater than elem2 by returning, respectively, a negative value, zero or a positive value.
-inline int b2PairCompareQSort(const void * elem1, const void * elem2)
-{
-   b2Pair* pair1 = (b2Pair*) elem1;
-   b2Pair* pair2 = (b2Pair*) elem2;
-
-   if (pair1->proxyIdA < pair2->proxyIdA)
-   {
-      return -1;
-   }
-
-   if (pair1->proxyIdA == pair2->proxyIdA)
-   {
-      if( pair1->proxyIdB < pair2->proxyIdB ) {
-         return -1;
-      }
-      else if(pair1->proxyIdB > pair2->proxyIdB) {
-         return 1;
-      }
-      else {
-         return 0;
-      }
-   }
-   else {
-      return 1;
-   }
-
-}
-
 template <typename T>
 void b2BroadPhase::UpdatePairs(T* callback)
 {
@@ -216,10 +185,7 @@ void b2BroadPhase::UpdatePairs(T* callback)
 	m_moveCount = 0;
 
 	// Sort the pair buffer to expose duplicates.
-	//std::sort(m_pairBuffer, m_pairBuffer + m_pairCount, b2PairLessThan);
-
-	// FIX from http://www.box2d.org/forum/viewtopic.php?f=7&t=4756&start=0 to get rid of stl dependency
-	qsort(m_pairBuffer, sizeof(m_pairBuffer) / sizeof(struct b2Pair) , sizeof(struct b2Pair), b2PairCompareQSort);
+	std::sort(m_pairBuffer, m_pairBuffer + m_pairCount, b2PairLessThan);
 
 	// Send the pairs back to the client.
 	int32 i = 0;
@@ -247,7 +213,6 @@ void b2BroadPhase::UpdatePairs(T* callback)
 	// Try to keep the tree balanced.
 	m_tree.Rebalance(4);
 }
-
 
 template <typename T>
 inline void b2BroadPhase::Query(T* callback, const b2AABB& aabb) const

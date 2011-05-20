@@ -19,12 +19,12 @@
 #ifndef B2_MATH_H
 #define B2_MATH_H
 
-#include "Box2D/Common/b2Settings.h"
+#include <Box2D/Common/b2Settings.h>
 
-#include <math.h>
-#include <float.h>
-#include <stddef.h>
-#include <limits.h>
+#include <cmath>
+#include <cfloat>
+#include <cstddef>
+#include <limits>
 
 /// This function is used to ensure that a floating point number is
 /// not a NaN or infinity.
@@ -36,7 +36,8 @@ inline bool b2IsValid(float32 x)
 		return false;
 	}
 
-	return true;
+	float32 infinity = std::numeric_limits<float32>::infinity();
+	return -infinity < x && x < infinity;
 }
 
 /// This is a approximate yet fast inverse square-root.
