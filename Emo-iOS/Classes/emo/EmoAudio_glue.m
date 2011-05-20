@@ -438,11 +438,7 @@ SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
         return 1;
     }
 	
-    if ([engine.audioManager getChannelLooping:channelIndex]) {
-        sq_pushbool(v, true);
-    } else {
-        sq_pushbool(v, false);
-    }
+    sq_pushbool(v, [engine.audioManager getChannelLooping:channelIndex]);
 	
     return 1;
 	
