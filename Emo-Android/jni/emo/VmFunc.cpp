@@ -294,13 +294,116 @@ void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFU
 }
 
 /*
+ * get boolean value from the stack.
+ * this function accepts both integer(1,0) and bool(true,false).
+ * returns true if succeeds.
+ */
+bool getBool(HSQUIRRELVM v, int idx, SQBool* value) {
+	if (sq_gettype(v, idx) == OT_INTEGER) {
+		SQInteger val;
+		sq_getinteger(v, idx, &val);
+		*value = (val == 1);
+	} else if (sq_gettype(v, idx) == OT_BOOL) {
+		sq_getbool(v, idx, value);
+	} else {
+		return false;
+	}
+	
+	return true;
+}
+
+/*
+ * get instance member value as float
+ */
+bool getInstanceMemberAsInteger(HSQUIRRELVM v, int idx, const char *name, SQInteger* value) {
+	if (sq_gettype(v, idx) == OT_NULL) return false;
+	sq_pushstring(v, name, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
+	if (sq_gettype(v, -1) == OT_NULL)  return false;
+	sq_getinteger(v, -1, value);
+	sq_pop(v, 1);
+	
+	return true;
+}
+
+/*
  * get instance member value as float
  */
 bool getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat* value) {
 	if (sq_gettype(v, idx) == OT_NULL) return false;
 	sq_pushstring(v, name, -1);
-	sq_get(v, idx);
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
+	if (sq_gettype(v, -1) == OT_NULL)  return false;
 	sq_getfloat(v, -1, value);
+	sq_pop(v, 1);
+	
+	return true;
+}
+	
+/*
+ * get instance member value as bool
+ * this function accepts both integer(1,0) and bool(true,false).
+ */
+bool getInstanceMemberAsBool(HSQUIRRELVM v, int idx, const char *name, bool* value) {
+	if (sq_gettype(v, idx) == OT_NULL) return false;
+	sq_pushstring(v, name, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
+
+	SQBool flag;
+	if (!getBool(v, -1, &flag)) {
+		sq_pop(v, 1);
+		return false;
+	}
+	
+	*value = flag;
+	
+	sq_pop(v, 1);
+	return true;
+}
+
+/*
+ * get instance member value as table
+ */
+bool getInstanceMemberAsTable(HSQUIRRELVM v, int idx, const char *cname, const char *name, SQFloat* value) {
+	if (sq_gettype(v, idx) == OT_NULL) return false;
+	sq_pushstring(v, cname, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
+	sq_pushstring(v, name, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, -2))) return false;
+	if (sq_gettype(v, -1) == OT_NULL) return false;
+	sq_getfloat(v, -1, value);
+	sq_pop(v, 1);
+	return true;
+}
+
+/*
+ * get instance member value as user pointer
+ */
+bool getInstanceMemberAsUserPointer(HSQUIRRELVM v, int idx, 
+					const char *cname, const char *name, SQUserPointer* value) {
+	if (sq_gettype(v, idx) == OT_NULL) return false;
+	sq_pushstring(v, cname, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
+	sq_pushstring(v, name, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, -2))) return false;
+	if (sq_gettype(v, -1) != OT_USERPOINTER) return false;
+	sq_getuserpointer(v, -1, value);
+	sq_pop(v, 1);
+	return true;
+}
+	
+/*
+ * get instance member pointer from instance
+ */
+bool getInstanceMemberAsInstance(HSQUIRRELVM v, int idx, 
+			const char *cname, const char *name, SQUserPointer* value) {
+	if (sq_gettype(v, idx) == OT_NULL) return false;
+	sq_pushstring(v, cname, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
+	sq_pushstring(v, name, -1);
+	if (!SQ_SUCCEEDED(sq_get(v, -2))) return false;
+	if (sq_gettype(v, -1) != OT_INSTANCE) return false;
+	sq_getinstanceup(v, -1, value, 0);
 	sq_pop(v, 1);
 	return true;
 }

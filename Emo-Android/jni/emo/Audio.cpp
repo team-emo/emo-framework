@@ -388,11 +388,11 @@ namespace emo {
         return false;
     }
 
-    bool Audio::setChannelLooping(int index, SQInteger enable) {
+    bool Audio::setChannelLooping(int index, SQBool enable) {
         Channel* channel = &this->channels[index];
 
         SLresult result;
-        if (enable == EMO_YES) {
+        if (enable) {
             result = (*channel->playerSeek)->SetLoop(channel->playerSeek, SL_BOOLEAN_TRUE, 0, SL_TIME_UNKNOWN);
         } else {
             result = (*channel->playerSeek)->SetLoop(channel->playerSeek, SL_BOOLEAN_FALSE, 0, SL_TIME_UNKNOWN);
@@ -691,11 +691,10 @@ SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
     }
 
     SQInteger channelIndex;
-    SQInteger useLoop;
+    SQBool useLoop;
 
-    if (sq_gettype(v, 2) != OT_NULL && sq_gettype(v, 3) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_INTEGER && getBool(v, 3, &useLoop)) {
         sq_getinteger(v, 2, &channelIndex);
-        sq_getinteger(v, 3, &useLoop);
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
         return 1;
@@ -719,7 +718,7 @@ SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
 SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
         LOGE("emoGetAudioChannelLooping: audio engine is closed");
-        sq_pushinteger(v, EMO_NO);
+        sq_pushbool(v, false);
         return 1;
     }
 
@@ -728,21 +727,21 @@ SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
     if (sq_gettype(v, 2) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
     } else {
-        sq_pushinteger(v, EMO_NO);
+        sq_pushbool(v, false);
         LOGE("emoGetAudioChannelLooping: invalid parameter type");
         return 1;
     }
 
     if (channelIndex >= engine->audio->getChannelCount()) {
         LOGE("emoGetAudioChannelLooping: invalid channel index");
-        sq_pushinteger(v, EMO_NO);
+        sq_pushbool(v, false);
         return 1;
     }
 
     if (engine->audio->getChannelLooping(channelIndex)) {
-        sq_pushinteger(v, EMO_YES);
+        sq_pushbool(v, true);
     } else {
-        sq_pushinteger(v, EMO_NO);
+        sq_pushbool(v, false);
     }
 
     return 1;

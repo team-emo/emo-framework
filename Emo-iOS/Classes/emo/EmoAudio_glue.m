@@ -391,11 +391,10 @@ SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
     }
 	
     SQInteger channelIndex;
-    SQInteger useLoop;
+    SQBool useLoop;
 	
-    if (sq_gettype(v, 2) != OT_NULL && sq_gettype(v, 3) == OT_INTEGER) {
+    if (sq_gettype(v, 2) != OT_INTEGER && getBool(v, 3, &useLoop)) {
         sq_getinteger(v, 2, &channelIndex);
-        sq_getinteger(v, 3, &useLoop);
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
         return 1;

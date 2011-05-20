@@ -306,7 +306,7 @@ extern EmoEngine* engine;
 	return enabled != 0;
 }
 
--(BOOL)setChannelLooping:(NSInteger)index withLoop:(NSInteger) enable {
+-(BOOL)setChannelLooping:(NSInteger)index withLoop:(BOOL) enable {
     if (!audioEngineCreated) {
         engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
         LOGE("emo_audio: audio engine is closed.");

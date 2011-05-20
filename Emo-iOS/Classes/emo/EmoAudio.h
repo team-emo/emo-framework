@@ -33,6 +33,6 @@
 -(ALfloat)getChannelMinVolume:(NSInteger)index;
 
 -(BOOL)getChannelLooping:(NSInteger)index;
--(BOOL)setChannelLooping:(NSInteger)index withLoop:(NSInteger) enable;
+-(BOOL)setChannelLooping:(NSInteger)index withLoop:(BOOL) enable;
 
 @end

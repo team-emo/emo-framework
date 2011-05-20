@@ -48,9 +48,6 @@
 #define DEFAULT_DATABASE_NAME  "emoruntime.db"
 #define PREFERENCE_TABLE_NAME  "preferences"
 
-#define EMO_NO              0
-#define EMO_YES             1
-
 #define EMO_NO_ERROR    0x0000
 #define EMO_ERROR       0x0001
 #define LOG_INFO        0x0002
@@ -146,5 +143,21 @@
 #define PHYSICS_SHAPE_UNKNOWN -1
 #define PHYSICS_SHAPE_CIRCLE   0
 #define PHYSICS_SHAPE_POLYGON  1
+
+#define JOINT_TYPE_UNKNOWN   0
+#define JOINT_TYPE_REVOLUTE  1
+#define JOINT_TYPE_PRISMATIC 2
+#define JOINT_TYPE_DISTANCE  3
+#define JOINT_TYPE_PULLEY    4
+#define JOINT_TYPE_MOUSE     5
+#define JOINT_TYPE_GEAR      6
+#define JOINT_TYPE_LINE      7
+#define JOINT_TYPE_WELD      8
+#define JOINT_TYPE_FRICTION  9
+
+#define PHYSICS_STATE_NULL    -1
+#define PHYSICS_STATE_ADD     0
+#define PHYSICS_STATE_PERSIST 1
+#define PHYSICS_STATE_REMOVE  2
 
 #endif

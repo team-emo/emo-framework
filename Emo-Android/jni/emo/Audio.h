@@ -33,7 +33,7 @@ namespace emo {
         bool isLoaded(int channelIndex);
 
         bool getChannelLooping(int index);
-        bool setChannelLooping(int index, SQInteger enable);
+        bool setChannelLooping(int index, SQBool enable);
 
     protected:
         bool running;

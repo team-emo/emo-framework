@@ -20,5 +20,11 @@ void register_class_func_with_namespace(HSQUIRRELVM v, const char* nname, const 
 void register_table(HSQUIRRELVM v, const char *name);
 void registerClass(HSQUIRRELVM v, const char *cname);
 void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func);
+bool getInstanceMemberAsInteger(HSQUIRRELVM v, int idx, const char *name, SQInteger* value);
 bool getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat* value);
+bool getInstanceMemberAsBool(HSQUIRRELVM v, int idx, const char *name, bool* value);
+bool getInstanceMemberAsTable(HSQUIRRELVM v, int idx, const char *cname, const char *name, SQFloat* value);
+bool getInstanceMemberAsUserPointer(HSQUIRRELVM v, int idx, const char *cname, const char *name, SQUserPointer* value);
+bool getInstanceMemberAsInstance(HSQUIRRELVM v, int idx, const char *cname, const char *name, SQUserPointer* value);
+bool getBool(HSQUIRRELVM v, int idx, SQBool* value);
 SQInteger createSQObject(HSQUIRRELVM v, const char* package_name, const char* name, SQUserPointer ptr, SQRELEASEHOOK releaseHook);
