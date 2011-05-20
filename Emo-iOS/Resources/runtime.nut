@@ -213,6 +213,14 @@ const AUDIO_CHANNEL_PLAYING   = 3;
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 
+function emo::toRadian(degree) {
+	return degree * PI / 180.0;
+}
+
+function emo::toDegree(radian) {
+	return radian * 180.0 / PI;
+}
+
 class emo.Instance {
 	type = null;
 }
