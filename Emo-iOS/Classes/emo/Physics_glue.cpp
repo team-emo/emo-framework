@@ -20,6 +20,7 @@ emo::EmoPhysicsContactListener* emoPhysicsContactListener = NULL;
 static SQInteger b2WorldReleaseHook(SQUserPointer ptr, SQInteger size) {
 	if (emoPhysicsContactListener != NULL) {
 		delete emoPhysicsContactListener;
+		emoPhysicsContactListener = NULL;
 	}
 	delete reinterpret_cast<b2World*>(ptr);
 	return 0;
@@ -45,11 +46,7 @@ SQInteger emoPhysicsNewWorld(HSQUIRRELVM v) {
 		gravity.Set(0, SENSOR_STANDARD_GRAVITY);
 	}
 	SQBool doSleep = true;
-	if (nargs >= 3 && sq_gettype(v, 3) == OT_INTEGER) {
-		SQInteger val;
-		sq_getinteger(v, 3, &val);
-		doSleep = (val == EMO_YES);
-	}
+	getBool(v, 3, &doSleep);
 	
 	b2World* world = new b2World(gravity, doSleep);
 	
@@ -61,6 +58,7 @@ SQInteger emoPhysicsNewWorld(HSQUIRRELVM v) {
 	}
 	return 1;
 }
+
 SQInteger emoPhysicsCreateBody(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 	if (nargs < 3) {
@@ -258,10 +256,10 @@ SQInteger emoPhysicsWorld_SetAutoClearForces(HSQUIRRELVM v) {
 	b2World* world = NULL;
 	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
 	
-	SQInteger iflag;
-	sq_getinteger(v, 3, &iflag);
+	SQBool flag;
+	getBool(v, 3, &flag);
 	
-	world->SetAutoClearForces(iflag == EMO_YES);
+	world->SetAutoClearForces(flag);
 	
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
@@ -269,15 +267,13 @@ SQInteger emoPhysicsWorld_SetAutoClearForces(HSQUIRRELVM v) {
 SQInteger emoPhysicsWorld_GetAutoClearForces(HSQUIRRELVM v) {
 	SQInteger nargs = sq_gettop(v);
 	if (nargs < 2 || sq_gettype(v, 2) != OT_INSTANCE) {
-		sq_pushinteger(v, EMO_NO);
+        sq_pushbool(v, false);
 		return 1;
 	}
 	b2World* world = NULL;
 	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
 	
-	bool flag = world->GetAutoClearForces();
-	
-	sq_pushinteger(v, flag ? EMO_YES : EMO_NO);
+	sq_pushbool(v, world->GetAutoClearForces());
 	return 1;
 }
 SQInteger emoPhysicsCreateFixture(HSQUIRRELVM v) {
@@ -843,10 +839,10 @@ SQInteger emoPhysicsBody_SetBullet(HSQUIRRELVM v) {
 	b2Body* body = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
 	
-	SQInteger flag;
-	sq_getinteger(v, 3, &flag);
+	SQBool flag;
+	getBool(v, 3, &flag);
 	
-	body->SetBullet(flag == EMO_YES);
+	body->SetBullet(flag);
 	
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
@@ -858,7 +854,7 @@ SQInteger emoPhysicsBody_IsBullet(HSQUIRRELVM v) {
 	b2Body* body = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
 	
-	sq_pushinteger(v, body->IsBullet() ? EMO_YES : EMO_NO);
+	sq_pushbool(v, body->IsBullet());
 	
 	return 1;
 }
@@ -869,10 +865,10 @@ SQInteger emoPhysicsBody_SetSleepingAllowed(HSQUIRRELVM v) {
 	b2Body* body = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
 	
-	SQInteger flag;
-	sq_getinteger(v, 3, &flag);
+	SQBool flag;
+	getBool(v, 3, &flag);
 	
-	body->SetSleepingAllowed(flag == EMO_YES);
+	body->SetSleepingAllowed(flag);
 	
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
@@ -884,7 +880,7 @@ SQInteger emoPhysicsBody_IsSleepingAllowed(HSQUIRRELVM v) {
 	b2Body* body = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
 	
-	sq_pushinteger(v, body->IsSleepingAllowed() ? EMO_YES : EMO_NO);
+	sq_pushbool(v, body->IsSleepingAllowed());
 	
 	return 1;
 }
@@ -895,10 +891,10 @@ SQInteger emoPhysicsBody_SetAwake(HSQUIRRELVM v) {
 	b2Body* body = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
 	
-	SQInteger flag;
-	sq_getinteger(v, 3, &flag);
+	SQBool flag;
+	getBool(v, 3, &flag);
 	
-	body->SetAwake(flag == EMO_YES);
+	body->SetAwake(flag);
 	
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
@@ -910,7 +906,7 @@ SQInteger emoPhysicsBody_IsAwake(HSQUIRRELVM v) {
 	b2Body* body = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
 	
-	sq_pushinteger(v, body->IsAwake() ? EMO_YES : EMO_NO);
+	sq_pushbool(v, body->IsAwake());
 	
 	return 1;
 }
@@ -921,10 +917,10 @@ SQInteger emoPhysicsBody_SetActive(HSQUIRRELVM v) {
 	b2Body* body = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
 
-	SQInteger flag;
-	sq_getinteger(v, 3, &flag);
+	SQBool flag;
+	getBool(v, 3, &flag);
 	
-	body->SetActive(flag == EMO_YES);
+	body->SetActive(flag);
 	
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
@@ -936,7 +932,7 @@ SQInteger emoPhysicsBody_IsActive(HSQUIRRELVM v) {
 	b2Body* body = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
 	
-	sq_pushinteger(v, body->IsActive() ? EMO_YES : EMO_NO);
+	sq_pushbool(v, body->IsActive());
 	
 	return 1;
 }
@@ -947,10 +943,10 @@ SQInteger emoPhysicsBody_SetFixedRotation(HSQUIRRELVM v) {
 	b2Body* body = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
 	
-	SQInteger flag;
-	sq_getinteger(v, 3, &flag);
+	SQBool flag;
+	getBool(v, 3, &flag);
 	
-	body->SetFixedRotation(flag == EMO_YES);
+	body->SetFixedRotation(flag);
 	
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
@@ -962,7 +958,7 @@ SQInteger emoPhysicsBody_IsFixedRotation(HSQUIRRELVM v) {
 	b2Body* body = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
 	
-	sq_pushinteger(v, body->IsFixedRotation() ? EMO_YES : EMO_NO);
+	sq_pushbool(v, body->IsFixedRotation());
 	
 	return 1;
 }
@@ -1285,13 +1281,13 @@ SQInteger emoPhysicsJoint_IsLimitedEnabled(HSQUIRRELVM v) {
 	
 	if (joint->GetType() == e_lineJoint) {
 		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);
-		sq_pushinteger(v, _joint->IsLimitEnabled() ? EMO_YES : EMO_NO);
+		sq_pushbool(v, _joint->IsLimitEnabled());
 	} else if (joint->GetType() == e_prismaticJoint) {
 		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
-		sq_pushinteger(v, _joint->IsLimitEnabled() ? EMO_YES : EMO_NO);
+		sq_pushbool(v, _joint->IsLimitEnabled());
 	} else if (joint->GetType() == e_revoluteJoint) {
 		b2RevoluteJoint* _joint = reinterpret_cast<b2RevoluteJoint*>(joint);
-		sq_pushinteger(v, _joint->IsLimitEnabled() ? EMO_YES : EMO_NO);
+		sq_pushbool(v, _joint->IsLimitEnabled());
 	} else {
 		return 0;
 	}
@@ -1306,9 +1302,8 @@ SQInteger emoPhysicsJoint_EnableLimit(HSQUIRRELVM v) {
 	b2Joint* joint = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
 	
-	SQInteger value;
-	sq_getinteger(v, 3, &value);
-	bool flag = value == EMO_YES ? true : false;
+	SQBool flag;
+	getBool(v, 3, &flag);
 	
 	if (joint->GetType() == e_lineJoint) {
 		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);
@@ -1408,10 +1403,10 @@ SQInteger emoPhysicsJoint_IsMotorEnabled(HSQUIRRELVM v) {
 	
 	if (joint->GetType() == e_prismaticJoint) {
 		b2PrismaticJoint* _joint = reinterpret_cast<b2PrismaticJoint*>(joint);
-		sq_pushinteger(v, _joint->IsMotorEnabled() ? EMO_YES : EMO_NO);
+		sq_pushbool(v, _joint->IsMotorEnabled());
 	} else if (joint->GetType() == e_revoluteJoint) {
 		b2RevoluteJoint* _joint = reinterpret_cast<b2RevoluteJoint*>(joint);
-		sq_pushinteger(v, _joint->IsMotorEnabled() ? EMO_YES : EMO_NO);
+		sq_pushbool(v, _joint->IsMotorEnabled());
 	} else {
 		return 0;
 	}
@@ -1426,9 +1421,8 @@ SQInteger emoPhysicsJoint_EnableMotor(HSQUIRRELVM v) {
 	b2Joint* joint = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
 	
-	SQInteger value;
-	sq_getinteger(v, 3, &value);
-	bool flag = value == EMO_YES ? true : false;
+	SQBool flag;
+	getBool(v, 3, &flag);
 	
 	if (joint->GetType() == e_lineJoint) {
 		b2LineJoint* _joint = reinterpret_cast<b2LineJoint*>(joint);

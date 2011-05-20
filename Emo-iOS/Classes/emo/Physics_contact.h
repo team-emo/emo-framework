@@ -1,3 +1,6 @@
+/*
+ * Box2D Contact Listener
+ */
 namespace emo {
 	class EmoPhysicsContactListener : public b2ContactListener {
 	public:
@@ -21,5 +24,7 @@ namespace emo {
 		b2Vec2 normal;
 		b2Vec2 position;
 		b2PointState state;
+		float32 normalImpulse;
+		float32 tangentImpulse;
 	};
 }

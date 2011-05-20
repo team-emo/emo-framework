@@ -61,7 +61,7 @@ class emo.physics.World {
 	}
 	
 	function destroyBody(body) {
-		physics.destroyBody(id, body.id);
+		return physics.destroyBody(id, body.id);
 	}
 	
 	function createJoint(jointdef) {
@@ -95,19 +95,19 @@ class emo.physics.World {
 	}
 	
 	function destroyJoint(joint) {
-		physics.destroyJoint(id, joint.id);
+		return physics.destroyJoint(id, joint.id);
 	}
 	
 	function step(timeStep, velocityIterations, positionIterations) {
-		physics.world_step(id, timeStep, velocityIterations, positionIterations);
+		return physics.world_step(id, timeStep, velocityIterations, positionIterations);
 	}
 	
 	function clearForces() {
-		physics.world_clearForces(id);
+		return physics.world_clearForces(id);
 	}
 	
 	function setAutoClearForces(flag) {
-		physics.world_setAutoClearForces(id, flag);
+		return physics.world_setAutoClearForces(id, flag);
 	}
 	
 	function getAutoClearForces() {
@@ -164,7 +164,7 @@ class emo.physics.Body {
 	}
 	
 	function setLinearVelocity(v) {
-		physics.body_setLinearVelocity(id, v);
+		return physics.body_setLinearVelocity(id, v);
 	}
 	
 	function getLinearVelocity() {
@@ -172,7 +172,7 @@ class emo.physics.Body {
 	}
 	
 	function setAngularVelocity(omega) {
-		physics.body_setAngularVelocity(id, omega);
+		return physics.body_setAngularVelocity(id, omega);
 	}
 	
 	function getAngularVelocity() {
@@ -180,19 +180,19 @@ class emo.physics.Body {
 	}
 	
 	function applyForce(force, point) {
-		physics.body_applyForce(id, force, point);
+		return physics.body_applyForce(id, force, point);
 	}
 	
 	function applyTorque(torque) {
-		physics.body_applyTorque(id, torque);
+		return physics.body_applyTorque(id, torque);
 	}
 	
 	function applyLinearImpulse(impulse, point) {
-		physics.body_applyLinearImpulse(id, impulse, point);
+		return physics.body_applyLinearImpulse(id, impulse, point);
 	}
 	
 	function applyAngularImpulse(impulse) {
-		physics.body_applyAngularImpulse(id, impulse);
+		return physics.body_applyAngularImpulse(id, impulse);
 	}
 	
 	function getMass() {
@@ -232,7 +232,7 @@ class emo.physics.Body {
 	}
 	
 	function setLinearDamping(linearDamping) {
-		physics.body_setLinearDamping(id, linearDamping);
+		return physics.body_setLinearDamping(id, linearDamping);
 	}
 	
 	function getAngularDamping() {
@@ -240,11 +240,11 @@ class emo.physics.Body {
 	}
 	
 	function setAngularDamping(angularDamping) {
-		physics.body_setAngularDamping(id, angularDamping);
+		return physics.body_setAngularDamping(id, angularDamping);
 	}
 	
 	function setType(bodyType) {
-		physics.body_setType(id, bodyType);
+		return physics.body_setType(id, bodyType);
 	}
 	
 	function getType() {
@@ -252,43 +252,43 @@ class emo.physics.Body {
 	}
 	
 	function setBullet(flag) {
-		physics.body_setBullet(id, flag);
+		return physics.body_setBullet(id, flag);
 	}
 	
 	function isBullet() {
-		return physics.body_isBullet(id) == EMO_YES;
+		return physics.body_isBullet(id);
 	}
 	
 	function setSleepingAllowed(flag) {
-		physics.body_setSleepingAllowed(id, flag);
+		return physics.body_setSleepingAllowed(id, flag);
 	}
 	
 	function isSleepingAllowed() {
-		return physics.body_isSleepingAllowed(id) == EMO_YES;
+		return physics.body_isSleepingAllowed(id);
 	}
 	
 	function setAwake(flag) {
-		physics.body_setAwake(id, flag);
+		return physics.body_setAwake(id, flag);
 	}
 	
 	function isAwake() {
-		return physics.body_isAwake(id) == EMO_YES;
+		return physics.body_isAwake(id);
 	}
 	
 	function setActive(flag) {
-		physics.body_setActive(id, flag);
+		return physics.body_setActive(id, flag);
 	}
 	
 	function isActive() {
-		return physics.isActive(id) == EMO_YES;
+		return physics.isActive(id);
 	}
 	
 	function setFixedRotation(flag) {
-		physics.body_setFixedRotation(id, flag);
+		return physics.body_setFixedRotation(id, flag);
 	}
 	
 	function isFixedRotation() {
-		return physics.body_isFixedRotation(id) == EMO_YES;
+		return physics.body_isFixedRotation(id);
 	}
 }
 
@@ -567,7 +567,7 @@ class emo.physics.JointDef {
 	physics  = emo.Physics();
 	collideConnected = null;
 	function update() {
-		physics.updateJointDef(id);
+		return physics.updateJointDef(id);
 	}
 }
 
@@ -581,7 +581,7 @@ class emo.physics.DistanceJointDef extends emo.physics.JointDef {
 	}
 	
 	function initialize(bodyA, bodyB, anchorA, anchorB) {
-		physics.initDistanceJointDef(id, bodyA.id, bodyB.id, anchorA, anchorB);
+		return physics.initDistanceJointDef(id, bodyA.id, bodyB.id, anchorA, anchorB);
 	}
 }
 class emo.physics.FrictionJointDef extends emo.physics.JointDef {
@@ -592,7 +592,7 @@ class emo.physics.FrictionJointDef extends emo.physics.JointDef {
 		id = physics.newJointDef(type);
 	}
 	function initialize(bodyA, bodyB, anchor) {
-		physics.initFrictionJointDef(id, bodyA.id, bodyB.id, anchor);
+		return physics.initFrictionJointDef(id, bodyA.id, bodyB.id, anchor);
 	}
 }
 class emo.physics.GearJointDef extends emo.physics.JointDef {
@@ -616,7 +616,7 @@ class emo.physics.LineJointDef extends emo.physics.JointDef {
 		id = physics.newJointDef(type);
 	}
 	function initialize(bodyA, bodyB, anchor, axis) {
-		physics.initLineJointDef(id, bodyA.id, bodyB.id, anchor, axis);
+		return physics.initLineJointDef(id, bodyA.id, bodyB.id, anchor, axis);
 	}
 }
 class emo.physics.PrismaticJointDef extends emo.physics.JointDef {
@@ -631,7 +631,7 @@ class emo.physics.PrismaticJointDef extends emo.physics.JointDef {
 		id = physics.newJointDef(type);
 	}
 	function initialize(bodyA, bodyB, anchor, axis) {
-		physics.initPrismaticJointDef(id, bodyA.id, bodyB.id, anchor, axis);
+		return physics.initPrismaticJointDef(id, bodyA.id, bodyB.id, anchor, axis);
 	}
 }
 class emo.physics.PulleyJointDef extends emo.physics.JointDef {
@@ -640,7 +640,7 @@ class emo.physics.PulleyJointDef extends emo.physics.JointDef {
 		id = physics.newJointDef(type);
 	}
 	function initialize(bodyA, bodyB, groundAnchorA, groundAnchorB, anchorA, anchorB, ratio) {
-		physics.initPulleyJointDef(id, bodyA.id, bodyB.id,
+		return physics.initPulleyJointDef(id, bodyA.id, bodyB.id,
 			groundAnchorA, groundAnchorB, anchorA, anchorB, ratio);
 	}
 }
@@ -656,7 +656,7 @@ class emo.physics.RevoluteJointDef extends emo.physics.JointDef {
 		id = physics.newJointDef(type);
 	}
 	function initialize(bodyA, bodyB, anchor) {
-		physics.initRevoluteJointDef(id, bodyA.id, bodyB.id, anchor);
+		return physics.initRevoluteJointDef(id, bodyA.id, bodyB.id, anchor);
 	}
 }
 class emo.physics.WeldJointDef extends emo.physics.JointDef {
@@ -665,7 +665,7 @@ class emo.physics.WeldJointDef extends emo.physics.JointDef {
 		id = physics.newJointDef(type);
 	}
 	function initialize(bodyA, bodyB, anchor) {
-		physics.initWeldJointDef(id, bodyA.id, bodyB.id, anchor);
+		return physics.initWeldJointDef(id, bodyA.id, bodyB.id, anchor);
 	}
 }
 
@@ -720,17 +720,17 @@ class emo.physics.CircleShape {
 	}
 }
 
-function emo::_onContact(_fixA, _fixB, _bodyA, _bodyB, _pos, _normal, state) {
+function emo::_onContact(state, _fixA, _fixB, _bodyA, _bodyB, _pos, _normal, normalImpulse, tangentImpulse) {
 	local fixtureA = emo.Fixture(_bodyA, _fixA);
 	local fixtureB = emo.Fixture(_bodyB, _fixB);
 	local positon  = emo.Vec2.fromArray(_pos);
 	local normal   = emo.Vec2.fromArray(_normal);
 
     if (emo.rawin("onContact")) {
-        emo.onContact(fixtureA, fixtureB, position, normal, state);
+        emo.onContact(state, fixtureA, fixtureB, position, normal, normalImpulse, tangentImpulse);
     }
     if (EMO_RUNTIME_DELEGATE != null &&
              EMO_RUNTIME_DELEGATE.rawin("onContact")) {
-        EMO_RUNTIME_DELEGATE.onContact(fixtureA, fixtureB, position, normal, state);
+        EMO_RUNTIME_DELEGATE.onContact(state, fixtureA, fixtureB, position, normal, normalImpulse, tangentImpulse);
     }
 }

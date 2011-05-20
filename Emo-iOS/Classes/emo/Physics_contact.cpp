@@ -14,6 +14,9 @@ extern void LOGW(const char* msg);
 extern void LOGE(const char* msg);
 
 namespace emo {
+	/*
+	 * invoke contact event
+	 */
 	static SQBool invokeContactEvent(HSQUIRRELVM v, ContactPoint cp) {
 		SQBool result = false;
 		SQInteger top = sq_gettop(v);
@@ -23,13 +26,6 @@ namespace emo {
 			sq_pushstring(v, "_onContact", -1);
 			if(SQ_SUCCEEDED(sq_get(v, -2))) {
 				sq_pushroottable(v);
-				sq_pushuserpointer(v, cp.fixtureA);
-				sq_pushuserpointer(v, cp.fixtureB);
-				sq_pushuserpointer(v, cp.fixtureA->GetBody());
-				sq_pushuserpointer(v, cp.fixtureB->GetBody());
-				pushVec2(v, cp.position);
-				pushVec2(v, cp.normal);
-				
 				switch(cp.state) {
 					case b2_addState:
 						sq_pushinteger(v, PHYSICS_STATE_ADD);
@@ -43,8 +39,16 @@ namespace emo {
 					default:
 						sq_pushinteger(v, PHYSICS_STATE_NULL);
 				}
+				sq_pushuserpointer(v, cp.fixtureA);
+				sq_pushuserpointer(v, cp.fixtureB);
+				sq_pushuserpointer(v, cp.fixtureA->GetBody());
+				sq_pushuserpointer(v, cp.fixtureB->GetBody());
+				pushVec2(v, cp.position);
+				pushVec2(v, cp.normal);
+				sq_pushfloat(v, cp.normalImpulse);
+				sq_pushfloat(v, cp.tangentImpulse);
 				
-				result = SQ_SUCCEEDED(sq_call(v, 8, SQFalse, SQTrue));
+				result = SQ_SUCCEEDED(sq_call(v, 10, SQFalse, SQTrue));
 			}
 		}
 		sq_settop(v,top);
@@ -59,6 +63,7 @@ namespace emo {
 	EmoPhysicsContactListener::~EmoPhysicsContactListener() {
 		
 	}
+	
 	void EmoPhysicsContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {
 		const b2Manifold* manifold = contact->GetManifold();
 		
@@ -83,6 +88,8 @@ namespace emo {
 			cp.fixtureB = fixtureB;
 			cp.position = worldManifold.points[i];
 			cp.normal = worldManifold.normal;
+			cp.normalImpulse  = manifold->points[i].normalImpulse;
+			cp.tangentImpulse = manifold->points[i].tangentImpulse;
 			cp.state = state2[i];
 			
 			invokeContactEvent(sqvm, cp);

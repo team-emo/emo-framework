@@ -2,7 +2,7 @@ emo.Runtime.import("physics.nut");
 
 function emo::onLoad() {
 	local gravity = emo.Vec2(0, -10);
-	local world = emo.physics.World(gravity, EMO_YES);
+	local world = emo.physics.World(gravity, true);
 	
 	local groundBodyDef = emo.physics.BodyDef();
 	groundBodyDef.position = emo.Vec2(0, -10);

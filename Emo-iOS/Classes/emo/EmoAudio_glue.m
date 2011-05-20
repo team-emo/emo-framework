@@ -419,7 +419,7 @@ SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
 SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
     if (![engine.audioManager isAudioEngineRunning]) {
         LOGE("emoGetAudioChannelLooping: audio engine is closed");
-        sq_pushinteger(v, EMO_NO);
+        sq_pushbool(v, false);
         return 1;
     }
 	
@@ -428,21 +428,21 @@ SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
     if (sq_gettype(v, 2) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
     } else {
-        sq_pushinteger(v, EMO_NO);
+        sq_pushbool(v, false);
         LOGE("emoGetAudioChannelLooping: invalid parameter type");
         return 1;
     }
 	
     if (channelIndex >= [engine.audioManager getChannelCount]) {
         LOGE("emoGetAudioChannelLooping: invalid channel index");
-        sq_pushinteger(v, EMO_NO);
+        sq_pushbool(v, false);
         return 1;
     }
 	
     if ([engine.audioManager getChannelLooping:channelIndex]) {
-        sq_pushinteger(v, EMO_YES);
+        sq_pushbool(v, true);
     } else {
-        sq_pushinteger(v, EMO_NO);
+        sq_pushbool(v, false);
     }
 	
     return 1;

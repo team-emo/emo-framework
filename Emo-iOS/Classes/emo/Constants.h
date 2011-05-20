@@ -48,9 +48,6 @@
 #define DEFAULT_DATABASE_NAME  "emoruntime.db"
 #define PREFERENCE_TABLE_NAME  "preferences"
 
-#define EMO_NO              0
-#define EMO_YES             1
-
 #define EMO_NO_ERROR    0x0000
 #define EMO_ERROR       0x0001
 #define LOG_INFO        0x0002

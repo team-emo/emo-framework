@@ -26,4 +26,5 @@ bool getInstanceMemberAsBool(HSQUIRRELVM v, int idx, const char *name, bool* val
 bool getInstanceMemberAsTable(HSQUIRRELVM v, int idx, const char *cname, const char *name, SQFloat* value);
 bool getInstanceMemberAsUserPointer(HSQUIRRELVM v, int idx, const char *cname, const char *name, SQUserPointer* value);
 bool getInstanceMemberAsInstance(HSQUIRRELVM v, int idx, const char *cname, const char *name, SQUserPointer* value);
+bool getBool(HSQUIRRELVM v, int idx, SQBool* value);
 SQInteger createSQObject(HSQUIRRELVM v, const char* package_name, const char* name, SQUserPointer ptr, SQRELEASEHOOK releaseHook);

@@ -298,6 +298,25 @@ void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFU
 }
 
 /*
+ * get boolean value from the stack.
+ * this function accepts both integer(1,0) and bool(true,false).
+ * returns true if succeeds.
+ */
+bool getBool(HSQUIRRELVM v, int idx, SQBool* value) {
+	if (sq_gettype(v, idx) == OT_INTEGER) {
+		SQInteger val;
+		sq_getinteger(v, idx, &val);
+		*value = (val == 1);
+	} else if (sq_gettype(v, idx) == OT_BOOL) {
+		sq_getbool(v, idx, value);
+	} else {
+		return false;
+	}
+	
+	return true;
+}
+
+/*
  * get instance member value as float
  */
 bool getInstanceMemberAsInteger(HSQUIRRELVM v, int idx, const char *name, SQInteger* value) {
@@ -327,18 +346,22 @@ bool getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat*
 	
 /*
  * get instance member value as bool
+ * this function accepts both integer(1,0) and bool(true,false).
  */
 bool getInstanceMemberAsBool(HSQUIRRELVM v, int idx, const char *name, bool* value) {
 	if (sq_gettype(v, idx) == OT_NULL) return false;
-	SQInteger iflag;
 	sq_pushstring(v, name, -1);
 	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
-	if (sq_gettype(v, -1) == OT_NULL)  return false;
-	sq_getinteger(v, -1, &iflag);
+
+	SQBool flag;
+	if (!getBool(v, -1, &flag)) {
+		sq_pop(v, 1);
+		return false;
+	}
+	
+	*value = flag;
+	
 	sq_pop(v, 1);
-	
-	*value = iflag == EMO_YES;
-	
 	return true;
 }
 
@@ -388,7 +411,7 @@ bool getInstanceMemberAsInstance(HSQUIRRELVM v, int idx,
 	sq_pop(v, 1);
 	return true;
 }
-	
+
 SQInteger createSQObject(HSQUIRRELVM v, 
 				const char* package_name, const char* name,
 				SQUserPointer ptr, SQRELEASEHOOK releaseHook) {
