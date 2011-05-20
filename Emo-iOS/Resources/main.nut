@@ -36,8 +36,8 @@ function emo::onLoad() {
 		world.clearForces();
 		
 		local position = body.getPosition();
-		local angle = emo.toDegree(body.getAngle());
+		local angle    = body.getAngle();
 		
-		print(position.x + " " + position.y + " " + angle);
+		print(format("%4.2f %4.2f %4.2f", position.x, position.y, angle));
 	}
 }
