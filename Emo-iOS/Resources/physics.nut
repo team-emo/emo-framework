@@ -115,11 +115,6 @@ class emo.physics.World {
 	}
 }
 
-class emo.physics.AABB {
-	lowerBound = null;
-	upperBound = null;
-}
-
 class emo.physics.Body {
 	id      = null;
 	physics = emo.Physics();

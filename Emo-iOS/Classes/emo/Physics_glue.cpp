@@ -1591,28 +1591,28 @@ SQInteger emoPhysicsJointDef_Update(HSQUIRRELVM v) {
 
 	switch(def->type) {
 		case e_distanceJoint:
-			updateDistanceJointDef(v, 3, reinterpret_cast<b2DistanceJointDef*> (def));
+			getDistanceJointDef(v, 3, reinterpret_cast<b2DistanceJointDef*> (def));
 			break;
 		case e_frictionJoint:
-			updateFrictionJointDef(v, 3, reinterpret_cast<b2FrictionJointDef*> (def));
+			getFrictionJointDef(v, 3, reinterpret_cast<b2FrictionJointDef*> (def));
 			break;
 		case e_gearJoint:
-			updateGearJointDef(v, 3, reinterpret_cast<b2GearJointDef*> (def));
+			getGearJointDef(v, 3, reinterpret_cast<b2GearJointDef*> (def));
 			break;
 		case e_lineJoint:
-			updateLineJointDef(v, 3, reinterpret_cast<b2LineJointDef*> (def));
+			getLineJointDef(v, 3, reinterpret_cast<b2LineJointDef*> (def));
 			break;
 		case e_prismaticJoint:
-			updatePrismaticJointDef(v, 3, reinterpret_cast<b2PrismaticJointDef*> (def));
+			getPrismaticJointDef(v, 3, reinterpret_cast<b2PrismaticJointDef*> (def));
 			break;
 		case e_pulleyJoint:
-			updatePulleyJointDef(v, 3, reinterpret_cast<b2PulleyJointDef*> (def));
+			getPulleyJointDef(v, 3, reinterpret_cast<b2PulleyJointDef*> (def));
 			break;
 		case e_revoluteJoint:
-			updateRevoluteJointDef(v, 3, reinterpret_cast<b2RevoluteJointDef*> (def));
+			getRevoluteJointDef(v, 3, reinterpret_cast<b2RevoluteJointDef*> (def));
 			break;
 		case e_weldJoint:
-			updateWeldJointDef(v, 3, reinterpret_cast<b2WeldJointDef*> (def));
+			getWeldJointDef(v, 3, reinterpret_cast<b2WeldJointDef*> (def));
 			break;
 		default:
 			sq_pushinteger(v, ERR_INVALID_PARAM);
