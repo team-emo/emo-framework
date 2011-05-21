@@ -692,6 +692,7 @@ class emo.physics.WeldJointDef extends emo.physics.JointDef {
 class emo.physics.PolygonShape {
 	id      = null;
 	physics = emo.Physics();
+	type    = PHYSICS_SHAPE_TYPE_POLYGON;
 	
 	function constructor() {
 		id = physics.newShape(PHYSICS_SHAPE_TYPE_POLYGON);
@@ -726,16 +727,17 @@ class emo.physics.PolygonShape {
 class emo.physics.CircleShape {
 	id       = null;
 	physics  = emo.Physics();
+	type     = PHYSICS_SHAPE_TYPE_CIRCLE;
 	function constructor() {
 		id = physics.newShape(PHYSICS_SHAPE_TYPE_CIRCLE);
 		id.type = "emo.physics.CircleShape";
 	}
 
-	function setPosition(position) {
+	function position(position) {
 		return physics.circleShape_position(id, position);
 	}
 	
-	function setRadius(radius) {
+	function radius(radius) {
 		return physics.circleShape_radius(id, radius);
 	}
 }
@@ -781,7 +783,7 @@ class emo.physics.PhysicsSprite {
 	}
 }
 
-function emo::Physics::createSprite(world, sprite, bodyType, fixtureDef = null) {
+function emo::Physics::createSprite(world, sprite, bodyType, shape, fixtureDef = null) {
 
 	local halfWidth  = sprite.getWidth()  * 0.5;
 	local halfHeight = sprite.getHeight() * 0.5;
@@ -796,11 +798,12 @@ function emo::Physics::createSprite(world, sprite, bodyType, fixtureDef = null) 
 	
 	local body = world.createBody(bodyDef);
 	
-	local box = emo.physics.PolygonShape();
-	box.setAsBox(halfWidth / scale, halfHeight / scale);
+	if (shape.type == PHYSICS_SHAPE_TYPE_POLYGON) {
+		shape.setAsBox(halfWidth / scale, halfHeight / scale);
+	}
 	
 	if (fixtureDef == null) fixtureDef = emo.physics.FixtureDef();
-	fixtureDef.shape = box;
+	fixtureDef.shape = shape;
 
 	local fixture = body.createFixture(fixtureDef);
 	local physicsSprite = emo.physics.PhysicsSprite(sprite, fixture, bodyType);
@@ -811,9 +814,24 @@ function emo::Physics::createSprite(world, sprite, bodyType, fixtureDef = null) 
 }
 
 function emo::Physics::createStaticSprite(world, sprite, fixtureDef = null) {
-	return emo.Physics.createSprite(world, sprite, PHYSICS_BODY_TYPE_STATIC, fixtureDef);
+	local shape = emo.physics.PolygonShape();
+	return emo.Physics.createSprite(world, sprite, PHYSICS_BODY_TYPE_STATIC, shape, fixtureDef);
 }
 
 function emo::Physics::createDynamicSprite(world, sprite, fixtureDef = null) {
-	return emo.Physics.createSprite(world, sprite, PHYSICS_BODY_TYPE_DYNAMIC, fixtureDef);
+	local shape = emo.physics.PolygonShape();
+	return emo.Physics.createSprite(world, sprite, PHYSICS_BODY_TYPE_DYNAMIC, shape, fixtureDef);
 }
+
+function emo::Physics::createStaticCircleSprite(world, sprite, radius, fixtureDef = null) {
+	local shape = emo.physics.CircleShape();
+	shape.radius(radius / world.scale.tofloat());
+	return emo.Physics.createSprite(world, sprite, PHYSICS_BODY_TYPE_STATIC, shape, fixtureDef);
+}
+
+function emo::Physics::createDynamicCircleSprite(world, sprite, radius, fixtureDef = null) {
+	local shape = emo.physics.CircleShape();
+	shape.radius(radius / world.scale.tofloat());
+	return emo.Physics.createSprite(world, sprite, PHYSICS_BODY_TYPE_DYNAMIC, shape, fixtureDef);
+}
+

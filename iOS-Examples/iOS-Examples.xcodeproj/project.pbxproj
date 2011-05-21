@@ -127,6 +127,7 @@
 		F94C2BD61384848900D12D13 /* b2WeldJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F94C2BB21384848900D12D13 /* b2WeldJoint.cpp */; };
 		F94C2BDB1384849C00D12D13 /* EmoPhysics.m in Sources */ = {isa = PBXBuildFile; fileRef = F94C2BD81384849C00D12D13 /* EmoPhysics.m */; };
 		F94C2BDC1384849C00D12D13 /* Physics_glue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F94C2BD91384849C00D12D13 /* Physics_glue.cpp */; };
+		F94CA3CC138785650006123B /* physics_circle.nut in Resources */ = {isa = PBXBuildFile; fileRef = F98EABC7138784D800902E31 /* physics_circle.nut */; };
 		F967A8ED1372A3F800BEF871 /* modifier_move_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F967A8C21372A17800BEF871 /* modifier_move_example.nut */; };
 		F97C156F13722E1A00551C94 /* modifier_rotate_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */; };
 		F985282213875C2F007DD0CF /* physics_helloworld.nut in Resources */ = {isa = PBXBuildFile; fileRef = F985282113875C2F007DD0CF /* physics_helloworld.nut */; };
@@ -350,6 +351,7 @@
 		F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = modifier_rotate_example.nut; path = Resources/modifier_rotate_example.nut; sourceTree = "<group>"; };
 		F985282113875C2F007DD0CF /* physics_helloworld.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_helloworld.nut; path = Resources/physics_helloworld.nut; sourceTree = "<group>"; };
 		F9856D8D1375576B00F6C00F /* tiles_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = tiles_example.nut; path = Resources/tiles_example.nut; sourceTree = "<group>"; };
+		F98EABC7138784D800902E31 /* physics_circle.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_circle.nut; path = Resources/physics_circle.nut; sourceTree = "<group>"; };
 		F9D78CD213872E8A0076C937 /* physics.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics.nut; path = Resources/physics.nut; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -430,6 +432,7 @@
 				F967A8C21372A17800BEF871 /* modifier_move_example.nut */,
 				F921CC9F136FFBAC00F058FF /* periodic_update_example.nut */,
 				F985282113875C2F007DD0CF /* physics_helloworld.nut */,
+				F98EABC7138784D800902E31 /* physics_circle.nut */,
 				F921CCA0136FFBAC00F058FF /* runtime.nut */,
 				F9D78CD213872E8A0076C937 /* physics.nut */,
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
@@ -835,6 +838,7 @@
 				F908827613872BFD0065EC77 /* box2d_helloworld.nut in Resources */,
 				F9D78CD313872E8A0076C937 /* physics.nut in Resources */,
 				F985282213875C2F007DD0CF /* physics_helloworld.nut in Resources */,
+				F94CA3CC138785650006123B /* physics_circle.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
