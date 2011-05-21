@@ -12,7 +12,7 @@ const FPS = 60.0;
 
 class Main {
 	ground  = emo.Rectangle();
-	sprite  = emo.Sprite("block.png");
+	sprite  = emo.Sprite("tv.png");
 	
 	function onLoad() {
 		ground.setSize(stage.getWindowWidth(), 20);
