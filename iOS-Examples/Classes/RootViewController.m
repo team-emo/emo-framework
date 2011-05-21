@@ -32,9 +32,10 @@
 		[NSArray arrayWithObjects:@"Drawing Tiles",    @"tiles_example.nut", nil],
 		nil]];
 	
-	// Event
+	// Amimation
 	[examples addObject: [NSArray arrayWithObjects:
-		[NSArray arrayWithObjects:@"Periodic Update",   @"periodic_update_example.nut", nil],
+		[NSArray arrayWithObjects:@"Sprite Animation", @"animation_example.nut", nil],
+		[NSArray arrayWithObjects:@"Periodic Update",  @"periodic_update_example.nut", nil],
 		[NSArray arrayWithObjects:@"Using Modifier",   @"modifier_rotate_example.nut", nil],
 		[NSArray arrayWithObjects:@"Modifiers with Easing", @"modifier_move_example.nut", nil],
 		nil]];

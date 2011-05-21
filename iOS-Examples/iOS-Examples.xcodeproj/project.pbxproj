@@ -18,11 +18,11 @@
 		F908827613872BFD0065EC77 /* box2d_helloworld.nut in Resources */ = {isa = PBXBuildFile; fileRef = F908827513872BEA0065EC77 /* box2d_helloworld.nut */; };
 		F908828713872D780065EC77 /* Physics_contact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F908828313872D780065EC77 /* Physics_contact.cpp */; };
 		F908828813872D780065EC77 /* Physics_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F908828513872D780065EC77 /* Physics_util.cpp */; };
+		F917F96F1387AC15003F4B53 /* animation_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F917F96E1387AC0D003F4B53 /* animation_example.nut */; };
 		F921CCA8136FFBAC00F058FF /* block.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9A136FFBAC00F058FF /* block.png */; };
 		F921CCA9136FFBAC00F058FF /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9B136FFBAC00F058FF /* blocks.png */; };
 		F921CCAA136FFBAC00F058FF /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9C136FFBAC00F058FF /* dog.png */; };
 		F921CCAB136FFBAC00F058FF /* king.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9D136FFBAC00F058FF /* king.png */; };
-		F921CCAC136FFBAC00F058FF /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9E136FFBAC00F058FF /* logo.png */; };
 		F921CCAD136FFBAC00F058FF /* periodic_update_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9F136FFBAC00F058FF /* periodic_update_example.nut */; };
 		F921CCAE136FFBAC00F058FF /* runtime.nut in Resources */ = {isa = PBXBuildFile; fileRef = F921CCA0136FFBAC00F058FF /* runtime.nut */; };
 		F921CCAF136FFBAC00F058FF /* shape_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F921CCA1136FFBAC00F058FF /* shape_example.nut */; };
@@ -154,11 +154,11 @@
 		F908828413872D780065EC77 /* Physics_contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Physics_contact.h; sourceTree = "<group>"; };
 		F908828513872D780065EC77 /* Physics_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Physics_util.cpp; sourceTree = "<group>"; };
 		F908828613872D780065EC77 /* Physics_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Physics_util.h; sourceTree = "<group>"; };
+		F917F96E1387AC0D003F4B53 /* animation_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = animation_example.nut; path = Resources/animation_example.nut; sourceTree = "<group>"; };
 		F921CC9A136FFBAC00F058FF /* block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.png; sourceTree = "<group>"; };
 		F921CC9B136FFBAC00F058FF /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blocks.png; sourceTree = "<group>"; };
 		F921CC9C136FFBAC00F058FF /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dog.png; sourceTree = "<group>"; };
 		F921CC9D136FFBAC00F058FF /* king.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = king.png; sourceTree = "<group>"; };
-		F921CC9E136FFBAC00F058FF /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		F921CC9F136FFBAC00F058FF /* periodic_update_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = periodic_update_example.nut; path = Resources/periodic_update_example.nut; sourceTree = "<group>"; };
 		F921CCA0136FFBAC00F058FF /* runtime.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = runtime.nut; path = Resources/runtime.nut; sourceTree = "<group>"; };
 		F921CCA1136FFBAC00F058FF /* shape_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = shape_example.nut; path = Resources/shape_example.nut; sourceTree = "<group>"; };
@@ -425,6 +425,7 @@
 				F921CC99136FFBAC00F058FF /* graphics */,
 				F921CCA2136FFBAC00F058FF /* sounds */,
 				F908827513872BEA0065EC77 /* box2d_helloworld.nut */,
+				F917F96E1387AC0D003F4B53 /* animation_example.nut */,
 				F921CCA1136FFBAC00F058FF /* shape_example.nut */,
 				F921CCA7136FFBAC00F058FF /* sprite_example.nut */,
 				F9856D8D1375576B00F6C00F /* tiles_example.nut */,
@@ -465,7 +466,6 @@
 				F921CC9B136FFBAC00F058FF /* blocks.png */,
 				F921CC9C136FFBAC00F058FF /* dog.png */,
 				F921CC9D136FFBAC00F058FF /* king.png */,
-				F921CC9E136FFBAC00F058FF /* logo.png */,
 			);
 			name = graphics;
 			path = Resources/graphics;
@@ -823,7 +823,6 @@
 				F921CCA9136FFBAC00F058FF /* blocks.png in Resources */,
 				F921CCAA136FFBAC00F058FF /* dog.png in Resources */,
 				F921CCAB136FFBAC00F058FF /* king.png in Resources */,
-				F921CCAC136FFBAC00F058FF /* logo.png in Resources */,
 				F921CCAD136FFBAC00F058FF /* periodic_update_example.nut in Resources */,
 				F921CCAE136FFBAC00F058FF /* runtime.nut in Resources */,
 				F921CCAF136FFBAC00F058FF /* shape_example.nut in Resources */,
@@ -839,6 +838,7 @@
 				F9D78CD313872E8A0076C937 /* physics.nut in Resources */,
 				F985282213875C2F007DD0CF /* physics_helloworld.nut in Resources */,
 				F94CA3CC138785650006123B /* physics_circle.nut in Resources */,
+				F917F96F1387AC15003F4B53 /* animation_example.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

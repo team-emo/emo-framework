@@ -1,15 +1,19 @@
+/*
+ * Physics example by Box2D with one dynamic circle body and static bodies.
+ * This example uses OnDrawCallback to step the physics world.
+ */
 emo.Runtime.import("physics.nut");
 
-local stage = emo.Stage();
+local stage   = emo.Stage();
 local physics = emo.Physics();
-local world = emo.physics.World(emo.Vec2(0, 10), true);
+local world   = emo.physics.World(emo.Vec2(0, 10), true);
 
 local fps = 60.0;
 
 class Main {
 	ground  = emo.Rectangle();
-	blockL   = emo.Rectangle();
-	blockR   = emo.Rectangle();
+	blockL  = emo.Rectangle();
+	blockR  = emo.Rectangle();
 	sprite  = emo.Sprite("block.png");
 	
 	function onLoad() {
@@ -29,11 +33,11 @@ class Main {
 		physics.createStaticSprite(world, blockL);
 		physics.createStaticSprite(world, blockR);
 		
-		local circleDef = emo.physics.FixtureDef();
-		circleDef.density  = 1.0;
-		circleDef.friction = 0.3;
-		circleDef.restitution = 0.2;
-		physics.createDynamicCircleSprite(world, sprite, sprite.getWidth() * 0.5, circleDef);
+		local fixture = emo.physics.FixtureDef();
+		fixture.density  = 1.0;
+		fixture.friction = 0.3;
+		fixture.restitution = 0.2;
+		physics.createDynamicCircleSprite(world, sprite, sprite.getWidth() * 0.5, fixture);
 	
 		ground.load();
 		sprite.load();

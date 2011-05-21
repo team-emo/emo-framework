@@ -52,8 +52,8 @@ extern EmoEngine* engine;
 	return (uptime - lastOnAnimationInterval) * 1000;
 }
 -(void)garbage {
-	int retainCount = [name retainCount];
-	for (int i = 0; i < retainCount; i++) {
+	NSInteger retainCount = [name retainCount];
+	if (retainCount > 0 && retainCount < NSIntegerMax) {
 		[name release];
 	}
 	name = nil;
