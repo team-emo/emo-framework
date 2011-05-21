@@ -41,7 +41,8 @@
 
 	// Physics
 	[examples addObject: [NSArray arrayWithObjects:
-						  [NSArray arrayWithObjects:@"Hello, world (No Graphics)", @"box2d_helloworld.nut", nil],
+						  [NSArray arrayWithObjects:@"HelloWorld (No Graphics)", @"box2d_helloworld.nut", nil],
+						  [NSArray arrayWithObjects:@"HelloWorld", @"physics_helloworld.nut", nil],
 						  nil]];
 }
 

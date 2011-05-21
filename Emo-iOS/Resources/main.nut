@@ -1,43 +1,42 @@
 emo.Runtime.import("physics.nut");
 
-function emo::onLoad() {
-	local gravity = emo.Vec2(0, -10);
-	local world = emo.physics.World(gravity, true);
-	
-	local groundBodyDef = emo.physics.BodyDef();
-	groundBodyDef.position = emo.Vec2(0, -10);
-	
-	local groundBody = world.createBody(groundBodyDef);
-	
-	local groundBox = emo.physics.PolygonShape();
-	groundBox.setAsBox(50, 10);
-	groundBody.createFixture(groundBox, 0);
+local stage = emo.Stage();
+local physics = emo.Physics();
+local world = emo.physics.World(emo.Vec2(0, 10), true);
 
-	local bodyDef = emo.physics.BodyDef();
-	bodyDef.type = PHYSICS_BODY_TYPE_DYNAMIC;
-	bodyDef.position = emo.Vec2(0, 4);
-	local body = world.createBody(bodyDef);
+local fps = 60.0;
+
+class Main {
+	ground  = emo.Rectangle();
+	sprite  = emo.Sprite("block.png");
 	
-	local dynamicBox = emo.physics.PolygonShape();
-	dynamicBox.setAsBox(1, 1);
+	function onLoad() {
+		ground.setSize(stage.getWindowWidth(), 20);
+		ground.move(0, stage.getWindowHeight() - ground.getHeight());
 	
-	local fixtureDef = emo.physics.FixtureDef();
-	fixtureDef.shape = dynamicBox;
-	fixtureDef.density  = 1;
-	fixtureDef.friction = 0.3;
-	body.createFixture(fixtureDef);
+		sprite.move(0, 0);
+
+		physics.createStaticSprite(world, ground);
+		physics.createDynamicSprite(world, sprite);
 	
-	local timeStep = 1.0 / 60.0;
-	local velocityIterations = 6;
-	local positionIterations  = 2;
+		ground.load();
+		sprite.load();
 	
-	for (local i = 0; i < 60; ++i) {
-		world.step(timeStep, velocityIterations, positionIterations);
-		world.clearForces();
-		
-		local position = body.getPosition();
-		local angle    = body.getAngle();
-		
-		print(format("%4.2f %4.2f %4.2f", position.x, position.y, angle));
+		// set OnDrawCallback interval (millisecond)
+		emo.Event.enableOnDrawCallback(1000.0 / fps);
 	}
+	
+    function onDrawFrame(dt) {
+		// world step interval(second)
+		world.step(1.0 / fps, 6, 2);
+		world.clearForces();
+	}
+	
+	function onDispose() {
+		ground.remove();
+		sprite.remove();
+	}
+}
+function emo::onLoad() {
+    stage.load(Main());
 }

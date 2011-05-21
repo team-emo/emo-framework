@@ -28,6 +28,8 @@ PHYSICS_STATE_ADD     <- 0;
 PHYSICS_STATE_PERSIST <- 1;
 PHYSICS_STATE_REMOVE  <- 2;
 
+PHYSICS_WORLD_PIXEL_TO_METER_RATIO <- 100;
+
 class emo.Vec2 {
 	x = null;
 	y = null;
@@ -52,8 +54,24 @@ emo.physics <- {};
 class emo.physics.World {
 	id      = null;
 	physics = emo.Physics();
+	scale   = null;
+	sprites = null;
 	function constructor(gravity, doSleep) {
 		id = physics.newWorld(gravity, doSleep);
+		scale = PHYSICS_WORLD_PIXEL_TO_METER_RATIO;
+		sprites = [];
+	}
+	
+	function setScale(pixelToMeterRatio) {
+		scale = pixelToMeterRatio;
+	}
+	
+	function addPhysicsSprite(pSprite) {
+		sprites.append(pSprite);
+	}
+	
+	function removePhysicsSprite(pSprite) {
+		sprites.remove(pSprite);
 	}
 	
 	function createBody(bodydef) {
@@ -99,7 +117,14 @@ class emo.physics.World {
 	}
 	
 	function step(timeStep, velocityIterations, positionIterations) {
-		return physics.world_step(id, timeStep, velocityIterations, positionIterations);
+		
+		local r = physics.world_step(id, timeStep, velocityIterations, positionIterations);
+		
+		for (local i = 0; i < sprites.len(); i++) {
+			sprites[i].update(timeStep, scale);
+		}
+		
+		return r;
 	}
 	
 	function clearForces() {
@@ -311,7 +336,7 @@ class emo.physics.Fixture {
 		id     = _id;
 	}
 	function getBody() {
-		return emo.Body(bodyId);
+		return emo.physics.Body(bodyId);
 	}
 }
 
@@ -728,4 +753,67 @@ function emo::_onContact(state, _fixA, _fixB, _bodyA, _bodyB, _pos, _normal, nor
              EMO_RUNTIME_DELEGATE.rawin("onContact")) {
         EMO_RUNTIME_DELEGATE.onContact(state, fixtureA, fixtureB, position, normal, normalImpulse, tangentImpulse);
     }
+}
+
+class emo.physics.PhysicsSprite {
+	fixture = null;
+	sprite  = null;
+	body    = null;
+	type    = null;
+	
+	function constructor(_s, _f, _type) {
+		sprite  = _s;
+		fixture = _f;
+		body    = _f.getBody();
+		type    = _type;
+	}
+	
+	function update(timeStep, scale) {
+		if (type != PHYSICS_BODY_TYPE_STATIC) {
+			local pos = body.getPosition();
+			
+			local x = (pos.x * scale) - (sprite.getWidth()  * 0.5);
+			local y = (pos.y * scale) - (sprite.getHeight() * 0.5);
+			
+			sprite.move(x, y);
+			sprite.rotate(body.getAngle());
+		}
+	}
+}
+
+function emo::Physics::createSprite(world, sprite, bodyType, fixtureDef = null) {
+
+	local halfWidth  = sprite.getWidth()  * 0.5;
+	local halfHeight = sprite.getHeight() * 0.5;
+	local scale = world.scale.tofloat();
+
+	local bodyDef = emo.physics.BodyDef();
+	bodyDef.type = bodyType;
+	bodyDef.position = emo.Vec2(
+			(sprite.getX() + halfWidth)  / scale,
+			(sprite.getY() + halfHeight) / scale
+	);
+	
+	local body = world.createBody(bodyDef);
+	
+	local box = emo.physics.PolygonShape();
+	box.setAsBox(halfWidth / scale, halfHeight / scale);
+	
+	if (fixtureDef == null) fixtureDef = emo.physics.FixtureDef();
+	fixtureDef.shape = box;
+
+	local fixture = body.createFixture(fixtureDef);
+	local physicsSprite = emo.physics.PhysicsSprite(sprite, fixture, bodyType);
+	
+	world.addPhysicsSprite(physicsSprite);
+	
+	return physicsSprite;
+}
+
+function emo::Physics::createStaticSprite(world, sprite, fixtureDef = null) {
+	return emo.Physics.createSprite(world, sprite, PHYSICS_BODY_TYPE_STATIC, fixtureDef);
+}
+
+function emo::Physics::createDynamicSprite(world, sprite, fixtureDef = null) {
+	return emo.Physics.createSprite(world, sprite, PHYSICS_BODY_TYPE_DYNAMIC, fixtureDef);
 }
