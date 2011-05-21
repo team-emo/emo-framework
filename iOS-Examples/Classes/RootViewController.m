@@ -30,6 +30,7 @@
 		[NSArray arrayWithObjects:@"Drawing a Shape",  @"shape_example.nut", nil],
 		[NSArray arrayWithObjects:@"Drawing a Sprite", @"sprite_example.nut", nil],
 		[NSArray arrayWithObjects:@"Drawing Tiles",    @"tiles_example.nut", nil],
+		[NSArray arrayWithObjects:@"Drawing TiledMap", @"mapsprite_example.nut", nil],
 		nil]];
 	
 	// Amimation
