@@ -776,7 +776,7 @@ class emo.physics.PhysicsSprite {
 			local y = (pos.y * scale) - (sprite.getHeight() * 0.5);
 			
 			sprite.move(x, y);
-			sprite.rotate(body.getAngle());
+			sprite.rotate(emo.toDegree(body.getAngle()));
 		}
 	}
 }
