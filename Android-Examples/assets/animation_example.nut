@@ -1,15 +1,11 @@
 local stage = emo.Stage();
 
 /*
- * This example shows one block sprite sheet that changes frame index on touch-down event
+ * This example shows single sprite with animations.
  */
 class Main {
 
-    // defines a sprite sheet that consists of 32x32 block with 2 pixel border.
-    block = emo.SpriteSheet("blocks.png", 32, 32, 2);
-
-    // current frame index
-    currentFrame = 0;
+    sprite = emo.SpriteSheet("dog.png", 34, 42, 1);
 
 	/*
 	 * Called when this class is loaded
@@ -18,13 +14,13 @@ class Main {
         print("onLoad"); 
 		
 		// move sprite to the center of the screen
-		local x = (stage.getWindowWidth()  - block.getWidth())  / 2;
-		local y = (stage.getWindowHeight() - block.getHeight()) / 2;
+		local x = (stage.getWindowWidth()  - sprite.getWidth())  / 2;
+		local y = (stage.getWindowHeight() - sprite.getHeight()) / 2;
 		
-		block.move(x, y);
+		sprite.move(x, y);
 
 		// load sprite to the screen
-        block.load();
+        sprite.load();
     }
 
 	/*
@@ -32,6 +28,8 @@ class Main {
 	 */
     function onGainedFocus() {
         print("onGainedFocus");
+		
+		sprite.animate(0, 5, 500);
     }
 
 	/*
@@ -48,20 +46,15 @@ class Main {
         print("onDispose");
         
         // remove sprite from the screen
-        block.remove();
+        sprite.remove();
     }
 
 	/*
 	 * touch event
 	 */
 	function onMotionEvent(mevent) {
-		// change frame index on touch down event
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-			currentFrame++;
-			if (currentFrame >= block.getFrameCount()) {
-				currentFrame = 0;
-			}
-			block.setFrame(currentFrame);
+			sprite.pauseAt(0);
 		}
 	}
 }

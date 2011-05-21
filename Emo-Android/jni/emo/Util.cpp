@@ -1,7 +1,5 @@
 #include <math.h>
 
-#include "Util.h"
-
 bool isPowerOfTwo(int x) {
 	return (x != 0) && ((x & (x - 1)) == 0);
 }

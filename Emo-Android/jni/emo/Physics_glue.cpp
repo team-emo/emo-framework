@@ -374,16 +374,17 @@ SQInteger emoPhysicsPolygonShape_SetAsBox(HSQUIRRELVM v) {
 	sq_getfloat(v, 3, &hx);
 	sq_getfloat(v, 4, &hy);
 	
-	b2Vec2 center;
-	if (sq_gettype(v, 5) == OT_INSTANCE) {
+	if (sq_gettype(v, 5) == OT_INSTANCE && sq_gettype(v, 6) != OT_NULL) {
+		b2Vec2 center;
 		getVec2Instance(v, 5, &center);
-	}
-	float32 angle;
-	if (sq_gettype(v, 6) != OT_NULL) {
+		
+		float32 angle;
 		sq_getfloat(v, 6, &angle);
+		
+		shape->SetAsBox(hx, hy, center, angle);
+	} else {
+		shape->SetAsBox(hx, hy);
 	}
-	
-	shape->SetAsBox(hx, hy, center, angle);
 	
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
@@ -1587,28 +1588,28 @@ SQInteger emoPhysicsJointDef_Update(HSQUIRRELVM v) {
 
 	switch(def->type) {
 		case e_distanceJoint:
-			updateDistanceJointDef(v, 3, reinterpret_cast<b2DistanceJointDef*> (def));
+			getDistanceJointDef(v, 3, reinterpret_cast<b2DistanceJointDef*> (def));
 			break;
 		case e_frictionJoint:
-			updateFrictionJointDef(v, 3, reinterpret_cast<b2FrictionJointDef*> (def));
+			getFrictionJointDef(v, 3, reinterpret_cast<b2FrictionJointDef*> (def));
 			break;
 		case e_gearJoint:
-			updateGearJointDef(v, 3, reinterpret_cast<b2GearJointDef*> (def));
+			getGearJointDef(v, 3, reinterpret_cast<b2GearJointDef*> (def));
 			break;
 		case e_lineJoint:
-			updateLineJointDef(v, 3, reinterpret_cast<b2LineJointDef*> (def));
+			getLineJointDef(v, 3, reinterpret_cast<b2LineJointDef*> (def));
 			break;
 		case e_prismaticJoint:
-			updatePrismaticJointDef(v, 3, reinterpret_cast<b2PrismaticJointDef*> (def));
+			getPrismaticJointDef(v, 3, reinterpret_cast<b2PrismaticJointDef*> (def));
 			break;
 		case e_pulleyJoint:
-			updatePulleyJointDef(v, 3, reinterpret_cast<b2PulleyJointDef*> (def));
+			getPulleyJointDef(v, 3, reinterpret_cast<b2PulleyJointDef*> (def));
 			break;
 		case e_revoluteJoint:
-			updateRevoluteJointDef(v, 3, reinterpret_cast<b2RevoluteJointDef*> (def));
+			getRevoluteJointDef(v, 3, reinterpret_cast<b2RevoluteJointDef*> (def));
 			break;
 		case e_weldJoint:
-			updateWeldJointDef(v, 3, reinterpret_cast<b2WeldJointDef*> (def));
+			getWeldJointDef(v, 3, reinterpret_cast<b2WeldJointDef*> (def));
 			break;
 		default:
 			sq_pushinteger(v, ERR_INVALID_PARAM);

@@ -1,19 +1,33 @@
 #include "Box2D/Box2D.h"
 #include "Squirrel.h"
+#include "stdio.h"
 #include "Physics_util.h"
 #include "Constants.h"
 #include "VmFunc.h"
 
+extern void LOGI(const char* msg);
+extern void LOGW(const char* msg);
+extern void LOGE(const char* msg);
+	
+/*
+ * Get b2Vec2 from emo.Vec2
+ */
 void getVec2Instance(HSQUIRRELVM v, int idx, b2Vec2* vec2) {
 	getInstanceMemberAsFloat(v, idx, "x", &vec2->x);
 	getInstanceMemberAsFloat(v, idx, "y", &vec2->y);
 }
 
+/*
+ * Get b2Vec2 from emo.Vec2 of instance member
+ */
 void getVec2InstanceFromMember(HSQUIRRELVM v, int idx, const char* member, b2Vec2* vec2) {
 	getInstanceMemberAsTable(v, idx, member, "x", &vec2->x);
 	getInstanceMemberAsTable(v, idx, member, "y", &vec2->y);
 }
 
+/*
+ * Push b2Vec2 as an array
+ */
 void pushVec2(HSQUIRRELVM v, b2Vec2 vec2) {
 	sq_newarray(v, 0);
 	
@@ -25,6 +39,10 @@ void pushVec2(HSQUIRRELVM v, b2Vec2 vec2) {
 	
 	sq_push(v, -1);
 }	
+
+/*
+ * get b2BodyDef from emo.BodyDef instance
+ */
 void getBodyDefInstance(HSQUIRRELVM v, int idx, b2BodyDef* def) {
 	SQInteger btype;
 	getInstanceMemberAsInteger(v, idx, "type", &btype);
@@ -53,6 +71,9 @@ void getBodyDefInstance(HSQUIRRELVM v, int idx, b2BodyDef* def) {
 	getInstanceMemberAsFloat(v,  idx, "inertiaScale",    &def->inertiaScale);
 }
 
+/*
+ * Get b2FixtureDef from emo.FixtureDef instance
+ */
 void getFixtureDefInstance(HSQUIRRELVM v, int idx, b2FixtureDef* def) {
 	getInstanceMemberAsFloat(v,  idx, "friction",    &def->friction);
 	getInstanceMemberAsFloat(v,  idx, "restitution", &def->restitution);
@@ -61,20 +82,30 @@ void getFixtureDefInstance(HSQUIRRELVM v, int idx, b2FixtureDef* def) {
 	
 	SQUserPointer ptr_shape;
 	if (getInstanceMemberAsInstance(v, idx, "shape", "id", &ptr_shape)) {
-		def->shape = reinterpret_cast<b2Shape*>(ptr_shape); 
+		def->shape = reinterpret_cast<b2Shape*>(ptr_shape);
 	}
 }
-SQInteger updateDistanceJointDef(HSQUIRRELVM v, int idx, b2DistanceJointDef* def) {
+
+/*
+ * Get b2DistanceJointDef from emo.DistanceJointDef instance
+ */
+void getDistanceJointDef(HSQUIRRELVM v, int idx, b2DistanceJointDef* def) {
 	getInstanceMemberAsFloat(v, idx, "frequencyHz", &def->frequencyHz);
 	getInstanceMemberAsFloat(v, idx, "dampingRatio", &def->dampingRatio);
-	return EMO_NO_ERROR;
 }
-SQInteger updateFrictionJointDef(HSQUIRRELVM v, int idx, b2FrictionJointDef* def) {
+
+/*
+ * Get b2FrictionJointDef from emo.FrictionJointDef instance
+ */
+void getFrictionJointDef(HSQUIRRELVM v, int idx, b2FrictionJointDef* def) {
 	getInstanceMemberAsFloat(v, idx, "maxForce", &def->maxForce);
 	getInstanceMemberAsFloat(v, idx, "maxTorque", &def->maxTorque);
-	return EMO_NO_ERROR;
 }
-SQInteger updateGearJointDef(HSQUIRRELVM v, int idx, b2GearJointDef* def) {
+	
+/*
+ * Get b2GearJointDef from emo.GearJointDef instance
+ */
+void getGearJointDef(HSQUIRRELVM v, int idx, b2GearJointDef* def) {
 	getInstanceMemberAsFloat(v, idx, "ratio", &def->ratio);
 	
 	SQUserPointer ptr_joint1;
@@ -86,41 +117,54 @@ SQInteger updateGearJointDef(HSQUIRRELVM v, int idx, b2GearJointDef* def) {
 	if (getInstanceMemberAsInstance(v, idx, "joint2", "id", &ptr_joint2)) {
 		def->joint2 = reinterpret_cast<b2Joint*>(ptr_joint2); 
 	}
-	return EMO_NO_ERROR;
 }
-SQInteger updateLineJointDef(HSQUIRRELVM v, int idx, b2LineJointDef* def) {
+
+/*
+ * Get b2LineJointDef from emo.LineJointDef instance
+ */
+void getLineJointDef(HSQUIRRELVM v, int idx, b2LineJointDef* def) {
 	getInstanceMemberAsBool(v, idx, "enableLimit", &def->enableLimit);
 	getInstanceMemberAsFloat(v, idx, "lowerTranslation", &def->lowerTranslation);
 	getInstanceMemberAsFloat(v, idx, "upperTranslation", &def->upperTranslation);
 	getInstanceMemberAsBool(v, idx, "enableMotor", &def->enableMotor);
 	getInstanceMemberAsFloat(v, idx, "maxMotorForce", &def->maxMotorForce);
 	getInstanceMemberAsFloat(v, idx, "motorSpeed", &def->motorSpeed);
-	
-	return EMO_NO_ERROR;
 }
-SQInteger updatePrismaticJointDef(HSQUIRRELVM v, int idx, b2PrismaticJointDef* def) {
+
+/*
+ * Get b2PrismaticJointDef from emo.PrismaticJointDef instance
+ */
+void getPrismaticJointDef(HSQUIRRELVM v, int idx, b2PrismaticJointDef* def) {
 	getInstanceMemberAsBool(v, idx, "enableLimit", &def->enableLimit);
 	getInstanceMemberAsFloat(v, idx, "lowerTranslation", &def->lowerTranslation);
 	getInstanceMemberAsFloat(v, idx, "upperTranslation", &def->upperTranslation);
 	getInstanceMemberAsBool(v, idx, "enableMotor", &def->enableMotor);
 	getInstanceMemberAsFloat(v, idx, "maxMotorForce", &def->maxMotorForce);
 	getInstanceMemberAsFloat(v, idx, "motorSpeed", &def->motorSpeed);
-	return EMO_NO_ERROR;
 }
-SQInteger updatePulleyJointDef(HSQUIRRELVM v, int idx, b2PulleyJointDef* def) {
+
+/*
+ * Get b2PulleyJointDef from emo.PulleyJointDef instance
+ */
+void getPulleyJointDef(HSQUIRRELVM v, int idx, b2PulleyJointDef* def) {
 	// no item to convert
-	return EMO_NO_ERROR;
 }
-SQInteger updateRevoluteJointDef(HSQUIRRELVM v, int idx, b2RevoluteJointDef* def) {
+
+/*
+ * Get b2RevoluteJointDef from emo.RevoluteJointDe instance
+ */
+void getRevoluteJointDef(HSQUIRRELVM v, int idx, b2RevoluteJointDef* def) {
 	getInstanceMemberAsBool(v, idx, "enableLimit", &def->enableLimit);
 	getInstanceMemberAsFloat(v, idx, "lowerAngle", &def->lowerAngle);
 	getInstanceMemberAsFloat(v, idx, "upperAngle", &def->upperAngle);
 	getInstanceMemberAsBool(v, idx, "enableMotor", &def->enableMotor);
 	getInstanceMemberAsFloat(v, idx, "maxMotorTorque", &def->maxMotorTorque);
 	getInstanceMemberAsFloat(v, idx, "motorSpeed", &def->motorSpeed);
-	return EMO_NO_ERROR;
 }
-SQInteger updateWeldJointDef(HSQUIRRELVM v, int idx, b2WeldJointDef* def) {
+
+/*
+ * Get b2WeldJointDef from emo.WeldJointDef instance
+ */
+void getWeldJointDef(HSQUIRRELVM v, int idx, b2WeldJointDef* def) {
 	// no item to convert
-	return EMO_NO_ERROR;
 }

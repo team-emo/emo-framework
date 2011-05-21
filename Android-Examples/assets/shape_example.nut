@@ -1,7 +1,7 @@
 local stage = emo.Stage();
 
 /*
- * This example shows one rectangular shape that moves to the position of touch-down event.
+ * This example shows one rectangular shape that moves to the position on touch-down event.
  */
 class Main {
 
@@ -60,7 +60,7 @@ class Main {
 	 * touch event
 	 */
 	function onMotionEvent(mevent) {
-		// move rectangle to the position of the motion event 
+		// move rectangle to the position on the motion event 
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
 			local x = mevent.getX() - (rectangle.getWidth()  / 2);
 			local y = mevent.getY() - (rectangle.getHeight() / 2);

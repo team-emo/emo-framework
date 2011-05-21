@@ -24,31 +24,45 @@ public class Launcher extends ExpandableListActivity {
     private List<List<Map<String, String>>> childData = new ArrayList<List<Map<String, String>>>();
     
     private static final String[] groupNames = {
-    	"Basic", "Animation"
+    	"Basic", "Animation", "Physics"
     };
     
     private static final String[][] childNames = {
     	{
     		"Drawing a Shape",
     		"Drawing a Sprite",
-			"Drawing Tiles"
+			"Drawing Tiles",
+			"Drawing TiledMap"
     	},
     	{
+    		"Sprite Animation",
     		"Periodic Update",
     		"Using Modifiers",
     		"Modifier with Easing"
+    	},
+    	{
+    		"HelloWorld (No Graphics)",
+    		"Using Box Shape",
+    		"Using Circle Shape"
     	}
     };
     private static final String[][] activities = {
     	{
     		".ShapeExample",
     		".SpriteExample",
-			".TileExample"
+			".TileExample",
+			".TiledMapExample"
     	},
     	{
+    		".SpriteAnimationExample",
     		".PeriodicUpdateExample",
     		".RotateModifierExample",
     		".MoveModifierExample"
+    	},
+    	{
+    		".Box2DHelloWorld",
+    		".PhysicsHelloWorld",
+    		".PhysicsCircleExample"
     	}
     };
     

@@ -318,8 +318,14 @@ bool getBool(HSQUIRRELVM v, int idx, SQBool* value) {
 bool getInstanceMemberAsInteger(HSQUIRRELVM v, int idx, const char *name, SQInteger* value) {
 	if (sq_gettype(v, idx) == OT_NULL) return false;
 	sq_pushstring(v, name, -1);
-	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
-	if (sq_gettype(v, -1) == OT_NULL)  return false;
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) {
+		sq_pop(v, 1);
+		return false;
+	}
+	if (sq_gettype(v, -1) == OT_NULL) {
+		return false;
+		sq_pop(v, 1);
+	}
 	sq_getinteger(v, -1, value);
 	sq_pop(v, 1);
 	
@@ -332,8 +338,14 @@ bool getInstanceMemberAsInteger(HSQUIRRELVM v, int idx, const char *name, SQInte
 bool getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat* value) {
 	if (sq_gettype(v, idx) == OT_NULL) return false;
 	sq_pushstring(v, name, -1);
-	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
-	if (sq_gettype(v, -1) == OT_NULL)  return false;
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) {
+		sq_pop(v, 1);
+		return false;
+	}
+	if (sq_gettype(v, -1) == OT_NULL) {
+		sq_pop(v, 1);
+		return false;
+	}
 	sq_getfloat(v, -1, value);
 	sq_pop(v, 1);
 	
@@ -347,8 +359,10 @@ bool getInstanceMemberAsFloat(HSQUIRRELVM v, int idx, const char *name, SQFloat*
 bool getInstanceMemberAsBool(HSQUIRRELVM v, int idx, const char *name, bool* value) {
 	if (sq_gettype(v, idx) == OT_NULL) return false;
 	sq_pushstring(v, name, -1);
-	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
-
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) {
+		sq_pop(v, 1);
+		return false;
+	}
 	SQBool flag;
 	if (!getBool(v, -1, &flag)) {
 		sq_pop(v, 1);
@@ -367,12 +381,21 @@ bool getInstanceMemberAsBool(HSQUIRRELVM v, int idx, const char *name, bool* val
 bool getInstanceMemberAsTable(HSQUIRRELVM v, int idx, const char *cname, const char *name, SQFloat* value) {
 	if (sq_gettype(v, idx) == OT_NULL) return false;
 	sq_pushstring(v, cname, -1);
-	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) {
+		sq_pop(v, 1);
+		return false;
+	}
 	sq_pushstring(v, name, -1);
-	if (!SQ_SUCCEEDED(sq_get(v, -2))) return false;
-	if (sq_gettype(v, -1) == OT_NULL) return false;
+	if (!SQ_SUCCEEDED(sq_get(v, -2))) {
+		sq_pop(v, 2);
+		return false;
+	}
+	if (sq_gettype(v, -1) == OT_NULL) {
+		sq_pop(v, 2);
+		return false;
+	}
 	sq_getfloat(v, -1, value);
-	sq_pop(v, 1);
+	sq_pop(v, 2);
 	return true;
 }
 
@@ -383,12 +406,21 @@ bool getInstanceMemberAsUserPointer(HSQUIRRELVM v, int idx,
 					const char *cname, const char *name, SQUserPointer* value) {
 	if (sq_gettype(v, idx) == OT_NULL) return false;
 	sq_pushstring(v, cname, -1);
-	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) {
+		sq_pop(v, 1);
+		return false;
+	}
 	sq_pushstring(v, name, -1);
-	if (!SQ_SUCCEEDED(sq_get(v, -2))) return false;
-	if (sq_gettype(v, -1) != OT_USERPOINTER) return false;
+	if (!SQ_SUCCEEDED(sq_get(v, -2))) {
+		sq_pop(v, 2);
+		return false;
+	}
+	if (sq_gettype(v, -1) != OT_USERPOINTER) {
+		sq_pop(v, 2);
+		return false;
+	}
 	sq_getuserpointer(v, -1, value);
-	sq_pop(v, 1);
+	sq_pop(v, 2);
 	return true;
 }
 	
@@ -399,12 +431,21 @@ bool getInstanceMemberAsInstance(HSQUIRRELVM v, int idx,
 			const char *cname, const char *name, SQUserPointer* value) {
 	if (sq_gettype(v, idx) == OT_NULL) return false;
 	sq_pushstring(v, cname, -1);
-	if (!SQ_SUCCEEDED(sq_get(v, idx))) return false;
+	if (!SQ_SUCCEEDED(sq_get(v, idx))) {
+		sq_pop(v, 1);
+		return false;
+	}
 	sq_pushstring(v, name, -1);
-	if (!SQ_SUCCEEDED(sq_get(v, -2))) return false;
-	if (sq_gettype(v, -1) != OT_INSTANCE) return false;
+	if (!SQ_SUCCEEDED(sq_get(v, -2))) {
+		sq_pop(v, 2);
+		return false;
+	}
+	if (sq_gettype(v, -1) != OT_INSTANCE) {
+		sq_pop(v, 2);
+		return false;
+	}
 	sq_getinstanceup(v, -1, value, 0);
-	sq_pop(v, 1);
+	sq_pop(v, 2);
 	return true;
 }
 
@@ -414,11 +455,16 @@ SQInteger createSQObject(HSQUIRRELVM v,
 	sq_pushroottable(v);
 	
 	sq_pushstring(v, package_name, -1);
-	if (!SQ_SUCCEEDED(sq_get(v, -2))) return 0;
-		
+	if (!SQ_SUCCEEDED(sq_get(v, -2))) {
+		sq_pop(v, 1);
+		return 0;
+	}
 	if (name != NULL) {
 		sq_pushstring(v, name, -1);
-		if (!SQ_SUCCEEDED(sq_get(v, -2))) return 0;
+		if (!SQ_SUCCEEDED(sq_get(v, -2))) {
+			sq_pop(v, 2);
+			return 0;
+		}
 	}
 	
 	sq_createinstance(v, -1);
@@ -428,6 +474,6 @@ SQInteger createSQObject(HSQUIRRELVM v,
 	}
 	sq_remove(v, -2);
 	sq_remove(v, -2);
-	
+
 	return 1;
 }

@@ -53,7 +53,29 @@
             <meta-data android:name="emo.script.main"
                        android:value="tiles_example.nut" />
         </activity-alias>
+        
+        <activity-alias android:name=".TiledMapExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="mapsprite_example.nut" />
+        </activity-alias>
 
+        <activity-alias android:name=".SpriteAnimationExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="animation_example.nut" />
+        </activity-alias>
+        
         <activity-alias android:name=".PeriodicUpdateExample"
             android:targetActivity=".Main"
             android:label="@string/sprite_example_name">
@@ -85,6 +107,39 @@
                        android:value="runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="modifier_move_example.nut" />
+        </activity-alias>
+
+        <activity-alias android:name=".Box2DHelloWorld"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="box2d_helloworld.nut" />
+        </activity-alias>
+
+        <activity-alias android:name=".PhysicsHelloWorld"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="physics_helloworld.nut" />
+        </activity-alias>
+        
+        <activity-alias android:name=".PhysicsCircleExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="physics_circle.nut" />
         </activity-alias>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />

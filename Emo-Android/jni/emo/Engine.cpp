@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Runtime.h"
 #include "VmFunc.h"
+#include "Physics.h"
 
 #include <android/window.h>
 #include <jni.h>
@@ -39,6 +40,7 @@ namespace emo {
         initAudioFunctions();
         initJavaGlueFunctions();
         initDatabaseFunctions();
+        initPhysicsFunctions();
     }
 
     int32_t Engine::event_handle_input(android_app* app, AInputEvent* event) {
