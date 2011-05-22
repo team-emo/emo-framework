@@ -18,15 +18,12 @@ class Main {
 		block.setSize(10, 20);
 		block.move(0, stage.getWindowHeight() - ground.getHeight() - block.getHeight());
 	
-		sprite.move(0, 0);
+		sprite.move(stage.getWindowWidth() / 2, 0);
+		sprite.rotate(30);
 
 		physics.createStaticSprite(world, ground);
 		physics.createStaticSprite(world, block);
-		
-		local circleDef = emo.physics.FixtureDef();
-		circleDef.density  = 1.0;
-		circleDef.friction = 0.3;
-		physics.createDynamicCircleSprite(world, sprite, sprite.getWidth() * 0.5, circleDef);
+		physics.createDynamicSprite(world, sprite);
 	
 		ground.load();
 		sprite.load();
