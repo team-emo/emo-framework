@@ -21,6 +21,8 @@ void initPhysicsFunctions() {
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "newJointDef",   emoPhysicsNewJointDef);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "world_setAutoClearForces", emoPhysicsWorld_SetAutoClearForces);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "world_getAutoClearForces", emoPhysicsWorld_GetAutoClearForces);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "world_setGravity",   emoPhysicsWorld_SetGravity);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "world_getGravity",   emoPhysicsWorld_GetGravity);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "polygonShape_set",   emoPhysicsPolygonShape_Set);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "polygonShape_setAsBox",   emoPhysicsPolygonShape_SetAsBox);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "polygonShape_setAsEdge",   emoPhysicsPolygonShape_SetAsEdge);

@@ -37,10 +37,8 @@ static SQInteger b2JointDefReleaseHook(SQUserPointer ptr, SQInteger size) {
 }
 	
 SQInteger emoPhysicsNewWorld(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-	
 	b2Vec2 gravity;
-	if (nargs >= 2 && sq_gettype(v, 2) == OT_INSTANCE) {
+	if (sq_gettype(v, 2) == OT_INSTANCE) {
 		getVec2Instance(v, 2, &gravity);
 	} else {
 		gravity.Set(0, SENSOR_STANDARD_GRAVITY);
@@ -216,8 +214,7 @@ SQInteger emoPhysicsWorld_Step(HSQUIRRELVM v) {
 	return 1;
 }
 SQInteger emoPhysicsWorld_EnableContactListener(HSQUIRRELVM v) {
-	SQInteger nargs = sq_gettop(v);
-	if (nargs < 2 || sq_gettype(v, 2) != OT_INSTANCE) {
+	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
@@ -234,8 +231,7 @@ SQInteger emoPhysicsWorld_EnableContactListener(HSQUIRRELVM v) {
 	return 1;
 }
 SQInteger emoPhysicsWorld_ClearForces(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-	if (nargs < 2 || sq_gettype(v, 2) != OT_INSTANCE) {
+	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
@@ -248,8 +244,7 @@ SQInteger emoPhysicsWorld_ClearForces(HSQUIRRELVM v) {
 	return 1;
 }
 SQInteger emoPhysicsWorld_SetAutoClearForces(HSQUIRRELVM v) {
-	SQInteger nargs = sq_gettop(v);
-	if (nargs < 3 || sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) != OT_INTEGER) {
+	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
@@ -265,8 +260,7 @@ SQInteger emoPhysicsWorld_SetAutoClearForces(HSQUIRRELVM v) {
 	return 1;
 }
 SQInteger emoPhysicsWorld_GetAutoClearForces(HSQUIRRELVM v) {
-	SQInteger nargs = sq_gettop(v);
-	if (nargs < 2 || sq_gettype(v, 2) != OT_INSTANCE) {
+	if (sq_gettype(v, 2) != OT_INSTANCE) {
         sq_pushbool(v, false);
 		return 1;
 	}
@@ -274,6 +268,33 @@ SQInteger emoPhysicsWorld_GetAutoClearForces(HSQUIRRELVM v) {
 	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
 	
 	sq_pushbool(v, world->GetAutoClearForces());
+	return 1;
+}
+SQInteger emoPhysicsWorld_SetGravity(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_INSTANCE) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2World* world = NULL;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
+	
+	b2Vec2 gravity;
+	getVec2Instance(v, 3, &gravity);
+	
+	world->SetGravity(gravity);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+SQInteger emoPhysicsWorld_GetGravity(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_INSTANCE) {
+		sq_pushbool(v, false);
+		return 1;
+	}
+	b2World* world = NULL;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
+	
+	pushVec2(v, world->GetGravity());
 	return 1;
 }
 SQInteger emoPhysicsCreateFixture(HSQUIRRELVM v) {
@@ -312,9 +333,8 @@ SQInteger emoPhysicsDestroyFixture(HSQUIRRELVM v) {
 	return 1;
 }
 SQInteger emoPhysicsNewShape(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
 	SQInteger sType = PHYSICS_SHAPE_UNKNOWN;
-	if (nargs >= 2 && sq_gettype(v, 2) == OT_INTEGER) {
+	if (sq_gettype(v, 2) == OT_INTEGER) {
 		sq_getinteger(v, 2, &sType);
 	}
 	b2Shape* shape;
@@ -336,8 +356,7 @@ SQInteger emoPhysicsNewShape(HSQUIRRELVM v) {
 	return 1;
 }
 SQInteger emoPhysicsPolygonShape_Set(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-	if (nargs < 3 || sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) != OT_ARRAY) {
+	if (sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) != OT_ARRAY) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
@@ -365,8 +384,7 @@ SQInteger emoPhysicsPolygonShape_Set(HSQUIRRELVM v) {
 	return 1;
 }
 SQInteger emoPhysicsPolygonShape_SetAsBox(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-	if (nargs < 4 || sq_gettype(v, 2) != OT_INSTANCE
+	if (sq_gettype(v, 2) != OT_INSTANCE
 			|| sq_gettype(v, 3) == OT_NULL || sq_gettype(v, 4) == OT_NULL) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
@@ -394,8 +412,7 @@ SQInteger emoPhysicsPolygonShape_SetAsBox(HSQUIRRELVM v) {
 	return 1;
 }
 SQInteger emoPhysicsPolygonShape_SetAsEdge(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-	if (nargs < 4 || sq_gettype(v, 2) != OT_INSTANCE
+	if (sq_gettype(v, 2) != OT_INSTANCE
 		|| sq_gettype(v, 3) != OT_INSTANCE || sq_gettype(v, 4) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
@@ -413,8 +430,7 @@ SQInteger emoPhysicsPolygonShape_SetAsEdge(HSQUIRRELVM v) {
 	return 1;
 }
 SQInteger emoPhysicsPolygonShape_GetVertex(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-	if (nargs < 3 || sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) == OT_NULL) {
+	if (sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) == OT_NULL) {
 		return 0;
 	}
 	b2PolygonShape* shape;
@@ -428,8 +444,7 @@ SQInteger emoPhysicsPolygonShape_GetVertex(HSQUIRRELVM v) {
 	return 1;
 }
 SQInteger emoPhysicsPolygonShape_GetVertexCount(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-	if (nargs < 2 || sq_gettype(v, 2) != OT_INSTANCE) {
+	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		return 0;
 	}
 	b2PolygonShape* shape;

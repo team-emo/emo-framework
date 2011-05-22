@@ -709,6 +709,7 @@ class emo.Sprite {
     id       = null;
     childId  = null;
     loaded   = null;
+	fixture  = null;
 
     function constructor(rawname) {
         name = this.getResourceName(rawname);
@@ -826,6 +827,19 @@ class emo.Sprite {
     function removeModifier(modifier) {
     	EMO_MODIFIER_MANAGER.remove(modifier);
     }
+	
+	function setFixture(_fixture) {
+		fixture = _fixture;
+	}
+	
+	function getFixture() {
+		return fixture;
+	}
+	
+	function getPhysicsBody() {
+		return fixture.getBody();
+	}
+
 }
 
 class emo.SpriteSheet extends emo.Sprite {

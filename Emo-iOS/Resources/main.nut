@@ -23,7 +23,13 @@ class Main {
 
 		physics.createStaticSprite(world, ground);
 		physics.createStaticSprite(world, block);
-		physics.createDynamicSprite(world, sprite);
+		
+		local fixture = emo.physics.FixtureDef();
+		fixture.density  = 1.0;
+		fixture.friction = 0.2;
+		fixture.restitution = 0.1;
+
+		physics.createDynamicSprite(world, sprite, fixture);
 	
 		ground.load();
 		sprite.load();
@@ -37,6 +43,20 @@ class Main {
 		// world step interval(second)
 		world.step(1.0 / fps, 6, 2);
 		world.clearForces();
+	}
+	
+	/*
+	 * touch event
+	 */
+	function onMotionEvent(mevent) {
+		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+			local gravity = world.getGravity();
+			gravity.y = -gravity.y;
+			world.setGravity(gravity);
+			if (!sprite.getPhysicsBody().isAwake()) {
+				sprite.getPhysicsBody().setAwake(true);
+			}
+		}
 	}
 	
 	function onDispose() {

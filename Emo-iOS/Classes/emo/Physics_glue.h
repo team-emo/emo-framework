@@ -14,6 +14,8 @@ SQInteger emoPhysicsNewJointDef(HSQUIRRELVM v);
 SQInteger emoPhysicsWorld_EnableContactListener(HSQUIRRELVM v);
 SQInteger emoPhysicsWorld_SetAutoClearForces(HSQUIRRELVM v);
 SQInteger emoPhysicsWorld_GetAutoClearForces(HSQUIRRELVM v);
+SQInteger emoPhysicsWorld_SetGravity(HSQUIRRELVM v);
+SQInteger emoPhysicsWorld_GetGravity(HSQUIRRELVM v);
 SQInteger emoPhysicsPolygonShape_Set(HSQUIRRELVM v);
 SQInteger emoPhysicsPolygonShape_SetAsBox(HSQUIRRELVM v);
 SQInteger emoPhysicsPolygonShape_SetAsEdge(HSQUIRRELVM v);
