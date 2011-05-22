@@ -387,6 +387,7 @@ NSString* data2ns(NSData* data) {
 
 /*
  * enable sensor with updateInterval
+ * only accelerometer is supported for iOS.
  */
 - (void)enableSensor:(BOOL)enable withType:(NSInteger)sensorType withInterval:(int)updateInterval {
 	if (sensorType == SENSOR_TYPE_ACCELEROMETER) {

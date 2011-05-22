@@ -22,7 +22,7 @@
 	[viewController awakeFromNib];
 	didReturnRootView = FALSE;
 	
-	sections = [[NSArray alloc] initWithObjects:@"Basic", @"Animation", @"Physics", nil];
+	sections = [[NSArray alloc] initWithObjects:@"Basic", @"Animation", @"Event", @"Physics", nil];
 	examples = [[NSMutableArray alloc] init];
 	
 	// Basic
@@ -41,10 +41,18 @@
 		[NSArray arrayWithObjects:@"Modifiers with Easing", @"modifier_move_example.nut", nil],
 		nil]];
 
+	// Event
+	[examples addObject: [NSArray arrayWithObjects:
+						  [NSArray arrayWithObjects:@"Dragging a Sprite",  @"motion_event.nut", nil],
+						  [NSArray arrayWithObjects:@"Handling Multi-Touch",  @"motion_event_multi.nut", nil],
+						  [NSArray arrayWithObjects:@"Sensor Event",  @"sensor_event.nut", nil],
+						  nil]];
+
 	// Physics
 	[examples addObject: [NSArray arrayWithObjects:
 						  [NSArray arrayWithObjects:@"HelloWorld (No Graphics)", @"box2d_helloworld.nut", nil],
 						  [NSArray arrayWithObjects:@"Using Box Shape", @"physics_helloworld.nut", nil],
+						  [NSArray arrayWithObjects:@"Using Circle Shape", @"physics_circle.nut", nil],
 						  [NSArray arrayWithObjects:@"Using Circle Shape", @"physics_circle.nut", nil],
 						  nil]];
 }

@@ -210,23 +210,23 @@ EmoEngine* engine;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+	[self fireMotionEvent: touches withEvent:event withAction: MOTION_EVENT_ACTION_UP];
 	for (UITouch *touch in touches) {
-		if ([touchIdMaster objectForKey:touch] != nil) {
-			[touchIdMaster removeObjectForKey:touch];
+		if ([touchIdMaster objectForKey:[NSValue valueWithPointer:touch]] != nil) {
+			[touchIdMaster removeObjectForKey:[NSValue valueWithPointer:touch]];
 		}
 	}
 	[self updateTouchId];
-	[self fireMotionEvent: touches withEvent:event withAction: MOTION_EVENT_ACTION_UP];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+	[self fireMotionEvent: touches withEvent:event withAction: MOTION_EVENT_ACTION_CANCEL];
 	for (UITouch *touch in touches) {
-		if ([touchIdMaster objectForKey:touch] != nil) {
-			[touchIdMaster removeObjectForKey:touch];
+		if ([touchIdMaster objectForKey:[NSValue valueWithPointer:touch]] != nil) {
+			[touchIdMaster removeObjectForKey:[NSValue valueWithPointer:touch]];
 		}
 	}
 	[self updateTouchId];
-	[self fireMotionEvent: touches withEvent:event withAction: MOTION_EVENT_ACTION_CANCEL];
 }
 
 /*
@@ -234,7 +234,7 @@ EmoEngine* engine;
  */
 - (void)fireMotionEvent:(NSSet *)touches withEvent:(UIEvent *)event withAction:(NSInteger) action {
 	for (UITouch *touch in touches) {
-		NSNumber *touchId = [touchIdMaster objectForKey:touch];
+		NSNumber *touchId = [touchIdMaster objectForKey:[NSValue valueWithPointer:touch]];
 		CGPoint location = [touch locationInView:self.view];
 		NSTimeInterval uptimeSec  = [engine uptime];
 		NSTimeInterval uptimeMsec = (uptimeSec - floor(uptimeSec)) * 1000; 

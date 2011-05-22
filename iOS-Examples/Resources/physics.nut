@@ -62,6 +62,14 @@ class emo.physics.World {
 		sprites = [];
 	}
 	
+	function setGravity(gravity) {
+		return physics.world_setGravity(id, gravity);
+	}
+	
+	function getGravity() {
+		return emo.Vec2.fromArray(physics.world_getGravity(id));
+	}
+	
 	function setScale(pixelToMeterRatio) {
 		scale = pixelToMeterRatio;
 	}
@@ -810,6 +818,7 @@ function emo::Physics::createSprite(world, sprite, bodyType, shape, fixtureDef =
 	local physicsSprite = emo.physics.PhysicsSprite(sprite, fixture, bodyType);
 	
 	world.addPhysicsSprite(physicsSprite);
+	sprite.setFixture(fixture);
 	
 	return physicsSprite;
 }

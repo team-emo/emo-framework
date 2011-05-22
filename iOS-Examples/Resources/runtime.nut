@@ -709,6 +709,7 @@ class emo.Sprite {
     id       = null;
     childId  = null;
     loaded   = null;
+	fixture  = null;
 
     function constructor(rawname) {
         name = this.getResourceName(rawname);
@@ -785,8 +786,8 @@ class emo.Sprite {
         return stage.move(id, x, y, z);
     }
 
-    function pos(x, y, z = null) {
-        return move(x, y, z);
+    function moveCenter(x, y, z = null) {
+        return move(x - (getWidth() * 0.5), y - (getHeight() * 0.5), z);
     }
 
     function scale(scaleX, scaleY, centerX = null, centerY = null) {
@@ -826,6 +827,19 @@ class emo.Sprite {
     function removeModifier(modifier) {
     	EMO_MODIFIER_MANAGER.remove(modifier);
     }
+	
+	function setFixture(_fixture) {
+		fixture = _fixture;
+	}
+	
+	function getFixture() {
+		return fixture;
+	}
+	
+	function getPhysicsBody() {
+		return fixture.getBody();
+	}
+
 }
 
 class emo.SpriteSheet extends emo.Sprite {
