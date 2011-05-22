@@ -141,6 +141,50 @@
             <meta-data android:name="emo.script.main"
                        android:value="physics_circle.nut" />
         </activity-alias>
+        
+        <activity-alias android:name=".PhysicsSensorExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="physics_sensor.nut" />
+        </activity-alias>
+        
+        <activity-alias android:name=".MotionEventExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="motion_event.nut" />
+        </activity-alias>
+        
+        <activity-alias android:name=".MultiTouchExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="motion_event_multi.nut" />
+        </activity-alias>
+        
+        <activity-alias android:name=".SensorExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="sensor_event.nut" />
+        </activity-alias>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest> 

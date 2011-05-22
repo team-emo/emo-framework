@@ -363,6 +363,7 @@ bool getInstanceMemberAsBool(HSQUIRRELVM v, int idx, const char *name, bool* val
 		sq_pop(v, 1);
 		return false;
 	}
+	
 	SQBool flag;
 	if (!getBool(v, -1, &flag)) {
 		sq_pop(v, 1);
@@ -387,15 +388,15 @@ bool getInstanceMemberAsTable(HSQUIRRELVM v, int idx, const char *cname, const c
 	}
 	sq_pushstring(v, name, -1);
 	if (!SQ_SUCCEEDED(sq_get(v, -2))) {
-		sq_pop(v, 2);
+		sq_pop(v, 1);
 		return false;
 	}
 	if (sq_gettype(v, -1) == OT_NULL) {
-		sq_pop(v, 2);
+		sq_pop(v, 1);
 		return false;
 	}
 	sq_getfloat(v, -1, value);
-	sq_pop(v, 2);
+	sq_pop(v, 1);
 	return true;
 }
 

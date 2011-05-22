@@ -14,7 +14,7 @@ class Main {
 	ground  = emo.Rectangle();
 	blockL  = emo.Rectangle();
 	blockR  = emo.Rectangle();
-	sprite  = emo.Sprite("block.png");
+	sprite  = emo.Sprite("ball.png");
 	
 	function onLoad() {
 		ground.setSize(stage.getWindowWidth(), 20);

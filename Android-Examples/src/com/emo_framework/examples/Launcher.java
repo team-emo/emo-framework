@@ -24,7 +24,7 @@ public class Launcher extends ExpandableListActivity {
     private List<List<Map<String, String>>> childData = new ArrayList<List<Map<String, String>>>();
     
     private static final String[] groupNames = {
-    	"Basic", "Animation", "Physics"
+    	"Basic", "Animation", "Event", "Physics"
     };
     
     private static final String[][] childNames = {
@@ -40,10 +40,16 @@ public class Launcher extends ExpandableListActivity {
     		"Using Modifiers",
     		"Modifier with Easing"
     	},
+		{
+			"Dragging a Sprite",
+			"Handling Multi-Touch",
+			"Sensor Event"
+		},
     	{
     		"HelloWorld (No Graphics)",
     		"Using Box Shape",
-    		"Using Circle Shape"
+    		"Using Circle Shape",
+			"Using with Sensor"
     	}
     };
     private static final String[][] activities = {
@@ -59,10 +65,16 @@ public class Launcher extends ExpandableListActivity {
     		".RotateModifierExample",
     		".MoveModifierExample"
     	},
+		{
+			".MotionEventExample",
+			".MultiTouchExample",
+			".SensorExample"
+		},
     	{
     		".Box2DHelloWorld",
     		".PhysicsHelloWorld",
-    		".PhysicsCircleExample"
+    		".PhysicsCircleExample",
+			".PhysicsSensorExample"
     	}
     };
     

@@ -14,12 +14,15 @@ void initPhysicsFunctions() {
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "createJoint",   emoPhysicsCreateJoint);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "destroyJoint",  emoPhysicsDestroyJoint);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "world_step",    emoPhysicsWorld_Step);
+    registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "enableContactListener", emoPhysicsWorld_EnableContactListener);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "world_clearForces", emoPhysicsWorld_ClearForces);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "createFixture", emoPhysicsCreateFixture);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "destroyFixture",emoPhysicsDestroyFixture);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "newJointDef",   emoPhysicsNewJointDef);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "world_setAutoClearForces", emoPhysicsWorld_SetAutoClearForces);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "world_getAutoClearForces", emoPhysicsWorld_GetAutoClearForces);
+    registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "world_setGravity",   emoPhysicsWorld_SetGravity);
+    registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "world_getGravity",   emoPhysicsWorld_GetGravity);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "polygonShape_set",   emoPhysicsPolygonShape_Set);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "polygonShape_setAsBox",   emoPhysicsPolygonShape_SetAsBox);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "polygonShape_setAsEdge",   emoPhysicsPolygonShape_SetAsEdge);
@@ -101,7 +104,6 @@ void initPhysicsFunctions() {
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "joint_getLength1",   emoPhysicsJoint_GetLength1);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "joint_getLength2",   emoPhysicsJoint_GetLength2);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "updateJointDef",     emoPhysicsJointDef_Update);
-
 	registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "initDistanceJointDef",     emoPhysicsInitDistanceJointDef);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "initFrictionJointDef",     emoPhysicsInitFrictionJointDef);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "initLineJointDef",         emoPhysicsInitLineJointDef);
@@ -109,5 +111,4 @@ void initPhysicsFunctions() {
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "initPulleyJointDef",       emoPhysicsInitPulleyJointDef);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "initRevoluteJointDef",     emoPhysicsInitRevoluteJointDef);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "initWeldJointDef",         emoPhysicsInitWeldJointDef);
-
 }
