@@ -795,6 +795,7 @@ function emo::Physics::createSprite(world, sprite, bodyType, shape, fixtureDef =
 			(sprite.getX() + halfWidth)  / scale,
 			(sprite.getY() + halfHeight) / scale
 	);
+	bodyDef.angle = emo.toRadian(sprite.getAngle());
 	
 	local body = world.createBody(bodyDef);
 	

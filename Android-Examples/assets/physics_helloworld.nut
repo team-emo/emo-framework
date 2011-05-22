@@ -12,16 +12,23 @@ const FPS = 60.0;
 
 class Main {
 	ground  = emo.Rectangle();
-	sprite  = emo.Sprite("block.png");
+	sprite  = emo.Sprite("tv.png");
 	
 	function onLoad() {
 		ground.setSize(stage.getWindowWidth(), 20);
 		ground.move(0, stage.getWindowHeight() - ground.getHeight());
 	
 		sprite.move((stage.getWindowWidth() - sprite.getWidth()) / 2, 0);
+		sprite.rotate(30);
 
 		physics.createStaticSprite(world, ground);
-		physics.createDynamicSprite(world, sprite);
+		
+		local fixture = emo.physics.FixtureDef();
+		fixture.density  = 1.0;
+		fixture.friction = 0.2;
+		fixture.restitution = 0.1;
+
+		physics.createDynamicSprite(world, sprite, fixture);
 	
 		ground.load();
 		sprite.load();
