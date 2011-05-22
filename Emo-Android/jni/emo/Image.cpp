@@ -36,14 +36,14 @@ bool loadPngSizeFromAsset(const char *fname, int *width, int *height) {
     AAssetManager* mgr = engine->app->activity->assetManager;
     if (mgr == NULL) {
     	engine->setLastError(ERR_ASSET_LOAD);
-    	LOGE("loadPngFromAsset: failed to load AAssetManager");
+    	LOGE("loadPngSizeFromAsset: failed to load AAssetManager");
     	return false;
     }
 
     AAsset* asset = AAssetManager_open(mgr, fname, AASSET_MODE_UNKNOWN);
     if (asset == NULL) {
     	engine->setLastError(ERR_ASSET_OPEN);
-    	LOGW("loadPngFromAsset: failed to open asset");
+    	LOGW("loadPngSizeFromAsset: failed to open asset");
         LOGW(fname);
     	return false;
     }

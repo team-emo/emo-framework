@@ -84,13 +84,17 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
         if (strlen(name) > 0) {
             drawable->name = name;
         }
+    } else {
+        name = NULL;
     }
 
     int width  = 0;
     int height = 0;
-    if (name != NULL && (!loadPngSizeFromAsset(name, &width, &height) || width <= 0 || height <= 0)) {
-        delete drawable;
-        return 0;
+    if (name != NULL && strlen(name) > 0) {
+        if (!loadPngSizeFromAsset(name, &width, &height) || width <= 0 || height <= 0) {
+            delete drawable;
+            return 0;
+        }
     }
     drawable->width  = width;
     drawable->height = height;
@@ -122,6 +126,8 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
         if (strlen(name) > 0) {
             drawable->name = name;
         }
+    } else {
+        name = NULL;
     }
 
     SQInteger frameIndex = 0;
@@ -146,10 +152,11 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     int width  = 0;
     int height = 0;
 
-    if (name != NULL && (!loadPngSizeFromAsset(name, &width, &height) || 
-          width <= 0 || height <= 0 || frameWidth <= 0 || frameHeight <= 0)) {
-        delete drawable;
-        return 0;
+    if (name != NULL && strlen(name) > 0) {
+         if (!loadPngSizeFromAsset(name, &width, &height) || width <= 0 || height <= 0 || frameWidth <= 0 || frameHeight <= 0) {
+            delete drawable;
+            return 0;
+        }
     }
 
     drawable->hasSheet = true;

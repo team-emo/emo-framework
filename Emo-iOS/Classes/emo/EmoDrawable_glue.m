@@ -128,7 +128,9 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
         if (strlen(name) > 0) {
 			drawable.name = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
         }
-    }
+    } else {
+		drawable.name = nil;
+	}
 	
     SQInteger frameIndex = 0;
     SQInteger frameWidth = 0;

@@ -711,14 +711,23 @@ namespace emo {
     }
 
     void Engine::createSensors(int value) {
-
         if (this->sensorManager == NULL) {
             // Get a reference to the sensor manager
             this->sensorManager = ASensorManager_getInstance();
 
+            if (this->sensorManager == NULL) {
+            	LOGI("Could not create sensor manager");
+            	return;
+            }
+
             // Creates a new sensor event queue
             this->sensorEventQueue = ASensorManager_createEventQueue(
                 this->sensorManager, this->app->looper, LOOPER_ID_USER, NULL, NULL);
+
+            if (this->sensorEventQueue == NULL) {
+            	LOGI("Could not create sensor event queue");
+            	return;
+            }
         }
 
         switch(value) {
@@ -743,14 +752,13 @@ namespace emo {
                 this->sensorManager, ASENSOR_TYPE_PROXIMITY);
             break;
         }
-
     }
-
 
     /*
      * enable sensor
      */
     void Engine::enableSensor(int sensorType, int interval) {
+    	if (this->sensorManager == NULL || this->sensorEventQueue == NULL) return;
 
         switch(sensorType) {
         case SENSOR_TYPE_ACCELEROMETER:
@@ -800,7 +808,7 @@ namespace emo {
      * disable sensor
      */
     void Engine::disableSensor(int sensorType) {
-
+    	if (this->sensorManager == NULL || this->sensorEventQueue == NULL) return;
         switch(sensorType) {
         case SENSOR_TYPE_ACCELEROMETER:
             if (this->accelerometerSensor != NULL) {

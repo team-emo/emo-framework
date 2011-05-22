@@ -244,9 +244,11 @@ SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
             sq_tostring(v, n);
             sq_getstring(v, -1, &str);
             sq_poptop(v);
-    	}
-    }
-	
+        } else {
+            str = NULL;
+        }
+	}
+
 	if (str != NULL) {
 		sq_pushstring(v, str, -1);
 	}

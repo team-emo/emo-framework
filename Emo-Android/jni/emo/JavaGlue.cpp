@@ -130,20 +130,21 @@ namespace emo {
 
 
 SQInteger emoJavaEcho(HSQUIRRELVM v) {
-	const SQChar *str;
     SQInteger nargs = sq_gettop(v);
     for(SQInteger n = 1; n <= nargs; n++) {
+		const SQChar *str;
     	if (sq_gettype(v, n) == OT_STRING) {
             sq_tostring(v, n);
             sq_getstring(v, -1, &str);
             sq_poptop(v);
+        } else {
+            str = NULL;
+        }
+    	if (str != NULL) {
+            std::string value = engine->javaGlue->echo(str);
+	    	sq_pushstring(v, value.c_str(), -1);
     	}
     }
-	
-	if (str != NULL) {
-        std::string value = engine->javaGlue->echo(str);
-		sq_pushstring(v, value.c_str(), -1);
-	}
 	
 	return 1;
 }
