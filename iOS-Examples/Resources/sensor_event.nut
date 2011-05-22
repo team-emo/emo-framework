@@ -28,7 +28,7 @@ class Main {
 	 */
     function onGainedFocus() {
         print("onGainedFocus");
-		event.enableSensor(SENSOR_TYPE_ACCELEROMETER, 1000);
+		event.enableSensor(SENSOR_TYPE_ACCELEROMETER, 100);
     }
 
 	/*
@@ -54,6 +54,7 @@ class Main {
 	 */
 	function onSensorEvent(sevent) {
 		if (sevent.getType() == SENSOR_TYPE_ACCELEROMETER) {
+			block.rotate(emo.toDegree(sevent.getAccelerationX()));
 			print(format("x=%f, y=%f, z=%f", 
 				sevent.getAccelerationX(), 
 				sevent.getAccelerationY(),
