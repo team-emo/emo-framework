@@ -786,8 +786,8 @@ class emo.Sprite {
         return stage.move(id, x, y, z);
     }
 
-    function pos(x, y, z = null) {
-        return move(x, y, z);
+    function moveCenter(x, y, z = null) {
+        return move(x - (getWidth() * 0.5), y - (getHeight() * 0.5), z);
     }
 
     function scale(scaleX, scaleY, centerX = null, centerY = null) {

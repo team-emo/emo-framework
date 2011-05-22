@@ -137,6 +137,7 @@
 		F9D43A3F1388E5920069C3C1 /* motion_event.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43A3D1388E57B0069C3C1 /* motion_event.nut */; };
 		F9D43A401388E5920069C3C1 /* sensor_event.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43A3E1388E58C0069C3C1 /* sensor_event.nut */; };
 		F9D43A921388F9830069C3C1 /* motion_event_multi.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */; };
+		F9D43B0C1389160B0069C3C1 /* physics_sensor.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43B0B138916040069C3C1 /* physics_sensor.nut */; };
 		F9D78CD313872E8A0076C937 /* physics.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D78CD213872E8A0076C937 /* physics.nut */; };
 		F9F5AB9F138880D90068EC12 /* tv.png in Resources */ = {isa = PBXBuildFile; fileRef = F9F5AB9E138880D90068EC12 /* tv.png */; };
 /* End PBXBuildFile section */
@@ -363,6 +364,7 @@
 		F9D43A3D1388E57B0069C3C1 /* motion_event.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = motion_event.nut; path = Resources/motion_event.nut; sourceTree = "<group>"; };
 		F9D43A3E1388E58C0069C3C1 /* sensor_event.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = sensor_event.nut; path = Resources/sensor_event.nut; sourceTree = "<group>"; };
 		F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = motion_event_multi.nut; path = Resources/motion_event_multi.nut; sourceTree = "<group>"; };
+		F9D43B0B138916040069C3C1 /* physics_sensor.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_sensor.nut; path = Resources/physics_sensor.nut; sourceTree = "<group>"; };
 		F9D78CD213872E8A0076C937 /* physics.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics.nut; path = Resources/physics.nut; sourceTree = "<group>"; };
 		F9F5AB9E138880D90068EC12 /* tv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tv.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -447,6 +449,7 @@
 				F921CC9F136FFBAC00F058FF /* periodic_update_example.nut */,
 				F985282113875C2F007DD0CF /* physics_helloworld.nut */,
 				F98EABC7138784D800902E31 /* physics_circle.nut */,
+				F9D43B0B138916040069C3C1 /* physics_sensor.nut */,
 				F9D43A3D1388E57B0069C3C1 /* motion_event.nut */,
 				F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */,
 				F9D43A3E1388E58C0069C3C1 /* sensor_event.nut */,
@@ -863,6 +866,7 @@
 				F9D43A3F1388E5920069C3C1 /* motion_event.nut in Resources */,
 				F9D43A401388E5920069C3C1 /* sensor_event.nut in Resources */,
 				F9D43A921388F9830069C3C1 /* motion_event_multi.nut in Resources */,
+				F9D43B0C1389160B0069C3C1 /* physics_sensor.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -53,7 +53,7 @@
 						  [NSArray arrayWithObjects:@"HelloWorld (No Graphics)", @"box2d_helloworld.nut", nil],
 						  [NSArray arrayWithObjects:@"Using Box Shape", @"physics_helloworld.nut", nil],
 						  [NSArray arrayWithObjects:@"Using Circle Shape", @"physics_circle.nut", nil],
-						  [NSArray arrayWithObjects:@"Using Circle Shape", @"physics_circle.nut", nil],
+						  [NSArray arrayWithObjects:@"Using with Sensor", @"physics_sensor.nut", nil],
 						  nil]];
 }
 
