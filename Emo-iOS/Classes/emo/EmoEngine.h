@@ -103,6 +103,8 @@ NSString* data2ns(NSData* data);
 -(void)addCachedImage:(NSString*)key value:(EmoImage*)image;
 -(void)removeCachedImage:(NSString*)key;
 
+- (NSString*)getDeviceName;
+
 - (NSTimeInterval)uptime;
 @end
 

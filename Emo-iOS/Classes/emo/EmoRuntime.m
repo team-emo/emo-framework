@@ -89,6 +89,8 @@ void initRuntimeFunctions() {
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "device",          emoRuntimeGetDeviceName);
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "isSimulator",     emoRuntimeIsSimulator);
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "gc",              emoRuntimeGC);
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "start",         emoRuntimeStopwatchStart);
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
@@ -366,6 +368,24 @@ SQInteger emoRuntimeFinish(HSQUIRRELVM v) {
 SQInteger emoRuntimeGetOSName(HSQUIRRELVM v) {
     sq_pushstring(v, OS_IOS, -1);
     return 1;
+}
+
+/* 
+ * Returns device name
+ */
+SQInteger emoRuntimeGetDeviceName(HSQUIRRELVM v) {
+    sq_pushstring(v, [[engine getDeviceName] UTF8String], -1);
+    return 1;
+}
+
+/*
+ * Returns whether the device is simulator or not
+ */
+SQInteger emoRuntimeIsSimulator(HSQUIRRELVM v) {
+	NSString* device = [engine getDeviceName];
+	BOOL value = ([device isEqualToString:@"i386"]) || ([device isEqualToString:@"x86_64"]); 
+	sq_pushbool(v, value);
+	return 1;
 }
 
 /*

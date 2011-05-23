@@ -506,6 +506,16 @@ NSString* data2ns(NSData* data) {
 	[imageCache removeObjectForKey:key];
 }
 
+- (NSString*)getDeviceName {
+	size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    char *machine = malloc(size);
+	sysctlbyname("hw.machine", machine, &size, NULL, 0);
+	NSString *platform = [NSString stringWithCString:machine encoding: NSUTF8StringEncoding];
+	free(machine);
+	return platform;
+}
+
 -(void)dealloc {
 	[lastCallbackErrorMessage release];
 	[lastCallbackErrorType release];

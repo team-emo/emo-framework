@@ -19,6 +19,8 @@
 void initRuntimeFunctions();
 
 SQInteger emoRuntimeGetOSName(HSQUIRRELVM v);
+SQInteger emoRuntimeGetDeviceName(HSQUIRRELVM v);
+SQInteger emoRuntimeIsSimulator(HSQUIRRELVM v);
 SQInteger emoRuntimeEcho(HSQUIRRELVM v);
 SQInteger emoImportScript(HSQUIRRELVM v);
 SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v);
