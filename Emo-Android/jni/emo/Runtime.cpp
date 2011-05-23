@@ -30,6 +30,8 @@ void initRuntimeFunctions() {
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "warn",            emoRuntimeLogWarn);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "finish",          emoRuntimeFinish);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "os",              emoRuntimeGetOSName);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "device",          emoRuntimeGetDeviceName);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "isSimulator",     emoRuntimeIsSimulator);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "gc",              emoRuntimeGC);
     registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "start",         emoRuntimeStopwatchStart);
     registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
@@ -272,6 +274,21 @@ SQInteger emoRuntimeGetOSName(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * Returns device name
+ */
+SQInteger emoRuntimeGetDeviceName(HSQUIRRELVM v) {
+    sq_pushstring(v, (SQChar*)engine->javaGlue->getDeviceName().c_str(), -1);
+	return 1;
+}
+
+/*
+ * Returns whether the device is simulator or not
+ */
+SQInteger emoRuntimeIsSimulator(HSQUIRRELVM v) {
+	sq_pushbool(v, engine->javaGlue->isSimulator());
+	return 1;
+}
 
 /*
  * start stopwatch

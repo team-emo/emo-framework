@@ -126,6 +126,69 @@ namespace emo {
 
         return result == JNI_TRUE;
     }
+
+    void JavaGlue::setOrientationLandscape() {
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "setOrientationLandscape", "()V");
+        env->CallVoidMethod(engine->app->activity->clazz, methodj);
+
+        vm->DetachCurrentThread();
+    }
+
+    void JavaGlue::setOrientationPortrait() {
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "setOrientationPortrait", "()V");
+        env->CallVoidMethod(engine->app->activity->clazz, methodj);
+
+        vm->DetachCurrentThread();
+    }
+
+    std::string JavaGlue::getDeviceName() {
+        std::string value;
+
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "getDeviceName", "()Ljava/lang/String;");
+        jstring jstr = (jstring)env->CallObjectMethod(engine->app->activity->clazz, methodj);
+        if (jstr != NULL) {
+            const char* str = env->GetStringUTFChars(jstr, NULL);
+            value = str;
+            env->ReleaseStringUTFChars(jstr, str);
+        }
+        vm->DetachCurrentThread();
+
+        return value;
+    }
+
+    bool JavaGlue::isSimulator() {
+    	jboolean value = false;
+
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "isSimulator", "()Z");
+        value = env->CallBooleanMethod(engine->app->activity->clazz, methodj);
+        vm->DetachCurrentThread();
+
+        return value;
+    }
 }
 
 

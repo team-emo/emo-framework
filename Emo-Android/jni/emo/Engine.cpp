@@ -702,10 +702,10 @@ namespace emo {
             this->enableBackKey = false;
             break;
         case OPT_ORIENTATION_PORTRAIT:
-            AConfiguration_setOrientation(this->app->config, ACONFIGURATION_ORIENTATION_PORT);
+            this->javaGlue->setOrientationPortrait();
             break;
         case OPT_ORIENTATION_LANDSCAPE:
-            AConfiguration_setOrientation(this->app->config, ACONFIGURATION_ORIENTATION_LAND);
+        	this->javaGlue->setOrientationLandscape();
             break;
         }
     }

@@ -28,6 +28,8 @@ SQInteger emoRuntimeLogError(HSQUIRRELVM v);
 SQInteger emoRuntimeLogWarn(HSQUIRRELVM v);
 SQInteger emoRuntimeFinish(HSQUIRRELVM v);
 SQInteger emoRuntimeGetOSName(HSQUIRRELVM v);
+SQInteger emoRuntimeGetDeviceName(HSQUIRRELVM v);
+SQInteger emoRuntimeIsSimulator(HSQUIRRELVM v);
 SQInteger emoRuntimeStopwatchStart(HSQUIRRELVM v);
 SQInteger emoRuntimeStopwatchStop(HSQUIRRELVM v);
 SQInteger emoRuntimeStopwatchElapsed(HSQUIRRELVM v);

@@ -205,5 +205,21 @@ public class EmoActivity extends NativeActivity {
     	Log.w(ENGINE_TAG, message, null);
     }
 
+    public void setOrientationLandscape() {
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+    
+    public void setOrientationPortrait() {
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+    
+    public String getDeviceName() {
+    	return android.os.Build.DEVICE;
+    }
+    
+    public boolean isSimulator() {
+    	return "sdk".equals(android.os.Build.MODEL) && "generic".equals(android.os.Build.DEVICE);
+    }
+    
     public native void callback(String name, String value);
 }
