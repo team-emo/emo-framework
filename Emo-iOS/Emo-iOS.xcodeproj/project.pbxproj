@@ -110,6 +110,7 @@
 		F9DF2C6D138008B70057247A /* Physics_glue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9DF2C6C138008B70057247A /* Physics_glue.cpp */; };
 		F9DF2C70138009670057247A /* EmoPhysics.m in Sources */ = {isa = PBXBuildFile; fileRef = F9DF2C6F138009670057247A /* EmoPhysics.m */; };
 		F9E41A43134494DE0009385D /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E41A42134494DE0009385D /* OpenAL.framework */; };
+		F9E8BD7E138A0523000C961E /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = F9E8BD7D138A0523000C961E /* blocks.png */; };
 		F9F89ECD1350218C00B005AF /* EmoStage.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F89ECC1350218C00B005AF /* EmoStage.m */; };
 /* End PBXBuildFile section */
 
@@ -306,6 +307,7 @@
 		F9DF2C6E138009670057247A /* EmoPhysics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoPhysics.h; sourceTree = "<group>"; };
 		F9DF2C6F138009670057247A /* EmoPhysics.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = EmoPhysics.m; sourceTree = "<group>"; };
 		F9E41A42134494DE0009385D /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		F9E8BD7D138A0523000C961E /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blocks.png; path = Resources/graphics/blocks.png; sourceTree = "<group>"; };
 		F9F89ECB1350218C00B005AF /* EmoStage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoStage.h; sourceTree = "<group>"; };
 		F9F89ECC1350218C00B005AF /* EmoStage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoStage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -506,6 +508,7 @@
 		F9C350E813610E4C00B21AE9 /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				F9E8BD7D138A0523000C961E /* blocks.png */,
 				F98526DE13874882007DD0CF /* block.png */,
 			);
 			name = graphics;
@@ -751,6 +754,7 @@
 				F9DB370B136E257C00340476 /* runtime.nut in Resources */,
 				F9B500CA13807A31009BB773 /* physics.nut in Resources */,
 				F98526DF13874882007DD0CF /* block.png in Resources */,
+				F9E8BD7E138A0523000C961E /* blocks.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

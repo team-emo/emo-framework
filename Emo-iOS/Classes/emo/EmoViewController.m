@@ -255,4 +255,10 @@ EmoEngine* engine;
 		nextTouchId = 0;
 	}
 }
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	if (engine != nil) {
+		return [engine shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+	}
+	return [super shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+}
 @end

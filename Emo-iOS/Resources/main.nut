@@ -1,69 +1,77 @@
-emo.Runtime.import("physics.nut");
-
 local stage = emo.Stage();
-local physics = emo.Physics();
-local world = emo.physics.World(emo.Vec2(0, 10), true);
 
-local fps = 60.0;
+const BLOCK_SIZE   = 32;
+const BLOCK_BORDER = 2;
 
+/*
+ * This example shows tiled map sprite.
+ */
 class Main {
-	ground  = emo.Rectangle();
-	block   = emo.Rectangle();
-	sprite  = emo.Sprite("block.png");
-	
-	function onLoad() {
-		ground.setSize(stage.getWindowWidth(), 20);
-		ground.move(0, stage.getWindowHeight() - ground.getHeight());
-		
-		block.setSize(10, 20);
-		block.move(0, stage.getWindowHeight() - ground.getHeight() - block.getHeight());
-	
-		sprite.move(stage.getWindowWidth() / 2, 0);
-		sprite.rotate(30);
 
-		physics.createStaticSprite(world, ground);
-		physics.createStaticSprite(world, block);
-		
-		local fixture = emo.physics.FixtureDef();
-		fixture.density  = 1.0;
-		fixture.friction = 0.2;
-		fixture.restitution = 0.1;
+    sprite = emo.MapSprite("blocks.png", BLOCK_SIZE, BLOCK_SIZE, BLOCK_BORDER);
 
-		physics.createDynamicSprite(world, sprite, fixture);
-	
-		ground.load();
-		sprite.load();
-		block.load();
-	
-		// set OnDrawCallback interval (millisecond)
-		emo.Event.enableOnDrawCallback(1000.0 / fps);
-	}
-	
-    function onDrawFrame(dt) {
-		// world step interval(second)
-		world.step(1.0 / fps, 6, 2);
-		world.clearForces();
-	}
-	
+	/*
+	 * Called when this class is loaded
+	 */
+    function onLoad() {
+        print("onLoad"); 
+
+		emo.Runtime.setOptions(OPT_ORIENTATION_LANDSCAPE);
+
+		local tiles = [
+			[-1,  8,  9, 10, -1, 11, 12, 13, 14, 15, -1, -1, -1, -1, -1,  8,  9, 10, -1, -1],
+			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+			[-1, -1, -1, -1, -1,  8,  9, 10, -1, -1, -1,  8,  9, 10, -1, 11, 12, 13, 14, 15],
+			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+			[-1, 13, 14, 15, -1, -1, -1,  8,  9, -1, -1, 13, 14, 15, -1, -1, -1,  8,  9, -1],
+			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 18, 19, -1, -1, -1, -1, -1, -1, -1],
+			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 16, 17, -1, -1, -1, -1, -1, -1, -1],
+			[-1   0,  1,  2,  3,  4,  5, -1,  6,  7, -1   7,  6,  7,  6,  7,  6,  7,  6,  7],
+		];
+		sprite.setMap(tiles);
+		sprite.move(0, stage.getWindowHeight() - (BLOCK_SIZE * tiles.len()));
+
+		// load sprite to the screen
+        sprite.load();
+    }
+
+	/*
+	 * Called when the app has gained focus
+	 */
+    function onGainedFocus() {
+        print("onGainedFocus");
+    }
+
+	/*
+	 * Called when the app has lost focus
+	 */
+    function onLostFocus() {
+        print("onLostFocus"); 
+    }
+
+	/*
+	 * Called when this class will be disposed
+	 */
+    function onDispose() {
+        print("onDispose");
+        
+        // remove sprite from the screen
+        sprite.remove();
+    }
+
 	/*
 	 * touch event
 	 */
 	function onMotionEvent(mevent) {
+		// move one block right
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-			local gravity = world.getGravity();
-			gravity.y = -gravity.y;
-			world.setGravity(gravity);
-			if (!sprite.getPhysicsBody().isAwake()) {
-				sprite.getPhysicsBody().setAwake(true);
-			}
+			sprite.move(sprite.getX() - BLOCK_SIZE, sprite.getY());
 		}
 	}
-	
-	function onDispose() {
-		ground.remove();
-		sprite.remove();
-	}
 }
+
 function emo::onLoad() {
     stage.load(Main());
 }

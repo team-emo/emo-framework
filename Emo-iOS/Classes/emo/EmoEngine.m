@@ -1,3 +1,5 @@
+#include <sys/sysctl.h> 
+
 #import "Constants.h"
 #import "VmFunc.h"
 #import "EmoRuntime.h"
@@ -39,6 +41,15 @@ NSString* data2ns(NSData* data) {
 @synthesize audioManager;
 @synthesize stage;
 @synthesize database;
+@synthesize currentOrientation;
+
+- (id)init {
+    self = [super init];
+    if (self != nil) {
+		currentOrientation = OPT_ORIENTATION_UNSPECIFIED;
+    }
+    return self;
+}
 
 /*
  * register classes and functions for script
@@ -514,6 +525,23 @@ NSString* data2ns(NSData* data) {
 	NSString *platform = [NSString stringWithCString:machine encoding: NSUTF8StringEncoding];
 	free(machine);
 	return platform;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	
+	if (currentOrientation == OPT_ORIENTATION_UNSPECIFIED) {
+		return YES;
+	}
+	if (currentOrientation == OPT_ORIENTATION_LANDSCAPE &&
+			interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
+		return YES;
+	}
+	if (currentOrientation == OPT_ORIENTATION_PORTRAIT &&
+		interfaceOrientation == UIInterfaceOrientationPortrait) {
+		return YES;
+	}
+	
+	return NO;
 }
 
 -(void)dealloc {

@@ -50,6 +50,8 @@ NSString* data2ns(NSData* data);
 	BOOL stopwatchStarted;
 	NSTimeInterval stopwatchStartTime;
 	NSTimeInterval stopwatchElapsedTime;
+	
+	NSInteger currentOrientation;
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readwrite) int  lastError;
@@ -65,6 +67,7 @@ NSString* data2ns(NSData* data);
 @property (readonly) EmoStage* stage;
 @property (readwrite) BOOL sortOrderDirty;
 @property (readonly) EmoDatabase* database;
+@property (readwrite) NSInteger currentOrientation;
 
 - (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 - (void)registerAccelerometerSensor:(BOOL)enable;
@@ -104,6 +107,7 @@ NSString* data2ns(NSData* data);
 -(void)removeCachedImage:(NSString*)key;
 
 - (NSString*)getDeviceName;
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 
 - (NSTimeInterval)uptime;
 @end

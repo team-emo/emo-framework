@@ -166,6 +166,12 @@ void emoUpdateOptions(SQInteger value) {
 		case OPT_WINDOW_KEEP_SCREEN_ON:
 			[UIApplication sharedApplication].idleTimerDisabled = YES;
 			break;
+		case OPT_ORIENTATION_LANDSCAPE:
+			engine.currentOrientation = OPT_ORIENTATION_LANDSCAPE;
+			break;
+		case OPT_ORIENTATION_PORTRAIT:
+			engine.currentOrientation = OPT_ORIENTATION_PORTRAIT;
+			break;
     }
 }
 

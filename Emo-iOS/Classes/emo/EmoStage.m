@@ -88,5 +88,7 @@
 	height = _height;
 	viewport_width  = _width;
 	viewport_height = _height;
+	
+	dirty = TRUE;
 }
 @end
