@@ -91,4 +91,7 @@
 	
 	dirty = TRUE;
 }
+-(void)invertSize {
+	[self setSize:height height:width];
+}
 @end

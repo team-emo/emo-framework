@@ -16,8 +16,6 @@ class Main {
     function onLoad() {
         print("onLoad"); 
 
-		emo.Runtime.setOptions(OPT_ORIENTATION_LANDSCAPE);
-
 		local tiles = [
 			[-1,  8,  9, 10, -1, 11, 12, 13, 14, 15, -1, -1, -1, -1, -1,  8,  9, 10, -1, -1],
 			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],

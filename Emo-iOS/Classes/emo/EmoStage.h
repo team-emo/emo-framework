@@ -28,4 +28,5 @@
 -(BOOL)loadBuffer;
 -(BOOL)onDrawFrame:(NSTimeInterval)dt;
 -(void)unloadBuffer;
+-(void)invertSize;
 @end

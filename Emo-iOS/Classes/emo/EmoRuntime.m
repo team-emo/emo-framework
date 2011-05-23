@@ -168,6 +168,7 @@ void emoUpdateOptions(SQInteger value) {
 			break;
 		case OPT_ORIENTATION_LANDSCAPE:
 			engine.currentOrientation = OPT_ORIENTATION_LANDSCAPE;
+			[engine.stage invertSize];
 			break;
 		case OPT_ORIENTATION_PORTRAIT:
 			engine.currentOrientation = OPT_ORIENTATION_PORTRAIT;
