@@ -128,6 +128,12 @@ namespace emo {
     }
 
     void JavaGlue::setOrientationLandscape() {
+
+    	int32_t orient = AConfiguration_getOrientation(engine->app->config);
+    	if (orient != ACONFIGURATION_ORIENTATION_LAND) {
+    		engine->stage->invertSize();
+    	}
+
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
 
@@ -141,6 +147,11 @@ namespace emo {
     }
 
     void JavaGlue::setOrientationPortrait() {
+    	int32_t orient = AConfiguration_getOrientation(engine->app->config);
+    	if (orient != ACONFIGURATION_ORIENTATION_PORT) {
+    		engine->stage->invertSize();
+    	}
+
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
 

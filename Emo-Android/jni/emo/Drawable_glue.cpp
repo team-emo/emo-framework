@@ -398,13 +398,13 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
     }
 
     // parent width
-    SQInteger width = engine->getWidth();
+    SQInteger width = engine->stage->width;
     if (nargs >= 5 && sq_gettype(v, 5) != OT_NULL) {
         sq_getinteger(v, 5, &width);
     }
 
     // parent height
-    SQInteger height = engine->getHeight();
+    SQInteger height = engine->stage->height;
     if (nargs >= 6 && sq_gettype(v, 6) != OT_NULL) {
         sq_getinteger(v, 6, &height);
     }
@@ -964,12 +964,12 @@ SQInteger emoSetStageSize(HSQUIRRELVM v) {
 }
 
 SQInteger emoGetWindowWidth(HSQUIRRELVM v) {
-    sq_pushinteger(v, ANativeWindow_getWidth(engine->app->window));
+    sq_pushinteger(v, engine->stage->width);
     return 1;
 }
 
 SQInteger emoGetWindowHeight(HSQUIRRELVM v) {
-    sq_pushinteger(v, ANativeWindow_getHeight(engine->app->window));
+    sq_pushinteger(v, engine->stage->height);
     return 1;
 }
 

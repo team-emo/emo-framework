@@ -13,6 +13,8 @@ namespace emo {
         void onDrawFrame();
         void deleteBuffer();
         void rebindBuffer();
+        void setSizeAndView(int width, int height);
+        void invertSize();
         bool dirty;
 
         int width;

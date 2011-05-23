@@ -20,7 +20,11 @@ class Main {
 		// load sprite to the screen
         block.load();
 		
-		event.registerSensors(SENSOR_TYPE_ACCELEROMETER);
+		if (emo.Runtime.isSimulator()) {
+			error("This program cannot run on the simulator.");
+		} else {
+			event.registerSensors(SENSOR_TYPE_ACCELEROMETER);
+		}
     }
 
 	/*
@@ -28,7 +32,9 @@ class Main {
 	 */
     function onGainedFocus() {
         print("onGainedFocus");
-		event.enableSensor(SENSOR_TYPE_ACCELEROMETER, 100);
+		if (!emo.Runtime.isSimulator()) {
+			event.enableSensor(SENSOR_TYPE_ACCELEROMETER, 100);
+		}
     }
 
 	/*
@@ -36,7 +42,9 @@ class Main {
 	 */
     function onLostFocus() {
         print("onLostFocus"); 
-		event.disableSensor(SENSOR_TYPE_ACCELEROMETER);
+		if (!emo.Runtime.isSimulator()) {
+			event.disableSensor(SENSOR_TYPE_ACCELEROMETER);
+		}
     }
 
 	/*
@@ -55,10 +63,6 @@ class Main {
 	function onSensorEvent(sevent) {
 		if (sevent.getType() == SENSOR_TYPE_ACCELEROMETER) {
 			block.rotate(emo.toDegree(sevent.getAccelerationX()));
-			print(format("x=%f, y=%f, z=%f", 
-				sevent.getAccelerationX(), 
-				sevent.getAccelerationY(),
-				sevent.getAccelerationZ()));
 		}
 	}
 }

@@ -18,12 +18,6 @@ namespace emo {
         this->loaded    = false;
         this->dirty = true;
 
-        this->width  = ANativeWindow_getWidth(engine->app->window);
-        this->height = ANativeWindow_getHeight(engine->app->window);
-
-        this->viewport_width  = this->width;
-        this->viewport_height = this->height;
-
         this->indices[0] = 0;
         this->indices[1] = 1;
         this->indices[2] = 2;
@@ -106,7 +100,23 @@ namespace emo {
 
         this->dirty = true;
         this->loaded = true;
-}
+    }
 
+    void Stage::setSizeAndView(int w, int h) {
+    	this->width  = w;
+    	this->height = h;
+    	this->viewport_width  = w;
+    	this->viewport_height = h;
+    }
 
+    void Stage::invertSize() {
+    	int w = this->width;
+    	this->width  = this->height;
+    	this->height = w;
+
+    	this->viewport_width  = this->width;
+    	this->viewport_height = this->height;
+
+    	this->dirty = true;
+    }
 }

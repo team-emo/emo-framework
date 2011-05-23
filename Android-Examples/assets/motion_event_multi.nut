@@ -45,7 +45,7 @@ class Main {
 			local rectangle = emo.Rectangle();
 			rectangle.setSize(70, 70);
 			rectangle.color(1, 0, 0);
-			rectangle.move(mevent.getX(), mevent.getY());
+			rectangle.moveCenter(mevent.getX(), mevent.getY());
 			rectangle.load();
 			
 			rectangles[id] <- rectangle;
@@ -60,9 +60,9 @@ class Main {
 	
 	function handleTouch(rectangle, mevent) {
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-			rectangle.move(mevent.getX(), mevent.getY());
+			rectangle.moveCenter(mevent.getX(), mevent.getY());
 		} else if (mevent.getAction() == MOTION_EVENT_ACTION_MOVE) {
-			rectangle.move(mevent.getX(), mevent.getY());
+			rectangle.moveCenter(mevent.getX(), mevent.getY());
 		} else if (mevent.getAction() == MOTION_EVENT_ACTION_UP ||
 				   mevent.getAction() == MOTION_EVENT_ACTION_CANCEL) {
 			delete rectangles[mevent.getPointerId()];
