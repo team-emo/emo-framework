@@ -86,7 +86,7 @@ class Main {
     }
 
 	/*
-	 * Called when this class will be disposed
+	 * Called when the class ends
 	 */
     function onDispose() {
         print("onDispose");
@@ -95,6 +95,11 @@ class Main {
         sprite.remove();
     }
 
+    /*
+     * Called when the onDraw callback is enabled by enableOnDrawCallback.
+     * This callback is called before drawing the screen at interval of milliseconds set by enableOnDrawCallback.
+     * dt is the actual delta time elapsed (milliseconds).
+     */
     function onDrawFrame(dt) {
 		// step the world (second)
 		world.step(1.0 / FPS, 6, 2);

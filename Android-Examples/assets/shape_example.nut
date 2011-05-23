@@ -47,7 +47,7 @@ class Main {
     }
 
 	/*
-	 * Called when this class will be disposed
+	 * Called when the class ends
 	 */
     function onDispose() {
         print("onDispose");

@@ -16,6 +16,9 @@ class Main {
 	blockR  = emo.Rectangle();
 	sprite  = emo.Sprite("ball.png");
 	
+	/*
+	 * Called when this class is loaded
+	 */
 	function onLoad() {
 		ground.setSize(stage.getWindowWidth(), 20);
 		ground.move(0, stage.getWindowHeight() - ground.getHeight());
@@ -48,12 +51,20 @@ class Main {
 		emo.Event.enableOnDrawCallback(1000.0 / fps);
 	}
 	
+    /*
+     * Called when the onDraw callback is enabled by enableOnDrawCallback.
+     * This callback is called before drawing the screen at interval of milliseconds set by enableOnDrawCallback.
+     * dt is the actual delta time elapsed (milliseconds).
+     */
     function onDrawFrame(dt) {
 		// world step interval(second)
 		world.step(1.0 / fps, 6, 2);
 		world.clearForces();
 	}
 	
+	/*
+	 * Called when the class ends
+	 */
 	function onDispose() {
 		ground.remove();
 		sprite.remove();

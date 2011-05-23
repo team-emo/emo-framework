@@ -1,7 +1,7 @@
 local stage = emo.Stage();
 
 /*
- * This example shows multiple sprites that handles multi-touch
+ * This example shows draggable sprites that handles multi-touch
  */
 class Main {
 
@@ -29,7 +29,7 @@ class Main {
     }
 
 	/*
-	 * Called when this class will be disposed
+	 * Called when the class ends
 	 */
     function onDispose() {
         print("onDispose");
@@ -39,7 +39,9 @@ class Main {
 	 * touch event
 	 */
 	function onMotionEvent(mevent) {
+		// pointer id is a unique id of the pointer.
 		local id = mevent.getPointerId();
+
 		if (!rectangles.rawin(id)) {
 			// create new rectangle
 			local rectangle = emo.Rectangle();
@@ -48,6 +50,7 @@ class Main {
 			rectangle.moveCenter(mevent.getX(), mevent.getY());
 			rectangle.load();
 			
+			// add rectangle to the hash table.
 			rectangles[id] <- rectangle;
 		}
 		if (mevent.getAction() == MOTION_EVENT_ACTION_UP) {
@@ -58,6 +61,9 @@ class Main {
 		handleTouch(rectangles[id], mevent);
 	}
 	
+	/*
+	 * move and remove the rectangle
+	 */
 	function handleTouch(rectangle, mevent) {
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
 			rectangle.moveCenter(mevent.getX(), mevent.getY());
