@@ -6,7 +6,7 @@ local event = emo.Event();
  */
 class Main {
 
-    block = emo.Sprite("block.png");
+    block = emo.Sprite("loading.png");
     
 	/*
 	 * Called when this class is loaded
@@ -33,8 +33,8 @@ class Main {
 		// load sprite to the screen
         block.load();
         
-        // rotate the block from 0 to 360 degree in 5 seconds using Linear equation
-        block.addModifier(emo.RotateModifier(0, 360, 5000, emo.easing.Linear));
+        // rotate the block from 0 to 360 degree in 1 seconds using Linear equation with infinite loop.
+        block.addModifier(emo.RotateModifier(0, 360, 1000, emo.easing.Linear, -1));
     }
 
 	/*

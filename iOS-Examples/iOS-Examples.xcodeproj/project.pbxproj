@@ -139,6 +139,7 @@
 		F9D43A921388F9830069C3C1 /* motion_event_multi.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */; };
 		F9D43B0C1389160B0069C3C1 /* physics_sensor.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43B0B138916040069C3C1 /* physics_sensor.nut */; };
 		F9D78CD313872E8A0076C937 /* physics.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D78CD213872E8A0076C937 /* physics.nut */; };
+		F9E503BE138BD4B900C7F0BD /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = F9E503BD138BD4B900C7F0BD /* loading.png */; };
 		F9F5AB9F138880D90068EC12 /* tv.png in Resources */ = {isa = PBXBuildFile; fileRef = F9F5AB9E138880D90068EC12 /* tv.png */; };
 /* End PBXBuildFile section */
 
@@ -366,6 +367,7 @@
 		F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = motion_event_multi.nut; path = Resources/motion_event_multi.nut; sourceTree = "<group>"; };
 		F9D43B0B138916040069C3C1 /* physics_sensor.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_sensor.nut; path = Resources/physics_sensor.nut; sourceTree = "<group>"; };
 		F9D78CD213872E8A0076C937 /* physics.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics.nut; path = Resources/physics.nut; sourceTree = "<group>"; };
+		F9E503BD138BD4B900C7F0BD /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		F9F5AB9E138880D90068EC12 /* tv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tv.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -481,6 +483,7 @@
 		F921CC99136FFBAC00F058FF /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				F9E503BD138BD4B900C7F0BD /* loading.png */,
 				F9CAE01513888259002278F7 /* ball.png */,
 				F9F5AB9E138880D90068EC12 /* tv.png */,
 				F921CC9A136FFBAC00F058FF /* block.png */,
@@ -867,6 +870,7 @@
 				F9D43A401388E5920069C3C1 /* sensor_event.nut in Resources */,
 				F9D43A921388F9830069C3C1 /* motion_event_multi.nut in Resources */,
 				F9D43B0C1389160B0069C3C1 /* physics_sensor.nut in Resources */,
+				F9E503BE138BD4B900C7F0BD /* loading.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
