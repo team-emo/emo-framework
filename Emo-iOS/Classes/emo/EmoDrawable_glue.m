@@ -220,11 +220,6 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 			drawable.texture = imageInfo;
 			drawable.hasTexture = TRUE;
 			
-			if (!drawable.hasSheet) {
-				drawable.width  = imageInfo.width;
-				drawable.height = imageInfo.height;
-			}
-			
 			imageInfo.referenceCount++;
 		} else {
 			imageInfo = [[EmoImage alloc]init];
@@ -238,14 +233,6 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 				drawable.texture = imageInfo;
 				drawable.hasTexture = TRUE;
 			
-				if (!drawable.hasSheet) {
-					if (drawable.width <= 0) {
-						drawable.width = imageInfo.width;
-					}
-					if (drawable.height <= 0) {
-						drawable.height = imageInfo.height;
-					}
-				}
 				imageInfo.referenceCount++;
 		
 				// assign OpenGL texture id
@@ -256,6 +243,14 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 				[imageInfo release];
 				sq_pushinteger(v, ERR_ASSET_LOAD);
 				return 1;
+			}
+			if (imageInfo != nil && !drawable.hasSheet) {
+				if (drawable.width <= 0) {
+					drawable.width = imageInfo.width;
+				}
+				if (drawable.height <= 0) {
+					drawable.height = imageInfo.height;
+				}
 			}
 			[imageInfo release];
 		}
@@ -376,15 +371,6 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
 			drawable.texture = imageInfo;
 			drawable.hasTexture = TRUE;
 			
-			if (!drawable.hasSheet) {
-				if (drawable.width <= 0) {
-					drawable.width = imageInfo.width;
-				}
-				if (drawable.height <= 0) {
-					drawable.height = imageInfo.height;
-				}
-			}
-			
 			imageInfo.referenceCount++;
 		} else {
 			imageInfo = [[EmoImage alloc]init];
@@ -398,14 +384,6 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
 				drawable.texture = imageInfo;
 				drawable.hasTexture = TRUE;
 				
-				if (!drawable.hasSheet) {
-					if (drawable.width <= 0) {
-						drawable.width = imageInfo.width;
-					}
-					if (drawable.height <= 0) {
-						drawable.height = imageInfo.height;
-					}
-				}
 				imageInfo.referenceCount++;
 				
 				// assign OpenGL texture id
@@ -416,6 +394,14 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
 				[imageInfo release];
 				sq_pushinteger(v, ERR_ASSET_LOAD);
 				return 1;
+			}
+			if (imageInfo != nil && !drawable.hasSheet) {
+				if (drawable.width <= 0) {
+					drawable.width = imageInfo.width;
+				}
+				if (drawable.height <= 0) {
+					drawable.height = imageInfo.height;
+				}
 			}
 			[imageInfo release];
 		}
