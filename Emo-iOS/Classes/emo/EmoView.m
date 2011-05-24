@@ -1,6 +1,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "EmoView.h"
+#import "Constants.h"
 
 @interface EmoView (PrivateMethods)
 - (void)createFramebuffer;
@@ -12,6 +13,7 @@
 @synthesize width=framebufferWidth;
 @synthesize height=framebufferHeight;
 @synthesize eventDelegate;
+@synthesize isRetina;
 @dynamic context;
 
 + (Class)layerClass
@@ -67,6 +69,15 @@
     if (context && !defaultFramebuffer)
     {
         [EAGLContext setCurrentContext:context];
+		
+		// detect retina display
+		if (UIGraphicsBeginImageContextWithOptions != NULL) {
+			self.contentScaleFactor  = RETINA_SCALE_FACTOR;
+			self.layer.contentsScale = RETINA_SCALE_FACTOR;
+			isRetina = TRUE;
+		} else {
+			isRetina = FALSE;
+		}
         
         glGenFramebuffers(1, &defaultFramebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);

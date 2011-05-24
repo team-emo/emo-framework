@@ -47,6 +47,7 @@ EmoEngine* engine;
 	nextTouchId = 0;
 	
 	engine = [[EmoEngine alloc]init];
+	engine.isRetina = ((EmoView *)self.view).isRetina;
 }
 
 - (void)dealloc
@@ -236,6 +237,12 @@ EmoEngine* engine;
 	for (UITouch *touch in touches) {
 		NSNumber *touchId = [touchIdMaster objectForKey:[NSValue valueWithPointer:touch]];
 		CGPoint location = [touch locationInView:self.view];
+		
+		if (engine.isRetina) {
+			location.x = location.x * RETINA_SCALE_FACTOR;
+			location.y = location.y * RETINA_SCALE_FACTOR;
+		}
+		
 		NSTimeInterval uptimeSec  = [engine uptime];
 		NSTimeInterval uptimeMsec = (uptimeSec - floor(uptimeSec)) * 1000; 
 		touchEventParamCache[0] = [touchId intValue];

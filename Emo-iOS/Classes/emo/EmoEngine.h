@@ -14,6 +14,7 @@ NSString* data2ns(NSData* data);
 	NSInteger lastError;
 	NSString* lastCallbackErrorMessage;
 	NSString* lastCallbackErrorType;
+	BOOL isRetina;
 	BOOL isFrameInitialized;
 	BOOL isRunning;
 	BOOL sortOrderDirty;
@@ -68,6 +69,7 @@ NSString* data2ns(NSData* data);
 @property (readwrite) BOOL sortOrderDirty;
 @property (readonly) EmoDatabase* database;
 @property (readwrite) NSInteger currentOrientation;
+@property (readwrite) BOOL isRetina;
 
 - (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 - (void)registerAccelerometerSensor:(BOOL)enable;

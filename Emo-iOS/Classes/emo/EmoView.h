@@ -25,12 +25,15 @@
     GLuint defaultFramebuffer, colorRenderbuffer;
 	
 	id<EmoViewEventHandler> eventDelegate;
+	
+	BOOL isRetina;
 }
 
 @property (nonatomic, retain) EAGLContext *context;
 @property (nonatomic,readwrite,assign) id<EmoViewEventHandler> eventDelegate;
 @property (readonly) GLint width;
 @property (readonly) GLint height;
+@property (readonly) BOOL isRetina;
 
 - (void)setFramebuffer;
 - (BOOL)presentFramebuffer;

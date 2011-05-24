@@ -42,6 +42,7 @@ NSString* data2ns(NSData* data) {
 @synthesize stage;
 @synthesize database;
 @synthesize currentOrientation;
+@synthesize isRetina;
 
 - (id)init {
     self = [super init];
