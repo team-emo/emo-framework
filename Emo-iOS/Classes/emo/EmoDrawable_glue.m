@@ -239,8 +239,12 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 				drawable.hasTexture = TRUE;
 			
 				if (!drawable.hasSheet) {
-					drawable.width  = imageInfo.width;
-					drawable.height = imageInfo.height;
+					if (drawable.width <= 0) {
+						drawable.width = imageInfo.width;
+					}
+					if (drawable.height <= 0) {
+						drawable.height = imageInfo.height;
+					}
 				}
 				imageInfo.referenceCount++;
 		
@@ -373,8 +377,12 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
 			drawable.hasTexture = TRUE;
 			
 			if (!drawable.hasSheet) {
-				drawable.width  = imageInfo.width;
-				drawable.height = imageInfo.height;
+				if (drawable.width <= 0) {
+					drawable.width = imageInfo.width;
+				}
+				if (drawable.height <= 0) {
+					drawable.height = imageInfo.height;
+				}
 			}
 			
 			imageInfo.referenceCount++;
@@ -391,8 +399,12 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
 				drawable.hasTexture = TRUE;
 				
 				if (!drawable.hasSheet) {
-					drawable.width  = imageInfo.width;
-					drawable.height = imageInfo.height;
+					if (drawable.width <= 0) {
+						drawable.width = imageInfo.width;
+					}
+					if (drawable.height <= 0) {
+						drawable.height = imageInfo.height;
+					}
 				}
 				imageInfo.referenceCount++;
 				
