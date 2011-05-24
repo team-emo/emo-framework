@@ -213,6 +213,13 @@ const AUDIO_CHANNEL_PLAYING   = 3;
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 
+EMO_STAGE_CONTENT_SCALE <- 1;
+
+function emo::Stage::setContentScale(scale) {
+	EMO_STAGE_CONTENT_SCALE = scale.tofloat();
+	ortho(getWindowWidth() / EMO_STAGE_CONTENT_SCALE, getWindowHeight() / EMO_STAGE_CONTENT_SCALE);
+}
+
 function emo::toRadian(degree) {
 	return degree * PI / 180.0;
 }
@@ -604,8 +611,8 @@ class emo.MotionEvent {
 
     function getPointerId() { return param[0]; }
     function getAction()    { return param[1]; }
-    function getX() { return param[2]; }
-    function getY() { return param[3]; }
+    function getX() { return param[2] / EMO_STAGE_CONTENT_SCALE; }
+    function getY() { return param[3] / EMO_STAGE_CONTENT_SCALE; }
     function getEventTime() { return param[4] + (param[5] / 1000); }
     function getDeviceId()  { return param[6]; }
     function getSource() { return param[7]; }
