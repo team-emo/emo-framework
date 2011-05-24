@@ -237,8 +237,12 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
             drawable->hasTexture = true;
 
             if (!drawable->hasSheet) {
-                drawable->width  = image->width;
-                drawable->height = image->height;
+                if (drawable->width <= 0) {
+                    drawable->width  = image->width;
+                }
+                if (drawable->height <= 0) {
+                    drawable->height = image->height;
+                }
             }
 
             image->referenceCount++;
@@ -375,8 +379,12 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
             drawable->hasTexture = true;
 
             if (!drawable->hasSheet) {
-                drawable->width  = image->width;
-                drawable->height = image->height;
+                if (drawable->width <= 0) {
+                    drawable->width  = image->width;
+                }
+                if (drawable->height <= 0) {
+                    drawable->height = image->height;
+                }
             }
 
             image->referenceCount++;
