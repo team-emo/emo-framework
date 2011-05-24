@@ -32,8 +32,11 @@ EmoEngine* engine;
 	self.context = aContext;
 	[aContext release];
 	
-    [(EmoView *)self.view setContext:context];
-    [(EmoView *)self.view setFramebuffer];
+	EmoView* eview = (EmoView *)self.view;
+	
+	[eview enableRetina:TRUE];
+    [eview setContext:context];
+    [eview setFramebuffer];
         
     animating = FALSE;
     animationFrameInterval = 1;
@@ -42,12 +45,11 @@ EmoEngine* engine;
 	// enable user interaction (touch event)
 	[self.view setUserInteractionEnabled:TRUE];
 	[self.view setMultipleTouchEnabled:TRUE];
-	((EmoView *)self.view).eventDelegate = self;
+	eview.eventDelegate = self;
     touchIdMaster = [[NSMutableDictionary alloc] init];
 	nextTouchId = 0;
 	
 	engine = [[EmoEngine alloc]init];
-	engine.isRetina = ((EmoView *)self.view).isRetina;
 }
 
 - (void)dealloc
@@ -238,7 +240,7 @@ EmoEngine* engine;
 		NSNumber *touchId = [touchIdMaster objectForKey:[NSValue valueWithPointer:touch]];
 		CGPoint location = [touch locationInView:self.view];
 		
-		if (engine.isRetina) {
+		if (((EmoView*)self.view).isRetina) {
 			location.x = location.x * RETINA_SCALE_FACTOR;
 			location.y = location.y * RETINA_SCALE_FACTOR;
 		}

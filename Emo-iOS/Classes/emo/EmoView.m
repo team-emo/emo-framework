@@ -71,7 +71,7 @@
         [EAGLContext setCurrentContext:context];
 		
 		// detect retina display
-		if (UIGraphicsBeginImageContextWithOptions != NULL) {
+		if (useRetina && UIGraphicsBeginImageContextWithOptions != NULL) {
 			self.contentScaleFactor  = RETINA_SCALE_FACTOR;
 			self.layer.contentsScale = RETINA_SCALE_FACTOR;
 			isRetina = TRUE;
@@ -171,5 +171,8 @@
 	if (eventDelegate) {
 		[eventDelegate touchesCancelled:touches withEvent:event];
 	}	
+}
+- (void)enableRetina:(BOOL)enable {
+	useRetina = enable;
 }
 @end

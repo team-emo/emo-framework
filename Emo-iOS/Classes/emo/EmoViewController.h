@@ -35,5 +35,4 @@
 - (void)onLostFocus;
 - (void)stopAnimation;
 - (void)onDispose;
-
 @end

@@ -912,6 +912,7 @@
 				IPHONE_OPTIMIZE_OPTIONS = "-skip-PNGs";
 				PREBINDING = NO;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};

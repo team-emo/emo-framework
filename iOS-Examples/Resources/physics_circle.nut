@@ -23,8 +23,8 @@ class Main {
 		ground.setSize(stage.getWindowWidth(), 20);
 		ground.move(0, stage.getWindowHeight() - ground.getHeight());
 		
-		blockL.setSize(10, 20);
-		blockR.setSize(10, 20);
+		blockL.setSize(10, 100);
+		blockR.setSize(10, 100);
 		
 		blockL.move(0, stage.getWindowHeight() - ground.getHeight() - blockL.getHeight());
 		blockR.move(stage.getWindowWidth()  - blockR.getWidth(), 

@@ -14,7 +14,6 @@ NSString* data2ns(NSData* data);
 	NSInteger lastError;
 	NSString* lastCallbackErrorMessage;
 	NSString* lastCallbackErrorType;
-	BOOL isRetina;
 	BOOL isFrameInitialized;
 	BOOL isRunning;
 	BOOL sortOrderDirty;
@@ -69,7 +68,6 @@ NSString* data2ns(NSData* data);
 @property (readwrite) BOOL sortOrderDirty;
 @property (readonly) EmoDatabase* database;
 @property (readwrite) NSInteger currentOrientation;
-@property (readwrite) BOOL isRetina;
 
 - (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 - (void)registerAccelerometerSensor:(BOOL)enable;
@@ -108,9 +106,9 @@ NSString* data2ns(NSData* data);
 -(void)addCachedImage:(NSString*)key value:(EmoImage*)image;
 -(void)removeCachedImage:(NSString*)key;
 
-- (NSString*)getDeviceName;
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
+-(NSString*)getDeviceName;
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 
-- (NSTimeInterval)uptime;
+-(NSTimeInterval)uptime;
 @end
 

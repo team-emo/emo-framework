@@ -27,6 +27,7 @@
 	id<EmoViewEventHandler> eventDelegate;
 	
 	BOOL isRetina;
+	BOOL useRetina;
 }
 
 @property (nonatomic, retain) EAGLContext *context;
@@ -37,5 +38,5 @@
 
 - (void)setFramebuffer;
 - (BOOL)presentFramebuffer;
-
+- (void)enableRetina:(BOOL)enable;
 @end

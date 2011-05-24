@@ -42,7 +42,6 @@ NSString* data2ns(NSData* data) {
 @synthesize stage;
 @synthesize database;
 @synthesize currentOrientation;
-@synthesize isRetina;
 
 - (id)init {
     self = [super init];
@@ -531,7 +530,7 @@ NSString* data2ns(NSData* data) {
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	
 	if (currentOrientation == OPT_ORIENTATION_UNSPECIFIED) {
-		return YES;
+		return NO;
 	}
 	if (currentOrientation == OPT_ORIENTATION_LANDSCAPE &&
 			interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
@@ -544,7 +543,6 @@ NSString* data2ns(NSData* data) {
 	
 	return NO;
 }
-
 -(void)dealloc {
 	[lastCallbackErrorMessage release];
 	[lastCallbackErrorType release];
