@@ -91,7 +91,6 @@
 		F92BBE871373E51800796475 /* EmoDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F92BBE851373E51800796475 /* EmoDatabase.m */; };
 		F92BBE991373E53000796475 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F92BBE981373E53000796475 /* libsqlite3.dylib */; };
 		F93A8F5C1387B3EE0032FE66 /* mapsprite_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */; };
-		F948AD69138B2F850090C2F8 /* physics_circle_retina.nut in Resources */ = {isa = PBXBuildFile; fileRef = F948AD68138B2F760090C2F8 /* physics_circle_retina.nut */; };
 		F94C2BB41384848900D12D13 /* b2BroadPhase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F94C2B691384848900D12D13 /* b2BroadPhase.cpp */; };
 		F94C2BB51384848900D12D13 /* b2CollideCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F94C2B6B1384848900D12D13 /* b2CollideCircle.cpp */; };
 		F94C2BB61384848900D12D13 /* b2CollidePolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F94C2B6C1384848900D12D13 /* b2CollidePolygon.cpp */; };
@@ -281,7 +280,6 @@
 		F92BBE851373E51800796475 /* EmoDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDatabase.m; sourceTree = "<group>"; };
 		F92BBE981373E53000796475 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mapsprite_example.nut; path = Resources/mapsprite_example.nut; sourceTree = "<group>"; };
-		F948AD68138B2F760090C2F8 /* physics_circle_retina.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_circle_retina.nut; path = Resources/physics_circle_retina.nut; sourceTree = "<group>"; };
 		F94C2B671384848900D12D13 /* Box2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box2D.h; sourceTree = "<group>"; };
 		F94C2B691384848900D12D13 /* b2BroadPhase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = b2BroadPhase.cpp; sourceTree = "<group>"; };
 		F94C2B6A1384848900D12D13 /* b2BroadPhase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = b2BroadPhase.h; sourceTree = "<group>"; };
@@ -460,7 +458,6 @@
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* iOS_Examples-Info.plist */,
-				F948AD68138B2F760090C2F8 /* physics_circle_retina.nut */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -870,7 +867,6 @@
 				F9D43A401388E5920069C3C1 /* sensor_event.nut in Resources */,
 				F9D43A921388F9830069C3C1 /* motion_event_multi.nut in Resources */,
 				F9D43B0C1389160B0069C3C1 /* physics_sensor.nut in Resources */,
-				F948AD69138B2F850090C2F8 /* physics_circle_retina.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
