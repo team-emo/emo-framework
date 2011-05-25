@@ -60,6 +60,7 @@
 		F9C849D0133E09EB0095EA37 /* EmoDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C849CF133E09EB0095EA37 /* EmoDrawable.m */; };
 		F9C8CE16138541310063D189 /* Physics_contact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9C8CE15138541310063D189 /* Physics_contact.cpp */; };
 		F9C8CE1F1385451D0063D189 /* Physics_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9C8CE1E1385451D0063D189 /* Physics_util.cpp */; };
+		F9CF41E5138C736C0023AC9F /* font_16x16.png in Resources */ = {isa = PBXBuildFile; fileRef = F9CF41E4138C736C0023AC9F /* font_16x16.png */; };
 		F9D00E52135D44CA00D51C64 /* VmFunc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9D00E51135D44CA00D51C64 /* VmFunc.cpp */; };
 		F9D00E58135D453B00D51C64 /* Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9D00E57135D453B00D51C64 /* Util.cpp */; };
 		F9D00EA4135D48E800D51C64 /* EmoAudio_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D00E9D135D48E800D51C64 /* EmoAudio_glue.m */; };
@@ -209,6 +210,7 @@
 		F9C8CE15138541310063D189 /* Physics_contact.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Physics_contact.cpp; sourceTree = "<group>"; };
 		F9C8CE1D1385451D0063D189 /* Physics_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Physics_util.h; sourceTree = "<group>"; };
 		F9C8CE1E1385451D0063D189 /* Physics_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Physics_util.cpp; sourceTree = "<group>"; };
+		F9CF41E4138C736C0023AC9F /* font_16x16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = font_16x16.png; path = Resources/graphics/font_16x16.png; sourceTree = "<group>"; };
 		F9D00E50135D44CA00D51C64 /* VmFunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VmFunc.h; sourceTree = "<group>"; };
 		F9D00E51135D44CA00D51C64 /* VmFunc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VmFunc.cpp; sourceTree = "<group>"; };
 		F9D00E56135D452C00D51C64 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -508,6 +510,7 @@
 		F9C350E813610E4C00B21AE9 /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				F9CF41E4138C736C0023AC9F /* font_16x16.png */,
 				F9E8BD7D138A0523000C961E /* blocks.png */,
 				F98526DE13874882007DD0CF /* block.png */,
 			);
@@ -755,6 +758,7 @@
 				F9B500CA13807A31009BB773 /* physics.nut in Resources */,
 				F98526DF13874882007DD0CF /* block.png in Resources */,
 				F9E8BD7E138A0523000C961E /* blocks.png in Resources */,
+				F9CF41E5138C736C0023AC9F /* font_16x16.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

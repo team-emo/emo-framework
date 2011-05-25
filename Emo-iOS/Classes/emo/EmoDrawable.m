@@ -338,7 +338,12 @@ extern EmoEngine* engine;
 -(float)getAngle {
 	return param_rotate[0];
 }
-
+-(float)getScaledWidth {
+	return [self getScaleX] * width;
+}
+-(float)getScaledHeight {
+	return [self getScaleY] * height;
+}
 -(void)createTextureBuffer {
     frames_vbos = (GLuint *)malloc(sizeof(GLuint) * frameCount);
 	

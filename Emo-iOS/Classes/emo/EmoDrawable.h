@@ -102,4 +102,6 @@
 -(float)getScaleX;
 -(float)getScaleY;
 -(float)getAngle;
+-(float)getScaledWidth;
+-(float)getScaledHeight;
 @end

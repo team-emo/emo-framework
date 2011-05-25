@@ -759,6 +759,8 @@ class emo.Sprite {
     function getZ() { return stage.getZ(id); }
     function getWidth()  { return stage.getWidth(id); }
     function getHeight() { return stage.getHeight(id); }
+	function getScaledWidth()  { return getWidth()  * getScaleX(); }
+	function getScaledHeight() { return getHeight() * getScaleY(); }
 
     function setX(x) { return stage.setX(id, x); }
     function setY(y) { return stage.setY(id, y); }
@@ -961,6 +963,14 @@ class emo.MapSprite extends emo.Sprite {
     function red  (r = null) { return stage.red  (childId, r); }
     function green(g = null) { return stage.green(childId, g); }
     function blue (b = null) { return stage.blue (childId, b); }
+	
+    function scale(scaleX, scaleY, centerX = null, centerY = null) {
+		error("MapSprite.scale is not supported.");
+    }
+
+    function rotate(angle, centerX = null, centerY = null, axis = null) {
+		error("MapSprite.rotate is not supported.");
+	}
 }
 
 
@@ -991,6 +1001,27 @@ class emo.TextSprite extends emo.MapSprite {
 		addRow(indexes);
 		
 		setSize(indexes.len() * width, height);
+	}
+	
+	function getWidth() {
+		return indexes.len() * width;
+	}
+	
+	function getHeight() {
+		return height;
+	}
+	
+	function getScaledWidth() {
+		return getWidth() * getScaleX();
+	}
+	
+	function getScaledHeight() {
+		return getHeight() * getScaleY();
+	}
+	
+	function scale(scaleX, scaleY) {
+        stage.scale(id, scaleX, scaleY, 0, 0);
+        return stage.scale(childId, scaleX, scaleY, 0, 0);
 	}
 }
 
