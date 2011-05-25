@@ -212,8 +212,20 @@ const AUDIO_CHANNEL_PLAYING   = 3;
 
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
+EMO_MOTION_LISTENERS    <- [];
 
 EMO_STAGE_CONTENT_SCALE <- 1;
+
+function emo::Event::addMotionListener(listener) {
+	EMO_MOTION_LISTENERS.append(listener);
+}
+
+function emo::Event::removeMotionListener(listener) {
+	local idx = EMO_MOTION_LISTENERS.find(listener);
+	if (idx != null) {
+		EMO_MOTION_LISTENERS.remove(idx);
+	}
+}
 
 function emo::Stage::setContentScale(scale) {
 	EMO_STAGE_CONTENT_SCALE = scale.tofloat();
@@ -914,8 +926,8 @@ class emo.Sprite {
     function getAngle()  { return stage.getAngle(id); }
 
     function contains(x, y) {
-        return x >= this.getX() && x <= getX() + getWidth() &&
-               y >= this.getY() && y <= getY() + getHeight();
+        return x >= getX() && x <= getX() + getWidth() &&
+               y >= getY() && y <= getY() + getHeight();
     }
 
     function collidesWith(other) {
@@ -1111,7 +1123,6 @@ class emo.MapSprite extends emo.Sprite {
 	}
 }
 
-
 class emo.TextSprite extends emo.MapSprite {
 	textbase = null;
 	indexes  = null;
@@ -1161,6 +1172,97 @@ class emo.TextSprite extends emo.MapSprite {
         stage.scale(id, scaleX, scaleY, 0, 0);
         return stage.scale(childId, scaleX, scaleY, 0, 0);
 	}
+}
+
+class emo.AnalogOnScreenController extends emo.Sprite {
+	knob    = null;
+	padding = null;
+	margin  = null;
+	function constructor(_name, _knobname, _alpha = 0.5) {
+		base.constructor(_name);
+		knob = emo.Sprite(_knobname);
+		
+		alpha(_alpha);
+		
+		emo.Event().addMotionListener(this);
+		
+		padding = 0;
+		margin  = 0;
+	}
+	
+    function load() {
+		base.load();
+		knob.load();
+    }
+	
+    function show() { knob.show(); return base.show(); }
+    function hide() { knob.hide(); return knobase.hide(); }
+    function alpha(a = null) { knob.alpha(a); return base.alpha(a); }
+    function red  (r = null) { knob.red(r);   return base.red(r);   }
+    function green(g = null) { knob.green(g); return base.green(g); }
+    function blue (b = null) { knob.blue(b);  return base.blue(b);  }
+
+    function move(x, y, z = 99) {
+		releaseKnob(x, y, z + 1);
+		return base.move(x, y, z);
+    }
+	
+	function releaseKnob(x, y, knobZ) {
+		local knobX = x + (getScaledWidth()  - knob.getScaledWidth()) / 2.0;
+		local knobY = y + (getScaledHeight() - knob.getScaledHeight()) / 2.0;
+		knob.move(knobX, knobY, knobZ);
+	}
+
+    function moveCenter(x, y, z = null) {
+		knob.moveCenter(x, y, z);
+		return base.moveCenter(x, y, z);
+    }
+
+    function scale(scaleX, scaleY, centerX = null, centerY = null) {
+		knob.scale(scaleX, scaleY, centerX, centerY);
+		return base.scale(scaleX, scaleY, centerY);
+    }
+
+    function rotate(angle, centerX = null, centerY = null, axis = null) {
+		knob.rotate(angle, centerX, centerY, axis);
+		return base.rotate(angle, centerX, centerY, axis);
+    }
+
+    function color(red, green, blue, alpha = null) {
+		knob.color(red, green, blue, alpha);
+		return base.color(red, green, blue, alpha);
+    }
+
+    function remove() {
+		emo.Event().removeMotionListener(this);
+		knob.remove();
+		return base.remove();
+    }
+
+	function onMotionEvent(mevent) {
+		local x = mevent.getX();
+		local y = mevent.getY();
+		if (mevent.getAction() == MOTION_EVENT_ACTION_UP ||
+			mevent.getAction() == MOTION_EVENT_ACTION_CANCEL  ||
+			mevent.getAction() == MOTION_EVENT_ACTION_OUTSIDE ||
+			mevent.getAction() == MOTION_EVENT_ACTION_POINTER_UP) {
+			releaseKnob(getX(), getY(), knob.getZ());
+		} else {
+			if (contains(x, y)) {
+				knob.moveCenter(x, y);
+			}
+		}
+	}
+	
+    function contains(x, y) {
+        return x >= getX() - margin && x <= getX() + getWidth()  + margin &&
+               y >= getY() - margin && y <= getY() + getHeight() + margin;
+    }
+	
+    function knobContains(x, y) {
+        return x >= knob.getX() - padding && x <= knob.getX() + knob.getWidth()  + padding &&
+               y >= knob.getY() - padding && y <= knob.getY() + knob.getHeight() + padding;
+    }
 }
 
 function emo::Stage::load(obj) {
@@ -1274,6 +1376,12 @@ function emo::_onMotionEvent(...) {
              EMO_RUNTIME_DELEGATE.rawin("onMotionEvent")) {
         EMO_RUNTIME_DELEGATE.onMotionEvent(mevent);
     }
+	
+	for (local i = 0; i < EMO_MOTION_LISTENERS.len(); i++) {
+		if (EMO_MOTION_LISTENERS[i].rawin("onMotionEvent")) {
+			EMO_MOTION_LISTENERS[i].onMotionEvent(mevent);
+		}
+	}
 }
 
 function emo::_onKeyEvent(...) {
