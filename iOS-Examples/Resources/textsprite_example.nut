@@ -65,7 +65,15 @@ class Main {
 	 */
 	function onMotionEvent(mevent) {
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-
+			// scale up the text
+			text.scale(text.getScaleX() * 1.1, text.getScaleY() * 1.1);
+			
+			// Move sprite to the center of the screen
+			// Use getScaledWidth, getScaledHeight to retrive scaled size.
+			local x = (stage.getWindowWidth()  - text.getScaledWidth())  / 2;
+			local y = (stage.getWindowHeight() - text.getScaledHeight()) / 2;
+			
+			text.move(x, y);
 		}
 	}
 }
