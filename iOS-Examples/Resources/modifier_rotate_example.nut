@@ -2,11 +2,13 @@ local stage = emo.Stage();
 local event = emo.Event();
 
 /*
- * This example shows one block sprite that rotates using modifier.
+ * This example shows loading sprites with modifier.
  */
 class Main {
 
-    block = emo.Sprite("loading.png");
+    circle = emo.Sprite("loading.png");
+    text = emo.TextSprite("font_16x16.png", 16, 16, 
+		" !\"c*%#'{}@+,=./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSQTVWXYZ");
     
 	/*
 	 * Called when this class is loaded
@@ -24,17 +26,29 @@ class Main {
 			stage.setContentScale(2);
 		}
 		
-		// move sprite to the center of the screen
-		local x = (stage.getWindowWidth()  - block.getWidth())  / 2;
-		local y = (stage.getWindowHeight() - block.getHeight()) / 2;
+		text.setText("  LOADING..");
 		
-		block.move(x, y);
+		// move sprite to the center of the screen
+		local x = (stage.getWindowWidth()  - circle.getWidth())  / 2;
+		local y = (stage.getWindowHeight() - circle.getHeight()) / 2;
+		
+		circle.move(x, y);
+		text.move((stage.getWindowWidth() - text.getWidth()) / 2,
+					y + circle.getHeight() + text.getHeight());
+		
+		// set z-order (move text to front of the circle)
+		circle.setZ(0);
+		text.setZ(1);
 
 		// load sprite to the screen
-        block.load();
+		text.load();
+        circle.load();
         
         // rotate the block from 0 to 360 degree in 1 seconds using Linear equation with infinite loop.
-        block.addModifier(emo.RotateModifier(0, 360, 1000, emo.easing.Linear, -1));
+        circle.addModifier(emo.RotateModifier(0, 360, 1000, emo.easing.Linear, -1));
+		
+		// change alpha color of the text in 2 seconds using Linear equation with infinite loop.
+		text.addModifier(emo.AlphaModifier(1, 0, 2000, emo.easing.Linear, -1));
     }
 
 	/*
@@ -58,7 +72,7 @@ class Main {
         print("onDispose");
         
         // remove sprite from the screen
-        block.remove();
+        circle.remove();
     }
 }
 
