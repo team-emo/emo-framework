@@ -705,6 +705,7 @@ SQInteger emoDrawableMove(HSQUIRRELVM v) {
         SQFloat z;
         sq_getfloat(v, 5, &z);
         drawable->z = z;
+        engine->sortOrderDirty = true;
     }
 
     sq_pushinteger(v, EMO_NO_ERROR);
