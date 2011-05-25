@@ -929,11 +929,15 @@ class emo.MapSprite extends emo.Sprite {
     }
 
     function setMap(tiles) {
-        stage.clearTiles(id);
+        clearTiles();
         for (local i = 0; i < tiles.len(); i++) {
             this.addRow(tiles[i]);
         }
     }
+	
+	function clearTiles() {
+        stage.clearTiles(id);
+	}
 
     function setTileAt(row, column, value) {
         return stage.setTileAt(id, row, column, value);
@@ -957,6 +961,37 @@ class emo.MapSprite extends emo.Sprite {
     function red  (r = null) { return stage.red  (childId, r); }
     function green(g = null) { return stage.green(childId, g); }
     function blue (b = null) { return stage.blue (childId, b); }
+}
+
+
+class emo.TextSprite extends emo.MapSprite {
+	textbase = null;
+	indexes  = null;
+	width  = null;
+	height = null;
+	
+	function constructor(_name, _width, _height, _textbase, _border = null, _margin = null) {
+		textbase = _textbase;
+		indexes = [];
+		
+		base.constructor(_name, _width, _height, _border, _margin);
+		
+		width  = _width;
+		height = _height;
+	}
+	
+	function setText(text) {
+		indexes.clear();
+		for (local i = 0; i < text.len(); i++) {
+			local idx = textbase.find(text.slice(i, i+1));
+			if (idx == null) idx = -1;
+			indexes.append(idx);
+		}
+		clearTiles();
+		addRow(indexes);
+		
+		setSize(indexes.len() * width, height);
+	}
 }
 
 function emo::Stage::load(obj) {
