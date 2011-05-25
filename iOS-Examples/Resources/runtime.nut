@@ -56,7 +56,7 @@ const MODE_WORLD_WRITEABLE            = 0x0002;
 
 const EVENT_MODIFIER_START             = 0;
 const EVENT_MODIFIER_RESTART           = 1;
-const EVENT_MODIFIER_FINISHED          = 2;
+const EVENT_MODIFIER_FINISH            = 2;
 
 const MOTION_EVENT_ACTION_DOWN         = 0;
 const MOTION_EVENT_ACTION_UP           = 1;
@@ -294,6 +294,7 @@ class emo.Modifier {
 	duration = null;
 	easing   = null;
 	started  = null;
+	parent   = null;
 	repeatCount   = null;
 	currentCount  = null;
 	eventCallback = null;
@@ -327,6 +328,9 @@ class emo.Modifier {
 			if (eventCallback != null) {
 				eventCallback(targetObj, this, EVENT_MODIFIER_START);
 			}
+			if (parent != null) {
+				parent.onEvent(targetObj, this, EVENT_MODIFIER_START);
+			}
 		}
 
 		local elapsedf = elapsed().tofloat();
@@ -339,29 +343,163 @@ class emo.Modifier {
 				if (eventCallback != null) {
 					eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
 				}
+				if (parent != null) {
+					parent.onEvent(targetObj, this, EVENT_MODIFIER_FINISH);
+				}
 			} else {
 				startTime = EMO_RUNTIME_STOPWATCH.elapsed();
 				currentCount++;
 				if (eventCallback != null) {
 					eventCallback(targetObj, this, EVENT_MODIFIER_RESTART);
 				}
+				if (parent != null) {
+					parent.onEvent(targetObj, this, EVENT_MODIFIER_RESTART);
+				}
 			}
 			return;
 		}
 		onModify(current);
 	}
+	
 	/* subclass must override this method to apply changes to targetObj. */
 	function onModify(currentValue) {
 		
 	}
+	
 	function setObject(obj) {
 		targetObj = obj;
+	}
+	
+	function getObject() {
+		return targetObj;
 	}
 
 	function setName(_name) {
 		name = _name;
 	}
 
+	function getName() {
+		return name;
+	}
+	
+	function setParent(prnt) {
+		parent = prnt;
+	}
+	
+	function getParent() {
+		return parent;
+	}
+	
+	function resetTimer() {
+		startTime   = EMO_RUNTIME_STOPWATCH.elapsed();
+		pausedTime  = startTime;
+		
+		currentCount = 0;
+		started = false;
+	}
+
+	function setEventCallback(func) {
+		eventCallback = func;
+	}
+}
+
+class emo.SquenceModifier {
+	modifiers       = [];
+	name            = null;
+	eventCallback   = null;
+	modifier        = null;
+	started         = null;
+	modifierIndex   = null;
+	repeatCount     = null;
+	currentCount    = null;
+	
+	function constructor(...) {
+		for (local i = 0; i < vargv.len(); i++) {
+			vargv[i].setParent(this);
+			vargv[i].onPause();
+			modifiers.append(vargv[i]);
+		}
+		if (vargv.len() > 0) {
+			modifier = modifiers[0];
+			modifier.onResume();
+		}
+		started = false;
+		modifierIndex = 0;
+		repeatCount   = 0;
+		currentCount  = 0;
+	}
+	
+	function setRepeatCount(count) {
+		repeatCount = count;
+	}
+	
+	function onEvent(obj, _modifier, eventType) {
+		if (!started && eventType == EVENT_MODIFIER_START) {
+			started = true;
+			if (eventCallback != null) {
+				eventCallback(obj, this, eventType);
+			}
+		}
+		
+		if (eventType == EVENT_MODIFIER_FINISH) {
+			modifierIndex++;
+			if (modifierIndex < modifiers.len()) {
+				modifier = modifiers[modifierIndex];
+				modifier.onResume();
+			} else {
+				if (currentCount == repeatCount) {
+					for (local i = 0; i < modifiers.len(); i++) {
+						modifiers[i].setParent(null);
+					}
+					modifier = null;
+					modifiers.clear();
+					EMO_MODIFIER_MANAGER.remove(this);
+					if (eventCallback != null) {
+						eventCallback(obj, this, eventType);
+					}
+				} else {
+					currentCount++;
+					for (local i = 0; i < modifiers.len(); i++) {
+						modifiers[i].resetTimer();
+						modifiers[i].onPause();
+					}
+					modifierIndex = 0;
+					modifier = modifiers[modifierIndex];
+					modifier.onResume();
+				}
+			}
+		}
+	}
+	
+	function setObject(obj) {
+		for (local i = 0; i < modifiers.len(); i++) {
+			modifiers[i].setObject(obj);
+		}
+	}
+
+	function setName(_name) {
+		for (local i = 0; i < modifiers.len(); i++) {
+			modifiers[i].setName(_name);
+		}
+		name = _name;
+	}
+	
+	function onPause() {
+		if (modifier != null) modifier.onPause();
+	}
+	
+	function onResume() {
+		if (modifier != null) modifier.onResume();
+	}
+	
+	function onUpdate() {
+		if (modifier != null) modifier.onUpdate();
+	}
+
+	function onModify(currentValue) {
+		if (modifier != null) modifier.onModiy(currentValue);
+	}
+	
 	function getName() {
 		return name;
 	}

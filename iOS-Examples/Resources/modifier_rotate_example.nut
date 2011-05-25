@@ -47,8 +47,13 @@ class Main {
         // rotate the block from 0 to 360 degree in 1 seconds using Linear equation with infinite loop.
         circle.addModifier(emo.RotateModifier(0, 360, 1000, emo.easing.Linear, -1));
 		
-		// change alpha color of the text in 2 seconds using Linear equation with infinite loop.
-		text.addModifier(emo.AlphaModifier(1, 0, 2000, emo.easing.Linear, -1));
+		// change alpha color of the text in 2 seconds
+		// using CubicIn and CubicOut equation sequentially with infinite loop.
+		local blinkTextModifier = emo.SquenceModifier(
+			emo.AlphaModifier(1, 0, 1000, emo.easing.CubicIn),
+			emo.AlphaModifier(0, 1, 1000, emo.easing.CubicOut));
+		blinkTextModifier.setRepeatCount(-1); // -1 means infinite loop
+		text.addModifier(blinkTextModifier);
     }
 
 	/*
