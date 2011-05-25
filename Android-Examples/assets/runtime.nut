@@ -213,6 +213,13 @@ const AUDIO_CHANNEL_PLAYING   = 3;
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 
+EMO_STAGE_CONTENT_SCALE <- 1;
+
+function emo::Stage::setContentScale(scale) {
+	EMO_STAGE_CONTENT_SCALE = scale.tofloat();
+	ortho(getWindowWidth() / EMO_STAGE_CONTENT_SCALE, getWindowHeight() / EMO_STAGE_CONTENT_SCALE);
+}
+
 function emo::toRadian(degree) {
 	return degree * PI / 180.0;
 }
@@ -604,8 +611,8 @@ class emo.MotionEvent {
 
     function getPointerId() { return param[0]; }
     function getAction()    { return param[1]; }
-    function getX() { return param[2]; }
-    function getY() { return param[3]; }
+    function getX() { return param[2] / EMO_STAGE_CONTENT_SCALE; }
+    function getY() { return param[3] / EMO_STAGE_CONTENT_SCALE; }
     function getEventTime() { return param[4] + (param[5] / 1000); }
     function getDeviceId()  { return param[6]; }
     function getSource() { return param[7]; }
@@ -752,6 +759,8 @@ class emo.Sprite {
     function getZ() { return stage.getZ(id); }
     function getWidth()  { return stage.getWidth(id); }
     function getHeight() { return stage.getHeight(id); }
+	function getScaledWidth()  { return getWidth()  * getScaleX(); }
+	function getScaledHeight() { return getHeight() * getScaleY(); }
 
     function setX(x) { return stage.setX(id, x); }
     function setY(y) { return stage.setY(id, y); }
@@ -922,11 +931,15 @@ class emo.MapSprite extends emo.Sprite {
     }
 
     function setMap(tiles) {
-        stage.clearTiles(id);
+        clearTiles();
         for (local i = 0; i < tiles.len(); i++) {
             this.addRow(tiles[i]);
         }
     }
+	
+	function clearTiles() {
+        stage.clearTiles(id);
+	}
 
     function setTileAt(row, column, value) {
         return stage.setTileAt(id, row, column, value);
@@ -950,6 +963,66 @@ class emo.MapSprite extends emo.Sprite {
     function red  (r = null) { return stage.red  (childId, r); }
     function green(g = null) { return stage.green(childId, g); }
     function blue (b = null) { return stage.blue (childId, b); }
+	
+    function scale(scaleX, scaleY, centerX = null, centerY = null) {
+		error("MapSprite.scale is not supported.");
+    }
+
+    function rotate(angle, centerX = null, centerY = null, axis = null) {
+		error("MapSprite.rotate is not supported.");
+	}
+}
+
+
+class emo.TextSprite extends emo.MapSprite {
+	textbase = null;
+	indexes  = null;
+	width  = null;
+	height = null;
+	
+	function constructor(_name, _width, _height, _textbase, _border = null, _margin = null) {
+		textbase = _textbase;
+		indexes = [];
+		
+		base.constructor(_name, _width, _height, _border, _margin);
+		
+		width  = _width;
+		height = _height;
+	}
+	
+	function setText(text) {
+		indexes.clear();
+		for (local i = 0; i < text.len(); i++) {
+			local idx = textbase.find(text.slice(i, i+1));
+			if (idx == null) idx = -1;
+			indexes.append(idx);
+		}
+		clearTiles();
+		addRow(indexes);
+		
+		setSize(indexes.len() * width, height);
+	}
+	
+	function getWidth() {
+		return indexes.len() * width;
+	}
+	
+	function getHeight() {
+		return height;
+	}
+	
+	function getScaledWidth() {
+		return getWidth() * getScaleX();
+	}
+	
+	function getScaledHeight() {
+		return getHeight() * getScaleY();
+	}
+	
+	function scale(scaleX, scaleY) {
+        stage.scale(id, scaleX, scaleY, 0, 0);
+        return stage.scale(childId, scaleX, scaleY, 0, 0);
+	}
 }
 
 function emo::Stage::load(obj) {

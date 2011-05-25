@@ -31,6 +31,7 @@ public class Launcher extends ExpandableListActivity {
     	{
     		"Drawing a Shape",
     		"Drawing a Sprite",
+    		"Drawing Texts",
 			"Drawing Tiles",
 			"Drawing TiledMap"
     	},
@@ -56,6 +57,7 @@ public class Launcher extends ExpandableListActivity {
     	{
     		".ShapeExample",
     		".SpriteExample",
+    		".TextSpriteExample",
 			".TileExample",
 			".TiledMapExample"
     	},

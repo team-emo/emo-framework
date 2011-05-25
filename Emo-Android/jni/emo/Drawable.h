@@ -58,6 +58,8 @@ namespace emo {
 
         void setTexture(Image* image);
 
+        float getScaledWidth();
+        float getScaledHeight();
 
         bool hasSheet;
         bool animating;

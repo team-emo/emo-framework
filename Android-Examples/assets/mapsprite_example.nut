@@ -1,14 +1,13 @@
 local stage = emo.Stage();
 
 const BLOCK_SIZE   = 32;
-const BLOCK_BORDER = 2;
 
 /*
  * This example shows tiled map sprite.
  */
 class Main {
 
-    sprite = emo.MapSprite("blocks.png", BLOCK_SIZE, BLOCK_SIZE, BLOCK_BORDER);
+    sprite = emo.MapSprite("blocks.png", BLOCK_SIZE, BLOCK_SIZE, 4, 3);
 
 	/*
 	 * Called when this class is loaded
@@ -16,6 +15,16 @@ class Main {
     function onLoad() {
         print("onLoad"); 
 
+		// Below statements is an example of multiple screen density support.
+		// (i.e. Retina vs non-Retina, cellular phone vs tablet device).
+		if (stage.getWindowWidth() >= 640) {
+			// if the screen has large display, scale contents twice
+			// that makes the stage size by half.
+			// This examples shows how to display similar-scale images
+			// on Retina and non-Retina display.
+			stage.setContentScale(2);
+		}
+		
 		local tiles = [
 			[-1,  8,  9, 10, -1, 11, 12, 13, 14, 15, -1, -1, -1, -1, -1,  8,  9, 10, -1, -1],
 			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],

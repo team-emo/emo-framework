@@ -18,6 +18,16 @@ class Main {
     function onLoad() {
         print("onLoad"); 
 		
+		// Below statements is an example of multiple screen density support.
+		// (i.e. Retina vs non-Retina, cellular phone vs tablet device).
+		if (stage.getWindowWidth() >= 640) {
+			// if the screen has large display, scale contents twice
+			// that makes the stage size by half.
+			// This examples shows how to display similar-scale images
+			// on Retina and non-Retina display.
+			stage.setContentScale(2);
+		}
+		
 		// move sprite to the center of the screen
 		local x = stage.getWindowWidth() / 5;
 		local y = stage.getWindowHeight() - block1.getHeight();
@@ -47,11 +57,11 @@ class Main {
 			[block2.getX(), y],
 			5000, emo.easing.BackInOut));
 
-		// block3 moves along axis by ElasticOut equation in 5 seconds 
+		// block3 moves along axis by BounceOut equation in 5 seconds 
         block3.addModifier(emo.MoveModifier(
 			[block3.getX(), block3.getY()],
 			[block3.getX(), y],
-			5000, emo.easing.ElasticOut));
+			5000, emo.easing.BounceOut));
 			
 		// block4 moves along axis by ElasticInOut equation in 5 seconds 
         block4.addModifier(emo.MoveModifier(

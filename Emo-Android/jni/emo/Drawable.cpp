@@ -378,6 +378,14 @@ namespace emo {
         this->texture = image;
     }
 
+    float Drawable::getScaledWidth() {
+        return this->width * this->param_scale[0];
+    }
+
+    float Drawable::getScaledHeight() {
+        return this->height * this->param_scale[1];
+    }
+
     void Drawable::setChild(Drawable* child) {
         this->child = child;
     }
@@ -490,8 +498,8 @@ namespace emo {
     std::vector<int> MapDrawable::getTileIndexAtCoord(float x, float y) {
         std::vector<int> index;
 
-        int col = (int)floor((x - this->x) / (double)this->drawable->width);
-        int row = (int)floor((y - this->y) / (double)this->drawable->height);
+        int col = (int)floor((x - this->x) / (double)this->drawable->getScaledWidth());
+        int row = (int)floor((y - this->y) / (double)this->drawable->getScaledHeight());
 
         index.push_back(col);
         index.push_back(row);
@@ -506,8 +514,8 @@ namespace emo {
         int col = tile.at(0);
         int row = tile.at(1);
         
-        index.push_back((col * this->drawable->width)  + this->x);
-        index.push_back((row * this->drawable->height) + this->y);
+        index.push_back((col * this->drawable->getScaledWidth())  + this->x);
+        index.push_back((row * this->drawable->getScaledHeight()) + this->y);
         
         return index;
     }
@@ -539,25 +547,25 @@ namespace emo {
         int invertX = -this->x;
         int invertY = -this->y;
 
-        if (this->x > 0 && this->x  > this->width)  return;
-        if (this->y > 0 && this->y  > this->height) return;
-        if (this->x < 0 && invertX > this->drawable->width  * this->columns) return;
-        if (this->y < 0 && invertY > this->drawable->height * this->rows) return;
+        if (this->x > 0 && this->x  > this->getScaledWidth())  return;
+        if (this->y > 0 && this->y  > this->getScaledHeight()) return;
+        if (this->x < 0 && invertX > this->drawable->getScaledWidth()  * this->columns) return;
+        if (this->y < 0 && invertY > this->drawable->getScaledHeight() * this->rows) return;
 
-        int columnCount = (int)ceil(this->width  / (double)this->drawable->width);
-        int rowCount    = (int)ceil(this->height / (double)this->drawable->height);
+        int columnCount = (int)ceil(this->getScaledWidth()  / (double)this->drawable->getScaledWidth());
+        int rowCount    = (int)ceil(this->getScaledHeight() / (double)this->drawable->getScaledHeight());
         
-        int firstColumn = max(0, min(this->columns, (invertX / this->drawable->width)));
+        int firstColumn = max(0, min(this->columns, (invertX / this->drawable->getScaledWidth())));
         int lastColumn  = min(firstColumn + columnCount + 1, this->columns);
         
-        int firstRow = max(0, min(this->rows, (invertY / this->drawable->height)));
+        int firstRow = max(0, min(this->rows, (invertY / this->drawable->getScaledHeight())));
         int lastRow  = min(firstRow + rowCount + 1, this->rows);
 
         for (int i = firstRow; i < lastRow; i++) {
             for (int j = firstColumn; j < lastColumn; j++) {
                if (((int)tiles->size()) <= i || ((int)tiles->at(i)->size()) <= j) break;
-                this->drawable->x = j * this->drawable->width  - invertX;
-                this->drawable->y = i * this->drawable->height - invertY;
+                this->drawable->x = j * this->drawable->getScaledWidth()  - invertX;
+                this->drawable->y = i * this->drawable->getScaledHeight() - invertY;
                 if (tiles->at(i)->at(j) < 0) continue;
 
                 this->drawable->setFrameIndex(tiles->at(i)->at(j));

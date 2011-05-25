@@ -3,7 +3,7 @@ local event = emo.Event();
 
 class Main {
 
-    block = emo.Sprite("block.png");
+    block = emo.Sprite("tv.png");
 
 	/*
 	 * Called when this class is loaded
