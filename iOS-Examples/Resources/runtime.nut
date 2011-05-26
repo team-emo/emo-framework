@@ -312,7 +312,15 @@ class emo.ModifierManager {
 	}
 }
 
-EMO_MODIFIER_MANAGER    <- emo.ModifierManager();
+EMO_ON_UPDATE_MANAGER    <- emo.ModifierManager();
+
+function emo::Event::addOnUpdateListener(listener) {
+	EMO_ON_UPDATE_MANAGER.add(listener);
+}
+
+function emo::Event::removeOnUpdateListener(listener) {
+	EMO_ON_UPDATE_MANAGER.remove(listener);
+}
 
 class emo.Modifier {
 	name      = null;
@@ -369,7 +377,7 @@ class emo.Modifier {
 		if (elapsedf >= duration) {
 			onModify(maxValue);
 			if (repeatCount == currentCount) {
-				EMO_MODIFIER_MANAGER.remove(this);
+				emo.Event().removeOnUpdateListener(this);
 				if (eventCallback != null) {
 					eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
 				}
@@ -483,7 +491,7 @@ class emo.SquenceModifier {
 					}
 					modifier = null;
 					modifiers.clear();
-					EMO_MODIFIER_MANAGER.remove(this);
+					emo.Event().removeOnUpdateListener(this);
 					if (eventCallback != null) {
 						eventCallback(obj, this, eventType);
 					}
@@ -559,7 +567,7 @@ class emo.MultiModifier extends emo.Modifier {
 			if (elapsedf >= duration) {
 				onModify(maxValue);
 				if (repeatCount == currentCount) {
-					EMO_MODIFIER_MANAGER.remove(this);
+					emo.Event().removeOnUpdateListener(this);
 					if (eventCallback != null) {
 						eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
 					}
@@ -998,11 +1006,11 @@ class emo.Sprite {
     
     function addModifier(modifier) {
     	modifier.setObject(this);
-    	EMO_MODIFIER_MANAGER.add(modifier);
+    	emo.Event().addOnUpdateListener(modifier);
     }
 
     function removeModifier(modifier) {
-    	EMO_MODIFIER_MANAGER.remove(modifier);
+    	emo.Event().removeOnUpdateListener(modifier);
     }
 	
 	function setFixture(_fixture) {
@@ -1200,19 +1208,24 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 	updateInterval = null;
 	lastUpdate     = null;
 	
+	previousRelativeX = null;
+	previousRelativeY = null;
+	
 	function constructor(_name, _knobname, _alpha = 0.5) {
 		base.constructor(_name);
 		knob = emo.Sprite(_knobname);
 		
 		alpha(_alpha);
 		
+		emo.Event().addOnUpdateListener(this);
 		emo.Event().addMotionListener(this);
 		
 		padding = 0;
 		margin  = 0;
 
 		updateInterval = 100;
-		lastUpdate = elapsed();
+		lastUpdate     = -1;
+		
 	}
 	
     function load() {
@@ -1267,12 +1280,13 @@ class emo.AnalogOnScreenController extends emo.Sprite {
     }
 
     function remove() {
+		emo.Event().removeOnUpdateListener(this);
 		emo.Event().removeMotionListener(this);
 		knob.remove();
 		return base.remove();
     }
 
-	function onMotionEvent(mevent, hasChanged = true) {
+	function onMotionEvent(mevent) {
 		local x = mevent.getX();
 		local y = mevent.getY();
 		if (mevent.getAction() == MOTION_EVENT_ACTION_UP ||
@@ -1280,11 +1294,10 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 			mevent.getAction() == MOTION_EVENT_ACTION_OUTSIDE ||
 			mevent.getAction() == MOTION_EVENT_ACTION_POINTER_UP) {
 			releaseKnob(getX(), getY(), knob.getZ());
-			fireControlEvent(hasChanged, true);
+			fireControlEvent(true, true);
 		} else {
 			if (contains(x, y)) {
 				knob.moveCenter(x, y);
-				fireControlEvent(hasChanged);
 			}
 		}
 	}
@@ -1300,8 +1313,18 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 	function fireControlEvent(hasChanged, immediate = false) {
 		local delta = elapsed() - lastUpdate;
 		if (immediate || delta >= updateInterval) {
-			emo._onControlEvent(this, getRelativeX(), getRelativeY(), hasChanged);
+			local x = getRelativeX();
+			local y = getRelativeY();
+			emo._onControlEvent(this, x, y, hasChanged);
 			lastUpdate = elapsed();
+			
+			if (isNeutral()) {
+				previousRelativeX = null;
+				previousRelativeY = null;
+			} else {
+				previousRelativeX = x;
+				previousRelativeY = y;
+			}
 		}
 	}
 	
@@ -1377,13 +1400,24 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 			}
 		}
 	}
+	
+	function onUpdate() {
+		if (previousRelativeX == getRelativeX() && previousRelativeY == getRelativeY()) {
+			fireControlEvent(false);
+		} else if (!isNeutral()) {
+			fireControlEvent(true, false);
+		}
+	}
+	
+	function onPause()  { }
+	function onResume() { } 
 }
 
 class emo.DigitalOnScreenController extends emo.AnalogOnScreenController {
 	function constructor(_name, _knobname, _alpha = 0.5) {
 		base.constructor(_name, _knobname, _alpha);
 	}
-	function fireControlEvent(hasChanged) {
+	function fireControlEvent(hasChanged, immediate = false) {
 		local relativeX = getRelativeX();
 		local relativeY = getRelativeY();
 		local knobWidthSpace  = knob.getWidth()  * 0.5;
@@ -1404,7 +1438,7 @@ class emo.DigitalOnScreenController extends emo.AnalogOnScreenController {
 		}
 		
 		
-		base.fireControlEvent(hasChanged);
+		base.fireControlEvent(hasChanged, immediate);
 	}
 }
 
@@ -1440,7 +1474,7 @@ function emo::_onLoad() {
 function emo::_onGainedFocus() {
 
     EMO_RUNTIME_STOPWATCH.start();
-	EMO_MODIFIER_MANAGER.onResume();
+	EMO_ON_UPDATE_MANAGER.onResume();
 
     if (emo.rawin("onGainedFocus")) {
         emo.onGainedFocus();
@@ -1453,7 +1487,7 @@ function emo::_onGainedFocus() {
 
 function emo::_onLostFocus() {
 
-	EMO_MODIFIER_MANAGER.onPause();
+	EMO_ON_UPDATE_MANAGER.onPause();
 	
     if (emo.rawin("onLostFocus")) {
         emo.onLostFocus();
@@ -1497,7 +1531,7 @@ function emo::_onDrawFrame(dt) {
 }
 
 function emo::_onUpdate(dt) {
-    EMO_MODIFIER_MANAGER.onUpdate();
+    EMO_ON_UPDATE_MANAGER.onUpdate();
 }
 
 function emo::_onLowMemory() {
