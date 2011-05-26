@@ -143,6 +143,8 @@
 		F9D43A921388F9830069C3C1 /* motion_event_multi.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */; };
 		F9D43B0C1389160B0069C3C1 /* physics_sensor.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43B0B138916040069C3C1 /* physics_sensor.nut */; };
 		F9D78CD313872E8A0076C937 /* physics.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D78CD213872E8A0076C937 /* physics.nut */; };
+		F9E30413138E3B1A00DB5B60 /* digital_controller_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9E30412138E3ACB00DB5B60 /* digital_controller_example.nut */; };
+		F9E30439138E3D0600DB5B60 /* multiple_controllers_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9E30434138E3C9000DB5B60 /* multiple_controllers_example.nut */; };
 		F9E503BE138BD4B900C7F0BD /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = F9E503BD138BD4B900C7F0BD /* loading.png */; };
 		F9F5AB9F138880D90068EC12 /* tv.png in Resources */ = {isa = PBXBuildFile; fileRef = F9F5AB9E138880D90068EC12 /* tv.png */; };
 /* End PBXBuildFile section */
@@ -375,6 +377,8 @@
 		F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = motion_event_multi.nut; path = Resources/motion_event_multi.nut; sourceTree = "<group>"; };
 		F9D43B0B138916040069C3C1 /* physics_sensor.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_sensor.nut; path = Resources/physics_sensor.nut; sourceTree = "<group>"; };
 		F9D78CD213872E8A0076C937 /* physics.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics.nut; path = Resources/physics.nut; sourceTree = "<group>"; };
+		F9E30412138E3ACB00DB5B60 /* digital_controller_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = digital_controller_example.nut; path = Resources/digital_controller_example.nut; sourceTree = "<group>"; };
+		F9E30434138E3C9000DB5B60 /* multiple_controllers_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = multiple_controllers_example.nut; path = Resources/multiple_controllers_example.nut; sourceTree = "<group>"; };
 		F9E503BD138BD4B900C7F0BD /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		F9F5AB9E138880D90068EC12 /* tv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tv.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -459,6 +463,8 @@
 				F967A8C21372A17800BEF871 /* modifier_move_example.nut */,
 				F921CC9F136FFBAC00F058FF /* periodic_update_example.nut */,
 				F91C5146138DD63C00464576 /* analog_controller_example.nut */,
+				F9E30412138E3ACB00DB5B60 /* digital_controller_example.nut */,
+				F9E30434138E3C9000DB5B60 /* multiple_controllers_example.nut */,
 				F985282113875C2F007DD0CF /* physics_helloworld.nut */,
 				F98EABC7138784D800902E31 /* physics_circle.nut */,
 				F9D43B0B138916040069C3C1 /* physics_sensor.nut */,
@@ -887,6 +893,8 @@
 				F91C5144138DD60500464576 /* onscreen_control_base.png in Resources */,
 				F91C5145138DD60500464576 /* onscreen_control_knob.png in Resources */,
 				F91C514D138DD80D00464576 /* analog_controller_example.nut in Resources */,
+				F9E30413138E3B1A00DB5B60 /* digital_controller_example.nut in Resources */,
+				F9E30439138E3D0600DB5B60 /* multiple_controllers_example.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -22,7 +22,7 @@
 	[viewController awakeFromNib];
 	didReturnRootView = FALSE;
 	
-	sections = [[NSArray alloc] initWithObjects:@"Basic", @"Animation", @"Event", @"Physics", nil];
+	sections = [[NSArray alloc] initWithObjects:@"Basic", @"Animation", @"Event", @"On-Screen Controller", @"Physics", nil];
 	examples = [[NSMutableArray alloc] init];
 	
 	// Basic
@@ -47,9 +47,15 @@
 						  [NSArray arrayWithObjects:@"Dragging a Sprite",  @"motion_event.nut", nil],
 						  [NSArray arrayWithObjects:@"Handling Multi-Touch",  @"motion_event_multi.nut", nil],
 						  [NSArray arrayWithObjects:@"Using the Accelerometer",  @"sensor_event.nut", nil],
-						  [NSArray arrayWithObjects:@"On-Screen Controller",  @"analog_controller_example.nut", nil],
 						  nil]];
 
+	// On-Screen Controller
+	[examples addObject: [NSArray arrayWithObjects:
+						  [NSArray arrayWithObjects:@"Analog Controller",     @"analog_controller_example.nut", nil],
+						  [NSArray arrayWithObjects:@"Digital Controller",    @"digital_controller_example.nut", nil],
+						  [NSArray arrayWithObjects:@"Multiple Controllers",  @"multiple_controllers_example.nut", nil],
+						  nil]];
+	
 	// Physics
 	[examples addObject: [NSArray arrayWithObjects:
 						  [NSArray arrayWithObjects:@"HelloWorld (No Graphics)", @"box2d_helloworld.nut", nil],
