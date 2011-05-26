@@ -46,7 +46,8 @@
 	[examples addObject: [NSArray arrayWithObjects:
 						  [NSArray arrayWithObjects:@"Dragging a Sprite",  @"motion_event.nut", nil],
 						  [NSArray arrayWithObjects:@"Handling Multi-Touch",  @"motion_event_multi.nut", nil],
-						  [NSArray arrayWithObjects:@"Sensor Event",  @"sensor_event.nut", nil],
+						  [NSArray arrayWithObjects:@"Using the Accelerometer",  @"sensor_event.nut", nil],
+						  [NSArray arrayWithObjects:@"On-Screen Controller",  @"analog_controller_example.nut", nil],
 						  nil]];
 
 	// Physics

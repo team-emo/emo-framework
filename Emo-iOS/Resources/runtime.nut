@@ -210,6 +210,12 @@ const AUDIO_CHANNEL_STOPPED   = 1;
 const AUDIO_CHANNEL_PAUSED    = 2;
 const AUDIO_CHANNEL_PLAYING   = 3;
 
+const CONTROL_UP     = 0;
+const CONTROL_DOWN   = 1;
+const CONTROL_LEFT   = 2;
+const CONTROL_RIGHT  = 3;
+const CONTROL_CENTER = 4;
+
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 EMO_MOTION_LISTENERS    <- [];
@@ -1266,7 +1272,7 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 		return base.remove();
     }
 
-	function onMotionEvent(mevent) {
+	function onMotionEvent(mevent, hasChanged = true) {
 		local x = mevent.getX();
 		local y = mevent.getY();
 		if (mevent.getAction() == MOTION_EVENT_ACTION_UP ||
@@ -1274,12 +1280,12 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 			mevent.getAction() == MOTION_EVENT_ACTION_OUTSIDE ||
 			mevent.getAction() == MOTION_EVENT_ACTION_POINTER_UP) {
 			releaseKnob(getX(), getY(), knob.getZ());
-			fireControlEvent();
+			fireControlEvent(hasChanged, true);
 		} else {
 			if (contains(x, y)) {
 				knob.moveCenter(x, y);
+				fireControlEvent(hasChanged);
 			}
-			fireControlEvent();
 		}
 	}
 	
@@ -1287,10 +1293,14 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 		return EMO_RUNTIME_STOPWATCH.elapsed();	
 	}
 	
-	function fireControlEvent() {
+	function isNeutral() {
+		return getRelativeX() == 0 && getRelativeY() == 0;
+	}
+	
+	function fireControlEvent(hasChanged, immediate = false) {
 		local delta = elapsed() - lastUpdate;
-		if (delta >= updateInterval) {
-			emo._onControlEvent(this, getRelativeX(), getRelativeY());
+		if (immediate || delta >= updateInterval) {
+			emo._onControlEvent(this, getRelativeX(), getRelativeY(), hasChanged);
 			lastUpdate = elapsed();
 		}
 	}
@@ -1327,6 +1337,14 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 		return knob.getHeight();
 	}
 	
+	function getControlX() {
+		return relativeX();
+	}
+	
+	function getControlY() {
+		return relativeY();
+	}
+	
     function contains(x, y) {
         return x >= getX() - margin && x <= getX() + getWidth()  + margin &&
                y >= getY() - margin && y <= getY() + getHeight() + margin;
@@ -1336,13 +1354,36 @@ class emo.AnalogOnScreenController extends emo.Sprite {
         return x >= knob.getX() - padding && x <= knob.getX() + knob.getWidth()  + padding &&
                y >= knob.getY() - padding && y <= knob.getY() + knob.getHeight() + padding;
     }
+	
+	function getDirection() {
+		local relativeX = getRelativeX();
+		local relativeY = getRelativeY();
+		
+		if (abs(relativeX) > abs(relativeY)) {
+			if (relativeX > 0) {
+				return CONTROL_RIGHT;
+			} else if (relativeX < 0) {
+				return CONTROL_LEFT;
+			} else {
+				return CONTROL_CENTER;
+			}
+		} else {
+			if (relativeY > 0) {
+				return CONTROL_DOWN;
+			} else if (relativeY < 0) {
+				return CONTROL_UP;
+			} else {
+				return CONTROL_CENTER;
+			}
+		}
+	}
 }
 
 class emo.DigitalOnScreenController extends emo.AnalogOnScreenController {
 	function constructor(_name, _knobname, _alpha = 0.5) {
 		base.constructor(_name, _knobname, _alpha);
 	}
-	function fireControlEvent() {
+	function fireControlEvent(hasChanged) {
 		local relativeX = getRelativeX();
 		local relativeY = getRelativeY();
 		local knobWidthSpace  = knob.getWidth()  * 0.5;
@@ -1363,7 +1404,7 @@ class emo.DigitalOnScreenController extends emo.AnalogOnScreenController {
 		}
 		
 		
-		base.fireControlEvent();
+		base.fireControlEvent(hasChanged);
 	}
 }
 
@@ -1530,10 +1571,10 @@ function emo::_onFps(fps) {
 
 function emo::_onControlEvent(...) {
     if (emo.rawin("onControlEvent")) {
-        emo.onControlEvent(vargv[0], vargv[1], vargv[2]);
+        emo.onControlEvent(vargv[0], vargv[1], vargv[2], vargv[3]);
     }
     if (EMO_RUNTIME_DELEGATE != null &&
              EMO_RUNTIME_DELEGATE.rawin("onControlEvent")) {
-        EMO_RUNTIME_DELEGATE.onControlEvent(vargv[0], vargv[1], vargv[2]);
+        EMO_RUNTIME_DELEGATE.onControlEvent(vargv[0], vargv[1], vargv[2], vargv[3]);
     }
 }
