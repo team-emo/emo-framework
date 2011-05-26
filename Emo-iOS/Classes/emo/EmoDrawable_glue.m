@@ -715,6 +715,7 @@ SQInteger emoDrawableMove(HSQUIRRELVM v) {
         SQFloat z;
         sq_getfloat(v, 5, &z);
         drawable.z = z;
+        engine.sortOrderDirty = TRUE;
     }
 	return 0;
 }

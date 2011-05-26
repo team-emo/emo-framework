@@ -240,6 +240,18 @@ function emo::toDegree(radian) {
 	return radian * 180.0 / PI;
 }
 
+function min(a, b) {
+	return a < b ? a : b;
+}
+
+function max(a, b) {
+	return a > b ? a : b;
+}
+
+function round(x) {
+	return (x.tofloat() + (x > 0 ? 0.5 : -0.5)).tointeger();
+}
+
 class emo.Instance {
 	type = null;
 }
@@ -1178,6 +1190,10 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 	knob    = null;
 	padding = null;
 	margin  = null;
+	
+	updateInterval = null;
+	lastUpdate     = null;
+	
 	function constructor(_name, _knobname, _alpha = 0.5) {
 		base.constructor(_name);
 		knob = emo.Sprite(_knobname);
@@ -1188,6 +1204,9 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 		
 		padding = 0;
 		margin  = 0;
+
+		updateInterval = 100;
+		lastUpdate = elapsed();
 	}
 	
     function load() {
@@ -1208,9 +1227,17 @@ class emo.AnalogOnScreenController extends emo.Sprite {
     }
 	
 	function releaseKnob(x, y, knobZ) {
-		local knobX = x + (getScaledWidth()  - knob.getScaledWidth()) / 2.0;
-		local knobY = y + (getScaledHeight() - knob.getScaledHeight()) / 2.0;
+		local knobX = x + (getScaledWidth()  - knob.getScaledWidth())  * 0.5;
+		local knobY = y + (getScaledHeight() - knob.getScaledHeight()) * 0.5;
 		knob.move(knobX, knobY, knobZ);
+	}
+	
+	function getNeutralKnobX() {
+		return getX() + (getScaledWidth() - knob.getScaledWidth()) * 0.5;
+	}
+	
+	function getNeutralKnobY() {
+		return getY() + (getScaledHeight() - knob.getScaledHeight()) * 0.5;
 	}
 
     function moveCenter(x, y, z = null) {
@@ -1247,11 +1274,57 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 			mevent.getAction() == MOTION_EVENT_ACTION_OUTSIDE ||
 			mevent.getAction() == MOTION_EVENT_ACTION_POINTER_UP) {
 			releaseKnob(getX(), getY(), knob.getZ());
+			fireControlEvent();
 		} else {
 			if (contains(x, y)) {
 				knob.moveCenter(x, y);
 			}
+			fireControlEvent();
 		}
+	}
+	
+	function elapsed() {	
+		return EMO_RUNTIME_STOPWATCH.elapsed();	
+	}
+	
+	function fireControlEvent() {
+		local delta = elapsed() - lastUpdate;
+		if (delta >= updateInterval) {
+			emo._onControlEvent(this, getRelativeX(), getRelativeY());
+			lastUpdate = elapsed();
+		}
+	}
+	
+	function getRelativeX() {
+		local unit  = (getWidth() * 0.5) - padding;
+		local axisX = getX() + (getWidth() * 0.5);
+		local knobX = knob.getX() + (knob.getWidth() * 0.5);
+		
+		local x = round((knobX - axisX) / unit.tofloat() * 100.0);
+		if (x > 0) x = min(100, x);
+		if (x < 0) x = max(-100, x);
+		 
+		return x;
+	}
+	
+	function getRelativeY() {
+		local unit  = (getHeight() * 0.5) - padding;
+		local axisY = getY() + (getHeight() * 0.5);
+		local knobY = knob.getY() + (knob.getHeight() * 0.5);
+		
+		local y = round((knobY - axisY) / unit.tofloat() * 100.0);
+		if (y > 0) y = min(100, y);
+		if (y < 0) y = max(-100, y);
+		 
+		return y;
+	}
+	
+	function getKnobWidth() {
+		return knob.getWidth();
+	}
+	
+	function getKnobHeight() {
+		return knob.getHeight();
 	}
 	
     function contains(x, y) {
@@ -1263,6 +1336,35 @@ class emo.AnalogOnScreenController extends emo.Sprite {
         return x >= knob.getX() - padding && x <= knob.getX() + knob.getWidth()  + padding &&
                y >= knob.getY() - padding && y <= knob.getY() + knob.getHeight() + padding;
     }
+}
+
+class emo.DigitalOnScreenController extends emo.AnalogOnScreenController {
+	function constructor(_name, _knobname, _alpha = 0.5) {
+		base.constructor(_name, _knobname, _alpha);
+	}
+	function fireControlEvent() {
+		local relativeX = getRelativeX();
+		local relativeY = getRelativeY();
+		local knobWidthSpace  = knob.getWidth()  * 0.5;
+		local knobHeightSpace = knob.getHeight() * 0.5;
+		
+		if (abs(relativeX) > abs(relativeY)) {
+			if (relativeX > 0) {
+				knob.move(getX() + getWidth() - knobWidthSpace + margin, getNeutralKnobY());
+			} else if (relativeX < 0) {
+				knob.move(getX() - margin - knobWidthSpace, getNeutralKnobY());
+			}
+		} else {
+			if (relativeY > 0) {
+				knob.move(getNeutralKnobX(), getY() + getHeight() - knobHeightSpace + margin);
+			} else if (relativeY < 0) {
+				knob.move(getNeutralKnobX(), getY() - margin - knobHeightSpace);
+			}
+		}
+		
+		
+		base.fireControlEvent();
+	}
 }
 
 function emo::Stage::load(obj) {
@@ -1423,5 +1525,15 @@ function emo::_onFps(fps) {
     if (EMO_RUNTIME_DELEGATE != null &&
              EMO_RUNTIME_DELEGATE.rawin("onFps")) {
         EMO_RUNTIME_DELEGATE.onFps(fps);
+    }
+}
+
+function emo::_onControlEvent(...) {
+    if (emo.rawin("onControlEvent")) {
+        emo.onControlEvent(vargv[0], vargv[1], vargv[2]);
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onControlEvent")) {
+        EMO_RUNTIME_DELEGATE.onControlEvent(vargv[0], vargv[1], vargv[2]);
     }
 }
