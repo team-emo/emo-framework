@@ -19,6 +19,8 @@
 	
 	[window makeKeyAndVisible];
 
+	[self.viewController onLoad];
+	
     return YES;
 }
 
@@ -26,12 +28,10 @@
 {
 	[self.viewController onLostFocus];
     [self.viewController stopAnimation];
-	[self.viewController onDispose];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-	[self.viewController onLoad];
 	[self.viewController onGainedFocus];
     [self.viewController startAnimation];
 }
@@ -39,6 +39,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     [self.viewController stopAnimation];
+	[self.viewController onDispose];
 }
 
 - (void)dealloc
