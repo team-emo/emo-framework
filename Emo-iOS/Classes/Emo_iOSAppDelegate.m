@@ -38,6 +38,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+	[self.viewController onLostFocus];
     [self.viewController stopAnimation];
 	[self.viewController onDispose];
 }
