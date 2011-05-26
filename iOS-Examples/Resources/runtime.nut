@@ -1155,7 +1155,7 @@ class emo.TextSprite extends emo.MapSprite {
 	width  = null;
 	height = null;
 	
-	function constructor(_name, _width, _height, _textbase, _border = null, _margin = null) {
+	function constructor(_name, _textbase, _width, _height, _border = null, _margin = null) {
 		textbase = _textbase;
 		indexes = [];
 		
@@ -1217,20 +1217,19 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 		
 		alpha(_alpha);
 		
-		emo.Event().addOnUpdateListener(this);
 		emo.Event().addMotionListener(this);
 		
 		padding = 0;
 		margin  = 0;
 
 		updateInterval = 100;
-		lastUpdate     = -1;
-		
+		lastUpdate = elapsed();
 	}
 	
     function load() {
 		base.load();
 		knob.load();
+		emo.Event().addOnUpdateListener(this);
     }
 	
     function show() { knob.show(); return base.show(); }

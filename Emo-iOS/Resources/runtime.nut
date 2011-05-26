@@ -1155,7 +1155,7 @@ class emo.TextSprite extends emo.MapSprite {
 	width  = null;
 	height = null;
 	
-	function constructor(_name, _width, _height, _textbase, _border = null, _margin = null) {
+	function constructor(_name, _textbase, _width, _height, _border = null, _margin = null) {
 		textbase = _textbase;
 		indexes = [];
 		

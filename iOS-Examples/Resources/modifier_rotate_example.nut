@@ -7,8 +7,11 @@ local event = emo.Event();
 class Main {
 
     circle = emo.Sprite("loading.png");
-    text = emo.TextSprite("font_16x16.png", 16, 16, 
-		" !\"c*%#'{}@+,=./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSQTVWXYZ");
+	
+	// 16x16 text sprite with 2 pixel border and 1 pixel margin
+    text = emo.TextSprite("font_16x16.png",
+		" !\"c*%#'{}@+,=./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSQTVWXYZ",
+		16, 16, 2, 1);
     
 	/*
 	 * Called when this class is loaded
