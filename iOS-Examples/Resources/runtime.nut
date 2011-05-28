@@ -1218,18 +1218,18 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 		alpha(_alpha);
 		
 		emo.Event().addMotionListener(this);
+		emo.Event().addOnUpdateListener(this);
 		
 		padding = 0;
 		margin  = 0;
 
 		updateInterval = 100;
-		lastUpdate = elapsed();
+		lastUpdate = -1000;
 	}
 	
     function load() {
 		base.load();
 		knob.load();
-		emo.Event().addOnUpdateListener(this);
     }
 	
     function show() { knob.show(); return base.show(); }
