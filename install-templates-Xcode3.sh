@@ -5,6 +5,7 @@ echo 'emo-framework template installer'
 EMO_VER='emo-framework 0.1 alpha'
 BASE_TEMPLATE_DIR="/Library/Application Support/Developer/Shared/Xcode"
 BASE_TEMPLATE_USER_DIR="$HOME/Library/Application Support/Developer/Shared/Xcode"
+SCRIPT_DIR=$(dirname $0)
 
 force=
 user_dir=
@@ -50,7 +51,8 @@ exit 1
 fi
 
 copy_files(){
-	rsync -r --exclude=.svn "$1" "$2"
+	SRC_DIR="${SCRIPT_DIR}/${1}"
+	rsync -r --exclude=.svn "$SRC_DIR" "$2"
 }
 
 check_dst_dir(){
