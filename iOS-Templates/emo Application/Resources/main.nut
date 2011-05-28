@@ -1,3 +1,0 @@
-function emo::onLoad() {
-
-}
