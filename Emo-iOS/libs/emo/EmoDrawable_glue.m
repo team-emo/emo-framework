@@ -40,6 +40,7 @@ void initDrawableFunctions() {
 	registerClass(engine.sqvm, EMO_STAGE_CLASS);
 	
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createSprite",   emoDrawableCreateSprite);
+	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createLine",     emoDrawableCreateLine);
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createSpriteSheet", emoDrawableCreateSpriteSheet);
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
 
@@ -124,6 +125,43 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 	
 	drawable.width  = width;
 	drawable.height = height;
+	
+    [drawable createTextureBuffer];
+	
+    char key[DRAWABLE_KEY_LENGTH];
+	[drawable updateKey:key];
+    [engine addDrawable:drawable withKey:key];
+	
+    sq_pushstring(v, key, strlen(key));
+	
+	[drawable release];
+	
+    return 1;
+}
+
+SQInteger emoDrawableCreateLine(HSQUIRRELVM v) {
+	SQInteger nargs = sq_gettop(v);
+	if (nargs < 5) {
+		return 0;
+	}
+	
+	EmoLineDrawable* drawable = [[EmoLineDrawable alloc] init];
+	
+    [drawable initDrawable];
+	
+	SQFloat x1, y1, x2, y2;
+	sq_getfloat(v, 2, &x1);
+	sq_getfloat(v, 3, &y1);
+	sq_getfloat(v, 4, &x2);
+	sq_getfloat(v, 5, &y2);
+	
+	drawable.x = x1;
+	drawable.y = y1;
+	drawable.x2 = x2;
+	drawable.y2 = y2;
+	
+	drawable.width  = 1;
+	drawable.height = abs(y1 - y2);
 	
     [drawable createTextureBuffer];
 	

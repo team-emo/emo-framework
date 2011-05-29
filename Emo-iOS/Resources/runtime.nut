@@ -1083,6 +1083,13 @@ class emo.Rectangle extends emo.Sprite {
 	}
 }
 
+class emo.Line extends emo.Sprite {
+	function constructor(x1, y1, x2, y2) {
+		name = null;
+        id = stage.createLine(x1, y1, x2, y2);
+	}
+}
+
 class emo.MapSprite extends emo.Sprite {
     function constructor(rawname, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
         local sprite = emo.SpriteSheet(rawname, frameWidth, frameHeight, border, margin, frameIndex);

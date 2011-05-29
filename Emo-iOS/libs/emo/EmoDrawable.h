@@ -113,10 +113,6 @@
 -(BOOL)setFrameIndex:(NSInteger)index;
 -(BOOL)pauseAt:(NSInteger)index;
 -(float)getColor:(NSInteger)index;
--(float)getTexCoordStartX;
--(float)getTexCoordStartY;
--(float)getTexCoordEndX;
--(float)getTexCoordEndY;
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
 -(void)pause;
 -(void)stop;
@@ -131,4 +127,15 @@
 -(float)getAngle;
 -(float)getScaledWidth;
 -(float)getScaledHeight;
+@end
+
+@interface EmoLineDrawable : EmoDrawable {
+	float x2, y2;
+}
+@property (readwrite) float x2;
+@property (readwrite) float y2;
+
+-(void)initDrawable;
+-(BOOL)bindVertex;
+-(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
 @end
