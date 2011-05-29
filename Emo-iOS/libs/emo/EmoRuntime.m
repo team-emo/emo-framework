@@ -80,6 +80,7 @@ extern EmoEngine* engine;
     callSqFunction_Bool_TwoStrings(engine.sqvm, 
 			EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, 
 				[name UTF8String], [response UTF8String], SQFalse);
+	[response release];
 	[engine removeNetTask:name];
 }
 
