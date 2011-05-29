@@ -222,6 +222,10 @@ EMO_MOTION_LISTENERS    <- [];
 
 EMO_STAGE_CONTENT_SCALE <- 1;
 
+function emo::Runtime::uptime() {
+	return EMO_RUNTIME_STOPWATCH.elapsed();
+}
+
 function emo::Event::addMotionListener(listener) {
 	EMO_MOTION_LISTENERS.append(listener);
 }
@@ -892,7 +896,9 @@ class emo.Sprite {
     id       = null;
     childId  = null;
     loaded   = null;
-	fixture  = null;
+	uptime   = null;
+	
+	physicsInfo = null;
 
     function constructor(rawname) {
         name = this.getResourceName(rawname);
@@ -915,6 +921,7 @@ class emo.Sprite {
             status = stage.loadSprite(id, x, y, width, height);
 
             if (status == EMO_NO_ERROR) {
+				uptime = EMO_RUNTIME_STOPWATCH.elapsed();
                 loaded = true;
             }
         }
@@ -998,6 +1005,12 @@ class emo.Sprite {
     function remove() {
         local status = EMO_NO_ERROR;
         if (loaded) {
+			removeModifier(this);
+			emo.Event().removeMotionListener(this);
+			if (physicsInfo != null) {
+				physicsInfo.remove();
+				physicsInfo = null;
+			}
             status = stage.remove(id);
             loaded = false;
         }
@@ -1021,16 +1034,27 @@ class emo.Sprite {
     	emo.Event().removeOnUpdateListener(modifier);
     }
 	
-	function setFixture(_fixture) {
-		fixture = _fixture;
+	function setPhysicsInfo(_physicsInfo) {
+		physicsInfo = _physicsInfo;
+	}
+	
+	function getPhysicsInfo() {
+		return physicsInfo;
 	}
 	
 	function getFixture() {
-		return fixture;
+		if (physicsInfo == null) return null;
+		return physicsInfo.getFixture();
 	}
 	
 	function getPhysicsBody() {
-		return fixture.getBody();
+		if (physicsInfo == null) return null;
+		return physicsInfo.getBody();
+	}
+	
+	function elapsed() {
+		if (uptime == null) return -1;
+		return EMO_RUNTIME_STOPWATCH.elapsed() - uptime;
 	}
 
 }

@@ -9,27 +9,33 @@ local physics = emo.Physics();
 local world   = emo.physics.World(emo.Vec2(0, 10), true);
 
 const FPS = 60.0;
+const WALL_WIDTH = 10;
 
 class Main {
-	ground = emo.Rectangle();
-	box    = emo.Rectangle();
-	axis   = emo.Rectangle();
-	rope   = emo.Line();
+	box     = emo.Rectangle();
+	axis    = emo.Rectangle();
+	rope    = emo.Line();
+	dropBox = emo.Rectangle();
+
+	lastRecycledTime = 0;
 	
 	/*
 	 * Called when this class is loaded
 	 */
 	function onLoad() {
-		ground.setSize(stage.getWindowWidth(), 20);
-		ground.move(0, stage.getWindowHeight() - ground.getHeight());
-		physics.createStaticSprite(world, ground);
-		ground.load();
+	
+		createWall();
 		
 		box.setSize(stage.getWindowWidth() / 4, 20);
 		box.move(
 			(stage.getWindowWidth()  - box.getWidth())  / 2,
 			(stage.getWindowHeight() - box.getHeight()) / 2);
 		box.color(0, 0, 1);
+		
+		dropBox.setSize(box.getWidth() / 2, 10);
+		dropBox.color(0, 1, 0);
+		dropBox.hide();
+		dropBox.load();
 	
 		axis.setSize(10, 10);
 		axis.move(
@@ -70,6 +76,33 @@ class Main {
 		emo.Event.enableOnDrawCallback(1000.0 / FPS);
 	}
 	
+	function createWall() {
+		local wall1  = emo.Rectangle();
+		local wall2  = emo.Rectangle();
+		local wall3  = emo.Rectangle();
+		local wall4  = emo.Rectangle();
+
+		wall1.setSize(stage.getWindowWidth(), WALL_WIDTH);
+		wall2.setSize(stage.getWindowWidth(), WALL_WIDTH);
+		wall3.setSize(WALL_WIDTH, stage.getWindowHeight());
+		wall4.setSize(WALL_WIDTH, stage.getWindowHeight());
+		
+		wall1.move(0, 0);
+		wall2.move(0, stage.getWindowHeight() - wall2.getHeight());
+		wall3.move(0, 0);
+		wall4.move(stage.getWindowWidth() - wall4.getWidth(), 0);
+		
+		physics.createStaticSprite(world, wall1);
+		physics.createStaticSprite(world, wall2);
+		physics.createStaticSprite(world, wall3);
+		physics.createStaticSprite(world, wall4);
+		
+		wall1.load();
+		wall2.load();
+		wall3.load();
+		wall4.load();
+	}
+	
     /*
      * Called when the onDraw callback is enabled by enableOnDrawCallback.
      * This callback is called before drawing the screen at interval of milliseconds set by enableOnDrawCallback.
@@ -83,6 +116,17 @@ class Main {
 		rope.move(
 			axis.getCenterX(), axis.getCenterY(),
 			box.getCenterX(),  box.getCenterY());
+		
+		if (emo.Runtime().uptime() - lastRecycledTime > 1000) {
+			lastRecycledTime = emo.Runtime().uptime();
+			
+			// if the drop box is sleeping, drop it again.
+			if (dropBox.getPhysicsInfo() == null ||
+				 !dropBox.getPhysicsInfo().getBody().isAwake()) {
+				local dropX = (stage.getWindowWidth() - box.getWidth()) / 2 + (rand() % box.getWidth());
+				addNewDropBox(dropX, 100, rand() % 180);
+			}
+		}
 	}
 	
 	/*
@@ -93,22 +137,30 @@ class Main {
 		axis.remove();
 	}
 	
+	function addNewDropBox(x, y, angle) {
+		dropBox.hide();
+		dropBox.rotate(angle);
+		
+		if (dropBox.getPhysicsInfo() != null) {
+			dropBox.getPhysicsInfo().remove();
+			dropBox.physicsInfo = null;
+		}
+
+		dropBox.move(x, y);
+		
+		local fixture = emo.physics.FixtureDef();
+		fixture.density  = 0.1;
+		physics.createDynamicSprite(world, dropBox, fixture);
+		
+		dropBox.show();
+	}
+	
 	/*
-	 * touch event
+	 * drop boxes at touch event.
 	 */
 	function onMotionEvent(mevent) {
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-			local dropBox = emo.Rectangle();
-			dropBox.setSize(20, 20);
-			dropBox.move(mevent.getX(), mevent.getY());
-			dropBox.color(0, 1, 0);
-			
-			local fixture = emo.physics.FixtureDef();
-			fixture.density  = 0.1;
-		
-			physics.createDynamicSprite(world, dropBox, fixture);
-		
-			dropBox.load();
+			addNewDropBox(mevent.getX(), mevent.getY(), rand() % 180);
 		}
 	}
 }
