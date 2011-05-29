@@ -63,8 +63,9 @@ class Main {
 		world.createJoint(jointDef);
 	
 		// draw the joint over the sprite
-		sprite.setZ(0);
-		jointAxis.setZ(1);
+		line.setZ(0);
+		sprite.setZ(1);
+		jointAxis.setZ(2);
 
 		// load the sprites
 		sprite.load();
