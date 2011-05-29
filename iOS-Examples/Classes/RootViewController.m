@@ -22,7 +22,10 @@
 	[viewController awakeFromNib];
 	didReturnRootView = FALSE;
 	
-	sections = [[NSArray alloc] initWithObjects:@"Basic", @"Animation", @"Event", @"On-Screen Controller", @"Physics", nil];
+	sections = [[NSArray alloc] initWithObjects:@"Basic", @"Animation", 
+					@"Event", @"On-Screen Controller", @"Physics",
+					@"Physics with Joints",
+					nil];
 	examples = [[NSMutableArray alloc] init];
 	
 	// Basic
@@ -62,6 +65,17 @@
 						  [NSArray arrayWithObjects:@"Using Box Shape", @"physics_helloworld.nut", nil],
 						  [NSArray arrayWithObjects:@"Using Circle Shape", @"physics_circle.nut", nil],
 						  [NSArray arrayWithObjects:@"Using with Sensor", @"physics_sensor.nut", nil],
+						  nil]];
+	
+	// Physics with Joints
+	[examples addObject: [NSArray arrayWithObjects:
+						  [NSArray arrayWithObjects:@"Using DistanceJoint", @"physics_distancejoint.nut", nil],
+						  [NSArray arrayWithObjects:@"Using RevoluteJoint", @"physics_revolutejoint.nut", nil],
+						  [NSArray arrayWithObjects:@"Using PrismaticJoint", @"physics_prismaticjoint.nut", nil],
+						  [NSArray arrayWithObjects:@"Using PulleyJoint",   @"physics_pulleyjoint.nut", nil],
+						  [NSArray arrayWithObjects:@"Using GearJoint",     @"physics_gearjoint.nut", nil],
+						  [NSArray arrayWithObjects:@"Using LineJoint",     @"physics_linejoint.nut", nil],
+						  [NSArray arrayWithObjects:@"Using WeldJoint",     @"physics_weldjoint.nut", nil],
 						  nil]];
 }
 
