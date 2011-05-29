@@ -974,6 +974,14 @@ class emo.Sprite {
     function moveCenter(x, y, z = null) {
         return move(x - (getWidth() * 0.5), y - (getHeight() * 0.5), z);
     }
+	
+	function getCenterX() {
+		return getX() + (getWidth() * 0.5);
+	}
+	
+	function getCenterY() {
+		return getY() + (getHeight() * 0.5);
+	}
 
     function scale(scaleX, scaleY, centerX = null, centerY = null) {
         return stage.scale(id, scaleX, scaleY, centerX, centerY);
@@ -1080,6 +1088,16 @@ class emo.Rectangle extends emo.Sprite {
 	function constructor() {
 		name = null;
         id = stage.createSprite(name);
+	}
+}
+
+class emo.Line extends emo.Sprite {
+	function constructor(x1 = 0, y1 = 0, x2 = 1, y2 = 1) {
+		name = null;
+        id = stage.createLine(x1, y1, x2, y2);
+	}
+	function move(x1, y1, x2, y2) {
+		return stage.setLine(id, x1, y1, x2, y2);
 	}
 }
 

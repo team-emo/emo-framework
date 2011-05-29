@@ -510,25 +510,28 @@ extern EmoEngine* engine;
 @synthesize x2, y2;
 
 -(void)initDrawable {
+	[super initDrawable];
+	
 	x2 = 0;
 	y2 = 0;
 	
-	[super initDrawable];
+    param_color[0] = 0;
+    param_color[1] = 1;
+    param_color[2] = 0;
 }
 
 -(BOOL)bindVertex {
-	vertex_tex_coords[0] = x;
-	vertex_tex_coords[1] = y;
-	vertex_tex_coords[2] = x2;
-	vertex_tex_coords[3] = y2;
-	
 	loaded = TRUE;
-	
 	return TRUE;
 }
 
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
 	if (!loaded) return FALSE;
+	
+	vertex_tex_coords[0] = x;
+	vertex_tex_coords[1] = y;
+	vertex_tex_coords[2] = x2;
+	vertex_tex_coords[3] = y2;
 	
     glMatrixMode (GL_MODELVIEW);
     glLoadIdentity (); 

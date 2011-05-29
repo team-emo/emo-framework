@@ -32,6 +32,7 @@ function getScaledImage(filename, baseWidth = 320) {
 class Main {
 	sprite  = emo.Sprite(getScaledImage("tv.png"));
 	jointAxis = emo.Rectangle();
+	line    = emo.Line();
 	
 	/*
 	 * Called when this class is loaded
@@ -68,6 +69,9 @@ class Main {
 		// load the sprites
 		sprite.load();
 		jointAxis.load();
+		
+		line.setWidth(4);
+		line.load();
 	
 		// apply linear velocity to sprite to see how the DistanceJoint works.
 		spriteInfo.getBody().setLinearVelocity(emo.Vec2(5, 0));
@@ -85,6 +89,10 @@ class Main {
 		// step the world (second)
 		world.step(1.0 / FPS, 6, 2);
 		world.clearForces();
+		
+		line.move(
+			jointAxis.getCenterX(), jointAxis.getCenterY(),
+			sprite.getCenterX(), sprite.getCenterY());
 	}
 	
 	/*

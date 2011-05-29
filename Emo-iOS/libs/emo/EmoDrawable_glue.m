@@ -91,6 +91,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "animate",        emoDrawableAnimate);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getFrameIndex",  emoDrawableGetFrameIndex);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getFrameCount",  emoDrawableGetFrameCount);
+    registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setLine",        emoDrawableSetLinePosition);
 }
 
 /*
@@ -1408,7 +1409,6 @@ SQInteger emoDrawableSetSize(HSQUIRRELVM v) {
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }
-
 SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1756,5 +1756,49 @@ SQInteger emoDrawableGetFrameCount(HSQUIRRELVM v) {
     }
 	
     sq_pushinteger(v, drawable.frameCount);
+    return 1;
+}
+
+SQInteger emoDrawableSetLinePosition(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoLineDrawable* drawable = (EmoLineDrawable*)[engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    if (sq_gettype(v, 3) != OT_NULL) {
+        SQFloat x1;
+        sq_getfloat(v, 3, &x1);
+        drawable.x = x1;
+    }
+    if (sq_gettype(v, 4) != OT_NULL) {
+        SQFloat y1;
+        sq_getfloat(v, 4, &y1);
+        drawable.y = y1;
+    }
+    if (sq_gettype(v, 5) != OT_NULL) {
+        SQFloat x2;
+        sq_getfloat(v, 5, &x2);
+        drawable.x2 = x2;
+    }
+    if (sq_gettype(v, 6) != OT_NULL) {
+        SQFloat y2;
+        sq_getfloat(v, 6, &y2);
+        drawable.y2 = y2;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }

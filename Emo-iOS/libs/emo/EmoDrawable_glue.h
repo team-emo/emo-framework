@@ -84,3 +84,4 @@ SQInteger emoDrawableSetSize(HSQUIRRELVM v);
 SQInteger emoDrawableGetFrameIndex(HSQUIRRELVM v);
 SQInteger emoDrawableGetFrameCount(HSQUIRRELVM v);
 
+SQInteger emoDrawableSetLinePosition(HSQUIRRELVM v);
