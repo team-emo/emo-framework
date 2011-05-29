@@ -10,72 +10,61 @@ local world   = emo.physics.World(emo.Vec2(0, 10), true);
 
 const FPS = 60.0;
 
-/*
- * This function is an example for retrieving
- * higher resolution image filename to support 
- * multiple screen size. (i.e. Retina and non-Retina).
- */
-function getScaledImage(filename, baseWidth = 320) {
-	local idx    = filename.find(".");
-	local name   = filename.slice(0, idx);
-	local suffix = filename.slice(idx);
-
-	local scaling = (emo.Stage.getWindowWidth() / baseWidth).tointeger();
-	
-	if (scaling > 1) {
-		name = name + "@" + scaling + "x";
-	}
-	
-	return name + suffix;
-}
-
 class Main {
-	sprite  = emo.Sprite(getScaledImage("tv.png"));
-	jointAxis = emo.Rectangle();
-	line    = emo.Line();
+	ground = emo.Rectangle();
+	box    = emo.Rectangle();
+	axis   = emo.Rectangle();
+	rope   = emo.Line();
 	
 	/*
 	 * Called when this class is loaded
 	 */
 	function onLoad() {
-		sprite.move(
-			(stage.getWindowWidth()  - sprite.getWidth())  / 2,
-			(stage.getWindowHeight() - sprite.getHeight()) / 2);
-
+		ground.setSize(stage.getWindowWidth(), 20);
+		ground.move(0, stage.getWindowHeight() - ground.getHeight());
+		physics.createStaticSprite(world, ground);
+		ground.load();
+		
+		box.setSize(stage.getWindowWidth() / 4, 20);
+		box.move(
+			(stage.getWindowWidth()  - box.getWidth())  / 2,
+			(stage.getWindowHeight() - box.getHeight()) / 2);
+		box.color(0, 0, 1);
+	
+		axis.setSize(10, 10);
+		axis.move(
+			(stage.getWindowWidth()  - axis.getWidth())  / 2,
+			box.getHeight());
+		axis.color(1, 0, 0);
+		
 		local fixture = emo.physics.FixtureDef();
 		fixture.density  = 0.1;
 		fixture.friction = 0.2;
 		fixture.restitution = 0.1;
 		
-		jointAxis.setSize(10, 10);
-		jointAxis.move(
-			(stage.getWindowWidth()  - jointAxis.getWidth())  / 2,
-			sprite.getHeight());
-		jointAxis.color(1, 0, 0);
-	
-		local spriteInfo = physics.createDynamicSprite(world, sprite, fixture);
-		local axisInfo   = physics.createStaticSprite(world, jointAxis, fixture);
+		local boxInfo  = physics.createDynamicSprite(world, box, fixture);
+		local axisInfo = physics.createStaticSprite(world, axis, fixture);
 		
 		local jointDef = emo.physics.DistanceJointDef();
 		jointDef.initialize(
-			spriteInfo.getBody(), axisInfo.getBody(),
-			spriteInfo.getBody().getWorldCenter(), axisInfo.getBody().getWorldCenter());
+			boxInfo.getBody(), axisInfo.getBody(),
+			boxInfo.getBody().getWorldCenter(), axisInfo.getBody().getWorldCenter());
 		world.createJoint(jointDef);
 	
 		// draw the joint over the sprite
-		line.setZ(0);
-		sprite.setZ(1);
-		jointAxis.setZ(2);
+		rope.setZ(0);
+		box.setZ(1);
+		axis.setZ(2);
 
 		// load the sprites
-		sprite.load();
-		jointAxis.load();
+		box.load();
+		axis.load();
 		
-		line.setWidth(4);
-		line.load();
+		rope.setWidth(2);
+		rope.load();
 	
 		// apply linear velocity to sprite to see how the DistanceJoint works.
-		spriteInfo.getBody().setLinearVelocity(emo.Vec2(5, 0));
+		boxInfo.getBody().setLinearVelocity(emo.Vec2(5, 0));
 	
 		// Set OnDrawCallback interval (millisecond)
 		emo.Event.enableOnDrawCallback(1000.0 / FPS);
@@ -91,17 +80,36 @@ class Main {
 		world.step(1.0 / FPS, 6, 2);
 		world.clearForces();
 		
-		line.move(
-			jointAxis.getCenterX(), jointAxis.getCenterY(),
-			sprite.getCenterX(), sprite.getCenterY());
+		rope.move(
+			axis.getCenterX(), axis.getCenterY(),
+			box.getCenterX(),  box.getCenterY());
 	}
 	
 	/*
 	 * Called when the class ends
 	 */
 	function onDispose() {
-		sprite.remove();
-		jointAxis.remove();
+		box.remove();
+		axis.remove();
+	}
+	
+	/*
+	 * touch event
+	 */
+	function onMotionEvent(mevent) {
+		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+			local dropBox = emo.Rectangle();
+			dropBox.setSize(20, 20);
+			dropBox.move(mevent.getX(), mevent.getY());
+			dropBox.color(0, 1, 0);
+			
+			local fixture = emo.physics.FixtureDef();
+			fixture.density  = 0.1;
+		
+			physics.createDynamicSprite(world, dropBox, fixture);
+		
+			dropBox.load();
+		}
 	}
 }
 function emo::onLoad() {
