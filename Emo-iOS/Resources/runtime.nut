@@ -1240,8 +1240,6 @@ class emo.TextSprite extends emo.MapSprite {
 		}
 		clearTiles();
 		addRow(indexes);
-		
-		setSize(indexes.len() * width, height);
 	}
 	
 	function getWidth() {
