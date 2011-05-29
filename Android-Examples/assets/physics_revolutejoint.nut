@@ -1,5 +1,5 @@
 /*
- * Physics example by Box2D with one dynamic body and one static body.
+ * Physics example by Box2D with dynamic body and RevoluteJoint.
  * This example uses OnDrawCallback to step the physics world.
  */
 emo.Runtime.import("physics.nut");
@@ -30,30 +30,45 @@ function getScaledImage(filename, baseWidth = 320) {
 }
 
 class Main {
-	ground  = emo.Rectangle();
 	sprite  = emo.Sprite(getScaledImage("tv.png"));
+	jointAxis = emo.Rectangle();
 	
 	/*
 	 * Called when this class is loaded
 	 */
 	function onLoad() {
-		ground.setSize(stage.getWindowWidth(), 20);
-		ground.move(0, stage.getWindowHeight() - ground.getHeight());
-	
-		sprite.move((stage.getWindowWidth() - sprite.getWidth()) / 2, 0);
-		sprite.rotate(30);
-
-		physics.createStaticSprite(world, ground);
+		sprite.move(
+			(stage.getWindowWidth()  - sprite.getWidth())  / 2,
+			(stage.getWindowHeight() - sprite.getHeight()) / 2);
 		
 		local fixture = emo.physics.FixtureDef();
-		fixture.density  = 1.0;
+		fixture.density  = 0.1;
 		fixture.friction = 0.2;
 		fixture.restitution = 0.1;
-
-		physics.createDynamicSprite(world, sprite, fixture);
+		
+		jointAxis.setSize(10, 10);
+		jointAxis.move(sprite.getX() + 10, sprite.getY() + 10);
+		jointAxis.color(1, 0, 0);
 	
-		ground.load();
+		local spriteInfo = physics.createDynamicSprite(world, sprite, fixture);
+		local axisInfo   = physics.createStaticSprite(world, jointAxis, fixture);
+		
+		local jointDef = emo.physics.RevoluteJointDef();
+		jointDef.initialize(
+			spriteInfo.getBody(), axisInfo.getBody(),
+			axisInfo.getBody().getWorldCenter());
+		jointDef.enableMotor = true;
+		jointDef.maxMotorTorque = 10;
+		jointDef.motorSpeed = 1;
+		world.createJoint(jointDef);
+	
+		// draw the joint over the sprite
+		sprite.setZ(0);
+		jointAxis.setZ(1);
+
+		// load the sprites
 		sprite.load();
+		jointAxis.load();
 	
 		// Set OnDrawCallback interval (millisecond)
 		emo.Event.enableOnDrawCallback(1000.0 / FPS);
@@ -74,8 +89,8 @@ class Main {
 	 * Called when the class ends
 	 */
 	function onDispose() {
-		ground.remove();
 		sprite.remove();
+		jointAxis.remove();
 	}
 }
 function emo::onLoad() {

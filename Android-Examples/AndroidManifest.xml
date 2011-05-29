@@ -15,7 +15,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        
         <activity android:name=".Main"
                   android:label="@string/app_name"
                   android:configChanges="orientation|keyboardHidden">
@@ -198,6 +198,109 @@
             <meta-data android:name="emo.script.main"
                        android:value="sensor_event.nut" />
         </activity-alias>
+
+        <activity-alias android:name=".AnalogControllerExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="analog_controller_example.nut" />
+        </activity-alias>
+        <activity-alias android:name=".DigitalControllerExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="digital_controller_example.nut" />
+        </activity-alias>
+        <activity-alias android:name=".MultipleControllerExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="multiple_controllers_example.nut" />
+        </activity-alias>
+
+        <activity-alias android:name=".PhysicsDistanceJointExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="physics_distancejoint.nut" />
+        </activity-alias>
+        <activity-alias android:name=".PhysicsRevoluteJointExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="physics_revolutejoint.nut" />
+        </activity-alias>
+        <activity-alias android:name=".PhysicsPrismaticJointExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="physics_prismaticjoint.nut" />
+        </activity-alias>
+        <activity-alias android:name=".PhysicsPulleyJointExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="physics_pulleyjoint.nut" />
+        </activity-alias>
+        <activity-alias android:name=".PhysicsGearJointExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="physics_gearjoint.nut" />
+        </activity-alias>
+        <activity-alias android:name=".PhysicsLineJointExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="physics_linejoint.nut" />
+        </activity-alias>
+        <activity-alias android:name=".PhysicsWeldJointExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="physics_weldjoint.nut" />
+        </activity-alias>
+
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest> 

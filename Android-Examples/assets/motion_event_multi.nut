@@ -43,9 +43,9 @@ class Main {
 		local id = mevent.getPointerId();
 
 		if (!rectangles.rawin(id)) {
-			// create new rectangle
+			// if new pointer comes in, create new rectangle
 			local rectangle = emo.Rectangle();
-			rectangle.setSize(70, 70);
+			rectangle.setSize(100, 100);
 			rectangle.color(1, 0, 0);
 			rectangle.moveCenter(mevent.getX(), mevent.getY());
 			rectangle.load();

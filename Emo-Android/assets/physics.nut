@@ -595,7 +595,7 @@ class emo.physics.JointDef {
 	physics  = emo.Physics();
 	collideConnected = null;
 	function update() {
-		return physics.updateJointDef(id);
+		return physics.updateJointDef(id, this);
 	}
 }
 
@@ -788,6 +788,22 @@ class emo.physics.PhysicsSprite {
 			sprite.move(x, y);
 			sprite.rotate(emo.toDegree(body.getAngle()));
 		}
+	}
+	
+	function getBody() {
+		return body;
+	}
+	
+	function getSprite() {
+		return sprite;
+	}
+	
+	function getType() {
+		return type;
+	}
+	
+	function getFixture() {
+		return fixture;
 	}
 }
 

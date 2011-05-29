@@ -41,6 +41,7 @@ void initDrawableFunctions() {
     registerClass(engine->sqvm, EMO_STAGE_CLASS);
 
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSprite",     emoDrawableCreateSprite);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createLine",       emoDrawableCreateLine);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createMapSprite",     emoDrawableCreateMapSprite);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSprite",       emoDrawableLoad);
@@ -90,6 +91,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "animate",        emoDrawableAnimate);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getFrameIndex",  emoDrawableGetFrameIndex);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getFrameCount",  emoDrawableGetFrameCount);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setLine",        emoDrawableSetLinePosition);
 }
 
 /*
@@ -136,6 +138,44 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 
     return 1;
 }
+
+SQInteger emoDrawableCreateLine(HSQUIRRELVM v) {
+	SQInteger nargs = sq_gettop(v);
+	if (nargs < 5) {
+		return 0;
+	}
+	
+	emo::LineDrawable* drawable = new emo::LineDrawable();
+	
+    drawable->setFrameCount(1);
+    drawable->load();
+	
+	SQFloat x1, y1, x2, y2;
+	sq_getfloat(v, 2, &x1);
+	sq_getfloat(v, 3, &y1);
+	sq_getfloat(v, 4, &x2);
+	sq_getfloat(v, 5, &y2);
+	
+	drawable->x = x1;
+	drawable->y = y1;
+	drawable->x2 = x2;
+	drawable->y2 = y2;
+	
+	drawable->width  = 1;
+	drawable->height = abs(y1 - y2);
+	
+    char key[DRAWABLE_KEY_LENGTH];
+    sprintf(key, "%ld%d-%d", 
+                engine->uptime.time, engine->uptime.millitm, drawable->getCurrentBufferId());
+
+    engine->addDrawable(key, drawable);
+
+    sq_pushstring(v, key, strlen(key));
+
+	
+    return 1;
+}
+
 
 /*
  * create drawable instance (sprite sheet)
@@ -1721,5 +1761,49 @@ SQInteger emoDrawableGetFrameCount(HSQUIRRELVM v) {
     }
 	
     sq_pushinteger(v, drawable->getFrameCount());
+    return 1;
+}
+
+SQInteger emoDrawableSetLinePosition(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    emo::LineDrawable* drawable = (emo::LineDrawable*)engine->getDrawable(id);
+	
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    if (sq_gettype(v, 3) != OT_NULL) {
+        SQFloat x1;
+        sq_getfloat(v, 3, &x1);
+        drawable->x = x1;
+    }
+    if (sq_gettype(v, 4) != OT_NULL) {
+        SQFloat y1;
+        sq_getfloat(v, 4, &y1);
+        drawable->y = y1;
+    }
+    if (sq_gettype(v, 5) != OT_NULL) {
+        SQFloat x2;
+        sq_getfloat(v, 5, &x2);
+        drawable->x2 = x2;
+    }
+    if (sq_gettype(v, 6) != OT_NULL) {
+        SQFloat y2;
+        sq_getfloat(v, 6, &y2);
+        drawable->y2 = y2;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }

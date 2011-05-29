@@ -1,5 +1,5 @@
 /*
- * Physics example by Box2D with one dynamic body and one static body.
+ * Physics example by Box2D with dynamic body and DistanceJoint.
  * This example uses OnDrawCallback to step the physics world.
  */
 emo.Runtime.import("physics.nut");
@@ -30,30 +30,51 @@ function getScaledImage(filename, baseWidth = 320) {
 }
 
 class Main {
-	ground  = emo.Rectangle();
 	sprite  = emo.Sprite(getScaledImage("tv.png"));
+	jointAxis = emo.Rectangle();
+	line    = emo.Line();
 	
 	/*
 	 * Called when this class is loaded
 	 */
 	function onLoad() {
-		ground.setSize(stage.getWindowWidth(), 20);
-		ground.move(0, stage.getWindowHeight() - ground.getHeight());
-	
-		sprite.move((stage.getWindowWidth() - sprite.getWidth()) / 2, 0);
-		sprite.rotate(30);
+		sprite.move(
+			(stage.getWindowWidth()  - sprite.getWidth())  / 2,
+			(stage.getWindowHeight() - sprite.getHeight()) / 2);
 
-		physics.createStaticSprite(world, ground);
-		
 		local fixture = emo.physics.FixtureDef();
-		fixture.density  = 1.0;
+		fixture.density  = 0.1;
 		fixture.friction = 0.2;
 		fixture.restitution = 0.1;
-
-		physics.createDynamicSprite(world, sprite, fixture);
+		
+		jointAxis.setSize(10, 10);
+		jointAxis.move(
+			(stage.getWindowWidth()  - jointAxis.getWidth())  / 2,
+			sprite.getHeight());
+		jointAxis.color(1, 0, 0);
 	
-		ground.load();
+		local spriteInfo = physics.createDynamicSprite(world, sprite, fixture);
+		local axisInfo   = physics.createStaticSprite(world, jointAxis, fixture);
+		
+		local jointDef = emo.physics.DistanceJointDef();
+		jointDef.initialize(
+			spriteInfo.getBody(), axisInfo.getBody(),
+			spriteInfo.getBody().getWorldCenter(), axisInfo.getBody().getWorldCenter());
+		world.createJoint(jointDef);
+	
+		// draw the joint over the sprite
+		sprite.setZ(0);
+		jointAxis.setZ(1);
+
+		// load the sprites
 		sprite.load();
+		jointAxis.load();
+		
+		line.setWidth(4);
+		line.load();
+	
+		// apply linear velocity to sprite to see how the DistanceJoint works.
+		spriteInfo.getBody().setLinearVelocity(emo.Vec2(5, 0));
 	
 		// Set OnDrawCallback interval (millisecond)
 		emo.Event.enableOnDrawCallback(1000.0 / FPS);
@@ -68,14 +89,18 @@ class Main {
 		// step the world (second)
 		world.step(1.0 / FPS, 6, 2);
 		world.clearForces();
+		
+		line.move(
+			jointAxis.getCenterX(), jointAxis.getCenterY(),
+			sprite.getCenterX(), sprite.getCenterY());
 	}
 	
 	/*
 	 * Called when the class ends
 	 */
 	function onDispose() {
-		ground.remove();
 		sprite.remove();
+		jointAxis.remove();
 	}
 }
 function emo::onLoad() {

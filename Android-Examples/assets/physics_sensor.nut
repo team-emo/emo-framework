@@ -10,9 +10,28 @@ local world   = emo.physics.World(gravity, true);
 const FPS = 60.0;
 const WALL_WIDTH = 10;
 
+/*
+ * This function is an example for retrieving
+ * higher resolution image filename to support 
+ * multiple screen size. (i.e. Retina and non-Retina).
+ */
+function getScaledImage(filename, baseWidth = 320) {
+	local idx    = filename.find(".");
+	local name   = filename.slice(0, idx);
+	local suffix = filename.slice(idx);
+
+	local scaling = (emo.Stage.getWindowWidth() / baseWidth).tointeger();
+	
+	if (scaling > 1) {
+		name = name + "@" + scaling + "x";
+	}
+	
+	return name + suffix;
+}
+
 class Main {
 
-    sprite = emo.Sprite("ball.png");
+    sprite = emo.Sprite(getScaledImage("ball.png"));
 
 	/*
 	 * Called when this class is loaded

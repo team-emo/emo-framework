@@ -606,4 +606,48 @@ namespace emo {
         this->drawable->deleteBuffer();
     }
 
+    LineDrawable::LineDrawable() {
+        this->x2 = 0;
+        this->y2 = 0;
+
+        this->param_color[0] = 0;
+        this->param_color[1] = 1;
+        this->param_color[2] = 0;
+    }
+
+    LineDrawable::~LineDrawable() {
+
+    }
+
+    bool LineDrawable::bindVertex() {
+        this->loaded = true;
+        return true;
+    }
+
+    void LineDrawable::setFrameCount(int count) {
+        Drawable::setFrameCount(count);
+    }
+
+    void LineDrawable::onDrawFrame() {
+        if (!this->loaded) return;
+        this->vertex_tex_coords[0] = this->x;
+        this->vertex_tex_coords[1] = this->y;
+        this->vertex_tex_coords[2] = this->x2;
+        this->vertex_tex_coords[3] = this->y2;
+
+        glMatrixMode (GL_MODELVIEW);
+        glLoadIdentity (); 
+
+        glDisable(GL_TEXTURE_2D);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        glLineWidth(this->width);
+    
+        // update colors
+        glColor4f(this->param_color[0], this->param_color[1], this->param_color[2], this->param_color[3]);
+        glVertexPointer(2, GL_FLOAT, 0, this->vertex_tex_coords);
+        glDrawArrays(GL_LINES, 0, 2);
+
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
 }

@@ -56,7 +56,7 @@ const MODE_WORLD_WRITEABLE            = 0x0002;
 
 const EVENT_MODIFIER_START             = 0;
 const EVENT_MODIFIER_RESTART           = 1;
-const EVENT_MODIFIER_FINISHED          = 2;
+const EVENT_MODIFIER_FINISH            = 2;
 
 const MOTION_EVENT_ACTION_DOWN         = 0;
 const MOTION_EVENT_ACTION_UP           = 1;
@@ -210,10 +210,28 @@ const AUDIO_CHANNEL_STOPPED   = 1;
 const AUDIO_CHANNEL_PAUSED    = 2;
 const AUDIO_CHANNEL_PLAYING   = 3;
 
+const CONTROL_UP     = 0;
+const CONTROL_DOWN   = 1;
+const CONTROL_LEFT   = 2;
+const CONTROL_RIGHT  = 3;
+const CONTROL_CENTER = 4;
+
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
+EMO_MOTION_LISTENERS    <- [];
 
 EMO_STAGE_CONTENT_SCALE <- 1;
+
+function emo::Event::addMotionListener(listener) {
+	EMO_MOTION_LISTENERS.append(listener);
+}
+
+function emo::Event::removeMotionListener(listener) {
+	local idx = EMO_MOTION_LISTENERS.find(listener);
+	if (idx != null) {
+		EMO_MOTION_LISTENERS.remove(idx);
+	}
+}
 
 function emo::Stage::setContentScale(scale) {
 	EMO_STAGE_CONTENT_SCALE = scale.tofloat();
@@ -226,6 +244,18 @@ function emo::toRadian(degree) {
 
 function emo::toDegree(radian) {
 	return radian * 180.0 / PI;
+}
+
+function min(a, b) {
+	return a < b ? a : b;
+}
+
+function max(a, b) {
+	return a > b ? a : b;
+}
+
+function round(x) {
+	return (x.tofloat() + (x > 0 ? 0.5 : -0.5)).tointeger();
 }
 
 class emo.Instance {
@@ -282,7 +312,15 @@ class emo.ModifierManager {
 	}
 }
 
-EMO_MODIFIER_MANAGER    <- emo.ModifierManager();
+EMO_ON_UPDATE_MANAGER    <- emo.ModifierManager();
+
+function emo::Event::addOnUpdateListener(listener) {
+	EMO_ON_UPDATE_MANAGER.add(listener);
+}
+
+function emo::Event::removeOnUpdateListener(listener) {
+	EMO_ON_UPDATE_MANAGER.remove(listener);
+}
 
 class emo.Modifier {
 	name      = null;
@@ -294,6 +332,7 @@ class emo.Modifier {
 	duration = null;
 	easing   = null;
 	started  = null;
+	parent   = null;
 	repeatCount   = null;
 	currentCount  = null;
 	eventCallback = null;
@@ -327,6 +366,9 @@ class emo.Modifier {
 			if (eventCallback != null) {
 				eventCallback(targetObj, this, EVENT_MODIFIER_START);
 			}
+			if (parent != null) {
+				parent.onEvent(targetObj, this, EVENT_MODIFIER_START);
+			}
 		}
 
 		local elapsedf = elapsed().tofloat();
@@ -335,9 +377,12 @@ class emo.Modifier {
 		if (elapsedf >= duration) {
 			onModify(maxValue);
 			if (repeatCount == currentCount) {
-				EMO_MODIFIER_MANAGER.remove(this);
+				emo.Event().removeOnUpdateListener(this);
 				if (eventCallback != null) {
 					eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
+				}
+				if (parent != null) {
+					parent.onEvent(targetObj, this, EVENT_MODIFIER_FINISH);
 				}
 			} else {
 				startTime = EMO_RUNTIME_STOPWATCH.elapsed();
@@ -345,23 +390,154 @@ class emo.Modifier {
 				if (eventCallback != null) {
 					eventCallback(targetObj, this, EVENT_MODIFIER_RESTART);
 				}
+				if (parent != null) {
+					parent.onEvent(targetObj, this, EVENT_MODIFIER_RESTART);
+				}
 			}
 			return;
 		}
 		onModify(current);
 	}
+	
 	/* subclass must override this method to apply changes to targetObj. */
 	function onModify(currentValue) {
 		
 	}
+	
 	function setObject(obj) {
 		targetObj = obj;
+	}
+	
+	function getObject() {
+		return targetObj;
 	}
 
 	function setName(_name) {
 		name = _name;
 	}
 
+	function getName() {
+		return name;
+	}
+	
+	function setParent(prnt) {
+		parent = prnt;
+	}
+	
+	function getParent() {
+		return parent;
+	}
+	
+	function resetTimer() {
+		startTime   = EMO_RUNTIME_STOPWATCH.elapsed();
+		pausedTime  = startTime;
+		
+		currentCount = 0;
+		started = false;
+	}
+
+	function setEventCallback(func) {
+		eventCallback = func;
+	}
+}
+
+class emo.SquenceModifier {
+	modifiers       = [];
+	name            = null;
+	eventCallback   = null;
+	modifier        = null;
+	started         = null;
+	modifierIndex   = null;
+	repeatCount     = null;
+	currentCount    = null;
+	
+	function constructor(...) {
+		for (local i = 0; i < vargv.len(); i++) {
+			vargv[i].setParent(this);
+			vargv[i].onPause();
+			modifiers.append(vargv[i]);
+		}
+		if (vargv.len() > 0) {
+			modifier = modifiers[0];
+			modifier.onResume();
+		}
+		started = false;
+		modifierIndex = 0;
+		repeatCount   = 0;
+		currentCount  = 0;
+	}
+	
+	function setRepeatCount(count) {
+		repeatCount = count;
+	}
+	
+	function onEvent(obj, _modifier, eventType) {
+		if (!started && eventType == EVENT_MODIFIER_START) {
+			started = true;
+			if (eventCallback != null) {
+				eventCallback(obj, this, eventType);
+			}
+		}
+		
+		if (eventType == EVENT_MODIFIER_FINISH) {
+			modifierIndex++;
+			if (modifierIndex < modifiers.len()) {
+				modifier = modifiers[modifierIndex];
+				modifier.onResume();
+			} else {
+				if (currentCount == repeatCount) {
+					for (local i = 0; i < modifiers.len(); i++) {
+						modifiers[i].setParent(null);
+					}
+					modifier = null;
+					modifiers.clear();
+					emo.Event().removeOnUpdateListener(this);
+					if (eventCallback != null) {
+						eventCallback(obj, this, eventType);
+					}
+				} else {
+					currentCount++;
+					for (local i = 0; i < modifiers.len(); i++) {
+						modifiers[i].resetTimer();
+						modifiers[i].onPause();
+					}
+					modifierIndex = 0;
+					modifier = modifiers[modifierIndex];
+					modifier.onResume();
+				}
+			}
+		}
+	}
+	
+	function setObject(obj) {
+		for (local i = 0; i < modifiers.len(); i++) {
+			modifiers[i].setObject(obj);
+		}
+	}
+
+	function setName(_name) {
+		for (local i = 0; i < modifiers.len(); i++) {
+			modifiers[i].setName(_name);
+		}
+		name = _name;
+	}
+	
+	function onPause() {
+		if (modifier != null) modifier.onPause();
+	}
+	
+	function onResume() {
+		if (modifier != null) modifier.onResume();
+	}
+	
+	function onUpdate() {
+		if (modifier != null) modifier.onUpdate();
+	}
+
+	function onModify(currentValue) {
+		if (modifier != null) modifier.onModiy(currentValue);
+	}
+	
 	function getName() {
 		return name;
 	}
@@ -391,7 +567,7 @@ class emo.MultiModifier extends emo.Modifier {
 			if (elapsedf >= duration) {
 				onModify(maxValue);
 				if (repeatCount == currentCount) {
-					EMO_MODIFIER_MANAGER.remove(this);
+					emo.Event().removeOnUpdateListener(this);
 					if (eventCallback != null) {
 						eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
 					}
@@ -776,8 +952,8 @@ class emo.Sprite {
     function getAngle()  { return stage.getAngle(id); }
 
     function contains(x, y) {
-        return x >= this.getX() && x <= getX() + getWidth() &&
-               y >= this.getY() && y <= getY() + getHeight();
+        return x >= getX() && x <= getX() + getWidth() &&
+               y >= getY() && y <= getY() + getHeight();
     }
 
     function collidesWith(other) {
@@ -798,6 +974,14 @@ class emo.Sprite {
     function moveCenter(x, y, z = null) {
         return move(x - (getWidth() * 0.5), y - (getHeight() * 0.5), z);
     }
+	
+	function getCenterX() {
+		return getX() + (getWidth() * 0.5);
+	}
+	
+	function getCenterY() {
+		return getY() + (getHeight() * 0.5);
+	}
 
     function scale(scaleX, scaleY, centerX = null, centerY = null) {
         return stage.scale(id, scaleX, scaleY, centerX, centerY);
@@ -830,11 +1014,11 @@ class emo.Sprite {
     
     function addModifier(modifier) {
     	modifier.setObject(this);
-    	EMO_MODIFIER_MANAGER.add(modifier);
+    	emo.Event().addOnUpdateListener(modifier);
     }
 
     function removeModifier(modifier) {
-    	EMO_MODIFIER_MANAGER.remove(modifier);
+    	emo.Event().removeOnUpdateListener(modifier);
     }
 	
 	function setFixture(_fixture) {
@@ -907,6 +1091,16 @@ class emo.Rectangle extends emo.Sprite {
 	}
 }
 
+class emo.Line extends emo.Sprite {
+	function constructor(x1 = 0, y1 = 0, x2 = 1, y2 = 1) {
+		name = null;
+        id = stage.createLine(x1, y1, x2, y2);
+	}
+	function move(x1, y1, x2, y2) {
+		return stage.setLine(id, x1, y1, x2, y2);
+	}
+}
+
 class emo.MapSprite extends emo.Sprite {
     function constructor(rawname, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
         local sprite = emo.SpriteSheet(rawname, frameWidth, frameHeight, border, margin, frameIndex);
@@ -973,14 +1167,13 @@ class emo.MapSprite extends emo.Sprite {
 	}
 }
 
-
 class emo.TextSprite extends emo.MapSprite {
 	textbase = null;
 	indexes  = null;
 	width  = null;
 	height = null;
 	
-	function constructor(_name, _width, _height, _textbase, _border = null, _margin = null) {
+	function constructor(_name, _textbase, _width, _height, _border = null, _margin = null) {
 		textbase = _textbase;
 		indexes = [];
 		
@@ -1025,6 +1218,247 @@ class emo.TextSprite extends emo.MapSprite {
 	}
 }
 
+class emo.AnalogOnScreenController extends emo.Sprite {
+	knob    = null;
+	padding = null;
+	margin  = null;
+	
+	updateInterval = null;
+	lastUpdate     = null;
+	
+	previousRelativeX = null;
+	previousRelativeY = null;
+	
+	function constructor(_name, _knobname, _alpha = 0.5) {
+		base.constructor(_name);
+		knob = emo.Sprite(_knobname);
+		
+		alpha(_alpha);
+		
+		emo.Event().addMotionListener(this);
+		emo.Event().addOnUpdateListener(this);
+		
+		padding = 0;
+		margin  = 0;
+
+		updateInterval = 100;
+		lastUpdate = -1000;
+	}
+	
+    function load() {
+		base.load();
+		knob.load();
+    }
+	
+    function show() { knob.show(); return base.show(); }
+    function hide() { knob.hide(); return knobase.hide(); }
+    function alpha(a = null) { knob.alpha(a); return base.alpha(a); }
+    function red  (r = null) { knob.red(r);   return base.red(r);   }
+    function green(g = null) { knob.green(g); return base.green(g); }
+    function blue (b = null) { knob.blue(b);  return base.blue(b);  }
+
+    function move(x, y, z = 99) {
+		releaseKnob(x, y, z + 1);
+		return base.move(x, y, z);
+    }
+	
+	function releaseKnob(x, y, knobZ) {
+		local knobX = x + (getScaledWidth()  - knob.getScaledWidth())  * 0.5;
+		local knobY = y + (getScaledHeight() - knob.getScaledHeight()) * 0.5;
+		knob.move(knobX, knobY, knobZ);
+	}
+	
+	function getNeutralKnobX() {
+		return getX() + (getScaledWidth() - knob.getScaledWidth()) * 0.5;
+	}
+	
+	function getNeutralKnobY() {
+		return getY() + (getScaledHeight() - knob.getScaledHeight()) * 0.5;
+	}
+
+    function moveCenter(x, y, z = null) {
+		knob.moveCenter(x, y, z);
+		return base.moveCenter(x, y, z);
+    }
+
+    function scale(scaleX, scaleY, centerX = null, centerY = null) {
+		knob.scale(scaleX, scaleY, centerX, centerY);
+		return base.scale(scaleX, scaleY, centerY);
+    }
+
+    function rotate(angle, centerX = null, centerY = null, axis = null) {
+		knob.rotate(angle, centerX, centerY, axis);
+		return base.rotate(angle, centerX, centerY, axis);
+    }
+
+    function color(red, green, blue, alpha = null) {
+		knob.color(red, green, blue, alpha);
+		return base.color(red, green, blue, alpha);
+    }
+
+    function remove() {
+		emo.Event().removeOnUpdateListener(this);
+		emo.Event().removeMotionListener(this);
+		knob.remove();
+		return base.remove();
+    }
+
+	function onMotionEvent(mevent) {
+		local x = mevent.getX();
+		local y = mevent.getY();
+		if (mevent.getAction() == MOTION_EVENT_ACTION_UP ||
+			mevent.getAction() == MOTION_EVENT_ACTION_CANCEL  ||
+			mevent.getAction() == MOTION_EVENT_ACTION_OUTSIDE ||
+			mevent.getAction() == MOTION_EVENT_ACTION_POINTER_UP) {
+			releaseKnob(getX(), getY(), knob.getZ());
+			fireControlEvent(true, true);
+		} else {
+			if (contains(x, y)) {
+				knob.moveCenter(x, y);
+			}
+		}
+	}
+	
+	function elapsed() {	
+		return EMO_RUNTIME_STOPWATCH.elapsed();	
+	}
+	
+	function isNeutral() {
+		return getRelativeX() == 0 && getRelativeY() == 0;
+	}
+	
+	function fireControlEvent(hasChanged, immediate = false) {
+		local delta = elapsed() - lastUpdate;
+		if (immediate || delta >= updateInterval) {
+			local x = getRelativeX();
+			local y = getRelativeY();
+			emo._onControlEvent(this, x, y, hasChanged);
+			lastUpdate = elapsed();
+			
+			if (isNeutral()) {
+				previousRelativeX = null;
+				previousRelativeY = null;
+			} else {
+				previousRelativeX = x;
+				previousRelativeY = y;
+			}
+		}
+	}
+	
+	function getRelativeX() {
+		local unit  = (getWidth() * 0.5) - padding;
+		local axisX = getX() + (getWidth() * 0.5);
+		local knobX = knob.getX() + (knob.getWidth() * 0.5);
+		
+		local x = round((knobX - axisX) / unit.tofloat() * 100.0);
+		if (x > 0) x = min(100, x);
+		if (x < 0) x = max(-100, x);
+		 
+		return x;
+	}
+	
+	function getRelativeY() {
+		local unit  = (getHeight() * 0.5) - padding;
+		local axisY = getY() + (getHeight() * 0.5);
+		local knobY = knob.getY() + (knob.getHeight() * 0.5);
+		
+		local y = round((knobY - axisY) / unit.tofloat() * 100.0);
+		if (y > 0) y = min(100, y);
+		if (y < 0) y = max(-100, y);
+		 
+		return y;
+	}
+	
+	function getKnobWidth() {
+		return knob.getWidth();
+	}
+	
+	function getKnobHeight() {
+		return knob.getHeight();
+	}
+	
+	function getControlX() {
+		return relativeX();
+	}
+	
+	function getControlY() {
+		return relativeY();
+	}
+	
+    function contains(x, y) {
+        return x >= getX() - margin && x <= getX() + getWidth()  + margin &&
+               y >= getY() - margin && y <= getY() + getHeight() + margin;
+    }
+	
+    function knobContains(x, y) {
+        return x >= knob.getX() - padding && x <= knob.getX() + knob.getWidth()  + padding &&
+               y >= knob.getY() - padding && y <= knob.getY() + knob.getHeight() + padding;
+    }
+	
+	function getDirection() {
+		local relativeX = getRelativeX();
+		local relativeY = getRelativeY();
+		
+		if (abs(relativeX) > abs(relativeY)) {
+			if (relativeX > 0) {
+				return CONTROL_RIGHT;
+			} else if (relativeX < 0) {
+				return CONTROL_LEFT;
+			} else {
+				return CONTROL_CENTER;
+			}
+		} else {
+			if (relativeY > 0) {
+				return CONTROL_DOWN;
+			} else if (relativeY < 0) {
+				return CONTROL_UP;
+			} else {
+				return CONTROL_CENTER;
+			}
+		}
+	}
+	
+	function onUpdate() {
+		if (previousRelativeX == getRelativeX() && previousRelativeY == getRelativeY()) {
+			fireControlEvent(false);
+		} else if (!isNeutral()) {
+			fireControlEvent(true, false);
+		}
+	}
+	
+	function onPause()  { }
+	function onResume() { } 
+}
+
+class emo.DigitalOnScreenController extends emo.AnalogOnScreenController {
+	function constructor(_name, _knobname, _alpha = 0.5) {
+		base.constructor(_name, _knobname, _alpha);
+	}
+	function fireControlEvent(hasChanged, immediate = false) {
+		local relativeX = getRelativeX();
+		local relativeY = getRelativeY();
+		local knobWidthSpace  = knob.getWidth()  * 0.5;
+		local knobHeightSpace = knob.getHeight() * 0.5;
+		
+		if (abs(relativeX) > abs(relativeY)) {
+			if (relativeX > 0) {
+				knob.move(getX() + getWidth() - knobWidthSpace + margin, getNeutralKnobY());
+			} else if (relativeX < 0) {
+				knob.move(getX() - margin - knobWidthSpace, getNeutralKnobY());
+			}
+		} else {
+			if (relativeY > 0) {
+				knob.move(getNeutralKnobX(), getY() + getHeight() - knobHeightSpace + margin);
+			} else if (relativeY < 0) {
+				knob.move(getNeutralKnobX(), getY() - margin - knobHeightSpace);
+			}
+		}
+		
+		
+		base.fireControlEvent(hasChanged, immediate);
+	}
+}
+
 function emo::Stage::load(obj) {
 
     if (EMO_RUNTIME_DELEGATE != null &&
@@ -1057,7 +1491,7 @@ function emo::_onLoad() {
 function emo::_onGainedFocus() {
 
     EMO_RUNTIME_STOPWATCH.start();
-	EMO_MODIFIER_MANAGER.onResume();
+	EMO_ON_UPDATE_MANAGER.onResume();
 
     if (emo.rawin("onGainedFocus")) {
         emo.onGainedFocus();
@@ -1070,7 +1504,7 @@ function emo::_onGainedFocus() {
 
 function emo::_onLostFocus() {
 
-	EMO_MODIFIER_MANAGER.onPause();
+	EMO_ON_UPDATE_MANAGER.onPause();
 	
     if (emo.rawin("onLostFocus")) {
         emo.onLostFocus();
@@ -1114,7 +1548,7 @@ function emo::_onDrawFrame(dt) {
 }
 
 function emo::_onUpdate(dt) {
-    EMO_MODIFIER_MANAGER.onUpdate();
+    EMO_ON_UPDATE_MANAGER.onUpdate();
 }
 
 function emo::_onLowMemory() {
@@ -1136,6 +1570,12 @@ function emo::_onMotionEvent(...) {
              EMO_RUNTIME_DELEGATE.rawin("onMotionEvent")) {
         EMO_RUNTIME_DELEGATE.onMotionEvent(mevent);
     }
+	
+	for (local i = 0; i < EMO_MOTION_LISTENERS.len(); i++) {
+		if (EMO_MOTION_LISTENERS[i].rawin("onMotionEvent")) {
+			EMO_MOTION_LISTENERS[i].onMotionEvent(mevent);
+		}
+	}
 }
 
 function emo::_onKeyEvent(...) {
@@ -1177,5 +1617,15 @@ function emo::_onFps(fps) {
     if (EMO_RUNTIME_DELEGATE != null &&
              EMO_RUNTIME_DELEGATE.rawin("onFps")) {
         EMO_RUNTIME_DELEGATE.onFps(fps);
+    }
+}
+
+function emo::_onControlEvent(...) {
+    if (emo.rawin("onControlEvent")) {
+        emo.onControlEvent(vargv[0], vargv[1], vargv[2], vargv[3]);
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onControlEvent")) {
+        EMO_RUNTIME_DELEGATE.onControlEvent(vargv[0], vargv[1], vargv[2], vargv[3]);
     }
 }

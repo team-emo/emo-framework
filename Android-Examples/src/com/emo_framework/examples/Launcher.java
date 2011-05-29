@@ -24,7 +24,7 @@ public class Launcher extends ExpandableListActivity {
     private List<List<Map<String, String>>> childData = new ArrayList<List<Map<String, String>>>();
     
     private static final String[] groupNames = {
-    	"Basic", "Animation", "Event", "Physics"
+    	"Basic", "Animation", "Event", "On-Screen Controller", "Physics", "Physics with Joints"
     };
     
     private static final String[][] childNames = {
@@ -38,20 +38,34 @@ public class Launcher extends ExpandableListActivity {
     	{
     		"Sprite Animation",
     		"Periodic Update",
-    		"Using Modifiers",
-    		"Modifier with Easing"
+    		"Modifier with Easing",
+			"Loading Screen"
     	},
 		{
 			"Dragging a Sprite",
 			"Handling Multi-Touch",
-			"Sensor Event"
+			"Using the Accelerometer"
+		},
+		{
+			"Analog Controller",
+			"Digital Controller",
+			"Multiple Controllers"
 		},
     	{
     		"HelloWorld (No Graphics)",
     		"Using Box Shape",
     		"Using Circle Shape",
 			"Using with Sensor"
-    	}
+    	},
+		{
+			"Using DistanceJoint",
+			"Using RevoluteJoint",
+			"Using PrismaticJoint",
+			"Using PulleyJoint",
+			"Using GearJoint",
+			"Using LineJoint",
+			"Using WeldJoint"
+		}
     };
     private static final String[][] activities = {
     	{
@@ -64,20 +78,34 @@ public class Launcher extends ExpandableListActivity {
     	{
     		".SpriteAnimationExample",
     		".PeriodicUpdateExample",
+    		".MoveModifierExample",
     		".RotateModifierExample",
-    		".MoveModifierExample"
     	},
 		{
 			".MotionEventExample",
 			".MultiTouchExample",
 			".SensorExample"
 		},
+		{
+			".AnalogControllerExample",
+			".DigitalControllerExample",
+			".MultipleControllerExample"
+		},
     	{
     		".Box2DHelloWorld",
     		".PhysicsHelloWorld",
     		".PhysicsCircleExample",
 			".PhysicsSensorExample"
-    	}
+    	},
+		{
+			".PhysicsDistanceJointExample",
+			".PhysicsRevoluteJointExample",
+			".PhysicsPrismaticJointExample",
+			".PhysicsPulleyJointExample",
+			".PhysicsGearJointExample",
+			".PhysicsLineJointExample",
+			".PhysicsWeldJointExample"
+		}
     };
     
 	@Override

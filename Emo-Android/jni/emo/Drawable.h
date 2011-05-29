@@ -74,7 +74,7 @@ namespace emo {
         virtual void onDrawFrame();
         virtual void deleteBuffer();
 
-        void setFrameCount(int count);
+        virtual void setFrameCount(int count);
         int  getFrameCount();
 
         GLuint getCurrentBufferId();
@@ -184,6 +184,19 @@ namespace emo {
 
         int columns;
         int rows;
+    };
+
+    class LineDrawable : public Drawable {
+    public:
+        LineDrawable();
+        virtual ~LineDrawable();
+
+        virtual void setFrameCount(int count);
+        virtual bool bindVertex();
+        virtual void onDrawFrame();
+
+        float   x2;
+        float   y2;
     };
 }
 #endif

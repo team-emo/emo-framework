@@ -33,6 +33,7 @@
 void initDrawableFunctions();
 
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);
+SQInteger emoDrawableCreateLine(HSQUIRRELVM v);
 SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v);
 SQInteger emoDrawableCreateMapSprite(HSQUIRRELVM v);
 SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v);
@@ -84,4 +85,5 @@ SQInteger emoDrawableSetHeight(HSQUIRRELVM v);
 SQInteger emoDrawableSetSize(HSQUIRRELVM v);
 SQInteger emoDrawableGetFrameIndex(HSQUIRRELVM v);
 SQInteger emoDrawableGetFrameCount(HSQUIRRELVM v);
+SQInteger emoDrawableSetLinePosition(HSQUIRRELVM v);
 #endif

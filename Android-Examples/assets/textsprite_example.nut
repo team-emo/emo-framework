@@ -1,18 +1,15 @@
 local stage = emo.Stage();
-local event = emo.Event();
 
 /*
- * This example shows loading sprites with modifier.
+ * This example shows single text sprite
  */
 class Main {
 
-    circle = emo.Sprite("loading.png");
-	
 	// 16x16 text sprite with 2 pixel border and 1 pixel margin
     text = emo.TextSprite("font_16x16.png",
 		" !\"c*%#'{}@+,=./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSQTVWXYZ",
 		16, 16, 2, 1);
-    
+
 	/*
 	 * Called when this class is loaded
 	 */
@@ -29,34 +26,16 @@ class Main {
 			stage.setContentScale(2);
 		}
 		
-		text.setText("  LOADING..");
+		text.setText("HELLO, WORLD!");
 		
 		// move sprite to the center of the screen
-		local x = (stage.getWindowWidth()  - circle.getWidth())  / 2;
-		local y = (stage.getWindowHeight() - circle.getHeight()) / 2;
+		local x = (stage.getWindowWidth()  - text.getWidth())  / 2;
+		local y = (stage.getWindowHeight() - text.getHeight()) / 2;
 		
-		circle.move(x, y);
-		text.move((stage.getWindowWidth() - text.getWidth()) / 2,
-					y + circle.getHeight() + text.getHeight());
-		
-		// set z-order (move text to front of the circle)
-		circle.setZ(0);
-		text.setZ(1);
+		text.move(x, y);
 
 		// load sprite to the screen
-		text.load();
-        circle.load();
-        
-        // rotate the block from 0 to 360 degree in 1 seconds using Linear equation with infinite loop.
-        circle.addModifier(emo.RotateModifier(0, 360, 1000, emo.easing.Linear, -1));
-		
-		// change alpha color of the text in 2 seconds
-		// using CubicIn and CubicOut equation sequentially with infinite loop.
-		local blinkTextModifier = emo.SquenceModifier(
-			emo.AlphaModifier(1, 0, 1000, emo.easing.CubicIn),
-			emo.AlphaModifier(0, 1, 1000, emo.easing.CubicOut));
-		blinkTextModifier.setRepeatCount(-1); // -1 means infinite loop
-		text.addModifier(blinkTextModifier);
+        text.load();
     }
 
 	/*
@@ -65,7 +44,7 @@ class Main {
     function onGainedFocus() {
         print("onGainedFocus");
     }
-    
+
 	/*
 	 * Called when the app has lost focus
 	 */
@@ -80,8 +59,25 @@ class Main {
         print("onDispose");
         
         // remove sprite from the screen
-        circle.remove();
+        text.remove();
     }
+
+	/*
+	 * touch event
+	 */
+	function onMotionEvent(mevent) {
+		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+			// scale up the text
+			text.scale(text.getScaleX() * 1.1, text.getScaleY() * 1.1);
+			
+			// Move sprite to the center of the screen
+			// Use getScaledWidth, getScaledHeight to retrive scaled size.
+			local x = (stage.getWindowWidth()  - text.getScaledWidth())  / 2;
+			local y = (stage.getWindowHeight() - text.getScaledHeight()) / 2;
+			
+			text.move(x, y);
+		}
+	}
 }
 
 function emo::onLoad() {

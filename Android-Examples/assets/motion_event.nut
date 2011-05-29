@@ -57,7 +57,9 @@ class Main {
 	function onMotionEvent(mevent) {
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
 			if (block.contains(mevent.getX(), mevent.getY())) {
+				// change block color to blue
 				block.color(0, 0, 1, 1);
+				// move the block to center of the event's coordinate
 				block.moveCenter(mevent.getX(), mevent.getY());
 				dragStart = true;
 			}
@@ -68,6 +70,7 @@ class Main {
 		} else if (mevent.getAction() == MOTION_EVENT_ACTION_UP ||
 				   mevent.getAction() == MOTION_EVENT_ACTION_CANCEL) {
 			if (dragStart) {
+				// change block color to red
 				block.color(1, 0, 0, 1);
 				dragStart = false;
 			}
