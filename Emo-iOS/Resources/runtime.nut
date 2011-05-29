@@ -285,6 +285,14 @@ class emo.ModifierManager {
 		modifiersToRemove.append(modifier);
 	}
 	
+	function removeForObject(obj) {
+		for (local i = 0; i < modifiers.len(); i++) {
+			if (modifiers[i].getObject() == obj) {
+				modifiersToRemove.append(modifiers[i]);
+			}
+		}
+	}
+	
 	function onUpdate() {
 		for (local i = 0; i < modifiers.len(); i++) {
 			modifiers[i].onUpdate();
@@ -314,6 +322,10 @@ class emo.ModifierManager {
 			modifiers[i].onResume();
 		}
 	}
+	
+	function getModifierCount() {
+		return modifiers.len();
+	}
 }
 
 EMO_ON_UPDATE_MANAGER    <- emo.ModifierManager();
@@ -324,6 +336,10 @@ function emo::Event::addOnUpdateListener(listener) {
 
 function emo::Event::removeOnUpdateListener(listener) {
 	EMO_ON_UPDATE_MANAGER.remove(listener);
+}
+
+function emo::Event::removeOnUpdateListenerForObject(obj) {
+	EMO_ON_UPDATE_MANAGER.removeForObject(obj);
 }
 
 class emo.Modifier {
@@ -540,6 +556,10 @@ class emo.SquenceModifier {
 
 	function onModify(currentValue) {
 		if (modifier != null) modifier.onModiy(currentValue);
+	}
+	
+	function getObject() {
+		if (modifier != null) return modifier.getObject();
 	}
 	
 	function getName() {
@@ -1005,7 +1025,7 @@ class emo.Sprite {
     function remove() {
         local status = EMO_NO_ERROR;
         if (loaded) {
-			removeModifier(this);
+			clearModifier();
 			emo.Event().removeMotionListener(this);
 			if (physicsInfo != null) {
 				physicsInfo.remove();
@@ -1033,6 +1053,10 @@ class emo.Sprite {
     function removeModifier(modifier) {
     	emo.Event().removeOnUpdateListener(modifier);
     }
+	
+	function clearModifier() {
+    	emo.Event().removeOnUpdateListenerForObject(this);
+	}
 	
 	function setPhysicsInfo(_physicsInfo) {
 		physicsInfo = _physicsInfo;
@@ -1450,6 +1474,7 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 		}
 	}
 	
+	function getObject() { return null; }
 	function onPause()  { }
 	function onResume() { } 
 }
