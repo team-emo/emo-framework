@@ -31,8 +31,8 @@ function getScaledImage(filename, baseWidth = 320) {
 }
 
 class Main {
-	wheel1 = emo.Sprite(getScaledImage("ball.png"));
-	wheel2 = emo.Sprite(getScaledImage("ball.png"));
+	wheel1 = emo.Sprite(getScaledImage("gear.png"));
+	wheel2 = emo.Sprite(getScaledImage("gear.png"));
 	axis   = emo.Rectangle();
 	box    = emo.Rectangle();
 	
@@ -45,7 +45,7 @@ class Main {
 	
 		box.setSize(wheel1.getWidth() * 3, wheel1.getHeight());
 		box.move(stage.getWindowWidth() - box.getWidth(), 0);
-		box.color(0, 0, 1);
+		box.color(1, 1, 1);
 		
 		wheel1.move(box.getX(), 
 					box.getY() + (box.getHeight() / 4));

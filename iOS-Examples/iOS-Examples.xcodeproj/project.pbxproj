@@ -39,6 +39,8 @@
 		F92BBE991373E53000796475 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F92BBE981373E53000796475 /* libsqlite3.dylib */; };
 		F93A8F5C1387B3EE0032FE66 /* mapsprite_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */; };
 		F94CA3CC138785650006123B /* physics_circle.nut in Resources */ = {isa = PBXBuildFile; fileRef = F98EABC7138784D800902E31 /* physics_circle.nut */; };
+		F95F8D3313932C2D006BB4DB /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = F95F8D3113932C2D006BB4DB /* gear.png */; };
+		F95F8D3413932C2D006BB4DB /* gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F95F8D3213932C2D006BB4DB /* gear@2x.png */; };
 		F967A8ED1372A3F800BEF871 /* modifier_move_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F967A8C21372A17800BEF871 /* modifier_move_example.nut */; };
 		F967E67213907137006D8F99 /* b2BroadPhase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F967E5B613907136006D8F99 /* b2BroadPhase.cpp */; };
 		F967E67313907137006D8F99 /* b2CollideCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F967E5B813907136006D8F99 /* b2CollideCircle.cpp */; };
@@ -191,6 +193,8 @@
 		F92B7252136FD42F00DD803C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F92BBE981373E53000796475 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mapsprite_example.nut; path = Resources/mapsprite_example.nut; sourceTree = "<group>"; };
+		F95F8D3113932C2D006BB4DB /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
+		F95F8D3213932C2D006BB4DB /* gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gear@2x.png"; sourceTree = "<group>"; };
 		F967A8C21372A17800BEF871 /* modifier_move_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = modifier_move_example.nut; path = Resources/modifier_move_example.nut; sourceTree = "<group>"; };
 		F967E5B413907136006D8F99 /* Box2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box2D.h; sourceTree = "<group>"; };
 		F967E5B613907136006D8F99 /* b2BroadPhase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = b2BroadPhase.cpp; sourceTree = "<group>"; };
@@ -509,6 +513,8 @@
 		F921CC99136FFBAC00F058FF /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				F95F8D3113932C2D006BB4DB /* gear.png */,
+				F95F8D3213932C2D006BB4DB /* gear@2x.png */,
 				F91C5142138DD60400464576 /* onscreen_control_base.png */,
 				F91C5143138DD60500464576 /* onscreen_control_knob.png */,
 				F9B14CF7138C858A004A8FD8 /* font_16x16.png */,
@@ -923,6 +929,8 @@
 				F9CFE9BA1391D29700DDD12F /* physics_revolutejoint.nut in Resources */,
 				F99D44841391DF28006622F8 /* physics_distancejoint.nut in Resources */,
 				F97715371392FF2A00417119 /* physics_prismaticjoint.nut in Resources */,
+				F95F8D3313932C2D006BB4DB /* gear.png in Resources */,
+				F95F8D3413932C2D006BB4DB /* gear@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
