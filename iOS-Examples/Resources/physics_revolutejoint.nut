@@ -75,9 +75,6 @@ class Main {
 		jointDef.initialize(
 			wheel2Info.getBody(), boxInfo.getBody(),
 			wheel2Info.getBody().getWorldCenter());
-		jointDef.enableMotor = true;
-		jointDef.maxMotorTorque = 10;
-		jointDef.motorSpeed = 1;
 		world.createJoint(jointDef);
 	
 		box.setZ(0);
