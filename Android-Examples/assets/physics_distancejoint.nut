@@ -12,10 +12,10 @@ const FPS = 60.0;
 const WALL_WIDTH = 10;
 
 class Main {
-	box     = emo.Rectangle();
+	box     = emo.SpriteSheet("blocks.png", 32, 32, 4, 3);
 	axis    = emo.Rectangle();
 	rope    = emo.Line();
-	dropBox = emo.Rectangle();
+	dropBox = emo.SpriteSheet("blocks.png", 32, 32, 4, 3);
 
 	lastRecycledTime = 0;
 	
@@ -26,14 +26,14 @@ class Main {
 	
 		createWall();
 		
+		box.setFrame(7);
 		box.setSize(stage.getWindowWidth() / 4, 20);
 		box.move(
 			(stage.getWindowWidth()  - box.getWidth())  / 2,
 			(stage.getWindowHeight() - box.getHeight()) / 2);
-		box.color(0, 0, 1);
 		
-		dropBox.setSize(box.getWidth() / 2, 10);
-		dropBox.color(0, 1, 0);
+		dropBox.setFrame(6);
+		dropBox.setSize(box.getWidth(), 10);
 		dropBox.hide();
 		dropBox.load();
 	
@@ -41,8 +41,9 @@ class Main {
 		axis.move(
 			(stage.getWindowWidth()  - axis.getWidth())  / 2,
 			box.getHeight());
-		axis.color(1, 0, 0);
+		axis.color(0.41, 0.41, 0.41);
 		
+		rope.color(0.41, 0.41, 0.41);
 		local fixture = emo.physics.FixtureDef();
 		fixture.density  = 0.1;
 		fixture.friction = 0.2;
@@ -135,6 +136,7 @@ class Main {
 	function onDispose() {
 		box.remove();
 		axis.remove();
+		dropBox.remove();
 	}
 	
 	function addNewDropBox(x, y, angle) {

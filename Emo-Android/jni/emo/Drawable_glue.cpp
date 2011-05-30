@@ -127,6 +127,8 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     }
     drawable->width  = width;
     drawable->height = height;
+    drawable->frameWidth  = width;
+    drawable->frameHeight = height;
 
     char key[DRAWABLE_KEY_LENGTH];
     sprintf(key, "%ld%d-%d", 
@@ -230,6 +232,8 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     drawable->width  = frameWidth;
     drawable->height = frameHeight;
     drawable->border = border;
+    drawable->frameWidth  = frameWidth;
+    drawable->frameHeight = frameHeight;
 
     if (margin == 0 && border != 0) {
         drawable->margin = border;

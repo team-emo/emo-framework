@@ -119,6 +119,8 @@ namespace emo {
 
         this->width  = 0;
         this->height = 0;
+        this->frameWidth  = 0;
+        this->frameHeight = 0;
 
         this->frameCount  = 1;
         this->frame_index = 0;
@@ -182,16 +184,16 @@ namespace emo {
     }
 
     int Drawable::tex_coord_frame_startX() {
-        int xcount = (int)round((this->texture->width - (this->margin * 2) + this->border) / (float)(this->width  + this->border));
+        int xcount = (int)round((this->texture->width - (this->margin * 2) + this->border) / (float)(this->frameWidth  + this->border));
         int xindex = this->frame_index % xcount;
-        return ((this->border + this->width) * xindex) + this->margin;
+        return ((this->border + this->frameWidth) * xindex) + this->margin;
     }
 
     int Drawable::tex_coord_frame_startY() {
-        int xcount = (int)round((this->texture->width - (this->margin * 2) + this->border) / (float)(this->width  + this->border));
-        int ycount = (int)round((this->texture->height - (this->margin * 2) + this->border) / (float)(this->height + this->border));
+        int xcount = (int)round((this->texture->width - (this->margin * 2) + this->border) / (float)(this->frameWidth  + this->border));
+        int ycount = (int)round((this->texture->height - (this->margin * 2) + this->border) / (float)(this->frameHeight + this->border));
         int yindex = ycount - (this->frame_index / xcount) - 1;
-        return ((this->border + this->height) * yindex) + this->margin;
+        return ((this->border + this->frameHeight) * yindex) + this->margin;
     }
 
     float Drawable::getTexCoordStartX() {
@@ -206,7 +208,7 @@ namespace emo {
         if (!this->hasTexture) {
             return 1;
         } else if (this->hasSheet) {
-            return (float)(this->tex_coord_frame_startX() + this->width) / (float)this->texture->glWidth;
+            return (float)(this->tex_coord_frame_startX() + this->frameWidth) / (float)this->texture->glWidth;
         } else {
             return (float)this->texture->width / (float)this->texture->glWidth;
         }
@@ -216,7 +218,7 @@ namespace emo {
         if (!this->hasTexture) {
             return 1;
         } else if (this->hasSheet) {
-            return (float)(this->tex_coord_frame_startY() + this->height) / (float)this->texture->glHeight;
+            return (float)(this->tex_coord_frame_startY() + this->frameHeight) / (float)this->texture->glHeight;
         } else {
             return (float)this->texture->height / (float)this->texture->glHeight;
         }
@@ -599,11 +601,6 @@ namespace emo {
                 this->drawable->onDrawFrame();
             }
         }
-    }
-
-    void MapDrawable::deleteBuffer() {
-        this->deleteBuffer();
-        this->drawable->deleteBuffer();
     }
 
     LineDrawable::LineDrawable() {

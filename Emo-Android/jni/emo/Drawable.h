@@ -104,6 +104,8 @@ namespace emo {
 
         int        width;
         int        height;
+        int        frameWidth;
+        int        frameHeight;
 
         float      param_rotate[4];
         float      param_scale[4];
@@ -167,7 +169,6 @@ namespace emo {
         virtual void load();
         virtual bool bindVertex();
         virtual void onDrawFrame();
-        virtual void deleteBuffer();
 
         virtual void setChild(Drawable* child);
         virtual Drawable* getChild();
