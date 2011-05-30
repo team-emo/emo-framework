@@ -43,6 +43,7 @@ void initAudioFunctions() {
     registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
     registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
     registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
+    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "resume_play",    emoResumeAudioChannel);
     registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
     registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);
     registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "seek",           emoSeekAudioChannel);
@@ -350,6 +351,16 @@ namespace emo {
         return this->setChannelState(index, SL_PLAYSTATE_PLAYING);
     }
 
+    bool Audio::resumeChannel(int index) {
+        Channel* channel = &this->channels[index];
+        if (!channel->loaded) {
+            engine->setLastError(ERR_AUDIO_CHANNEL_CLOSED);
+            LOGE("emo_audio: audio channel is closed");
+            return false;
+        }
+        return this->setChannelState(index, SL_PLAYSTATE_PLAYING);
+    }
+
     bool Audio::pauseChannel(int index) {
         Channel* channel = &this->channels[index];
         if (!channel->loaded) {
@@ -509,6 +520,36 @@ SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
     }
 
     if (!engine->audio->playChannel(channelIndex)) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
+        return 1;
+    }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
+}
+
+SQInteger emoResumeAudioChannel(HSQUIRRELVM v) {
+    if (!engine->audio->isRunning()) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
+        return 1;
+    }
+
+    SQInteger channelIndex;
+
+    if (sq_gettype(v, 2) != OT_NULL) {
+        sq_getinteger(v, 2, &channelIndex);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
+    if (channelIndex >= engine->audio->getChannelCount()) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    if (!engine->audio->resumeChannel(channelIndex)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }

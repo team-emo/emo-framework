@@ -275,6 +275,7 @@ namespace emo {
     }
 
     bool Database::setPreference(std::string key, std::string value) {
+
         bool forceClose = false;
         if (!this->isOpen) {
             this->openOrCreatePreference();
@@ -408,9 +409,10 @@ SQInteger emoDatabaseGetPath(HSQUIRRELVM v) {
         return 0;
     }
 
-    const char* path = engine->database->getPath(name).c_str();
+    std::string path  = engine->database->getPath(name);
+    const char* cpath = path.c_str();
 
-    sq_pushstring(v, path, strlen(path));
+    sq_pushstring(v, cpath, -1);
 
     return 1;
 }
@@ -457,16 +459,17 @@ SQInteger emoDatabaseGetPreference(HSQUIRRELVM v) {
         return 0;
     }
 
-    const char* str = engine->database->getPreference(key).c_str();
+    std::string str = engine->database->getPreference(key);
+    const char* cstr = str.c_str();
 
-    sq_pushstring(v, str, strlen(str));
+    sq_pushstring(v, cstr, -1);
     return 1;
 }
 
 SQInteger emoDatabaseSetPreference(HSQUIRRELVM v) {
     const SQChar* key;
     SQInteger nargs = sq_gettop(v);
-    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+    if (nargs >= 2 && sq_gettype(v, 2) != OT_NULL) {
         sq_tostring(v, 2);
         sq_getstring(v, -1, &key);
         sq_poptop(v);
@@ -476,7 +479,7 @@ SQInteger emoDatabaseSetPreference(HSQUIRRELVM v) {
     }
 
     const SQChar* value;
-    if (nargs >= 3 && sq_gettype(v, 3) == OT_STRING) {
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         sq_tostring(v, 3);
         sq_getstring(v, -1, &value);
         sq_poptop(v);

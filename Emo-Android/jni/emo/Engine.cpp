@@ -600,9 +600,6 @@ namespace emo {
         eglSwapBuffers(this->display, this->surface);
 
         if (this->finishing) {
-
-            this->unloadDrawables();
-
             this->animating = false;
             ANativeActivity_finish(this->app->activity);
         }

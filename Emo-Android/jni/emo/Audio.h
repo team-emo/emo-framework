@@ -54,6 +54,7 @@ namespace emo {
 
         bool seekChannel(int index, int pos, SLuint32 seekMode);
         bool playChannel(int index);
+        bool resumeChannel(int index);
         bool pauseChannel(int index);
         bool stopChannel(int index);
 
@@ -88,6 +89,7 @@ void initAudioFunctions();
 SQInteger emoLoadAudio(HSQUIRRELVM v);
 SQInteger emoCreateAudioEngine(HSQUIRRELVM v);
 SQInteger emoPlayAudioChannel(HSQUIRRELVM v);
+SQInteger emoResumeAudioChannel(HSQUIRRELVM v);
 SQInteger emoPauseAudioChannel(HSQUIRRELVM v);
 SQInteger emoStopAudioChannel(HSQUIRRELVM v);
 SQInteger emoSeekAudioChannel(HSQUIRRELVM v);

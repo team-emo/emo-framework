@@ -301,6 +301,38 @@
                        android:value="physics_weldjoint.nut" />
         </activity-alias>
 
+        <activity-alias android:name=".AudioExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="audio_example.nut" />
+        </activity-alias>
+        
+        <activity-alias android:name=".AudioChannelExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="audio_channel_example.nut" />
+        </activity-alias>
+        
+        <activity-alias android:name=".DatabaseExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="database_example.nut" />
+        </activity-alias>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest> 
