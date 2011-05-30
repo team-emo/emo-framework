@@ -216,11 +216,18 @@ const CONTROL_LEFT   = 2;
 const CONTROL_RIGHT  = 3;
 const CONTROL_CENTER = 4;
 
+const DEFAULT_DATABASE_NAME  = "emoruntime.db";
+const PREFERENCE_TABLE_NAME  = "preferences";
+
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 EMO_MOTION_LISTENERS    <- [];
 
 EMO_STAGE_CONTENT_SCALE <- 1;
+
+function emo::Runtime::uptime() {
+	return EMO_RUNTIME_STOPWATCH.elapsed();
+}
 
 function emo::Event::addMotionListener(listener) {
 	EMO_MOTION_LISTENERS.append(listener);
@@ -281,6 +288,14 @@ class emo.ModifierManager {
 		modifiersToRemove.append(modifier);
 	}
 	
+	function removeForObject(obj) {
+		for (local i = 0; i < modifiers.len(); i++) {
+			if (modifiers[i].getObject() == obj) {
+				modifiersToRemove.append(modifiers[i]);
+			}
+		}
+	}
+	
 	function onUpdate() {
 		for (local i = 0; i < modifiers.len(); i++) {
 			modifiers[i].onUpdate();
@@ -310,6 +325,10 @@ class emo.ModifierManager {
 			modifiers[i].onResume();
 		}
 	}
+	
+	function getModifierCount() {
+		return modifiers.len();
+	}
 }
 
 EMO_ON_UPDATE_MANAGER    <- emo.ModifierManager();
@@ -320,6 +339,10 @@ function emo::Event::addOnUpdateListener(listener) {
 
 function emo::Event::removeOnUpdateListener(listener) {
 	EMO_ON_UPDATE_MANAGER.remove(listener);
+}
+
+function emo::Event::removeOnUpdateListenerForObject(obj) {
+	EMO_ON_UPDATE_MANAGER.removeForObject(obj);
 }
 
 class emo.Modifier {
@@ -536,6 +559,10 @@ class emo.SquenceModifier {
 
 	function onModify(currentValue) {
 		if (modifier != null) modifier.onModiy(currentValue);
+	}
+	
+	function getObject() {
+		if (modifier != null) return modifier.getObject();
 	}
 	
 	function getName() {
@@ -861,7 +888,14 @@ class emo.AudioChannel {
         }
 	    return manager.load(id, file);
 	}
-    function play()  { return manager.play(id); }
+    function play()  {
+		local state = getState();
+		if (state == AUDIO_CHANNEL_PAUSED) {
+			return manager.resume_play(id);
+		} else {
+			return manager.play(id);
+		}
+	}
     function pause() { return manager.pause(id); }
     function stop()  { return manager.stop(id); }
     function seek(pos) { return manager.seek(id, pos); }
@@ -892,7 +926,9 @@ class emo.Sprite {
     id       = null;
     childId  = null;
     loaded   = null;
-	fixture  = null;
+	uptime   = null;
+	
+	physicsInfo = null;
 
     function constructor(rawname) {
         name = this.getResourceName(rawname);
@@ -915,6 +951,7 @@ class emo.Sprite {
             status = stage.loadSprite(id, x, y, width, height);
 
             if (status == EMO_NO_ERROR) {
+				uptime = EMO_RUNTIME_STOPWATCH.elapsed();
                 loaded = true;
             }
         }
@@ -998,6 +1035,12 @@ class emo.Sprite {
     function remove() {
         local status = EMO_NO_ERROR;
         if (loaded) {
+			clearModifier();
+			emo.Event().removeMotionListener(this);
+			if (physicsInfo != null) {
+				physicsInfo.remove();
+				physicsInfo = null;
+			}
             status = stage.remove(id);
             loaded = false;
         }
@@ -1021,16 +1064,31 @@ class emo.Sprite {
     	emo.Event().removeOnUpdateListener(modifier);
     }
 	
-	function setFixture(_fixture) {
-		fixture = _fixture;
+	function clearModifier() {
+    	emo.Event().removeOnUpdateListenerForObject(this);
+	}
+	
+	function setPhysicsInfo(_physicsInfo) {
+		physicsInfo = _physicsInfo;
+	}
+	
+	function getPhysicsInfo() {
+		return physicsInfo;
 	}
 	
 	function getFixture() {
-		return fixture;
+		if (physicsInfo == null) return null;
+		return physicsInfo.getFixture();
 	}
 	
 	function getPhysicsBody() {
-		return fixture.getBody();
+		if (physicsInfo == null) return null;
+		return physicsInfo.getBody();
+	}
+	
+	function elapsed() {
+		if (uptime == null) return -1;
+		return EMO_RUNTIME_STOPWATCH.elapsed() - uptime;
 	}
 
 }
@@ -1192,8 +1250,6 @@ class emo.TextSprite extends emo.MapSprite {
 		}
 		clearTiles();
 		addRow(indexes);
-		
-		setSize(indexes.len() * width, height);
 	}
 	
 	function getWidth() {
@@ -1426,6 +1482,7 @@ class emo.AnalogOnScreenController extends emo.Sprite {
 		}
 	}
 	
+	function getObject() { return null; }
 	function onPause()  { }
 	function onResume() { } 
 }

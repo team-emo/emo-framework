@@ -74,12 +74,13 @@ class emo.physics.World {
 		scale = pixelToMeterRatio;
 	}
 	
-	function addPhysicsSprite(pSprite) {
+	function addPhysicsObject(pSprite) {
 		sprites.append(pSprite);
 	}
 	
-	function removePhysicsSprite(pSprite) {
-		sprites.remove(pSprite);
+	function removePhysicsObject(pSprite) {
+		local idx = sprites.find(pSprite);
+		if (idx != null) sprites.remove(idx);
 	}
 	
 	function createBody(bodydef) {
@@ -765,13 +766,15 @@ function emo::_onContact(state, _fixA, _fixB, _bodyA, _bodyB, _pos, _normal, nor
     }
 }
 
-class emo.physics.PhysicsSprite {
+class emo.physics.PhysicsInfo {
+	world   = null;
 	fixture = null;
 	sprite  = null;
 	body    = null;
 	type    = null;
 	
-	function constructor(_s, _f, _type) {
+	function constructor(_w, _s, _f, _type) {
+		world   = _w;
 		sprite  = _s;
 		fixture = _f;
 		body    = _f.getBody();
@@ -805,6 +808,17 @@ class emo.physics.PhysicsSprite {
 	function getFixture() {
 		return fixture;
 	}
+	
+	function remove() {
+		world.removePhysicsObject(this);
+		world.destroyBody(getBody());
+		
+		world   = null;
+		sprite  = null;
+		fixture = null;
+		body    = null;
+		type    = null;
+	}
 }
 
 function emo::Physics::createSprite(world, sprite, bodyType, shape, fixtureDef = null, bodyDef = null) {
@@ -833,12 +847,12 @@ function emo::Physics::createSprite(world, sprite, bodyType, shape, fixtureDef =
 	fixtureDef.shape = shape;
 
 	local fixture = body.createFixture(fixtureDef);
-	local physicsSprite = emo.physics.PhysicsSprite(sprite, fixture, bodyType);
+	local physicsInfo = emo.physics.PhysicsInfo(world, sprite, fixture, bodyType);
 	
-	world.addPhysicsSprite(physicsSprite);
-	sprite.setFixture(fixture);
+	world.addPhysicsObject(physicsInfo);
+	sprite.setPhysicsInfo(physicsInfo);
 	
-	return physicsSprite;
+	return physicsInfo;
 }
 
 function emo::Physics::createStaticSprite(world, sprite, fixtureDef = null, bodyDef = null) {

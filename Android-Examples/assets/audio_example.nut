@@ -1,7 +1,14 @@
 local stage = emo.Stage();
 
+// create audio manager with 1 channel.
+local audio = emo.Audio(1);
+
+// select audio channel 1 (index=0) to play the audio.
+// you can handle audios through this channel.
+local audioCh1 = audio.createChannel(0);
+
 /*
- * This example shows single text sprite
+ * This example of audio
  */
 class Main {
 
@@ -26,7 +33,10 @@ class Main {
 			stage.setContentScale(2);
 		}
 		
-		text.setText("HELLO, WORLD!");
+		// load the audio.
+		audioCh1.load("drums.wav");
+		
+		text.setText("PLAYING");
 		
 		// move sprite to the center of the screen
 		local x = (stage.getWindowWidth()  - text.getWidth())  / 2;
@@ -43,6 +53,9 @@ class Main {
 	 */
     function onGainedFocus() {
         print("onGainedFocus");
+		
+		// play the audio.
+		audioCh1.play();
     }
 
 	/*
@@ -50,6 +63,9 @@ class Main {
 	 */
     function onLostFocus() {
         print("onLostFocus"); 
+		
+		// pause the audio
+		audioCh1.pause();
     }
 
 	/*
@@ -60,6 +76,9 @@ class Main {
         
         // remove sprite from the screen
         text.remove();
+		
+		// close the audio
+		audioCh1.close();
     }
 
 	/*
@@ -67,15 +86,22 @@ class Main {
 	 */
 	function onMotionEvent(mevent) {
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-			// scale up the text
-			text.scale(text.getScaleX() * 1.1, text.getScaleY() * 1.1);
+			local state = audioCh1.getState();
+			if (state == AUDIO_CHANNEL_PLAYING) {
 			
-			// Move sprite to the center of the screen
-			// Use getScaledWidth, getScaledHeight to retrive scaled size.
-			local x = (stage.getWindowWidth()  - text.getScaledWidth())  / 2;
-			local y = (stage.getWindowHeight() - text.getScaledHeight()) / 2;
-			
-			text.move(x, y);
+				// use stop() if you want to stop the audio.
+				// audioCh1.stop();
+				// text.setText("STOPPED");
+				
+				// use pause() if you want to pause the audio.
+				audioCh1.pause();
+				text.setText("PAUSED");
+				
+			} else if (state == AUDIO_CHANNEL_PAUSED ||
+					   state == AUDIO_CHANNEL_STOPPED) {
+				audioCh1.play();
+				text.setText("PLAYING");
+			}
 		}
 	}
 }
