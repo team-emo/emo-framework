@@ -23,8 +23,9 @@
 	didReturnRootView = FALSE;
 	
 	sections = [[NSArray alloc] initWithObjects:@"Basic", @"Animation", 
-					@"Event", @"On-Screen Controller", @"Physics",
-					@"Physics with Joints",
+					@"Event", @"On-Screen Controller", @"Audio",
+					@"Database", @"Physics", @"Physics with Joints",
+					@"Misc",
 					nil];
 	examples = [[NSMutableArray alloc] init];
 	
@@ -58,6 +59,16 @@
 						  [NSArray arrayWithObjects:@"Digital Controller",    @"digital_controller_example.nut", nil],
 						  [NSArray arrayWithObjects:@"Multiple Controllers",  @"multiple_controllers_example.nut", nil],
 						  nil]];
+	// Audio
+	[examples addObject: [NSArray arrayWithObjects:
+						 [NSArray arrayWithObjects:@"Playing with Sound", @"audio_example.nut", nil],
+						 [NSArray arrayWithObjects:@"Using Channels",     @"audio_channel_example.nut", nil],
+						 nil]];
+	
+	// Database
+	[examples addObject: [NSArray arrayWithObjects:
+						 [NSArray arrayWithObjects:@"Save and Restore",   @"database_example.nut", nil],
+						 nil]];
 	
 	// Physics
 	[examples addObject: [NSArray arrayWithObjects:
@@ -77,6 +88,11 @@
 						  [NSArray arrayWithObjects:@"Using LineJoint",     @"physics_linejoint.nut", nil],
 						  [NSArray arrayWithObjects:@"Using WeldJoint",     @"physics_weldjoint.nut", nil],
 						  nil]];
+	
+	// Misc
+	[examples addObject: [NSArray arrayWithObjects:
+						 [NSArray arrayWithObjects:@"HTTP Access", @"http_access_example.nut", nil],
+						 nil]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
