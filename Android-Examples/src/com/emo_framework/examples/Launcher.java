@@ -24,7 +24,8 @@ public class Launcher extends ExpandableListActivity {
     private List<List<Map<String, String>>> childData = new ArrayList<List<Map<String, String>>>();
     
     private static final String[] groupNames = {
-    	"Basic", "Animation", "Event", "On-Screen Controller", "Physics", "Physics with Joints"
+    	"Basic", "Animation", "Event", "On-Screen Controller",
+    	"Audio", "Database", "Physics", "Physics with Joints"
     };
     
     private static final String[][] childNames = {
@@ -50,6 +51,13 @@ public class Launcher extends ExpandableListActivity {
 			"Analog Controller",
 			"Digital Controller",
 			"Multiple Controllers"
+		},
+		{
+			"Playing with Sound",
+			"Using Channels"
+		},
+		{
+			"Save and Restore"
 		},
     	{
     		"HelloWorld (No Graphics)",
@@ -90,6 +98,13 @@ public class Launcher extends ExpandableListActivity {
 			".AnalogControllerExample",
 			".DigitalControllerExample",
 			".MultipleControllerExample"
+		},
+		{
+			".AudioExample",
+			".AudioChannelExample"
+		},
+		{
+			".DatabaseExample"
 		},
     	{
     		".Box2DHelloWorld",
