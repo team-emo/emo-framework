@@ -60,6 +60,8 @@
 	float z;
 	NSInteger width;
 	NSInteger height;
+	NSInteger frameWidth;
+	NSInteger frameHeight;
 	
 	BOOL hasTexture;
 	BOOL loaded;
@@ -92,6 +94,8 @@
 @property (readwrite) float z;
 @property (readwrite) NSInteger width;
 @property (readwrite) NSInteger height;
+@property (readwrite) NSInteger frameWidth;
+@property (readwrite) NSInteger frameHeight;
 @property (readwrite) BOOL hasTexture;
 @property (readwrite) BOOL hasSheet;
 @property (readwrite) NSInteger frameCount;

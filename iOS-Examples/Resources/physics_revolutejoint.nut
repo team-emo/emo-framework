@@ -45,7 +45,7 @@ class Main {
 	
 		box.setSize(wheel1.getWidth() * 3, wheel1.getHeight());
 		box.move(stage.getWindowWidth() - box.getWidth(), 0);
-		box.color(1, 1, 1);
+		box.color(0.83, 0.83, 0.83);
 		
 		wheel1.move(box.getX(), 
 					box.getY() + (box.getHeight() / 4));

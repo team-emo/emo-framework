@@ -126,6 +126,8 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 	
 	drawable.width  = width;
 	drawable.height = height;
+	drawable.frameWidth  = width;
+	drawable.frameHeight = height;
 	
     [drawable createTextureBuffer];
 	
@@ -230,6 +232,8 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     drawable.frame_index = frameIndex;
     drawable.width  = frameWidth;
     drawable.height = frameHeight;
+	drawable.frameWidth  = frameWidth;
+	drawable.frameHeight = frameHeight;
     drawable.border = border;
 	
     if (margin == 0 && border != 0) {

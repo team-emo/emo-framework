@@ -106,6 +106,7 @@ extern EmoEngine* engine;
 @synthesize name;
 @synthesize x, y, z;
 @synthesize width, height;
+@synthesize frameWidth, frameHeight;
 @synthesize hasTexture, hasSheet;
 @synthesize texture;
 @synthesize frameCount, frame_index, border, margin;
@@ -233,16 +234,16 @@ extern EmoEngine* engine;
 }
 
 -(NSInteger)tex_coord_frame_startX {
-	int xcount = (int)round((texture.width - (margin * 2) + border) / (float)(width  + border));
+	int xcount = (int)round((texture.width - (margin * 2) + border) / (float)(frameWidth  + border));
 	int xindex = frame_index % xcount;
-	return ((border + width) * xindex) + margin;
+	return ((border + frameWidth) * xindex) + margin;
 }
 
 -(NSInteger) tex_coord_frame_startY {
-	int xcount = (int)round((texture.width - (margin * 2) + border) / (float)(width  + border));
-	int ycount = (int)round((texture.height - (margin * 2) + border) / (float)(height + border));
+	int xcount = (int)round((texture.width - (margin * 2) + border) / (float)(frameWidth  + border));
+	int ycount = (int)round((texture.height - (margin * 2) + border) / (float)(frameHeight + border));
 	int yindex = ycount - (frame_index / xcount) - 1;
-	return ((border + height) * yindex) + margin;
+	return ((border + frameHeight) * yindex) + margin;
 }
 
 -(float)getTexCoordStartX {
@@ -257,7 +258,7 @@ extern EmoEngine* engine;
 	if (!hasTexture) {
 		return 1;
     } else if (hasSheet) {
-        return (float)([self tex_coord_frame_startX] + width) / (float)texture.glWidth;
+        return (float)([self tex_coord_frame_startX] + frameWidth) / (float)texture.glWidth;
     } else {
         return (float)texture.width / (float)texture.glWidth;
     }
@@ -267,7 +268,7 @@ extern EmoEngine* engine;
 	if (!hasTexture) {
 		return 1;
 	} else if (hasSheet) {
-        return (float)([self tex_coord_frame_startY] + height) / (float)texture.glHeight;
+        return (float)([self tex_coord_frame_startY] + frameHeight) / (float)texture.glHeight;
     } else {
         return (float)texture.height / (float)texture.glHeight;
     }
