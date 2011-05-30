@@ -38,6 +38,7 @@
 @property (readwrite, copy) NSString* lastErrorMessage;
 
 -(BOOL)open:(NSString*) name;
+-(BOOL)open:(NSString*) name force:(BOOL)force;
 -(BOOL)openOrCreate:(NSString*)name mode:(NSInteger)mode;
 -(BOOL)close;
 -(BOOL)deleteDatabase:(NSString*)name;

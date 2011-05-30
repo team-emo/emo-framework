@@ -37,7 +37,6 @@ class Main {
 
 		// load rectangle to the screen
         rectangle.load();
-		
     }
 
 	/*
@@ -49,7 +48,8 @@ class Main {
 		// since we'are not sure whether the initial preference table is already created or not,
 		// we use openOrCreate() that creates new preference table if the table does not exist.
 		if (preference.openOrCreate() == EMO_NO_ERROR) {
-		
+
+			// detabase are stored at the following directory:
 			print(format("STORED AT: %s", database.getPath(DEFAULT_DATABASE_NAME)));
 		
 			// retrieve the latest position.
@@ -88,10 +88,12 @@ class Main {
 			preference.set(KEY_RECTANGLE_X, rectangle.getX());
 			preference.set(KEY_RECTANGLE_Y, rectangle.getY());
 			
+			// list all of the preference keys.
 			local keys = preference.keys();
 			for (local i = 0; i < keys.len(); i++) {
-				print(format("SAVE: %s = %s", keys[i], preference.get(keys[i])));
+				print(format("SAVED: %s = %s", keys[i], preference.get(keys[i])));
 			}
+			
 			// if you want to delete the preference value, uncomment below.
 			//preference.del(KEY_RECTANGLE_X);
 			//preference.del(KEY_RECTANGLE_Y);
@@ -99,12 +101,11 @@ class Main {
 			preference.close();
 	
 			// if you want to delete emo framework database completely, uncomment below.
-			// NOTE: all of the database used by emo framework are deleted.
-			//       it is safe to delete emo's database but it is not recommended.
-			//       maybe this function is useful for developing/testing phases.
+			// NOTE: by using deleteDatabase, all of the tables used by emo framework are deleted.
+			//       this function might be useful for developing or testing your program.
 			// database.deleteDatabase(DEFAULT_DATABASE_NAME);
 		} else {
-			print("failed to store the position");
+			print("failed to store the latest position");
 		}
     }
 

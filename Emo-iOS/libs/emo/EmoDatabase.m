@@ -31,8 +31,8 @@
 #import "EmoEngine_glue.h"
 
 static int database_preference_callback(void *arg, int argc, char **argv, char **column)  {
-    NSString* value = (NSString*)arg;
-    if (argc > 0) value = char2ns(argv[0]);
+    NSMutableString* value = (NSMutableString*)arg;
+    if (argc > 0) [value setString:char2ns(argv[0])];
     return SQLITE_OK;
 }
 
@@ -67,7 +67,7 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
     if (self != nil) {
 		isOpen = FALSE;
 		lastError = SQLITE_OK;
-		lastErrorMessage = nil;
+		lastErrorMessage = [NSString string];
     }
     return self;
 }
@@ -106,10 +106,20 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
 }
 
 -(BOOL)open:(NSString*) name {
+	return [self open:name force:FALSE];
+}
+
+-(BOOL)open:(NSString*) name force:(BOOL)force {
 	if (isOpen) return FALSE;
 	
 	NSString* path = [self getPath:name];
-	
+	NSFileManager* manager = [NSFileManager defaultManager];
+	if (!force && ![manager fileExistsAtPath:path]) {
+		lastError = ERR_DATABASE_OPEN;
+		lastErrorMessage = @"Database file is not found. use openOrCreate to open and create new database.";
+		return FALSE;
+	}
+		
 	int rcode = sqlite3_open([path UTF8String], &db);
 	
 	if (rcode != SQLITE_OK) {
@@ -128,7 +138,7 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
 		return FALSE;
 	}
 	
-	return [self open:name];
+	return [self open:name force:TRUE];
 }
 -(BOOL)close {
 	if (!isOpen) return FALSE;
@@ -180,11 +190,11 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
 		forceClose = TRUE;
 	}
 	
-	NSString* value;
+	NSMutableString* value =  [NSMutableString string];
 	char* sql = sqlite3_mprintf("SELECT VALUE FROM %q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, [key UTF8String]);
 	
 	char* error;
-	int rcode = sqlite3_exec(db, sql, database_preference_callback, &value, &error);
+	int rcode = sqlite3_exec(db, sql, database_preference_callback, value, &error);
 	if (rcode != SQLITE_OK) {
 		self.lastError = rcode;
 		self.lastErrorMessage = char2ns(error);

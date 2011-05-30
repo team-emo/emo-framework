@@ -216,6 +216,9 @@ const CONTROL_LEFT   = 2;
 const CONTROL_RIGHT  = 3;
 const CONTROL_CENTER = 4;
 
+const DEFAULT_DATABASE_NAME  = "emoruntime.db";
+const PREFERENCE_TABLE_NAME  = "preferences";
+
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 EMO_MOTION_LISTENERS    <- [];
