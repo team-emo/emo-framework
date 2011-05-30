@@ -188,7 +188,7 @@ SQInteger emoDatabaseGetPreference(HSQUIRRELVM v) {
 SQInteger emoDatabaseSetPreference(HSQUIRRELVM v) {
     const SQChar* key;
     SQInteger nargs = sq_gettop(v);
-    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+    if (nargs >= 2 && sq_gettype(v, 2) != OT_NULL) {
         sq_tostring(v, 2);
         sq_getstring(v, -1, &key);
         sq_poptop(v);
