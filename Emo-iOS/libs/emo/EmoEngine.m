@@ -33,6 +33,7 @@
 #import "EmoEngine_glue.h"
 #import "EmoDrawable_glue.h"
 #import "EmoAudio_glue.h"
+#import "EmoDatabase_glue.h"
 #import "EmoEngine.h"
 #import "EmoDrawable.h"
 #import "EmoPhysics.h"
@@ -88,6 +89,7 @@ NSString* data2ns(NSData* data) {
 	initDrawableFunctions();
 	initAudioFunctions();
 	initPhysicsFunctions();
+	initDatabaseFunctions();
 }
 
 /*

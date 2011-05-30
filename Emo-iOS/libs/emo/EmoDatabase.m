@@ -28,6 +28,7 @@
 #import "EmoDatabase.h"
 #import "Constants.h"
 #import "EmoEngine.h"
+#import "EmoEngine_glue.h"
 
 static int database_preference_callback(void *arg, int argc, char **argv, char **column)  {
     NSString* value = (NSString*)arg;
