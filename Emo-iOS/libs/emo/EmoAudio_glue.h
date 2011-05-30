@@ -33,6 +33,7 @@ SQInteger emoLoadAudio(HSQUIRRELVM v);
 SQInteger emoCreateAudioEngine(HSQUIRRELVM v);
 SQInteger emoPlayAudioChannel(HSQUIRRELVM v);
 SQInteger emoPauseAudioChannel(HSQUIRRELVM v);
+SQInteger emoResumeAudioChannel(HSQUIRRELVM v);
 SQInteger emoStopAudioChannel(HSQUIRRELVM v);
 SQInteger emoSeekAudioChannel(HSQUIRRELVM v);
 SQInteger emoCloseAudioChannel(HSQUIRRELVM v);

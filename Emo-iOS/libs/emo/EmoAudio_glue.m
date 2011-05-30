@@ -40,6 +40,7 @@ void initAudioFunctions() {
 	registerClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
 	registerClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
 	registerClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
+	registerClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "resume_play",    emoResumeAudioChannel);
 	registerClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);
 	registerClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "seek",           emoSeekAudioChannel);
 	registerClassFunc(engine.sqvm, EMO_AUDIO_CLASS,    "getChannelCount",emoGetAudioChannelCount);
@@ -138,6 +139,35 @@ SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
     }
 	
     if (![engine.audioManager playChannel:channelIndex]) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+	
+    return 1;
+}
+SQInteger emoResumeAudioChannel(HSQUIRRELVM v) {
+    if (![engine.audioManager isAudioEngineRunning]) {
+        sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
+        return 1;
+    }
+	
+    SQInteger channelIndex;
+	
+    if (sq_gettype(v, 2) != OT_NULL) {
+        sq_getinteger(v, 2, &channelIndex);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+	
+    if (channelIndex >= [engine.audioManager getChannelCount]) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    if (![engine.audioManager resumeChannel:channelIndex]) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }

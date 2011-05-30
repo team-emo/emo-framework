@@ -50,6 +50,7 @@
 -(BOOL)seekChannel:(NSInteger)index withOffset:(ALfloat)offset;
 -(BOOL)playChannel:(NSInteger)index;
 -(BOOL)pauseChannel:(NSInteger)index;
+-(BOOL)resumeChannel:(NSInteger)index;
 -(BOOL)stopChannel:(NSInteger)index;
 -(BOOL)channelLoaded:(NSInteger)index;
 -(ALenum)getChannelState:(NSInteger)index;

@@ -888,7 +888,14 @@ class emo.AudioChannel {
         }
 	    return manager.load(id, file);
 	}
-    function play()  { return manager.play(id); }
+    function play()  {
+		local state = getState();
+		if (state == AUDIO_CHANNEL_PAUSED) {
+			return manager.resume_play(id);
+		} else {
+			return manager.play(id);
+		}
+	}
     function pause() { return manager.pause(id); }
     function stop()  { return manager.stop(id); }
     function seek(pos) { return manager.seek(id, pos); }

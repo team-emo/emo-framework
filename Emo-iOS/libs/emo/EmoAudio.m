@@ -188,6 +188,20 @@ extern EmoEngine* engine;
     alSourcePlay(sources[index]);
 	return TRUE;
 }
+-(BOOL)resumeChannel:(NSInteger)index {
+    if (!audioEngineCreated) {
+        engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
+        LOGE("emo_audio: audio engine is closed.");
+        return FALSE;
+    }
+    if (!loaded[index]) {
+        engine.lastError = ERR_AUDIO_CHANNEL_CLOSED;
+        LOGE("emo_audio: audio channel is closed");
+        return FALSE;
+    }
+    alSourcePlay(sources[index]);
+	return TRUE;
+}
 -(BOOL)pauseChannel:(NSInteger)index {
     if (!audioEngineCreated) {
         engine.lastError = ERR_AUDIO_ENGINE_CLOSED;
