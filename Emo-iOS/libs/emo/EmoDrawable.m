@@ -511,6 +511,12 @@ extern EmoEngine* engine;
 	[self garbage];
 	[super dealloc];
 }
+-(BOOL)isAnimationFinished {
+	if (animating && currentAnimation != nil) {
+		return [currentAnimation isFinished];
+	}
+	return TRUE;
+}
 @end
 
 @implementation EmoLineDrawable

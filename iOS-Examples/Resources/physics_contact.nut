@@ -65,7 +65,10 @@ class Main {
 		fixture.restitution = 0.2;
 		physics.createDynamicCircleSprite(world, sprite, sprite.getWidth() * 0.5, fixture);
 
-		explosion.scale(2, 2);
+		if (stage.getWindowWidth() >= 640) {
+			explosion.scale(2, 2);
+		}
+		
 		explosion.hide();
 		explosion.load();
 		explosion.setZ(2)
@@ -93,6 +96,10 @@ class Main {
 		// world step interval(second)
 		world.step(1.0 / fps, 6, 2);
 		world.clearForces();
+		
+		if (explosion.isAnimationFinished()) {
+			explosion.hide();
+		}
 	}
 	
 	/*
@@ -106,6 +113,7 @@ class Main {
 	function onContact(state, fixtureA, fixtureB, 
 			position, normal, normalImpulse, tangentImpulse) {
 		if (normalImpulse > 0.1) {
+			explosion.hide();
 			explosion.moveCenter(position.x * world.getScale(), position.y * world.getScale());
 			explosion.animate(0, 9, 66, 0);
 			explosion.show();

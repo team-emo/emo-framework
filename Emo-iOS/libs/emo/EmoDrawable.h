@@ -131,6 +131,7 @@
 -(float)getAngle;
 -(float)getScaledWidth;
 -(float)getScaledHeight;
+-(BOOL)isAnimationFinished;
 @end
 
 @interface EmoLineDrawable : EmoDrawable {

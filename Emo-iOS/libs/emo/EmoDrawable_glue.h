@@ -64,6 +64,7 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v);
 SQInteger emoDrawablePause(HSQUIRRELVM v);
 SQInteger emoDrawableStop(HSQUIRRELVM v);
 SQInteger emoDrawableAnimate(HSQUIRRELVM v);
+SQInteger emoDrawableIsAnimationFinished(HSQUIRRELVM v);
 
 SQInteger emoDrawableGetX(HSQUIRRELVM v);
 SQInteger emoDrawableGetY(HSQUIRRELVM v);
