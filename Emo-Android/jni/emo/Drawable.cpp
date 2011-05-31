@@ -59,10 +59,15 @@ namespace emo {
 
         return (deltaSec * 1000) + deltaMsec;
     }
+    
+
+    bool AnimationFrame::isFinished() {
+        return (this->loop >= 0 && this->currentLoopCount > this->loop);
+    }
 
     int AnimationFrame::getNextIndex(int frameCount, int currentIndex) {
 
-        if (this->currentLoopCount > this->loop) {
+        if (this->isFinished()) {
             return currentIndex;
         }
 
@@ -70,12 +75,14 @@ namespace emo {
 
         if (currentCount >= this->count) {
             this->currentCount = 0;
-            if (this->loop > 0) {
+            if (this->loop >= 0) {
                 this->currentLoopCount++;
             }
         }
 
-        if (this->currentCount + this->start >= frameCount) {
+        if (this->isFinished()) {
+            return currentIndex;
+        } else if (this->currentCount + this->start >= frameCount) {
             currentCount = 0;
         }
 

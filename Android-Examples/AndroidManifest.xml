@@ -300,6 +300,16 @@
             <meta-data android:name="emo.script.main"
                        android:value="physics_weldjoint.nut" />
         </activity-alias>
+        <activity-alias android:name=".PhysicsContactExample"
+            android:targetActivity=".Main"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="physics_contact.nut" />
+        </activity-alias>
 
         <activity-alias android:name=".AudioExample"
             android:targetActivity=".Main"

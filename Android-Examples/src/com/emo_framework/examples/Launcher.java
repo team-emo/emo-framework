@@ -25,7 +25,7 @@ public class Launcher extends ExpandableListActivity {
     
     private static final String[] groupNames = {
     	"Basic", "Animation", "Event", "On-Screen Controller",
-    	"Audio", "Database", "Physics", "Physics with Joints"
+    	"Audio", "Database", "Physics", "Joints and Contacts"
     };
     
     private static final String[][] childNames = {
@@ -72,7 +72,8 @@ public class Launcher extends ExpandableListActivity {
 			"Using PulleyJoint",
 			"Using GearJoint",
 			"Using LineJoint",
-			"Using WeldJoint"
+			"Using WeldJoint",
+			"Using ContactListener"
 		}
     };
     private static final String[][] activities = {
@@ -119,7 +120,8 @@ public class Launcher extends ExpandableListActivity {
 			".PhysicsPulleyJointExample",
 			".PhysicsGearJointExample",
 			".PhysicsLineJointExample",
-			".PhysicsWeldJointExample"
+			".PhysicsWeldJointExample",
+			".PhysicsContactExample"
 		}
     };
     

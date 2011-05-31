@@ -39,7 +39,8 @@ class Main {
     function onGainedFocus() {
         print("onGainedFocus");
 		
-		sprite.animate(0, 5, 500);
+		// loop count = -1 means inifinite loop
+		sprite.animate(0, 5, 500, -1);
     }
 
 	/*

@@ -57,6 +57,8 @@ namespace emo {
         timeb lastOnAnimationInterval;
         
         int getNextIndex(int frameCount, int currentIndex);
+
+        bool isFinished();
     };
 
     typedef std::hash_map <std::string, emo::AnimationFrame *> animations_t;

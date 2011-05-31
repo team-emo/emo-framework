@@ -64,10 +64,7 @@ extern EmoEngine* engine;
 		currentCount = 0;
 		if (loop >= 0) {
 			currentLoopCount++;
-		} else {
-			currentCount = 0;
 		}
-
 	}
 	
 	if (currentCount + start >= frameCount) {
