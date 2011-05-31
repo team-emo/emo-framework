@@ -78,7 +78,7 @@
 						  [NSArray arrayWithObjects:@"Using with Sensor", @"physics_sensor.nut", nil],
 						  nil]];
 	
-	// Physics with Joints
+	// Joints and Contacts
 	[examples addObject: [NSArray arrayWithObjects:
 						  [NSArray arrayWithObjects:@"Using DistanceJoint", @"physics_distancejoint.nut", nil],
 						  [NSArray arrayWithObjects:@"Using RevoluteJoint", @"physics_revolutejoint.nut", nil],
@@ -87,6 +87,7 @@
 						  [NSArray arrayWithObjects:@"Using GearJoint",     @"physics_gearjoint.nut", nil],
 						  [NSArray arrayWithObjects:@"Using LineJoint",     @"physics_linejoint.nut", nil],
 						  [NSArray arrayWithObjects:@"Using WeldJoint",     @"physics_weldjoint.nut", nil],
+						  [NSArray arrayWithObjects:@"Using ContactListener",  @"physics_contact.nut", nil],
 						  nil]];
 	
 	// Misc

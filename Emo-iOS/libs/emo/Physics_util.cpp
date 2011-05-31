@@ -68,8 +68,6 @@ void pushVec2(HSQUIRRELVM v, b2Vec2 vec2) {
 	
 	sq_pushfloat(v, vec2.y);
 	sq_arrayappend(v, -2);
-	
-	sq_push(v, -1);
 }	
 
 /*

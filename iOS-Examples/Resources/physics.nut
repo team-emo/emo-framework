@@ -61,7 +61,9 @@ class emo.physics.World {
 		scale = PHYSICS_WORLD_PIXEL_TO_METER_RATIO;
 		sprites = [];
 	}
-	
+	function enableContactListener() {
+		return physics.world_enableContactListener(id);
+	}
 	function setGravity(gravity) {
 		return physics.world_setGravity(id, gravity);
 	}
@@ -72,6 +74,9 @@ class emo.physics.World {
 	
 	function setScale(pixelToMeterRatio) {
 		scale = pixelToMeterRatio;
+	}
+	function getScale() {
+		return scale;
 	}
 	
 	function addPhysicsObject(pSprite) {
@@ -751,11 +756,15 @@ class emo.physics.CircleShape {
 	}
 }
 
-function emo::_onContact(state, _fixA, _fixB, _bodyA, _bodyB, _pos, _normal, normalImpulse, tangentImpulse) {
-	local fixtureA = emo.Fixture(_bodyA, _fixA);
-	local fixtureB = emo.Fixture(_bodyB, _fixB);
-	local positon  = emo.Vec2.fromArray(_pos);
-	local normal   = emo.Vec2.fromArray(_normal);
+function emo::_onContact(...) {
+	//state, _fixA, _fixB, _bodyA, _bodyB, _pos, _normal, normalImpulse, tangentImpulse
+	local state = vargv[0];
+	local fixtureA = emo.physics.Fixture(vargv[3], vargv[1]);
+	local fixtureB = emo.physics.Fixture(vargv[4], vargv[2]);
+	local position = emo.Vec2.fromArray(vargv[5]);
+	local normal   = emo.Vec2.fromArray(vargv[6]);
+	local normalImpulse  = vargv[7];
+	local tangentImpulse = vargv[8];
 
     if (emo.rawin("onContact")) {
         emo.onContact(state, fixtureA, fixtureB, position, normal, normalImpulse, tangentImpulse);

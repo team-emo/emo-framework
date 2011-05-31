@@ -54,7 +54,7 @@ extern EmoEngine* engine;
 
 -(NSInteger)getNextIndex:(NSInteger)frameCount withIndex:(NSInteger)currentIndex {
 	
-	if (currentLoopCount > loop) {
+	if (loop >= 0 && currentLoopCount > loop) {
 		return currentIndex;
 	}
 	
@@ -62,9 +62,12 @@ extern EmoEngine* engine;
 	
 	if (currentCount >= count) {
 		currentCount = 0;
-		if (loop > 0) {
+		if (loop >= 0) {
 			currentLoopCount++;
+		} else {
+			currentCount = 0;
 		}
+
 	}
 	
 	if (currentCount + start >= frameCount) {

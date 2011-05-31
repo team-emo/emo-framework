@@ -147,6 +147,8 @@
 		F9BCF78C1393783400F19510 /* audio_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9BCF784139376FD00F19510 /* audio_example.nut */; };
 		F9CAE01613888259002278F7 /* ball.png in Resources */ = {isa = PBXBuildFile; fileRef = F9CAE01513888259002278F7 /* ball.png */; };
 		F9CFE9BA1391D29700DDD12F /* physics_revolutejoint.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9CFE9B91391D28D00DDD12F /* physics_revolutejoint.nut */; };
+		F9D2182E13947A8900463396 /* explosion.png in Resources */ = {isa = PBXBuildFile; fileRef = F9D2182D13947A8900463396 /* explosion.png */; };
+		F9D2183013947B0B00463396 /* physics_contact.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D2182F13947AAB00463396 /* physics_contact.nut */; };
 		F9D43A3F1388E5920069C3C1 /* motion_event.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43A3D1388E57B0069C3C1 /* motion_event.nut */; };
 		F9D43A401388E5920069C3C1 /* sensor_event.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43A3E1388E58C0069C3C1 /* sensor_event.nut */; };
 		F9D43A921388F9830069C3C1 /* motion_event_multi.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */; };
@@ -390,6 +392,8 @@
 		F9BCF784139376FD00F19510 /* audio_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = audio_example.nut; path = Resources/audio_example.nut; sourceTree = "<group>"; };
 		F9CAE01513888259002278F7 /* ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ball.png; sourceTree = "<group>"; };
 		F9CFE9B91391D28D00DDD12F /* physics_revolutejoint.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_revolutejoint.nut; path = Resources/physics_revolutejoint.nut; sourceTree = "<group>"; };
+		F9D2182D13947A8900463396 /* explosion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = explosion.png; sourceTree = "<group>"; };
+		F9D2182F13947AAB00463396 /* physics_contact.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_contact.nut; path = Resources/physics_contact.nut; sourceTree = "<group>"; };
 		F9D43A3D1388E57B0069C3C1 /* motion_event.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = motion_event.nut; path = Resources/motion_event.nut; sourceTree = "<group>"; };
 		F9D43A3E1388E58C0069C3C1 /* sensor_event.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = sensor_event.nut; path = Resources/sensor_event.nut; sourceTree = "<group>"; };
 		F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = motion_event_multi.nut; path = Resources/motion_event_multi.nut; sourceTree = "<group>"; };
@@ -486,6 +490,7 @@
 				F9CFE9B91391D28D00DDD12F /* physics_revolutejoint.nut */,
 				F99D44831391DF1E006622F8 /* physics_distancejoint.nut */,
 				F97715361392FF2000417119 /* physics_prismaticjoint.nut */,
+				F9D2182F13947AAB00463396 /* physics_contact.nut */,
 				F9D43A3D1388E57B0069C3C1 /* motion_event.nut */,
 				F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */,
 				F9D43A3E1388E58C0069C3C1 /* sensor_event.nut */,
@@ -519,6 +524,7 @@
 		F921CC99136FFBAC00F058FF /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				F9D2182D13947A8900463396 /* explosion.png */,
 				F95F8D3113932C2D006BB4DB /* gear.png */,
 				F95F8D3213932C2D006BB4DB /* gear@2x.png */,
 				F91C5142138DD60400464576 /* onscreen_control_base.png */,
@@ -939,6 +945,8 @@
 				F95F8D3413932C2D006BB4DB /* gear@2x.png in Resources */,
 				F953DF7713934C8A00E2529D /* database_example.nut in Resources */,
 				F9BCF78C1393783400F19510 /* audio_example.nut in Resources */,
+				F9D2182E13947A8900463396 /* explosion.png in Resources */,
+				F9D2183013947B0B00463396 /* physics_contact.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
