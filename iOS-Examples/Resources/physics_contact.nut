@@ -107,7 +107,7 @@ class Main {
 			position, normal, normalImpulse, tangentImpulse) {
 		if (normalImpulse > 0.1) {
 			explosion.moveCenter(position.x * world.getScale(), position.y * world.getScale());
-			explosion.animate(0, 8, 66, 0);
+			explosion.animate(0, 9, 66, 0);
 			explosion.show();
 		}
 	}

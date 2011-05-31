@@ -52,9 +52,13 @@ extern EmoEngine* engine;
     return self;
 }
 
+-(BOOL)isFinished {
+	return (loop >= 0 && currentLoopCount > loop);
+}
+
 -(NSInteger)getNextIndex:(NSInteger)frameCount withIndex:(NSInteger)currentIndex {
 	
-	if (loop >= 0 && currentLoopCount > loop) {
+	if ([self isFinished]) {
 		return currentIndex;
 	}
 	
@@ -67,7 +71,9 @@ extern EmoEngine* engine;
 		}
 	}
 	
-	if (currentCount + start >= frameCount) {
+	if ([self isFinished]) {
+		return currentIndex;
+	} else if (currentCount + start >= frameCount) {
 		currentCount = 0;
 	}
 	
