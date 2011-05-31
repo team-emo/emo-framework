@@ -1140,6 +1140,10 @@ class emo.SpriteSheet extends emo.Sprite {
 	function getFrameCount() {
 		return stage.getFrameCount(id);
 	}
+	
+	function isAnimationFinished() {
+		return stage.isAnimationFinished(id);
+	}
 }
 
 class emo.Rectangle extends emo.Sprite {

@@ -117,6 +117,7 @@ namespace emo {
         bool setAnimation(std::string name);
         AnimationFrame* getAnimation(std::string name);
         bool deleteAnimation(std::string name);
+        bool isAnimationFinished();
 
         bool enableAnimation(bool enable);
 

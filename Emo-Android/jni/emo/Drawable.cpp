@@ -492,6 +492,13 @@ namespace emo {
         return true;
     }
 
+    bool Drawable::isAnimationFinished() {
+        if (this->animating && this->currentAnimation != NULL) {
+            return this->currentAnimation->isFinished();
+        }
+        return true;
+    }
+
     MapDrawable::MapDrawable(Drawable* drawable) : Drawable() {
         this->drawable = drawable;
         this->tiles = new std::vector<std::vector<int>*>;

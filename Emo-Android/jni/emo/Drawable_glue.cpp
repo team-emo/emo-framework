@@ -89,6 +89,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "pause",          emoDrawablePause);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "stop",           emoDrawableStop);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "animate",        emoDrawableAnimate);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "isAnimationFinished", emoDrawableIsAnimationFinished);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getFrameIndex",  emoDrawableGetFrameIndex);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getFrameCount",  emoDrawableGetFrameCount);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setLine",        emoDrawableSetLinePosition);
@@ -1555,6 +1556,26 @@ SQInteger emoDrawableAnimate(HSQUIRRELVM v) {
     drawable->enableAnimation(true);
     
     sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+SQInteger emoDrawableIsAnimationFinished(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        return 0;
+    }
+    
+    emo::Drawable* drawable = engine->getDrawable(id);
+    
+    if (drawable == NULL) {
+        return 0;
+    }
+    
+    sq_pushbool(v, drawable->isAnimationFinished());
     return 1;
 }
 
