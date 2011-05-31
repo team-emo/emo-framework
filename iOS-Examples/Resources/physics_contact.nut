@@ -118,7 +118,7 @@ class Main {
 			
 		// state is contact point state aka b2PointState.
 		// see http://programanddesign.com/box2d/b2Collision_8h.html for details
-		if (state == PHYSICS_STATE_ADD || state == PHYSICS_STATE_REMOVE) {
+		if (state == PHYSICS_STATE_ADD) {
 			// get the event coordinate
 			local x = position.x * world.getScale();
 			local y = position.y * world.getScale();
