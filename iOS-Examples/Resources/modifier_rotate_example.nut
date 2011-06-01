@@ -33,7 +33,7 @@ class Loading {
 		// move sprite to the center of the screen
 		circle.moveCenter(stage.getWindowWidth() / 2, stage.getWindowHeight() / 2);
 		text.moveCenter(stage.getWindowWidth()  / 2,
-				(stage.getWindowHeight() / 2) + circle.getHeight() + text.getHeight());
+				(stage.getWindowHeight() / 2) + circle.getScaledHeight() + text.getScaledHeight());
 		
 		// set z-order (move text to front of the circle)
 		circle.setZ(0);

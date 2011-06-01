@@ -31,7 +31,7 @@ class Main {
 		// move sprite to the center of the screen
 		local x = (stage.getWindowWidth()  - text.getWidth())  / 2;
 		local y = (stage.getWindowHeight() - text.getHeight()) / 2;
-		
+
 		text.move(x, y);
 
 		// load sprite to the screen
