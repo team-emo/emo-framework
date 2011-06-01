@@ -30,7 +30,9 @@ class Splash {
 		// move sprite to the center of the screen
 		splash.moveCenter(stage.getWindowWidth() / 2, stage.getWindowHeight() / 2);
 		
+		// add modifier to fade in the splash sprite.
 		splash.addModifier(emo.AlphaModifier(0, 1, 1000, emo.easing.CubicIn));
+		
 		// load sprite to the screen
         splash.load();
         
@@ -52,13 +54,34 @@ class Splash {
      * dt parameter is a delta time (millisecond)
      */
     function onDrawFrame(dt) {
-		// disable onDraw listener because this is one time event.
-		event.disableOnDrawCallback();
+		print("Splash::onDrawFrame");
 		
-		// now loading is completed so proceed to the next stage.
+		// disable onDraw listener because this is only one time event.
+		event.disableOnDrawCallback();
+
+		// create a 1 second modifier to fade out the splash screen
+		local modifier = emo.AlphaModifier(1, 0, 1000, emo.easing.CubicOut);
+		
+		// set modifier event callback function to proceed to the main.
+		modifier.setEventCallback(modifierCallback);
+		
+		// add modifier to the splash sprite.
+		splash.addModifier(modifier);
+	}
+}
+
+// This function is called by modifier of the splash sprite.
+// eventType equals EVENT_MODIFIER_FINISH if the modifier ends.
+function modifierCallback(obj, modifier, eventType) {
+	if (eventType == EVENT_MODIFIER_FINISH) {
+		// now loading is completed so proceed to the next level.
 		stage.load(Main());
 	}
 }
+
+/*
+ * This is the main class of your game.
+ */
 class Main {
 	text = emo.TextSprite("font_16x16.png",
 		" !\"c*%#'{}@+,=./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
