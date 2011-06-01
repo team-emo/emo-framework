@@ -1009,7 +1009,7 @@ class emo.Sprite {
     }
 
     function moveCenter(x, y, z = null) {
-        return move(x - (getWidth() * 0.5), y - (getHeight() * 0.5), z);
+        return move(x - (getScaledWidth() * 0.5), y - (getScaledHeight() * 0.5), z);
     }
 	
 	function getCenterX() {
@@ -1232,17 +1232,12 @@ class emo.MapSprite extends emo.Sprite {
 class emo.TextSprite extends emo.MapSprite {
 	textbase = null;
 	indexes  = null;
-	width  = null;
-	height = null;
 	
 	function constructor(_name, _textbase, _width, _height, _border = null, _margin = null) {
 		textbase = _textbase;
 		indexes = [];
 		
 		base.constructor(_name, _width, _height, _border, _margin);
-		
-		width  = _width;
-		height = _height;
 	}
 	
 	function setText(text) {
@@ -1254,14 +1249,6 @@ class emo.TextSprite extends emo.MapSprite {
 		}
 		clearTiles();
 		addRow(indexes);
-	}
-	
-	function getWidth() {
-		return indexes.len() * width;
-	}
-	
-	function getHeight() {
-		return height;
 	}
 	
 	function getScaledWidth() {
@@ -1541,6 +1528,14 @@ function emo::Stage::getWindowWidth() {
 
 function emo::Stage::getWindowHeight() {
 	return this.windowHeight();
+}
+
+function emo::Stage::getCenterX() {
+	return getWindowWidth() * 0.5;
+}
+
+function emo::Stage::getCenterY() {
+	return getWindowHeight() * 0.5;
 }
 
 function emo::_onLoad() { 

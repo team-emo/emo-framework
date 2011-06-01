@@ -11,6 +11,11 @@ class Main {
     // current frame index
     currentFrame = 0;
 
+	// 16x16 text sprite with 2 pixel border and 1 pixel margin
+    text = emo.TextSprite("font_16x16.png",
+		" !\"c*%#'{}@+,=./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+		16, 16, 2, 1);
+	
 	/*
 	 * Called when this class is loaded
 	 */
@@ -35,6 +40,16 @@ class Main {
 
 		// load sprite to the screen
         block.load();
+		
+		// change the text
+		text.setText("TAP TO CHANGE THE TILE!");
+		text.scale(0.5, 0.5);
+		print(format("%dx%d", text.getWidth(), text.getHeight()));
+		
+		local tX = (stage.getWindowWidth()  - text.getScaledWidth())  / 2;
+		text.move(tX, 0);
+
+		text.load();
     }
 
 	/*
@@ -59,6 +74,7 @@ class Main {
         
         // remove sprite from the screen
         block.remove();
+		text.remove();
     }
 
 	/*

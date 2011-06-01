@@ -8,6 +8,7 @@ const BLOCK_SIZE   = 32;
 class Main {
 
     sprite = emo.MapSprite("blocks.png", BLOCK_SIZE, BLOCK_SIZE, 4, 3);
+	lastMoveX  = 0;
 
 	/*
 	 * Called when this class is loaded
@@ -69,12 +70,17 @@ class Main {
     }
 
 	/*
-	 * touch event
+	 * this tiled map can be dragged along x-axis
 	 */
 	function onMotionEvent(mevent) {
-		// move one block right
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-			sprite.move(sprite.getX() - BLOCK_SIZE, sprite.getY());
+			lastMoveX = mevent.getX();
+		} else if (mevent.getAction() == MOTION_EVENT_ACTION_MOVE) {
+			local x = sprite.getX() - (lastMoveX - mevent.getX());
+			if (x <= 0 && x >= -sprite.getWidth()) { 
+				sprite.move(x, sprite.getY());
+			}
+			lastMoveX = mevent.getX();
 		}
 	}
 }

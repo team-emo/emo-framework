@@ -521,6 +521,9 @@ namespace emo {
 
         this->columns = count;
         this->rows    = this->tiles->size();
+
+       this->width  = this->drawable->getScaledWidth()  * this->columns;
+       this->height = this->drawable->getScaledHeight() * this->rows;
     }
 
     bool MapDrawable::setTileAt(int row, int column, int value) {
