@@ -61,7 +61,7 @@
 	// Audio
 	[examples addObject: [NSArray arrayWithObjects:
 						 [NSArray arrayWithObjects:@"Playing with Sound", @"audio_example.nut", nil],
-						 [NSArray arrayWithObjects:@"Using Channels",     @"audio_channel_example.nut", nil],
+						 [NSArray arrayWithObjects:@"Multiple Channels",  @"audio_channel_example.nut", nil],
 						 nil]];
 	
 	// Database
