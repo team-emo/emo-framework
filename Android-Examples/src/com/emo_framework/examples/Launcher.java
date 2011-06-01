@@ -25,7 +25,7 @@ public class Launcher extends ExpandableListActivity {
     
     private static final String[] groupNames = {
     	"Basic", "Animation", "Event", "On-Screen Controller",
-    	"Audio", "Database", "Physics", "Joints and Contacts"
+    	"Audio", "Database", "Physics", "Joints and Contacts", "Misc"
     };
     
     private static final String[][] childNames = {
@@ -39,8 +39,7 @@ public class Launcher extends ExpandableListActivity {
     	{
     		"Sprite Animation",
     		"Periodic Update",
-    		"Modifier with Easing",
-			"Loading Screen"
+    		"Modifier with Easing"
     	},
 		{
 			"Dragging a Sprite",
@@ -54,7 +53,7 @@ public class Launcher extends ExpandableListActivity {
 		},
 		{
 			"Playing with Sound",
-			"Using Channels"
+			"Multiple Channels"
 		},
 		{
 			"Save and Restore"
@@ -74,6 +73,11 @@ public class Launcher extends ExpandableListActivity {
 			"Using LineJoint",
 			"Using WeldJoint",
 			"Using ContactListener"
+		},
+		{
+			"Loading Screen",
+			"Splash Screen",
+			"HTTP Access"
 		}
     };
     private static final String[][] activities = {
@@ -87,8 +91,7 @@ public class Launcher extends ExpandableListActivity {
     	{
     		".SpriteAnimationExample",
     		".PeriodicUpdateExample",
-    		".MoveModifierExample",
-    		".RotateModifierExample",
+    		".MoveModifierExample"
     	},
 		{
 			".MotionEventExample",
@@ -122,7 +125,13 @@ public class Launcher extends ExpandableListActivity {
 			".PhysicsLineJointExample",
 			".PhysicsWeldJointExample",
 			".PhysicsContactExample"
+		},
+		{
+    		".RotateModifierExample",
+			".ModifierEventExample",
+			".HTTPAccessExample"
 		}
+    	
     };
     
 	@Override

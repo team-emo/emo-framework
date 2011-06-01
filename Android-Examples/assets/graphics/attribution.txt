@@ -1,3 +1,4 @@
 blocks and dog images are from SpriteLib GPL: http://www.flyingyogi.com/fun/spritelib.html
 ball and tv images are from ICON HOIHOI: http://iconhoihoi.oops.jp/
 textsprite is from : http://www.spicypixel.net
+gear images are from OpenGraphicDesign: http://www.opengraphicdesign.com/art/vector-gears/

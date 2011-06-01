@@ -1009,7 +1009,7 @@ class emo.Sprite {
     }
 
     function moveCenter(x, y, z = null) {
-        return move(x - (getWidth() * 0.5), y - (getHeight() * 0.5), z);
+        return move(x - (getScaledWidth() * 0.5), y - (getScaledHeight() * 0.5), z);
     }
 	
 	function getCenterX() {
@@ -1541,6 +1541,14 @@ function emo::Stage::getWindowWidth() {
 
 function emo::Stage::getWindowHeight() {
 	return this.windowHeight();
+}
+
+function emo::Stage::getCenterX() {
+	return getWindowWidth() * 0.5;
+}
+
+function emo::Stage::getCenterY() {
+	return getWindowHeight() * 0.5;
 }
 
 function emo::_onLoad() { 
