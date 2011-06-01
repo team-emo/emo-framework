@@ -42,6 +42,11 @@ namespace emo {
 			B2_NOT_USED(impulse);
 		};
 		HSQUIRRELVM sqvm;
+		
+		bool enableNullEvent;
+		bool enableAddEvent;
+		bool enablePersistEvent;
+		bool enableRemoveEvent;
 	};
 
 	struct ContactPoint

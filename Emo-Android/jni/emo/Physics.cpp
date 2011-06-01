@@ -42,6 +42,7 @@ void initPhysicsFunctions() {
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "destroyJoint",  emoPhysicsDestroyJoint);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "world_step",    emoPhysicsWorld_Step);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "world_enableContactListener", emoPhysicsWorld_EnableContactListener);
+    registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "world_enableContactState",    emoPhysicsWorld_EnableContactState);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "world_clearForces", emoPhysicsWorld_ClearForces);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "createFixture", emoPhysicsCreateFixture);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "destroyFixture",emoPhysicsDestroyFixture);

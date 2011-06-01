@@ -253,6 +253,48 @@ SQInteger emoPhysicsWorld_EnableContactListener(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+SQInteger emoPhysicsWorld_EnableContactState(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_INSTANCE) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	b2World* world = NULL;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
+	
+	if (emoPhysicsContactListener == NULL) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+	
+	if (sq_gettype(v, 3) != OT_INTEGER || sq_gettype(v, 4) != OT_BOOL) {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+		return 1;
+	}
+
+	SQInteger eType;
+	SQBool    state;
+	
+	sq_getinteger(v, 3, &eType);
+	sq_getbool(v, 4, &state);
+	
+	switch(eType) {
+		case PHYSICS_STATE_NULL:
+			emoPhysicsContactListener->enableNullEvent    = state;
+			break;
+		case PHYSICS_STATE_ADD:
+			emoPhysicsContactListener->enableAddEvent     = state;
+			break;
+		case PHYSICS_STATE_PERSIST:
+			emoPhysicsContactListener->enablePersistEvent = state;
+			break;
+		case PHYSICS_STATE_REMOVE:
+			emoPhysicsContactListener->enableRemoveEvent  = state;
+			break;
+	}
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
 SQInteger emoPhysicsWorld_ClearForces(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);

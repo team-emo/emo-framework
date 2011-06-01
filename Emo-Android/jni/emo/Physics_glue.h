@@ -39,6 +39,7 @@ SQInteger emoPhysicsCreateFixture(HSQUIRRELVM v);
 SQInteger emoPhysicsDestroyFixture(HSQUIRRELVM v);
 SQInteger emoPhysicsNewJointDef(HSQUIRRELVM v);
 SQInteger emoPhysicsWorld_EnableContactListener(HSQUIRRELVM v);
+SQInteger emoPhysicsWorld_EnableContactState(HSQUIRRELVM v);
 SQInteger emoPhysicsWorld_SetAutoClearForces(HSQUIRRELVM v);
 SQInteger emoPhysicsWorld_GetAutoClearForces(HSQUIRRELVM v);
 SQInteger emoPhysicsWorld_SetGravity(HSQUIRRELVM v);
