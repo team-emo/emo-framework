@@ -52,8 +52,8 @@
 	int invertX = -self.x;
 	int invertY = -self.y;
 	
-	if (self.x > 0 && self.x  > [self getScaledWidth])  return FALSE;
-	if (self.y > 0 && self.y  > [self getScaledHeight]) return FALSE;
+	if (self.x > 0 && self.x  > stage.width)  return FALSE;
+	if (self.y > 0 && self.y  > stage.height) return FALSE;
 	if (self.x < 0 && invertX > [child getScaledWidth]  * columns) return FALSE;
 	if (self.y < 0 && invertY > [child getScaledHeight] * rows) return FALSE;
 	
