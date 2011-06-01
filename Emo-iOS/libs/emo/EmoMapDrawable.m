@@ -93,6 +93,9 @@
 	[tiles addObject:rowdata];
 	columns = [rowdata count];
 	rows    = [tiles count];
+	
+	width  = [child getScaledWidth]  * columns;
+	height = [child getScaledHeight] * rows;
 }
 
 -(BOOL)clearTiles {

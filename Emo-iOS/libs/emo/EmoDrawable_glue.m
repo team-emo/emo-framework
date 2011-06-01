@@ -504,8 +504,8 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
         sq_getinteger(v, 6, &height);
     }
 	
-    parent.width  = width;
-    parent.height = height;
+	if (parent.width  <= 0) parent.width  = width;
+    if (parent.height <= 0) parent.height = height;
 	
     if ([parent bindVertex]) {
         sq_pushinteger(v, EMO_NO_ERROR);

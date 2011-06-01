@@ -42,7 +42,9 @@ class Main {
         block.load();
 		
 		// change the text
-		text.setText("CHANGE THE TILE!");
+		text.setText("TAP TO CHANGE THE TILE!");
+		text.scale(0.5, 0.5);
+		print(format("%dx%d", text.getWidth(), text.getHeight()));
 		
 		local tX = (stage.getWindowWidth()  - text.getScaledWidth())  / 2;
 		text.move(tX, 0);
