@@ -105,6 +105,7 @@
 		F92D9EB0139070A10077ED19 /* sqstate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E95139070A10077ED19 /* sqstate.cpp */; };
 		F92D9EB1139070A10077ED19 /* sqtable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E98139070A10077ED19 /* sqtable.cpp */; };
 		F92D9EB2139070A10077ED19 /* sqvm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E9C139070A10077ED19 /* sqvm.cpp */; };
+		F98A7F791395B8BB008F984C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F98A7F781395B8BB008F984C /* Icon.png */; };
 		F9B500CA13807A31009BB773 /* physics.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9B500AF13807682009BB773 /* physics.nut */; };
 		F9C31C191345FC8600B066DC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C31C181345FC8600B066DC /* AudioToolbox.framework */; };
 		F9C7DE94134ABBDE0053065E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C7DE93134ABBDE0053065E /* libz.dylib */; };
@@ -303,6 +304,7 @@
 		F92D9E9B139070A10077ED19 /* squtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = squtils.h; sourceTree = "<group>"; };
 		F92D9E9C139070A10077ED19 /* sqvm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqvm.cpp; sourceTree = "<group>"; };
 		F92D9E9D139070A10077ED19 /* sqvm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqvm.h; sourceTree = "<group>"; };
+		F98A7F781395B8BB008F984C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/graphics/Icon.png; sourceTree = "<group>"; };
 		F9B500AF13807682009BB773 /* physics.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics.nut; path = Resources/physics.nut; sourceTree = "<group>"; };
 		F9C31C181345FC8600B066DC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F9C7DE93134ABBDE0053065E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -694,6 +696,7 @@
 		F9C350E813610E4C00B21AE9 /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				F98A7F781395B8BB008F984C /* Icon.png */,
 			);
 			name = graphics;
 			sourceTree = "<group>";
@@ -759,6 +762,7 @@
 				F9B500CA13807A31009BB773 /* physics.nut in Resources */,
 				F92D9E5C1390708B0077ED19 /* LICENSE in Resources */,
 				F92D9E9E139070A10077ED19 /* COPYRIGHT in Resources */,
+				F98A7F791395B8BB008F984C /* Icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

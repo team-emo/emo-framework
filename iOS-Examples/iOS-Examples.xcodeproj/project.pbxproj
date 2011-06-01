@@ -20,6 +20,7 @@
 		F91C5144138DD60500464576 /* onscreen_control_base.png in Resources */ = {isa = PBXBuildFile; fileRef = F91C5142138DD60400464576 /* onscreen_control_base.png */; };
 		F91C5145138DD60500464576 /* onscreen_control_knob.png in Resources */ = {isa = PBXBuildFile; fileRef = F91C5143138DD60500464576 /* onscreen_control_knob.png */; };
 		F91C514D138DD80D00464576 /* analog_controller_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F91C5146138DD63C00464576 /* analog_controller_example.nut */; };
+		F91DF9D31395AC730083DA0E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F91DF9D21395AC730083DA0E /* Icon.png */; };
 		F921CCA8136FFBAC00F058FF /* block.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9A136FFBAC00F058FF /* block.png */; };
 		F921CCA9136FFBAC00F058FF /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9B136FFBAC00F058FF /* blocks.png */; };
 		F921CCAA136FFBAC00F058FF /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9C136FFBAC00F058FF /* dog.png */; };
@@ -164,7 +165,7 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* iOS_ExamplesAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iOS_ExamplesAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* iOS_ExamplesAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iOS_ExamplesAppDelegate.m; sourceTree = "<group>"; };
-		1D6058910D05DD3D006BFB54 /* iOS-Examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS-Examples.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* EmoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AAE50D9B0CCF005BE974 /* iOS_Examples_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iOS_Examples_Prefix.pch; sourceTree = "<group>"; };
@@ -179,6 +180,7 @@
 		F91C5142138DD60400464576 /* onscreen_control_base.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onscreen_control_base.png; sourceTree = "<group>"; };
 		F91C5143138DD60500464576 /* onscreen_control_knob.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onscreen_control_knob.png; sourceTree = "<group>"; };
 		F91C5146138DD63C00464576 /* analog_controller_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = analog_controller_example.nut; path = Resources/analog_controller_example.nut; sourceTree = "<group>"; };
+		F91DF9D21395AC730083DA0E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		F921CC9A136FFBAC00F058FF /* block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.png; sourceTree = "<group>"; };
 		F921CC9B136FFBAC00F058FF /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blocks.png; sourceTree = "<group>"; };
 		F921CC9C136FFBAC00F058FF /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dog.png; sourceTree = "<group>"; };
@@ -439,7 +441,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* iOS-Examples.app */,
+				1D6058910D05DD3D006BFB54 /* EmoApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -524,6 +526,7 @@
 		F921CC99136FFBAC00F058FF /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				F91DF9D21395AC730083DA0E /* Icon.png */,
 				F9D2182D13947A8900463396 /* explosion.png */,
 				F95F8D3113932C2D006BB4DB /* gear.png */,
 				F95F8D3213932C2D006BB4DB /* gear@2x.png */,
@@ -851,9 +854,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* iOS-Examples */ = {
+		1D6058900D05DD3D006BFB54 /* Emo Examples */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "iOS-Examples" */;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Emo Examples" */;
 			buildPhases = (
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
@@ -863,9 +866,9 @@
 			);
 			dependencies = (
 			);
-			name = "iOS-Examples";
+			name = "Emo Examples";
 			productName = "iOS-Examples";
-			productReference = 1D6058910D05DD3D006BFB54 /* iOS-Examples.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* EmoApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -888,7 +891,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* iOS-Examples */,
+				1D6058900D05DD3D006BFB54 /* Emo Examples */,
 			);
 		};
 /* End PBXProject section */
@@ -947,6 +950,7 @@
 				F9BCF78C1393783400F19510 /* audio_example.nut in Resources */,
 				F9D2182E13947A8900463396 /* explosion.png in Resources */,
 				F9D2183013947B0B00463396 /* physics_contact.nut in Resources */,
+				F91DF9D31395AC730083DA0E /* Icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1066,7 +1070,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iOS_Examples_Prefix.pch;
 				INFOPLIST_FILE = "iOS_Examples-Info.plist";
-				PRODUCT_NAME = "iOS-Examples";
+				PRODUCT_NAME = EmoApp;
 			};
 			name = Debug;
 		};
@@ -1122,7 +1126,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "iOS-Examples" */ = {
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Emo Examples" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
