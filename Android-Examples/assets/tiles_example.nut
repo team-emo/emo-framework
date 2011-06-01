@@ -42,12 +42,11 @@ class Main {
         block.load();
 		
 		// change the text
-		text.setText("TAP TO CHANGE THE TILE!");
-		text.scale(0.5, 0.5);
-		print(format("%dx%d", text.getWidth(), text.getHeight()));
+		text.setText("TAP TO CHANGE THE TILE");
+		text.scale(0.7, 0.7);
 		
 		local tX = (stage.getWindowWidth()  - text.getScaledWidth())  / 2;
-		text.move(tX, 0);
+		text.move(tX, text.getScaledHeight());
 
 		text.load();
     }

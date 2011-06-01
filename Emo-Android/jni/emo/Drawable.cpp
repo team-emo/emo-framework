@@ -593,8 +593,8 @@ namespace emo {
         int invertX = -this->x;
         int invertY = -this->y;
 
-        if (this->x > 0 && this->x  > this->getScaledWidth())  return;
-        if (this->y > 0 && this->y  > this->getScaledHeight()) return;
+        if (this->x > 0 && this->x  > engine->stage->width)  return;
+        if (this->y > 0 && this->y  > engine->stage->height) return;
         if (this->x < 0 && invertX > this->drawable->getScaledWidth()  * this->columns) return;
         if (this->y < 0 && invertY > this->drawable->getScaledHeight() * this->rows) return;
 

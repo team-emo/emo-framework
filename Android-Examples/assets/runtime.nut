@@ -1251,14 +1251,6 @@ class emo.TextSprite extends emo.MapSprite {
 		addRow(indexes);
 	}
 	
-	function getScaledWidth() {
-		return getWidth() * getScaleX();
-	}
-	
-	function getScaledHeight() {
-		return getHeight() * getScaleY();
-	}
-	
 	function scale(scaleX, scaleY) {
         stage.scale(id, scaleX, scaleY, 0, 0);
         return stage.scale(childId, scaleX, scaleY, 0, 0);
