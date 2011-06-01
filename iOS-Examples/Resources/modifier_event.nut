@@ -2,21 +2,20 @@ local stage = emo.Stage();
 local event = emo.Event();
 
 /*
- * This example shows loading sprites with modifier.
+ * This example shows splash screen.
  */
-class Loading {
+class Splash {
 
-    circle = emo.Sprite("loading.png");
-	// 16x16 text sprite with 2 pixel border and 1 pixel margin
-	text = emo.TextSprite("font_16x16.png",
-		" !\"c*%#'{}@+,=./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-		16, 16, 2, 1);
+	// iOS users: do not use special resource like 'Default.png'(splash image)
+	//            as sprite resource otherwise the app will be frozen for no reason.
+	//            now we use the copy of Default.png as splash sprite.
+    splash = emo.Sprite("Splash.png");
     
 	/*
 	 * Called when this class is loaded
 	 */
     function onLoad() {
-        print("Loading::onLoad"); 
+        print("Splash::onLoad"); 
 		
 		// Below statements is an example of multiple screen density support.
 		// (i.e. Retina vs non-Retina, cellular phone vs tablet device).
@@ -28,68 +27,35 @@ class Loading {
 			stage.setContentScale(2);
 		}
 		
-		text.setText("  LOADING..");
-		
 		// move sprite to the center of the screen
-		circle.moveCenter(stage.getWindowWidth() / 2, stage.getWindowHeight() / 2);
-		text.moveCenter(stage.getWindowWidth()  / 2,
-				(stage.getWindowHeight() / 2) + circle.getHeight() + text.getHeight());
+		splash.moveCenter(stage.getWindowWidth() / 2, stage.getWindowHeight() / 2);
 		
-		// set z-order (move text to front of the circle)
-		circle.setZ(0);
-		text.setZ(1);
-
+		splash.addModifier(emo.AlphaModifier(0, 1, 1000, emo.easing.CubicIn));
 		// load sprite to the screen
-		text.load();
-        circle.load();
+        splash.load();
         
-        // rotate the block from 0 to 360 degree in 1 seconds using Linear equation with infinite loop.
-        circle.addModifier(emo.RotateModifier(0, 360, 1000, emo.easing.Linear, -1));
-		
-		// change alpha color of the text in 2 seconds
-		// using CubicIn and CubicOut equation sequentially with infinite loop.
-		local blinkTextModifier = emo.SquenceModifier(
-			emo.AlphaModifier(1, 0, 1000, emo.easing.CubicIn),
-			emo.AlphaModifier(0, 1, 1000, emo.easing.CubicOut));
-		blinkTextModifier.setRepeatCount(-1); // -1 means infinite loop
-		text.addModifier(blinkTextModifier);
-		
 		// onDrawFrame(dt) will be called 5 seconds later
-		event.enableOnDrawCallback(5000);
+		event.enableOnDrawCallback(3000);
     }
-
-	/*
-	 * Called when the app has gained focus
-	 */
-    function onGainedFocus() {
-        print("Loading::onGainedFocus");
-    }
-    
-	/*
-	 * Called when the app has lost focus
-	 */
-    function onLostFocus() {
-        print("Loading::onLostFocus"); 
-    }
-
+	
 	/*
 	 * Called when the class ends
 	 */
     function onDispose() {
-        print("Loading::onDispose");
+        print("Splash::onDispose");
         
         // remove sprite from the screen
-        circle.remove();
-		text.remove();
+        splash.remove();
     }
     /*
      * Enabled after onDrawCalleback event is enabled by enableOnDrawCallback
      * dt parameter is a delta time (millisecond)
      */
     function onDrawFrame(dt) {
-	
-		// now loading is completed so proceed to the next stage.
+		// disable onDraw listener because this is one time event.
 		event.disableOnDrawCallback();
+		
+		// now loading is completed so proceed to the next stage.
 		stage.load(Main());
 	}
 }
@@ -129,7 +95,7 @@ class Main {
     function onDispose() {
         print("Main::onDispose");
     }
-	
+		
 	/*
 	 * touch event
 	 */
@@ -142,5 +108,5 @@ class Main {
 	}
 }
 function emo::onLoad() {
-    stage.load(Loading());
+    stage.load(Splash());
 }

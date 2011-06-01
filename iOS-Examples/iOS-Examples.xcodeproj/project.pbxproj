@@ -39,6 +39,9 @@
 		F92B7253136FD42F00DD803C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B7252136FD42F00DD803C /* QuartzCore.framework */; };
 		F92BBE991373E53000796475 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F92BBE981373E53000796475 /* libsqlite3.dylib */; };
 		F93A8F5C1387B3EE0032FE66 /* mapsprite_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */; };
+		F93DA7AA1395CC840068C514 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F93DA7A91395CC840068C514 /* Default.png */; };
+		F93DA8261395D6750068C514 /* modifier_event.nut in Resources */ = {isa = PBXBuildFile; fileRef = F93DA7AB1395CCC10068C514 /* modifier_event.nut */; };
+		F93DA88B1395E0230068C514 /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = F93DA88A1395E0230068C514 /* Splash.png */; };
 		F94CA3CC138785650006123B /* physics_circle.nut in Resources */ = {isa = PBXBuildFile; fileRef = F98EABC7138784D800902E31 /* physics_circle.nut */; };
 		F953DF7713934C8A00E2529D /* database_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F953DF7013934B1900E2529D /* database_example.nut */; };
 		F95F8D3313932C2D006BB4DB /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = F95F8D3113932C2D006BB4DB /* gear.png */; };
@@ -199,6 +202,9 @@
 		F92B7252136FD42F00DD803C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F92BBE981373E53000796475 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mapsprite_example.nut; path = Resources/mapsprite_example.nut; sourceTree = "<group>"; };
+		F93DA7A91395CC840068C514 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		F93DA7AB1395CCC10068C514 /* modifier_event.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = modifier_event.nut; path = Resources/modifier_event.nut; sourceTree = "<group>"; };
+		F93DA88A1395E0230068C514 /* Splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Splash.png; sourceTree = "<group>"; };
 		F953DF7013934B1900E2529D /* database_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = database_example.nut; path = Resources/database_example.nut; sourceTree = "<group>"; };
 		F95F8D3113932C2D006BB4DB /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
 		F95F8D3213932C2D006BB4DB /* gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gear@2x.png"; sourceTree = "<group>"; };
@@ -482,6 +488,7 @@
 				F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */,
 				F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */,
 				F967A8C21372A17800BEF871 /* modifier_move_example.nut */,
+				F93DA7AB1395CCC10068C514 /* modifier_event.nut */,
 				F921CC9F136FFBAC00F058FF /* periodic_update_example.nut */,
 				F91C5146138DD63C00464576 /* analog_controller_example.nut */,
 				F9E30412138E3ACB00DB5B60 /* digital_controller_example.nut */,
@@ -526,6 +533,8 @@
 		F921CC99136FFBAC00F058FF /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				F93DA88A1395E0230068C514 /* Splash.png */,
+				F93DA7A91395CC840068C514 /* Default.png */,
 				F91DF9D21395AC730083DA0E /* Icon.png */,
 				F9D2182D13947A8900463396 /* explosion.png */,
 				F95F8D3113932C2D006BB4DB /* gear.png */,
@@ -951,6 +960,9 @@
 				F9D2182E13947A8900463396 /* explosion.png in Resources */,
 				F9D2183013947B0B00463396 /* physics_contact.nut in Resources */,
 				F91DF9D31395AC730083DA0E /* Icon.png in Resources */,
+				F93DA7AA1395CC840068C514 /* Default.png in Resources */,
+				F93DA8261395D6750068C514 /* modifier_event.nut in Resources */,
+				F93DA88B1395E0230068C514 /* Splash.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

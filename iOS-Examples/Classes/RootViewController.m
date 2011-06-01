@@ -43,7 +43,6 @@
 		[NSArray arrayWithObjects:@"Sprite Animation", @"animation_example.nut", nil],
 		[NSArray arrayWithObjects:@"Periodic Update",  @"periodic_update_example.nut", nil],
 		[NSArray arrayWithObjects:@"Modifiers with Easing", @"modifier_move_example.nut", nil],
-		[NSArray arrayWithObjects:@"Loading Screen",   @"modifier_rotate_example.nut", nil],
 		nil]];
 
 	// Event
@@ -92,6 +91,8 @@
 	
 	// Misc
 	[examples addObject: [NSArray arrayWithObjects:
+						 [NSArray arrayWithObjects:@"Loading Screen",  @"modifier_rotate_example.nut", nil],
+						 [NSArray arrayWithObjects:@"Splash Screen",   @"modifier_event.nut", nil],
 						 [NSArray arrayWithObjects:@"HTTP Access", @"http_access_example.nut", nil],
 						 nil]];
 }
