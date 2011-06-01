@@ -85,6 +85,10 @@ namespace emo {
 	
 	EmoPhysicsContactListener::EmoPhysicsContactListener(HSQUIRRELVM v) {
 		this->sqvm = v;
+		this->enableNullEvent    = false;
+		this->enableAddEvent     = true;
+		this->enablePersistEvent = true;
+		this->enableRemoveEvent  = true;
 	}
 
 	EmoPhysicsContactListener::~EmoPhysicsContactListener() {
@@ -110,6 +114,11 @@ namespace emo {
 		
 		for (int32 i = 0; i < manifold->pointCount; ++i)
 		{
+			if (!this->enableNullEvent    && state2[i] == b2_nullState)    continue;
+			if (!this->enableAddEvent     && state2[i] == b2_addState)     continue;
+			if (!this->enablePersistEvent && state2[i] == b2_persistState) continue;
+			if (!this->enableRemoveEvent  && state2[i] == b2_removeState)  continue;
+			
 			ContactPoint cp;
 			cp.fixtureA = fixtureA;
 			cp.fixtureB = fixtureB;

@@ -64,6 +64,10 @@ class emo.physics.World {
 	function enableContactListener() {
 		return physics.world_enableContactListener(id);
 	}
+	function enableContactState(contactType, enabled) {
+		return physics.world_enableContactState(id, contactType, enabled);
+	}
+	
 	function setGravity(gravity) {
 		return physics.world_setGravity(id, gravity);
 	}

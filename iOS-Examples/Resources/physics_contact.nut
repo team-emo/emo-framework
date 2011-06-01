@@ -85,6 +85,12 @@ class Main {
 		
 		// enable the physics worlds contact listener
 		world.enableContactListener();
+		
+		// in this example we use only add state so disable other status.
+		// this will supress unnecessary event calls.
+		world.enableContactState(PHYSICS_STATE_NULL,    false);
+		world.enableContactState(PHYSICS_STATE_PERSIST, false);
+		world.enableContactState(PHYSICS_STATE_REMOVE,  false);
 	}
 	
     /*
