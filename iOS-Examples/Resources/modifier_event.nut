@@ -6,7 +6,7 @@ local event = emo.Event();
  */
 class Splash {
 
-	// iOS users: do not use special resource like 'Default.png'(splash image)
+	// iOS users: do not use special resource like 'Default.png'(default splash image)
 	//            as sprite resource otherwise the app will be frozen for no reason.
 	//            now we use the copy of Default.png as splash sprite.
     splash = emo.Sprite("Splash.png");

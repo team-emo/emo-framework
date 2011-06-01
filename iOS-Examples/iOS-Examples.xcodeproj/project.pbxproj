@@ -27,7 +27,6 @@
 		F921CCAD136FFBAC00F058FF /* periodic_update_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9F136FFBAC00F058FF /* periodic_update_example.nut */; };
 		F921CCAE136FFBAC00F058FF /* runtime.nut in Resources */ = {isa = PBXBuildFile; fileRef = F921CCA0136FFBAC00F058FF /* runtime.nut */; };
 		F921CCAF136FFBAC00F058FF /* shape_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F921CCA1136FFBAC00F058FF /* shape_example.nut */; };
-		F921CCB0136FFBAC00F058FF /* attribution.txt in Resources */ = {isa = PBXBuildFile; fileRef = F921CCA3136FFBAC00F058FF /* attribution.txt */; };
 		F921CCB1136FFBAC00F058FF /* clang.wav in Resources */ = {isa = PBXBuildFile; fileRef = F921CCA4136FFBAC00F058FF /* clang.wav */; };
 		F921CCB2136FFBAC00F058FF /* drums.wav in Resources */ = {isa = PBXBuildFile; fileRef = F921CCA5136FFBAC00F058FF /* drums.wav */; };
 		F921CCB3136FFBAC00F058FF /* tada.wav in Resources */ = {isa = PBXBuildFile; fileRef = F921CCA6136FFBAC00F058FF /* tada.wav */; };
@@ -190,7 +189,6 @@
 		F921CC9F136FFBAC00F058FF /* periodic_update_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = periodic_update_example.nut; path = Resources/periodic_update_example.nut; sourceTree = "<group>"; };
 		F921CCA0136FFBAC00F058FF /* runtime.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = runtime.nut; path = Resources/runtime.nut; sourceTree = "<group>"; };
 		F921CCA1136FFBAC00F058FF /* shape_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = shape_example.nut; path = Resources/shape_example.nut; sourceTree = "<group>"; };
-		F921CCA3136FFBAC00F058FF /* attribution.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = attribution.txt; sourceTree = "<group>"; };
 		F921CCA4136FFBAC00F058FF /* clang.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = clang.wav; sourceTree = "<group>"; };
 		F921CCA5136FFBAC00F058FF /* drums.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = drums.wav; sourceTree = "<group>"; };
 		F921CCA6136FFBAC00F058FF /* tada.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = tada.wav; sourceTree = "<group>"; };
@@ -558,7 +556,6 @@
 		F921CCA2136FFBAC00F058FF /* sounds */ = {
 			isa = PBXGroup;
 			children = (
-				F921CCA3136FFBAC00F058FF /* attribution.txt */,
 				F921CCA4136FFBAC00F058FF /* clang.wav */,
 				F921CCA5136FFBAC00F058FF /* drums.wav */,
 				F921CCA6136FFBAC00F058FF /* tada.wav */,
@@ -918,7 +915,6 @@
 				F921CCAD136FFBAC00F058FF /* periodic_update_example.nut in Resources */,
 				F921CCAE136FFBAC00F058FF /* runtime.nut in Resources */,
 				F921CCAF136FFBAC00F058FF /* shape_example.nut in Resources */,
-				F921CCB0136FFBAC00F058FF /* attribution.txt in Resources */,
 				F921CCB1136FFBAC00F058FF /* clang.wav in Resources */,
 				F921CCB2136FFBAC00F058FF /* drums.wav in Resources */,
 				F921CCB3136FFBAC00F058FF /* tada.wav in Resources */,
