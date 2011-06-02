@@ -16,6 +16,7 @@
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
 		F908827613872BFD0065EC77 /* box2d_helloworld.nut in Resources */ = {isa = PBXBuildFile; fileRef = F908827513872BEA0065EC77 /* box2d_helloworld.nut */; };
+		F9102FDC13973AB300BC7404 /* http_access_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9102FDB13973AA800BC7404 /* http_access_example.nut */; };
 		F917F96F1387AC15003F4B53 /* animation_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F917F96E1387AC0D003F4B53 /* animation_example.nut */; };
 		F91C5144138DD60500464576 /* onscreen_control_base.png in Resources */ = {isa = PBXBuildFile; fileRef = F91C5142138DD60400464576 /* onscreen_control_base.png */; };
 		F91C5145138DD60500464576 /* onscreen_control_knob.png in Resources */ = {isa = PBXBuildFile; fileRef = F91C5143138DD60500464576 /* onscreen_control_knob.png */; };
@@ -179,6 +180,7 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* iOS_Examples-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iOS_Examples-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		F908827513872BEA0065EC77 /* box2d_helloworld.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = box2d_helloworld.nut; path = Resources/box2d_helloworld.nut; sourceTree = "<group>"; };
+		F9102FDB13973AA800BC7404 /* http_access_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = http_access_example.nut; path = Resources/http_access_example.nut; sourceTree = "<group>"; };
 		F917F96E1387AC0D003F4B53 /* animation_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = animation_example.nut; path = Resources/animation_example.nut; sourceTree = "<group>"; };
 		F91C5142138DD60400464576 /* onscreen_control_base.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onscreen_control_base.png; sourceTree = "<group>"; };
 		F91C5143138DD60500464576 /* onscreen_control_knob.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onscreen_control_knob.png; sourceTree = "<group>"; };
@@ -506,6 +508,7 @@
 				F953DF7013934B1900E2529D /* database_example.nut */,
 				F9BCF784139376FD00F19510 /* audio_example.nut */,
 				F9DAAC2F13961E27005DA4C1 /* audio_channel_example.nut */,
+				F9102FDB13973AA800BC7404 /* http_access_example.nut */,
 				F921CCA0136FFBAC00F058FF /* runtime.nut */,
 				F9D78CD213872E8A0076C937 /* physics.nut */,
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
@@ -963,6 +966,7 @@
 				F93DA8261395D6750068C514 /* modifier_event.nut in Resources */,
 				F93DA88B1395E0230068C514 /* Splash.png in Resources */,
 				F9DAAC321396226D005DA4C1 /* audio_channel_example.nut in Resources */,
+				F9102FDC13973AB300BC7404 /* http_access_example.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

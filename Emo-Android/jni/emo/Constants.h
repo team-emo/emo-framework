@@ -75,6 +75,7 @@
 #define DEFAULT_ANIMATION_NAME "EMO::DEFAULT"
 #define DEFAULT_DATABASE_NAME  "emoruntime.db"
 #define PREFERENCE_TABLE_NAME  "preferences"
+#define HTTP_ERROR             "HTTP_ERROR"
 
 #define EMO_NO_ERROR    0x0000
 #define EMO_ERROR       0x0001
@@ -115,6 +116,7 @@
 #define OPT_DISABLE_BACK_KEY            0x1005
 #define OPT_ORIENTATION_PORTRAIT        0x1006
 #define OPT_ORIENTATION_LANDSCAPE       0x1007
+#define OPT_ORIENTATION_UNSPECIFIED     0x1008
 
 #define MOTION_EVENT_ACTION_DOWN            0
 #define MOTION_EVENT_ACTION_UP              1
@@ -188,4 +190,5 @@
 #define PHYSICS_STATE_PERSIST 1
 #define PHYSICS_STATE_REMOVE  2
 
+#define RETINA_SCALE_FACTOR 2
 #endif

@@ -89,7 +89,7 @@ extern EmoEngine* engine;
 	engine.lastCallbackErrorType = @"NSURLConnection";
     callSqFunction_Bool_TwoStrings(engine.sqvm, 
 								   EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, 
-								   "ERROR", [name UTF8String], SQFalse);
+								   HTTP_ERROR, [name UTF8String], SQFalse);
 	[engine removeNetTask:name];
 }
 -(void)dealloc {

@@ -68,6 +68,7 @@ class Main {
         
         // remove sprite from the screen
         sprite.remove();
+		explosion.remove();
     }
 
 	/*

@@ -75,6 +75,7 @@
 #define DEFAULT_ANIMATION_NAME "EMO::DEFAULT"
 #define DEFAULT_DATABASE_NAME  "emoruntime.db"
 #define PREFERENCE_TABLE_NAME  "preferences"
+#define HTTP_ERROR             "HTTP_ERROR"
 
 #define EMO_NO_ERROR    0x0000
 #define EMO_ERROR       0x0001

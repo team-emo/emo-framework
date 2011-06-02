@@ -13,6 +13,8 @@ const OS_IOS     = "iOS";
 const ANDROID_GRAPHICS_DIR = "graphics/";
 const ANDROID_SOUNDS_DIR   = "sounds/";
 
+const HTTP_ERROR      = "HTTP_ERROR";
+
 const EMO_NO_ERROR    = 0x0000;
 const EMO_ERROR       = 0x0001;
 const LOG_INFO        = 0x0002;

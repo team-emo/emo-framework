@@ -27,7 +27,7 @@ import org.apache.http.HttpResponse;
 public class EmoActivity extends NativeActivity {
 
     public static final String ECHO  = "ECHO";
-    public static final String ERROR = "ERROR";
+    public static final String HTTP_ERROR = "HTTP_ERROR";
     
     public static final String ENGINE_TAG = "EmoFramework";
 
@@ -106,7 +106,7 @@ public class EmoActivity extends NativeActivity {
         }
         protected void onPostExecute(String response) {
         	if (response == null) {
-        		callback(ERROR, name);
+        		callback(HTTP_ERROR, name);
         	} else {
                 callback(name, response);
         	}
