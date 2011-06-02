@@ -17,6 +17,8 @@ class Main {
 		
 	lastMoveX  = 0;
 	lastMoveY  = 0;
+	
+	tileMarker = emo.Rectangle();
 
 	/*
 	 * Called when this class is loaded
@@ -39,7 +41,7 @@ class Main {
 			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
 			[-1, -1, -1, -1, -1,  8,  9, 10, -1, -1, -1,  8,  9, 10, -1, 11, 12, 13, 14, 15, -1],
 			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-			[-1, 13, 14, 15, -1, -1, -1,  8,  9, -1, -1, 13, 14, 15, -1, -1, -1,  8,  9, -1, -1],
+			[-1, 13, 14, 15, -1, -1, -1,  8,  9, 10, -1, 13, 14, 15, -1, -1, -1,  8,  9, -1, -1],
 			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
 			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
 			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 18, 19, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -60,6 +62,12 @@ class Main {
 		text.move(tX, text.getScaledHeight());
 
 		text.load();
+		
+		tileMarker.setSize(BLOCK_SIZE, BLOCK_SIZE);
+		tileMarker.color(1, 0, 0);
+		tileMarker.hide();
+		tileMarker.setZ(99);
+		tileMarker.load();
     }
 
 	/*
@@ -93,6 +101,9 @@ class Main {
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
 			lastMoveX = mevent.getX();
 			lastMoveY = mevent.getY();
+		
+			updateTileMarker(mevent.getX(), mevent.getY());
+			tileMarker.show();
 		} else if (mevent.getAction() == MOTION_EVENT_ACTION_MOVE) {
 			local x = sprite.getX() - (lastMoveX - mevent.getX());
 			local y = sprite.getY() - (lastMoveY - mevent.getY());
@@ -101,7 +112,20 @@ class Main {
 			}
 			lastMoveX = mevent.getX();
 			lastMoveY = mevent.getY();
+			
+			updateTileMarker(mevent.getX(), mevent.getY());
+		} else if (mevent.getAction() == MOTION_EVENT_ACTION_UP) {
+			tileMarker.hide();
 		}
+	}
+	
+	function updateTileMarker(x, y) {
+		local tilePos   = sprite.getTilePositionAtCoord(x, y);
+		tileMarker.move(tilePos.x, tilePos.y);
+		
+		// to change the tile dynamically with given position, uncomment below.
+		local tileIndex = sprite.getTileIndexAtCoord(x, y);
+		sprite.setTileAt(tileIndex.x, tileIndex.y, 1);
 	}
 }
 

@@ -547,8 +547,8 @@ namespace emo {
         int col = (int)floor((x - this->x) / (double)this->drawable->getScaledWidth());
         int row = (int)floor((y - this->y) / (double)this->drawable->getScaledHeight());
 
-        index.push_back(col);
         index.push_back(row);
+        index.push_back(col);
 
         return index;
     }
@@ -557,11 +557,8 @@ namespace emo {
         std::vector<float> index;
 
         std::vector<int> tile = this->getTileIndexAtCoord(x, y);
-        int col = tile.at(0);
-        int row = tile.at(1);
-        
-        index.push_back((col * this->drawable->getScaledWidth())  + this->x);
-        index.push_back((row * this->drawable->getScaledHeight()) + this->y);
+        index.push_back((tile.at(1) * this->drawable->getScaledWidth())  + this->x);
+        index.push_back((tile.at(0) * this->drawable->getScaledHeight()) + this->y);
         
         return index;
     }

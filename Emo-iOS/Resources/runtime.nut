@@ -225,6 +225,25 @@ EMO_MOTION_LISTENERS    <- [];
 
 EMO_STAGE_CONTENT_SCALE <- 1;
 
+class emo.Vec2 {
+	x = null;
+	y = null;
+	function constructor(_x, _y) {
+		x = _x;
+		y = _y;
+	}
+	
+	function set(_x, _y) {
+		x = _x;
+		y = _y;
+	}
+	
+	function fromArray(arg) {
+		if (arg == null || arg.len() < 2) return null;
+		return emo.Vec2(arg[0], arg[1]);
+	}
+}
+
 function emo::Runtime::uptime() {
 	return EMO_RUNTIME_STOPWATCH.elapsed();
 }
@@ -1206,11 +1225,11 @@ class emo.MapSprite extends emo.Sprite {
     }
 
     function getTileIndexAtCoord(x, y) {
-        return stage.getTileIndexAtCoord(id, x, y);
+        return emo.Vec2.fromArray(stage.getTileIndexAtCoord(id, x, y));
     }
 
     function getTilePositionAtCoord(x, y) {
-        return stage.getTilePositionAtCoord(id, x, y);
+        return emo.Vec2.fromArray(stage.getTilePositionAtCoord(id, x, y));
     }
 
     function show() { return stage.show(childId); }

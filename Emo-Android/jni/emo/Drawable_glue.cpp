@@ -608,7 +608,10 @@ SQInteger emoDrawableSetTileAt(HSQUIRRELVM v) {
         sq_getinteger(v, 4, &column);
         sq_getinteger(v, 5, &value);
 
-        drawable->setTileAt(row, column, value);
+        if (!drawable->setTileAt(row, column, value)) {
+            sq_pushinteger(v, ERR_INVALID_PARAM);
+            return 1;
+        }
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
@@ -685,8 +688,6 @@ SQInteger emoDrawableGetTileIndexAtCoord(HSQUIRRELVM v) {
 
         sq_pushinteger(v, index.at(1));
         sq_arrayappend(v, -2);
-
-        sq_push(v, -1);
     } else {
         return 0;
     }
@@ -729,8 +730,6 @@ SQInteger emoDrawableGetTilePositionAtCoord(HSQUIRRELVM v) {
 
         sq_pushfloat(v, position.at(1));
         sq_arrayappend(v, -2);
-
-        sq_push(v, -1);
     } else {
         return 0;
     }

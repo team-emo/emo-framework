@@ -119,16 +119,16 @@
 }
 
 -(NSArray*)getTileIndexAtCoord:(float)_x y:(float)_y {
-	int col = (int)floor((_x - self.x) / (double)[child getScaledWidth]);
 	int row = (int)floor((_y - self.y) / (double)[child getScaledHeight]);
-	return [NSArray arrayWithObjects: [NSNumber numberWithInt:col], [NSNumber numberWithInt:row], nil];
+	int col = (int)floor((_x - self.x) / (double)[child getScaledWidth]);
+	return [NSArray arrayWithObjects: [NSNumber numberWithInt:row], [NSNumber numberWithInt:col], nil];
 }
 
 -(NSArray*)getTilePositionAtCoord:(float)_x y:(float)_y {
 	NSArray* tile = [self getTileIndexAtCoord:_x y:_y];
-	int col = [[tile objectAtIndex:0] intValue] * [child getScaledWidth];
-	int row = [[tile objectAtIndex:1] intValue] * [child getScaledHeight];
-	return [NSArray arrayWithObjects: [NSNumber numberWithInt:col], [NSNumber numberWithInt:row], nil];
+	int px = [[tile objectAtIndex:1] intValue] * [child getScaledWidth]  + x;
+	int py = [[tile objectAtIndex:0] intValue] * [child getScaledHeight] + y;
+	return [NSArray arrayWithObjects: [NSNumber numberWithInt:px], [NSNumber numberWithInt:py], nil];
 }
 
 @end
