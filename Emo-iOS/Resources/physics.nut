@@ -28,7 +28,7 @@ PHYSICS_STATE_ADD     <- 0;
 PHYSICS_STATE_PERSIST <- 1;
 PHYSICS_STATE_REMOVE  <- 2;
 
-PHYSICS_WORLD_PIXEL_TO_METER_RATIO <- 32;
+PTM_RATIO <- 32;
 
 emo.physics <- {};
 
@@ -39,7 +39,7 @@ class emo.physics.World {
 	sprites = null;
 	function constructor(gravity, doSleep) {
 		id = physics.newWorld(gravity, doSleep);
-		scale = PHYSICS_WORLD_PIXEL_TO_METER_RATIO;
+		scale = PTM_RATIO;
 		sprites = [];
 	}
 	function enableContactListener() {
