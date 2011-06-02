@@ -90,8 +90,8 @@ extern EmoEngine* engine;
 	} else {
 		callSqFunction_Bool_Strings(engine.sqvm, 
 			EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, HTTP_ERROR, [name UTF8String],
-					[statusMessage UTF8String],
-					[[NSString stringWithFormat:@"%d", statusCode] UTF8String], SQFalse);
+					[[NSString stringWithFormat:@"%d", statusCode] UTF8String],
+					[statusMessage UTF8String], SQFalse);
 	}
 	[response release];
 	[engine removeNetTask:name];
@@ -100,8 +100,8 @@ extern EmoEngine* engine;
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     callSqFunction_Bool_Strings(engine.sqvm, EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, 
 					HTTP_ERROR, [name UTF8String],
-					[[error localizedDescription] UTF8String],
-					[[NSString stringWithFormat: @"%d" ,[error code]] UTF8String], SQFalse);
+					[[NSString stringWithFormat: @"%d" ,[error code]] UTF8String],
+					[[error localizedDescription] UTF8String], SQFalse);
 	[engine removeNetTask:name];
 }
 -(void)dealloc {

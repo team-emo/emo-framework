@@ -66,8 +66,8 @@ class Main {
 			// emo.Net.request(MY_REQUEST_NAME, "http://www.example.com/", "GET", 1000);
 			
 			// http request with METHOD, timeout and parameters
-			//emo.Net.request(MY_REQUEST_NAME, "http://www.example.com/",
-			//		"GET", 1000, "key1", "value1", "key2", "value2");
+			// emo.Net.request(MY_REQUEST_NAME, "http://www.example.com/",
+			//		"POST", 1000, "key1", "value1", "key2", "value2");
 		}
 	}
 	
