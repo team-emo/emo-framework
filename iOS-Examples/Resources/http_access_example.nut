@@ -74,7 +74,7 @@ class Main {
 	/*
 	 * Asynchronous http request callback
 	 */
-	function onCallback(name, response) {
+	function onCallback(name, response, err) {
 		if (name == MY_REQUEST_NAME) {
 			print(format("============ RESPONSE FROM %s ============", name));
 			print(response);
@@ -84,10 +84,9 @@ class Main {
 			// and the response equals the request name ('My HTTP Request').
 			print(format("============ ERROR RESPONSE FROM %s ============", response));
 			
-			// print the error description
-			// error type is the class name of the error
-			print(emo.Event.getLastErrorType());
-			print(emo.Event.getLastErrorMessage());
+			// print the error description and error code.
+			print(err.code);
+			print(err.message);
 			
 			text.setText("ACCESS: FAILED");
 		}

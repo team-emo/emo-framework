@@ -1669,13 +1669,22 @@ function emo::_onSensorEvent(...) {
     }
 }
 
+class emo.Error {
+	code    = null;
+	message = null;
+}
+
 function emo::_onCallback(...) {
+	local err   = emo.Error();
+	err.code    = vargv[2];
+	err.message = vargv[3];
+	
     if (emo.rawin("onCallback")) {
-        emo.onCallback(vargv[0], vargv[1]);
+        emo.onCallback(vargv[0], vargv[1], err);
     }
     if (EMO_RUNTIME_DELEGATE != null &&
              EMO_RUNTIME_DELEGATE.rawin("onCallback")) {
-        EMO_RUNTIME_DELEGATE.onCallback(vargv[0], vargv[1]);
+        EMO_RUNTIME_DELEGATE.onCallback(vargv[0], vargv[1], err);
     }
 }
 

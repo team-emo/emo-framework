@@ -57,8 +57,6 @@ NSString* data2ns(NSData* data) {
 @implementation EmoEngine
 @synthesize sqvm;
 @synthesize lastError;
-@synthesize lastCallbackErrorMessage;
-@synthesize lastCallbackErrorType;
 @synthesize isFrameInitialized;
 @synthesize isRunning;
 @synthesize sortOrderDirty;
@@ -571,10 +569,5 @@ NSString* data2ns(NSData* data) {
 	}
 	
 	return NO;
-}
--(void)dealloc {
-	[lastCallbackErrorMessage release];
-	[lastCallbackErrorType release];
-	[super dealloc];
 }
 @end

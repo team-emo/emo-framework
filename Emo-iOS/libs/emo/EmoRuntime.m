@@ -77,19 +77,17 @@ extern EmoEngine* engine;
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	NSString* response = data2ns(content);
-    callSqFunction_Bool_TwoStrings(engine.sqvm, 
-			EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, 
-				[name UTF8String], [response UTF8String], SQFalse);
+    callSqFunction_Bool_Strings(engine.sqvm, 
+			EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, [name UTF8String], [response UTF8String], "", "", SQFalse);
 	[response release];
 	[engine removeNetTask:name];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-	engine.lastCallbackErrorMessage = [error localizedDescription];
-	engine.lastCallbackErrorType = @"NSURLConnection";
-    callSqFunction_Bool_TwoStrings(engine.sqvm, 
-								   EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, 
-								   HTTP_ERROR, [name UTF8String], SQFalse);
+    callSqFunction_Bool_Strings(engine.sqvm, EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, 
+					HTTP_ERROR, [name UTF8String],
+					[[error localizedDescription] UTF8String],
+					[[NSString stringWithFormat: @"%d" ,[error code]] UTF8String], SQFalse);
 	[engine removeNetTask:name];
 }
 -(void)dealloc {
@@ -133,9 +131,6 @@ void initRuntimeFunctions() {
     registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnUpdateCallback", emoDisableOnUpdateCallback);
     registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnFpsCallback",  emoEnableOnFpsCallback);
     registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnFpsCallback", emoDisableOnFpsCallback);
-	
-	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "getLastErrorMessage",   emoGetLastCallbackErrorMessage);
-	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "getLastErrorType",      emoGetLastCallbackErrorType);
 
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoRuntimeEcho);	
     registerClassFunc(engine.sqvm, EMO_NET_CLASS,     "request",      emoAsyncHttpRequest);
@@ -421,22 +416,6 @@ SQInteger emoRuntimeIsSimulator(HSQUIRRELVM v) {
 	BOOL value = ([device isEqualToString:@"i386"]) || ([device isEqualToString:@"x86_64"]); 
 	sq_pushbool(v, value);
 	return 1;
-}
-
-/*
- * Returns last callback error message
- */
-SQInteger emoGetLastCallbackErrorMessage(HSQUIRRELVM v) {
-    sq_pushstring(v, [engine.lastCallbackErrorMessage UTF8String], -1);
-    return 1;
-}
-
-/*
- * Returns last callback error type (class name or exception name)
- */
-SQInteger emoGetLastCallbackErrorType(HSQUIRRELVM v) {
-    sq_pushstring(v, [engine.lastCallbackErrorType UTF8String], -1);
-    return 1;
 }
 
 /*
