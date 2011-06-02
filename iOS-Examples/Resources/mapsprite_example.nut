@@ -120,12 +120,15 @@ class Main {
 	}
 	
 	function updateTileMarker(x, y) {
+		// move the marker (the red box) to the given position.
 		local tilePos   = sprite.getTilePositionAtCoord(x, y);
 		tileMarker.move(tilePos.x, tilePos.y);
 		
-		// to change the tile dynamically with given position, uncomment below.
-		local tileIndex = sprite.getTileIndexAtCoord(x, y);
-		sprite.setTileAt(tileIndex.x, tileIndex.y, 1);
+		// to change the tile dynamically at given position, uncomment below.
+		//local tileIndex = sprite.getTileIndexAtCoord(x, y);
+		//print(format("change %dx%d tile %d -> %d",
+		//	tileIndex.x, tileIndex.y, sprite.getTileAt(tileIndex.x, tileIndex.y), 1));
+		//sprite.setTileAt(tileIndex.x, tileIndex.y, 1);
 	}
 }
 
