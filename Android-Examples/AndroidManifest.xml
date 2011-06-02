@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".Main"
+        <activity android:name="com.emo_framework.EmoActivity"
                   android:label="@string/app_name"
                   android:configChanges="orientation|keyboardHidden">
             <meta-data android:name="android.app.lib_name"
@@ -24,7 +24,7 @@
         </activity>
 
         <activity-alias android:name=".ShapeExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/shape_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -35,7 +35,7 @@
         </activity-alias>
 
         <activity-alias android:name=".SpriteExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -46,7 +46,7 @@
         </activity-alias>
 
         <activity-alias android:name=".TextSpriteExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -57,7 +57,7 @@
         </activity-alias>
 
         <activity-alias android:name=".TileExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -68,7 +68,7 @@
         </activity-alias>
         
         <activity-alias android:name=".TiledMapExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -79,7 +79,7 @@
         </activity-alias>
 
         <activity-alias android:name=".SpriteAnimationExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -90,7 +90,7 @@
         </activity-alias>
         
         <activity-alias android:name=".PeriodicUpdateExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -101,7 +101,7 @@
         </activity-alias>
         
         <activity-alias android:name=".RotateModifierExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -112,7 +112,7 @@
         </activity-alias>
 
         <activity-alias android:name=".MoveModifierExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -123,7 +123,7 @@
         </activity-alias>
         
         <activity-alias android:name=".ModifierEventExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -134,7 +134,7 @@
         </activity-alias>
 
         <activity-alias android:name=".Box2DHelloWorld"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -145,7 +145,7 @@
         </activity-alias>
 
         <activity-alias android:name=".PhysicsHelloWorld"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -156,7 +156,7 @@
         </activity-alias>
         
         <activity-alias android:name=".PhysicsCircleExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -167,7 +167,7 @@
         </activity-alias>
         
         <activity-alias android:name=".PhysicsSensorExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -178,7 +178,7 @@
         </activity-alias>
         
         <activity-alias android:name=".MotionEventExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -189,7 +189,7 @@
         </activity-alias>
         
         <activity-alias android:name=".MultiTouchExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -200,7 +200,7 @@
         </activity-alias>
         
         <activity-alias android:name=".SensorExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -211,7 +211,7 @@
         </activity-alias>
 
         <activity-alias android:name=".AnalogControllerExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -221,7 +221,7 @@
                        android:value="analog_controller_example.nut" />
         </activity-alias>
         <activity-alias android:name=".DigitalControllerExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -231,7 +231,7 @@
                        android:value="digital_controller_example.nut" />
         </activity-alias>
         <activity-alias android:name=".MultipleControllerExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -242,7 +242,7 @@
         </activity-alias>
 
         <activity-alias android:name=".PhysicsDistanceJointExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -252,7 +252,7 @@
                        android:value="physics_distancejoint.nut" />
         </activity-alias>
         <activity-alias android:name=".PhysicsRevoluteJointExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -262,7 +262,7 @@
                        android:value="physics_revolutejoint.nut" />
         </activity-alias>
         <activity-alias android:name=".PhysicsPrismaticJointExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -272,7 +272,7 @@
                        android:value="physics_prismaticjoint.nut" />
         </activity-alias>
         <activity-alias android:name=".PhysicsPulleyJointExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -282,7 +282,7 @@
                        android:value="physics_pulleyjoint.nut" />
         </activity-alias>
         <activity-alias android:name=".PhysicsGearJointExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -292,7 +292,7 @@
                        android:value="physics_gearjoint.nut" />
         </activity-alias>
         <activity-alias android:name=".PhysicsLineJointExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -302,7 +302,7 @@
                        android:value="physics_linejoint.nut" />
         </activity-alias>
         <activity-alias android:name=".PhysicsWeldJointExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -312,7 +312,7 @@
                        android:value="physics_weldjoint.nut" />
         </activity-alias>
         <activity-alias android:name=".PhysicsContactExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -323,7 +323,7 @@
         </activity-alias>
 
         <activity-alias android:name=".AudioExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -334,7 +334,7 @@
         </activity-alias>
         
         <activity-alias android:name=".AudioChannelExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -345,7 +345,7 @@
         </activity-alias>
         
         <activity-alias android:name=".DatabaseExample"
-            android:targetActivity=".Main"
+            android:targetActivity="com.emo_framework.EmoActivity"
             android:label="@string/sprite_example_name">
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
@@ -353,6 +353,17 @@
                        android:value="runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="database_example.nut" />
+        </activity-alias>
+        
+        <activity-alias android:name=".HTTPAccessExample"
+            android:targetActivity="com.emo_framework.EmoActivity"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="http_access_example.nut" />
         </activity-alias>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />

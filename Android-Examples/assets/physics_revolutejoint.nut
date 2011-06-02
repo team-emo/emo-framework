@@ -11,28 +11,9 @@ local world   = emo.physics.World(emo.Vec2(0, 10), true);
 const FPS = 60.0;
 const WALL_WIDTH = 10;
 
-/*
- * This function is an example for retrieving
- * higher resolution image filename to support 
- * multiple screen size. (i.e. Retina and non-Retina).
- */
-function getScaledImage(filename, baseWidth = 320) {
-	local idx    = filename.find(".");
-	local name   = filename.slice(0, idx);
-	local suffix = filename.slice(idx);
-
-	local scaling = (emo.Stage.getWindowWidth() / baseWidth).tointeger();
-	
-	if (scaling > 1) {
-		name = name + "@" + scaling + "x";
-	}
-	
-	return name + suffix;
-}
-
 class Main {
-	wheel1 = emo.Sprite(getScaledImage("gear.png"));
-	wheel2 = emo.Sprite(getScaledImage("gear.png"));
+	wheel1 = emo.Sprite("gear.png");
+	wheel2 = emo.Sprite("gear.png");
 	axis   = emo.Rectangle();
 	box    = emo.Rectangle();
 	
@@ -41,6 +22,16 @@ class Main {
 	 */
 	function onLoad() {
 	
+		// Below statements is an example of multiple screen density support.
+		// (i.e. Retina vs non-Retina, cellular phone vs tablet device).
+		if (stage.getWindowWidth() > 320) {
+			// if the screen has large display, scale contents twice
+			// that makes the stage size by half.
+			// This examples shows how to display similar-scale images
+			// on Retina and non-Retina display.
+			stage.setContentScale(stage.getWindowWidth() / 320);
+		}
+		
 		createWall();
 	
 		box.setSize(wheel1.getWidth() * 3, wheel1.getHeight());

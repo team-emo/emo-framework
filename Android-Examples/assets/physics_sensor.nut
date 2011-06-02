@@ -31,7 +31,9 @@ function getScaledImage(filename, baseWidth = 320) {
 
 class Main {
 
-    sprite = emo.Sprite(getScaledImage("ball.png"));
+	// uncomment below to uses dynamic scaled image like iOS way(i.e. ball@2x.png).
+	// sprite  = emo.Sprite(getScaledImage("ball.png"));
+	sprite  = emo.Sprite("ball.png");
 
 	/*
 	 * Called when this class is loaded
@@ -39,6 +41,16 @@ class Main {
     function onLoad() {
         print("onLoad"); 
 
+		// Below statements is an example of multiple screen density support.
+		// (i.e. Retina vs non-Retina, cellular phone vs tablet device).
+		if (stage.getWindowWidth() > 320) {
+			// if the screen has large display, scale contents twice
+			// that makes the stage size by half.
+			// This examples shows how to display similar-scale images
+			// on Retina and non-Retina display.
+			stage.setContentScale(stage.getWindowWidth() / 320);
+		}
+		
 		local wall1  = emo.Rectangle();
 		local wall2  = emo.Rectangle();
 		local wall3  = emo.Rectangle();

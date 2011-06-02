@@ -1,16 +1,8 @@
 local stage = emo.Stage();
 
-/*
- * This example shows one block sprite sheet that changes frame index on touch-down event
- */
+const MY_REQUEST_NAME = "My HTTP Request";
+
 class Main {
-
-    // defines a sprite sheet that consists of 32x32 block with 4 pixel border and 3 pixel margin.
-    block = emo.SpriteSheet("blocks.png", 32, 32, 4, 3);
-
-    // current frame index
-    currentFrame = 0;
-
 	// 16x16 text sprite with 2 pixel border and 1 pixel margin
     text = emo.TextSprite("font_16x16.png",
 		" !\"c*%#'{}@+,=./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
@@ -32,18 +24,8 @@ class Main {
 			stage.setContentScale(stage.getWindowWidth() / 320);
 		}
 		
-		// move sprite to the center of the screen
-		local x = (stage.getWindowWidth()  - block.getWidth())  / 2;
-		local y = (stage.getWindowHeight() - block.getHeight()) / 2;
-		
-		block.move(x, y);
-
-		// load sprite to the screen
-        block.load();
-		
 		// change the text
-		text.setText("TAP TO CHANGE THE TILE");
-		text.scale(0.7, 0.7);
+		text.setText("TAP TO ACCESS");
 		
 		local tX = (stage.getWindowWidth()  - text.getScaledWidth())  / 2;
 		text.move(tX, text.getScaledHeight());
@@ -70,27 +52,48 @@ class Main {
 	 */
     function onDispose() {
         print("onDispose");
-        
-        // remove sprite from the screen
-        block.remove();
-		text.remove();
     }
 
 	/*
 	 * touch event
 	 */
 	function onMotionEvent(mevent) {
-		// change frame index on touch down event
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-			currentFrame++;
-			if (currentFrame >= block.getFrameCount()) {
-				currentFrame = 0;
-			}
-			block.setFrame(currentFrame);
+			// http request
+			// emo.Net.request(MY_REQUEST_NAME, "http://www.happyshout.jp/");
+			
+			// http request with METHOD and request timeout(msec)
+			// emo.Net.request(MY_REQUEST_NAME, "http://www.happyshout.jp/", "GET", 1000);
+			
+			// http request with METHOD, timeout and parameters
+			emo.Net.request(MY_REQUEST_NAME, "http://www.happyshout.jp/",
+					"POST", 1000, "key1", "value1", "key2", "value2");
+		}
+	}
+	
+	/*
+	 * Asynchronous http request callback
+	 */
+	function onCallback(name, response) {
+		if (name == MY_REQUEST_NAME) {
+			print(format("============ RESPONSE FROM %s ============", name));
+			print(response);
+			text.setText("ACCESS: OK");
+		} else if (name == HTTP_ERROR) {
+			// if the request has failed, name equals HTTP_ERROR
+			// and the response equals the request name ('My HTTP Request').
+			print(format("============ ERROR RESPONSE FROM %s ============", response));
+			
+			// print the error description
+			// error type is the class name of the error
+			print(emo.Event.getLastErrorType());
+			print(emo.Event.getLastErrorMessage());
+			
+			text.setText("ACCESS: FAILED");
 		}
 	}
 }
 
 function emo::onLoad() {
-    stage.load(Main());
+    emo.Stage().load(Main());
 }

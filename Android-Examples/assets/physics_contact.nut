@@ -10,36 +10,27 @@ local world   = emo.physics.World(emo.Vec2(0, 10), true);
 
 local fps = 60.0;
 
-/*
- * This function is an example for retrieving
- * higher resolution image filename to support 
- * multiple screen size. (i.e. Retina and non-Retina).
- */
-function getScaledImage(filename, baseWidth = 320) {
-	local idx    = filename.find(".");
-	local name   = filename.slice(0, idx);
-	local suffix = filename.slice(idx);
-
-	local scaling = (emo.Stage.getWindowWidth() / baseWidth).tointeger();
-	
-	if (scaling > 1) {
-		name = name + "@" + scaling + "x";
-	}
-	
-	return name + suffix;
-}
-
 class Main {
 	ground  = emo.Rectangle();
 	blockL  = emo.Rectangle();
 	blockR  = emo.Rectangle();
-	sprite  = emo.Sprite(getScaledImage("ball.png"));
+	sprite  = emo.Sprite("ball.png");
 	explosion = emo.SpriteSheet("explosion.png", 19, 19, 3, 2);
 	
 	/*
 	 * Called when this class is loaded
 	 */
 	function onLoad() {
+		// Below statements is an example of multiple screen density support.
+		// (i.e. Retina vs non-Retina, cellular phone vs tablet device).
+		if (stage.getWindowWidth() > 320) {
+			// if the screen has large display, scale contents twice
+			// that makes the stage size by half.
+			// This examples shows how to display similar-scale images
+			// on Retina and non-Retina display.
+			stage.setContentScale(stage.getWindowWidth() / 320);
+		}
+		
 		ground.setSize(stage.getWindowWidth(), 20);
 		ground.move(0, stage.getWindowHeight() - ground.getHeight());
 		
@@ -132,7 +123,7 @@ class Main {
 			// draw the explosion
 			explosion.hide();
 			explosion.moveCenter(x, y);
-			explosion.animate(0, 9, 66, 0);
+			explosion.animate(0, 10, 66, 0);
 			explosion.show();
 			
 			print(format("%4.2f, x=%4.2f, y=%4.2f", normalImpulse, x, y));

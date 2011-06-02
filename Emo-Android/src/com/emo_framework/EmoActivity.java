@@ -108,16 +108,11 @@ public class EmoActivity extends NativeActivity {
         	if (response == null) {
         		callback(HTTP_ERROR, name);
         	} else {
-                callback(name, response);
+        		callback(name, response);
         	}
         }
     }
     
-    protected void saveError(Exception e) {
-    	lastErrorType    = e.getClass().getName();
-    	lastErrorMessage = e.getMessage();
-    }
-
     public String httpRequestByGET(String url, int timeout) {
         String response = "";
         try {
@@ -137,9 +132,14 @@ public class EmoActivity extends NativeActivity {
                 }
                 response = buffer.toString();
                 inputStream.close();
+            } else {
+            	this.lastErrorType    = String.valueOf(serverResponse.getStatusLine().getStatusCode());
+            	this.lastErrorMessage = serverResponse.getStatusLine().getReasonPhrase();
+            	return null;
             }
         } catch (IOException e) {
-        	saveError(e);
+        	this.lastErrorType    = "";
+        	this.lastErrorMessage = e.getMessage();
             return null;
         }
         return response;
@@ -152,9 +152,9 @@ public class EmoActivity extends NativeActivity {
         	HttpPost httpPost = new HttpPost(url);
             httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
         	
-            HttpResponse httpResponse = httpClient.execute(httpPost);
-            if (httpResponse.getStatusLine().getStatusCode() < 400){
-                InputStream inputStream = httpResponse.getEntity().getContent();
+            HttpResponse serverResponse = httpClient.execute(httpPost);
+            if (serverResponse.getStatusLine().getStatusCode() < 400){
+                InputStream inputStream = serverResponse.getEntity().getContent();
                 InputStreamReader inputReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputReader);
                 StringBuffer buffer = new StringBuffer();
@@ -164,10 +164,15 @@ public class EmoActivity extends NativeActivity {
                 }
                 response = buffer.toString();
                 inputStream.close();
+            } else {
+            	this.lastErrorType    = String.valueOf(serverResponse.getStatusLine().getStatusCode());
+            	this.lastErrorMessage = serverResponse.getStatusLine().getReasonPhrase();
+            	return null;
             }
         	
         } catch (IOException e) {
-        	saveError(e);
+        	this.lastErrorType    = "";
+        	this.lastErrorMessage = e.getMessage();
         	return null;
         }
     	return response;
