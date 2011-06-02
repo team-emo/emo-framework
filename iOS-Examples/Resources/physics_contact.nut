@@ -123,7 +123,7 @@ class Main {
 			// draw the explosion
 			explosion.hide();
 			explosion.moveCenter(x, y);
-			explosion.animate(0, 9, 66, 0);
+			explosion.animate(0, 10, 66, 0);
 			explosion.show();
 			
 			print(format("%4.2f, x=%4.2f, y=%4.2f", normalImpulse, x, y));

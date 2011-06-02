@@ -6,6 +6,7 @@ local stage = emo.Stage();
 class Main {
 
     sprite = emo.SpriteSheet("dog.png", 34, 42, 3, 2);
+	explosion = emo.SpriteSheet("explosion.png", 19, 19, 3, 2);
 
 	/*
 	 * Called when this class is loaded
@@ -31,6 +32,14 @@ class Main {
 
 		// load sprite to the screen
         sprite.load();
+		
+		local eScale = (stage.getWindowWidth() / 320) * 2;
+		explosion.scale(eScale, eScale);
+		explosion.hide();
+		explosion.load();
+		
+		sprite.setZ(0);
+		explosion.setZ(1);
     }
 
 	/*
@@ -39,7 +48,8 @@ class Main {
     function onGainedFocus() {
         print("onGainedFocus");
 		
-		// loop count = -1 means inifinite loop
+		// start with first frame, number of frames equals 5 and
+		// interval equals 500msec.  loop count = -1 means inifinite loop
 		sprite.animate(0, 5, 500, -1);
     }
 
@@ -65,7 +75,11 @@ class Main {
 	 */
 	function onMotionEvent(mevent) {
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-			sprite.pauseAt(0);
+			// draw the explosion
+			explosion.hide();
+			explosion.moveCenter(mevent.getX(), mevent.getY());
+			explosion.animate(0, 10, 66, 0);
+			explosion.show();
 		}
 	}
 }
