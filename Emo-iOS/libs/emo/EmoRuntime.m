@@ -66,8 +66,13 @@ extern EmoEngine* engine;
 		[request setHTTPBody: requestData];
 	}
    	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	content    = nil;
+	statusCode = -1;
+	statusMessage = [NSString string];
 }
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    statusCode = [((NSHTTPURLResponse *)response) statusCode];
+	statusMessage = [NSHTTPURLResponse localizedStringForStatusCode:statusCode];
 	content = [[NSMutableData alloc] initWithData:0];
 }
 
@@ -77,8 +82,17 @@ extern EmoEngine* engine;
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	NSString* response = data2ns(content);
-    callSqFunction_Bool_Strings(engine.sqvm, 
-			EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, [name UTF8String], [response UTF8String], "", "", SQFalse);
+	
+	if (statusCode < 400) {
+		callSqFunction_Bool_Strings(engine.sqvm, 
+			EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, [name UTF8String],
+									[response UTF8String], "", "", SQFalse);
+	} else {
+		callSqFunction_Bool_Strings(engine.sqvm, 
+			EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, HTTP_ERROR, [name UTF8String],
+					[statusMessage UTF8String],
+					[[NSString stringWithFormat:@"%d", statusCode] UTF8String], SQFalse);
+	}
 	[response release];
 	[engine removeNetTask:name];
 }

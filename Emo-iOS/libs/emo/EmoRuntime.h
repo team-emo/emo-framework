@@ -35,6 +35,8 @@
 	NSString* name;
 	NSInteger timeout;
 	NSString* method;
+	NSInteger statusCode;
+	NSString* statusMessage;
 }
 @property (readwrite, copy) NSString* name;
 @property (readwrite, copy) NSString* method;
