@@ -28,26 +28,7 @@ PHYSICS_STATE_ADD     <- 0;
 PHYSICS_STATE_PERSIST <- 1;
 PHYSICS_STATE_REMOVE  <- 2;
 
-PHYSICS_WORLD_PIXEL_TO_METER_RATIO <- 100;
-
-class emo.Vec2 {
-	x = null;
-	y = null;
-	function constructor(_x, _y) {
-		x = _x;
-		y = _y;
-	}
-	
-	function set(_x, _y) {
-		x = _x;
-		y = _y;
-	}
-	
-	function fromArray(arg) {
-		if (arg == null || arg.len() < 2) return null;
-		return emo.Vec2(arg[0], arg[1]);
-	}
-}
+PTM_RATIO <- 32;
 
 emo.physics <- {};
 
@@ -58,7 +39,7 @@ class emo.physics.World {
 	sprites = null;
 	function constructor(gravity, doSleep) {
 		id = physics.newWorld(gravity, doSleep);
-		scale = PHYSICS_WORLD_PIXEL_TO_METER_RATIO;
+		scale = PTM_RATIO;
 		sprites = [];
 	}
 	function enableContactListener() {

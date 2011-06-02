@@ -13,6 +13,8 @@ const OS_IOS     = "iOS";
 const ANDROID_GRAPHICS_DIR = "graphics/";
 const ANDROID_SOUNDS_DIR   = "sounds/";
 
+const HTTP_ERROR      = "HTTP_ERROR";
+
 const EMO_NO_ERROR    = 0x0000;
 const EMO_ERROR       = 0x0001;
 const LOG_INFO        = 0x0002;
@@ -224,6 +226,25 @@ EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 EMO_MOTION_LISTENERS    <- [];
 
 EMO_STAGE_CONTENT_SCALE <- 1;
+
+class emo.Vec2 {
+	x = null;
+	y = null;
+	function constructor(_x, _y) {
+		x = _x;
+		y = _y;
+	}
+	
+	function set(_x, _y) {
+		x = _x;
+		y = _y;
+	}
+	
+	function fromArray(arg) {
+		if (arg == null || arg.len() < 2) return null;
+		return emo.Vec2(arg[0], arg[1]);
+	}
+}
 
 function emo::Runtime::uptime() {
 	return EMO_RUNTIME_STOPWATCH.elapsed();
@@ -1206,11 +1227,11 @@ class emo.MapSprite extends emo.Sprite {
     }
 
     function getTileIndexAtCoord(x, y) {
-        return stage.getTileIndexAtCoord(id, x, y);
+        return emo.Vec2.fromArray(stage.getTileIndexAtCoord(id, x, y));
     }
 
     function getTilePositionAtCoord(x, y) {
-        return stage.getTilePositionAtCoord(id, x, y);
+        return emo.Vec2.fromArray(stage.getTilePositionAtCoord(id, x, y));
     }
 
     function show() { return stage.show(childId); }
@@ -1249,14 +1270,6 @@ class emo.TextSprite extends emo.MapSprite {
 		}
 		clearTiles();
 		addRow(indexes);
-	}
-	
-	function getScaledWidth() {
-		return getWidth() * getScaleX();
-	}
-	
-	function getScaledHeight() {
-		return getHeight() * getScaleY();
 	}
 	
 	function scale(scaleX, scaleY) {
@@ -1656,13 +1669,22 @@ function emo::_onSensorEvent(...) {
     }
 }
 
+class emo.Error {
+	code    = null;
+	message = null;
+}
+
 function emo::_onCallback(...) {
+	local err   = emo.Error();
+	err.code    = vargv[2];
+	err.message = vargv[3];
+	
     if (emo.rawin("onCallback")) {
-        emo.onCallback(vargv[0], vargv[1]);
+        emo.onCallback(vargv[0], vargv[1], err);
     }
     if (EMO_RUNTIME_DELEGATE != null &&
              EMO_RUNTIME_DELEGATE.rawin("onCallback")) {
-        EMO_RUNTIME_DELEGATE.onCallback(vargv[0], vargv[1]);
+        EMO_RUNTIME_DELEGATE.onCallback(vargv[0], vargv[1], err);
     }
 }
 

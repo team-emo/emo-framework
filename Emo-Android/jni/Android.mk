@@ -21,7 +21,7 @@ include $(LOCAL_PATH)/libpng/Android.mk
 include $(LOCAL_PATH)/sqlite/Android.mk
 include $(LOCAL_PATH)/Box2D/Android.mk
 
-SQUIRREL_CFLAGS := -O2 -Wall
+SQUIRREL_CFLAGS := -O0 -Wall -g
 
 APP_OPTIM       := release
 LOCAL_MODULE    := emo-android

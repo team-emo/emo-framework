@@ -43,13 +43,15 @@ void initJavaGlueFunctions() {
 /*
  * Class:     com_emo_framework_EmoActivity
  * Method:    callback
- * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_callback
-              (JNIEnv* env, jobject thiz, jstring jname, jstring jvalue) {
+  (JNIEnv* env, jobject thiz, jstring jname, jstring jvalue, jstring jerrCode, jstring jerrMsg) {
 
     char* name;
     char* value;
+    char* errCode;
+    char* errMsg;
 
     const char* cname = env->GetStringUTFChars(jname, NULL);
     name = strdup(cname);
@@ -59,10 +61,21 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_callback
     value = strdup(cvalue);
     env->ReleaseStringUTFChars(jvalue, cvalue);
 
-    callSqFunction_Bool_TwoStrings(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, name, value, false);
+    const char* ccode = env->GetStringUTFChars(jerrCode, NULL);
+    errCode = strdup(ccode);
+    env->ReleaseStringUTFChars(jerrCode, ccode);
+
+    const char* cmsg = env->GetStringUTFChars(jerrMsg, NULL);
+    errMsg = strdup(cmsg);
+    env->ReleaseStringUTFChars(jerrMsg, cmsg);
+
+
+    callSqFunction_Bool_Strings(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, name, value, errCode, errMsg, false);
 
     free(name);
     free(value);
+    free(errCode);
+    free(errMsg);
 }
 
 namespace emo {
@@ -137,7 +150,7 @@ namespace emo {
     bool JavaGlue::registerJavaGlue() {
 
         JNINativeMethod methods[] = {
-            { "callback", "(Ljava/lang/String;Ljava/lang/String;)V",
+            { "callback", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
                   (void *)Java_com_emo_1framework_EmoActivity_callback }
 
         };

@@ -60,21 +60,21 @@ class Main {
 	function onMotionEvent(mevent) {
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
 			// http request
-			// emo.Net.request(MY_REQUEST_NAME, "http://www.happyshout.jp/");
+			emo.Net.request(MY_REQUEST_NAME, "http://www.example.com/");
 			
 			// http request with METHOD and request timeout(msec)
-			// emo.Net.request(MY_REQUEST_NAME, "http://www.happyshout.jp/", "GET", 1000);
+			// emo.Net.request(MY_REQUEST_NAME, "http://www.example.com/", "GET", 1000);
 			
 			// http request with METHOD, timeout and parameters
-			emo.Net.request(MY_REQUEST_NAME, "http://www.happyshout.jp/",
-					"POST", 1000, "key1", "value1", "key2", "value2");
+			//emo.Net.request(MY_REQUEST_NAME, "http://www.example.com/",
+			//		"GET", 1000, "key1", "value1", "key2", "value2");
 		}
 	}
 	
 	/*
 	 * Asynchronous http request callback
 	 */
-	function onCallback(name, response) {
+	function onCallback(name, response, err) {
 		if (name == MY_REQUEST_NAME) {
 			print(format("============ RESPONSE FROM %s ============", name));
 			print(response);
@@ -84,10 +84,9 @@ class Main {
 			// and the response equals the request name ('My HTTP Request').
 			print(format("============ ERROR RESPONSE FROM %s ============", response));
 			
-			// print the error description
-			// error type is the class name of the error
-			print(emo.Event.getLastErrorType());
-			print(emo.Event.getLastErrorMessage());
+			// print the error description and error code.
+			print(err.code);
+			print(err.message);
 			
 			text.setText("ACCESS: FAILED");
 		}

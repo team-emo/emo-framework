@@ -147,10 +147,12 @@ SQBool callSqFunction_Bool_String(HSQUIRRELVM v, const SQChar* nname, const SQCh
 }
 
 /*
- * Call Squirrel function with two strings parameter
+ * Call Squirrel function with strings parameter
  * Returns SQTrue if sq_call succeeds.
  */
-SQBool callSqFunction_Bool_TwoStrings(HSQUIRRELVM v, const SQChar* nname, const SQChar* name, const SQChar* value1, const SQChar* value2, SQBool defaultValue) {
+SQBool callSqFunction_Bool_Strings(HSQUIRRELVM v, const SQChar* nname, const SQChar* name, 
+			const SQChar* value1, const SQChar* value2,
+			const SQChar* value3, const SQChar* value4, SQBool defaultValue) {
 	SQBool result = defaultValue;
 	SQInteger top = sq_gettop(v);
 	sq_pushroottable(v);
@@ -160,8 +162,10 @@ SQBool callSqFunction_Bool_TwoStrings(HSQUIRRELVM v, const SQChar* nname, const 
 		if(SQ_SUCCEEDED(sq_get(v, -2))) {
 			sq_pushroottable(v);
 			sq_pushstring(v, value1, -1);
-			sq_pushstring(v, value2, -2);
-			result = SQ_SUCCEEDED(sq_call(v, 3, SQFalse, SQTrue));
+			sq_pushstring(v, value2, -1);
+			sq_pushstring(v, value3, -1);
+			sq_pushstring(v, value4, -1);
+			result = SQ_SUCCEEDED(sq_call(v, 5, SQFalse, SQTrue));
 		}
 	}
 	sq_settop(v,top);

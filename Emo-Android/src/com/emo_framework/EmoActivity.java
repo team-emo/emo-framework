@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -32,10 +33,10 @@ public class EmoActivity extends NativeActivity {
     public static final String ENGINE_TAG = "EmoFramework";
 
     protected String lastErrorMessage;
-    protected String lastErrorType;
+    protected String lastErrorCode;
     
     public String echo(String str) {
-        callback(ECHO, str);
+        callback(ECHO, str, "", "");
         return str;
     }
     
@@ -43,8 +44,8 @@ public class EmoActivity extends NativeActivity {
     	return lastErrorMessage;
     }
     
-    public String getLastErrorType() {
-    	return lastErrorType;
+    public String getLastErrorCode() {
+    	return lastErrorCode;
     }
 
     public void asyncHttpRequest(final String name, final int timeout, final String... params) {
@@ -106,9 +107,9 @@ public class EmoActivity extends NativeActivity {
         }
         protected void onPostExecute(String response) {
         	if (response == null) {
-        		callback(HTTP_ERROR, name);
+        		callback(HTTP_ERROR, name, lastErrorCode, lastErrorMessage);
         	} else {
-        		callback(name, response);
+        		callback(name, response, "", "");
         	}
         }
     }
@@ -121,7 +122,8 @@ public class EmoActivity extends NativeActivity {
             HttpConnectionParams.setConnectionTimeout(params, timeout);
             HttpConnectionParams.setSoTimeout(params, timeout);
             HttpResponse serverResponse = httpClient.execute(new HttpGet(url));
-            if (serverResponse.getStatusLine().getStatusCode() < 400){
+            StatusLine statusLine = serverResponse.getStatusLine();
+            if (statusLine.getStatusCode() < 400){
                 InputStream inputStream = serverResponse.getEntity().getContent();
                 InputStreamReader inputReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputReader);
@@ -133,13 +135,13 @@ public class EmoActivity extends NativeActivity {
                 response = buffer.toString();
                 inputStream.close();
             } else {
-            	this.lastErrorType    = String.valueOf(serverResponse.getStatusLine().getStatusCode());
-            	this.lastErrorMessage = serverResponse.getStatusLine().getReasonPhrase();
+            	this.lastErrorCode    = String.valueOf(statusLine.getStatusCode());
+            	this.lastErrorMessage = statusLine.getReasonPhrase();
             	return null;
             }
         } catch (IOException e) {
-        	this.lastErrorType    = "";
-        	this.lastErrorMessage = e.getMessage();
+        	this.lastErrorCode    = "-1";
+        	this.lastErrorMessage = e.getLocalizedMessage();
             return null;
         }
         return response;
@@ -151,9 +153,9 @@ public class EmoActivity extends NativeActivity {
             HttpClient httpClient = new DefaultHttpClient();
         	HttpPost httpPost = new HttpPost(url);
             httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-        	
             HttpResponse serverResponse = httpClient.execute(httpPost);
-            if (serverResponse.getStatusLine().getStatusCode() < 400){
+            StatusLine statusLine = serverResponse.getStatusLine();
+            if (statusLine.getStatusCode() < 400){
                 InputStream inputStream = serverResponse.getEntity().getContent();
                 InputStreamReader inputReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputReader);
@@ -165,14 +167,14 @@ public class EmoActivity extends NativeActivity {
                 response = buffer.toString();
                 inputStream.close();
             } else {
-            	this.lastErrorType    = String.valueOf(serverResponse.getStatusLine().getStatusCode());
-            	this.lastErrorMessage = serverResponse.getStatusLine().getReasonPhrase();
+            	this.lastErrorCode    = String.valueOf(statusLine.getStatusCode());
+            	this.lastErrorMessage = statusLine.getReasonPhrase();
             	return null;
             }
         	
         } catch (IOException e) {
-        	this.lastErrorType    = "";
-        	this.lastErrorMessage = e.getMessage();
+        	this.lastErrorCode    = "-1";
+        	this.lastErrorMessage = e.getLocalizedMessage();
         	return null;
         }
     	return response;
@@ -225,6 +227,6 @@ public class EmoActivity extends NativeActivity {
     public boolean isSimulator() {
     	return "sdk".equals(android.os.Build.MODEL) && "generic".equals(android.os.Build.DEVICE);
     }
-    
-    public native void callback(String name, String value);
+
+    public native void callback(String name, String value, String errCode, String errMsg);
 }
