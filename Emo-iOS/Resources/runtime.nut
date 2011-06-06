@@ -1212,10 +1212,10 @@ class emo.MapSprite extends emo.Sprite {
         id           = stage.createMapSprite(sprite.getId());
     }
 
-    function load(x = null, y = null, width = null, height = null) {
+    function load(x = null, y = null) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
-            status = stage.loadMapSprite(id, x, y, width, height);
+            status = stage.loadMapSprite(id, x, y, null, null);
             if (status == EMO_NO_ERROR) {
                 loaded = true;
             }
