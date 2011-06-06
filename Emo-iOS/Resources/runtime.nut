@@ -1185,8 +1185,8 @@ class emo.Line extends emo.Sprite {
 }
 
 class emo.MapSprite extends emo.Sprite {
-    function constructor(rawname, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
-        local sprite = emo.SpriteSheet(rawname, frameWidth, frameHeight, border, margin, frameIndex);
+    function constructor(rawname, frameWidth, frameHeight, border = 0, margin = 0) {
+        local sprite = emo.SpriteSheet(rawname, frameWidth, frameHeight, border, margin, 0);
         name         = sprite.getName();
         childId      = sprite.getId();
         id           = stage.createMapSprite(sprite.getId());
