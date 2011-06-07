@@ -675,7 +675,8 @@ SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v) {
         return 1;
     }
 
-    sq_pushinteger(v, engine->audio->getChannelVolume(channelIndex));
+    float volume = (-SL_MILLIBEL_MIN + engine->audio->getChannelVolume(channelIndex)) / (float)-SL_MILLIBEL_MIN;
+    sq_pushfloat(v, volume);
 
     return 1;
 }
@@ -687,11 +688,11 @@ SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
     }
 
     SQInteger channelIndex;
-    SQInteger channelVolume;
+    float channelVolume;
 
     if (sq_gettype(v, 2) != OT_NULL && sq_gettype(v, 3) != OT_NULL) {
         sq_getinteger(v, 2, &channelIndex);
-        sq_getinteger(v, 3, &channelVolume);
+        sq_getfloat(v, 3, &channelVolume);
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
         return 1;
@@ -702,7 +703,9 @@ SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
         return 1;
     }
 
-    if (!engine->audio->setChannelVolume(channelIndex, channelVolume)) {
+    SLint16 volume = (1 - channelVolume) * SL_MILLIBEL_MIN;
+
+    if (!engine->audio->setChannelVolume(channelIndex, volume)) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_STATUS);
         return 1;
     }
@@ -713,30 +716,7 @@ SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
 }
 
 SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v) {
-    if (!engine->audio->isRunning()) {
-        LOGE("emoGetAudioChannelVolume: audio engine is closed");
-        sq_pushinteger(v, 0);
-        return 1;
-    }
-
-    SQInteger channelIndex;
-
-    if (sq_gettype(v, 2) != OT_NULL) {
-        sq_getinteger(v, 2, &channelIndex);
-    } else {
-        sq_pushinteger(v, 0);
-        LOGE("emoGetAudioChannelVolume: invalid parameter type");
-        return 1;
-    }
-
-    if (channelIndex >= engine->audio->getChannelCount()) {
-        LOGE("emoGetAudioChannelVolume: invalid channel index");
-        sq_pushinteger(v, 0);
-        return 1;
-    }
-
-    sq_pushinteger(v, engine->audio->getChannelMaxVolume(channelIndex));
-
+    sq_pushfloat(v, 1.0);
     return 1;
 }
 
@@ -747,7 +727,7 @@ SQInteger emoGetAudioChannelCount(HSQUIRRELVM v) {
 }
 
 SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v) {
-    sq_pushinteger(v, SL_MILLIBEL_MIN);
+    sq_pushfloat(v, 0);
     return 1;
 }
 
