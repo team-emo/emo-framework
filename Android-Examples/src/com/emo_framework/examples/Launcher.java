@@ -25,7 +25,7 @@ public class Launcher extends ExpandableListActivity {
     
     private static final String[] groupNames = {
     	"Basic", "Animation", "Event", "On-Screen Controller",
-    	"Audio", "Database", "Physics", "Joints and Contacts", "Misc"
+    	"Audio", "Database", "Physics", "Physics with Joints", "Misc"
     };
     
     private static final String[][] childNames = {
@@ -63,7 +63,8 @@ public class Launcher extends ExpandableListActivity {
     		"HelloWorld (No Graphics)",
     		"Using Box Shape",
     		"Using Circle Shape",
-			"Using with Sensor"
+			"Using with Sensor",
+			"Using ContactListener"
     	},
 		{
 			"Using DistanceJoint",
@@ -72,8 +73,7 @@ public class Launcher extends ExpandableListActivity {
 			"Using PulleyJoint",
 			"Using GearJoint",
 			"Using LineJoint",
-			"Using WeldJoint",
-			"Using ContactListener"
+			"Using WeldJoint"
 		},
 		{
 			"Loading Screen",
@@ -116,7 +116,8 @@ public class Launcher extends ExpandableListActivity {
     		".Box2DHelloWorld",
     		".PhysicsHelloWorld",
     		".PhysicsCircleExample",
-			".PhysicsSensorExample"
+			".PhysicsSensorExample",
+			".PhysicsContactExample"
     	},
 		{
 			".PhysicsDistanceJointExample",
@@ -125,8 +126,7 @@ public class Launcher extends ExpandableListActivity {
 			".PhysicsPulleyJointExample",
 			".PhysicsGearJointExample",
 			".PhysicsLineJointExample",
-			".PhysicsWeldJointExample",
-			".PhysicsContactExample"
+			".PhysicsWeldJointExample"
 		},
 		{
     		".RotateModifierExample",
