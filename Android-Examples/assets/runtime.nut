@@ -929,7 +929,11 @@ class emo.AudioChannel {
         }
 	    return manager.load(id, file);
 	}
-    function play()  {
+    function play(reset = false)  {
+    	if (reset) {
+    		return manager.play(id);
+    	}
+    	
 		local state = getState();
 		if (state == AUDIO_CHANNEL_PAUSED) {
 			return manager.resume_play(id);

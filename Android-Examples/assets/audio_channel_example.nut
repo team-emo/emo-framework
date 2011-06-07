@@ -126,7 +126,7 @@ class Main {
 				clangButton.setZ(2);
 				tadaButton.setZ(1);
 				
-				audioCh2.play();
+				audioCh2.play(true);
 			} else if (tadaButton.contains(mevent.getX(), mevent.getY())) {
 				tadaButton.scale(2, 2);
 				
@@ -134,7 +134,7 @@ class Main {
 				clangButton.setZ(1);
 				tadaButton.setZ(2);
 				
-				audioCh3.play();
+				audioCh3.play(true);
 			}
 		} else if (mevent.getAction() == MOTION_EVENT_ACTION_UP) {
 			clangButton.scale(1, 1);
