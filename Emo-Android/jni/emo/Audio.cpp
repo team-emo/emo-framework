@@ -346,6 +346,7 @@ namespace emo {
             return false;
         }
         if (this->getChannelState(index) != SL_PLAYSTATE_STOPPED) {
+            this->setChannelState(index, SL_PLAYSTATE_STOPPED);
             this->seekChannel(index, 0, SL_SEEKMODE_FAST);
         }
         return this->setChannelState(index, SL_PLAYSTATE_PLAYING);
