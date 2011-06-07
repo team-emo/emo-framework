@@ -33,7 +33,7 @@ class Main {
 		// load sprite to the screen
         sprite.load();
 		
-		local eScale = (stage.getWindowWidth() / 320) * 2;
+		local eScale = (stage.getWindowWidth() / 320.0) * 2;
 		explosion.scale(eScale, eScale);
 		explosion.hide();
 		explosion.load();
