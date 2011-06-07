@@ -57,6 +57,7 @@ SQInteger emoGetWindowHeight(HSQUIRRELVM v);
 SQInteger emoDrawableShow(HSQUIRRELVM v);
 SQInteger emoDrawableHide(HSQUIRRELVM v);
 
+SQInteger emoSetStageColor(HSQUIRRELVM v);
 SQInteger emoDrawableColorRed(HSQUIRRELVM v);
 SQInteger emoDrawableColorGreen(HSQUIRRELVM v);
 SQInteger emoDrawableColorBlue(HSQUIRRELVM v);

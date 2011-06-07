@@ -68,6 +68,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setWidth",       emoDrawableSetWidth);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setHeight",      emoDrawableSetHeight);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setSize",        emoDrawableSetSize);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "bgcolor",        emoSetStageColor);
     
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
@@ -1038,6 +1039,34 @@ SQInteger emoSetStageSize(HSQUIRRELVM v) {
     engine->stage->width  = width;
     engine->stage->height = height;
     engine->stage->dirty = true;
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoSetStageColor(HSQUIRRELVM v) {
+    float red   = engine->stage->color[0];
+    float green = engine->stage->color[1];
+    float blue  = engine->stage->color[2];
+    float alpha = engine->stage->color[3];
+
+    if (sq_gettype(v, 2) != OT_NULL) {
+        sq_getfloat(v, 2, &red);
+    }
+    if (sq_gettype(v, 3) != OT_NULL) {
+        sq_getfloat(v, 3, &green);
+    }
+    if (sq_gettype(v, 4) != OT_NULL) {
+        sq_getfloat(v, 4, &blue);
+    }
+    if (sq_gettype(v, 5) != OT_NULL) {
+        sq_getfloat(v, 5, &alpha);
+    }
+
+    engine->stage->color[0] = red;
+    engine->stage->color[1] = green;
+    engine->stage->color[2] = blue;
+    engine->stage->color[3] = alpha;
 
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;

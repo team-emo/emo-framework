@@ -64,7 +64,8 @@ public class Launcher extends ExpandableListActivity {
     		"Using Box Shape",
     		"Using Circle Shape",
 			"Using with Sensor",
-			"Using ContactListener"
+			"Using ContactListener",
+			"Dynamic Loading"
     	},
 		{
 			"Using DistanceJoint",
@@ -117,7 +118,8 @@ public class Launcher extends ExpandableListActivity {
     		".PhysicsHelloWorld",
     		".PhysicsCircleExample",
 			".PhysicsSensorExample",
-			".PhysicsContactExample"
+			".PhysicsContactExample",
+			".PhysicsAddExample"
     	},
 		{
 			".PhysicsDistanceJointExample",

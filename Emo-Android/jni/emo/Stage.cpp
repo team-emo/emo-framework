@@ -33,15 +33,6 @@ extern emo::Engine* engine;
 
 namespace emo {
     Stage::Stage() {
-
-    }
-
-    Stage::~Stage() {
-
-    }
-
-    bool Stage::onLoad() {
-
         this->loaded    = false;
         this->dirty = true;
 
@@ -69,6 +60,17 @@ namespace emo {
         this->vbo[0] = 0;
         this->vbo[1] = 0;
 
+        this->color[0] = 0;
+        this->color[1] = 0;
+        this->color[2] = 0;
+        this->color[3] = 1;
+    }
+
+    Stage::~Stage() {
+
+    }
+
+    bool Stage::onLoad() {
         clearGLErrors("Stage::onLoad");
 
         glGenBuffers(2, this->vbo);
@@ -98,7 +100,7 @@ namespace emo {
             this->dirty = false;
         }
 
-        glClearColor(0, 0, 0, 1);
+        glClearColor(this->color[0], this->color[1], this->color[2], this->color[3]);
         glClear(GL_COLOR_BUFFER_BIT);
     }
 

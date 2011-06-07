@@ -49,6 +49,7 @@ namespace emo {
         int viewport_width;
         int viewport_height;
         GLuint vbo[2];
+        float color[4];
     protected:
         bool loaded;
 

@@ -176,6 +176,17 @@
             <meta-data android:name="emo.script.main"
                        android:value="physics_sensor.nut" />
         </activity-alias>
+
+        <activity-alias android:name=".PhysicsAddExample"
+            android:targetActivity="com.emo_framework.EmoActivity"
+            android:label="@string/sprite_example_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="physics_add_example.nut" />
+        </activity-alias>
         
         <activity-alias android:name=".MotionEventExample"
             android:targetActivity="com.emo_framework.EmoActivity"
