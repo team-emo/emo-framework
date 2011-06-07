@@ -41,6 +41,7 @@ class Main {
 	function onMotionEvent(mevent) {
 		// pointer id is a unique id of the pointer.
 		local id = mevent.getPointerId();
+		local action = mevent.getAction();
 
 		if (!rectangles.rawin(id)) {
 			// if new pointer comes in, create new rectangle
@@ -53,9 +54,9 @@ class Main {
 			// add rectangle to the hash table.
 			rectangles[id] <- rectangle;
 		}
-		if (mevent.getAction() == MOTION_EVENT_ACTION_UP) {
+		if (action == MOTION_EVENT_ACTION_UP || action == MOTION_EVENT_ACTION_POINTER_UP) {
 			print("UP: " + id);
-		} else if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) { 
+		} else if (action == MOTION_EVENT_ACTION_DOWN || action == MOTION_EVENT_ACTION_POINTER_DOWN) { 
 			print("DOWN: " + id);
 		}
 		handleTouch(rectangles[id], mevent);
@@ -65,12 +66,15 @@ class Main {
 	 * move and remove the rectangle
 	 */
 	function handleTouch(rectangle, mevent) {
-		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+		local action = mevent.getAction();
+		if (action == MOTION_EVENT_ACTION_DOWN || action == MOTION_EVENT_ACTION_POINTER_DOWN) {
 			rectangle.moveCenter(mevent.getX(), mevent.getY());
-		} else if (mevent.getAction() == MOTION_EVENT_ACTION_MOVE) {
+		} else if (action == MOTION_EVENT_ACTION_MOVE) {
 			rectangle.moveCenter(mevent.getX(), mevent.getY());
-		} else if (mevent.getAction() == MOTION_EVENT_ACTION_UP ||
-				   mevent.getAction() == MOTION_EVENT_ACTION_CANCEL) {
+		} else if (action == MOTION_EVENT_ACTION_UP ||
+				   action == MOTION_EVENT_ACTION_CANCEL ||
+				   action == MOTION_EVENT_ACTION_OUTSIDE ||
+				   action == MOTION_EVENT_ACTION_POINTER_UP) {
 			delete rectangles[mevent.getPointerId()];
 			rectangle.remove();
 		}

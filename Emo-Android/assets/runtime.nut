@@ -246,6 +246,26 @@ class emo.Vec2 {
 	}
 }
 
+class emo.TileIndex {
+	row    = null;
+	column = null;
+	
+	function constructor(_row, _column) {
+		row = _row;
+		column = _column;
+	}
+	
+	function set(_row, _column) {
+		row = _row;
+		column = _column;
+	}
+	
+	function fromArray(arg) {
+		if (arg == null || arg.len() < 2) return null;
+		return emo.TileIndex(arg[0], arg[1]);
+	}
+}
+
 function emo::Runtime::uptime() {
 	return EMO_RUNTIME_STOPWATCH.elapsed();
 }
@@ -1185,17 +1205,17 @@ class emo.Line extends emo.Sprite {
 }
 
 class emo.MapSprite extends emo.Sprite {
-    function constructor(rawname, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
-        local sprite = emo.SpriteSheet(rawname, frameWidth, frameHeight, border, margin, frameIndex);
+    function constructor(rawname, frameWidth, frameHeight, border = 0, margin = 0) {
+        local sprite = emo.SpriteSheet(rawname, frameWidth, frameHeight, border, margin, 0);
         name         = sprite.getName();
         childId      = sprite.getId();
         id           = stage.createMapSprite(sprite.getId());
     }
 
-    function load(x = null, y = null, width = null, height = null) {
+    function load(x = null, y = null) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
-            status = stage.loadMapSprite(id, x, y, width, height);
+            status = stage.loadMapSprite(id, x, y, null, null);
             if (status == EMO_NO_ERROR) {
                 loaded = true;
             }
@@ -1227,7 +1247,7 @@ class emo.MapSprite extends emo.Sprite {
     }
 
     function getTileIndexAtCoord(x, y) {
-        return emo.Vec2.fromArray(stage.getTileIndexAtCoord(id, x, y));
+        return emo.TileIndex.fromArray(stage.getTileIndexAtCoord(id, x, y));
     }
 
     function getTilePositionAtCoord(x, y) {

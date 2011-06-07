@@ -128,7 +128,7 @@ class Main {
 		//local tileIndex = sprite.getTileIndexAtCoord(x, y);
 		//print(format("change %dx%d tile %d -> %d",
 		//	tileIndex.x, tileIndex.y, sprite.getTileAt(tileIndex.x, tileIndex.y), 1));
-		//sprite.setTileAt(tileIndex.x, tileIndex.y, 1);
+		//sprite.setTileAt(tileIndex.row, tileIndex.column, 1);
 	}
 }
 
