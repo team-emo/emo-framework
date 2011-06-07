@@ -73,10 +73,11 @@
 	// Physics
 	[examples addObject: [NSArray arrayWithObjects:
 						  [NSArray arrayWithObjects:@"HelloWorld (No Graphics)", @"box2d_helloworld.nut", nil],
-						  [NSArray arrayWithObjects:@"Using Box Shape", @"physics_helloworld.nut", nil],
+						  [NSArray arrayWithObjects:@"Using Box Shape",    @"physics_helloworld.nut", nil],
 						  [NSArray arrayWithObjects:@"Using Circle Shape", @"physics_circle.nut", nil],
-						  [NSArray arrayWithObjects:@"Using with Sensor", @"physics_sensor.nut", nil],
+						  [NSArray arrayWithObjects:@"Using with Sensor",  @"physics_sensor.nut", nil],
 						  [NSArray arrayWithObjects:@"Using ContactListener",  @"physics_contact.nut", nil],
+						  [NSArray arrayWithObjects:@"Dynamic Loading",     @"physics_add_example.nut", nil],
 						  nil]];
 	
 	// Physics with Joints

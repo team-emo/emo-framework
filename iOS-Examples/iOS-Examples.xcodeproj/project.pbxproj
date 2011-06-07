@@ -143,6 +143,7 @@
 		F97C156F13722E1A00551C94 /* modifier_rotate_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */; };
 		F985282213875C2F007DD0CF /* physics_helloworld.nut in Resources */ = {isa = PBXBuildFile; fileRef = F985282113875C2F007DD0CF /* physics_helloworld.nut */; };
 		F9856D8E1375576B00F6C00F /* tiles_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9856D8D1375576B00F6C00F /* tiles_example.nut */; };
+		F98DA7CB139E5F8D00D3835A /* physics_add_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F98DA7CA139E5F8300D3835A /* physics_add_example.nut */; };
 		F993C36B1390ECE9003E18CA /* ball@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F993C3691390ECE9003E18CA /* ball@2x.png */; };
 		F993C36C1390ECE9003E18CA /* tv@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F993C36A1390ECE9003E18CA /* tv@2x.png */; };
 		F99D44841391DF28006622F8 /* physics_distancejoint.nut in Resources */ = {isa = PBXBuildFile; fileRef = F99D44831391DF1E006622F8 /* physics_distancejoint.nut */; };
@@ -393,6 +394,7 @@
 		F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = modifier_rotate_example.nut; path = Resources/modifier_rotate_example.nut; sourceTree = "<group>"; };
 		F985282113875C2F007DD0CF /* physics_helloworld.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_helloworld.nut; path = Resources/physics_helloworld.nut; sourceTree = "<group>"; };
 		F9856D8D1375576B00F6C00F /* tiles_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = tiles_example.nut; path = Resources/tiles_example.nut; sourceTree = "<group>"; };
+		F98DA7CA139E5F8300D3835A /* physics_add_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_add_example.nut; path = Resources/physics_add_example.nut; sourceTree = "<group>"; };
 		F98EABC7138784D800902E31 /* physics_circle.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_circle.nut; path = Resources/physics_circle.nut; sourceTree = "<group>"; };
 		F993C3691390ECE9003E18CA /* ball@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball@2x.png"; sourceTree = "<group>"; };
 		F993C36A1390ECE9003E18CA /* tv@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tv@2x.png"; sourceTree = "<group>"; };
@@ -504,6 +506,7 @@
 				F99D44831391DF1E006622F8 /* physics_distancejoint.nut */,
 				F97715361392FF2000417119 /* physics_prismaticjoint.nut */,
 				F9D2182F13947AAB00463396 /* physics_contact.nut */,
+				F98DA7CA139E5F8300D3835A /* physics_add_example.nut */,
 				F9D43A3D1388E57B0069C3C1 /* motion_event.nut */,
 				F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */,
 				F9D43A3E1388E58C0069C3C1 /* sensor_event.nut */,
@@ -971,6 +974,7 @@
 				F9DAAC321396226D005DA4C1 /* audio_channel_example.nut in Resources */,
 				F9102FDC13973AB300BC7404 /* http_access_example.nut in Resources */,
 				F9F99BDA139E09EB0059B4C8 /* audio_volume_example.nut in Resources */,
+				F98DA7CB139E5F8D00D3835A /* physics_add_example.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
