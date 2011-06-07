@@ -37,6 +37,11 @@
     if (self != nil) {
 		loaded = FALSE;
 		dirty = TRUE;
+		
+		color[0] = 0;
+		color[1] = 0;
+		color[2] = 0;
+		color[3] = 1;
     }
     return self;
 }
@@ -99,7 +104,7 @@
         dirty = FALSE;
     }
 	
-    glClearColor(0, 0, 0, 1);
+    glClearColor(color[0], color[1], color[2], color[3]);
     glClear(GL_COLOR_BUFFER_BIT);
 	return TRUE;
 }
@@ -117,6 +122,12 @@
 	viewport_height = _height;
 	
 	dirty = TRUE;
+}
+-(void)setColor:(NSInteger)index withValue:(float)value {
+	color[index] = value;
+}
+-(float)getColor:(NSInteger)index {
+	return color[index];
 }
 -(void)invertSize {
 	[self setSize:height height:width];

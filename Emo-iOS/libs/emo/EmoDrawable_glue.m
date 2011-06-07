@@ -68,6 +68,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setWidth",       emoDrawableSetWidth);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setHeight",      emoDrawableSetHeight);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setSize",        emoDrawableSetSize);
+    registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "bgcolor",        emoSetStageColor);
 	
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "move",           emoDrawableMove);
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "scale",          emoDrawableScale);
@@ -1043,7 +1044,33 @@ SQInteger emoSetStageSize(HSQUIRRELVM v) {
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }
-
+SQInteger emoSetStageColor(HSQUIRRELVM v) {
+    float red   = [engine.stage getColor:0];
+    float green = [engine.stage getColor:1];
+    float blue  = [engine.stage getColor:2];
+    float alpha = [engine.stage getColor:3];
+	
+    if (sq_gettype(v, 2) != OT_NULL) {
+        sq_getfloat(v, 2, &red);
+    }
+    if (sq_gettype(v, 3) != OT_NULL) {
+        sq_getfloat(v, 3, &green);
+    }
+    if (sq_gettype(v, 4) != OT_NULL) {
+        sq_getfloat(v, 4, &blue);
+    }
+    if (sq_gettype(v, 5) != OT_NULL) {
+        sq_getfloat(v, 5, &alpha);
+    }
+	
+    [engine.stage setColor:0 withValue:red];
+    [engine.stage setColor:1 withValue:green];
+    [engine.stage setColor:2 withValue:blue];
+    [engine.stage setColor:3 withValue:alpha];
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
 SQInteger emoGetWindowWidth(HSQUIRRELVM v) {
     sq_pushinteger(v, engine.stage.width);
     return 1;

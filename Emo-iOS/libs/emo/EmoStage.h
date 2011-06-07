@@ -36,6 +36,7 @@
 	
 	short indices[4];
 	float positions[12];
+	float color[4];
 	
 	GLint width;
 	GLint height;
@@ -51,6 +52,8 @@
 -(GLuint)getPositionPointer;
 -(GLuint)getIndicePointer;
 
+-(void)setColor:(NSInteger)index withValue:(float)value;
+-(float)getColor:(NSInteger)index;
 -(void)setSize:(GLint)_width height:(GLint)_height;
 -(BOOL)loadBuffer;
 -(BOOL)onDrawFrame:(NSTimeInterval)dt;

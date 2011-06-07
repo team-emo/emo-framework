@@ -56,6 +56,7 @@ SQInteger emoDrawableColorGreen(HSQUIRRELVM v);
 SQInteger emoDrawableColorBlue(HSQUIRRELVM v);
 SQInteger emoDrawableColorAlpha(HSQUIRRELVM v);
 
+SQInteger emoSetStageColor(HSQUIRRELVM v);
 SQInteger emoSetStageSize(HSQUIRRELVM v);
 SQInteger emoSetViewport(HSQUIRRELVM v);
 SQInteger emoGetWindowWidth(HSQUIRRELVM v);
