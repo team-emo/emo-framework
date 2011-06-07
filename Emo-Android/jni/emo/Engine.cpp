@@ -46,6 +46,9 @@ namespace emo {
         this->finishing = false;
         this->sortOrderDirty = true;
         this->enableOnUpdate = false;
+        this->sensorManager = NULL;
+        this->sensorEventQueue = NULL;
+
     }
 
     Engine::~Engine() {
@@ -452,14 +455,14 @@ namespace emo {
     int32_t Engine::onSensorEvent(ASensorEvent* event) {
         if (!this->loaded) return 0;
         if (!this->focused) return 0;
-
         this->updateUptime();
-        switch(event->sensor) {
+
+        switch(event->type) {
         case ASENSOR_TYPE_ACCELEROMETER:
-            this->accelerometerEventParamCache[0] = event->sensor;
-            this->accelerometerEventParamCache[1] = event->acceleration.x;
-            this->accelerometerEventParamCache[2] = event->acceleration.y;
-            this->accelerometerEventParamCache[3] = event->acceleration.z;
+            this->accelerometerEventParamCache[0] = event->type;
+            this->accelerometerEventParamCache[1] = event->acceleration.x / -ASENSOR_STANDARD_GRAVITY;
+            this->accelerometerEventParamCache[2] = event->acceleration.y / -ASENSOR_STANDARD_GRAVITY;
+            this->accelerometerEventParamCache[3] = event->acceleration.z / -ASENSOR_STANDARD_GRAVITY;
             if (callSqFunction_Bool_Floats(this->sqvm, EMO_NAMESPACE, EMO_FUNC_SENSOREVENT, this->accelerometerEventParamCache, ACCELEROMETER_EVENT_PARAMS_SIZE, false)) {
                 return 1;
             }
@@ -744,15 +747,6 @@ namespace emo {
             	LOGI("Could not create sensor manager");
             	return;
             }
-
-            // Creates a new sensor event queue
-            this->sensorEventQueue = ASensorManager_createEventQueue(
-                this->sensorManager, this->app->looper, LOOPER_ID_USER, NULL, NULL);
-
-            if (this->sensorEventQueue == NULL) {
-            	LOGI("Could not create sensor event queue");
-            	return;
-            }
         }
 
         switch(value) {
@@ -776,6 +770,17 @@ namespace emo {
             this->proximitySensor = ASensorManager_getDefaultSensor(
                 this->sensorManager, ASENSOR_TYPE_PROXIMITY);
             break;
+        }
+
+        if (this->sensorEventQueue == NULL) {
+        	// Creates a new sensor event queue
+        	this->sensorEventQueue = ASensorManager_createEventQueue(
+        			this->sensorManager, this->app->looper, LOOPER_ID_USER, NULL, NULL);
+
+        	if (this->sensorEventQueue == NULL) {
+        		LOGI("Could not create sensor event queue");
+        		return;
+        	}
         }
     }
 
