@@ -27,7 +27,7 @@ class Main {
 		" !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
 		16, 16, 2, 1);
 	
-	volumeLevel = 10;
+	volumeLevel = 100;
 
 	/*
 	 * Called when this class is loaded
@@ -118,10 +118,9 @@ class Main {
 			if (audioCh1.getVolume() > audioCh1.getMinVolume()) {
 				volumeLevel--;
 			} else {
-				volumeLevel = 10;
+				volumeLevel = 100;
 			}
-			local delta = (audioCh1.getMaxVolume() - audioCh1.getMinVolume()) / 10.0
-			audioCh1.setVolume(audioCh1.getMaxVolume() - ((10 - volumeLevel) * delta));
+			audioCh1.setVolume(audioCh1.getMaxVolume() / 100.0 * volumeLevel);
 			volText.setText(format("VOL: %4.2f", audioCh1.getVolume()));
 		}
 	}
