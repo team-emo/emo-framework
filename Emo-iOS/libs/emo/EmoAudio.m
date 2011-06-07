@@ -168,7 +168,7 @@ extern EmoEngine* engine;
         return FALSE;
     }
 	// fix offset because offset is millisecond basis
-	alSourcef(sources[index], AL_SEC_OFFSET, offset / 1000.0f);
+	alSourcef(sources[index], AL_SEC_OFFSET, offset * 1000.0f);
 	
 	return TRUE;
 }
