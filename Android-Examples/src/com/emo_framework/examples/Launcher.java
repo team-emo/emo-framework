@@ -53,7 +53,8 @@ public class Launcher extends ExpandableListActivity {
 		},
 		{
 			"Playing with Sound",
-			"Multiple Channels"
+			"Multiple Channels",
+			"Changing Volume"
 		},
 		{
 			"Save and Restore"
@@ -105,7 +106,8 @@ public class Launcher extends ExpandableListActivity {
 		},
 		{
 			".AudioExample",
-			".AudioChannelExample"
+			".AudioChannelExample",
+			".AudioVolumeExample"
 		},
 		{
 			".DatabaseExample"

@@ -84,7 +84,7 @@ function modifierCallback(obj, modifier, eventType) {
  */
 class Main {
 	text = emo.TextSprite("font_16x16.png",
-		" !\"c*%#'{}@+,=./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+		" !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
 		16, 16, 2, 1);
 
 	/*

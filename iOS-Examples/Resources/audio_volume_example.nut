@@ -14,17 +14,17 @@ class Main {
 
 	// 16x16 text sprite with 2 pixel border and 1 pixel margin
     text = emo.TextSprite("font_16x16.png",
-		" !\"c*%#'{}@+,=./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+		" !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
 		16, 16, 2, 1);
 	
     volText = emo.TextSprite("font_16x16.png",
-		" !\"c*%#'{}@+,=./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+		" !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
 		16, 16, 2, 1);
     maxText = emo.TextSprite("font_16x16.png",
-		" !\"c*%#'{}@+,=./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+		" !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
 		16, 16, 2, 1);
     minText = emo.TextSprite("font_16x16.png",
-		" !\"c*%#'{}@+,=./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+		" !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
 		16, 16, 2, 1);
 	
 	volumeLevel = 10;
@@ -120,7 +120,8 @@ class Main {
 			} else {
 				volumeLevel = 10;
 			}
-			audioCh1.setVolume(audioCh1.getMaxVolume() * (volumeLevel / 10.0));
+			local delta = (audioCh1.getMaxVolume() - audioCh1.getMinVolume()) / 10.0
+			audioCh1.setVolume(audioCh1.getMaxVolume() - ((10 - volumeLevel) * delta));
 			volText.setText(format("VOL: %4.2f", audioCh1.getVolume()));
 		}
 	}
