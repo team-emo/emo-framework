@@ -12,7 +12,8 @@ const WALL_WIDTH = 10;
 const NUMBER_OF_BALLS = 30;
 
 local nextBallIndex = 0;
-local ballFixture = null;
+local ballFixture   = null;
+local ballDef       = null;
 
 class Main {
 
@@ -28,6 +29,10 @@ class Main {
 		ballFixture.density  = 1.0;
 		ballFixture.friction = 0.3;
 		ballFixture.restitution = 0.2;
+		
+		// the balls won't sleep
+		ballDef = emo.physics.BodyDef();
+		ballDef.allowSleep = false;
 		
 		for (local i = 0; i < NUMBER_OF_BALLS; i++) {
 			local sprite = emo.Sprite("ball.png");
@@ -160,7 +165,7 @@ class Main {
 		}
 			
 		sprites[i].moveCenter(x, y);
-		physics.createDynamicCircleSprite(world, sprites[i], sprites[i].getWidth() * 0.5, ballFixture);
+		physics.createDynamicCircleSprite(world, sprites[i], sprites[i].getWidth() * 0.5, ballFixture, ballDef);
 		sprites[i].show();
 			
 		nextBallIndex++;

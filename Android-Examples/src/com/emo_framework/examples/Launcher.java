@@ -65,7 +65,7 @@ public class Launcher extends ExpandableListActivity {
     		"Using Circle Shape",
 			"Using with Sensor",
 			"Using ContactListener",
-			"Dynamic Loading"
+			"Adding Physics"
     	},
 		{
 			"Using DistanceJoint",
