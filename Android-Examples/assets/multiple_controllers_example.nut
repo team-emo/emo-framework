@@ -26,7 +26,7 @@ class Main {
 			// that makes the stage size by half.
 			// This examples shows how to display similar-scale images
 			// on Retina and non-Retina display.
-			stage.setContentScale(stage.getWindowWidth() / 320);
+			stage.setContentScale(stage.getWindowWidth() / 320.0);
 		}
 		
 		// move sprite to the center of the screen
