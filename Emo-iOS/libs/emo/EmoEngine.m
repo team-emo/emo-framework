@@ -117,11 +117,11 @@ NSString* data2ns(NSData* data) {
 	
 	// engine startup time
 	startTime = [[NSDate date] retain];
-	lastOnDrawInterval = [self uptime];
-	lastOnDrawDrawablesInterval = [self uptime];
 	
 	onDrawFrameInterval = 0;
 	onDrawDrawablesInterval = 0;
+	lastOnDrawInterval = [self uptime];
+	lastOnDrawDrawablesInterval = [self uptime];
 	
 	frameCount         = 0;
 	onFpsInterval      = 0;
@@ -216,6 +216,9 @@ NSString* data2ns(NSData* data) {
 	[stage loadBuffer];
 	
 	isFrameInitialized = TRUE;
+	
+	lastOnDrawInterval = [self uptime];
+	lastOnDrawDrawablesInterval = [self uptime];
 	
 	return TRUE;
 }

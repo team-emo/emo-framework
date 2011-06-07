@@ -230,6 +230,10 @@ namespace emo {
         }
         this->onInitGLSurface();
 
+        this->updateUptime();
+        this->lastOnDrawInterval  = this->uptime;
+        this->lastOnDrawDrawablesInterval = this->uptime;
+
         return 0;
     }
 

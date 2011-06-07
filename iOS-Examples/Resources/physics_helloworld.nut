@@ -78,7 +78,7 @@ class Main {
      */
     function onDrawFrame(dt) {
 		// step the world (second)
-		world.step(1.0 / FPS, 6, 2);
+		world.step(dt / 1000.0, 6, 2);
 		world.clearForces();
 	}
 	
