@@ -929,11 +929,7 @@ class emo.AudioChannel {
         }
 	    return manager.load(id, file);
 	}
-    function play(reset = false)  {
-    	if (reset) {
-    		return manager.play(id);
-    	}
-    	
+    function play()  {
 		local state = getState();
 		if (state == AUDIO_CHANNEL_PAUSED) {
 			return manager.resume_play(id);
@@ -1286,6 +1282,7 @@ class emo.TextSprite extends emo.MapSprite {
 	}
 	
 	function setText(text) {
+		text = text.tostring();
 		indexes.clear();
 		for (local i = 0; i < text.len(); i++) {
 			local idx = textbase.find(text.slice(i, i+1));
