@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Emo Examples</string>
-    <string name="shape_example_name">Drawing Shapes</string>
-    <string name="sprite_example_name">Drawing Sprites</string>
-    <string name="sprite_remove_example_name">Removing a Sprite</string>
 </resources>
