@@ -12,7 +12,7 @@ const FPS = 60.0;
 const WALL_WIDTH = 10;
 
 class Main {
-	gear = emo.Sprite("gear.png");
+	gear = emo.Sprite("gear@2x.png");
 	axis = emo.Rectangle();
 	
 	/*
@@ -78,7 +78,7 @@ class Main {
 		world.clearForces();
 		
 		if (gear.getX() + (gear.getWidth() * 0.5) <= axis.getX()) {
-			gear.getPhysicsBody().setLinearVelocity(emo.Vec2(10, 0));
+			gear.getPhysicsBody().setLinearVelocity(emo.Vec2(5, 0));
 		}
 	}
 	
