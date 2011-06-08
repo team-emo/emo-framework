@@ -151,6 +151,7 @@
 		F9B14CF8138C858A004A8FD8 /* font_16x16.png in Resources */ = {isa = PBXBuildFile; fileRef = F9B14CF7138C858A004A8FD8 /* font_16x16.png */; };
 		F9B14D0C138C865A004A8FD8 /* textsprite_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9B14CF0138C854B004A8FD8 /* textsprite_example.nut */; };
 		F9BCF78C1393783400F19510 /* audio_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9BCF784139376FD00F19510 /* audio_example.nut */; };
+		F9C39247139F845C007D6476 /* physics_linejoint.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9C39246139F8453007D6476 /* physics_linejoint.nut */; };
 		F9C70739139F556A007D5506 /* physics_gearjoint.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9C70738139F555F007D5506 /* physics_gearjoint.nut */; };
 		F9C707C1139F7A96007D5506 /* physics_weldjoint.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9C707C0139F7A89007D5506 /* physics_weldjoint.nut */; };
 		F9CAE01613888259002278F7 /* ball.png in Resources */ = {isa = PBXBuildFile; fileRef = F9CAE01513888259002278F7 /* ball.png */; };
@@ -406,6 +407,7 @@
 		F9B14CF0138C854B004A8FD8 /* textsprite_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = textsprite_example.nut; path = Resources/textsprite_example.nut; sourceTree = "<group>"; };
 		F9B14CF7138C858A004A8FD8 /* font_16x16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = font_16x16.png; sourceTree = "<group>"; };
 		F9BCF784139376FD00F19510 /* audio_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = audio_example.nut; path = Resources/audio_example.nut; sourceTree = "<group>"; };
+		F9C39246139F8453007D6476 /* physics_linejoint.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_linejoint.nut; path = Resources/physics_linejoint.nut; sourceTree = "<group>"; };
 		F9C70738139F555F007D5506 /* physics_gearjoint.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_gearjoint.nut; path = Resources/physics_gearjoint.nut; sourceTree = "<group>"; };
 		F9C707C0139F7A89007D5506 /* physics_weldjoint.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_weldjoint.nut; path = Resources/physics_weldjoint.nut; sourceTree = "<group>"; };
 		F9CAE01513888259002278F7 /* ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ball.png; sourceTree = "<group>"; };
@@ -514,6 +516,7 @@
 				F9396B25139F1A7D00D968C1 /* physics_pulleyjoint.nut */,
 				F9C70738139F555F007D5506 /* physics_gearjoint.nut */,
 				F9C707C0139F7A89007D5506 /* physics_weldjoint.nut */,
+				F9C39246139F8453007D6476 /* physics_linejoint.nut */,
 				F9D2182F13947AAB00463396 /* physics_contact.nut */,
 				F98DA7CA139E5F8300D3835A /* physics_add_example.nut */,
 				F9D43A3D1388E57B0069C3C1 /* motion_event.nut */,
@@ -987,6 +990,7 @@
 				F9396B26139F1A8700D968C1 /* physics_pulleyjoint.nut in Resources */,
 				F9C70739139F556A007D5506 /* physics_gearjoint.nut in Resources */,
 				F9C707C1139F7A96007D5506 /* physics_weldjoint.nut in Resources */,
+				F9C39247139F845C007D6476 /* physics_linejoint.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
