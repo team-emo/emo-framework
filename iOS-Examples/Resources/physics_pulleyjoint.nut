@@ -9,7 +9,6 @@ local physics = emo.Physics();
 local world   = emo.physics.World(emo.Vec2(0, 10), true);
 
 const FPS = 60.0;
-const WALL_WIDTH = 10;
 
 class Main {
 
