@@ -38,6 +38,7 @@
 		F92B7219136FD39100DD803C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B7218136FD39100DD803C /* libz.dylib */; };
 		F92B7253136FD42F00DD803C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B7252136FD42F00DD803C /* QuartzCore.framework */; };
 		F92BBE991373E53000796475 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F92BBE981373E53000796475 /* libsqlite3.dylib */; };
+		F9396B26139F1A8700D968C1 /* physics_pulleyjoint.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9396B25139F1A7D00D968C1 /* physics_pulleyjoint.nut */; };
 		F93A8F5C1387B3EE0032FE66 /* mapsprite_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */; };
 		F93DA7AA1395CC840068C514 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F93DA7A91395CC840068C514 /* Default.png */; };
 		F93DA8261395D6750068C514 /* modifier_event.nut in Resources */ = {isa = PBXBuildFile; fileRef = F93DA7AB1395CCC10068C514 /* modifier_event.nut */; };
@@ -204,6 +205,7 @@
 		F92B7218136FD39100DD803C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F92B7252136FD42F00DD803C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F92BBE981373E53000796475 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		F9396B25139F1A7D00D968C1 /* physics_pulleyjoint.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_pulleyjoint.nut; path = Resources/physics_pulleyjoint.nut; sourceTree = "<group>"; };
 		F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mapsprite_example.nut; path = Resources/mapsprite_example.nut; sourceTree = "<group>"; };
 		F93DA7A91395CC840068C514 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		F93DA7AB1395CCC10068C514 /* modifier_event.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = modifier_event.nut; path = Resources/modifier_event.nut; sourceTree = "<group>"; };
@@ -505,6 +507,7 @@
 				F9CFE9B91391D28D00DDD12F /* physics_revolutejoint.nut */,
 				F99D44831391DF1E006622F8 /* physics_distancejoint.nut */,
 				F97715361392FF2000417119 /* physics_prismaticjoint.nut */,
+				F9396B25139F1A7D00D968C1 /* physics_pulleyjoint.nut */,
 				F9D2182F13947AAB00463396 /* physics_contact.nut */,
 				F98DA7CA139E5F8300D3835A /* physics_add_example.nut */,
 				F9D43A3D1388E57B0069C3C1 /* motion_event.nut */,
@@ -975,6 +978,7 @@
 				F9102FDC13973AB300BC7404 /* http_access_example.nut in Resources */,
 				F9F99BDA139E09EB0059B4C8 /* audio_volume_example.nut in Resources */,
 				F98DA7CB139E5F8D00D3835A /* physics_add_example.nut in Resources */,
+				F9396B26139F1A8700D968C1 /* physics_pulleyjoint.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
