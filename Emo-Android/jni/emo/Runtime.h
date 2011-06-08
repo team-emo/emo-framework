@@ -60,6 +60,7 @@ SQInteger emoRuntimeIsSimulator(HSQUIRRELVM v);
 SQInteger emoRuntimeStopwatchStart(HSQUIRRELVM v);
 SQInteger emoRuntimeStopwatchStop(HSQUIRRELVM v);
 SQInteger emoRuntimeStopwatchElapsed(HSQUIRRELVM v);
+SQInteger emoRuntimeSetLogLevel(HSQUIRRELVM v);
 
 SQInteger emoRegisterSensors(HSQUIRRELVM v);
 SQInteger emoEnableSensor(HSQUIRRELVM v);

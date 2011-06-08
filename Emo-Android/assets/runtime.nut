@@ -18,8 +18,8 @@ const HTTP_ERROR      = "HTTP_ERROR";
 const EMO_NO_ERROR    = 0x0000;
 const EMO_ERROR       = 0x0001;
 const LOG_INFO        = 0x0002;
-const LOG_ERROR       = 0x0003;
-const LOG_WARN        = 0x0004;
+const LOG_WARN        = 0x0003;
+const LOG_ERROR       = 0x0004;
 
 const ERR_SCRIPT_LOAD           = 0x0100;
 const ERR_SCRIPT_OPEN           = 0x0101;

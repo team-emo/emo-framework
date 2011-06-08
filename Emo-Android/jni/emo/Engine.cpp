@@ -39,6 +39,8 @@ namespace emo {
     }
 
     Engine::Engine() {
+    	this->logLevel = LOG_INFO;
+
         this->focused = false;
         this->loaded  = false;
         this->loadedCalled = false;
