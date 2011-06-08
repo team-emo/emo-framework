@@ -77,6 +77,8 @@ NSString* data2ns(NSData* data);
 	NSTimeInterval stopwatchElapsedTime;
 	
 	NSInteger currentOrientation;
+	
+	NSInteger logLevel;
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readwrite) int  lastError;
@@ -91,6 +93,7 @@ NSString* data2ns(NSData* data);
 @property (readwrite) BOOL sortOrderDirty;
 @property (readonly) EmoDatabase* database;
 @property (readwrite) NSInteger currentOrientation;
+@property (readwrite) NSInteger logLevel;
 
 - (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 - (void)registerAccelerometerSensor:(BOOL)enable;

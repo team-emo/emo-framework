@@ -24,7 +24,8 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
+//
+#import "EmoEngine.h"
 #import "EmoEngine_glue.h"
 #import "Constants.h"
 #import "png.h"
@@ -32,19 +33,27 @@
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
 
+extern EmoEngine* engine;
+
 /*
  * Logging
  */
 void LOGI(const char* msg) {
-	NSLog(@"%s INFO %s", EMO_LOG_TAG, msg);
+	if (engine.logLevel <= LOG_INFO) {
+		NSLog(@"%s INFO %s", EMO_LOG_TAG, msg);
+	}
 }
 
 void LOGE(const char* msg) {
-	NSLog(@"%s ERROR %s", EMO_LOG_TAG, msg);
+	if (engine.logLevel <= LOG_ERROR) {
+		NSLog(@"%s ERROR %s", EMO_LOG_TAG, msg);
+	}
 }
 
 void LOGW(const char* msg) {
-	NSLog(@"%s WARN %s", EMO_LOG_TAG, msg);
+	if (engine.logLevel <= LOG_WARN) {
+		NSLog(@"%s WARN %s", EMO_LOG_TAG, msg);
+	}
 }
 
 void NSLOGI(NSString* msg) {

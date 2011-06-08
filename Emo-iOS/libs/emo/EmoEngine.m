@@ -68,11 +68,13 @@ NSString* data2ns(NSData* data) {
 @synthesize stage;
 @synthesize database;
 @synthesize currentOrientation;
+@synthesize logLevel;
 
 - (id)init {
     self = [super init];
     if (self != nil) {
 		currentOrientation = OPT_ORIENTATION_UNSPECIFIED;
+		logLevel = LOG_INFO;
     }
     return self;
 }

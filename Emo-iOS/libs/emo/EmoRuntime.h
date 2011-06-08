@@ -66,6 +66,7 @@ SQInteger emoRuntimeLogError(HSQUIRRELVM v);
 SQInteger emoRuntimeLogWarn(HSQUIRRELVM v);
 SQInteger emoRuntimeFinish(HSQUIRRELVM v);
 SQInteger emoRuntimeGC(HSQUIRRELVM v);
+SQInteger emoRuntimeSetLogLevel(HSQUIRRELVM v);
 
 SQInteger emoAsyncHttpRequest(HSQUIRRELVM v);
 

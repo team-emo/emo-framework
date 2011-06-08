@@ -135,6 +135,7 @@ void initRuntimeFunctions() {
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "start",         emoRuntimeStopwatchStart);
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
+    registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "setLogLevel",   emoRuntimeSetLogLevel);
 	
 	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
 	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
@@ -313,6 +314,35 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
 	[engine disableSensor:sensorType];
 	
 	return 0;
+}
+
+/*
+ * Set Runtime log level
+ */
+SQInteger emoRuntimeSetLogLevel(HSQUIRRELVM v) {
+	
+	if (sq_gettype(v, 2) == OT_INTEGER) {
+		SQInteger level;
+		sq_getinteger(v, 2, &level);
+		
+		switch(level) {
+			case LOG_INFO:
+			case LOG_WARN:
+			case LOG_ERROR:
+				engine.logLevel = level;
+				break;
+			default:
+				sq_pushinteger(v, ERR_INVALID_PARAM);
+				return 1;
+		}
+		
+	} else {
+		sq_pushinteger(v, ERR_INVALID_PARAM);
+	    return 1;
+	}
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
 }
 
 /*
