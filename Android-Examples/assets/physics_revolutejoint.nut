@@ -14,7 +14,6 @@ const WALL_WIDTH = 10;
 class Main {
 	wheel1 = emo.Sprite("gear.png");
 	wheel2 = emo.Sprite("gear.png");
-	axis   = emo.Rectangle();
 	box    = emo.Rectangle();
 	
 	/*
@@ -35,7 +34,7 @@ class Main {
 		createWall();
 	
 		box.setSize(wheel1.getWidth() * 3, wheel1.getHeight());
-		box.move(stage.getWindowWidth() - box.getWidth(), 0);
+		box.move(stage.getWindowWidth() - box.getWidth() - WALL_WIDTH, stage.getWindowHeight() / 2);
 		box.color(0.83, 0.83, 0.83);
 		
 		wheel1.move(box.getX(), 
