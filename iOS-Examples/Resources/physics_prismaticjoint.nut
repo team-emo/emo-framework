@@ -1,5 +1,5 @@
 /*
- * Physics example by Box2D with dynamic body and RevoluteJoint.
+ * Physics example by Box2D with dynamic body and PrismaticJoint.
  * This example uses OnDrawCallback to step the physics world.
  */
 emo.Runtime.import("physics.nut");

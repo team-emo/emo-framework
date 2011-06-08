@@ -1843,8 +1843,10 @@ SQInteger emoPhysicsInitPulleyJointDef(HSQUIRRELVM v) {
 	getVec2Instance(v, 7, &anchorA);
 	getVec2Instance(v, 8, &anchorB);
 	
-	SQFloat ratio;
+	SQFloat ratio = 0;
 	sq_getfloat(v, 9, &ratio);
+	
+	if (ratio <= 0) ratio = 1.0;
 	
 	def->Initialize(bodyA, bodyB, gAnchorA, gAnchorB, anchorA, anchorB, ratio);
 	
