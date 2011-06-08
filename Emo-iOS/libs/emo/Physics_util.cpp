@@ -139,13 +139,23 @@ void getGearJointDef(HSQUIRRELVM v, int idx, b2GearJointDef* def) {
 	getInstanceMemberAsFloat(v, idx, "ratio", &def->ratio);
 	
 	SQUserPointer ptr_joint1;
-	if (getInstanceMemberAsInstance(v, idx, "joint1", "id", &ptr_joint1)) {
+	if (getInstanceMemberAsUserPointer(v, idx, "joint1", "id", &ptr_joint1)) {
 		def->joint1 = reinterpret_cast<b2Joint*>(ptr_joint1); 
 	}
 	
 	SQUserPointer ptr_joint2;
-	if (getInstanceMemberAsInstance(v, idx, "joint2", "id", &ptr_joint2)) {
+	if (getInstanceMemberAsUserPointer(v, idx, "joint2", "id", &ptr_joint2)) {
 		def->joint2 = reinterpret_cast<b2Joint*>(ptr_joint2); 
+	}
+	
+	SQUserPointer ptr_bodyA;
+	if (getInstanceMemberAsUserPointer(v, idx, "bodyA", "id", &ptr_bodyA)) {
+		def->bodyA = reinterpret_cast<b2Body*>(ptr_bodyA);
+	}
+	
+	SQUserPointer ptr_bodyB;
+	if (getInstanceMemberAsUserPointer(v, idx, "bodyB", "id", &ptr_bodyB)) {
+		def->bodyB = reinterpret_cast<b2Body*>(ptr_bodyB); 
 	}
 }
 
