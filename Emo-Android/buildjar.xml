@@ -9,13 +9,10 @@
 	
 	<property name="binfile" value="export/emo_framework.jar" />
 	<property name="sofile"  value="libs/armeabi/libemo-android.so" />
-	<property name="rscript"  value="assets/runtime.nut" />
-		
-	<property name="to_dir"  value="../Android-Examples/" />
-	<property name="bin_to"  value="libs/emo_framework.jar" />
-	<property name="so_to"   value="libs/armeabi/libemo-android.so" />
-	<property name="rsc_to"  value="assets/runtime.nut" />
-   
+
+	<property name="example_dir"   value="../Android-Examples/" />
+	<property name="template_dir"  value="../Android-Template/" />
+
 	<target name="buildjar">
 		<jar destfile="${binfile}">
 			<zipfileset dir="${bin}">
@@ -28,14 +25,21 @@
 	</target>
 	
 	<target name="copyjar">
-		<copy file="${binfile}"  tofile="${to_dir}${bin_to}"/>
-		<copy file="${sofile}"   tofile="${to_dir}${so_to}"/>
-		<copy file="${rscript}"  tofile="${to_dir}${rsc_to}"/>
+		<copy file="${binfile}" todir="${to_dir}libs/" />
+		<copy file="${sofile}" todir="${to_dir}libs/armeabi/" />
+		<copy todir="${to_dir}assets/">
+			<fileset dir="assets/" includes="*.nut" />
+		</copy>
 		<eclipse.refreshLocal resource="${to_dir}" depth="infinite"/>
 	</target>
 
 	<target name="all">
 	    <antcall target="buildjar"/>
-	    <antcall target="copyjar"/>
+	    <antcall target="copyjar">
+			<param name="to_dir" value="${example_dir}" />
+		</antcall>
+	    <antcall target="copyjar">
+			<param name="to_dir" value="${template_dir}" />
+		</antcall>
 	</target>
 </project>
