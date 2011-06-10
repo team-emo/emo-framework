@@ -1,7 +1,6 @@
 local stage = emo.Stage();
 
-
-const NUMBER_OF_SPARKS = 36;
+const NUMBER_OF_SPARKS = 24;
 
 class ParabolicMoveModifier extends emo.MultiModifier {
 	g        = 0.0004;
@@ -62,6 +61,8 @@ class Main {
 		text.move(tX, text.getScaledHeight());
 
 		text.load();
+		
+		addSpark(stage.getCenterX(), stage.getCenterY());
     }
 
 	/*
@@ -84,38 +85,43 @@ class Main {
     function onDispose() {
         print("onDispose");
     }
+	
+	function addSpark(startX, startY) {
+		for (local i = 0; i < sparks.len(); i++) {
+			
+			sparks[i].moveCenter(startX, startY);
+			
+			// clear previous modifiers if exists.
+			sparks[i].clearModifier();
+				
+			sparks[i].addModifier(ParabolicMoveModifier(
+				[startX, startY],           // from [x, y]
+				i * (360.0 / sparks.len()), // angle
+				2000                        // duration
+			));
+				
+			sparks[i].addModifier(emo.ColorModifier(
+				[1, 1, 0],
+				[0.7, 0.13, 0.13],
+				2000,
+				emo.easing.Linear
+			));
+			sparks[i].addModifier(emo.AlphaModifier(
+				1,
+				0,
+				2000,
+				emo.easing.CubicIn
+			));
+			sparks[i].show();
+		}
+	}
 
 	/*
 	 * touch event
 	 */
 	function onMotionEvent(mevent) {
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-			for (local i = 0; i < sparks.len(); i++) {
-				local startX = mevent.getX();
-				local startY = mevent.getY();
-				
-				sparks[i].moveCenter(startX, startY);
-				
-				sparks[i].addModifier(ParabolicMoveModifier(
-					[startX, startY],         // from [x, y]
-					i * (360.0 / sparks.len()), // angle
-					2000                      // duration
-				));
-				
-				sparks[i].addModifier(emo.ColorModifier(
-					[1, 1, 0],
-					[0.7, 0.13, 0.13],
-					2000,
-					emo.easing.Linear
-				));
-				sparks[i].addModifier(emo.AlphaModifier(
-					1,
-					0,
-					2000,
-					emo.easing.CubicIn
-				));
-				sparks[i].show();
-			}
+			addSpark(mevent.getX(), mevent.getY());
 		}
 	}
 }
