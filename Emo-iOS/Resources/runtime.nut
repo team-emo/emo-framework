@@ -509,7 +509,7 @@ class emo.Modifier {
 	}
 }
 
-class emo.SquenceModifier {
+class emo.SequenceModifier {
 	modifiers       = [];
 	name            = null;
 	eventCallback   = null;
