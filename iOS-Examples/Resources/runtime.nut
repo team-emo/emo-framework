@@ -440,7 +440,7 @@ class emo.Modifier {
 		}
 
 		local elapsedf = elapsed().tofloat();
-		local percent  = easing(elapsedf, duration, targetObj);
+		local percent  = easing(elapsedf, duration, this);
 		local current  = currentValue(minValue, maxValue, percent);
 		if (elapsedf >= duration) {
 			onModify(maxValue);
@@ -654,9 +654,9 @@ class emo.MultiModifier extends emo.Modifier {
 			}
 			local percent;
 			if (enableMultipleEasing) {
-				percent = easing[i](elapsedf, duration, targetObj);
+				percent = easing[i](elapsedf, duration, this);
 			} else {
-				percent = easing(elapsedf, duration, targetObj);
+				percent = easing(elapsedf, duration, this);
 			}
 			current.append(currentValue(minValue[i], maxValue[i], percent));
 		}
@@ -707,52 +707,52 @@ class emo.ColorModifier extends emo.MultiModifier {
 }
 
 emo.easing <- {};
-function emo::easing::Linear(elapsed, duration, targetObj) {
+function emo::easing::Linear(elapsed, duration, modifier) {
 	return elapsed / duration;
 }
 
-function emo::easing::CubicIn(elapsed, duration, targetObj) {
+function emo::easing::CubicIn(elapsed, duration, modifier) {
 	return (elapsed = elapsed / duration) * pow(elapsed, 2);
 }
 
-function emo::easing::CubicOut(elapsed, duration, targetObj) {
+function emo::easing::CubicOut(elapsed, duration, modifier) {
 	return (elapsed = elapsed / duration - 1) * pow(elapsed, 2) + 1;
 }
 
-function emo::easing::CubicInOut(elapsed, duration, targetObj) {
+function emo::easing::CubicInOut(elapsed, duration, modifier) {
 	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * pow(elapsed, 3);
 	return 1.0 / 2.0 * ((elapsed -= 2) * pow(elapsed, 2) + 2);
 }
 
-function emo::easing::BackIn(elapsed, duration, targetObj) {
+function emo::easing::BackIn(elapsed, duration, modifier) {
 	return (elapsed /= duration) * elapsed * ((1.70158 + 1) * elapsed - 1.70158);
 }
 
-function emo::easing::BackOut(elapsed, duration, targetObj) {
+function emo::easing::BackOut(elapsed, duration, modifier) {
 	return ((elapsed = elapsed / duration - 1) * elapsed * ((1.70158 + 1) * elapsed + 1.70158) + 1);
 }
 
-function emo::easing::BackInOut(elapsed, duration, targetObj) {
+function emo::easing::BackInOut(elapsed, duration, modifier) {
 	local s = 1.70158;
 	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * (elapsed * elapsed * (((s *= (1.525)) + 1) * elapsed - s));
 	return 1.0 / 2.0 * ((elapsed -= 2) * elapsed * (((s *= (1.525)) + 1) * elapsed + s) + 2);
 }
 
-function emo::easing::ElasticIn(elapsed, duration, targetObj) {
+function emo::easing::ElasticIn(elapsed, duration, modifier) {
 	if ((elapsed /= duration) == 1) return 1;
 	local p = duration * 0.3;
 	local s = p / 4.0;
 	return -(pow(2, 10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2.0 * PI) / p));
 }
 
-function emo::easing::ElasticOut(elapsed, duration, targetObj) {
+function emo::easing::ElasticOut(elapsed, duration, modifier) {
 	if ((elapsed /= duration) == 1) return 1;
 	local p = duration * 0.3;
 	local s = p / 4.0;
 	return (pow(2, -10 * elapsed) * sin((elapsed * duration - s) * (2.0 * PI) / p) + 1);
 }
 
-function emo::easing::ElasticInOut(elapsed, duration, targetObj) {
+function emo::easing::ElasticInOut(elapsed, duration, modifier) {
 	if ((elapsed /= duration / 2.0) == 2) return 1;
 	local p = duration * (0.3 * 1.5);
 	local s = p / 4.0;
@@ -760,99 +760,99 @@ function emo::easing::ElasticInOut(elapsed, duration, targetObj) {
 	return pow(2, -10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2.0 * PI) / p) * 0.5 + 1;
 }
 
-function emo::easing::BounceOut(elapsed, duration, targetObj) {
+function emo::easing::BounceOut(elapsed, duration, modifier) {
 	if ((elapsed /= duration) < (1.0 / 2.75)) return (7.5625 * elapsed * elapsed);
 	else if (elapsed < (2.0 / 2.75)) return (7.5625 * (elapsed -= (1.5 / 2.75)) * elapsed + 0.75);
 	else if (elapsed < (2.5 / 2.75)) return (7.5625 * (elapsed -= (2.25 / 2.75)) * elapsed + 0.9375);
 	else return (7.5625 * (elapsed -= (2.625 / 2.75)) * elapsed + 0.984375);
 }
 
-function emo::easing::BounceIn(elapsed, duration, targetObj) {
+function emo::easing::BounceIn(elapsed, duration, modifier) {
 	return 1 - emo.easing.BounceOut(duration - elapsed, duration);
 }
 
-function emo::easing::BounceInOut(elapsed, duration, targetObj) {
+function emo::easing::BounceInOut(elapsed, duration, modifier) {
 	if (elapsed < duration / 2.0) return emo.easing.BounceIn(elapsed * 2.0, duration) * 0.5;
 	else return emo.easing.BounceOut(t * 2.0 - duration, duration) * 0.5 + 0.5;
 }
 
-function emo::easing::ExpoIn(elapsed, duration, targetObj) {
+function emo::easing::ExpoIn(elapsed, duration, modifier) {
 	return (elapsed == 0) ? 0 : pow(2, 10 * (elapsed / duration - 1));
 }
 
-function emo::easing::ExpoOut(elapsed, duration, targetObj) {
+function emo::easing::ExpoOut(elapsed, duration, modifier) {
 	return (elapsed == duration) ? 1 : (-pow(2, -10 * elapsed / duration) + 1);
 }
 
-function emo::easing::ExpoInOut(elapsed, duration, targetObj) {
+function emo::easing::ExpoInOut(elapsed, duration, modifier) {
 	if (elapsed == 0) return 0;
 	if (elapsed == duration) return 1;
 	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * pow(2, 10 * (elapsed - 1));
 	return 1.0 / 2.0 * (-pow(2, -10 * --elapsed) + 2);
 }
 
-function emo::easing::QuadIn(elapsed, duration, targetObj) {
+function emo::easing::QuadIn(elapsed, duration, modifier) {
 	return (elapsed /= duration) * elapsed;
 }
 
-function emo::easing::QuadOut(elapsed, duration, targetObj) {
+function emo::easing::QuadOut(elapsed, duration, modifier) {
 	return -1 * (elapsed /= duration) * (elapsed - 2);
 }
 
-function emo::easing::QuadInOut(elapsed, duration, targetObj) {
+function emo::easing::QuadInOut(elapsed, duration, modifier) {
 	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * elapsed * elapsed;
 	return -1.0 / 2.0 * ((--elapsed) * (elapsed - 2) - 1);
 }
 
-function emo::easing::SineIn(elapsed, duration, targetObj) {
+function emo::easing::SineIn(elapsed, duration, modifier) {
 	return -1 * cos(elapsed / duration * (PI / 2.0)) + 1;
 }
 
-function emo::easing::SineOut(elapsed, duration, targetObj) {
+function emo::easing::SineOut(elapsed, duration, modifier) {
 	return 1 * sin(elapsed / duration * (PI / 2.0));
 }
 
-function emo::easing::SineInOut(elapsed, duration, targetObj) {
+function emo::easing::SineInOut(elapsed, duration, modifier) {
 	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * (sin(PI * elapsed / 2.0));
 	return -1.0 / 2.0 * (cos(PI * --elapsed / 2.0) - 2);
 }
 
-function emo::easing::CircIn(elapsed, duration, targetObj) {
+function emo::easing::CircIn(elapsed, duration, modifier) {
 	return -1 * (sqrt(1 - (elapsed /= duration) * elapsed) - 1);
 }
 
-function emo::easing::CircOut(elapsed, duration, targetObj) {
+function emo::easing::CircOut(elapsed, duration, modifier) {
 	return sqrt(1 - (elapsed = elapsed / duration - 1) * elapsed);
 }
 
-function emo::easing::CircInOut(elapsed, duration, targetObj) {
+function emo::easing::CircInOut(elapsed, duration, modifier) {
 	if ((elapsed /= duration / 2.0) < 1) return -1.0 / 2.0 * (sqrt(1 - elapsed * elapsed) - 1);
 	return 1.0 / 2.0 * (sqrt(1 - (elapsed -= 2) * elapsed) + 1);
 
 }
 
-function emo::easing::QuintIn(elapsed, duration, targetObj) {
+function emo::easing::QuintIn(elapsed, duration, modifier) {
 	return (elapsed /= duration) * elapsed * elapsed * elapsed * elapsed;
 }
 
-function emo::easing::QuintOut(elapsed, duration, targetObj) {
+function emo::easing::QuintOut(elapsed, duration, modifier) {
 	return ((elapsed = elapsed / duration - 1) * elapsed * elapsed * elapsed * elapsed + 1);
 }
 
-function emo::easing::QuintInOut(elapsed, duration, targetObj) {
+function emo::easing::QuintInOut(elapsed, duration, modifier) {
 	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * elapsed * elapsed * elapsed * elapsed * elapsed;
 	return 1.0 / 2.0 * ((elapsed -= 2) * elapsed * elapsed * elapsed * elapsed + 2);
 }
 
-function emo::easing::QuartIn(elapsed, duration, targetObj) {
+function emo::easing::QuartIn(elapsed, duration, modifier) {
 	return (elapsed /= duration) * elapsed * elapsed * elapsed;
 }
 
-function emo::easing::QuartOut(elapsed, duration, targetObj) {
+function emo::easing::QuartOut(elapsed, duration, modifier) {
 	return -1 * ((elapsed = elapsed / duration - 1) * elapsed * elapsed * elapsed - 1);
 }
 
-function emo::easing::QuartInOut(elapsed, duration, targetObj) {
+function emo::easing::QuartInOut(elapsed, duration, modifier) {
 	if ((t /= duration / 2.0) < 1) return 1.0 / 2.0 * elapsed * elapsed * elapsed * elapsed;
 	return -1.0 / 2.0 * ((elapsed -= 2) * elapsed * elapsed * elapsed - 2);
 }
