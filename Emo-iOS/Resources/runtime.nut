@@ -694,6 +694,12 @@ class emo.MoveModifier extends emo.MultiModifier {
 	}
 }
 
+class emo.MoveCenterModifier extends emo.MultiModifier {
+	function onModify(currentValue) {
+		targetObj.moveCenter(currentValue[0], currentValue[1]);
+	}
+}
+
 class emo.ColorModifier extends emo.MultiModifier {
 	function onModify(currentValue) {
 		targetObj.color(currentValue[0], currentValue[1], currentValue[2]);
