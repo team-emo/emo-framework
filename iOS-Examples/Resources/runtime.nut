@@ -509,7 +509,7 @@ class emo.Modifier {
 	}
 }
 
-class emo.SquenceModifier {
+class emo.SequenceModifier {
 	modifiers       = [];
 	name            = null;
 	eventCallback   = null;
@@ -691,6 +691,12 @@ class emo.AlphaModifier extends emo.Modifier {
 class emo.MoveModifier extends emo.MultiModifier {
 	function onModify(currentValue) {
 		targetObj.move(currentValue[0], currentValue[1]);
+	}
+}
+
+class emo.MoveCenterModifier extends emo.MultiModifier {
+	function onModify(currentValue) {
+		targetObj.moveCenter(currentValue[0], currentValue[1]);
 	}
 }
 

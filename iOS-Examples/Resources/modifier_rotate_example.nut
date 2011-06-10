@@ -48,7 +48,7 @@ class Loading {
 		
 		// change alpha color of the text in 2 seconds
 		// using CubicIn and CubicOut equation sequentially with infinite loop.
-		local blinkTextModifier = emo.SquenceModifier(
+		local blinkTextModifier = emo.SequenceModifier(
 			emo.AlphaModifier(1, 0, 1000, emo.easing.CubicIn),
 			emo.AlphaModifier(0, 1, 1000, emo.easing.CubicOut));
 		blinkTextModifier.setRepeatCount(-1); // -1 means infinite loop
