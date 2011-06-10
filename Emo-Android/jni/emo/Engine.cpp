@@ -793,8 +793,10 @@ namespace emo {
     /*
      * enable sensor
      */
-    void Engine::enableSensor(int sensorType, int interval) {
+    void Engine::enableSensor(int sensorType, int msec) {
     	if (this->sensorManager == NULL || this->sensorEventQueue == NULL) return;
+
+        int interval = msec * 1000;
 
         switch(sensorType) {
         case SENSOR_TYPE_ACCELEROMETER:
