@@ -286,6 +286,10 @@ function emo::Stage::setContentScale(scale) {
 	ortho(getWindowWidth() / EMO_STAGE_CONTENT_SCALE, getWindowHeight() / EMO_STAGE_CONTENT_SCALE);
 }
 
+function emo::Stage::getContentScale() {
+	return EMO_STAGE_CONTENT_SCALE;
+}
+
 function emo::toRadian(degree) {
 	return degree * PI / 180.0;
 }
