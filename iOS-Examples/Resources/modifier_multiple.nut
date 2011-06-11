@@ -3,13 +3,13 @@ local stage = emo.Stage();
 const NUMBER_OF_SPARKS = 12;
 
 class ParabolicMoveModifier extends emo.MultiModifier {
-	g        = 0.0004;
-	velocity = 0.2
+	g        = 0.0005;
+	velocity = 0.2;
 	angle    = null;
 	toY      = null;
 	function constructor(_from, _angle, _duration, _startTime = null) {
 		angle = emo.toRadian(_angle);
-	
+		
 		local x = velocity * cos(angle) * _duration;
 		local y = getY(velocity, angle, _duration, g);
 
