@@ -39,7 +39,8 @@ public class Launcher extends ExpandableListActivity {
     	{
     		"Sprite Animation",
     		"Periodic Update",
-    		"Modifier with Easing"
+    		"Modifier with Easing",
+    		"Multiple Modifiers"
     	},
 		{
 			"Dragging a Sprite",
@@ -93,7 +94,8 @@ public class Launcher extends ExpandableListActivity {
     	{
     		".SpriteAnimationExample",
     		".PeriodicUpdateExample",
-    		".MoveModifierExample"
+    		".MoveModifierExample",
+    		".MultipleModifierExample"
     	},
 		{
 			".MotionEventExample",
