@@ -1329,7 +1329,7 @@ class emo.TextSprite extends emo.MapSprite {
 	}
 	
 	function getScaledHeight() {
-		return stage.getWidth(childId) * getScaleX();
+		return stage.getHeight(childId) * getScaleY();
 	}
 }
 
