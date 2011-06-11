@@ -6,7 +6,7 @@ local event = emo.Event();
  */
 class Main {
 
-    block = emo.Sprite("block.png");
+    block = emo.Sprite("flare.png");
     
     distantX = 2;
     distantY = 2;
@@ -32,12 +32,14 @@ class Main {
 		local y = (stage.getWindowHeight() - block.getHeight()) / 2;
 		
 		block.move(x, y);
+		
+		block.color(1, 1, 0);
 
 		// load sprite to the screen
         block.load();
         
-		// onDrawFrame(dt) will be called on every 33 milliseconds
-		event.enableOnDrawCallback(33);
+		// onDrawFrame(dt) will be called on every 16 milliseconds
+		event.enableOnDrawCallback(16);
     }
 
 	/*
