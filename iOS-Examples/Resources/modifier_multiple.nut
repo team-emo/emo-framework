@@ -1,13 +1,13 @@
 local stage = emo.Stage();
 
-const NUMBER_OF_SPARKS = 24;
+const NUMBER_OF_SPARKS = 12;
 
 class ParabolicMoveModifier extends emo.MultiModifier {
 	g        = 0.0004;
 	velocity = 0.2
 	angle    = null;
 	toY      = null;
-	function constructor(_from, _angle, _duration) {
+	function constructor(_from, _angle, _duration, _startTime = null) {
 		angle = emo.toRadian(_angle);
 	
 		local x = velocity * cos(angle) * _duration;
@@ -15,7 +15,7 @@ class ParabolicMoveModifier extends emo.MultiModifier {
 
 		toY = y;
 		
-		base.constructor(_from, [_from[0] + x, _from[1] + y], _duration, [emo.easing.Linear, parabolic], 0);
+		base.constructor(_from, [_from[0] + x, _from[1] + y], _duration, [emo.easing.Linear, parabolic], 0, _startTime);
 	}
 	function onModify(currentValue) {
 		targetObj.moveCenter(currentValue[0], currentValue[1]);
@@ -55,7 +55,7 @@ class Main {
 		}
 		
 		// change the text
-		text.setText("TAP TO TEST MODIFIERS");
+		text.setText("TAP TO ADD MODIFIERS");
 		
 		local tX = (stage.getWindowWidth()  - text.getScaledWidth())  / 2;
 		text.move(tX, text.getScaledHeight());
@@ -87,6 +87,10 @@ class Main {
     }
 	
 	function addSpark(startX, startY) {
+		// save the start time of the modifiers because
+		// there's a 'time lag' between the first modifier and the last modifier.
+		local startTime = emo.Runtime().uptime();
+		
 		for (local i = 0; i < sparks.len(); i++) {
 			
 			sparks[i].moveCenter(startX, startY);
@@ -97,20 +101,26 @@ class Main {
 			sparks[i].addModifier(ParabolicMoveModifier(
 				[startX, startY],           // from [x, y]
 				i * (360.0 / sparks.len()), // angle
-				2000                        // duration
+				2000,                       // duration
+				startTime                   // modifier start time
 			));
 				
 			sparks[i].addModifier(emo.ColorModifier(
 				[1, 1, 0],
 				[0.7, 0.13, 0.13],
 				2000,
-				emo.easing.Linear
+				emo.easing.CubicIn,
+				0,                          // repeat count
+				startTime                   // modifier start time
+				
 			));
 			sparks[i].addModifier(emo.AlphaModifier(
 				1,
 				0,
 				2000,
-				emo.easing.CubicIn
+				emo.easing.CubicIn,
+				0,                          // repeat count
+				startTime                   // modifier start time
 			));
 			sparks[i].show();
 		}

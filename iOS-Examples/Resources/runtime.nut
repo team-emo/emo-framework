@@ -404,8 +404,12 @@ class emo.Modifier {
 	repeatCount   = null;
 	currentCount  = null;
 	eventCallback = null;
-	function constructor(_minValue, _maxValue, _duration, _easing, _repeatCount = 0) {
-		startTime   = EMO_RUNTIME_STOPWATCH.elapsed();
+	function constructor(_minValue, _maxValue, _duration, _easing, _repeatCount = 0, _startTime = null) {
+		if (_startTime == null) {
+			startTime = EMO_RUNTIME_STOPWATCH.elapsed();
+		} else {
+			startTime = _startTime;
+		}
 		pausedTime  = startTime;
 		
 		minValue = _minValue;
@@ -621,8 +625,8 @@ class emo.SequenceModifier {
 
 class emo.MultiModifier extends emo.Modifier {
 	enableMultipleEasing = null;
-	function constructor(_minValue, _maxValue, _duration, _easing, _repeatCount = 0) {
-		base.constructor(_minValue, _maxValue, _duration, _easing, _repeatCount);
+	function constructor(_minValue, _maxValue, _duration, _easing, _repeatCount = 0, _startTime = null) {
+		base.constructor(_minValue, _maxValue, _duration, _easing, _repeatCount, _startTime);
 		enableMultipleEasing = type(_easing) == "array";
 	}
 
