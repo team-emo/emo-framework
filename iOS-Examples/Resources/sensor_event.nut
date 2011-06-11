@@ -43,7 +43,7 @@ class Main {
 	function changeText(x, y) {
 		text.setText(format("X:%4.2f, Y:%4.2f", x, y));
 		
-		local tX = (stage.getWindowWidth()  - text.getWidth())  / 2;
+		local tX = (stage.getWindowWidth()  - text.getScaledWidth())  / 2;
 		text.move(tX, text.getHeight());
 	}
 

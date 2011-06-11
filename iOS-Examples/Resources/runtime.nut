@@ -1315,6 +1315,22 @@ class emo.TextSprite extends emo.MapSprite {
         stage.scale(id, scaleX, scaleY, 0, 0);
         return stage.scale(childId, scaleX, scaleY, 0, 0);
 	}
+	
+	function getScaleX() {
+		return stage.getScaleX(childId);
+	}
+	
+	function getScaleY() {
+		return stage.getScaleY(childId);
+	}
+	
+	function getScaledWidth() {
+		return indexes.len() * stage.getWidth(childId) * getScaleX();
+	}
+	
+	function getScaledHeight() {
+		return stage.getWidth(childId) * getScaleX();
+	}
 }
 
 class emo.AnalogOnScreenController extends emo.Sprite {
