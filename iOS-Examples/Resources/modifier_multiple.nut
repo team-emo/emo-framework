@@ -97,10 +97,12 @@ class Main {
 			
 			// clear previous modifiers if exists.
 			sparks[i].clearModifier();
-				
+			
+			local angle = i * (360.0 / sparks.len());
+			
 			sparks[i].addModifier(ParabolicMoveModifier(
 				[startX, startY],           // from [x, y]
-				i * (360.0 / sparks.len()), // angle
+				angle,                      // angle
 				2000,                       // duration
 				startTime                   // modifier start time
 			));
@@ -119,6 +121,14 @@ class Main {
 				0,
 				2000,
 				emo.easing.CubicIn,
+				0,                          // repeat count
+				startTime                   // modifier start time
+			));
+			sparks[i].addModifier(emo.RotateModifier(
+				angle,
+				angle + 180,
+				2000,
+				emo.easing.CubicOut,
 				0,                          // repeat count
 				startTime                   // modifier start time
 			));
