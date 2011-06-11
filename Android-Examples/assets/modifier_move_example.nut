@@ -6,11 +6,11 @@ local event = emo.Event();
  */
 class Main {
 
-    block1 = emo.Sprite("block.png");
-    block2 = emo.Sprite("block.png");
-    block3 = emo.Sprite("block.png");
-    block4 = emo.Sprite("block.png");
-    block5 = emo.Sprite("block.png");
+    block1 = emo.Sprite("flare.png");
+    block2 = emo.Sprite("flare.png");
+    block3 = emo.Sprite("flare.png");
+    block4 = emo.Sprite("flare.png");
+    block5 = emo.Sprite("flare.png");
     
 	/*
 	 * Called when this class is loaded
@@ -37,6 +37,12 @@ class Main {
 		block3.move(x * 2, block3.getHeight());
 		block4.move(x * 3, block4.getHeight());
 		block5.move(x * 4, block5.getHeight());
+		
+		block1.color(1, 1, 0);
+		block2.color(1, 1, 0);
+		block3.color(1, 1, 0);
+		block4.color(1, 1, 0);
+		block5.color(1, 1, 0);
 
 		// load sprite to the screen
         block1.load();

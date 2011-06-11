@@ -2,14 +2,19 @@ local stage = emo.Stage();
 
 const NUMBER_OF_SPARKS = 12;
 
+/*
+ * A modifier class that emulates parabolic movement.
+ */
 class ParabolicMoveModifier extends emo.MultiModifier {
-	g        = 0.0004;
-	velocity = 0.2
+	g        = 0.0005;
+	velocity = 0.2;
 	angle    = null;
 	toY      = null;
+
+	// this constructor calculates the final destination (x, y) and pass them to the parent.
 	function constructor(_from, _angle, _duration, _startTime = null) {
 		angle = emo.toRadian(_angle);
-	
+		
 		local x = velocity * cos(angle) * _duration;
 		local y = getY(velocity, angle, _duration, g);
 
@@ -17,12 +22,18 @@ class ParabolicMoveModifier extends emo.MultiModifier {
 		
 		base.constructor(_from, [_from[0] + x, _from[1] + y], _duration, [emo.easing.Linear, parabolic], 0, _startTime);
 	}
+	
+	// move the target object when modify event is fired.
 	function onModify(currentValue) {
 		targetObj.moveCenter(currentValue[0], currentValue[1]);
 	}
+	
+	// calculate the current position
 	function getY(_velocity, _angle, _elapsed, _g) {
 		return -(_velocity * sin(_angle) * _elapsed - (1 * 0.5 * _g * pow(_elapsed, 2)));
 	}
+	
+	// ParabolicMoveModifier implements equation function by itself.
 	function parabolic(elapsed, duration, modifier) {
 		local y = modifier.getY(modifier.velocity, modifier.angle, elapsed, modifier.g);
 		return y / modifier.toY.tofloat();
@@ -30,7 +41,7 @@ class ParabolicMoveModifier extends emo.MultiModifier {
 }
 
 /*
- * This example shows single sprite that rotates and scales on touch-down event
+ * This example shows particle-like sparks using multiple modifiers
  */
 class Main {
 
@@ -98,37 +109,45 @@ class Main {
 			// clear previous modifiers if exists.
 			sparks[i].clearModifier();
 			
+			// change the angle to throw the sparks
 			local angle = i * (360.0 / sparks.len());
 			
+			// modifier for parabolic movement
+			// defined by custom modifier class: ParabolicMoveModifier
 			sparks[i].addModifier(ParabolicMoveModifier(
 				[startX, startY],           // from [x, y]
 				angle,                      // angle
 				2000,                       // duration
 				startTime                   // modifier start time
 			));
-				
+			
+			// modifier for changing colors
 			sparks[i].addModifier(emo.ColorModifier(
-				[1, 1, 0],
-				[0.7, 0.13, 0.13],
-				2000,
-				emo.easing.CubicIn,
+				[1, 1, 0],                  // from [rgb]
+				[0.7, 0.13, 0.13],          // to   [rgb]
+				2000,                       // duration
+				emo.easing.CubicIn,         // equation
 				0,                          // repeat count
 				startTime                   // modifier start time
 				
 			));
+			
+			// modifier for changing alpha colors
 			sparks[i].addModifier(emo.AlphaModifier(
-				1,
-				0,
-				2000,
-				emo.easing.CubicIn,
+				1,                          // from
+				0,                          // to
+				2000,                       // duration
+				emo.easing.CubicIn,         // equation
 				0,                          // repeat count
 				startTime                   // modifier start time
 			));
+			
+			// modifier for rotation
 			sparks[i].addModifier(emo.RotateModifier(
 				angle,
 				angle + 180,
-				2000,
-				emo.easing.CubicOut,
+				2000,                       // duration
+				emo.easing.CubicOut,        // equation
 				0,                          // repeat count
 				startTime                   // modifier start time
 			));
