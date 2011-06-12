@@ -8,6 +8,10 @@ class Main {
     sprite = emo.SpriteSheet("dog.png", 34, 42, 3, 2);
 	explosion = emo.SpriteSheet("explosion.png", 19, 19, 3, 2);
 
+	direction = "RIGHT";
+	startX = null;
+	endX   = null;
+
 	/*
 	 * Called when this class is loaded
 	 */
@@ -40,17 +44,60 @@ class Main {
 		
 		sprite.setZ(0);
 		explosion.setZ(1);
+		
+		startX = stage.getWindowWidth() / 5.0;
+		endX   = startX * 4;
+		
+		// onDrawFrame(dt) will be called on every 33 milliseconds
+		emo.Event().enableOnDrawCallback(33);
     }
 
+    /*
+     * Enabled after onDrawCalleback event is enabled by enableOnDrawCallback
+     * dt parameter is a delta time (millisecond)
+     */
+    function onDrawFrame(dt) {
+		if (direction == "RIGHT") {
+			// if the dog reaches the endX, change the animation
+			if (sprite.getX() >= endX) {
+				direction = "LEFT";
+				
+				// start with 5th frame, number of frames equals 2 (no.5 to no.6) and
+				// interval equals 100msec.  loop count = -1 means inifinite loop
+				sprite.animate(5, 2, 200, -1);
+				
+				// draw the explosion
+				addExplosion(sprite.getX() + sprite.getWidth(), sprite.getY() + sprite.getHeight());
+
+			} else {
+				sprite.move(sprite.getX() + 2, sprite.getY());
+			}
+		} else {
+			// if the dog reaches the startX, change the animation
+			if (sprite.getX() <= startX) {
+				direction = "RIGHT";
+				
+				// start with first frame, number of frames equals 2(no.0 to no.1) and
+				// interval equals 100msec.  loop count = -1 means inifinite loop
+				sprite.animate(0, 2, 200, -1);
+				
+				// draw the explosion
+				addExplosion(sprite.getX() + sprite.getWidth(), sprite.getY() + sprite.getHeight());
+			} else {
+				sprite.move(sprite.getX() - 2, sprite.getY());
+			}
+		}
+	}
+	
 	/*
 	 * Called when the app has gained focus
 	 */
     function onGainedFocus() {
         print("onGainedFocus");
 		
-		// start with first frame, number of frames equals 5 and
-		// interval equals 500msec.  loop count = -1 means inifinite loop
-		sprite.animate(0, 5, 500, -1);
+		// start with first frame, number of frames equals 2(no.0 to no.1) and
+		// interval equals 100msec.  loop count = -1 means inifinite loop
+		sprite.animate(0, 2, 200, -1);
     }
 
 	/*
@@ -70,6 +117,14 @@ class Main {
         sprite.remove();
 		explosion.remove();
     }
+	
+	// draw the explosion
+	function addExplosion(x, y) {
+		explosion.hide();
+		explosion.moveCenter(x, y);
+		explosion.animate(0, 10, 66, 0);
+		explosion.show();
+	}
 
 	/*
 	 * touch event
@@ -77,10 +132,7 @@ class Main {
 	function onMotionEvent(mevent) {
 		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
 			// draw the explosion
-			explosion.hide();
-			explosion.moveCenter(mevent.getX(), mevent.getY());
-			explosion.animate(0, 10, 66, 0);
-			explosion.show();
+			addExplosion(mevent.getX(), mevent.getY());
 		}
 	}
 }
