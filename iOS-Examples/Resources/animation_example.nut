@@ -62,13 +62,12 @@ class Main {
 			if (sprite.getX() >= endX) {
 				direction = "LEFT";
 				
-				// start with 5th frame, number of frames equals 2 (no.5 to no.6) and
-				// interval equals 100msec.  loop count = -1 means inifinite loop
-				sprite.animate(5, 2, 200, -1);
-				
 				// draw the explosion
 				addExplosion(sprite.getX() + sprite.getWidth(), sprite.getY() + sprite.getHeight());
 
+				// start with 5th frame, number of frames equals 2 (no.5 to no.6) and
+				// interval equals 100msec.  loop count = -1 means inifinite loop
+				sprite.animate(5, 2, 200, -1);
 			} else {
 				sprite.move(sprite.getX() + 2, sprite.getY());
 			}
@@ -77,12 +76,12 @@ class Main {
 			if (sprite.getX() <= startX) {
 				direction = "RIGHT";
 				
+				// draw the explosion
+				addExplosion(sprite.getX() + sprite.getWidth(), sprite.getY() + sprite.getHeight());
+				
 				// start with first frame, number of frames equals 2(no.0 to no.1) and
 				// interval equals 100msec.  loop count = -1 means inifinite loop
 				sprite.animate(0, 2, 200, -1);
-				
-				// draw the explosion
-				addExplosion(sprite.getX() + sprite.getWidth(), sprite.getY() + sprite.getHeight());
 			} else {
 				sprite.move(sprite.getX() - 2, sprite.getY());
 			}
