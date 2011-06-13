@@ -17,130 +17,130 @@ local audioCh3 = audio.createChannel(2);
  */
 class Main {
 
-	// 16x16 text sprite with 2 pixel border and 1 pixel margin
+    // 16x16 text sprite with 2 pixel border and 1 pixel margin
     text = emo.TextSprite("font_16x16.png",
-		" !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-		16, 16, 2, 1);
-	clangButton = emo.Rectangle();
-	tadaButton  = emo.Rectangle();
+        " !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        16, 16, 2, 1);
+    clangButton = emo.Rectangle();
+    tadaButton  = emo.Rectangle();
 
-	/*
-	 * Called when this class is loaded
-	 */
+    /*
+     * Called when this class is loaded
+     */
     function onLoad() {
         print("onLoad"); 
-		
-		// Below statements is an example of multiple screen density support.
-		// (i.e. Retina vs non-Retina, cellular phone vs tablet device).
-		if (stage.getWindowWidth() > 320) {
-			// if the screen has large display, scale contents twice
-			// that makes the stage size by half.
-			// This examples shows how to display similar-scale images
-			// on Retina and non-Retina display.
-			stage.setContentScale(stage.getWindowWidth() / 320.0);
-		}
-		
-		// load the audio.
-		audioCh1.load("drums.wav");
-		audioCh2.load("clang.wav");
-		audioCh3.load("tada.wav");
-		
-		// enable looping for the background audio
-		// NOTE:  calling setLoop before loading the audio will fail.
-		audioCh1.setLoop(true);
-		
-		text.setText("TAP THE BOX");
-		
-		// move sprite to the center of the screen
-		text.moveCenter(stage.getWindowWidth()  / 2,
-						stage.getWindowHeight() / 2);
-						
-		// set z-order of the shapes
-		text.setZ(0);
-		clangButton.setZ(1);
-		tadaButton.setZ(1);
+        
+        // Below statements is an example of multiple screen density support.
+        // (i.e. Retina vs non-Retina, cellular phone vs tablet device).
+        if (stage.getWindowWidth() > 320) {
+            // if the screen has large display, scale contents twice
+            // that makes the stage size by half.
+            // This examples shows how to display similar-scale images
+            // on Retina and non-Retina display.
+            stage.setContentScale(stage.getWindowWidth() / 320.0);
+        }
+        
+        // load the audio.
+        audioCh1.load("drums.wav");
+        audioCh2.load("clang.wav");
+        audioCh3.load("tada.wav");
+        
+        // enable looping for the background audio
+        // NOTE:  calling setLoop before loading the audio will fail.
+        audioCh1.setLoop(true);
+        
+        text.setText("TAP THE BOX");
+        
+        // move sprite to the center of the screen
+        text.moveCenter(stage.getWindowWidth()  / 2,
+                        stage.getWindowHeight() / 2);
+                        
+        // set z-order of the shapes
+        text.setZ(0);
+        clangButton.setZ(1);
+        tadaButton.setZ(1);
 
-		// load sprite to the screen
+        // load sprite to the screen
         text.load();
-		
-		local x = stage.getWindowWidth()  / 2;
-		local y = stage.getWindowHeight() / 2;
-		
-		clangButton.setSize(50, 50);
-		clangButton.moveCenter(x - 25, y + text.getHeight() + clangButton.getHeight());
-		clangButton.color(1, 0, 0);
-		clangButton.load();
-		
-		tadaButton.setSize(50, 50);
-		tadaButton.moveCenter(x + 25, y + text.getHeight() + tadaButton.getHeight());
-		tadaButton.color(0, 0, 1);
-		tadaButton.load();
+        
+        local x = stage.getWindowWidth()  / 2;
+        local y = stage.getWindowHeight() / 2;
+        
+        clangButton.setSize(50, 50);
+        clangButton.moveCenter(x - 25, y + text.getHeight() + clangButton.getHeight());
+        clangButton.color(1, 0, 0);
+        clangButton.load();
+        
+        tadaButton.setSize(50, 50);
+        tadaButton.moveCenter(x + 25, y + text.getHeight() + tadaButton.getHeight());
+        tadaButton.color(0, 0, 1);
+        tadaButton.load();
     }
 
-	/*
-	 * Called when the app has gained focus
-	 */
+    /*
+     * Called when the app has gained focus
+     */
     function onGainedFocus() {
         print("onGainedFocus");
-		
-		// play the background audio.
-		audioCh1.play();
+        
+        // play the background audio.
+        audioCh1.play();
     }
 
-	/*
-	 * Called when the app has lost focus
-	 */
+    /*
+     * Called when the app has lost focus
+     */
     function onLostFocus() {
         print("onLostFocus"); 
-		
-		// pause the audio
-		audioCh1.pause();
-		audioCh2.pause();
-		audioCh3.pause();
+        
+        // pause the audio
+        audioCh1.pause();
+        audioCh2.pause();
+        audioCh3.pause();
     }
 
-	/*
-	 * Called when the class ends
-	 */
+    /*
+     * Called when the class ends
+     */
     function onDispose() {
         print("onDispose");
         
         // remove sprite from the screen
         text.remove();
-		
-		// close the audio
-		audioCh1.close();
-		audioCh2.close();
-		audioCh3.close();
+        
+        // close the audio
+        audioCh1.close();
+        audioCh2.close();
+        audioCh3.close();
     }
 
-	/*
-	 * touch event
-	 */
-	function onMotionEvent(mevent) {
-		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-			if (clangButton.contains(mevent.getX(), mevent.getY())) {
-				clangButton.scale(2, 2);
-				
-				// bring the button to front
-				clangButton.setZ(2);
-				tadaButton.setZ(1);
-				
-				audioCh2.play(true);
-			} else if (tadaButton.contains(mevent.getX(), mevent.getY())) {
-				tadaButton.scale(2, 2);
-				
-				// bring the button to front
-				clangButton.setZ(1);
-				tadaButton.setZ(2);
-				
-				audioCh3.play(true);
-			}
-		} else if (mevent.getAction() == MOTION_EVENT_ACTION_UP) {
-			clangButton.scale(1, 1);
-			tadaButton.scale(1, 1);
-		}
-	}
+    /*
+     * touch event
+     */
+    function onMotionEvent(mevent) {
+        if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+            if (clangButton.contains(mevent.getX(), mevent.getY())) {
+                clangButton.scale(2, 2);
+                
+                // bring the button to front
+                clangButton.setZ(2);
+                tadaButton.setZ(1);
+                
+                audioCh2.play(true);
+            } else if (tadaButton.contains(mevent.getX(), mevent.getY())) {
+                tadaButton.scale(2, 2);
+                
+                // bring the button to front
+                clangButton.setZ(1);
+                tadaButton.setZ(2);
+                
+                audioCh3.play(true);
+            }
+        } else if (mevent.getAction() == MOTION_EVENT_ACTION_UP) {
+            clangButton.scale(1, 1);
+            tadaButton.scale(1, 1);
+        }
+    }
 }
 
 function emo::onLoad() {

@@ -228,637 +228,637 @@ EMO_MOTION_LISTENERS    <- [];
 EMO_STAGE_CONTENT_SCALE <- 1;
 
 class emo.Vec2 {
-	x = null;
-	y = null;
-	function constructor(_x, _y) {
-		x = _x;
-		y = _y;
-	}
-	
-	function set(_x, _y) {
-		x = _x;
-		y = _y;
-	}
-	
-	function fromArray(arg) {
-		if (arg == null || arg.len() < 2) return null;
-		return emo.Vec2(arg[0], arg[1]);
-	}
+    x = null;
+    y = null;
+    function constructor(_x, _y) {
+        x = _x;
+        y = _y;
+    }
+    
+    function set(_x, _y) {
+        x = _x;
+        y = _y;
+    }
+    
+    function fromArray(arg) {
+        if (arg == null || arg.len() < 2) return null;
+        return emo.Vec2(arg[0], arg[1]);
+    }
 }
 
 class emo.TileIndex {
-	row    = null;
-	column = null;
-	
-	function constructor(_row, _column) {
-		row = _row;
-		column = _column;
-	}
-	
-	function set(_row, _column) {
-		row = _row;
-		column = _column;
-	}
-	
-	function fromArray(arg) {
-		if (arg == null || arg.len() < 2) return null;
-		return emo.TileIndex(arg[0], arg[1]);
-	}
+    row    = null;
+    column = null;
+    
+    function constructor(_row, _column) {
+        row = _row;
+        column = _column;
+    }
+    
+    function set(_row, _column) {
+        row = _row;
+        column = _column;
+    }
+    
+    function fromArray(arg) {
+        if (arg == null || arg.len() < 2) return null;
+        return emo.TileIndex(arg[0], arg[1]);
+    }
 }
 
 function emo::Runtime::uptime() {
-	return EMO_RUNTIME_STOPWATCH.elapsed();
+    return EMO_RUNTIME_STOPWATCH.elapsed();
 }
 
 function emo::Event::addMotionListener(listener) {
-	EMO_MOTION_LISTENERS.append(listener);
+    EMO_MOTION_LISTENERS.append(listener);
 }
 
 function emo::Event::removeMotionListener(listener) {
-	local idx = EMO_MOTION_LISTENERS.find(listener);
-	if (idx != null) {
-		EMO_MOTION_LISTENERS.remove(idx);
-	}
+    local idx = EMO_MOTION_LISTENERS.find(listener);
+    if (idx != null) {
+        EMO_MOTION_LISTENERS.remove(idx);
+    }
 }
 
 function emo::Stage::setContentScale(scale) {
-	EMO_STAGE_CONTENT_SCALE = scale.tofloat();
-	ortho(getWindowWidth() / EMO_STAGE_CONTENT_SCALE, getWindowHeight() / EMO_STAGE_CONTENT_SCALE);
+    EMO_STAGE_CONTENT_SCALE = scale.tofloat();
+    ortho(getWindowWidth() / EMO_STAGE_CONTENT_SCALE, getWindowHeight() / EMO_STAGE_CONTENT_SCALE);
 }
 
 function emo::Stage::getContentScale() {
-	return EMO_STAGE_CONTENT_SCALE;
+    return EMO_STAGE_CONTENT_SCALE;
 }
 
 function emo::toRadian(degree) {
-	return degree * PI / 180.0;
+    return degree * PI / 180.0;
 }
 
 function emo::toDegree(radian) {
-	return radian * 180.0 / PI;
+    return radian * 180.0 / PI;
 }
 
 function min(a, b) {
-	return a < b ? a : b;
+    return a < b ? a : b;
 }
 
 function max(a, b) {
-	return a > b ? a : b;
+    return a > b ? a : b;
 }
 
 function round(x) {
-	return (x.tofloat() + (x > 0 ? 0.5 : -0.5)).tointeger();
+    return (x.tofloat() + (x > 0 ? 0.5 : -0.5)).tointeger();
 }
 
 class emo.Instance {
-	type = null;
+    type = null;
 }
 
 class emo.ModifierManager {
-	modifiers = null;
-	modifiersToRemove = null;
-	function constructor() {
-		modifiers = [];
-		modifiersToRemove = [];
-	}
-	
-	function add(modifier) {
-		if (modifiers.len() == 0) {
-			emo.Event().enableOnUpdateCallback();
-		}
-		modifiers.append(modifier);
-	}
-	
-	function remove(modifier) {
-		modifiersToRemove.append(modifier);
-	}
-	
-	function removeForObject(obj) {
-		for (local i = 0; i < modifiers.len(); i++) {
-			if (modifiers[i].getObject() == obj) {
-				modifiersToRemove.append(modifiers[i]);
-			}
-		}
-	}
-	
-	function onUpdate() {
-		for (local i = 0; i < modifiers.len(); i++) {
-			modifiers[i].onUpdate();
-		}
-		if (modifiersToRemove.len() > 0) {
-			for (local i = 0; i < modifiersToRemove.len(); i++) {
-				local idx = modifiers.find(modifiersToRemove[i]);
-				if (idx != null) {
-					modifiers.remove(idx);
-				}
-			}
-			if (modifiers.len() == 0) {
-				emo.Event().disableOnUpdateCallback();
-			}
-			modifiersToRemove.clear();
-		}
-	}
-	
-	function onPause() {
-		for (local i = 0; i < modifiers.len(); i++) {
-			modifiers[i].onPause();
-		}
-	}
-	
-	function onResume() {
-		for (local i = 0; i < modifiers.len(); i++) {
-			modifiers[i].onResume();
-		}
-	}
-	
-	function getModifierCount() {
-		return modifiers.len();
-	}
+    modifiers = null;
+    modifiersToRemove = null;
+    function constructor() {
+        modifiers = [];
+        modifiersToRemove = [];
+    }
+    
+    function add(modifier) {
+        if (modifiers.len() == 0) {
+            emo.Event().enableOnUpdateCallback();
+        }
+        modifiers.append(modifier);
+    }
+    
+    function remove(modifier) {
+        modifiersToRemove.append(modifier);
+    }
+    
+    function removeForObject(obj) {
+        for (local i = 0; i < modifiers.len(); i++) {
+            if (modifiers[i].getObject() == obj) {
+                modifiersToRemove.append(modifiers[i]);
+            }
+        }
+    }
+    
+    function onUpdate() {
+        for (local i = 0; i < modifiers.len(); i++) {
+            modifiers[i].onUpdate();
+        }
+        if (modifiersToRemove.len() > 0) {
+            for (local i = 0; i < modifiersToRemove.len(); i++) {
+                local idx = modifiers.find(modifiersToRemove[i]);
+                if (idx != null) {
+                    modifiers.remove(idx);
+                }
+            }
+            if (modifiers.len() == 0) {
+                emo.Event().disableOnUpdateCallback();
+            }
+            modifiersToRemove.clear();
+        }
+    }
+    
+    function onPause() {
+        for (local i = 0; i < modifiers.len(); i++) {
+            modifiers[i].onPause();
+        }
+    }
+    
+    function onResume() {
+        for (local i = 0; i < modifiers.len(); i++) {
+            modifiers[i].onResume();
+        }
+    }
+    
+    function getModifierCount() {
+        return modifiers.len();
+    }
 }
 
 EMO_ON_UPDATE_MANAGER    <- emo.ModifierManager();
 
 function emo::Event::addOnUpdateListener(listener) {
-	EMO_ON_UPDATE_MANAGER.add(listener);
+    EMO_ON_UPDATE_MANAGER.add(listener);
 }
 
 function emo::Event::removeOnUpdateListener(listener) {
-	EMO_ON_UPDATE_MANAGER.remove(listener);
+    EMO_ON_UPDATE_MANAGER.remove(listener);
 }
 
 function emo::Event::removeOnUpdateListenerForObject(obj) {
-	EMO_ON_UPDATE_MANAGER.removeForObject(obj);
+    EMO_ON_UPDATE_MANAGER.removeForObject(obj);
 }
 
 class emo.Modifier {
-	name      = null;
-	targetObj = null;
-	startTime   = null;
-	pausedTime  = null;
-	minValue = null;
-	maxValue = null;
-	duration = null;
-	easing   = null;
-	started  = null;
-	parent   = null;
-	repeatCount   = null;
-	currentCount  = null;
-	eventCallback = null;
-	function constructor(_minValue, _maxValue, _duration, _easing, _repeatCount = 0, _startTime = null) {
-		if (_startTime == null) {
-			startTime = EMO_RUNTIME_STOPWATCH.elapsed();
-		} else {
-			startTime = _startTime;
-		}
-		pausedTime  = startTime;
-		
-		minValue = _minValue;
-		maxValue = _maxValue;
-		duration = _duration.tofloat();
-		easing   = _easing;
-		started  = false;
-		repeatCount  = _repeatCount;
-		currentCount = 0;
-	}
-	function elapsed() {
-		return EMO_RUNTIME_STOPWATCH.elapsed() - startTime;
-	}
-	function currentValue(min, max, percent) {
-		return min + (percent * (max - min));
-	}
-	function onPause() {
-		pausedTime = EMO_RUNTIME_STOPWATCH.elapsed();
-	}
-	function onResume() {
-		startTime = startTime + (EMO_RUNTIME_STOPWATCH.elapsed() - pausedTime);
-	}
-	function onUpdate() {
-		if (!started) {
-			started = true;
-			if (eventCallback != null) {
-				eventCallback(targetObj, this, EVENT_MODIFIER_START);
-			}
-			if (parent != null) {
-				parent.onEvent(targetObj, this, EVENT_MODIFIER_START);
-			}
-		}
+    name      = null;
+    targetObj = null;
+    startTime   = null;
+    pausedTime  = null;
+    minValue = null;
+    maxValue = null;
+    duration = null;
+    easing   = null;
+    started  = null;
+    parent   = null;
+    repeatCount   = null;
+    currentCount  = null;
+    eventCallback = null;
+    function constructor(_minValue, _maxValue, _duration, _easing, _repeatCount = 0, _startTime = null) {
+        if (_startTime == null) {
+            startTime = EMO_RUNTIME_STOPWATCH.elapsed();
+        } else {
+            startTime = _startTime;
+        }
+        pausedTime  = startTime;
+        
+        minValue = _minValue;
+        maxValue = _maxValue;
+        duration = _duration.tofloat();
+        easing   = _easing;
+        started  = false;
+        repeatCount  = _repeatCount;
+        currentCount = 0;
+    }
+    function elapsed() {
+        return EMO_RUNTIME_STOPWATCH.elapsed() - startTime;
+    }
+    function currentValue(min, max, percent) {
+        return min + (percent * (max - min));
+    }
+    function onPause() {
+        pausedTime = EMO_RUNTIME_STOPWATCH.elapsed();
+    }
+    function onResume() {
+        startTime = startTime + (EMO_RUNTIME_STOPWATCH.elapsed() - pausedTime);
+    }
+    function onUpdate() {
+        if (!started) {
+            started = true;
+            if (eventCallback != null) {
+                eventCallback(targetObj, this, EVENT_MODIFIER_START);
+            }
+            if (parent != null) {
+                parent.onEvent(targetObj, this, EVENT_MODIFIER_START);
+            }
+        }
 
-		local elapsedf = elapsed().tofloat();
-		local percent  = easing(elapsedf, duration, this);
-		local current  = currentValue(minValue, maxValue, percent);
-		if (elapsedf >= duration) {
-			onModify(maxValue);
-			if (repeatCount == currentCount) {
-				emo.Event().removeOnUpdateListener(this);
-				if (eventCallback != null) {
-					eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
-				}
-				if (parent != null) {
-					parent.onEvent(targetObj, this, EVENT_MODIFIER_FINISH);
-				}
-			} else {
-				startTime = EMO_RUNTIME_STOPWATCH.elapsed();
-				currentCount++;
-				if (eventCallback != null) {
-					eventCallback(targetObj, this, EVENT_MODIFIER_RESTART);
-				}
-				if (parent != null) {
-					parent.onEvent(targetObj, this, EVENT_MODIFIER_RESTART);
-				}
-			}
-			return;
-		}
-		onModify(current);
-	}
-	
-	/* subclass must override this method to apply changes to targetObj. */
-	function onModify(currentValue) {
-		
-	}
-	
-	function setObject(obj) {
-		targetObj = obj;
-	}
-	
-	function getObject() {
-		return targetObj;
-	}
+        local elapsedf = elapsed().tofloat();
+        local percent  = easing(elapsedf, duration, this);
+        local current  = currentValue(minValue, maxValue, percent);
+        if (elapsedf >= duration) {
+            onModify(maxValue);
+            if (repeatCount == currentCount) {
+                emo.Event().removeOnUpdateListener(this);
+                if (eventCallback != null) {
+                    eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
+                }
+                if (parent != null) {
+                    parent.onEvent(targetObj, this, EVENT_MODIFIER_FINISH);
+                }
+            } else {
+                startTime = EMO_RUNTIME_STOPWATCH.elapsed();
+                currentCount++;
+                if (eventCallback != null) {
+                    eventCallback(targetObj, this, EVENT_MODIFIER_RESTART);
+                }
+                if (parent != null) {
+                    parent.onEvent(targetObj, this, EVENT_MODIFIER_RESTART);
+                }
+            }
+            return;
+        }
+        onModify(current);
+    }
+    
+    /* subclass must override this method to apply changes to targetObj. */
+    function onModify(currentValue) {
+        
+    }
+    
+    function setObject(obj) {
+        targetObj = obj;
+    }
+    
+    function getObject() {
+        return targetObj;
+    }
 
-	function setName(_name) {
-		name = _name;
-	}
+    function setName(_name) {
+        name = _name;
+    }
 
-	function getName() {
-		return name;
-	}
-	
-	function setParent(prnt) {
-		parent = prnt;
-	}
-	
-	function getParent() {
-		return parent;
-	}
-	
-	function resetTimer() {
-		startTime   = EMO_RUNTIME_STOPWATCH.elapsed();
-		pausedTime  = startTime;
-		
-		currentCount = 0;
-		started = false;
-	}
+    function getName() {
+        return name;
+    }
+    
+    function setParent(prnt) {
+        parent = prnt;
+    }
+    
+    function getParent() {
+        return parent;
+    }
+    
+    function resetTimer() {
+        startTime   = EMO_RUNTIME_STOPWATCH.elapsed();
+        pausedTime  = startTime;
+        
+        currentCount = 0;
+        started = false;
+    }
 
-	function setEventCallback(func) {
-		eventCallback = func;
-	}
+    function setEventCallback(func) {
+        eventCallback = func;
+    }
 }
 
 class emo.SequenceModifier {
-	modifiers       = [];
-	name            = null;
-	eventCallback   = null;
-	modifier        = null;
-	started         = null;
-	modifierIndex   = null;
-	repeatCount     = null;
-	currentCount    = null;
-	
-	function constructor(...) {
-		for (local i = 0; i < vargv.len(); i++) {
-			vargv[i].setParent(this);
-			vargv[i].onPause();
-			modifiers.append(vargv[i]);
-		}
-		if (vargv.len() > 0) {
-			modifier = modifiers[0];
-			modifier.onResume();
-		}
-		started = false;
-		modifierIndex = 0;
-		repeatCount   = 0;
-		currentCount  = 0;
-	}
-	
-	function setRepeatCount(count) {
-		repeatCount = count;
-	}
-	
-	function onEvent(obj, _modifier, eventType) {
-		if (!started && eventType == EVENT_MODIFIER_START) {
-			started = true;
-			if (eventCallback != null) {
-				eventCallback(obj, this, eventType);
-			}
-		}
-		
-		if (eventType == EVENT_MODIFIER_FINISH) {
-			modifierIndex++;
-			if (modifierIndex < modifiers.len()) {
-				modifier = modifiers[modifierIndex];
-				modifier.onResume();
-			} else {
-				if (currentCount == repeatCount) {
-					for (local i = 0; i < modifiers.len(); i++) {
-						modifiers[i].setParent(null);
-					}
-					modifier = null;
-					modifiers.clear();
-					emo.Event().removeOnUpdateListener(this);
-					if (eventCallback != null) {
-						eventCallback(obj, this, eventType);
-					}
-				} else {
-					currentCount++;
-					for (local i = 0; i < modifiers.len(); i++) {
-						modifiers[i].resetTimer();
-						modifiers[i].onPause();
-					}
-					modifierIndex = 0;
-					modifier = modifiers[modifierIndex];
-					modifier.onResume();
-				}
-			}
-		}
-	}
-	
-	function setObject(obj) {
-		for (local i = 0; i < modifiers.len(); i++) {
-			modifiers[i].setObject(obj);
-		}
-	}
+    modifiers       = [];
+    name            = null;
+    eventCallback   = null;
+    modifier        = null;
+    started         = null;
+    modifierIndex   = null;
+    repeatCount     = null;
+    currentCount    = null;
+    
+    function constructor(...) {
+        for (local i = 0; i < vargv.len(); i++) {
+            vargv[i].setParent(this);
+            vargv[i].onPause();
+            modifiers.append(vargv[i]);
+        }
+        if (vargv.len() > 0) {
+            modifier = modifiers[0];
+            modifier.onResume();
+        }
+        started = false;
+        modifierIndex = 0;
+        repeatCount   = 0;
+        currentCount  = 0;
+    }
+    
+    function setRepeatCount(count) {
+        repeatCount = count;
+    }
+    
+    function onEvent(obj, _modifier, eventType) {
+        if (!started && eventType == EVENT_MODIFIER_START) {
+            started = true;
+            if (eventCallback != null) {
+                eventCallback(obj, this, eventType);
+            }
+        }
+        
+        if (eventType == EVENT_MODIFIER_FINISH) {
+            modifierIndex++;
+            if (modifierIndex < modifiers.len()) {
+                modifier = modifiers[modifierIndex];
+                modifier.onResume();
+            } else {
+                if (currentCount == repeatCount) {
+                    for (local i = 0; i < modifiers.len(); i++) {
+                        modifiers[i].setParent(null);
+                    }
+                    modifier = null;
+                    modifiers.clear();
+                    emo.Event().removeOnUpdateListener(this);
+                    if (eventCallback != null) {
+                        eventCallback(obj, this, eventType);
+                    }
+                } else {
+                    currentCount++;
+                    for (local i = 0; i < modifiers.len(); i++) {
+                        modifiers[i].resetTimer();
+                        modifiers[i].onPause();
+                    }
+                    modifierIndex = 0;
+                    modifier = modifiers[modifierIndex];
+                    modifier.onResume();
+                }
+            }
+        }
+    }
+    
+    function setObject(obj) {
+        for (local i = 0; i < modifiers.len(); i++) {
+            modifiers[i].setObject(obj);
+        }
+    }
 
-	function setName(_name) {
-		for (local i = 0; i < modifiers.len(); i++) {
-			modifiers[i].setName(_name);
-		}
-		name = _name;
-	}
-	
-	function onPause() {
-		if (modifier != null) modifier.onPause();
-	}
-	
-	function onResume() {
-		if (modifier != null) modifier.onResume();
-	}
-	
-	function onUpdate() {
-		if (modifier != null) modifier.onUpdate();
-	}
+    function setName(_name) {
+        for (local i = 0; i < modifiers.len(); i++) {
+            modifiers[i].setName(_name);
+        }
+        name = _name;
+    }
+    
+    function onPause() {
+        if (modifier != null) modifier.onPause();
+    }
+    
+    function onResume() {
+        if (modifier != null) modifier.onResume();
+    }
+    
+    function onUpdate() {
+        if (modifier != null) modifier.onUpdate();
+    }
 
-	function onModify(currentValue) {
-		if (modifier != null) modifier.onModiy(currentValue);
-	}
-	
-	function getObject() {
-		if (modifier != null) return modifier.getObject();
-	}
-	
-	function getName() {
-		return name;
-	}
+    function onModify(currentValue) {
+        if (modifier != null) modifier.onModiy(currentValue);
+    }
+    
+    function getObject() {
+        if (modifier != null) return modifier.getObject();
+    }
+    
+    function getName() {
+        return name;
+    }
 
-	function setEventCallback(func) {
-		eventCallback = func;
-	}
+    function setEventCallback(func) {
+        eventCallback = func;
+    }
 }
 
 class emo.MultiModifier extends emo.Modifier {
-	enableMultipleEasing = null;
-	function constructor(_minValue, _maxValue, _duration, _easing, _repeatCount = 0, _startTime = null) {
-		base.constructor(_minValue, _maxValue, _duration, _easing, _repeatCount, _startTime);
-		enableMultipleEasing = type(_easing) == "array";
-	}
+    enableMultipleEasing = null;
+    function constructor(_minValue, _maxValue, _duration, _easing, _repeatCount = 0, _startTime = null) {
+        base.constructor(_minValue, _maxValue, _duration, _easing, _repeatCount, _startTime);
+        enableMultipleEasing = type(_easing) == "array";
+    }
 
-	function onUpdate() {
-		if (!started) {
-			started = true;
-			if (eventCallback != null) {
-				eventCallback(targetObj, this, EVENT_MODIFIER_START);
-			}
-		}
-		local current = [];
-		local elapsedf = elapsed().tofloat();
-		for (local i = 0; i < minValue.len(); i++) {
-			if (elapsedf >= duration) {
-				onModify(maxValue);
-				if (repeatCount == currentCount) {
-					emo.Event().removeOnUpdateListener(this);
-					if (eventCallback != null) {
-						eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
-					}
-				} else {
-					startTime = EMO_RUNTIME_STOPWATCH.elapsed();
-					currentCount++;
-					if (eventCallback != null) {
-						eventCallback(targetObj, this, EVENT_MODIFIER_RESTART);
-					}
-				}
-				return;
-			}
-			local percent;
-			if (enableMultipleEasing) {
-				percent = easing[i](elapsedf, duration, this);
-			} else {
-				percent = easing(elapsedf, duration, this);
-			}
-			current.append(currentValue(minValue[i], maxValue[i], percent));
-		}
-		onModify(current);
-	}
+    function onUpdate() {
+        if (!started) {
+            started = true;
+            if (eventCallback != null) {
+                eventCallback(targetObj, this, EVENT_MODIFIER_START);
+            }
+        }
+        local current = [];
+        local elapsedf = elapsed().tofloat();
+        for (local i = 0; i < minValue.len(); i++) {
+            if (elapsedf >= duration) {
+                onModify(maxValue);
+                if (repeatCount == currentCount) {
+                    emo.Event().removeOnUpdateListener(this);
+                    if (eventCallback != null) {
+                        eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
+                    }
+                } else {
+                    startTime = EMO_RUNTIME_STOPWATCH.elapsed();
+                    currentCount++;
+                    if (eventCallback != null) {
+                        eventCallback(targetObj, this, EVENT_MODIFIER_RESTART);
+                    }
+                }
+                return;
+            }
+            local percent;
+            if (enableMultipleEasing) {
+                percent = easing[i](elapsedf, duration, this);
+            } else {
+                percent = easing(elapsedf, duration, this);
+            }
+            current.append(currentValue(minValue[i], maxValue[i], percent));
+        }
+        onModify(current);
+    }
 }
 
 class emo.AlphaModifier extends emo.Modifier {
-	function onModify(currentValue) {
-		targetObj.alpha(currentValue);
-	}
+    function onModify(currentValue) {
+        targetObj.alpha(currentValue);
+    }
 }
 
 class emo.ScaleModifier extends emo.Modifier {
-	function onModify(currentValue) {
-		targetObj.scale(currentValue, currentValue);
-	}
+    function onModify(currentValue) {
+        targetObj.scale(currentValue, currentValue);
+    }
 }
 
 class emo.RotateModifier extends emo.Modifier {
-	function onModify(currentValue) {
-		targetObj.rotate(currentValue);
-	}
+    function onModify(currentValue) {
+        targetObj.rotate(currentValue);
+    }
 }
 
 class emo.AlphaModifier extends emo.Modifier {
-	function onModify(currentValue) {
-		targetObj.alpha(currentValue);
-	}
+    function onModify(currentValue) {
+        targetObj.alpha(currentValue);
+    }
 }
 
 class emo.MoveModifier extends emo.MultiModifier {
-	function onModify(currentValue) {
-		targetObj.move(currentValue[0], currentValue[1]);
-	}
+    function onModify(currentValue) {
+        targetObj.move(currentValue[0], currentValue[1]);
+    }
 }
 
 class emo.MoveCenterModifier extends emo.MultiModifier {
-	function onModify(currentValue) {
-		targetObj.moveCenter(currentValue[0], currentValue[1]);
-	}
+    function onModify(currentValue) {
+        targetObj.moveCenter(currentValue[0], currentValue[1]);
+    }
 }
 
 class emo.ColorModifier extends emo.MultiModifier {
-	function onModify(currentValue) {
-		targetObj.color(currentValue[0], currentValue[1], currentValue[2]);
-	}
+    function onModify(currentValue) {
+        targetObj.color(currentValue[0], currentValue[1], currentValue[2]);
+    }
 }
 
 emo.easing <- {};
 function emo::easing::Linear(elapsed, duration, modifier) {
-	return elapsed / duration;
+    return elapsed / duration;
 }
 
 function emo::easing::CubicIn(elapsed, duration, modifier) {
-	return (elapsed = elapsed / duration) * pow(elapsed, 2);
+    return (elapsed = elapsed / duration) * pow(elapsed, 2);
 }
 
 function emo::easing::CubicOut(elapsed, duration, modifier) {
-	return (elapsed = elapsed / duration - 1) * pow(elapsed, 2) + 1;
+    return (elapsed = elapsed / duration - 1) * pow(elapsed, 2) + 1;
 }
 
 function emo::easing::CubicInOut(elapsed, duration, modifier) {
-	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * pow(elapsed, 3);
-	return 1.0 / 2.0 * ((elapsed -= 2) * pow(elapsed, 2) + 2);
+    if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * pow(elapsed, 3);
+    return 1.0 / 2.0 * ((elapsed -= 2) * pow(elapsed, 2) + 2);
 }
 
 function emo::easing::BackIn(elapsed, duration, modifier) {
-	return (elapsed /= duration) * elapsed * ((1.70158 + 1) * elapsed - 1.70158);
+    return (elapsed /= duration) * elapsed * ((1.70158 + 1) * elapsed - 1.70158);
 }
 
 function emo::easing::BackOut(elapsed, duration, modifier) {
-	return ((elapsed = elapsed / duration - 1) * elapsed * ((1.70158 + 1) * elapsed + 1.70158) + 1);
+    return ((elapsed = elapsed / duration - 1) * elapsed * ((1.70158 + 1) * elapsed + 1.70158) + 1);
 }
 
 function emo::easing::BackInOut(elapsed, duration, modifier) {
-	local s = 1.70158;
-	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * (elapsed * elapsed * (((s *= (1.525)) + 1) * elapsed - s));
-	return 1.0 / 2.0 * ((elapsed -= 2) * elapsed * (((s *= (1.525)) + 1) * elapsed + s) + 2);
+    local s = 1.70158;
+    if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * (elapsed * elapsed * (((s *= (1.525)) + 1) * elapsed - s));
+    return 1.0 / 2.0 * ((elapsed -= 2) * elapsed * (((s *= (1.525)) + 1) * elapsed + s) + 2);
 }
 
 function emo::easing::ElasticIn(elapsed, duration, modifier) {
-	if ((elapsed /= duration) == 1) return 1;
-	local p = duration * 0.3;
-	local s = p / 4.0;
-	return -(pow(2, 10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2.0 * PI) / p));
+    if ((elapsed /= duration) == 1) return 1;
+    local p = duration * 0.3;
+    local s = p / 4.0;
+    return -(pow(2, 10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2.0 * PI) / p));
 }
 
 function emo::easing::ElasticOut(elapsed, duration, modifier) {
-	if ((elapsed /= duration) == 1) return 1;
-	local p = duration * 0.3;
-	local s = p / 4.0;
-	return (pow(2, -10 * elapsed) * sin((elapsed * duration - s) * (2.0 * PI) / p) + 1);
+    if ((elapsed /= duration) == 1) return 1;
+    local p = duration * 0.3;
+    local s = p / 4.0;
+    return (pow(2, -10 * elapsed) * sin((elapsed * duration - s) * (2.0 * PI) / p) + 1);
 }
 
 function emo::easing::ElasticInOut(elapsed, duration, modifier) {
-	if ((elapsed /= duration / 2.0) == 2) return 1;
-	local p = duration * (0.3 * 1.5);
-	local s = p / 4.0;
-	if (elapsed < 1) return -0.5 * (pow(2, 10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2.0 * PI) / p));
-	return pow(2, -10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2.0 * PI) / p) * 0.5 + 1;
+    if ((elapsed /= duration / 2.0) == 2) return 1;
+    local p = duration * (0.3 * 1.5);
+    local s = p / 4.0;
+    if (elapsed < 1) return -0.5 * (pow(2, 10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2.0 * PI) / p));
+    return pow(2, -10 * (elapsed -= 1)) * sin((elapsed * duration - s) * (2.0 * PI) / p) * 0.5 + 1;
 }
 
 function emo::easing::BounceOut(elapsed, duration, modifier) {
-	if ((elapsed /= duration) < (1.0 / 2.75)) return (7.5625 * elapsed * elapsed);
-	else if (elapsed < (2.0 / 2.75)) return (7.5625 * (elapsed -= (1.5 / 2.75)) * elapsed + 0.75);
-	else if (elapsed < (2.5 / 2.75)) return (7.5625 * (elapsed -= (2.25 / 2.75)) * elapsed + 0.9375);
-	else return (7.5625 * (elapsed -= (2.625 / 2.75)) * elapsed + 0.984375);
+    if ((elapsed /= duration) < (1.0 / 2.75)) return (7.5625 * elapsed * elapsed);
+    else if (elapsed < (2.0 / 2.75)) return (7.5625 * (elapsed -= (1.5 / 2.75)) * elapsed + 0.75);
+    else if (elapsed < (2.5 / 2.75)) return (7.5625 * (elapsed -= (2.25 / 2.75)) * elapsed + 0.9375);
+    else return (7.5625 * (elapsed -= (2.625 / 2.75)) * elapsed + 0.984375);
 }
 
 function emo::easing::BounceIn(elapsed, duration, modifier) {
-	return 1 - emo.easing.BounceOut(duration - elapsed, duration);
+    return 1 - emo.easing.BounceOut(duration - elapsed, duration);
 }
 
 function emo::easing::BounceInOut(elapsed, duration, modifier) {
-	if (elapsed < duration / 2.0) return emo.easing.BounceIn(elapsed * 2.0, duration) * 0.5;
-	else return emo.easing.BounceOut(t * 2.0 - duration, duration) * 0.5 + 0.5;
+    if (elapsed < duration / 2.0) return emo.easing.BounceIn(elapsed * 2.0, duration) * 0.5;
+    else return emo.easing.BounceOut(t * 2.0 - duration, duration) * 0.5 + 0.5;
 }
 
 function emo::easing::ExpoIn(elapsed, duration, modifier) {
-	return (elapsed == 0) ? 0 : pow(2, 10 * (elapsed / duration - 1));
+    return (elapsed == 0) ? 0 : pow(2, 10 * (elapsed / duration - 1));
 }
 
 function emo::easing::ExpoOut(elapsed, duration, modifier) {
-	return (elapsed == duration) ? 1 : (-pow(2, -10 * elapsed / duration) + 1);
+    return (elapsed == duration) ? 1 : (-pow(2, -10 * elapsed / duration) + 1);
 }
 
 function emo::easing::ExpoInOut(elapsed, duration, modifier) {
-	if (elapsed == 0) return 0;
-	if (elapsed == duration) return 1;
-	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * pow(2, 10 * (elapsed - 1));
-	return 1.0 / 2.0 * (-pow(2, -10 * --elapsed) + 2);
+    if (elapsed == 0) return 0;
+    if (elapsed == duration) return 1;
+    if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * pow(2, 10 * (elapsed - 1));
+    return 1.0 / 2.0 * (-pow(2, -10 * --elapsed) + 2);
 }
 
 function emo::easing::QuadIn(elapsed, duration, modifier) {
-	return (elapsed /= duration) * elapsed;
+    return (elapsed /= duration) * elapsed;
 }
 
 function emo::easing::QuadOut(elapsed, duration, modifier) {
-	return -1 * (elapsed /= duration) * (elapsed - 2);
+    return -1 * (elapsed /= duration) * (elapsed - 2);
 }
 
 function emo::easing::QuadInOut(elapsed, duration, modifier) {
-	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * elapsed * elapsed;
-	return -1.0 / 2.0 * ((--elapsed) * (elapsed - 2) - 1);
+    if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * elapsed * elapsed;
+    return -1.0 / 2.0 * ((--elapsed) * (elapsed - 2) - 1);
 }
 
 function emo::easing::SineIn(elapsed, duration, modifier) {
-	return -1 * cos(elapsed / duration * (PI / 2.0)) + 1;
+    return -1 * cos(elapsed / duration * (PI / 2.0)) + 1;
 }
 
 function emo::easing::SineOut(elapsed, duration, modifier) {
-	return 1 * sin(elapsed / duration * (PI / 2.0));
+    return 1 * sin(elapsed / duration * (PI / 2.0));
 }
 
 function emo::easing::SineInOut(elapsed, duration, modifier) {
-	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * (sin(PI * elapsed / 2.0));
-	return -1.0 / 2.0 * (cos(PI * --elapsed / 2.0) - 2);
+    if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * (sin(PI * elapsed / 2.0));
+    return -1.0 / 2.0 * (cos(PI * --elapsed / 2.0) - 2);
 }
 
 function emo::easing::CircIn(elapsed, duration, modifier) {
-	return -1 * (sqrt(1 - (elapsed /= duration) * elapsed) - 1);
+    return -1 * (sqrt(1 - (elapsed /= duration) * elapsed) - 1);
 }
 
 function emo::easing::CircOut(elapsed, duration, modifier) {
-	return sqrt(1 - (elapsed = elapsed / duration - 1) * elapsed);
+    return sqrt(1 - (elapsed = elapsed / duration - 1) * elapsed);
 }
 
 function emo::easing::CircInOut(elapsed, duration, modifier) {
-	if ((elapsed /= duration / 2.0) < 1) return -1.0 / 2.0 * (sqrt(1 - elapsed * elapsed) - 1);
-	return 1.0 / 2.0 * (sqrt(1 - (elapsed -= 2) * elapsed) + 1);
+    if ((elapsed /= duration / 2.0) < 1) return -1.0 / 2.0 * (sqrt(1 - elapsed * elapsed) - 1);
+    return 1.0 / 2.0 * (sqrt(1 - (elapsed -= 2) * elapsed) + 1);
 
 }
 
 function emo::easing::QuintIn(elapsed, duration, modifier) {
-	return (elapsed /= duration) * elapsed * elapsed * elapsed * elapsed;
+    return (elapsed /= duration) * elapsed * elapsed * elapsed * elapsed;
 }
 
 function emo::easing::QuintOut(elapsed, duration, modifier) {
-	return ((elapsed = elapsed / duration - 1) * elapsed * elapsed * elapsed * elapsed + 1);
+    return ((elapsed = elapsed / duration - 1) * elapsed * elapsed * elapsed * elapsed + 1);
 }
 
 function emo::easing::QuintInOut(elapsed, duration, modifier) {
-	if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * elapsed * elapsed * elapsed * elapsed * elapsed;
-	return 1.0 / 2.0 * ((elapsed -= 2) * elapsed * elapsed * elapsed * elapsed + 2);
+    if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * elapsed * elapsed * elapsed * elapsed * elapsed;
+    return 1.0 / 2.0 * ((elapsed -= 2) * elapsed * elapsed * elapsed * elapsed + 2);
 }
 
 function emo::easing::QuartIn(elapsed, duration, modifier) {
-	return (elapsed /= duration) * elapsed * elapsed * elapsed;
+    return (elapsed /= duration) * elapsed * elapsed * elapsed;
 }
 
 function emo::easing::QuartOut(elapsed, duration, modifier) {
-	return -1 * ((elapsed = elapsed / duration - 1) * elapsed * elapsed * elapsed - 1);
+    return -1 * ((elapsed = elapsed / duration - 1) * elapsed * elapsed * elapsed - 1);
 }
 
 function emo::easing::QuartInOut(elapsed, duration, modifier) {
-	if ((t /= duration / 2.0) < 1) return 1.0 / 2.0 * elapsed * elapsed * elapsed * elapsed;
-	return -1.0 / 2.0 * ((elapsed -= 2) * elapsed * elapsed * elapsed - 2);
+    if ((t /= duration / 2.0) < 1) return 1.0 / 2.0 * elapsed * elapsed * elapsed * elapsed;
+    return -1.0 / 2.0 * ((elapsed -= 2) * elapsed * elapsed * elapsed - 2);
 }
 
 class emo.MotionEvent {
@@ -941,20 +941,20 @@ class emo.AudioChannel {
         if (runtime.os() == OS_ANDROID) {
             file = ANDROID_SOUNDS_DIR + file;
         }
-	    return manager.load(id, file);
-	}
+        return manager.load(id, file);
+    }
     function play(reset = false)  {
-		if (reset) {
-			return manager.play(id);
-		}
-	
-		local state = getState();
-		if (state == AUDIO_CHANNEL_PAUSED) {
-			return manager.resume_play(id);
-		} else {
-			return manager.play(id);
-		}
-	}
+        if (reset) {
+            return manager.play(id);
+        }
+    
+        local state = getState();
+        if (state == AUDIO_CHANNEL_PAUSED) {
+            return manager.resume_play(id);
+        } else {
+            return manager.play(id);
+        }
+    }
     function pause() { return manager.pause(id); }
     function stop()  { return manager.stop(id); }
     function seek(pos) { return manager.seek(id, pos); }
@@ -985,9 +985,9 @@ class emo.Sprite {
     id       = null;
     childId  = null;
     loaded   = null;
-	uptime   = null;
-	
-	physicsInfo = null;
+    uptime   = null;
+    
+    physicsInfo = null;
 
     function constructor(rawname) {
         name = this.getResourceName(rawname);
@@ -1010,13 +1010,13 @@ class emo.Sprite {
             status = stage.loadSprite(id, x, y, width, height);
 
             if (status == EMO_NO_ERROR) {
-				uptime = EMO_RUNTIME_STOPWATCH.elapsed();
+                uptime = EMO_RUNTIME_STOPWATCH.elapsed();
                 loaded = true;
             }
         }
         return status;
     }
-	
+    
     function show() { return stage.show(id); }
     function hide() { return stage.hide(id); }
     function alpha(a = null) { return stage.alpha(id, a); }
@@ -1031,8 +1031,8 @@ class emo.Sprite {
     function getZ() { return stage.getZ(id); }
     function getWidth()  { return stage.getWidth(id); }
     function getHeight() { return stage.getHeight(id); }
-	function getScaledWidth()  { return getWidth()  * getScaleX(); }
-	function getScaledHeight() { return getHeight() * getScaleY(); }
+    function getScaledWidth()  { return getWidth()  * getScaleX(); }
+    function getScaledHeight() { return getHeight() * getScaleY(); }
 
     function setX(x) { return stage.setX(id, x); }
     function setY(y) { return stage.setY(id, y); }
@@ -1070,14 +1070,14 @@ class emo.Sprite {
     function moveCenter(x, y, z = null) {
         return move(x - (getScaledWidth() * 0.5), y - (getScaledHeight() * 0.5), z);
     }
-	
-	function getCenterX() {
-		return getX() + (getWidth() * 0.5);
-	}
-	
-	function getCenterY() {
-		return getY() + (getHeight() * 0.5);
-	}
+    
+    function getCenterX() {
+        return getX() + (getWidth() * 0.5);
+    }
+    
+    function getCenterY() {
+        return getY() + (getHeight() * 0.5);
+    }
 
     function scale(scaleX, scaleY, centerX = null, centerY = null) {
         return stage.scale(id, scaleX, scaleY, centerX, centerY);
@@ -1094,12 +1094,12 @@ class emo.Sprite {
     function remove() {
         local status = EMO_NO_ERROR;
         if (loaded) {
-			clearModifier();
-			emo.Event().removeMotionListener(this);
-			if (physicsInfo != null) {
-				physicsInfo.remove();
-				physicsInfo = null;
-			}
+            clearModifier();
+            emo.Event().removeMotionListener(this);
+            if (physicsInfo != null) {
+                physicsInfo.remove();
+                physicsInfo = null;
+            }
             status = stage.remove(id);
             loaded = false;
         }
@@ -1115,50 +1115,50 @@ class emo.Sprite {
     }
     
     function addModifier(modifier) {
-    	modifier.setObject(this);
-    	emo.Event().addOnUpdateListener(modifier);
+        modifier.setObject(this);
+        emo.Event().addOnUpdateListener(modifier);
     }
 
     function removeModifier(modifier) {
-    	emo.Event().removeOnUpdateListener(modifier);
+        emo.Event().removeOnUpdateListener(modifier);
     }
-	
-	function clearModifier() {
-    	emo.Event().removeOnUpdateListenerForObject(this);
-	}
-	
-	function setPhysicsInfo(_physicsInfo) {
-		physicsInfo = _physicsInfo;
-	}
-	
-	function getPhysicsInfo() {
-		return physicsInfo;
-	}
-	
-	function getFixture() {
-		if (physicsInfo == null) return null;
-		return physicsInfo.getFixture();
-	}
-	
-	function getPhysicsBody() {
-		if (physicsInfo == null) return null;
-		return physicsInfo.getBody();
-	}
-	
-	function elapsed() {
-		if (uptime == null) return -1;
-		return EMO_RUNTIME_STOPWATCH.elapsed() - uptime;
-	}
+    
+    function clearModifier() {
+        emo.Event().removeOnUpdateListenerForObject(this);
+    }
+    
+    function setPhysicsInfo(_physicsInfo) {
+        physicsInfo = _physicsInfo;
+    }
+    
+    function getPhysicsInfo() {
+        return physicsInfo;
+    }
+    
+    function getFixture() {
+        if (physicsInfo == null) return null;
+        return physicsInfo.getFixture();
+    }
+    
+    function getPhysicsBody() {
+        if (physicsInfo == null) return null;
+        return physicsInfo.getBody();
+    }
+    
+    function elapsed() {
+        if (uptime == null) return -1;
+        return EMO_RUNTIME_STOPWATCH.elapsed() - uptime;
+    }
 
 }
 
 class emo.SpriteSheet extends emo.Sprite {
 
-	function constructor(rawname, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
+    function constructor(rawname, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
         name = base.getResourceName(rawname);
         id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border, margin);
-	}
-	
+    }
+    
     function load(x = null, y = null, frameIndex = null) {
         local status = EMO_NO_ERROR;
         if (!loaded) {
@@ -1191,35 +1191,35 @@ class emo.SpriteSheet extends emo.Sprite {
     function stop() {
         return stage.stop(id);
     }
-	
-	function getFrameIndex() {
-		return stage.getFrameIndex(id);
-	}
-	
-	function getFrameCount() {
-		return stage.getFrameCount(id);
-	}
-	
-	function isAnimationFinished() {
-		return stage.isAnimationFinished(id);
-	}
+    
+    function getFrameIndex() {
+        return stage.getFrameIndex(id);
+    }
+    
+    function getFrameCount() {
+        return stage.getFrameCount(id);
+    }
+    
+    function isAnimationFinished() {
+        return stage.isAnimationFinished(id);
+    }
 }
 
 class emo.Rectangle extends emo.Sprite {
-	function constructor() {
-		name = null;
+    function constructor() {
+        name = null;
         id = stage.createSprite(name);
-	}
+    }
 }
 
 class emo.Line extends emo.Sprite {
-	function constructor(x1 = 0, y1 = 0, x2 = 1, y2 = 1) {
-		name = null;
+    function constructor(x1 = 0, y1 = 0, x2 = 1, y2 = 1) {
+        name = null;
         id = stage.createLine(x1, y1, x2, y2);
-	}
-	function move(x1, y1, x2, y2) {
-		return stage.setLine(id, x1, y1, x2, y2);
-	}
+    }
+    function move(x1, y1, x2, y2) {
+        return stage.setLine(id, x1, y1, x2, y2);
+    }
 }
 
 class emo.MapSprite extends emo.Sprite {
@@ -1251,10 +1251,10 @@ class emo.MapSprite extends emo.Sprite {
             this.addRow(tiles[i]);
         }
     }
-	
-	function clearTiles() {
+    
+    function clearTiles() {
         stage.clearTiles(id);
-	}
+    }
 
     function setTileAt(row, column, value) {
         return stage.setTileAt(id, row, column, value);
@@ -1278,93 +1278,93 @@ class emo.MapSprite extends emo.Sprite {
     function red  (r = null) { return stage.red  (childId, r); }
     function green(g = null) { return stage.green(childId, g); }
     function blue (b = null) { return stage.blue (childId, b); }
-	
+    
     function scale(scaleX, scaleY, centerX = null, centerY = null) {
-		error("MapSprite.scale is not supported.");
+        error("MapSprite.scale is not supported.");
     }
 
     function rotate(angle, centerX = null, centerY = null, axis = null) {
-		error("MapSprite.rotate is not supported.");
-	}
+        error("MapSprite.rotate is not supported.");
+    }
 }
 
 class emo.TextSprite extends emo.MapSprite {
-	textbase = null;
-	indexes  = null;
-	
-	function constructor(_name, _textbase, _width, _height, _border = null, _margin = null) {
-		textbase = _textbase;
-		indexes = [];
-		
-		base.constructor(_name, _width, _height, _border, _margin);
-	}
-	
-	function setText(text) {
-		text = text.tostring();
-		indexes.clear();
-		for (local i = 0; i < text.len(); i++) {
-			local idx = textbase.find(text.slice(i, i+1));
-			if (idx == null) idx = -1;
-			indexes.append(idx);
-		}
-		clearTiles();
-		addRow(indexes);
-	}
-	
-	function scale(scaleX, scaleY) {
+    textbase = null;
+    indexes  = null;
+    
+    function constructor(_name, _textbase, _width, _height, _border = null, _margin = null) {
+        textbase = _textbase;
+        indexes = [];
+        
+        base.constructor(_name, _width, _height, _border, _margin);
+    }
+    
+    function setText(text) {
+        text = text.tostring();
+        indexes.clear();
+        for (local i = 0; i < text.len(); i++) {
+            local idx = textbase.find(text.slice(i, i+1));
+            if (idx == null) idx = -1;
+            indexes.append(idx);
+        }
+        clearTiles();
+        addRow(indexes);
+    }
+    
+    function scale(scaleX, scaleY) {
         stage.scale(id, scaleX, scaleY, 0, 0);
         return stage.scale(childId, scaleX, scaleY, 0, 0);
-	}
-	
-	function getScaleX() {
-		return stage.getScaleX(childId);
-	}
-	
-	function getScaleY() {
-		return stage.getScaleY(childId);
-	}
-	
-	function getScaledWidth() {
-		return indexes.len() * stage.getWidth(childId) * getScaleX();
-	}
-	
-	function getScaledHeight() {
-		return stage.getHeight(childId) * getScaleY();
-	}
+    }
+    
+    function getScaleX() {
+        return stage.getScaleX(childId);
+    }
+    
+    function getScaleY() {
+        return stage.getScaleY(childId);
+    }
+    
+    function getScaledWidth() {
+        return indexes.len() * stage.getWidth(childId) * getScaleX();
+    }
+    
+    function getScaledHeight() {
+        return stage.getHeight(childId) * getScaleY();
+    }
 }
 
 class emo.AnalogOnScreenController extends emo.Sprite {
-	knob    = null;
-	padding = null;
-	margin  = null;
-	
-	updateInterval = null;
-	lastUpdate     = null;
-	
-	previousRelativeX = null;
-	previousRelativeY = null;
-	
-	function constructor(_name, _knobname, _alpha = 0.5) {
-		base.constructor(_name);
-		knob = emo.Sprite(_knobname);
-		
-		alpha(_alpha);
-		
-		emo.Event().addMotionListener(this);
-		emo.Event().addOnUpdateListener(this);
-		
-		padding = 0;
-		margin  = 0;
+    knob    = null;
+    padding = null;
+    margin  = null;
+    
+    updateInterval = null;
+    lastUpdate     = null;
+    
+    previousRelativeX = null;
+    previousRelativeY = null;
+    
+    function constructor(_name, _knobname, _alpha = 0.5) {
+        base.constructor(_name);
+        knob = emo.Sprite(_knobname);
+        
+        alpha(_alpha);
+        
+        emo.Event().addMotionListener(this);
+        emo.Event().addOnUpdateListener(this);
+        
+        padding = 0;
+        margin  = 0;
 
-		updateInterval = 100;
-		lastUpdate = -1000;
-	}
-	
-    function load() {
-		base.load();
-		knob.load();
+        updateInterval = 100;
+        lastUpdate = -1000;
     }
-	
+    
+    function load() {
+        base.load();
+        knob.load();
+    }
+    
     function show() { knob.show(); return base.show(); }
     function hide() { knob.hide(); return knobase.hide(); }
     function alpha(a = null) { knob.alpha(a); return base.alpha(a); }
@@ -1373,206 +1373,206 @@ class emo.AnalogOnScreenController extends emo.Sprite {
     function blue (b = null) { knob.blue(b);  return base.blue(b);  }
 
     function move(x, y, z = 99) {
-		releaseKnob(x, y, z + 1);
-		return base.move(x, y, z);
+        releaseKnob(x, y, z + 1);
+        return base.move(x, y, z);
     }
-	
-	function releaseKnob(x, y, knobZ) {
-		local knobX = x + (getScaledWidth()  - knob.getScaledWidth())  * 0.5;
-		local knobY = y + (getScaledHeight() - knob.getScaledHeight()) * 0.5;
-		knob.move(knobX, knobY, knobZ);
-	}
-	
-	function getNeutralKnobX() {
-		return getX() + (getScaledWidth() - knob.getScaledWidth()) * 0.5;
-	}
-	
-	function getNeutralKnobY() {
-		return getY() + (getScaledHeight() - knob.getScaledHeight()) * 0.5;
-	}
+    
+    function releaseKnob(x, y, knobZ) {
+        local knobX = x + (getScaledWidth()  - knob.getScaledWidth())  * 0.5;
+        local knobY = y + (getScaledHeight() - knob.getScaledHeight()) * 0.5;
+        knob.move(knobX, knobY, knobZ);
+    }
+    
+    function getNeutralKnobX() {
+        return getX() + (getScaledWidth() - knob.getScaledWidth()) * 0.5;
+    }
+    
+    function getNeutralKnobY() {
+        return getY() + (getScaledHeight() - knob.getScaledHeight()) * 0.5;
+    }
 
     function moveCenter(x, y, z = null) {
-		knob.moveCenter(x, y, z);
-		return base.moveCenter(x, y, z);
+        knob.moveCenter(x, y, z);
+        return base.moveCenter(x, y, z);
     }
 
     function scale(scaleX, scaleY, centerX = null, centerY = null) {
-		knob.scale(scaleX, scaleY, centerX, centerY);
-		return base.scale(scaleX, scaleY, centerY);
+        knob.scale(scaleX, scaleY, centerX, centerY);
+        return base.scale(scaleX, scaleY, centerY);
     }
 
     function rotate(angle, centerX = null, centerY = null, axis = null) {
-		knob.rotate(angle, centerX, centerY, axis);
-		return base.rotate(angle, centerX, centerY, axis);
+        knob.rotate(angle, centerX, centerY, axis);
+        return base.rotate(angle, centerX, centerY, axis);
     }
 
     function color(red, green, blue, alpha = null) {
-		knob.color(red, green, blue, alpha);
-		return base.color(red, green, blue, alpha);
+        knob.color(red, green, blue, alpha);
+        return base.color(red, green, blue, alpha);
     }
 
     function remove() {
-		emo.Event().removeOnUpdateListener(this);
-		emo.Event().removeMotionListener(this);
-		knob.remove();
-		return base.remove();
+        emo.Event().removeOnUpdateListener(this);
+        emo.Event().removeMotionListener(this);
+        knob.remove();
+        return base.remove();
     }
 
-	function onMotionEvent(mevent) {
-		local x = mevent.getX();
-		local y = mevent.getY();
-		if (mevent.getAction() == MOTION_EVENT_ACTION_UP ||
-			mevent.getAction() == MOTION_EVENT_ACTION_CANCEL  ||
-			mevent.getAction() == MOTION_EVENT_ACTION_OUTSIDE ||
-			mevent.getAction() == MOTION_EVENT_ACTION_POINTER_UP) {
-			releaseKnob(getX(), getY(), knob.getZ());
-			fireControlEvent(true, true);
-		} else {
-			if (contains(x, y)) {
-				knob.moveCenter(x, y);
-			}
-		}
-	}
-	
-	function elapsed() {	
-		return EMO_RUNTIME_STOPWATCH.elapsed();	
-	}
-	
-	function isNeutral() {
-		return getRelativeX() == 0 && getRelativeY() == 0;
-	}
-	
-	function fireControlEvent(hasChanged, immediate = false) {
-		local delta = elapsed() - lastUpdate;
-		if (immediate || delta >= updateInterval) {
-			local x = getRelativeX();
-			local y = getRelativeY();
-			emo._onControlEvent(this, x, y, hasChanged);
-			lastUpdate = elapsed();
-			
-			if (isNeutral()) {
-				previousRelativeX = null;
-				previousRelativeY = null;
-			} else {
-				previousRelativeX = x;
-				previousRelativeY = y;
-			}
-		}
-	}
-	
-	function getRelativeX() {
-		local unit  = (getWidth() * 0.5) - padding;
-		local axisX = getX() + (getWidth() * 0.5);
-		local knobX = knob.getX() + (knob.getWidth() * 0.5);
-		
-		local x = round((knobX - axisX) / unit.tofloat() * 100.0);
-		if (x > 0) x = min(100, x);
-		if (x < 0) x = max(-100, x);
-		 
-		return x;
-	}
-	
-	function getRelativeY() {
-		local unit  = (getHeight() * 0.5) - padding;
-		local axisY = getY() + (getHeight() * 0.5);
-		local knobY = knob.getY() + (knob.getHeight() * 0.5);
-		
-		local y = round((knobY - axisY) / unit.tofloat() * 100.0);
-		if (y > 0) y = min(100, y);
-		if (y < 0) y = max(-100, y);
-		 
-		return y;
-	}
-	
-	function getKnobWidth() {
-		return knob.getWidth();
-	}
-	
-	function getKnobHeight() {
-		return knob.getHeight();
-	}
-	
-	function getControlX() {
-		return relativeX();
-	}
-	
-	function getControlY() {
-		return relativeY();
-	}
-	
+    function onMotionEvent(mevent) {
+        local x = mevent.getX();
+        local y = mevent.getY();
+        if (mevent.getAction() == MOTION_EVENT_ACTION_UP ||
+            mevent.getAction() == MOTION_EVENT_ACTION_CANCEL  ||
+            mevent.getAction() == MOTION_EVENT_ACTION_OUTSIDE ||
+            mevent.getAction() == MOTION_EVENT_ACTION_POINTER_UP) {
+            releaseKnob(getX(), getY(), knob.getZ());
+            fireControlEvent(true, true);
+        } else {
+            if (contains(x, y)) {
+                knob.moveCenter(x, y);
+            }
+        }
+    }
+    
+    function elapsed() {    
+        return EMO_RUNTIME_STOPWATCH.elapsed();    
+    }
+    
+    function isNeutral() {
+        return getRelativeX() == 0 && getRelativeY() == 0;
+    }
+    
+    function fireControlEvent(hasChanged, immediate = false) {
+        local delta = elapsed() - lastUpdate;
+        if (immediate || delta >= updateInterval) {
+            local x = getRelativeX();
+            local y = getRelativeY();
+            emo._onControlEvent(this, x, y, hasChanged);
+            lastUpdate = elapsed();
+            
+            if (isNeutral()) {
+                previousRelativeX = null;
+                previousRelativeY = null;
+            } else {
+                previousRelativeX = x;
+                previousRelativeY = y;
+            }
+        }
+    }
+    
+    function getRelativeX() {
+        local unit  = (getWidth() * 0.5) - padding;
+        local axisX = getX() + (getWidth() * 0.5);
+        local knobX = knob.getX() + (knob.getWidth() * 0.5);
+        
+        local x = round((knobX - axisX) / unit.tofloat() * 100.0);
+        if (x > 0) x = min(100, x);
+        if (x < 0) x = max(-100, x);
+         
+        return x;
+    }
+    
+    function getRelativeY() {
+        local unit  = (getHeight() * 0.5) - padding;
+        local axisY = getY() + (getHeight() * 0.5);
+        local knobY = knob.getY() + (knob.getHeight() * 0.5);
+        
+        local y = round((knobY - axisY) / unit.tofloat() * 100.0);
+        if (y > 0) y = min(100, y);
+        if (y < 0) y = max(-100, y);
+         
+        return y;
+    }
+    
+    function getKnobWidth() {
+        return knob.getWidth();
+    }
+    
+    function getKnobHeight() {
+        return knob.getHeight();
+    }
+    
+    function getControlX() {
+        return relativeX();
+    }
+    
+    function getControlY() {
+        return relativeY();
+    }
+    
     function contains(x, y) {
         return x >= getX() - margin && x <= getX() + getWidth()  + margin &&
                y >= getY() - margin && y <= getY() + getHeight() + margin;
     }
-	
+    
     function knobContains(x, y) {
         return x >= knob.getX() - padding && x <= knob.getX() + knob.getWidth()  + padding &&
                y >= knob.getY() - padding && y <= knob.getY() + knob.getHeight() + padding;
     }
-	
-	function getDirection() {
-		local relativeX = getRelativeX();
-		local relativeY = getRelativeY();
-		
-		if (abs(relativeX) > abs(relativeY)) {
-			if (relativeX > 0) {
-				return CONTROL_RIGHT;
-			} else if (relativeX < 0) {
-				return CONTROL_LEFT;
-			} else {
-				return CONTROL_CENTER;
-			}
-		} else {
-			if (relativeY > 0) {
-				return CONTROL_DOWN;
-			} else if (relativeY < 0) {
-				return CONTROL_UP;
-			} else {
-				return CONTROL_CENTER;
-			}
-		}
-	}
-	
-	function onUpdate() {
-		if (previousRelativeX == getRelativeX() && previousRelativeY == getRelativeY()) {
-			fireControlEvent(false);
-		} else if (!isNeutral()) {
-			fireControlEvent(true, false);
-		}
-	}
-	
-	function getObject() { return null; }
-	function onPause()  { }
-	function onResume() { } 
+    
+    function getDirection() {
+        local relativeX = getRelativeX();
+        local relativeY = getRelativeY();
+        
+        if (abs(relativeX) > abs(relativeY)) {
+            if (relativeX > 0) {
+                return CONTROL_RIGHT;
+            } else if (relativeX < 0) {
+                return CONTROL_LEFT;
+            } else {
+                return CONTROL_CENTER;
+            }
+        } else {
+            if (relativeY > 0) {
+                return CONTROL_DOWN;
+            } else if (relativeY < 0) {
+                return CONTROL_UP;
+            } else {
+                return CONTROL_CENTER;
+            }
+        }
+    }
+    
+    function onUpdate() {
+        if (previousRelativeX == getRelativeX() && previousRelativeY == getRelativeY()) {
+            fireControlEvent(false);
+        } else if (!isNeutral()) {
+            fireControlEvent(true, false);
+        }
+    }
+    
+    function getObject() { return null; }
+    function onPause()  { }
+    function onResume() { } 
 }
 
 class emo.DigitalOnScreenController extends emo.AnalogOnScreenController {
-	function constructor(_name, _knobname, _alpha = 0.5) {
-		base.constructor(_name, _knobname, _alpha);
-	}
-	function fireControlEvent(hasChanged, immediate = false) {
-		local relativeX = getRelativeX();
-		local relativeY = getRelativeY();
-		local knobWidthSpace  = knob.getWidth()  * 0.5;
-		local knobHeightSpace = knob.getHeight() * 0.5;
-		
-		if (abs(relativeX) > abs(relativeY)) {
-			if (relativeX > 0) {
-				knob.move(getX() + getWidth() - knobWidthSpace + margin, getNeutralKnobY());
-			} else if (relativeX < 0) {
-				knob.move(getX() - margin - knobWidthSpace, getNeutralKnobY());
-			}
-		} else {
-			if (relativeY > 0) {
-				knob.move(getNeutralKnobX(), getY() + getHeight() - knobHeightSpace + margin);
-			} else if (relativeY < 0) {
-				knob.move(getNeutralKnobX(), getY() - margin - knobHeightSpace);
-			}
-		}
-		
-		
-		base.fireControlEvent(hasChanged, immediate);
-	}
+    function constructor(_name, _knobname, _alpha = 0.5) {
+        base.constructor(_name, _knobname, _alpha);
+    }
+    function fireControlEvent(hasChanged, immediate = false) {
+        local relativeX = getRelativeX();
+        local relativeY = getRelativeY();
+        local knobWidthSpace  = knob.getWidth()  * 0.5;
+        local knobHeightSpace = knob.getHeight() * 0.5;
+        
+        if (abs(relativeX) > abs(relativeY)) {
+            if (relativeX > 0) {
+                knob.move(getX() + getWidth() - knobWidthSpace + margin, getNeutralKnobY());
+            } else if (relativeX < 0) {
+                knob.move(getX() - margin - knobWidthSpace, getNeutralKnobY());
+            }
+        } else {
+            if (relativeY > 0) {
+                knob.move(getNeutralKnobX(), getY() + getHeight() - knobHeightSpace + margin);
+            } else if (relativeY < 0) {
+                knob.move(getNeutralKnobX(), getY() - margin - knobHeightSpace);
+            }
+        }
+        
+        
+        base.fireControlEvent(hasChanged, immediate);
+    }
 }
 
 function emo::Stage::load(obj) {
@@ -1591,19 +1591,19 @@ function emo::Stage::load(obj) {
 }
 
 function emo::Stage::getWindowWidth() {
-	return this.windowWidth();
+    return this.windowWidth();
 }
 
 function emo::Stage::getWindowHeight() {
-	return this.windowHeight();
+    return this.windowHeight();
 }
 
 function emo::Stage::getCenterX() {
-	return getWindowWidth() * 0.5;
+    return getWindowWidth() * 0.5;
 }
 
 function emo::Stage::getCenterY() {
-	return getWindowHeight() * 0.5;
+    return getWindowHeight() * 0.5;
 }
 
 function emo::_onLoad() { 
@@ -1615,7 +1615,7 @@ function emo::_onLoad() {
 function emo::_onGainedFocus() {
 
     EMO_RUNTIME_STOPWATCH.start();
-	EMO_ON_UPDATE_MANAGER.onResume();
+    EMO_ON_UPDATE_MANAGER.onResume();
 
     if (emo.rawin("onGainedFocus")) {
         emo.onGainedFocus();
@@ -1628,8 +1628,8 @@ function emo::_onGainedFocus() {
 
 function emo::_onLostFocus() {
 
-	EMO_ON_UPDATE_MANAGER.onPause();
-	
+    EMO_ON_UPDATE_MANAGER.onPause();
+    
     if (emo.rawin("onLostFocus")) {
         emo.onLostFocus();
     }
@@ -1694,12 +1694,12 @@ function emo::_onMotionEvent(...) {
              EMO_RUNTIME_DELEGATE.rawin("onMotionEvent")) {
         EMO_RUNTIME_DELEGATE.onMotionEvent(mevent);
     }
-	
-	for (local i = 0; i < EMO_MOTION_LISTENERS.len(); i++) {
-		if (EMO_MOTION_LISTENERS[i].rawin("onMotionEvent")) {
-			EMO_MOTION_LISTENERS[i].onMotionEvent(mevent);
-		}
-	}
+    
+    for (local i = 0; i < EMO_MOTION_LISTENERS.len(); i++) {
+        if (EMO_MOTION_LISTENERS[i].rawin("onMotionEvent")) {
+            EMO_MOTION_LISTENERS[i].onMotionEvent(mevent);
+        }
+    }
 }
 
 function emo::_onKeyEvent(...) {
@@ -1725,15 +1725,15 @@ function emo::_onSensorEvent(...) {
 }
 
 class emo.Error {
-	code    = null;
-	message = null;
+    code    = null;
+    message = null;
 }
 
 function emo::_onCallback(...) {
-	local err   = emo.Error();
-	err.code    = vargv[2];
-	err.message = vargv[3];
-	
+    local err   = emo.Error();
+    err.code    = vargv[2];
+    err.message = vargv[3];
+    
     if (emo.rawin("onCallback")) {
         emo.onCallback(vargv[0], vargv[1], err);
     }

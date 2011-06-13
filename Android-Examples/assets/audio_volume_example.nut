@@ -12,118 +12,118 @@ local audioCh1 = audio.createChannel(0);
  */
 class Main {
 
-	// 16x16 text sprite with 2 pixel border and 1 pixel margin
+    // 16x16 text sprite with 2 pixel border and 1 pixel margin
     text = emo.TextSprite("font_16x16.png",
-		" !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-		16, 16, 2, 1);
-	
+        " !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        16, 16, 2, 1);
+    
     volText = emo.TextSprite("font_16x16.png",
-		" !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-		16, 16, 2, 1);
+        " !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        16, 16, 2, 1);
     maxText = emo.TextSprite("font_16x16.png",
-		" !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-		16, 16, 2, 1);
+        " !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        16, 16, 2, 1);
     minText = emo.TextSprite("font_16x16.png",
-		" !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-		16, 16, 2, 1);
-	
-	volumeLevel = 100;
+        " !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        16, 16, 2, 1);
+    
+    volumeLevel = 100;
 
-	/*
-	 * Called when this class is loaded
-	 */
+    /*
+     * Called when this class is loaded
+     */
     function onLoad() {
         print("onLoad"); 
-		
-		// Below statements is an example of multiple screen density support.
-		// (i.e. Retina vs non-Retina, cellular phone vs tablet device).
-		if (stage.getWindowWidth() > 320) {
-			// if the screen has large display, scale contents twice
-			// that makes the stage size by half.
-			// This examples shows how to display similar-scale images
-			// on Retina and non-Retina display.
-			stage.setContentScale(stage.getWindowWidth() / 320.0);
-		}
-		
-		// load the audio.
-		audioCh1.load("drums.wav");
-		
-		// enable looping for the background audio
-		// NOTE:  calling setLoop before loading the audio will fail.
-		audioCh1.setLoop(true);
-		
-		text.setText("TAP TO CHANGE VOLUME");
-		volText.setText("VOL: ");
-		maxText.setText("MAX: ");
-		minText.setText("MIN: ");
-		
-		// move sprite to the center of the screen
-		local x = (stage.getWindowWidth()  - text.getWidth())  / 2;
-		local y = (stage.getWindowHeight() - text.getHeight()) / 2;
-		
-		text.move(x, y);
-		volText.move(x, y + text.getHeight());
-		maxText.move(x, y + text.getHeight() * 2);
-		minText.move(x, y + text.getHeight() * 3);
-		
-		// load sprite to the screen
+        
+        // Below statements is an example of multiple screen density support.
+        // (i.e. Retina vs non-Retina, cellular phone vs tablet device).
+        if (stage.getWindowWidth() > 320) {
+            // if the screen has large display, scale contents twice
+            // that makes the stage size by half.
+            // This examples shows how to display similar-scale images
+            // on Retina and non-Retina display.
+            stage.setContentScale(stage.getWindowWidth() / 320.0);
+        }
+        
+        // load the audio.
+        audioCh1.load("drums.wav");
+        
+        // enable looping for the background audio
+        // NOTE:  calling setLoop before loading the audio will fail.
+        audioCh1.setLoop(true);
+        
+        text.setText("TAP TO CHANGE VOLUME");
+        volText.setText("VOL: ");
+        maxText.setText("MAX: ");
+        minText.setText("MIN: ");
+        
+        // move sprite to the center of the screen
+        local x = (stage.getWindowWidth()  - text.getWidth())  / 2;
+        local y = (stage.getWindowHeight() - text.getHeight()) / 2;
+        
+        text.move(x, y);
+        volText.move(x, y + text.getHeight());
+        maxText.move(x, y + text.getHeight() * 2);
+        minText.move(x, y + text.getHeight() * 3);
+        
+        // load sprite to the screen
         text.load();
-		volText.load();
-		maxText.load();
-		minText.load();
+        volText.load();
+        maxText.load();
+        minText.load();
     }
 
-	/*
-	 * Called when the app has gained focus
-	 */
+    /*
+     * Called when the app has gained focus
+     */
     function onGainedFocus() {
         print("onGainedFocus");
-		
-		// play the audio.
-		audioCh1.play();
-		
-		volText.setText(format("VOL: %4.2f", audioCh1.getVolume()));
-		maxText.setText(format("MAX: %4.2f", audioCh1.getMaxVolume()));
-		minText.setText(format("MIN: %4.2f", audioCh1.getMinVolume()));
+        
+        // play the audio.
+        audioCh1.play();
+        
+        volText.setText(format("VOL: %4.2f", audioCh1.getVolume()));
+        maxText.setText(format("MAX: %4.2f", audioCh1.getMaxVolume()));
+        minText.setText(format("MIN: %4.2f", audioCh1.getMinVolume()));
     }
 
-	/*
-	 * Called when the app has lost focus
-	 */
+    /*
+     * Called when the app has lost focus
+     */
     function onLostFocus() {
         print("onLostFocus"); 
-		
-		// pause the audio
-		audioCh1.pause();
+        
+        // pause the audio
+        audioCh1.pause();
     }
 
-	/*
-	 * Called when the class ends
-	 */
+    /*
+     * Called when the class ends
+     */
     function onDispose() {
         print("onDispose");
         
         // remove sprite from the screen
         text.remove();
-		
-		// close the audio
-		audioCh1.close();
+        
+        // close the audio
+        audioCh1.close();
     }
 
-	/*
-	 * touch event
-	 */
-	function onMotionEvent(mevent) {
-		if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-			if (audioCh1.getVolume() > audioCh1.getMinVolume()) {
-				volumeLevel--;
-			} else {
-				volumeLevel = 100;
-			}
-			audioCh1.setVolume(audioCh1.getMaxVolume() / 100.0 * volumeLevel);
-			volText.setText(format("VOL: %4.2f", audioCh1.getVolume()));
-		}
-	}
+    /*
+     * touch event
+     */
+    function onMotionEvent(mevent) {
+        if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+            if (audioCh1.getVolume() > audioCh1.getMinVolume()) {
+                volumeLevel--;
+            } else {
+                volumeLevel = 100;
+            }
+            audioCh1.setVolume(audioCh1.getMaxVolume() / 100.0 * volumeLevel);
+            volText.setText(format("VOL: %4.2f", audioCh1.getVolume()));
+        }
+    }
 }
 
 function emo::onLoad() {
