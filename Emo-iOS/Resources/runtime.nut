@@ -668,12 +668,6 @@ class emo.MultiModifier extends emo.Modifier {
     }
 }
 
-class emo.AlphaModifier extends emo.Modifier {
-    function onModify(currentValue) {
-        targetObj.alpha(currentValue);
-    }
-}
-
 class emo.ScaleModifier extends emo.Modifier {
     function onModify(currentValue) {
         targetObj.scale(currentValue, currentValue);
