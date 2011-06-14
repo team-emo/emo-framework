@@ -718,7 +718,7 @@ class emo.physics.PolygonShape {
         return physics.polygonShape_getVertexCount(id);
     }
     
-    function setRadius(radius) {
+    function radius(radius) {
         return physics.polygonShape_radius(id, radius);
     }
 }
