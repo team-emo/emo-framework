@@ -79,20 +79,20 @@ class Main {
         
         sprite.move(nextX, nextY);
         
-		if (hasChanged) {
-			local direction = controller.getDirection();
-			if (direction == CONTROL_LEFT) {
-				sprite.setFrame(5);
-			} else if (direction == CONTROL_RIGHT) {
-				sprite.setFrame(0);
-			} else if (direction == CONTROL_UP) {
-				sprite.setFrame(1);
-			} else if (direction == CONTROL_DOWN) {
-				sprite.setFrame(2);
-			} else {
-				sprite.setFrame(0);
-			}
-		}
+        if (hasChanged) {
+            local direction = controller.getDirection();
+            if (direction == CONTROL_LEFT) {
+                sprite.setFrame(5);
+            } else if (direction == CONTROL_RIGHT) {
+                sprite.setFrame(0);
+            } else if (direction == CONTROL_UP) {
+                sprite.setFrame(1);
+            } else if (direction == CONTROL_DOWN) {
+                sprite.setFrame(2);
+            } else {
+                sprite.setFrame(0);
+            }
+        }
     }
 }
 
