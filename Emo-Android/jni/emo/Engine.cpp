@@ -738,6 +738,8 @@ namespace emo {
         case OPT_ORIENTATION_PORTRAIT:
             this->javaGlue->setOrientationPortrait();
             break;
+        case OPT_ORIENTATION_LANDSCAPE_LEFT:
+        case OPT_ORIENTATION_LANDSCAPE_RIGHT:
         case OPT_ORIENTATION_LANDSCAPE:
         	this->javaGlue->setOrientationLandscape();
             break;
