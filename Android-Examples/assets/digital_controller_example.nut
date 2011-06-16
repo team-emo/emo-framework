@@ -32,6 +32,10 @@ class Main {
         sprite.move(x, y);
         controller.move((stage.getWindowWidth() - controller.getWidth()) / 2,
                          stage.getWindowHeight() - controller.getHeight());
+                         
+        // onControlEvent is fired every 16 milliseconds at most
+        // the default updateInterval equals 100 milliseconds
+        controller.updateInterval = 16;
 
         // load sprite into the screen
         sprite.load();
@@ -67,8 +71,8 @@ class Main {
      * on-screen controller event
      */
     function onControlEvent(controller, controlX, controlY, hasChanged) {
-        local nextX = sprite.getX() + (controlX / 5);
-        local nextY = sprite.getY() + (controlY / 5);
+        local nextX = sprite.getX() + (controlX / 10);
+        local nextY = sprite.getY() + (controlY / 10);
         
         if (nextX < 0 || nextX > stage.getWindowWidth() - sprite.getWidth()) {
             nextX = sprite.getX();

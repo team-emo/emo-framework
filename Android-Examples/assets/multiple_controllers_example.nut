@@ -39,6 +39,11 @@ class Main {
         controller1.move(0, stage.getWindowHeight() - controller1.getHeight());
         controller2.move(stage.getWindowWidth()  - controller2.getWidth(),
                          stage.getWindowHeight() - controller2.getHeight());
+                         
+        // onControlEvent is fired every 16 milliseconds at most
+        // the default updateInterval equals 100 milliseconds
+        controller1.updateInterval = 16;
+        controller2.updateInterval = 16;
 
         // sprite2 is painted
         sprite2.red(0.5);
@@ -87,8 +92,8 @@ class Main {
         } else {
             sprite = sprite2;
         }
-        local nextX = sprite.getX() + (controlX / 5);
-        local nextY = sprite.getY() + (controlY / 5);
+        local nextX = sprite.getX() + (controlX / 10);
+        local nextY = sprite.getY() + (controlY / 10);
         
         if (nextX < 0 || nextX > stage.getWindowWidth() - sprite.getWidth()) {
             nextX = sprite.getX();
