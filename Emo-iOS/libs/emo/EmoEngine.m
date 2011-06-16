@@ -568,6 +568,14 @@ NSString* data2ns(NSData* data) {
 			interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
 		return YES;
 	}
+	if (currentOrientation == OPT_ORIENTATION_LANDSCAPE_LEFT &&
+        interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
+		return YES;
+	}
+	if (currentOrientation == OPT_ORIENTATION_LANDSCAPE_RIGHT &&
+        interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+		return YES;
+	}
 	if (currentOrientation == OPT_ORIENTATION_PORTRAIT &&
 		interfaceOrientation == UIInterfaceOrientationPortrait) {
 		return YES;
