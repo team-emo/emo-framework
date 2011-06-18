@@ -137,7 +137,7 @@ class Main {
     }
     
     /*
-     * touch event
+     * sensor event
      */
     function onSensorEvent(sevent) {
         if (sevent.getType() == SENSOR_TYPE_ACCELEROMETER) {
