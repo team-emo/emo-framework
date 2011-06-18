@@ -31,7 +31,6 @@ class Main {
      * touch event
      */
     function onMotionEvent(mevent) {
-        // move rectangle to the position on the motion event 
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
             print(format("EVENT: %dx%d", mevent.getX(), mevent.getY()));
         }
