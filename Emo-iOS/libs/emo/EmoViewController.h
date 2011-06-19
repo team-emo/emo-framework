@@ -62,4 +62,5 @@
 - (void)onLostFocus;
 - (void)stopAnimation;
 - (void)onDispose;
+-(NSInteger)getOrientationOption;
 @end

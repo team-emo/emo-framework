@@ -297,4 +297,10 @@ EmoEngine* engine;
 	}
 	return [super shouldAutorotateToInterfaceOrientation:interfaceOrientation];
 }
+-(NSInteger)getOrientationOption {
+    if (engine == nil) {
+        return OPT_ORIENTATION_UNSPECIFIED;
+    }
+    return engine.currentOrientation;
+}
 @end
