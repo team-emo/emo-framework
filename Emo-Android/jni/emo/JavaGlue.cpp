@@ -79,25 +79,8 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_callback
 }
 
 namespace emo {
-    std::string JavaGlue::echo(std::string echo) {
-        std::string echoValue;
-
-        JNIEnv* env;
-        JavaVM* vm = engine->app->activity->vm;
-
-        vm->AttachCurrentThread(&env, NULL);
-
-        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
-        jmethodID methodj = env->GetMethodID(clazz, "echo", "(Ljava/lang/String;)Ljava/lang/String;");
-        jstring jstr = (jstring)env->CallObjectMethod(engine->app->activity->clazz, methodj,  env->NewStringUTF(echo.c_str()));
-        if (jstr != NULL) {
-            const char* str = env->GetStringUTFChars(jstr, NULL);
-            echoValue = str;
-            env->ReleaseStringUTFChars(jstr, str);
-        }
-        vm->DetachCurrentThread();
-
-        return echoValue;
+    std::string JavaGlue::echo(std::string value) {
+    	return this->callString_String("echo", value);
     }
 
     void JavaGlue::asyncHttpRequest(std::string name, jint timeout, std::string url, std::string method, kvs_t* params) {
@@ -167,53 +150,34 @@ namespace emo {
         return result == JNI_TRUE;
     }
 
-    void JavaGlue::setOrientationLandscape() {
-
-    	int32_t orient = AConfiguration_getOrientation(engine->app->config);
-    	if (orient != ACONFIGURATION_ORIENTATION_LAND) {
-    		engine->stage->invertSize();
-    	}
-
+    /*
+     * Call java method with no parameter that returns void.
+     */
+    void JavaGlue::callVoid_Void(std::string methodName) {
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
 
         vm->AttachCurrentThread(&env, NULL);
 
         jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
-        jmethodID methodj = env->GetMethodID(clazz, "setOrientationLandscape", "()V");
+        jmethodID methodj = env->GetMethodID(clazz, methodName.c_str(), "()V");
         env->CallVoidMethod(engine->app->activity->clazz, methodj);
 
         vm->DetachCurrentThread();
     }
 
-    void JavaGlue::setOrientationPortrait() {
-    	int32_t orient = AConfiguration_getOrientation(engine->app->config);
-    	if (orient != ACONFIGURATION_ORIENTATION_PORT) {
-    		engine->stage->invertSize();
-    	}
-
-        JNIEnv* env;
-        JavaVM* vm = engine->app->activity->vm;
-
-        vm->AttachCurrentThread(&env, NULL);
-
-        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
-        jmethodID methodj = env->GetMethodID(clazz, "setOrientationPortrait", "()V");
-        env->CallVoidMethod(engine->app->activity->clazz, methodj);
-
-        vm->DetachCurrentThread();
-    }
-
-    std::string JavaGlue::getDeviceName() {
+    /*
+     * Call java method with no parameter that returns string.
+     */
+    std::string JavaGlue::callVoid_String(std::string methodName) {
         std::string value;
-
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
 
         vm->AttachCurrentThread(&env, NULL);
 
         jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
-        jmethodID methodj = env->GetMethodID(clazz, "getDeviceName", "()Ljava/lang/String;");
+        jmethodID methodj = env->GetMethodID(clazz, methodName.c_str(), "()Ljava/lang/String;");
         jstring jstr = (jstring)env->CallObjectMethod(engine->app->activity->clazz, methodj);
         if (jstr != NULL) {
             const char* str = env->GetStringUTFChars(jstr, NULL);
@@ -225,7 +189,10 @@ namespace emo {
         return value;
     }
 
-    bool JavaGlue::isSimulator() {
+    /*
+     * Call java method with no parameter that returns boolean.
+     */
+    bool JavaGlue::callVoid_Bool(std::string methodName) {
     	jboolean value = false;
 
         JNIEnv* env;
@@ -234,11 +201,62 @@ namespace emo {
         vm->AttachCurrentThread(&env, NULL);
 
         jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
-        jmethodID methodj = env->GetMethodID(clazz, "isSimulator", "()Z");
+        jmethodID methodj = env->GetMethodID(clazz, methodName.c_str(), "()Z");
         value = env->CallBooleanMethod(engine->app->activity->clazz, methodj);
         vm->DetachCurrentThread();
 
         return value;
+    }
+
+    /*
+     * Call java method with one string parameter that returns string.
+     */
+    std::string JavaGlue::callString_String(std::string methodName, std::string passValue) {
+        std::string value;
+
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, methodName.c_str(), "(Ljava/lang/String;)Ljava/lang/String;");
+        jstring jstr = (jstring)env->CallObjectMethod(engine->app->activity->clazz, methodj,  env->NewStringUTF(passValue.c_str()));
+        if (jstr != NULL) {
+            const char* str = env->GetStringUTFChars(jstr, NULL);
+            value = str;
+            env->ReleaseStringUTFChars(jstr, str);
+        }
+        vm->DetachCurrentThread();
+
+        return value;
+    }
+
+    void JavaGlue::setOrientationLandscape() {
+
+    	int32_t orient = AConfiguration_getOrientation(engine->app->config);
+    	if (orient != ACONFIGURATION_ORIENTATION_LAND) {
+    		engine->stage->invertSize();
+    	}
+
+    	this->callVoid_Void("setOrientationLandscape");
+    }
+
+    void JavaGlue::setOrientationPortrait() {
+    	int32_t orient = AConfiguration_getOrientation(engine->app->config);
+    	if (orient != ACONFIGURATION_ORIENTATION_PORT) {
+    		engine->stage->invertSize();
+    	}
+
+    	this->callVoid_Void("setOrientationPortrait");
+    }
+
+    std::string JavaGlue::getDeviceName() {
+    	return this->callVoid_String("getDeviceName");
+    }
+
+    bool JavaGlue::isSimulator() {
+    	return this->callVoid_Bool("isSimulator");
     }
 }
 

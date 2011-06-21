@@ -50,6 +50,10 @@ namespace emo {
         void asyncHttpRequest(std::string name, jint timeout, std::string url, std::string method, kvs_t* params);
         bool registerJavaGlue();
         int registerNativeMethods(JNIEnv* env, JNINativeMethod* gMethods, int numMethods);
+        void callVoid_Void(std::string methodName);
+        std::string callVoid_String(std::string methodName);
+        bool callVoid_Bool(std::string methodName);
+        std::string callString_String(std::string methodName, std::string passValue);
         void setOrientationLandscape();
         void setOrientationPortrait();
         std::string getDeviceName();
