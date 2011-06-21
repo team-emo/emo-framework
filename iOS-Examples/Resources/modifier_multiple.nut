@@ -1,6 +1,7 @@
 local stage = emo.Stage();
 
 const NUMBER_OF_SPARKS = 12;
+local touchCount = 0;
 
 /*
  * A modifier class that emulates parabolic movement.
@@ -101,6 +102,7 @@ class Main {
         // save the start time of the modifiers because
         // there's a 'time lag' between the first modifier and the last modifier.
         local startTime = emo.Runtime().uptime();
+        local doRandom = touchCount++ % 2 == 0;
         
         for (local i = 0; i < sparks.len(); i++) {
             
@@ -114,12 +116,17 @@ class Main {
             
             // modifier for parabolic movement
             // defined by custom modifier class: ParabolicMoveModifier
-            sparks[i].addModifier(ParabolicMoveModifier(
+            local pModifier = ParabolicMoveModifier(
                 [startX, startY],           // from [x, y]
                 angle,                      // angle
                 2000,                       // duration
                 startTime                   // modifier start time
-            ));
+            );
+            if (doRandom) {
+                pModifier.g = 0;
+                pModifier.velocity = 0.02 + (0.01 * (rand() % 4));
+            }
+            sparks[i].addModifier(pModifier);
             
             // modifier for changing colors
             sparks[i].addModifier(emo.ColorModifier(
