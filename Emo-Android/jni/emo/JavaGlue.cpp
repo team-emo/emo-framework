@@ -235,7 +235,7 @@ namespace emo {
     /*
      * Call java method with two string parameter that returns void.
      */
-    std::string JavaGlue::callTwoString_Void(std::string methodName, std::string value1, std::string value2) {
+    void JavaGlue::callTwoString_Void(std::string methodName, std::string value1, std::string value2) {
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
 

@@ -54,7 +54,7 @@ namespace emo {
         std::string callVoid_String(std::string methodName);
         bool callVoid_Bool(std::string methodName);
         std::string callString_String(std::string methodName, std::string passValue);
-        std::string callTwoString_Void(std::string methodName, std::string value1, std::string value2);
+        void callTwoString_Void(std::string methodName, std::string value1, std::string value2);
         void setOrientationLandscape();
         void setOrientationPortrait();
         std::string getDeviceName();
