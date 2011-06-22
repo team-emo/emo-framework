@@ -232,6 +232,21 @@ namespace emo {
         return value;
     }
 
+    /*
+     * Call java method with two string parameter that returns void.
+     */
+    std::string JavaGlue::callTwoString_Void(std::string methodName, std::string value1, std::string value2) {
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, methodName.c_str(), "(Ljava/lang/String;Ljava/lang/String;)V");
+        env->CallVoidMethod(engine->app->activity->clazz, methodj, env->NewStringUTF(value1.c_str()), env->NewStringUTF(value2.c_str()));
+        vm->DetachCurrentThread();
+    }
+
     void JavaGlue::setOrientationLandscape() {
 
     	int32_t orient = AConfiguration_getOrientation(engine->app->config);
