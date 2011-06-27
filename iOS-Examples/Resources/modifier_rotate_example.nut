@@ -1,6 +1,10 @@
 local stage = emo.Stage();
 local event = emo.Event();
 
+local sprites = [];
+
+const NUMBER_OF_SPRITES = 100;
+
 /*
  * This example shows loading sprites with modifier.
  */
@@ -28,7 +32,7 @@ class Loading {
             stage.setContentScale(stage.getWindowWidth() / 320.0);
         }
         
-        text.setText("  LOADING..");
+        text.setText("  LOADING..  0%");
         
         // move sprite to the center of the screen
         circle.moveCenter(stage.getWindowWidth() / 2, stage.getWindowHeight() / 2);
@@ -54,8 +58,8 @@ class Loading {
         blinkTextModifier.setRepeatCount(-1); // -1 means infinite loop
         text.addModifier(blinkTextModifier);
         
-        // onDrawFrame(dt) will be called 5 seconds later
-        event.enableOnDrawCallback(5000);
+        // onDrawFrame(dt) will be called on every 0.1 seconds
+        event.enableOnDrawCallback(100);
     }
 
     /*
@@ -88,9 +92,20 @@ class Loading {
      */
     function onDrawFrame(dt) {
     
-        // now loading is completed so proceed to the next stage.
-        event.disableOnDrawCallback();
-        stage.load(Main());
+        if (sprites.len() >= NUMBER_OF_SPRITES) {
+            // now loading is completed so proceed to the next stage.
+            event.disableOnDrawCallback();
+            stage.load(Main());
+        } else {
+            text.setText(format("  LOADING..%3d%%", sprites.len() + 1));
+        
+            local spark = emo.Sprite("flare.png");
+            spark.color(1, 1, 0);
+            spark.move(rand() % stage.getWindowWidth(), rand() % stage.getWindowHeight());
+            spark.hide();
+            spark.load();
+            sprites.append(spark);
+        }
     }
 }
 class Main {
@@ -128,6 +143,7 @@ class Main {
      */
     function onDispose() {
         print("Main::onDispose");
+        text.remove();
     }
     
     /*
@@ -138,6 +154,10 @@ class Main {
             text.setText("STARTED");
             text.moveCenter(stage.getWindowWidth()  / 2,
                             stage.getWindowHeight() / 2);
+                            
+            for (local i = 0; i < NUMBER_OF_SPRITES; i++) {
+                sprites[i].show();
+            }
         }
     }
 }
