@@ -144,6 +144,10 @@ class Main {
     function onDispose() {
         print("Main::onDispose");
         text.remove();
+        for (local i = 0; i < sprites.len(); i++) {
+            sprites[i].remove();
+        }
+        sprites.clear();
     }
     
     /*
@@ -155,7 +159,7 @@ class Main {
             text.moveCenter(stage.getWindowWidth()  / 2,
                             stage.getWindowHeight() / 2);
                             
-            for (local i = 0; i < NUMBER_OF_SPRITES; i++) {
+            for (local i = 0; i < sprites.len(); i++) {
                 sprites[i].show();
             }
         }
