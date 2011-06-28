@@ -1745,17 +1745,17 @@ class emo.Error {
     message = null;
 }
 
-function emo::_onCallback(...) {
+function emo::_onNetCallback(...) {
     local err   = emo.Error();
     err.code    = vargv[2];
     err.message = vargv[3];
     
-    if (emo.rawin("onCallback")) {
-        emo.onCallback(vargv[0], vargv[1], err);
+    if (emo.rawin("onNetCallback")) {
+        emo.onNetCallback(vargv[0], vargv[1], err);
     }
     if (EMO_RUNTIME_DELEGATE != null &&
-             EMO_RUNTIME_DELEGATE.rawin("onCallback")) {
-        EMO_RUNTIME_DELEGATE.onCallback(vargv[0], vargv[1], err);
+             EMO_RUNTIME_DELEGATE.rawin("onNetCallback")) {
+        EMO_RUNTIME_DELEGATE.onNetCallback(vargv[0], vargv[1], err);
     }
 }
 

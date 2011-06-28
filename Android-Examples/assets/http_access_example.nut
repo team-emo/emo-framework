@@ -74,7 +74,7 @@ class Main {
     /*
      * Asynchronous http request callback
      */
-    function onCallback(name, response, err) {
+    function onNetCallback(name, response, err) {
         if (name == MY_REQUEST_NAME) {
             print(format("============ RESPONSE FROM %s ============", name));
             print(response);
