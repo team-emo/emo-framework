@@ -403,7 +403,7 @@ class emo.Modifier {
     duration = null;
     easing   = null;
     started  = null;
-    parent   = null;
+    listener   = null;
     repeatCount   = null;
     currentCount  = null;
     eventCallback = null;
@@ -441,8 +441,8 @@ class emo.Modifier {
             if (eventCallback != null) {
                 eventCallback(targetObj, this, EVENT_MODIFIER_START);
             }
-            if (parent != null) {
-                parent.onModifierEvent(targetObj, this, EVENT_MODIFIER_START);
+            if (listener != null) {
+                listener.onModifierEvent(targetObj, this, EVENT_MODIFIER_START);
             }
         }
 
@@ -456,8 +456,8 @@ class emo.Modifier {
                 if (eventCallback != null) {
                     eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
                 }
-                if (parent != null) {
-                    parent.onModifierEvent(targetObj, this, EVENT_MODIFIER_FINISH);
+                if (listener != null) {
+                    listener.onModifierEvent(targetObj, this, EVENT_MODIFIER_FINISH);
                 }
             } else {
                 startTime = EMO_RUNTIME_STOPWATCH.elapsed();
@@ -465,8 +465,8 @@ class emo.Modifier {
                 if (eventCallback != null) {
                     eventCallback(targetObj, this, EVENT_MODIFIER_RESTART);
                 }
-                if (parent != null) {
-                    parent.onModifierEvent(targetObj, this, EVENT_MODIFIER_RESTART);
+                if (listener != null) {
+                    listener.onModifierEvent(targetObj, this, EVENT_MODIFIER_RESTART);
                 }
             }
             return;
@@ -496,11 +496,11 @@ class emo.Modifier {
     }
     
     function setEventListener(prnt) {
-        parent = prnt;
+        listener = prnt;
     }
     
     function getEventListener() {
-        return parent;
+        return listener;
     }
     
     function resetTimer() {
@@ -525,6 +525,7 @@ class emo.SequenceModifier {
     modifierIndex   = null;
     repeatCount     = null;
     currentCount    = null;
+    listener        = null;
     
     function constructor(...) {
         for (local i = 0; i < vargv.len(); i++) {
@@ -552,9 +553,10 @@ class emo.SequenceModifier {
             if (eventCallback != null) {
                 eventCallback(obj, this, eventType);
             }
-        }
-        
-        if (eventType == EVENT_MODIFIER_FINISH) {
+            if (listener != null) {
+                listener.onModifierEvent(obj, this, eventType);
+            }
+        } else if (eventType == EVENT_MODIFIER_FINISH) {
             modifierIndex++;
             if (modifierIndex < modifiers.len()) {
                 modifier = modifiers[modifierIndex];
@@ -570,6 +572,9 @@ class emo.SequenceModifier {
                     if (eventCallback != null) {
                         eventCallback(obj, this, eventType);
                     }
+                    if (listener != null) {
+                        listener.onModifierEvent(obj, this, eventType);
+                    }
                 } else {
                     currentCount++;
                     for (local i = 0; i < modifiers.len(); i++) {
@@ -579,6 +584,12 @@ class emo.SequenceModifier {
                     modifierIndex = 0;
                     modifier = modifiers[modifierIndex];
                     modifier.onResume();
+                    if (eventCallback != null) {
+                        eventCallback(obj, this, EVENT_MODIFIER_RESTART);
+                    }
+                    if (listener != null) {
+                        listener.onModifierEvent(obj, this, EVENT_MODIFIER_RESTART);
+                    }
                 }
             }
         }
@@ -623,6 +634,14 @@ class emo.SequenceModifier {
 
     function setEventCallback(func) {
         eventCallback = func;
+    }
+    
+    function setEventListener(prnt) {
+        listener = prnt;
+    }
+    
+    function getEventListener() {
+        return listener;
     }
 }
 
