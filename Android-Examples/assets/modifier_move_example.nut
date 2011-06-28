@@ -28,16 +28,6 @@ class Main {
             stage.setContentScale(stage.getWindowWidth() / 320.0);
         }
         
-        // move sprite to the center of the screen
-        local x = stage.getWindowWidth() / 5;
-        local y = stage.getWindowHeight() - block1.getHeight();
-        
-        block1.move(x * 0, block1.getHeight());
-        block2.move(x * 1, block2.getHeight());
-        block3.move(x * 2, block3.getHeight());
-        block4.move(x * 3, block4.getHeight());
-        block5.move(x * 4, block5.getHeight());
-        
         block1.color(1, 1, 0);
         block2.color(1, 1, 0);
         block3.color(1, 1, 0);
@@ -50,6 +40,30 @@ class Main {
         block3.load();
         block4.load();
         block5.load();
+        
+        addModifiers();
+    }
+    
+    /*
+     * setup block modifiers
+     */
+    function addModifiers() {
+        // clear all modifiers
+        block1.clearModifier();
+        block2.clearModifier();
+        block3.clearModifier();
+        block4.clearModifier();
+        block5.clearModifier();
+        
+        // move sprite to the center of the screen
+        local x = stage.getWindowWidth() / 5;
+        local y = stage.getWindowHeight() - block1.getHeight();
+        
+        block1.move(x * 0, block1.getHeight());
+        block2.move(x * 1, block2.getHeight());
+        block3.move(x * 2, block3.getHeight());
+        block4.move(x * 3, block4.getHeight());
+        block5.move(x * 4, block5.getHeight());
         
         // block1 moves along axis by Linear equation in 5 seconds 
         block1.addModifier(emo.MoveModifier(
@@ -113,6 +127,15 @@ class Main {
         block3.remove();
         block4.remove();
         block5.remove();
+    }
+    
+    /*
+     * touch event
+     */
+    function onMotionEvent(mevent) {
+        if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+            addModifiers();
+        }
     }
 }
 
