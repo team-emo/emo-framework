@@ -442,7 +442,7 @@ class emo.Modifier {
                 eventCallback(targetObj, this, EVENT_MODIFIER_START);
             }
             if (parent != null) {
-                parent.onEvent(targetObj, this, EVENT_MODIFIER_START);
+                parent.onModifierEvent(targetObj, this, EVENT_MODIFIER_START);
             }
         }
 
@@ -457,7 +457,7 @@ class emo.Modifier {
                     eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
                 }
                 if (parent != null) {
-                    parent.onEvent(targetObj, this, EVENT_MODIFIER_FINISH);
+                    parent.onModifierEvent(targetObj, this, EVENT_MODIFIER_FINISH);
                 }
             } else {
                 startTime = EMO_RUNTIME_STOPWATCH.elapsed();
@@ -466,7 +466,7 @@ class emo.Modifier {
                     eventCallback(targetObj, this, EVENT_MODIFIER_RESTART);
                 }
                 if (parent != null) {
-                    parent.onEvent(targetObj, this, EVENT_MODIFIER_RESTART);
+                    parent.onModifierEvent(targetObj, this, EVENT_MODIFIER_RESTART);
                 }
             }
             return;
@@ -495,11 +495,11 @@ class emo.Modifier {
         return name;
     }
     
-    function setParent(prnt) {
+    function setEventListener(prnt) {
         parent = prnt;
     }
     
-    function getParent() {
+    function getEventListener() {
         return parent;
     }
     
@@ -528,7 +528,7 @@ class emo.SequenceModifier {
     
     function constructor(...) {
         for (local i = 0; i < vargv.len(); i++) {
-            vargv[i].setParent(this);
+            vargv[i].setEventListener(this);
             vargv[i].onPause();
             modifiers.append(vargv[i]);
         }
@@ -546,7 +546,7 @@ class emo.SequenceModifier {
         repeatCount = count;
     }
     
-    function onEvent(obj, _modifier, eventType) {
+    function onModifierEvent(obj, _modifier, eventType) {
         if (!started && eventType == EVENT_MODIFIER_START) {
             started = true;
             if (eventCallback != null) {
@@ -562,7 +562,7 @@ class emo.SequenceModifier {
             } else {
                 if (currentCount == repeatCount) {
                     for (local i = 0; i < modifiers.len(); i++) {
-                        modifiers[i].setParent(null);
+                        modifiers[i].setEventListener(null);
                     }
                     modifier = null;
                     modifiers.clear();

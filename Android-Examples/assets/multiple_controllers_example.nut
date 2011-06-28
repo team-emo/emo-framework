@@ -84,6 +84,7 @@ class Main {
 
     /*
      * on-screen controller event
+     * controlX and controlY takes value from -100 to 100.
      */
     function onControlEvent(controller, controlX, controlY, hasChanged) {
         local sprite = null;

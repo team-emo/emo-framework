@@ -62,20 +62,21 @@ class Splash {
         // create a 1 second modifier to fade out the splash screen
         local modifier = emo.AlphaModifier(1, 0, 1000, emo.easing.CubicOut);
         
-        // set modifier event callback function to proceed to the main.
-        modifier.setEventCallback(modifierCallback);
+        // set modifier event listener. 
+        // onModifierEvent is called when modifier event occurs.
+        modifier.setEventListener(this);
         
         // add modifier to the splash sprite.
         splash.addModifier(modifier);
     }
-}
 
-// This function is called by modifier of the splash sprite.
-// eventType equals EVENT_MODIFIER_FINISH if the modifier ends.
-function modifierCallback(obj, modifier, eventType) {
-    if (eventType == EVENT_MODIFIER_FINISH) {
-        // now loading is completed so proceed to the next level.
-        stage.load(Main());
+    // This function is called by modifier of the splash sprite.
+    // eventType equals EVENT_MODIFIER_FINISH if the modifier ends.
+    function onModifierEvent(obj, modifier, eventType) {
+        if (eventType == EVENT_MODIFIER_FINISH) {
+            // now splash animation is completed so proceed to the next level.
+            stage.load(Main());
+        }
     }
 }
 
