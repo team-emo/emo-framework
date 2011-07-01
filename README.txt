@@ -10,16 +10,24 @@ emo-framework is licensed under the terms of the New BSD License (see LICENSE.tx
 
 = Install project template for Android =
 
-Project template for Eclipse can be used to create new emo project for Android.
+Use Eclipse project template to create new emo project for Android.
 
 Download the latest source distribution from http://code.google.com/p/emo-framework/downloads/list . The project template for Eclipse is in the Android-Template directory.
 
   * Start your Eclipse
   * Select 'File' -> 'Import' menu
   * Select 'General' -> 'Existing Projects into Workspace'
+
+http://www.emo-framework.com/images/eclipse_install1.png
+
   * Choose 'Select root directory' and browse for the parent directory of the Android-Template directory.
+
+http://www.emo-framework.com/images/eclipse_install2.png
+
   * Check the 'copy projects into workspace' if you want to copy them to your workspace. (Normally you may need to check it.)
   * Check the 'Android-Template' directory and press 'Finish' button
+
+http://www.emo-framework.com/images/eclipse_install3.png
 
 Edit package name in the !AndroidManifest.xml. Otherwise "com.emo_framework.examples" is used for your app. (you won't be happy  with it...)
 {{{
@@ -29,16 +37,18 @@ Edit package name in the !AndroidManifest.xml. Otherwise "com.emo_framework.exam
         android:versionName="1.0">
 }}}
 
-The main script file is assets/main.nut. Edit it to write your own game.
+The main script file is *assets/main.nut*. Edit it to create your own game.
+
+http://www.emo-framework.com/images/eclipse_install4.png
 
 {{{
 function emo::onLoad() {
   // print log into the logcat
   print("It works!");
+  emo.Stage().load(Main());
 }
 }}}
 
-That's all!
 
 = Build examples for Android =
 
@@ -47,9 +57,16 @@ The example for Eclipse is in the Android-Examples directory.
   * Start your Eclipse
   * Select 'File' -> 'Import' menu
   * Select 'General' -> 'Existing Projects into Workspace'
+
+http://www.emo-framework.com/images/eclipse_install1.png
+
   * Choose 'Select root directory' and browse for the parent directory of the Android-Examples directory.
+
+http://www.emo-framework.com/images/eclipse_install2.png
+
   * Check the 'copy projects into workspace' if you want to copy them to your workspace. (Normally you may need to check it.)
   * Check the 'Android-Examples' directory and press 'Finish' button
+
 
 = Install project template for Xcode 3 =
 
@@ -84,4 +101,24 @@ If you want to re-install the project template, add -f option.
 $ ./install-templates-Xcode3.sh -u -f
 }}}
 
-This installs the project template into your Xcode 3. Now you can choose the project template to create new emo project for iOS.
+After installing project template into your Xcode 3, you can choose the User Template to create new emo project for iOS.
+
+http://www.emo-framework.com/images/xcode_install1.png
+
+http://www.emo-framework.com/images/xcode_install2.png
+
+The main script file is *Resources/main.nut*. Edit main.nut to create your own game. 
+
+http://www.emo-framework.com/images/xcode_install3.png
+
+{{{
+function emo::onLoad() {
+  // print log into the console
+  print("It works!");
+  emo.Stage().load(Main());
+}
+}}}
+
+Have fun with emo!
+
+http://www.emo-framework.com/images/xcode_install4.png
