@@ -18,8 +18,6 @@
 		F908827613872BFD0065EC77 /* box2d_helloworld.nut in Resources */ = {isa = PBXBuildFile; fileRef = F908827513872BEA0065EC77 /* box2d_helloworld.nut */; };
 		F9102FDC13973AB300BC7404 /* http_access_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9102FDB13973AA800BC7404 /* http_access_example.nut */; };
 		F917F96F1387AC15003F4B53 /* animation_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F917F96E1387AC0D003F4B53 /* animation_example.nut */; };
-		F91C5144138DD60500464576 /* onscreen_control_base.png in Resources */ = {isa = PBXBuildFile; fileRef = F91C5142138DD60400464576 /* onscreen_control_base.png */; };
-		F91C5145138DD60500464576 /* onscreen_control_knob.png in Resources */ = {isa = PBXBuildFile; fileRef = F91C5143138DD60500464576 /* onscreen_control_knob.png */; };
 		F91C514D138DD80D00464576 /* analog_controller_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F91C5146138DD63C00464576 /* analog_controller_example.nut */; };
 		F91DF9D31395AC730083DA0E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F91DF9D21395AC730083DA0E /* Icon.png */; };
 		F921CCA8136FFBAC00F058FF /* block.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9A136FFBAC00F058FF /* block.png */; };
@@ -38,6 +36,8 @@
 		F92B7219136FD39100DD803C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B7218136FD39100DD803C /* libz.dylib */; };
 		F92B7253136FD42F00DD803C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B7252136FD42F00DD803C /* QuartzCore.framework */; };
 		F92BBE991373E53000796475 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F92BBE981373E53000796475 /* libsqlite3.dylib */; };
+		F9318D5F13BD9D6500DBAD55 /* control_base.png in Resources */ = {isa = PBXBuildFile; fileRef = F9318D5D13BD9D6500DBAD55 /* control_base.png */; };
+		F9318D6013BD9D6500DBAD55 /* control_knob.png in Resources */ = {isa = PBXBuildFile; fileRef = F9318D5E13BD9D6500DBAD55 /* control_knob.png */; };
 		F9396B26139F1A8700D968C1 /* physics_pulleyjoint.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9396B25139F1A7D00D968C1 /* physics_pulleyjoint.nut */; };
 		F93A8F5C1387B3EE0032FE66 /* mapsprite_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */; };
 		F93DA7AA1395CC840068C514 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F93DA7A91395CC840068C514 /* Default.png */; };
@@ -190,8 +190,6 @@
 		F908827513872BEA0065EC77 /* box2d_helloworld.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = box2d_helloworld.nut; path = Resources/box2d_helloworld.nut; sourceTree = "<group>"; };
 		F9102FDB13973AA800BC7404 /* http_access_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = http_access_example.nut; path = Resources/http_access_example.nut; sourceTree = "<group>"; };
 		F917F96E1387AC0D003F4B53 /* animation_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = animation_example.nut; path = Resources/animation_example.nut; sourceTree = "<group>"; };
-		F91C5142138DD60400464576 /* onscreen_control_base.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onscreen_control_base.png; sourceTree = "<group>"; };
-		F91C5143138DD60500464576 /* onscreen_control_knob.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onscreen_control_knob.png; sourceTree = "<group>"; };
 		F91C5146138DD63C00464576 /* analog_controller_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = analog_controller_example.nut; path = Resources/analog_controller_example.nut; sourceTree = "<group>"; };
 		F91DF9D21395AC730083DA0E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		F921CC9A136FFBAC00F058FF /* block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.png; sourceTree = "<group>"; };
@@ -210,6 +208,8 @@
 		F92B7218136FD39100DD803C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F92B7252136FD42F00DD803C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F92BBE981373E53000796475 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		F9318D5D13BD9D6500DBAD55 /* control_base.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = control_base.png; sourceTree = "<group>"; };
+		F9318D5E13BD9D6500DBAD55 /* control_knob.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = control_knob.png; sourceTree = "<group>"; };
 		F9396B25139F1A7D00D968C1 /* physics_pulleyjoint.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_pulleyjoint.nut; path = Resources/physics_pulleyjoint.nut; sourceTree = "<group>"; };
 		F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mapsprite_example.nut; path = Resources/mapsprite_example.nut; sourceTree = "<group>"; };
 		F93DA7A91395CC840068C514 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
@@ -560,6 +560,8 @@
 		F921CC99136FFBAC00F058FF /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				F9318D5D13BD9D6500DBAD55 /* control_base.png */,
+				F9318D5E13BD9D6500DBAD55 /* control_knob.png */,
 				F9D0CAAC13A22665008CA998 /* flare.png */,
 				F93DA88A1395E0230068C514 /* Splash.png */,
 				F93DA7A91395CC840068C514 /* Default.png */,
@@ -567,8 +569,6 @@
 				F9D2182D13947A8900463396 /* explosion.png */,
 				F95F8D3113932C2D006BB4DB /* gear.png */,
 				F95F8D3213932C2D006BB4DB /* gear@2x.png */,
-				F91C5142138DD60400464576 /* onscreen_control_base.png */,
-				F91C5143138DD60500464576 /* onscreen_control_knob.png */,
 				F9B14CF7138C858A004A8FD8 /* font_16x16.png */,
 				F9E503BD138BD4B900C7F0BD /* loading.png */,
 				F9CAE01513888259002278F7 /* ball.png */,
@@ -967,8 +967,6 @@
 				F9E503BE138BD4B900C7F0BD /* loading.png in Resources */,
 				F9B14CF8138C858A004A8FD8 /* font_16x16.png in Resources */,
 				F9B14D0C138C865A004A8FD8 /* textsprite_example.nut in Resources */,
-				F91C5144138DD60500464576 /* onscreen_control_base.png in Resources */,
-				F91C5145138DD60500464576 /* onscreen_control_knob.png in Resources */,
 				F91C514D138DD80D00464576 /* analog_controller_example.nut in Resources */,
 				F9E30413138E3B1A00DB5B60 /* digital_controller_example.nut in Resources */,
 				F9E30439138E3D0600DB5B60 /* multiple_controllers_example.nut in Resources */,
@@ -999,6 +997,8 @@
 				F9C39247139F845C007D6476 /* physics_linejoint.nut in Resources */,
 				F9D0CAAD13A22665008CA998 /* flare.png in Resources */,
 				F9D0CAB113A22834008CA998 /* modifier_multiple.nut in Resources */,
+				F9318D5F13BD9D6500DBAD55 /* control_base.png in Resources */,
+				F9318D6013BD9D6500DBAD55 /* control_knob.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
