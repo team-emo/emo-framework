@@ -9,9 +9,9 @@ class Main {
     sprite2 = emo.SpriteSheet("dog.png", 34, 42, 3, 2);
     
     controller1 = emo.AnalogOnScreenController(
-        "onscreen_control_base.png", "onscreen_control_knob.png");
+        "control_base.png", "control_knob.png");
     controller2 = emo.AnalogOnScreenController(
-        "onscreen_control_base.png", "onscreen_control_knob.png");
+        "control_base.png", "control_knob.png");
 
     /*
      * Called when this class is loaded

@@ -7,7 +7,7 @@ class Main {
 
     sprite = emo.SpriteSheet("dog.png", 34, 42, 3, 2);
     controller = emo.DigitalOnScreenController(
-        "onscreen_control_base.png", "onscreen_control_knob.png");
+        "control_base.png", "control_knob.png");
 
     /*
      * Called when this class is loaded
