@@ -517,7 +517,7 @@ class emo.Modifier {
 }
 
 class emo.SequenceModifier {
-    modifiers       = [];
+    modifiers       = null;
     name            = null;
     eventCallback   = null;
     modifier        = null;
@@ -528,6 +528,7 @@ class emo.SequenceModifier {
     listener        = null;
     
     function constructor(...) {
+        modifiers = [];
         for (local i = 0; i < vargv.len(); i++) {
             vargv[i].setEventListener(this);
             vargv[i].onPause();
