@@ -714,9 +714,19 @@ class emo.MoveModifier extends emo.MultiModifier {
     }
 }
 
-class emo.MoveCenterModifier extends emo.MultiModifier {
+class emo.AlphaModifier extends emo.Modifier {
     function onModify(currentValue) {
-        targetObj.moveCenter(currentValue[0], currentValue[1]);
+        targetObj.alpha(currentValue);
+    }
+}
+
+class emo.NoopModifier extends emo.Modifier {
+    function constructor(_duration, _repeatCount = 0, _startTime = null) {
+        base.constructor(0, _duration, _duration, emo.easing.Linear, _repeatCount, _startTime);
+    }
+    
+    function onModify(currentValue) {
+        // do nothing but wait
     }
 }
 
