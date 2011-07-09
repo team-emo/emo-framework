@@ -92,6 +92,7 @@ namespace emo {
 
         void enableOnDrawListener(bool enable);
         void setOnDrawListenerInterval(int value);
+        void setOnDrawDrawablesInterval(int value);
 
         void enableOnUpdateListener(bool enable);
 

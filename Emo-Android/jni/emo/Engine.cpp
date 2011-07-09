@@ -901,7 +901,13 @@ namespace emo {
 
     void Engine::setOnDrawListenerInterval(int value) {
         this->onDrawFrameInterval = value;
+        this->lastOnDrawInterval  = this->uptime;
     }
+
+    void Engine::setOnDrawDrawablesInterval(int value) {
+        this->onDrawDrawablesInterval     = value;
+        this->lastOnDrawDrawablesInterval = this->uptime;
+	}
 
     void Engine::enableOnUpdateListener(bool enable) {
         this->enableOnUpdate = enable;

@@ -996,7 +996,7 @@ SQInteger emoSetOnDrawInterval(HSQUIRRELVM v) {
     if (sq_gettype(v, 2) != OT_NULL) {
         SQInteger interval;
         sq_getinteger(v, 2, &interval);
-        engine->onDrawDrawablesInterval = interval;
+        engine->setOnDrawDrawablesInterval(interval);
     }
     sq_pushinteger(v, oldInterval);
 	

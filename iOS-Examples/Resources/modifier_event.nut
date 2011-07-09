@@ -36,7 +36,7 @@ class Splash {
         // load sprite to the screen
         splash.load();
         
-        // onDrawFrame(dt) will be called 5 seconds later
+        // onDrawFrame(dt) will be called 3 seconds later
         event.enableOnDrawCallback(3000);
     }
     

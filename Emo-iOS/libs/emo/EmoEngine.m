@@ -559,6 +559,17 @@ NSString* data2ns(NSData* data) {
 	return platform;
 }
 
+- (void)updateOnDrawFrameInterval:(NSInteger)interval {
+    onDrawFrameInterval = interval;
+    lastOnDrawInterval = [self uptime];
+}
+
+- (void)updateOnDrawDrawablesInterval:(NSInteger)interval {
+    onDrawDrawablesInterval = interval;
+    lastOnDrawDrawablesInterval = [self uptime];
+}
+
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	
 	if (currentOrientation == OPT_ORIENTATION_UNSPECIFIED) {

@@ -231,7 +231,7 @@ SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
         SQInteger interval;
         sq_getinteger(v, 2, &interval);
 		
-        engine.onDrawFrameInterval = interval;
+        [engine updateOnDrawFrameInterval:interval];
     }
 	
 	return 0;
