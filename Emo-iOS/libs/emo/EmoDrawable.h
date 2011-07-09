@@ -132,6 +132,7 @@
 -(float)getScaledWidth;
 -(float)getScaledHeight;
 -(BOOL)isAnimationFinished;
+-(BOOL)isVisible;
 @end
 
 @interface EmoLineDrawable : EmoDrawable {

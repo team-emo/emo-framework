@@ -165,6 +165,10 @@ namespace emo {
         this->hasBuffer = true;
     }
 
+	bool Drawable::isVisible() {
+		return this->param_color[3] != 0;
+	}
+
     bool Drawable::isCurrentTexBufferLoaded() {
         return this->frames_vbos[this->frame_index] > 0;
     }

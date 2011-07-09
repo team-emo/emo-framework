@@ -81,6 +81,7 @@ namespace emo {
 
         GLuint getCurrentBufferId();
         bool isCurrentTexBufferLoaded();
+		bool isVisible();
 
         bool setFrameIndex(int index);
         int  getFrameIndex();

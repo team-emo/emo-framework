@@ -363,6 +363,9 @@ extern EmoEngine* engine;
 -(float)getColor:(NSInteger)index {
 	return param_color[index];
 }
+-(BOOL)isVisible {
+    return param_color[3] != 0;
+}
 -(float)getScaleX {
 	return param_scale[0];
 }

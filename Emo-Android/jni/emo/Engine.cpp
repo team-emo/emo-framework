@@ -681,7 +681,7 @@ namespace emo {
         }
         for (unsigned int i = 0; i < this->sortedDrawables->size(); i++) {
             Drawable* drawable = this->sortedDrawables->at(i);
-            if (drawable->loaded && drawable->independent) {
+            if (drawable->loaded && drawable->independent && drawable->isVisible()) {
                 drawable->onDrawFrame();
             }
         }

@@ -318,7 +318,7 @@ NSString* data2ns(NSData* data) {
 	[stage onDrawFrame:delta];
 	for (int i = 0; i < [drawablesToDraw count]; i++) {
 		EmoDrawable* drawable = [drawablesToDraw objectAtIndex:i];
-		if (drawable.loaded && drawable.independent) {
+		if (drawable.loaded && drawable.independent && [drawable isVisible]) {
 			[drawable onDrawFrame:delta withStage:stage];
 		}
 	}
