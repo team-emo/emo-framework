@@ -659,6 +659,9 @@ class emo.MultiModifier extends emo.Modifier {
             if (eventCallback != null) {
                 eventCallback(targetObj, this, EVENT_MODIFIER_START);
             }
+            if (listener != null) {
+                listener.onModifierEvent(targetObj, this, EVENT_MODIFIER_START);
+            }
         }
         local current = [];
         local elapsedf = elapsed().tofloat();
@@ -670,11 +673,17 @@ class emo.MultiModifier extends emo.Modifier {
                     if (eventCallback != null) {
                         eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
                     }
+                    if (listener != null) {
+                        listener.onModifierEvent(targetObj, this, EVENT_MODIFIER_FINISH);
+                    }
                 } else {
                     startTime = EMO_RUNTIME_STOPWATCH.elapsed();
                     currentCount++;
                     if (eventCallback != null) {
                         eventCallback(targetObj, this, EVENT_MODIFIER_RESTART);
+                    }
+                    if (listener != null) {
+                        listener.onModifierEvent(targetObj, this, EVENT_MODIFIER_RESTART);
                     }
                 }
                 return;
