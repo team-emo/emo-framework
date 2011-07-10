@@ -64,6 +64,11 @@ namespace emo {
         this->color[1] = 0;
         this->color[2] = 0;
         this->color[3] = 1;
+
+        this->width  = 0;
+        this->height = 0;
+        this->viewport_width  = 0;
+        this->viewport_height = 0;
     }
 
     Stage::~Stage() {

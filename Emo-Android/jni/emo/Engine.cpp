@@ -218,7 +218,10 @@ namespace emo {
         this->surface = surface;
         this->width   = w;
         this->height  = h;
-        this->stage->setSizeAndView(w, h);
+
+        if (this->stage->width == 0 && this->stage->height == 0) {
+            this->stage->setSizeAndView(w, h);
+        }
 
         if (!this->scriptLoaded) {
             // register class and functions for script
