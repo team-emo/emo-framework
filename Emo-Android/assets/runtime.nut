@@ -544,6 +544,18 @@ class emo.SequenceModifier {
         currentCount  = 0;
     }
     
+    function addModifier(_modifier) {
+        _modifier.setEventListener(this);
+        _modifier.onPause();
+        
+        modifiers.append(_modifier);
+        
+        if (modifiers.len() == 1) {
+            modifier = _modifier;
+            modifier.onResume();
+        }
+    }
+    
     function setRepeatCount(count) {
         repeatCount = count;
     }
