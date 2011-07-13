@@ -60,6 +60,7 @@ void initRuntimeFunctions() {
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "device",          emoRuntimeGetDeviceName);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "isSimulator",     emoRuntimeIsSimulator);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "gc",              emoRuntimeGC);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "clearTextureCache", emoClearImageCache);
     registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "start",         emoRuntimeStopwatchStart);
     registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
     registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
@@ -518,4 +519,10 @@ SQInteger emoDisableOnFpsCallback(HSQUIRRELVM v) {
 SQInteger emoRuntimeGC(HSQUIRRELVM v) {
     sq_pushinteger(v, sq_collectgarbage(v));
     return 1;
+}
+
+SQInteger emoClearImageCache(HSQUIRRELVM v) {
+    // do nothing in Android
+    // image cache is used when returing from onPause
+    return 0;
 }

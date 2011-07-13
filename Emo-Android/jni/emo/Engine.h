@@ -143,6 +143,7 @@ namespace emo {
         Image* getCachedImage(std::string key);
         void addCachedImage(std::string key, Image* image);
         bool removeCachedImage(std::string key);
+        void clearCachedImage();
 
         int logLevel;
 

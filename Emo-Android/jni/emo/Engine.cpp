@@ -948,5 +948,14 @@ namespace emo {
     bool Engine::removeCachedImage(std::string key) {
         return this->imageCache->erase(key);
     }
+
+    void Engine::clearCachedImage() {
+        images_t::iterator iter;
+        for(iter = this->imageCache->begin(); iter != this->imageCache->end(); iter++) {
+            Image* image = iter->second;
+            image->data = NULL;
+        }
+        this->imageCache->clear();
+    }
 }
 
