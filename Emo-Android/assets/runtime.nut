@@ -1712,6 +1712,8 @@ function emo::_onUpdate(dt) {
 }
 
 function emo::_onLowMemory() {
+    emo.Runtime.clearTextureCache();
+    
     if (emo.rawin("onLowMemory")) {
         emo.onLowMemory();
     }
