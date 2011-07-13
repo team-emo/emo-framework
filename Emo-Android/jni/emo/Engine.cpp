@@ -694,7 +694,7 @@ namespace emo {
         drawables_t::iterator iter;
         for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
             Drawable* drawable = iter->second;
-            drawable->load();
+            drawable->reload();
             drawable->bindVertex();
         }
     }

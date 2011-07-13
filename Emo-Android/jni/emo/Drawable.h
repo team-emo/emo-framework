@@ -72,6 +72,7 @@ namespace emo {
         std::string name;
 
         virtual void load();
+        virtual void reload();
         virtual bool bindVertex();
         virtual void onDrawFrame();
         virtual void deleteBuffer();

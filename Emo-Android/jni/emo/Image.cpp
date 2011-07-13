@@ -47,7 +47,9 @@ namespace emo {
         }
     }
     void Image::genTextures() {
-        glGenTextures(1, &this->textureId);
+        if (textureId == 0) {
+            glGenTextures(1, &this->textureId);
+        }
     }
 }
 
@@ -147,7 +149,7 @@ bool loadPngFromAsset(const char *fname, emo::Image* imageInfo) {
 
     png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND, NULL);
 
-    imageInfo->textureId = -1;
+    imageInfo->textureId = 0;
     imageInfo->filename = fname;
     imageInfo->width  = info_ptr->width;
     imageInfo->height = info_ptr->height;

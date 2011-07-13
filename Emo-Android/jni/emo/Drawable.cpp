@@ -159,9 +159,19 @@ namespace emo {
         // generate buffer for current frame index
         glGenBuffers(1, &this->frames_vbos[this->frame_index]);
 
+        this->hasBuffer = true;
+    }
+
+    void Drawable::reload() {
+        if (this->hasBuffer) return;
+
+        // generate buffer for current frame index
+        glGenBuffers(1, &this->frames_vbos[this->frame_index]);
+
         if (this->hasTexture) {
             this->texture->genTextures();
         }
+
         this->hasBuffer = true;
     }
 
@@ -175,8 +185,11 @@ namespace emo {
 
     void Drawable::deleteBuffer() {
         if (!this->hasBuffer) return;
-        if (this->hasTexture && this->texture->referenceCount <= 1) {
+        if (this->hasTexture && this->texture->textureId > 0) {
             glDeleteTextures(1, &this->texture->textureId);
+
+            this->texture->textureId = 0;
+            this->texture->loaded    = false;
         }
 
         for (int i = 0; i < this->frameCount; i++) {
@@ -187,11 +200,6 @@ namespace emo {
         }
 
         this->hasBuffer = false;
-
-        if (this->hasTexture && this->texture->referenceCount <= 1) {
-            this->texture->textureId = 0;
-            this->texture->loaded    = false;
-        }
     }
 
     int Drawable::tex_coord_frame_startX() {
