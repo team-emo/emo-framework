@@ -582,6 +582,12 @@ namespace emo {
 
     void MapDrawable::load() {
         Drawable::load();
+        this->drawable->load();
+    }
+
+    void MapDrawable::reload() {
+        Drawable::reload();
+        this->drawable->reload();
     }
 
     Drawable* MapDrawable::getChild() {

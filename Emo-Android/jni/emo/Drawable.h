@@ -172,6 +172,7 @@ namespace emo {
         virtual ~MapDrawable();
 
         virtual void load();
+        virtual void reload();
         virtual bool bindVertex();
         virtual void onDrawFrame();
 
