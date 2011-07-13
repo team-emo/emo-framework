@@ -94,9 +94,16 @@ class Main {
     function onGainedFocus() {
         print("onGainedFocus");
         
-        // start with first frame, number of frames equals 2(no.0 to no.1) and
-        // interval equals 100msec.  loop count = -1 means inifinite loop
-        sprite.animate(0, 2, 200, -1);
+        if (direction == "RIGHT") {
+            // if current direction equals right,
+            // start with first frame, number of frames equals 2(no.0 to no.1) and
+            // interval equals 100msec.  loop count = -1 means inifinite loop
+            sprite.animate(0, 2, 200, -1);
+        } else {
+            // if current direction equals left,
+            // start the left animation
+            sprite.animate(5, 2, 200, -1);
+        }
     }
 
     /*
