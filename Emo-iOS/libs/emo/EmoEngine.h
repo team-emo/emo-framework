@@ -133,6 +133,7 @@ NSString* data2ns(NSData* data);
 -(EmoImage*)getCachedImage:(NSString*)key;
 -(void)addCachedImage:(NSString*)key value:(EmoImage*)image;
 -(void)removeCachedImage:(NSString*)key;
+-(void)clearImageCache;
 
 -(NSString*)getDeviceName;
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;

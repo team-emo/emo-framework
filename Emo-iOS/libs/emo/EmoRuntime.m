@@ -132,6 +132,7 @@ void initRuntimeFunctions() {
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "device",          emoRuntimeGetDeviceName);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "isSimulator",     emoRuntimeIsSimulator);
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "gc",              emoRuntimeGC);
+    registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "clearTextureCache", emoClearImageCache);
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "start",         emoRuntimeStopwatchStart);
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
@@ -592,6 +593,11 @@ SQInteger emoEnableOnFpsCallback(HSQUIRRELVM v) {
 
 SQInteger emoDisableOnFpsCallback(HSQUIRRELVM v) {
     [engine enableOnFpsListener:FALSE];
+    return 0;
+}
+
+SQInteger emoClearImageCache(HSQUIRRELVM v) {
+    [engine clearImageCache];
     return 0;
 }
 

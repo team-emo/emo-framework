@@ -549,6 +549,14 @@ NSString* data2ns(NSData* data) {
 	[imageCache removeObjectForKey:key];
 }
 
+-(void)clearImageCache {
+	for (NSString* key in imageCache) {
+		[[imageCache objectForKey:key] freeData];
+	}
+	
+	[imageCache removeAllObjects];
+}
+
 - (NSString*)getDeviceName {
 	size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);

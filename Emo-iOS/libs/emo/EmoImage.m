@@ -40,13 +40,11 @@
     self = [super init];
     if (self != nil) {
 		referenceCount = 0;
+        freed = FALSE;
     }
     return self;
 }
 
--(BOOL)loadPng:(NSString*)file {
-	return loadPngFromResource(file, self);
-}
 /*
  * assign OpenGL texture id
  */
@@ -55,8 +53,13 @@
 }
 -(void)doUnload {
 	glDeleteTextures(1, &textureId);
-	free(data);
+    [self freeData];
 	textureId = 0;
+}
+-(void)freeData {
+    if (freed) return;
+    free(data);
+    freed = TRUE;
 }
 -(void)dealloc {
 	[filename release];
