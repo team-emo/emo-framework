@@ -106,4 +106,5 @@ SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v);
 SQInteger emoGetAudioChannelState(HSQUIRRELVM v);
 
 SQInteger emoGetAudioChannelCount(HSQUIRRELVM v);
+SQInteger emoAudioVibrate(HSQUIRRELVM v);
 #endif // EMO_AUDIO_H

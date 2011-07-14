@@ -4,6 +4,7 @@ import android.app.NativeActivity;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Vibrator;
 import android.util.Log;
 
 import java.util.List;
@@ -46,6 +47,11 @@ public class EmoActivity extends NativeActivity {
     
     public String getLastErrorCode() {
     	return lastErrorCode;
+    }
+    
+    public void vibrate() {
+    	Vibrator vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
+    	vibrator.vibrate(400);
     }
 
     public void asyncHttpRequest(final String name, final int timeout, final String... params) {

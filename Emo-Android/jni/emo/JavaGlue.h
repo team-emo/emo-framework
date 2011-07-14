@@ -59,6 +59,7 @@ namespace emo {
         void setOrientationPortrait();
         std::string getDeviceName();
         bool isSimulator();
+        void vibrate();
     };
 }
 

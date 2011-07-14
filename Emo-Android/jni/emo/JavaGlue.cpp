@@ -273,6 +273,10 @@ namespace emo {
     bool JavaGlue::isSimulator() {
     	return this->callVoid_Bool("isSimulator");
     }
+
+    void JavaGlue::vibrate() {
+    	this->callVoid_Void("vibrate");
+    }
 }
 
 

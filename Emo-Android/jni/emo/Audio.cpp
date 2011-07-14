@@ -61,6 +61,7 @@ void initAudioFunctions() {
     registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "close",          emoCloseAudioChannel);
     registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "closeEngine",    emoCloseAudioEngine);
 
+    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "vibrate",        emoAudioVibrate);
 }
 
 static SLresult checkOpenSLresult(const char* message, SLresult result) {
@@ -873,4 +874,12 @@ SQInteger emoCloseAudioEngine(HSQUIRRELVM v) {
     sq_pushinteger(v, EMO_NO_ERROR);
 
     return 1;
+}
+
+/*
+ * vibrate
+ */
+SQInteger emoAudioVibrate(HSQUIRRELVM v) {
+	engine->javaGlue->vibrate();
+    return 0;
 }
