@@ -48,3 +48,5 @@ SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v);
 SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v);
 SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v);
 SQInteger emoGetAudioChannelState(HSQUIRRELVM v);
+
+SQInteger emoAudioVibrate(HSQUIRRELVM v);
