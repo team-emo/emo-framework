@@ -76,6 +76,7 @@ namespace emo {
         virtual bool bindVertex();
         virtual void onDrawFrame();
         virtual void deleteBuffer();
+        void generateBuffers();
 
         virtual void setFrameCount(int count);
         int  getFrameCount();

@@ -156,17 +156,22 @@ namespace emo {
     void Drawable::load() {
         if (this->hasBuffer) return;
 
-        // generate buffer for current frame index
-        glGenBuffers(1, &this->frames_vbos[this->frame_index]);
+        this->generateBuffers();
 
         this->hasBuffer = true;
+    }
+
+    /*
+     * generate buffer for current frame index
+     */
+    void Drawable::generateBuffers() {
+        glGenBuffers(1, &this->frames_vbos[this->frame_index]);
     }
 
     void Drawable::reload() {
         if (this->hasBuffer) return;
 
-        // generate buffer for current frame index
-        glGenBuffers(1, &this->frames_vbos[this->frame_index]);
+        this->generateBuffers();
 
         if (this->hasTexture) {
             this->texture->genTextures();
@@ -268,7 +273,7 @@ namespace emo {
 
         // generate buffer on demand
         if (this->frames_vbos[this->frame_index] == 0) {
-            glGenBuffers(1, &this->frames_vbos[this->frame_index]);
+            this->generateBuffers();
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, this->getCurrentBufferId());
