@@ -51,7 +51,7 @@ public class EmoActivity extends NativeActivity {
     
     public void vibrate() {
     	Vibrator vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
-    	vibrator.vibrate(400);
+        if (vibrator != null) vibrator.vibrate(400);
     }
 
     public void asyncHttpRequest(final String name, final int timeout, final String... params) {
