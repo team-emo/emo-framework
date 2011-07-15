@@ -176,13 +176,13 @@ extern EmoEngine* engine;
     if (hasTexture) {
 		glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture.textureId);
+        
+        // bind texture coords
+        glBindBuffer(GL_ARRAY_BUFFER, frames_vbos[frame_index]);
+        glTexCoordPointer(2, GL_FLOAT, 0, 0);
 	} else {
 		glDisable(GL_TEXTURE_2D);
 	}
-	
-    // bind texture coords
-    glBindBuffer(GL_ARRAY_BUFFER, frames_vbos[frame_index]);
-    glTexCoordPointer(2, GL_FLOAT, 0, 0);
 	
     // bind indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [stage getIndicePointer]);
