@@ -369,13 +369,13 @@ namespace emo {
         if (this->hasTexture) {
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, this->texture->textureId);
+
+            // bind texture coords
+            glBindBuffer(GL_ARRAY_BUFFER, this->getCurrentBufferId());
+            glTexCoordPointer(2, GL_FLOAT, 0, 0);
         } else {
             glDisable(GL_TEXTURE_2D);
         }
-
-        // bind texture coords
-        glBindBuffer(GL_ARRAY_BUFFER, this->getCurrentBufferId());
-        glTexCoordPointer(2, GL_FLOAT, 0, 0);
 
         // bind indices
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, engine->stage->vbo[1]);
