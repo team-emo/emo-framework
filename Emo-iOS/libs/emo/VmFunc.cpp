@@ -208,7 +208,7 @@ SQBool callSqFunction_Bool_Float(HSQUIRRELVM v, const SQChar* nname, const SQCha
 void sq_printfunc(HSQUIRRELVM v, const SQChar *s,...) {
 	va_list args;
     va_start(args, s);
-    SQChar* str = va_arg(args, char*);
+    SQChar* str = va_arg(args, SQChar*);
     LOGI(str);
     va_end(args);
 }
@@ -219,7 +219,7 @@ void sq_printfunc(HSQUIRRELVM v, const SQChar *s,...) {
 void sq_errorfunc(HSQUIRRELVM v, const SQChar *s,...) {
 	va_list args;
     va_start(args, s);
-    SQChar* str = va_arg(args, char*);
+    SQChar* str = va_arg(args, SQChar*);
     callSqFunction_Bool_String(v, EMO_NAMESPACE, EMO_FUNC_ONERROR, str, SQFalse);
     LOGE(str);
     va_end(args);
