@@ -202,28 +202,23 @@ SQBool callSqFunction_Bool_Float(HSQUIRRELVM v, const SQChar* nname, const SQCha
  * print function
  */
 void sq_printfunc(HSQUIRRELVM v, const SQChar *s,...) {
-	static SQChar text[2048];
 	va_list args;
     va_start(args, s);
-    scvsprintf(text, s, args);
+    SQChar* str = va_arg(args, char*);
+    LOGI(str);
     va_end(args);
-
-    LOGI(text);
 }
 
 /*
  * error function
  */
 void sq_errorfunc(HSQUIRRELVM v, const SQChar *s,...) {
-	static SQChar text[2048];
 	va_list args;
     va_start(args, s);
-    scvsprintf(text, s, args);
+    SQChar* str = va_arg(args, char*);
+    callSqFunction_Bool_String(v, EMO_NAMESPACE, EMO_FUNC_ONERROR, str, SQFalse);
+    LOGE(str);
     va_end(args);
-
-    callSqFunction_Bool_String(v, EMO_NAMESPACE, EMO_FUNC_ONERROR, text, SQFalse);
-
-    LOGE(text);
 }
 /*
  * Register global function.
