@@ -38,7 +38,7 @@
 #import "EmoDrawable.h"
 #import "EmoPhysics.h"
 
-NSString* char2ns(const SQChar* str) {
+NSString* char2ns(const char* str) {
 	return [NSString stringWithCString:(char*)str 
 							  encoding:NSUTF8StringEncoding];
 }

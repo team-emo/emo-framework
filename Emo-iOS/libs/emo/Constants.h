@@ -28,6 +28,7 @@
 #ifndef EMO_CONSTANT_H
 #define EMO_CONSTANT_H
 
+#define _UNICODE
 #define PNG_NO_PEDANTIC_WARNINGS
 
 #define EMO_LOG_TAG "EmoFramework"

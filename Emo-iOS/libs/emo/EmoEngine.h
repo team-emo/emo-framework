@@ -33,7 +33,7 @@
 #import "EmoRuntime.h"
 #import "EmoDatabase.h"
 
-NSString* char2ns(const SQChar* str);
+NSString* char2ns(const char* str);
 NSString* data2ns(NSData* data);
 
 @interface EmoEngine : NSObject<UIAccelerometerDelegate> {
