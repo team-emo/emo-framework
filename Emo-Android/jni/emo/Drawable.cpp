@@ -135,6 +135,8 @@ namespace emo {
         this->margin      = 0;
 
         this->animations = new animations_t();
+
+        this->useMesh = false;
     }
 
     Drawable::~Drawable() {
@@ -419,6 +421,12 @@ namespace emo {
         return true;
     }
 
+    bool Drawable::forceSetFrameIndex(int index) {
+        if (index < 0 || this->frameCount <= index) return false;
+        this->frame_index = index;
+        return true;
+    }
+
     int Drawable::getFrameIndex() {
         return this->frame_index;
     }
@@ -429,6 +437,10 @@ namespace emo {
 
     void Drawable::setTexture(Image* image) {
         this->texture = image;
+    }
+
+    Image* Drawable::getTexture() {
+        return this->texture;
     }
 
     float Drawable::getScaledWidth() {
@@ -520,6 +532,8 @@ namespace emo {
         this->drawable = drawable;
         this->tiles = new std::vector<std::vector<int>*>;
         this->setChild(drawable);
+        this->meshLoaded = false;
+        this->meshIndiceCount = 0;
     }
 
     MapDrawable::~MapDrawable() {
@@ -527,6 +541,25 @@ namespace emo {
             delete this->tiles->at(i);
         }
         delete this->tiles;
+
+        this->unbindMeshVertex();
+    }
+
+    void MapDrawable::deleteBuffer() {
+        Drawable::deleteBuffer();
+        this->unbindMeshVertex();
+    }
+
+    void MapDrawable::unbindMeshVertex() {
+        if (this->useMesh && this->meshLoaded) {
+            free(this->meshIndices);
+            free(this->meshPositions);
+            free(this->meshTexCoords);
+        
+            glDeleteBuffers(3, this->mesh_vbos);
+        
+            this->meshLoaded = false;
+        }
     }
 
     void MapDrawable::addRow(int rowdata[], int count) {
@@ -604,19 +637,194 @@ namespace emo {
     }
 
     bool MapDrawable::bindVertex() {
-        this->loaded = this->drawable->bindVertex();
+        if (this->useMesh && !this->meshLoaded) {
+            this->unbindMeshVertex();
+        
+            glGenBuffers(3, this->mesh_vbos);
+        
+            this->createMeshIndiceBuffer();
+            this->createMeshPositionBuffer();
+            this->createMeshTextureBuffer();
+            
+            meshLoaded = true;
+
+            this->loaded = this->drawable->bindVertex();
+        } else if (!this->useMesh) {
+            this->loaded = this->drawable->bindVertex();
+        }
         return this->loaded;
+    }
+
+    void MapDrawable::createMeshPositionBuffer() {
+        int vertexCount = this->rows * this->columns * POINTS_3D_SIZE * POINTS_RECTANGLE;
+    
+        this->meshPositions = (float *)malloc(sizeof(float) * vertexCount);
+    
+        int childWidth  = child->getScaledWidth();
+        int childHeight = child->getScaledHeight();
+
+        int index = 0;
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                int pX = childWidth  * column;
+                int pY = childHeight * row;
+            
+                this->meshPositions[index++] = pX;
+                this->meshPositions[index++] = pY;
+                this->meshPositions[index++] = 0;
+            
+                this->meshPositions[index++] = pX;
+                this->meshPositions[index++] = pY + childHeight;
+                this->meshPositions[index++] = 0;
+            
+                this->meshPositions[index++] = pX + childWidth;
+                this->meshPositions[index++] = pY;
+                this->meshPositions[index++] = 0;
+            
+                this->meshPositions[index++] = pX + childWidth;
+                this->meshPositions[index++] = pY + childHeight;
+                this->meshPositions[index++] = 0;
+            }
+        }
+    
+        glBindBuffer(GL_ARRAY_BUFFER, this->mesh_vbos[0]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexCount, this->meshPositions, GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
+        printGLErrors("Could not create position buffer");
+    }
+
+    int MapDrawable::getMeshIndiceCount() {
+        return this->rows * this->columns * POINTS_2D_SIZE * POINTS_TRIANGLE;
+    }
+
+    void MapDrawable::createMeshIndiceBuffer() {
+        this->meshIndiceCount = this->getMeshIndiceCount();
+    
+        this->meshIndices = (short *)malloc(sizeof(short) * this->meshIndiceCount);
+    
+        int index = 0;
+        int trIndex = 0;
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                this->meshIndices[index++] = (short)(trIndex + 0);
+                this->meshIndices[index++] = (short)(trIndex + 1);
+                this->meshIndices[index++] = (short)(trIndex + 2);
+            
+                this->meshIndices[index++] = (short)(trIndex + 2);
+                this->meshIndices[index++] = (short)(trIndex + 1);
+                this->meshIndices[index++] = (short)(trIndex + 3);
+            
+                trIndex += 4;
+            }
+        }
+    
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->mesh_vbos[1]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(short) * this->meshIndiceCount, this->meshIndices, GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
+        printGLErrors("Could not create indice buffer");
+    }
+
+    void MapDrawable::createMeshTextureBuffer() {
+        int coordCount = this->rows * this->columns * POINTS_2D_SIZE * POINTS_RECTANGLE;
+    
+        this->meshTexCoords = (float *)malloc(sizeof(float) * coordCount);
+    
+        int index = 0;
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                int frameIndex = this->getTileAt(row, column);
+                if (child->forceSetFrameIndex(frameIndex)) {
+                    this->meshTexCoords[index++] = child->getTexCoordStartX();
+                    this->meshTexCoords[index++] = child->getTexCoordStartY();
+            
+                    this->meshTexCoords[index++] = child->getTexCoordStartX();
+                    this->meshTexCoords[index++] = child->getTexCoordEndY();
+            
+                    this->meshTexCoords[index++] = child->getTexCoordEndX();
+                    this->meshTexCoords[index++] = child->getTexCoordStartY();
+            
+                    this->meshTexCoords[index++] = child->getTexCoordEndX();
+                    this->meshTexCoords[index++] = child->getTexCoordEndY();
+                } else {
+                    // no texture for this cell
+                    this->meshTexCoords[index++] = 0;
+                    this->meshTexCoords[index++] = 0;
+                
+                    this->meshTexCoords[index++] = 0;
+                    this->meshTexCoords[index++] = 0;
+                
+                    this->meshTexCoords[index++] = 0;
+                    this->meshTexCoords[index++] = 0;
+                
+                    this->meshTexCoords[index++] = 0;
+                    this->meshTexCoords[index++] = 0;
+                }
+            }
+        }
+    
+        glEnable(GL_TEXTURE_2D);
+        glBindBuffer(GL_ARRAY_BUFFER, this->mesh_vbos[2]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * coordCount, this->meshTexCoords, GL_STATIC_DRAW);
+    
+        printGLErrors("Could not create texture buffer");
+    }
+
+    bool MapDrawable::isInRange() {
+        if (this->x > 0 && this->x  > engine->stage->width)  return false;
+        if (this->y > 0 && this->y  > engine->stage->height) return false;
+        if (this->x < 0 && -this->x > this->drawable->getScaledWidth()  * this->columns) return false;
+        if (this->y < 0 && -this->y > this->drawable->getScaledHeight() * this->rows) return false;
+    
+        return true;
     }
 
     void MapDrawable::onDrawFrame() {
 
+        if (!this->isInRange()) return;
+
+        if (this->useMesh) {
+            glMatrixMode (GL_MODELVIEW);
+            glLoadIdentity (); 
+        
+            // update colors
+            glColor4f(param_color[0], param_color[1], param_color[2], param_color[3]);
+        
+            // update position
+            glTranslatef(x, y, 0);
+        
+            // bind vertex positions
+            glBindBuffer(GL_ARRAY_BUFFER, mesh_vbos[0]);
+            glVertexPointer(3, GL_FLOAT, 0, 0);
+        
+            // bind a texture
+            if (child->hasTexture) {
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, child->getTexture()->textureId);
+            
+                // bind texture coords
+                glBindBuffer(GL_ARRAY_BUFFER, mesh_vbos[2]);
+                glTexCoordPointer(2, GL_FLOAT, 0, 0);
+            } else {
+                glDisable(GL_TEXTURE_2D);
+            }
+        
+            // bind indices
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh_vbos[1]);
+        
+            // draw sprite
+            glDrawElements(GL_TRIANGLES, meshIndiceCount, GL_UNSIGNED_SHORT, 0);
+        
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glBindTexture(GL_TEXTURE_2D, 0);
+        
+            return;
+        }
+
         int invertX = -this->x;
         int invertY = -this->y;
-
-        if (this->x > 0 && this->x  > engine->stage->width)  return;
-        if (this->y > 0 && this->y  > engine->stage->height) return;
-        if (this->x < 0 && invertX > this->drawable->getScaledWidth()  * this->columns) return;
-        if (this->y < 0 && invertY > this->drawable->getScaledHeight() * this->rows) return;
 
         int columnCount = (int)ceil(this->getScaledWidth()  / (double)this->drawable->getScaledWidth());
         int rowCount    = (int)ceil(this->getScaledHeight() / (double)this->drawable->getScaledHeight());

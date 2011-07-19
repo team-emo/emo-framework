@@ -86,9 +86,11 @@ namespace emo {
 		bool isVisible();
 
         bool setFrameIndex(int index);
+        bool forceSetFrameIndex(int index);
         int  getFrameIndex();
 
         void setTexture(Image* image);
+        Image* getTexture();
 
         float getScaledWidth();
         float getScaledHeight();
@@ -137,6 +139,12 @@ namespace emo {
         virtual std::vector<int> getTileIndexAtCoord(float x, float y) { std::vector<int> p; return p; }
         virtual std::vector<float> getTilePositionAtCoord(float x, float y) { std::vector<float> p; return p; }
 
+        float getTexCoordStartX();
+        float getTexCoordEndX();
+        float getTexCoordStartY();
+        float getTexCoordEndY();
+
+        bool useMesh;
     protected:
 
         float      vertex_tex_coords[8];
@@ -150,10 +158,6 @@ namespace emo {
 
         int tex_coord_frame_startX();
         int tex_coord_frame_startY();
-        float getTexCoordStartX();
-        float getTexCoordEndX();
-        float getTexCoordStartY();
-        float getTexCoordEndY();
 
         bool frameCountLoaded;
 
@@ -176,6 +180,7 @@ namespace emo {
         virtual void reload();
         virtual bool bindVertex();
         virtual void onDrawFrame();
+        virtual void deleteBuffer();
 
         virtual void setChild(Drawable* child);
         virtual Drawable* getChild();
@@ -186,12 +191,28 @@ namespace emo {
         virtual int  getTileAt(int row, int column);
         virtual std::vector<int> getTileIndexAtCoord(float x, float y);
         virtual std::vector<float> getTilePositionAtCoord(float x, float y);
+
+        void createMeshPositionBuffer();
+        void createMeshIndiceBuffer();
+        void createMeshTextureBuffer();
+        void unbindMeshVertex();
+
+        int getMeshIndiceCount();
     protected:
         std::vector<std::vector<int>*>* tiles;
         Drawable* drawable;
 
         int columns;
         int rows;
+
+        bool meshLoaded;
+        short* meshIndices;
+        float* meshPositions;
+        float* meshTexCoords;
+        GLuint mesh_vbos[3];
+        int    meshIndiceCount;
+
+        bool isInRange();
     };
 
     class LineDrawable : public Drawable {

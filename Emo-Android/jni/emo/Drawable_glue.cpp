@@ -52,6 +52,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTileAt",        emoDrawableGetTileAt);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTileIndexAtCoord",    emoDrawableGetTileIndexAtCoord);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTilePositionAtCoord", emoDrawableGetTilePositionAtCoord);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "useMeshMapSprite", emoDrawableUseMeshMapSprite);
 
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getX",           emoDrawableGetX);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getY",           emoDrawableGetY);
@@ -735,6 +736,39 @@ SQInteger emoDrawableGetTilePositionAtCoord(HSQUIRRELVM v) {
         return 0;
     }
 
+    return 1;
+}
+
+SQInteger emoDrawableUseMeshMapSprite(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+    
+    emo::Drawable* parent = engine->getDrawable(id);
+    
+    if (parent == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+    
+    SQBool useMesh = false;
+    
+    if (getBool(v, 3, &useMesh)) {
+        sq_pushinteger(v, EMO_NO_ERROR);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+    
+    parent->useMesh = useMesh;
+    
     return 1;
 }
 
