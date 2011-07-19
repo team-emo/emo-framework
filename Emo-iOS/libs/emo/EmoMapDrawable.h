@@ -33,10 +33,19 @@
 	NSInteger columns;
 	NSInteger rows;
 	NSMutableArray* tiles;
+    
+    BOOL useMesh;
+    BOOL meshLoaded;
+    short* meshIndices;
+    float* meshPositions;
+    float* meshTexCoords;
+    GLuint mesh_vbos[3];
 }
+@property (readwrite) BOOL useMesh;
+
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
 -(BOOL)bindVertex;
-
+    
 -(void)setChild:(EmoDrawable*)child;
 -(EmoDrawable*)getChild;
 

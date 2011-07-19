@@ -27,50 +27,282 @@
 // 
 #import "EmoMapDrawable.h"
 #import "Util.h"
+#import "Constants.h"
+#include <EmoEngine_glue.h>
+
+@interface EmoMapDrawable (PrivateMethods)
+-(BOOL)isInRange:(EmoStage*)stage;
+-(NSInteger)getRowCount;
+-(NSInteger)getColumnCount;
+-(NSInteger)getFirstColumn;
+-(NSInteger)getLastColumn;
+-(NSInteger)getFirstRow;
+-(NSInteger)getLastRow;
+-(void)createMeshIndiceBuffer;
+-(void)createMeshPositionBuffer;
+-(void)createMeshTextureBuffer;
+-(void)unbindMeshVertex;
+-(NSInteger)getMeshIndiceCount;
+@end
 
 @implementation EmoMapDrawable
+@synthesize useMesh;
+
 - (id)init {
     self = [super init];
     if (self != nil) {
 		tiles = [[NSMutableArray alloc] init];
+        loaded = FALSE;
+        useMesh = FALSE;
+        meshLoaded = FALSE;
     }
     return self;
 }
 
 -(void)dealloc {
 	[tiles release];
+    [self unbindMeshVertex];
 	[super dealloc];
 }
 
+-(void)doUnload {
+    [self unbindMeshVertex];
+    [super doUnload];
+}
+
+-(void)unbindMeshVertex {
+    if (useMesh && meshLoaded) {
+        free(meshIndices);
+        free(meshPositions);
+        free(meshTexCoords);
+        
+        glDeleteBuffers(3, mesh_vbos);
+        
+        meshLoaded = FALSE;
+    }
+}
+
 -(BOOL)bindVertex {
-	loaded = [child bindVertex];
+    if (useMesh && !meshLoaded) {
+        [self unbindMeshVertex];
+        
+        glGenBuffers(3, mesh_vbos);
+        
+        [self createMeshIndiceBuffer];
+        [self createMeshPositionBuffer];
+        [self createMeshTextureBuffer];
+            
+        meshLoaded = TRUE;
+        loaded = [child bindVertex];
+    } else if (!useMesh) {
+        loaded = [child bindVertex];
+    }
 	return loaded;
+}
+
+-(void)createMeshPositionBuffer {
+    int vertexCount = rows * columns * POINTS_3D_SIZE * POINTS_RECTANGLE;
+    
+    meshPositions = (float *)malloc(sizeof(float) * vertexCount);
+    
+    int childWidth  = [child getScaledWidth];
+    int childHeight = [child getScaledHeight];
+
+    int index = 0;
+    for (int row = 0; row < rows; row++) {
+        for (int column = 0; column < columns; column++) {
+            int pX = childWidth  * column;
+            int pY = childHeight * row;
+            
+            meshPositions[index++] = pX;
+            meshPositions[index++] = pY;
+            meshPositions[index++] = 0;
+            
+            meshPositions[index++] = pX;
+            meshPositions[index++] = pY + childHeight;
+            meshPositions[index++] = 0;
+            
+            meshPositions[index++] = pX + childWidth;
+            meshPositions[index++] = pY;
+            meshPositions[index++] = 0;
+            
+            meshPositions[index++] = pX + childWidth;
+            meshPositions[index++] = pY + childHeight;
+            meshPositions[index++] = 0;
+        }
+    }
+    
+    glBindBuffer(GL_ARRAY_BUFFER, mesh_vbos[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexCount, meshPositions, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
+	printGLErrors("Could not create position buffer");
+}
+
+-(NSInteger)getMeshIndiceCount {
+    return rows * columns * POINTS_2D_SIZE * POINTS_TRIANGLE;
+}
+
+-(void)createMeshIndiceBuffer {
+    int indiceCount = [self getMeshIndiceCount];
+    
+    meshIndices = (short *)malloc(sizeof(short) * indiceCount);
+    
+    int index = 0;
+    int trIndex = 0;
+    for (int row = 0; row < rows; row++) {
+        for (int column = 0; column < columns; column++) {
+            meshIndices[index++] = (short)(trIndex + 0);
+            meshIndices[index++] = (short)(trIndex + 1);
+            meshIndices[index++] = (short)(trIndex + 2);
+            
+            meshIndices[index++] = (short)(trIndex + 2);
+            meshIndices[index++] = (short)(trIndex + 1);
+            meshIndices[index++] = (short)(trIndex + 3);
+            
+            trIndex += 4;
+        }
+    }
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh_vbos[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(short) * indiceCount, meshIndices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
+	printGLErrors("Could not create indice buffer");
+}
+
+-(void)createMeshTextureBuffer {
+    int coordCount = rows * columns * POINTS_2D_SIZE * POINTS_RECTANGLE;
+    
+    meshTexCoords = (float *)malloc(sizeof(float) * coordCount);
+    
+    int index = 0;
+    for (int row = 0; row < rows; row++) {
+        for (int column = 0; column < columns; column++) {
+            NSInteger frameIndex = [self getTileAt:row column:column];
+            if ([child setFrameIndex:frameIndex force:TRUE]) {
+                meshTexCoords[index++] = [child getTexCoordStartX];
+                meshTexCoords[index++] = [child getTexCoordStartY];
+            
+                meshTexCoords[index++] = [child getTexCoordStartX];
+                meshTexCoords[index++] = [child getTexCoordEndY];
+            
+                meshTexCoords[index++] = [child getTexCoordEndX];
+                meshTexCoords[index++] = [child getTexCoordStartY];
+            
+                meshTexCoords[index++] = [child getTexCoordEndX];
+                meshTexCoords[index++] = [child getTexCoordEndY];
+            } else {
+                // no texture for this cell
+                meshTexCoords[index++] = 0;
+                meshTexCoords[index++] = 0;
+                
+                meshTexCoords[index++] = 0;
+                meshTexCoords[index++] = 0;
+                
+                meshTexCoords[index++] = 0;
+                meshTexCoords[index++] = 0;
+                
+                meshTexCoords[index++] = 0;
+                meshTexCoords[index++] = 0;
+            }
+        }
+    }
+    
+	glEnable(GL_TEXTURE_2D);
+    glBindBuffer(GL_ARRAY_BUFFER, mesh_vbos[2]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * coordCount, meshTexCoords, GL_STATIC_DRAW);
+    
+	printGLErrors("Could not create texture buffer");
+}
+
+-(BOOL) isInRange:(EmoStage*)stage {
+	if (self.x > 0 && self.x  > stage.width)  return FALSE;
+	if (self.y > 0 && self.y  > stage.height) return FALSE;
+	if (self.x < 0 && -self.x > [child getScaledWidth]  * columns) return FALSE;
+	if (self.y < 0 && -self.y > [child getScaledHeight] * rows) return FALSE;
+    
+    return TRUE;
+}
+
+-(NSInteger)getRowCount {
+	return (int)ceil([self getScaledHeight] / (double)[child getScaledHeight]);
+}
+
+-(NSInteger)getColumnCount {
+	return (int)ceil([self getScaledWidth]  / (double)[child getScaledWidth]);
+}
+
+-(NSInteger)getFirstColumn {
+	return max(0, min(columns, (-self.x / [child getScaledWidth])));
+}
+
+-(NSInteger)getLastColumn {
+	return min([self getFirstColumn] + [self getColumnCount] + 1, columns);
+}
+
+-(NSInteger)getFirstRow {
+	return max(0, min(rows, (-self.y / [child getScaledHeight])));
+}
+
+-(NSInteger)getLastRow {
+	return min([self getFirstRow] + [self getRowCount] + 1, rows);
 }
 
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
 	
-	int invertX = -self.x;
-	int invertY = -self.y;
+    if (![self isInRange:stage]) return FALSE;
+    
+    if (useMesh) {
+        glMatrixMode (GL_MODELVIEW);
+        glLoadIdentity (); 
+        
+        // update colors
+        glColor4f(param_color[0], param_color[1], param_color[2], param_color[3]);
+        
+        // update position
+        glTranslatef(x, y, 0);
+        
+        // bind vertex positions
+        glBindBuffer(GL_ARRAY_BUFFER, mesh_vbos[0]);
+        glVertexPointer(3, GL_FLOAT, 0, 0);
+        
+        // bind a texture
+        if (child.hasTexture) {
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, child.texture.textureId);
+            
+            // bind texture coords
+            glBindBuffer(GL_ARRAY_BUFFER, mesh_vbos[2]);
+            glTexCoordPointer(2, GL_FLOAT, 0, 0);
+        } else {
+            glDisable(GL_TEXTURE_2D);
+        }
+        
+        // bind indices
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh_vbos[1]);
+        
+        // draw sprite
+        glDrawElements(GL_TRIANGLES, [self getMeshIndiceCount], GL_UNSIGNED_SHORT, 0);
+        
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        
+        return TRUE;
+    }
 	
-	if (self.x > 0 && self.x  > stage.width)  return FALSE;
-	if (self.y > 0 && self.y  > stage.height) return FALSE;
-	if (self.x < 0 && invertX > [child getScaledWidth]  * columns) return FALSE;
-	if (self.y < 0 && invertY > [child getScaledHeight] * rows) return FALSE;
+	int firstColumn = [self getFirstColumn];
+	int lastColumn  = [self getLastColumn];
 	
-	int columnCount = (int)ceil([self getScaledWidth]  / (double)[child getScaledWidth]);
-	int rowCount    = (int)ceil([self getScaledHeight] / (double)[child getScaledHeight]);
-	
-	int firstColumn = max(0, min(columns, (invertX / [child getScaledWidth])));
-	int lastColumn  = min(firstColumn + columnCount + 1, columns);
-	
-	int firstRow = max(0, min(rows, (invertY / [child getScaledHeight])));
-	int lastRow  = min(firstRow + rowCount + 1, rows);
+	int firstRow = [self getFirstRow];
+	int lastRow  = [self getLastRow];
 	
 	for (int i = firstRow; i < lastRow; i++) {
 		for (int j = firstColumn; j < lastColumn; j++) {
 			if (([tiles count]) <= i || [[tiles objectAtIndex:i] count] <= j) break;
-			child.x = j * [child getScaledWidth]  - invertX;
-			child.y = i * [child getScaledHeight] - invertY;
+			child.x = j * [child getScaledWidth]  - -self.x;
+			child.y = i * [child getScaledHeight] - -self.y;
 			if ([self getTileAt:i column:j] < 0) continue;
 			
 			[child setFrameIndex:[self getTileAt:i column:j]];

@@ -101,11 +101,7 @@ extern EmoEngine* engine;
 
 @interface EmoDrawable (PrivateMethods)
 -(NSInteger)tex_coord_frame_startX;
--(NSInteger) tex_coord_frame_startY;
--(float)getTexCoordStartX;
--(float)getTexCoordEndX;
--(float)getTexCoordStartY;
--(float)getTexCoordEndY;
+-(NSInteger)tex_coord_frame_startY;
 @end
 
 @implementation EmoDrawable
@@ -413,13 +409,21 @@ extern EmoEngine* engine;
 	
 	loaded = FALSE;
 }
--(BOOL)setFrameIndex:(NSInteger)index {
+-(BOOL)setFrameIndex:(NSInteger)index force:(BOOL)force {
 	if (index < 0 || frameCount <= index) {
 		return FALSE;
 	}
-	nextFrameIndex = index;
-	frameIndexChanged = TRUE;
+    if (force) {
+        frame_index = index;
+    } else {
+        nextFrameIndex = index;
+        frameIndexChanged = TRUE;
+    }
 	return TRUE;
+}
+
+-(BOOL)setFrameIndex:(NSInteger)index {
+    return [self setFrameIndex:index force:FALSE];
 }
 -(BOOL)pauseAt:(NSInteger)index {
 	if (![self setFrameIndex:index]) {

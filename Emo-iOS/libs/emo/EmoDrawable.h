@@ -114,6 +114,7 @@
 -(void)setScale:(NSInteger)index withValue:(float)value;
 -(void)setRotate:(NSInteger)index withValue:(float)value;
 -(void)setColor:(NSInteger)index withValue:(float)value;
+-(BOOL)setFrameIndex:(NSInteger)index force:(BOOL)force;
 -(BOOL)setFrameIndex:(NSInteger)index;
 -(BOOL)pauseAt:(NSInteger)index;
 -(float)getColor:(NSInteger)index;
@@ -133,6 +134,10 @@
 -(float)getScaledHeight;
 -(BOOL)isAnimationFinished;
 -(BOOL)isVisible;
+-(float)getTexCoordStartX;
+-(float)getTexCoordEndX;
+-(float)getTexCoordStartY;
+-(float)getTexCoordEndY;
 @end
 
 @interface EmoLineDrawable : EmoDrawable {
