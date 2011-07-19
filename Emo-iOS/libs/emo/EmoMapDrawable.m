@@ -32,12 +32,6 @@
 
 @interface EmoMapDrawable (PrivateMethods)
 -(BOOL)isInRange:(EmoStage*)stage;
--(NSInteger)getRowCount;
--(NSInteger)getColumnCount;
--(NSInteger)getFirstColumn;
--(NSInteger)getLastColumn;
--(NSInteger)getFirstRow;
--(NSInteger)getLastRow;
 -(void)createMeshIndiceBuffer;
 -(void)createMeshPositionBuffer;
 -(void)createMeshTextureBuffer;
@@ -226,30 +220,6 @@
     return TRUE;
 }
 
--(NSInteger)getRowCount {
-	return (int)ceil([self getScaledHeight] / (double)[child getScaledHeight]);
-}
-
--(NSInteger)getColumnCount {
-	return (int)ceil([self getScaledWidth]  / (double)[child getScaledWidth]);
-}
-
--(NSInteger)getFirstColumn {
-	return max(0, min(columns, (-self.x / [child getScaledWidth])));
-}
-
--(NSInteger)getLastColumn {
-	return min([self getFirstColumn] + [self getColumnCount] + 1, columns);
-}
-
--(NSInteger)getFirstRow {
-	return max(0, min(rows, (-self.y / [child getScaledHeight])));
-}
-
--(NSInteger)getLastRow {
-	return min([self getFirstRow] + [self getRowCount] + 1, rows);
-}
-
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
 	
     if (![self isInRange:stage]) return FALSE;
@@ -293,11 +263,14 @@
         return TRUE;
     }
 	
-	int firstColumn = [self getFirstColumn];
-	int lastColumn  = [self getLastColumn];
+    int rowCount = (int)ceil([self getScaledHeight] / (double)[child getScaledHeight]);
+    int columnCount = (int)ceil([self getScaledWidth]  / (double)[child getScaledWidth]);
+    
+	int firstColumn = max(0, min(columns, (-self.x / [child getScaledWidth])));
+	int lastColumn  = min(firstColumn + columnCount + 1, columns);
 	
-	int firstRow = [self getFirstRow];
-	int lastRow  = [self getLastRow];
+	int firstRow = max(0, min(rows, (-self.y / [child getScaledHeight])));
+	int lastRow  = min(firstRow + rowCount + 1, rows);
 	
 	for (int i = firstRow; i < lastRow; i++) {
 		for (int j = firstColumn; j < lastColumn; j++) {
