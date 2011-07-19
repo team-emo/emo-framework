@@ -41,6 +41,7 @@ SQInteger emoDrawableSetTileAt(HSQUIRRELVM v);
 SQInteger emoDrawableGetTileAt(HSQUIRRELVM v);
 SQInteger emoDrawableGetTileIndexAtCoord(HSQUIRRELVM v);
 SQInteger emoDrawableGetTilePositionAtCoord(HSQUIRRELVM v);
+SQInteger emoDrawableUseMeshMapSprite(HSQUIRRELVM v);
 
 SQInteger emoDrawableLoad(HSQUIRRELVM v);
 SQInteger emoDrawableMove(HSQUIRRELVM v);

@@ -55,6 +55,7 @@
         loaded = FALSE;
         useMesh = FALSE;
         meshLoaded = FALSE;
+        meshIndiceCount = 0;
     }
     return self;
 }
@@ -144,9 +145,9 @@
 }
 
 -(void)createMeshIndiceBuffer {
-    int indiceCount = [self getMeshIndiceCount];
+    meshIndiceCount = [self getMeshIndiceCount];
     
-    meshIndices = (short *)malloc(sizeof(short) * indiceCount);
+    meshIndices = (short *)malloc(sizeof(short) * meshIndiceCount);
     
     int index = 0;
     int trIndex = 0;
@@ -165,7 +166,7 @@
     }
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh_vbos[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(short) * indiceCount, meshIndices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(short) * meshIndiceCount, meshIndices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     
 	printGLErrors("Could not create indice buffer");
@@ -283,7 +284,7 @@
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh_vbos[1]);
         
         // draw sprite
-        glDrawElements(GL_TRIANGLES, [self getMeshIndiceCount], GL_UNSIGNED_SHORT, 0);
+        glDrawElements(GL_TRIANGLES, meshIndiceCount, GL_UNSIGNED_SHORT, 0);
         
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);

@@ -40,6 +40,7 @@
     float* meshPositions;
     float* meshTexCoords;
     GLuint mesh_vbos[3];
+    NSInteger meshIndiceCount;
 }
 @property (readwrite) BOOL useMesh;
 
