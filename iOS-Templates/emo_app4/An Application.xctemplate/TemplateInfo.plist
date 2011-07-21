@@ -126,7 +126,7 @@
 			<key>SharedSettings</key>
 			<dict>
 				<key>OTHER_LDFLAGS</key>
-				<string>-ObjC -all_load</string>
+				<string>-ObjC -all_load -lz -lsqlite3</string>
 				<key>HEADER_SEARCH_PATHS</key>
 				<string>$(BUILT_PRODUCTS_DIR)/usr/local/include ___PACKAGENAME___/Classes ___PACKAGENAME___/libs ___PACKAGENAME___/libs/libpng ___PACKAGENAME___/libs/emo ___PACKAGENAME___/libs/squirrel/include</string>
 				<key>IPHONE_OPTIMIZE_OPTIONS</key>
