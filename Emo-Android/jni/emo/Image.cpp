@@ -42,13 +42,18 @@ namespace emo {
         this->referenceCount = 0;
     }
     Image::~Image() {
-        if (this->hasData) {
-            free(this->data);
-        }
+        this->clearTexture();
     }
     void Image::genTextures() {
         if (textureId == 0) {
             glGenTextures(1, &this->textureId);
+        }
+    }
+
+    void Image::clearTexture() {
+        if (this->hasData) {
+            free(this->data);
+            this->hasData = false;
         }
     }
 }

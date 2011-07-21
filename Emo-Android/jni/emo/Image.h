@@ -37,6 +37,7 @@ namespace emo {
         ~Image();
 
         void genTextures();
+        void clearTexture();
 
         std::string filename;
         GLuint   textureId;
