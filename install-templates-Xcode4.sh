@@ -79,7 +79,6 @@ copy_project_templates(){
 	DST_DIR="$TEMPLATE_DIR"libemo.xctemplate/
 	LIBS_DIR="$DST_DIR"libs
 
-    mkdir -p LIBS_DIR
 	copy_files Emo-iOS/libs/emo "$LIBS_DIR"
 
 	echo ...copying box2d files
@@ -87,7 +86,6 @@ copy_project_templates(){
 	DST_DIR="$TEMPLATE_DIR"libbox2d.xctemplate/
 	LIBS_DIR="$DST_DIR"libs
 
-    mkdir -p LIBS_DIR
 	copy_files Emo-iOS/libs/box2d "$LIBS_DIR"
 
 	echo ...copying squirrel files
@@ -95,7 +93,6 @@ copy_project_templates(){
 	DST_DIR="$TEMPLATE_DIR"libsquirrel.xctemplate/
 	LIBS_DIR="$DST_DIR"libs
 
-    mkdir -p LIBS_DIR
 	copy_files Emo-iOS/libs/squirrel "$LIBS_DIR"
 
 	echo ...copying libpng files
@@ -103,7 +100,6 @@ copy_project_templates(){
 	DST_DIR="$TEMPLATE_DIR"libpng.xctemplate/
 	LIBS_DIR="$DST_DIR"libs
 
-    mkdir -p LIBS_DIR
 	copy_files Emo-iOS/libs/libpng "$LIBS_DIR"
 
 	echo done!
