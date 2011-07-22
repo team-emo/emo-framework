@@ -289,7 +289,7 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
             image = engine->getCachedImage(drawable->name);
         } else {
             image = new emo::Image();
-            if (loadPngFromAsset(drawable->name.c_str(), image)) {
+            if (loadPngFromAsset(drawable->name.c_str(), image, true)) {
 
                 // calculate the size of power of two
                 image->glWidth  = nextPowerOfTwo(image->width);
@@ -431,7 +431,7 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
             image = engine->getCachedImage(drawable->name);
         } else {
             image = new emo::Image();
-            if (loadPngFromAsset(drawable->name.c_str(), image)) {
+            if (loadPngFromAsset(drawable->name.c_str(), image, true)) {
 
                 // calculate the size of power of two
                 image->glWidth  = nextPowerOfTwo(image->width);

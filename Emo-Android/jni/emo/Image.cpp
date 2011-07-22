@@ -37,6 +37,7 @@ extern emo::Engine* engine;
 
 namespace emo {
     Image::Image() {
+        this->data       = NULL;
         this->hasData    = false;
         this->textureId  = 0;
         this->referenceCount = 0;
@@ -53,6 +54,7 @@ namespace emo {
     void Image::clearTexture() {
         if (this->hasData) {
             free(this->data);
+            this->data    = NULL;
             this->hasData = false;
         }
     }
@@ -116,7 +118,7 @@ bool loadPngSizeFromAsset(const char *fname, int *width, int *height) {
 /* 
  * load png image from asset
  */
-bool loadPngFromAsset(const char *fname, emo::Image* imageInfo) {
+bool loadPngFromAsset(const char *fname, emo::Image* imageInfo, bool forcePropertyUpdate) {
     AAssetManager* mgr = engine->app->activity->assetManager;
     if (mgr == NULL) {
     	engine->setLastError(ERR_ASSET_LOAD);
@@ -154,10 +156,12 @@ bool loadPngFromAsset(const char *fname, emo::Image* imageInfo) {
 
     png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND, NULL);
 
-    imageInfo->textureId = 0;
-    imageInfo->filename = fname;
-    imageInfo->width  = info_ptr->width;
-    imageInfo->height = info_ptr->height;
+    if (forcePropertyUpdate) {
+        imageInfo->textureId = 0;
+        imageInfo->filename = fname;
+        imageInfo->width  = info_ptr->width;
+        imageInfo->height = info_ptr->height;
+    }
 
     switch (info_ptr->color_type) {
         case PNG_COLOR_TYPE_RGBA:
