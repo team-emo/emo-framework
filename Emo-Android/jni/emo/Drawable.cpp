@@ -283,7 +283,7 @@ namespace emo {
 
         printGLErrors("Could not create OpenGL vertex");
 
-        if (this->hasTexture && !this->texture->loaded) {
+        if (this->hasTexture && this->texture->hasData && !this->texture->loaded) {
             glEnable(GL_TEXTURE_2D);
             glBindTexture   (GL_TEXTURE_2D, this->texture->textureId);
 
