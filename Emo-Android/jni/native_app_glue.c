@@ -27,10 +27,6 @@
 
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "threaded_app", __VA_ARGS__))
 
-extern int             android_main_running;
-extern pthread_mutex_t android_main_mutex;
-extern pthread_cond_t  android_main_cond;
-
 static void free_saved_state(struct android_app* android_app) {
     pthread_mutex_lock(&android_app->mutex);
     if (android_app->savedState != NULL) {
@@ -283,9 +279,6 @@ static void android_app_free(struct android_app* android_app) {
     }
     pthread_mutex_unlock(&android_app->mutex);
 
-    pthread_cond_destroy(&android_main_cond);
-    pthread_mutex_destroy(&android_main_mutex);
-
     close(android_app->msgread);
     close(android_app->msgwrite);
     pthread_cond_destroy(&android_app->cond);
@@ -302,11 +295,6 @@ static void onStart(ANativeActivity* activity) {
 }
 
 static void onResume(ANativeActivity* activity) {
-    pthread_mutex_lock(&android_main_mutex);
-    android_main_running = 1;
-    pthread_cond_broadcast(&android_main_cond);
-    pthread_mutex_unlock(&android_main_mutex);
-
     android_app_set_activity_state((struct android_app*)activity->instance, APP_CMD_RESUME);
 }
 
@@ -335,11 +323,6 @@ static void* onSaveInstanceState(ANativeActivity* activity, size_t* outLen) {
 
 static void onPause(ANativeActivity* activity) {
     android_app_set_activity_state((struct android_app*)activity->instance, APP_CMD_PAUSE);
-
-    pthread_mutex_lock(&android_main_mutex);
-    android_main_running = 0;
-    pthread_cond_broadcast(&android_main_cond);
-    pthread_mutex_unlock(&android_main_mutex);
 }
 
 static void onStop(ANativeActivity* activity) {

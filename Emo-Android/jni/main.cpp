@@ -32,17 +32,9 @@
 
 emo::Engine* engine;
 
-int             android_main_running;
-pthread_mutex_t android_main_mutex;
-pthread_cond_t  android_main_cond;
-
 void android_main(struct android_app* state) {
 
     app_dummy();
-
-    android_main_running = 1;
-    pthread_mutex_init(&android_main_mutex, NULL);
-    pthread_cond_init(&android_main_cond, NULL);
 
     engine = new emo::Engine();
 
@@ -52,8 +44,6 @@ void android_main(struct android_app* state) {
     engine->app = state;
 
     engine->onInitEngine();
-
-    struct timespec timeout;
 
     while (1) {
         int ident;
@@ -85,15 +75,6 @@ void android_main(struct android_app* state) {
                 delete engine;
                 return;
             }
-        }
-
-        // Wait for engine to start when the engine is paused.
-        if (!android_main_running) {
-            pthread_mutex_lock(&android_main_mutex);
-            timeout.tv_sec = time(NULL) + 1;
-            timeout.tv_nsec = 0;
-            pthread_cond_timedwait(&android_main_cond, &android_main_mutex, &timeout);
-            pthread_mutex_unlock(&android_main_mutex);
         }
 
         if (engine->animating) {
