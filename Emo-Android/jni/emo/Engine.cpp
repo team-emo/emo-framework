@@ -87,7 +87,7 @@ namespace emo {
     void Engine::event_handle_cmd(android_app* app, int32_t cmd) {
         switch (cmd) {
             case APP_CMD_INIT_WINDOW:
-                    if (this->app->window != NULL) {
+                if (this->app->window != NULL) {
                     this->onInitDisplay();
                     this->onDrawFrame();
                 }

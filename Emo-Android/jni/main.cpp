@@ -60,7 +60,7 @@ void android_main(struct android_app* state) {
         int events;
         struct android_poll_source* source;
 
-        while ((ident=ALooper_pollAll(engine->animating, NULL, &events,
+        while ((ident=ALooper_pollAll(engine->animating ? 0 : -1, NULL, &events,
                 (void**)&source)) >= 0) {
 
             // Process this event.
