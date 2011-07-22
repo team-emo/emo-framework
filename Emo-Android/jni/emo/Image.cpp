@@ -39,6 +39,7 @@ namespace emo {
     Image::Image() {
         this->data       = NULL;
         this->hasData    = false;
+        this->mustReload = false;
         this->textureId  = 0;
         this->referenceCount = 0;
     }
@@ -56,6 +57,7 @@ namespace emo {
             free(this->data);
             this->data    = NULL;
             this->hasData = false;
+            this->mustReload = true;
         }
     }
 }
@@ -189,6 +191,7 @@ bool loadPngFromAsset(const char *fname, emo::Image* imageInfo, bool forceProper
     AAsset_close(asset);
 
     imageInfo->hasData = true;
+    imageInfo->mustReload = false;
 
     return true;
 }

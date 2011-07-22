@@ -179,6 +179,11 @@ namespace emo {
             this->texture->genTextures();
         }
 
+        // reload texture data when the data is freed
+        if (this->hasTexture && this->texture->mustReload) {
+            loadPngFromAsset(this->name.c_str(), this->texture, false);
+        }
+
         this->hasBuffer = true;
     }
 

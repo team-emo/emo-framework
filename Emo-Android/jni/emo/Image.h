@@ -49,6 +49,7 @@ namespace emo {
 
         GLubyte* data;
         bool     hasData;
+        bool     mustReload;
         bool     hasAlpha;
         bool     loaded;
 
