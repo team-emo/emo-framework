@@ -1661,6 +1661,7 @@ function emo::_onLoad() {
 }
 
 function emo::_onGainedFocus() {
+    emo.Runtime.clearTextureCache();
 
     EMO_RUNTIME_STOPWATCH.start();
     EMO_ON_UPDATE_MANAGER.onResume();
@@ -1675,6 +1676,7 @@ function emo::_onGainedFocus() {
 }
 
 function emo::_onLostFocus() {
+    emo.Runtime.clearTextureCache();
 
     EMO_ON_UPDATE_MANAGER.onPause();
     
