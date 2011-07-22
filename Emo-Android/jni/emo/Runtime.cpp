@@ -522,7 +522,6 @@ SQInteger emoRuntimeGC(HSQUIRRELVM v) {
 }
 
 SQInteger emoClearImageCache(HSQUIRRELVM v) {
-    // do nothing in Android
-    // image cache is used when returing from onPause
+    engine->clearCachedImage();
     return 0;
 }
