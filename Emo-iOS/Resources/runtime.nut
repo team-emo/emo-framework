@@ -1757,12 +1757,17 @@ function emo::_onMotionEvent(...) {
 function emo::_onKeyEvent(...) {
     local kevent = emo.KeyEvent(vargv);
     if (emo.rawin("onKeyEvent")) {
-        emo.onKeyEvent(kevent);
+        if (emo.onKeyEvent(kevent)) {
+            return true;
+        }
     }
     if (EMO_RUNTIME_DELEGATE != null &&
              EMO_RUNTIME_DELEGATE.rawin("onKeyEvent")) {
-        EMO_RUNTIME_DELEGATE.onKeyEvent(kevent);
+        if (EMO_RUNTIME_DELEGATE.onKeyEvent(kevent)) {
+            return true;
+        }
     }
+    return false;
 }
 
 function emo::_onSensorEvent(...) {
