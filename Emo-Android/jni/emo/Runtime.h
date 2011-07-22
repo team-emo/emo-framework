@@ -28,7 +28,7 @@
 #ifndef EMO_RUNTIME_H
 #define EMO_RUNTIME_H
 
-#include <android_native_app_glue.h>
+#include <../native_app_glue.h>
 #include <squirrel.h>
 
 void initRuntimeFunctions();

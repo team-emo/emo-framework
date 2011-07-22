@@ -25,7 +25,7 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-#include <android_native_app_glue.h>
+#include <../native_app_glue.h>
 
 #include "Constants.h"
 #include "Engine.h"

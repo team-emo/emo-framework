@@ -28,7 +28,7 @@
 #ifndef EMO_ENGINE_H
 #define EMO_ENGINE_H
 
-#include <android_native_app_glue.h>
+#include <../native_app_glue.h>
 #include <android/sensor.h>
 
 #include <hash_map>

@@ -25,16 +25,24 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-#include <android_native_app_glue.h>
+#include "native_app_glue.h"
 
 #include "emo/Runtime.h"
 #include "emo/Engine.h"
 
 emo::Engine* engine;
 
+int             main_running;
+pthread_mutex_t main_mutex;
+pthread_cond_t  main_cond;
+
 void android_main(struct android_app* state) {
 
     app_dummy();
+
+    main_running = 1;
+    pthread_mutex_init(&main_mutex, NULL);
+    pthread_cond_init(&main_cond, NULL);
 
     engine = new emo::Engine();
 
@@ -75,6 +83,16 @@ void android_main(struct android_app* state) {
                 delete engine;
                 return;
             }
+        }
+
+        // Wait for thread to start.
+        if (!main_running) {
+            pthread_mutex_lock(&main_mutex);
+            struct timespec ts;
+            ts.tv_sec = time(NULL) + 1;
+            ts.tv_nsec = 0;
+            pthread_cond_timedwait(&main_cond, &main_mutex, &ts);
+            pthread_mutex_unlock(&main_mutex);
         }
 
         if (engine->animating) {
