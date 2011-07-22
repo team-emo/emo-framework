@@ -953,9 +953,8 @@ namespace emo {
         images_t::iterator iter;
         for(iter = this->imageCache->begin(); iter != this->imageCache->end(); iter++) {
             Image* image = iter->second;
-            image->data = NULL;
+            image->clearTexture();
         }
-        this->imageCache->clear();
     }
 }
 
