@@ -68,6 +68,7 @@ SQInteger emoRuntimeFinish(HSQUIRRELVM v);
 SQInteger emoRuntimeGC(HSQUIRRELVM v);
 SQInteger emoRuntimeSetLogLevel(HSQUIRRELVM v);
 SQInteger emoClearImageCache(HSQUIRRELVM v);
+SQInteger emoRuntimeCompile(HSQUIRRELVM v);
 
 SQInteger emoAsyncHttpRequest(HSQUIRRELVM v);
 

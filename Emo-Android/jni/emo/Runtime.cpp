@@ -65,6 +65,7 @@ void initRuntimeFunctions() {
     registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
     registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setLogLevel",     emoRuntimeSetLogLevel);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "compilebuffer",   emoRuntimeCompile);
 
     registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
     registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
@@ -524,4 +525,21 @@ SQInteger emoRuntimeGC(HSQUIRRELVM v) {
 SQInteger emoClearImageCache(HSQUIRRELVM v) {
     engine->clearCachedImage();
     return 0;
+}
+
+SQInteger emoRuntimeCompile(HSQUIRRELVM v) {
+    const SQChar* script;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &script);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    sq_pushinteger(v, sqCompileBuffer(v, script, EMO_RUNTIME_CLASS));
+    
+    return 1;
 }

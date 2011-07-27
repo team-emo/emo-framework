@@ -80,7 +80,8 @@ public class Launcher extends ExpandableListActivity {
 		{
 			"Loading Screen",
 			"Splash Screen",
-			"HTTP Access"
+			"HTTP Access",
+			"Compiling a Script"
 		}
     };
     private static final String[][] activities = {
@@ -136,6 +137,7 @@ public class Launcher extends ExpandableListActivity {
     		".RotateModifierExample",
 			".ModifierEventExample",
 			".HTTPAccessExample"
+			".CompileScriptExample"
 		}
     	
     };

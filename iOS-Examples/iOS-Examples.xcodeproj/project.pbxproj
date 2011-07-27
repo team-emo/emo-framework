@@ -20,6 +20,7 @@
 		F917F96F1387AC15003F4B53 /* animation_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F917F96E1387AC0D003F4B53 /* animation_example.nut */; };
 		F91C514D138DD80D00464576 /* analog_controller_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F91C5146138DD63C00464576 /* analog_controller_example.nut */; };
 		F91DF9D31395AC730083DA0E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F91DF9D21395AC730083DA0E /* Icon.png */; };
+		F921620613DF8C0A008A0B59 /* compile_script_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F921620513DF8C0A008A0B59 /* compile_script_example.nut */; };
 		F921CCA8136FFBAC00F058FF /* block.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9A136FFBAC00F058FF /* block.png */; };
 		F921CCA9136FFBAC00F058FF /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9B136FFBAC00F058FF /* blocks.png */; };
 		F921CCAA136FFBAC00F058FF /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = F921CC9C136FFBAC00F058FF /* dog.png */; };
@@ -192,6 +193,7 @@
 		F917F96E1387AC0D003F4B53 /* animation_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = animation_example.nut; path = Resources/animation_example.nut; sourceTree = "<group>"; };
 		F91C5146138DD63C00464576 /* analog_controller_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = analog_controller_example.nut; path = Resources/analog_controller_example.nut; sourceTree = "<group>"; };
 		F91DF9D21395AC730083DA0E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		F921620513DF8C0A008A0B59 /* compile_script_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = compile_script_example.nut; path = Resources/compile_script_example.nut; sourceTree = "<group>"; };
 		F921CC9A136FFBAC00F058FF /* block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.png; sourceTree = "<group>"; };
 		F921CC9B136FFBAC00F058FF /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blocks.png; sourceTree = "<group>"; };
 		F921CC9C136FFBAC00F058FF /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dog.png; sourceTree = "<group>"; };
@@ -532,6 +534,7 @@
 				F9DAAC2F13961E27005DA4C1 /* audio_channel_example.nut */,
 				F9F99BD9139E09D60059B4C8 /* audio_volume_example.nut */,
 				F9102FDB13973AA800BC7404 /* http_access_example.nut */,
+				F921620513DF8C0A008A0B59 /* compile_script_example.nut */,
 				F921CCA0136FFBAC00F058FF /* runtime.nut */,
 				F9D78CD213872E8A0076C937 /* physics.nut */,
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
@@ -1002,6 +1005,7 @@
 				F9D0CAB113A22834008CA998 /* modifier_multiple.nut in Resources */,
 				F9318D5F13BD9D6500DBAD55 /* control_base.png in Resources */,
 				F9318D6013BD9D6500DBAD55 /* control_knob.png in Resources */,
+				F921620613DF8C0A008A0B59 /* compile_script_example.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
