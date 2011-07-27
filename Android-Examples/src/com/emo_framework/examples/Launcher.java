@@ -136,7 +136,7 @@ public class Launcher extends ExpandableListActivity {
 		{
     		".RotateModifierExample",
 			".ModifierEventExample",
-			".HTTPAccessExample"
+			".HTTPAccessExample",
 			".CompileScriptExample"
 		}
     	
