@@ -240,6 +240,32 @@ NSString* data2ns(NSData* data) {
 	
 	NSString* nscontent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error: nil];
 	if (nscontent == nil) {
+		LOGE("Script resource content does not found:");
+		LOGE(chfname);
+		return ERR_SCRIPT_OPEN;
+	}
+	
+	const char* script = [nscontent UTF8String];
+	const char* sourcename  = [path UTF8String];
+	
+	return sqCompileBuffer(v, script, sourcename);
+}
+
+/*
+ * load script file (full path)
+ */
+-(int)loadScript:(NSString *)path vm:(HSQUIRRELVM) v {
+	NSFileManager* manager = [NSFileManager defaultManager];
+	if (![manager fileExistsAtPath:path]) {
+		LOGE("Script file does not found:");
+		NSLOGE(path);
+		return ERR_SCRIPT_OPEN;
+    }
+    
+	NSString* nscontent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error: nil];
+	if (nscontent == nil) {
+		LOGE("Script content does not found:");
+		NSLOGE(path);
 		return ERR_SCRIPT_OPEN;
 	}
 	

@@ -121,6 +121,7 @@ void initRuntimeFunctions() {
     registerClass(engine.sqvm, EMO_STOPWATCH_CLASS);
 	
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "importFromUserDocument", emoImportScriptFromUserDocument);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
@@ -137,7 +138,7 @@ void initRuntimeFunctions() {
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "setLogLevel",   emoRuntimeSetLogLevel);
-    registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "compilebuffer",       emoRuntimeCompile);
+    registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "compilebuffer", emoRuntimeCompileBuffer);
 	
 	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
 	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
@@ -175,7 +176,7 @@ SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
 }
 
 /*
- * import function called from squirrel script
+ * import script from resource
  */
 SQInteger emoImportScript(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
@@ -187,6 +188,27 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
             sq_poptop(v);
 			
     		[engine loadScriptFromResource:(const char*)fname vm:v];
+    	}
+    }
+	return 0;
+}
+
+/*
+ * import script from user document
+ */
+SQInteger emoImportScriptFromUserDocument(HSQUIRRELVM v) {
+	NSString* docDir = [NSSearchPathForDirectoriesInDomains(
+                            NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    
+    SQInteger nargs = sq_gettop(v);
+    for(SQInteger n = 1; n <= nargs; n++) {
+    	if (sq_gettype(v, n) == OT_STRING) {
+    		const SQChar *fname;
+            sq_tostring(v, n);
+            sq_getstring(v, -1, &fname);
+            sq_poptop(v);
+			
+    		[engine loadScript:[NSString stringWithFormat:@"%@/%s", docDir, fname] vm:v];
     	}
     }
 	return 0;
@@ -607,7 +629,7 @@ SQInteger emoRuntimeGC(HSQUIRRELVM v) {
 	return 1;
 }
 
-SQInteger emoRuntimeCompile(HSQUIRRELVM v) {
+SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v) {
     const SQChar* script;
     SQInteger nargs = sq_gettop(v);
     if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {

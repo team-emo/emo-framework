@@ -52,6 +52,7 @@ SQInteger emoRuntimeGetDeviceName(HSQUIRRELVM v);
 SQInteger emoRuntimeIsSimulator(HSQUIRRELVM v);
 SQInteger emoRuntimeEcho(HSQUIRRELVM v);
 SQInteger emoImportScript(HSQUIRRELVM v);
+SQInteger emoImportScriptFromUserDocument(HSQUIRRELVM v);
 SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v);
 SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v);
 void emoUpdateOptions(SQInteger value);
@@ -68,7 +69,7 @@ SQInteger emoRuntimeFinish(HSQUIRRELVM v);
 SQInteger emoRuntimeGC(HSQUIRRELVM v);
 SQInteger emoRuntimeSetLogLevel(HSQUIRRELVM v);
 SQInteger emoClearImageCache(HSQUIRRELVM v);
-SQInteger emoRuntimeCompile(HSQUIRRELVM v);
+SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v);
 
 SQInteger emoAsyncHttpRequest(HSQUIRRELVM v);
 
