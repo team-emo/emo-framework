@@ -54,6 +54,10 @@ public class EmoActivity extends NativeActivity {
         if (vibrator != null) vibrator.vibrate(400);
     }
 
+    public String getFilePath(String name) {
+        return getPath() + File.separator + name;
+    }
+
     public void asyncHttpRequest(final String name, final int timeout, final String... params) {
 		runOnUiThread(new Runnable() {
 			public void run() {

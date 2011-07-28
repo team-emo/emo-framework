@@ -66,6 +66,7 @@ void initRuntimeFunctions() {
     registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setLogLevel",     emoRuntimeSetLogLevel);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "compilebuffer",   emoRuntimeCompileBuffer);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "compile",         emoRuntimeCompile);
 
     registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
     registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
@@ -136,13 +137,24 @@ bool printGLErrors(const char* msg) {
 }
 
 /*
- * callback function to read squirrel script
+ * callback function to read squirrel script from asset
  */
-static SQInteger sq_lexer(SQUserPointer asset) {
+static SQInteger sq_lexer_asset(SQUserPointer asset) {
 	SQChar c;
 		if(AAsset_read((AAsset*)asset, &c, 1) > 0) {
 			return c;
 		}
+	return 0;
+}
+
+/*
+ * callback function to read squirrel script
+ */
+static SQInteger sq_lexer_fp(SQUserPointer fp) {
+	SQChar c;
+	if((c = fgetc((FILE*)fp)) != EOF) {
+		return c;
+	}
 	return 0;
 }
 
@@ -168,7 +180,7 @@ bool loadScriptFromAsset(const char* fname) {
     	return false;
     }
 
-    if(SQ_SUCCEEDED(sq_compile(engine->sqvm, sq_lexer, asset, fname, SQTrue))) {
+    if(SQ_SUCCEEDED(sq_compile(engine->sqvm, sq_lexer_asset, asset, fname, SQTrue))) {
         sq_pushroottable(engine->sqvm);
         if (SQ_FAILED(sq_call(engine->sqvm, 1, SQFalse, SQTrue))) {
         	engine->setLastError(ERR_SCRIPT_CALL_ROOT);
@@ -186,6 +198,37 @@ bool loadScriptFromAsset(const char* fname) {
     AAsset_close(asset);
 
     return true;
+}
+
+bool loadScript(const char* fname) {
+    FILE* fp = fopen(fname, "r");
+    if (fp == NULL) {
+    	engine->setLastError(ERR_SCRIPT_OPEN);
+    	LOGW("loadScript: failed to open main script file");
+        LOGW(fname);
+    	return false;
+    }
+    if(SQ_SUCCEEDED(sq_compile(engine->sqvm, sq_lexer_fp, fp, fname, SQTrue))) {
+        sq_pushroottable(engine->sqvm);
+        if (SQ_FAILED(sq_call(engine->sqvm, 1, SQFalse, SQTrue))) {
+        	engine->setLastError(ERR_SCRIPT_CALL_ROOT);
+            LOGW("loadScript: failed to sq_call");
+            LOGW(fname);
+            return false;
+        }
+    } else {
+    	engine->setLastError(ERR_SCRIPT_COMPILE);
+        LOGW("loadScript: failed to compile squirrel script");
+        LOGW(fname);
+        return false;
+    }
+
+    fclose(fp);
+    return true;
+}
+
+bool loadScriptFromUserDocument(const char* fname) {
+    return loadScript(engine->javaGlue->getFilePath(fname).c_str());
 }
 
 /*
@@ -395,6 +438,41 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
     	}
     }
 	return 0;
+}
+
+/*
+ * compile script from path
+ */
+SQInteger emoRuntimeCompile(HSQUIRRELVM v) {
+    
+    if (sq_gettype(v, 2) == OT_STRING) {
+        const SQChar *fname;
+        sq_tostring(v, 2); 
+        sq_getstring(v, -1, &fname);
+        sq_poptop(v);
+
+        // check if the file type exists
+        if (sq_gettype(v, 3) == OT_INTEGER) {
+            SQInteger fileType = TYPE_ASSET;
+            sq_getinteger(v, 3, &fileType);
+    
+            if (fileType == TYPE_ASSET) {
+                // load script from resource
+                loadScriptFromAsset((char*)fname);
+            } else if (fileType == TYPE_DOCUMENT) {
+                // load script from user document directory
+                loadScriptFromUserDocument(fname);
+            } else {
+                // load script from path
+                loadScript(fname);
+            }   
+        } else {
+            // load script from path
+            loadScript(fname);
+        }   
+    
+    }   
+    return 0;
 }
 
 /*

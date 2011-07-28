@@ -60,6 +60,7 @@ namespace emo {
         std::string getDeviceName();
         bool isSimulator();
         void vibrate();
+        std::string getFilePath(std::string name);
     };
 }
 

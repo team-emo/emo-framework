@@ -45,6 +45,8 @@ bool printGLErrors(const char* msg);
 
 void emoUpdateOptions(SQInteger value);
 bool loadScriptFromAsset(const char* fname);
+bool loadScriptFromDocument(const char* fname);
+bool loadScript(const char* fname);
 
 SQInteger emoImportScript(HSQUIRRELVM v);
 SQInteger emoSetOptions(HSQUIRRELVM v);
@@ -63,6 +65,7 @@ SQInteger emoRuntimeStopwatchElapsed(HSQUIRRELVM v);
 SQInteger emoRuntimeSetLogLevel(HSQUIRRELVM v);
 SQInteger emoClearImageCache(HSQUIRRELVM v);
 SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v);
+SQInteger emoRuntimeCompile(HSQUIRRELVM v);
 
 SQInteger emoRegisterSensors(HSQUIRRELVM v);
 SQInteger emoEnableSensor(HSQUIRRELVM v);
