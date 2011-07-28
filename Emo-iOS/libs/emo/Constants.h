@@ -198,4 +198,7 @@
 #define POINTS_3D_SIZE 3
 #define POINTS_RECTANGLE 4
 #define POINTS_TRIANGLE 3
+
+#define TYPE_ASSET    0
+#define TYPE_DOCUMENT 1
 #endif

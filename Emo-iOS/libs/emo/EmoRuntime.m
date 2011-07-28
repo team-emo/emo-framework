@@ -121,7 +121,6 @@ void initRuntimeFunctions() {
     registerClass(engine.sqvm, EMO_STOPWATCH_CLASS);
 	
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
-	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "importFromUserDocument", emoImportScriptFromUserDocument);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
@@ -139,6 +138,7 @@ void initRuntimeFunctions() {
     registerClassFunc(engine.sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "setLogLevel",   emoRuntimeSetLogLevel);
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "compilebuffer", emoRuntimeCompileBuffer);
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "compile",       emoRuntimeCompile);
 	
 	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
 	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
@@ -194,22 +194,38 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
 }
 
 /*
- * import script from user document
+ * compile script from path
  */
-SQInteger emoImportScriptFromUserDocument(HSQUIRRELVM v) {
-	NSString* docDir = [NSSearchPathForDirectoriesInDomains(
-                            NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+SQInteger emoRuntimeCompile(HSQUIRRELVM v) {
     
-    SQInteger nargs = sq_gettop(v);
-    for(SQInteger n = 1; n <= nargs; n++) {
-    	if (sq_gettype(v, n) == OT_STRING) {
-    		const SQChar *fname;
-            sq_tostring(v, n);
-            sq_getstring(v, -1, &fname);
-            sq_poptop(v);
-			
-    		[engine loadScript:[NSString stringWithFormat:@"%@/%s", docDir, fname] vm:v];
-    	}
+    if (sq_gettype(v, 2) == OT_STRING) {
+        const SQChar *fname;
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &fname);
+        sq_poptop(v);
+
+        // check if the file type exists
+        if (sq_gettype(v, 3) == OT_INTEGER) {
+            SQInteger fileType = TYPE_ASSET;
+            sq_getinteger(v, 3, &fileType);
+            
+            if (fileType == TYPE_ASSET) {
+                // load script from resource
+                [engine loadScriptFromResource:(const char*)fname vm:v];
+            } else if (fileType == TYPE_DOCUMENT) {
+                // load script from user document directory
+                NSString* docDir = [NSSearchPathForDirectoriesInDomains(
+                                NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+                [engine loadScript:[NSString stringWithFormat:@"%@/%s", docDir, fname] vm:v];                
+            } else {
+                // load script from path
+                [engine loadScript:[NSString stringWithFormat:@"%s", fname] vm:v];                
+            }
+        } else {
+            // load script from path
+            [engine loadScript:[NSString stringWithFormat:@"%s", fname] vm:v];                
+        }
+        
     }
 	return 0;
 }

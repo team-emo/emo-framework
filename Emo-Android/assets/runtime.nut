@@ -59,6 +59,9 @@ MODE_PRIVATE                    <- 0x0000;
 MODE_WORLD_READABLE             <- 0x0001;
 MODE_WORLD_WRITEABLE            <- 0x0002;
 
+TYPE_ASSET     <- 0;
+TYPE_DOCUMENT  <- 1;
+
 EVENT_MODIFIER_START             <- 0;
 EVENT_MODIFIER_RESTART           <- 1;
 EVENT_MODIFIER_FINISH            <- 2;
