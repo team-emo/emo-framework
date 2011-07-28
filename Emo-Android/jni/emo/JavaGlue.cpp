@@ -247,8 +247,8 @@ namespace emo {
         vm->DetachCurrentThread();
     }
 
-    std::string JavaGlue::getFilePath(std::string name) {
-        return this->callString_String("getFilePath", name);
+    std::string JavaGlue::getDataFilePath(std::string name) {
+        return this->callString_String("getDataFilePath", name);
     }
 
     void JavaGlue::setOrientationLandscape() {

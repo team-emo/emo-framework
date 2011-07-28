@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -54,8 +55,8 @@ public class EmoActivity extends NativeActivity {
         if (vibrator != null) vibrator.vibrate(400);
     }
 
-    public String getFilePath(String name) {
-        return getPath() + File.separator + name;
+    public String getDataFilePath(String name) {
+        return getFilesDir() + File.separator + name;
     }
 
     public void asyncHttpRequest(final String name, final int timeout, final String... params) {

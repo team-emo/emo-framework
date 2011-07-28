@@ -214,12 +214,14 @@ bool loadScript(const char* fname) {
         	engine->setLastError(ERR_SCRIPT_CALL_ROOT);
             LOGW("loadScript: failed to sq_call");
             LOGW(fname);
+            fclose(fp);
             return false;
         }
     } else {
     	engine->setLastError(ERR_SCRIPT_COMPILE);
         LOGW("loadScript: failed to compile squirrel script");
         LOGW(fname);
+        fclose(fp);
         return false;
     }
 
@@ -228,7 +230,7 @@ bool loadScript(const char* fname) {
 }
 
 bool loadScriptFromUserDocument(const char* fname) {
-    return loadScript(engine->javaGlue->getFilePath(fname).c_str());
+    return loadScript(engine->javaGlue->getDataFilePath(fname).c_str());
 }
 
 /*
