@@ -70,6 +70,8 @@ SQInteger emoRuntimeSetLogLevel(HSQUIRRELVM v);
 SQInteger emoClearImageCache(HSQUIRRELVM v);
 SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v);
 SQInteger emoRuntimeCompile(HSQUIRRELVM v);
+SQInteger emoRuntimeGetAssetDir(HSQUIRRELVM v);
+SQInteger emoRuntimeGetDocumentDir(HSQUIRRELVM v);
 
 SQInteger emoAsyncHttpRequest(HSQUIRRELVM v);
 

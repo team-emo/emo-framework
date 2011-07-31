@@ -1,7 +1,7 @@
 local stage = emo.Stage();
 
 /*
- * This example compiles user string dynamically
+ * This example shows the way to compile user string dynamically
  */
 class Main {
 
@@ -9,7 +9,10 @@ class Main {
      * Called when this class is loaded
      */
     function onLoad() {
-        print("onLoad"); 
+        print("onLoad");
+
+        print(format("script directory: %s",   emo.Runtime.getAssetDir()));
+        print(format("document directory: %s", emo.Runtime.getDocumentDir()));
     }
 
     /*
