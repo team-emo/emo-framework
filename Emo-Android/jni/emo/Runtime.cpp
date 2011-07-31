@@ -152,11 +152,12 @@ static SQInteger sq_lexer_asset(SQUserPointer asset) {
  * callback function to read squirrel script
  */
 static SQInteger sq_lexer_fp(SQUserPointer fp) {
-	SQChar c;
-	if((c = fgetc((FILE*)fp)) != EOF) {
-		return c;
-	}
-	return 0;
+    int ret;
+    SQChar c;
+    if((ret = fread(&c, sizeof(c), 1, (FILE *)fp) > 0)) {
+        return c;
+    }
+    return 0;
 }
 
 /*
