@@ -12,6 +12,10 @@ class Main {
         print("onLoad");
 
         print(format("document directory: %s", emo.Runtime.getDocumentDir()));
+        // user generated script can be loaded by using emo.Runtime.compile.
+        // use TYPE_DOCUMENT when the script is in the user document directory.
+        // user document directory can be retrieved via emo.Runtime.getDocumentDir()
+        // emo.Runtime.compile("test.nut", TYPE_DOCUMENT);
     }
 
     /*
@@ -41,6 +45,8 @@ class Main {
     function onMotionEvent(mevent) {
         // compiles user script dynamically
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+          // script string can be loaded by using emo.Runtime.compilebuffer.
+          // you have to be sure to filter out the malicious input.
           local script = format("print(%d+%d);", mevent.getX(), mevent.getY());
           print("compiling... " + script);
           emo.Runtime.compilebuffer(script);
