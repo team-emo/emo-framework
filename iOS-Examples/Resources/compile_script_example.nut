@@ -11,7 +11,6 @@ class Main {
     function onLoad() {
         print("onLoad");
 
-        print(format("script directory: %s",   emo.Runtime.getAssetDir()));
         print(format("document directory: %s", emo.Runtime.getDocumentDir()));
     }
 

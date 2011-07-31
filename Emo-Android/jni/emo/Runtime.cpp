@@ -67,6 +67,7 @@ void initRuntimeFunctions() {
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setLogLevel",     emoRuntimeSetLogLevel);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "compilebuffer",   emoRuntimeCompileBuffer);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "compile",         emoRuntimeCompile);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "getDocumentDir",  emoRuntimeGetDocumentDir);
 
     registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
     registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
@@ -475,6 +476,14 @@ SQInteger emoRuntimeCompile(HSQUIRRELVM v) {
     
     }   
     return 0;
+}
+
+/*
+ * Returns the document directory
+ */
+SQInteger emoRuntimeGetDocumentDir(HSQUIRRELVM v) {
+    sq_pushstring(v, engine->javaGlue->getDataFilePath("").c_str(), -1);
+    return 1;
 }
 
 /*

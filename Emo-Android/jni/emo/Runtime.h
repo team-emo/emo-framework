@@ -66,6 +66,7 @@ SQInteger emoRuntimeSetLogLevel(HSQUIRRELVM v);
 SQInteger emoClearImageCache(HSQUIRRELVM v);
 SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v);
 SQInteger emoRuntimeCompile(HSQUIRRELVM v);
+SQInteger emoRuntimeGetDocumentDir(HSQUIRRELVM v);
 
 SQInteger emoRegisterSensors(HSQUIRRELVM v);
 SQInteger emoEnableSensor(HSQUIRRELVM v);

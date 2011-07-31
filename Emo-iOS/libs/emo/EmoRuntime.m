@@ -139,7 +139,6 @@ void initRuntimeFunctions() {
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "setLogLevel",   emoRuntimeSetLogLevel);
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "compilebuffer", emoRuntimeCompileBuffer);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "compile",       emoRuntimeCompile);
-	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "getAssetDir",   emoRuntimeGetAssetDir);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "getDocumentDir",emoRuntimeGetDocumentDir);
 	
 	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
@@ -230,16 +229,6 @@ SQInteger emoRuntimeCompile(HSQUIRRELVM v) {
         
     }
 	return 0;
-}
-
-/*
- * Returns the asset directory
- */
-SQInteger emoRuntimeGetAssetDir(HSQUIRRELVM v) {
-	NSString* dir = [[NSBundle mainBundle] resourcePath];
-    sq_pushstring(v, [[NSString stringWithFormat:@"%@/", dir] UTF8String], -1);
-
-    return 1;
 }
 
 /*
