@@ -3,7 +3,7 @@ local stage = emo.Stage();
 /*
  * This example shows the way to compile user string dynamically.
  * 
- * Note: this example doesn't run on iOS because the sandbox is enabled by default.
+ * Note: this example will not work on iOS because the sandbox is enabled by default.
  * Comment out EMO_WITH_SANDBOX in emo/Constants.h and re-compile to disable the sandbox.
  */
 class Main {
@@ -50,9 +50,13 @@ class Main {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
           // script string can be loaded by using emo.Runtime.compilebuffer.
           // you have to be sure to filter out the malicious input.
-          local script = format("print(%d+%d);", mevent.getX(), mevent.getY());
-          print("compiling... " + script);
-          emo.Runtime.compilebuffer(script);
+          if (emo.Runtime.isSandboxEnabled()) {
+              print("dynamic compiler cannot be run in sandbox mode.");
+          } else {
+              local script = format("print(%d+%d);", mevent.getX(), mevent.getY());
+              print("compiling... " + script);
+              emo.Runtime.compilebuffer(script);
+          }
         }
     }
 }

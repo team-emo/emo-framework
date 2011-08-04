@@ -141,6 +141,7 @@ void initRuntimeFunctions() {
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "compilebuffer", emoRuntimeCompileBuffer);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "compile",       emoRuntimeCompile);
 #endif
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "isSandboxEnabled", emoRuntimeIsSandboxEnabled);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "getDocumentDir",emoRuntimeGetDocumentDir);
 	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
 	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
@@ -259,6 +260,18 @@ SQInteger emoRuntimeGetDocumentDir(HSQUIRRELVM v) {
                                                          NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     sq_pushstring(v, [[NSString stringWithFormat:@"%@/", dir] UTF8String], -1);
     
+    return 1;
+}
+
+/*
+ * Check if the sandbox is enabled
+ */
+SQInteger emoRuntimeIsSandboxEnabled(HSQUIRRELVM v) {
+#ifdef EMO_WITH_SANDBOX
+    sq_pushbool(v, true);
+#else
+    sq_pushbool(v, false);
+#endif    
     return 1;
 }
 

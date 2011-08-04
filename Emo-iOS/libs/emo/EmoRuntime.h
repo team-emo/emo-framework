@@ -73,6 +73,7 @@ SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v);
 SQInteger emoRuntimeCompile(HSQUIRRELVM v);
 #endif
 SQInteger emoRuntimeGetDocumentDir(HSQUIRRELVM v);
+SQInteger emoRuntimeIsSandboxEnabled(HSQUIRRELVM v);
 
 SQInteger emoAsyncHttpRequest(HSQUIRRELVM v);
 
