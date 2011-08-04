@@ -67,8 +67,8 @@ SQInteger emoClearImageCache(HSQUIRRELVM v);
 #ifndef EMO_WITH_SANDBOX
 SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v);
 SQInteger emoRuntimeCompile(HSQUIRRELVM v);
-SQInteger emoRuntimeGetDocumentDir(HSQUIRRELVM v);
 #endif
+SQInteger emoRuntimeGetDocumentDir(HSQUIRRELVM v);
 
 SQInteger emoRegisterSensors(HSQUIRRELVM v);
 SQInteger emoEnableSensor(HSQUIRRELVM v);

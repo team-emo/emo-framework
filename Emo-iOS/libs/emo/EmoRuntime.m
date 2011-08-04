@@ -140,8 +140,8 @@ void initRuntimeFunctions() {
 #ifndef EMO_WITH_SANDBOX
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "compilebuffer", emoRuntimeCompileBuffer);
 	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "compile",       emoRuntimeCompile);
-	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "getDocumentDir",emoRuntimeGetDocumentDir);
 #endif
+	registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS,   "getDocumentDir",emoRuntimeGetDocumentDir);
 	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
 	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
 	registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableSensor",   emoDisableSensor);
@@ -233,17 +233,6 @@ SQInteger emoRuntimeCompile(HSQUIRRELVM v) {
 	return 0;
 }
 
-/*
- * Returns the document directory
- */
-SQInteger emoRuntimeGetDocumentDir(HSQUIRRELVM v) {
-    NSString* dir = [NSSearchPathForDirectoriesInDomains(
-                            NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    sq_pushstring(v, [[NSString stringWithFormat:@"%@/", dir] UTF8String], -1);
-    
-    return 1;
-}
-
 SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v) {
     const SQChar* script;
     SQInteger nargs = sq_gettop(v);
@@ -261,6 +250,17 @@ SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v) {
     return 1;
 }
 #endif
+
+/*
+ * Returns the document directory
+ */
+SQInteger emoRuntimeGetDocumentDir(HSQUIRRELVM v) {
+    NSString* dir = [NSSearchPathForDirectoriesInDomains(
+                                                         NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    sq_pushstring(v, [[NSString stringWithFormat:@"%@/", dir] UTF8String], -1);
+    
+    return 1;
+}
 
 /*
  * update options
