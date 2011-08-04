@@ -1,9 +1,9 @@
 local stage = emo.Stage();
 
 /*
- * This example shows the way to compile user string dynamically
+ * This example shows the way to compile user string dynamically.
  * 
- * Note: this example doesn't run on iOS if the sandbox is enabled.
+ * Note: this example doesn't run on iOS because the sandbox is enabled by default.
  * Comment out EMO_WITH_SANDBOX in emo/Constants.h and re-compile to disable the sandbox.
  */
 class Main {

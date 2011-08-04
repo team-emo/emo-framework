@@ -65,9 +65,11 @@ void initRuntimeFunctions() {
     registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "stop",          emoRuntimeStopwatchStop);
     registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "elapsed",       emoRuntimeStopwatchElapsed);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setLogLevel",     emoRuntimeSetLogLevel);
+#ifndef EMO_WITH_SANDBOX
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "compilebuffer",   emoRuntimeCompileBuffer);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "compile",         emoRuntimeCompile);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "getDocumentDir",  emoRuntimeGetDocumentDir);
+#endif
 
     registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
     registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
@@ -444,6 +446,7 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
 	return 0;
 }
 
+#ifndef EMO_WITH_SANDBOX
 /*
  * compile script from path
  */
@@ -486,6 +489,24 @@ SQInteger emoRuntimeGetDocumentDir(HSQUIRRELVM v) {
     sq_pushstring(v, engine->javaGlue->getDataFilePath("").c_str(), -1);
     return 1;
 }
+
+SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v) {
+    const SQChar* script;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &script);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    sq_pushinteger(v, sqCompileBuffer(v, script, EMO_RUNTIME_CLASS));
+    
+    return 1;
+}
+#endif
 
 /*
  * set options function called from script
@@ -615,21 +636,4 @@ SQInteger emoRuntimeGC(HSQUIRRELVM v) {
 SQInteger emoClearImageCache(HSQUIRRELVM v) {
     engine->clearCachedImage();
     return 0;
-}
-
-SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v) {
-    const SQChar* script;
-    SQInteger nargs = sq_gettop(v);
-    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
-        sq_tostring(v, 2);
-        sq_getstring(v, -1, &script);
-        sq_poptop(v);
-    } else {
-        sq_pushinteger(v, ERR_INVALID_PARAM);
-        return 1;
-    }
-
-    sq_pushinteger(v, sqCompileBuffer(v, script, EMO_RUNTIME_CLASS));
-    
-    return 1;
 }

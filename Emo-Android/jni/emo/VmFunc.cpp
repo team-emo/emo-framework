@@ -53,7 +53,9 @@ void initSQVM(HSQUIRRELVM v) {
 	sq_setprintfunc(v, sq_printfunc, sq_errorfunc);
 	sq_pushroottable(v);
 	sqstd_register_systemlib(v);
+#ifndef EMO_WITH_SANDBOX
 	sqstd_register_iolib(v);
+#endif
 	sqstd_register_bloblib(v);
 	sqstd_register_mathlib(v);
 	sqstd_register_stringlib(v);
@@ -504,3 +506,4 @@ SQInteger createSQObject(HSQUIRRELVM v,
 
 	return 1;
 }
+
