@@ -99,6 +99,9 @@ void initDrawableFunctions() {
 
 /*
  * create drawable instance (single sprite)
+ * 
+ * @param image file name (only png can be used)
+ * @return drawable id
  */
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 
@@ -144,6 +147,15 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * create line instance
+ *
+ * @param x1 start x
+ * @param y1 start y
+ * @param x2 end x
+ * @param y2 end y
+ * @return drawable id
+ */
 SQInteger emoDrawableCreateLine(HSQUIRRELVM v) {
 	SQInteger nargs = sq_gettop(v);
 	if (nargs < 5) {
@@ -184,6 +196,14 @@ SQInteger emoDrawableCreateLine(HSQUIRRELVM v) {
 
 /*
  * create drawable instance (sprite sheet)
+ *
+ * @param image file name
+ * @param frame index
+ * @param frame width
+ * @param frame height
+ * @param frame border
+ * @param frame margin
+ * @return drawable id
  */
 SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
 
@@ -263,6 +283,16 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * load drawable
+ *
+ * @param drawable id
+ * @param drawable x
+ * @param drawable y
+ * @param drawable width
+ * @param drawable height
+ * @return EMO_NO_ERROR if loading succeeds, otherwise returns error code
+ */
 SQInteger emoDrawableLoad(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -363,6 +393,12 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * create map sprite
+ *
+ * @param sprite sheet id
+ * @return map sprite id
+ */
 SQInteger emoDrawableCreateMapSprite(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -398,6 +434,16 @@ SQInteger emoDrawableCreateMapSprite(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * load map sprite
+ *
+ * @param map sprite id 
+ * @param map x
+ * @param map y
+ * @param map width
+ * @param map height
+ * @param EMO_NO_ERROR if loading scceeds, otherwise returns error code
+ */
 SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -503,6 +549,13 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * add tile row to map sprite
+ *
+ * @param map sprite id
+ * @param map row to be added
+ * @returns EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDrawableAddTileRow(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -553,6 +606,12 @@ SQInteger emoDrawableAddTileRow(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * clear tiles from map sprite
+ *
+ * @param map sprite id
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDrawableClearTiles(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -581,6 +640,15 @@ SQInteger emoDrawableClearTiles(HSQUIRRELVM v) {
     }
 }
 
+/*
+ * set tile value at given index
+ *
+ * @param map sprite id
+ * @param tile row
+ * @param tile column
+ * @param tile value
+ * @param EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDrawableSetTileAt(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -623,6 +691,14 @@ SQInteger emoDrawableSetTileAt(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * get tile value from given index
+ *
+ * @param map sprite id
+ * @param tile row
+ * @param tile column
+ * @return tile value from given index
+ */
 SQInteger emoDrawableGetTileAt(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -655,6 +731,14 @@ SQInteger emoDrawableGetTileAt(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * get tile index at given coords
+ *
+ * @param map sprite id
+ * @param coord x
+ * @param coord y
+ * @returns tile index array[x, y]
+ */
 SQInteger emoDrawableGetTileIndexAtCoord(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -697,6 +781,14 @@ SQInteger emoDrawableGetTileIndexAtCoord(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * get tile position at given coords
+ *
+ * @param map sprite id
+ * @param coord x
+ * @param coord y
+ * @returns tile position array[x, y]
+ */
 SQInteger emoDrawableGetTilePositionAtCoord(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -739,6 +831,13 @@ SQInteger emoDrawableGetTilePositionAtCoord(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * use mesh map sprite
+ * mesh map sprite draws map as mesh (which does not loop each tiles)
+ *
+ * @param map sprite id
+ * @param use mesh or not
+ */
 SQInteger emoDrawableUseMeshMapSprite(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -775,6 +874,11 @@ SQInteger emoDrawableUseMeshMapSprite(HSQUIRRELVM v) {
 
 /*
  * move drawable
+ *
+ * @param drawable id
+ * @param x
+ * @param y
+ * @param z
  */
 SQInteger emoDrawableMove(HSQUIRRELVM v) {
     const SQChar* id;
@@ -820,6 +924,13 @@ SQInteger emoDrawableMove(HSQUIRRELVM v) {
 
 /*
  * update color of the drawable
+ * 
+ * @param drawable id
+ * @param red    (0 to 1)
+ * @param green  (0 to 1)
+ * @param blue   (0 to 1)
+ * @param alpha  (0 to 1)
+ * @return EMO_NO_ERROR if succeeds
  */
 SQInteger emoDrawableColor(HSQUIRRELVM v) {
     const SQChar* id;
@@ -870,6 +981,13 @@ SQInteger emoDrawableColor(HSQUIRRELVM v) {
 
 /*
  * scale drawable
+ * 
+ * @param drawable id
+ * @param scale x
+ * @param scale y
+ * @param center x
+ * @param center y
+ * @return EMO_NO_ERROR if succeeds
  */
 SQInteger emoDrawableScale(HSQUIRRELVM v) {
     const SQChar* id;
@@ -928,6 +1046,13 @@ SQInteger emoDrawableScale(HSQUIRRELVM v) {
 
 /*
  * rotate drawable
+ *
+ * @param drawable id
+ * @param rotate angle
+ * @param center x
+ * @param center y
+ * @param rotate axis
+ * @return EMO_NO_ERROR if succeeds
  */
 SQInteger emoDrawableRotate(HSQUIRRELVM v) {
     const SQChar* id;
@@ -992,6 +1117,9 @@ SQInteger emoDrawableRotate(HSQUIRRELVM v) {
 
 /*
  * remove drawable
+ * 
+ * @param drawable id
+ * @return EMO_NO_ERROR is succeeds, otherwise returns error code
  */
 SQInteger emoDrawableRemove(HSQUIRRELVM v) {
     const SQChar* id;
@@ -1023,6 +1151,9 @@ SQInteger emoDrawableRemove(HSQUIRRELVM v) {
 
 /*
  * set onDraw interval
+ *
+ * @param onDraw interval (msec)
+ * @return previous interval
  */
 SQInteger emoSetOnDrawInterval(HSQUIRRELVM v) {
     SQInteger oldInterval = engine->onDrawDrawablesInterval;
@@ -1037,6 +1168,13 @@ SQInteger emoSetOnDrawInterval(HSQUIRRELVM v) {
 	return 1;
 }
 
+/*
+ * set viewport
+ *
+ * @param viewport width
+ * @param viewport height
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoSetViewport(HSQUIRRELVM v) {
 
     SQInteger width  = engine->stage->viewport_width;
@@ -1058,6 +1196,13 @@ SQInteger emoSetViewport(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set stage size
+ *
+ * @param stage width
+ * @param stage height
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoSetStageSize(HSQUIRRELVM v) {
     SQInteger width  = engine->stage->width;
     SQInteger height = engine->stage->height;
@@ -1078,6 +1223,15 @@ SQInteger emoSetStageSize(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set stage color
+ *
+ * @param red   (0 to 1)
+ * @param green (0 to 1)
+ * @param blue  (0 to 1)
+ * @param alpha (0 to 1)
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoSetStageColor(HSQUIRRELVM v) {
     float red   = engine->stage->color[0];
     float green = engine->stage->color[1];
@@ -1106,16 +1260,28 @@ SQInteger emoSetStageColor(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns stage width
+ */
 SQInteger emoGetWindowWidth(HSQUIRRELVM v) {
     sq_pushinteger(v, engine->stage->width);
     return 1;
 }
 
+/*
+ * returns stage height
+ */
 SQInteger emoGetWindowHeight(HSQUIRRELVM v) {
     sq_pushinteger(v, engine->stage->height);
     return 1;
 }
 
+/*
+ * show a drawable with given id
+ * this function set alpha color to 1
+ *
+ * @param drawable id
+ */
 SQInteger emoDrawableShow(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1142,6 +1308,12 @@ SQInteger emoDrawableShow(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * hide a drawable with given id
+ * this function set alpha color to 0
+ *
+ * @param drawable id
+ */
 SQInteger emoDrawableHide(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1168,6 +1340,12 @@ SQInteger emoDrawableHide(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set drawable color (red)
+ *
+ * @param drawable id
+ * @param red color (0 to 1)
+ */
 SQInteger emoDrawableColorRed(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1195,6 +1373,12 @@ SQInteger emoDrawableColorRed(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set drawable color (green)
+ *
+ * @param drawable id
+ * @param green color (0 to 1)
+ */
 SQInteger emoDrawableColorGreen(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1222,6 +1406,12 @@ SQInteger emoDrawableColorGreen(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set drawable color (blue)
+ *
+ * @param drawable id
+ * @param blue color (0 to 1)
+ */
 SQInteger emoDrawableColorBlue(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1249,6 +1439,12 @@ SQInteger emoDrawableColorBlue(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set drawable alpha color
+ *
+ * @param drawable id
+ * @param alpha color (0 to 1)
+ */
 SQInteger emoDrawableColorAlpha(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1276,6 +1472,13 @@ SQInteger emoDrawableColorAlpha(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set drawable position x
+ * 
+ * @param drawable id
+ * @param x
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDrawableSetX(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1308,6 +1511,13 @@ SQInteger emoDrawableSetX(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set drawable position y
+ * 
+ * @param drawable id
+ * @param y
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDrawableSetY(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1340,6 +1550,13 @@ SQInteger emoDrawableSetY(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set drawable position z
+ * 
+ * @param drawable id
+ * @param z
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDrawableSetZ(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1373,6 +1590,13 @@ SQInteger emoDrawableSetZ(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set drawable width
+ * 
+ * @param drawable id
+ * @param width
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDrawableSetWidth(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1405,6 +1629,13 @@ SQInteger emoDrawableSetWidth(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set drawable height
+ * 
+ * @param drawable id
+ * @param height
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDrawableSetHeight(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1437,6 +1668,14 @@ SQInteger emoDrawableSetHeight(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set drawable size
+ * 
+ * @param drawable id
+ * @param width
+ * @param height
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDrawableSetSize(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1478,7 +1717,13 @@ SQInteger emoDrawableSetSize(HSQUIRRELVM v) {
     return 1;
 }
 
-
+/*
+ * pause spritesheet at given position
+ *
+ * @param drawable id
+ * @param index
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1518,6 +1763,13 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * pause spritesheet at given position
+ *
+ * @param drawable id
+ * @param index
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDrawablePause(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1543,6 +1795,12 @@ SQInteger emoDrawablePause(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * stop sprite animation
+ * animation frame index is set to 0
+ * 
+ * @param drawable id
+ */
 SQInteger emoDrawableStop(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1569,6 +1827,16 @@ SQInteger emoDrawableStop(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * animate sprite sheet
+ * 
+ * @param drawable id
+ * @param frame start index
+ * @param frame count from start index
+ * @param animation interval (msec)
+ * @param loop count
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDrawableAnimate(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1620,7 +1888,15 @@ SQInteger emoDrawableAnimate(HSQUIRRELVM v) {
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }
+
+/*
+ * returns whether animation is finished or not
+ *
+ * @param drawable id
+ * @return animation is finished or not
+ */
 SQInteger emoDrawableIsAnimationFinished(HSQUIRRELVM v) {
+
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
     if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
@@ -1641,6 +1917,12 @@ SQInteger emoDrawableIsAnimationFinished(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns drawable position x
+ *
+ * @param drawable id
+ * @return drawable position x
+ */
 SQInteger emoDrawableGetX(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1662,6 +1944,12 @@ SQInteger emoDrawableGetX(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns drawable position y
+ *
+ * @param drawable id
+ * @return drawable position y
+ */
 SQInteger emoDrawableGetY(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1683,6 +1971,12 @@ SQInteger emoDrawableGetY(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns drawable position z
+ *
+ * @param drawable id
+ * @return drawable position z
+ */
 SQInteger emoDrawableGetZ(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1704,6 +1998,12 @@ SQInteger emoDrawableGetZ(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns drawable width
+ *
+ * @param drawable id
+ * @return drawable width
+ */
 SQInteger emoDrawableGetWidth(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1725,6 +2025,12 @@ SQInteger emoDrawableGetWidth(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns drawable height
+ *
+ * @param drawable id
+ * @return drawable height
+ */
 SQInteger emoDrawableGetHeight(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1746,6 +2052,12 @@ SQInteger emoDrawableGetHeight(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns drawable scale x
+ *
+ * @param drawable id
+ * @return drawable scale x
+ */
 SQInteger emoDrawableGetScaleX(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1767,6 +2079,12 @@ SQInteger emoDrawableGetScaleX(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns drawable scale y
+ *
+ * @param drawable id
+ * @return drawable scale y
+ */
 SQInteger emoDrawableGetScaleY(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1788,6 +2106,12 @@ SQInteger emoDrawableGetScaleY(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns drawable angle
+ *
+ * @param drawable id
+ * @return drawable angle
+ */
 SQInteger emoDrawableGetAngle(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1809,6 +2133,12 @@ SQInteger emoDrawableGetAngle(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns spritesheet frame index
+ *
+ * @param drawable id
+ * @return spritesheet frame index
+ */
 SQInteger emoDrawableGetFrameIndex(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1830,6 +2160,12 @@ SQInteger emoDrawableGetFrameIndex(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns spritesheet frame count
+ *
+ * @param drawable id
+ * @return spritesheet frame count
+ */
 SQInteger emoDrawableGetFrameCount(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -1851,6 +2187,16 @@ SQInteger emoDrawableGetFrameCount(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set line position
+ *
+ * @param drawable id
+ * @param x1 start x
+ * @param y1 start y
+ * @param x2 end x
+ * @param y2 end y
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDrawableSetLinePosition(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
