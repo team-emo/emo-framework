@@ -58,7 +58,14 @@ static SQInteger b2JointDefReleaseHook(SQUserPointer ptr, SQInteger size) {
 	delete reinterpret_cast<b2JointDef*>(ptr);
 	return 0;
 }
-	
+
+/*
+ * create new physics world
+ *
+ * @param gravity (vec2 instance)
+ * @param sleep objects or not
+ * @return b2World instance
+ */
 SQInteger emoPhysicsNewWorld(HSQUIRRELVM v) {
 	b2Vec2 gravity;
 	if (sq_gettype(v, 2) == OT_INSTANCE) {
@@ -80,6 +87,13 @@ SQInteger emoPhysicsNewWorld(HSQUIRRELVM v) {
 	return 1;
 }
 
+/*
+ * create new physics body
+ *
+ * @param instance of physics world
+ * @param bodydef instance
+ * @return pointer of physics body
+ */
 SQInteger emoPhysicsCreateBody(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 	if (nargs < 3) {
@@ -99,6 +113,14 @@ SQInteger emoPhysicsCreateBody(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * destroy a physics body
+ *
+ * @param physics world instance
+ * @param pointer of the body
+ * @return EMO_NO_ERROR is succeeds
+ */
 SQInteger emoPhysicsDestroyBody(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 	if (nargs < 3) {
@@ -120,6 +142,13 @@ SQInteger emoPhysicsDestroyBody(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * create new physics jointdef instance
+ *
+ * @param joint type
+ * @return physics jointdef instance
+ */
 SQInteger emoPhysicsNewJointDef(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 	if (nargs < 2 || sq_gettype(v, 2) != OT_INTEGER) {
@@ -171,6 +200,14 @@ SQInteger emoPhysicsNewJointDef(HSQUIRRELVM v) {
 	}
 	return 1;
 }
+
+/*
+ * create new physics joint
+ *
+ * @param physics world instance
+ * @param physics jointdef instance
+ * @return pointer of physics joint
+ */
 SQInteger emoPhysicsCreateJoint(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 	if (nargs < 3) {
@@ -189,6 +226,14 @@ SQInteger emoPhysicsCreateJoint(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * destroy physics joint
+ *
+ * @param physics world instance
+ * @param pointer of physics joint
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsDestroyJoint(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 	if (nargs < 3) {
@@ -210,6 +255,16 @@ SQInteger emoPhysicsDestroyJoint(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * step physics world
+ *
+ * @param physics world instance
+ * @param time step
+ * @param velocity iterations
+ * @param position iterations
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsWorld_Step(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 	if (nargs < 5) {
@@ -236,6 +291,13 @@ SQInteger emoPhysicsWorld_Step(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * enable contact listener of physics world
+ *
+ * @param physics world instance
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsWorld_EnableContactListener(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -253,6 +315,18 @@ SQInteger emoPhysicsWorld_EnableContactListener(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * enable/disable contact state of physics world
+ *
+ * state is one of PHYSICS_STATE_NULL, PHYSICS_STATE_ADD,
+ * PHYSICS_STATE_PERSIST or PHYSICS_STATE_REMOVE
+ * 
+ * @param physics world instance
+ * @param contact state type
+ * @param enable or not
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsWorld_EnableContactState(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -295,6 +369,13 @@ SQInteger emoPhysicsWorld_EnableContactState(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * clear forces of physics world
+ *
+ * @param physics world instance
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsWorld_ClearForces(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -308,6 +389,14 @@ SQInteger emoPhysicsWorld_ClearForces(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * Set flag to control automatic clearing of forces after each time step. 
+ *
+ * @param physics world instance
+ * @param enable or not
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsWorld_SetAutoClearForces(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -324,6 +413,13 @@ SQInteger emoPhysicsWorld_SetAutoClearForces(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * Get the flag that controls automatic clearing of forces after each time step. 
+ *
+ * @param physics world instance
+ * @return the flag that controls automatic clearing of forces after each time step. 
+ */
 SQInteger emoPhysicsWorld_GetAutoClearForces(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
         sq_pushbool(v, false);
@@ -335,6 +431,14 @@ SQInteger emoPhysicsWorld_GetAutoClearForces(HSQUIRRELVM v) {
 	sq_pushbool(v, world->GetAutoClearForces());
 	return 1;
 }
+
+/*
+ * set gravity of physics world
+ *
+ * @param physics world instance
+ * @param gravity (vec2 instance)
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsWorld_SetGravity(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -351,6 +455,13 @@ SQInteger emoPhysicsWorld_SetGravity(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * get gravity of physics world
+ * 
+ * @param physics world instance
+ * @return gravity (vec2 instance)
+ */
 SQInteger emoPhysicsWorld_GetGravity(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushbool(v, false);
@@ -362,6 +473,14 @@ SQInteger emoPhysicsWorld_GetGravity(HSQUIRRELVM v) {
 	pushVec2(v, world->GetGravity());
 	return 1;
 }
+
+/*
+ * create physics fixture
+ *
+ * @param b2Body pointer
+ * @param fixturedef instance
+ * @return pointer of b2Fixture
+ */
 SQInteger emoPhysicsCreateFixture(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -376,6 +495,14 @@ SQInteger emoPhysicsCreateFixture(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * destroy physics fixture
+ *
+ * @param b2Body pointer
+ * @param b2Fixture pointer
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsDestroyFixture(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 	if (nargs < 3) {
@@ -397,6 +524,14 @@ SQInteger emoPhysicsDestroyFixture(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * create new physics shape
+ * physics shape type is one of PHYSICS_SHAPE_CIRCLE or PHYSICS_SHAPE_POLYGON
+ *
+ * @param type of physics shape
+ * @return instance of physics shape
+ */
 SQInteger emoPhysicsNewShape(HSQUIRRELVM v) {
 	SQInteger sType = PHYSICS_SHAPE_UNKNOWN;
 	if (sq_gettype(v, 2) == OT_INTEGER) {
@@ -420,6 +555,14 @@ SQInteger emoPhysicsNewShape(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2PolygonShape->Set
+ *
+ * @param instance of physics polygon shape
+ * @param array of vertices
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsPolygonShape_Set(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) != OT_ARRAY) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -448,6 +591,16 @@ SQInteger emoPhysicsPolygonShape_Set(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2PolygonShape->SetAsBox
+ *
+ * @param hx the half width
+ * @param hy the half height
+ * @param the center of the box in local coordinates
+ * @param the rotation of the box in local coordinates
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsPolygonShape_SetAsBox(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE
 			|| sq_gettype(v, 3) == OT_NULL || sq_gettype(v, 4) == OT_NULL) {
@@ -476,6 +629,15 @@ SQInteger emoPhysicsPolygonShape_SetAsBox(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2PolygonShape->SetAsEdge
+ *
+ * @param b2PolygonShape instance
+ * @param v1 vec2 instance 
+ * @param v2 vec2 instance
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsPolygonShape_SetAsEdge(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE
 		|| sq_gettype(v, 3) != OT_INSTANCE || sq_gettype(v, 4) != OT_INSTANCE) {
@@ -494,6 +656,14 @@ SQInteger emoPhysicsPolygonShape_SetAsEdge(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2PolygonShape->GetVertex
+ * 
+ * @param b2PolygonShape instance
+ * @param index of vertex
+ * @return vertex
+ */
 SQInteger emoPhysicsPolygonShape_GetVertex(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE || sq_gettype(v, 3) == OT_NULL) {
 		return 0;
@@ -508,6 +678,13 @@ SQInteger emoPhysicsPolygonShape_GetVertex(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * get vertex count of b2PolygonShape
+ *
+ * @param b2PolygonShape instance
+ * @return vertex count
+ */
 SQInteger emoPhysicsPolygonShape_GetVertexCount(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		return 0;
@@ -518,6 +695,14 @@ SQInteger emoPhysicsPolygonShape_GetVertexCount(HSQUIRRELVM v) {
 	sq_pushinteger(v, shape->GetVertexCount());
 	return 1;
 }
+
+/*
+ * call b2Body->SetTransform
+ *
+ * @param pointer of b2Body 
+ * @param position (vec2 instance)
+ * @param angle
+ */
 SQInteger emoPhysicsBody_SetTransform(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER
 			&& sq_gettype(v, 3) != OT_INSTANCE) {
@@ -537,6 +722,13 @@ SQInteger emoPhysicsBody_SetTransform(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * get position of b2Body
+ *
+ * @param pointer of b2Body
+ * @param position (vec2 instance)
+ */
 SQInteger emoPhysicsBody_GetPosition(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -548,6 +740,13 @@ SQInteger emoPhysicsBody_GetPosition(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * get angle of b2Body
+ *
+ * @param pointer of b2Body
+ * @return angle
+ */
 SQInteger emoPhysicsBody_GetAngle(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -559,6 +758,13 @@ SQInteger emoPhysicsBody_GetAngle(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->GetWorldCenter
+ *
+ * @param pointer of b2Body
+ * @return world position of the center of mass
+ */
 SQInteger emoPhysicsBody_GetWorldCenter(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -570,6 +776,13 @@ SQInteger emoPhysicsBody_GetWorldCenter(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->GetLocalCenter
+ *
+ * @param pointer of b2Body
+ * @return local position of the center of mass
+ */
 SQInteger emoPhysicsBody_GetLocalCenter(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -581,6 +794,14 @@ SQInteger emoPhysicsBody_GetLocalCenter(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * Set the linear velocity of the center of mass
+ * 
+ * @param pointer of b2Body
+ * @param linear velocity (vec2 instance)
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsBody_SetLinearVelocity(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER
 		&& sq_gettype(v, 3) != OT_INSTANCE) {
@@ -597,6 +818,13 @@ SQInteger emoPhysicsBody_SetLinearVelocity(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * Get the linear velocity of the center of mass
+ *
+ * @param pointer of b2Body
+ * @return linear velocity of the center of mass
+ */
 SQInteger emoPhysicsBody_GetLinearVelocity(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -608,6 +836,13 @@ SQInteger emoPhysicsBody_GetLinearVelocity(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * Set the angular velocity
+ *
+ * @param pointer of b2Body
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsBody_SetAngularVelocity(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER
 		&& sq_gettype(v, 3) != OT_INSTANCE) {
@@ -624,6 +859,13 @@ SQInteger emoPhysicsBody_SetAngularVelocity(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * Get the angular velocity
+ *
+ * @param pointer of b2Body
+ * @return anglular velocity
+ */
 SQInteger emoPhysicsBody_GetAngularVelocity(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -635,6 +877,15 @@ SQInteger emoPhysicsBody_GetAngularVelocity(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->ApplyForce
+ *
+ * @param pointer of b2Body
+ * @param force (vec2 instance)
+ * @param point (vec2 instance)
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsBody_ApplyForce(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -653,6 +904,14 @@ SQInteger emoPhysicsBody_ApplyForce(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2Body->ApplyTorque
+ *
+ * @param pointer of b2Body
+ * @param torque
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsBody_ApplyTorque(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -668,6 +927,15 @@ SQInteger emoPhysicsBody_ApplyTorque(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2Body->ApplyLinearImpulse
+ *
+ * @param pointer of b2Body
+ * @param value1 (vec2 instance)
+ * @param value2 (vec2 instance)
+ * @return EMO_NO_ERROR
+ */
 SQInteger emoPhysicsBody_ApplyLinearImpulse(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -686,6 +954,14 @@ SQInteger emoPhysicsBody_ApplyLinearImpulse(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2Body->ApplyAngularImpulse
+ *
+ * @param pointer of b2Body
+ * @param angular impulse
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsBody_ApplyAngularImpulse(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -701,6 +977,13 @@ SQInteger emoPhysicsBody_ApplyAngularImpulse(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2Body->GetMass
+ *
+ * @param pointer of b2Body
+ * @return total mass of the body
+ */
 SQInteger emoPhysicsBody_GetMass(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -712,6 +995,13 @@ SQInteger emoPhysicsBody_GetMass(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->getInertia
+ *
+ * @param pointer of b2Body
+ * @return central rotational inertia of the body
+ */
 SQInteger emoPhysicsBody_GetInertia(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -723,6 +1013,14 @@ SQInteger emoPhysicsBody_GetInertia(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->GetWorldPoint
+ *
+ * @param pointer of b2Body
+ * @param point on the body measured relative the the body's origin (vec2 instance)
+ * @return world coordinates of a point given the local coordinates
+ */
 SQInteger emoPhysicsBody_GetWorldPoint(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER
 		&& sq_gettype(v, 3) != OT_INSTANCE) {
@@ -738,6 +1036,14 @@ SQInteger emoPhysicsBody_GetWorldPoint(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->GetWorldVector
+ * 
+ * @param pointer of b2Body
+ * @param a vector fixed in the body
+ * @return world coordinates of a vector given the local coordinates
+ */
 SQInteger emoPhysicsBody_GetWorldVector(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER
 		&& sq_gettype(v, 3) != OT_INSTANCE) {
@@ -753,6 +1059,14 @@ SQInteger emoPhysicsBody_GetWorldVector(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->GetLocalPoint
+ *
+ * @param pointer of b2Body
+ * @param point in world coordinates
+ * @return a local point relative to the body's origin given a world point
+ */
 SQInteger emoPhysicsBody_GetLocalPoint(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER
 		&& sq_gettype(v, 3) != OT_INSTANCE) {
@@ -768,6 +1082,14 @@ SQInteger emoPhysicsBody_GetLocalPoint(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->GetLocalVector
+ *
+ * @param pointer of b2Body
+ * @param vector in world coordinates
+ * @return a local vector given a world vector
+ */
 SQInteger emoPhysicsBody_GetLocalVector(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER
 		&& sq_gettype(v, 3) != OT_INSTANCE) {
@@ -783,6 +1105,14 @@ SQInteger emoPhysicsBody_GetLocalVector(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->GetLinearVelocityFromWorldPoint
+ *
+ * @param pointer of b2Body
+ * @param point in world coordinates
+ * @return world linear velocity of a world point attached to this body
+ */
 SQInteger emoPhysicsBody_GetLinearVelocityFromWorldPoint(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER
 		&& sq_gettype(v, 3) != OT_INSTANCE) {
@@ -798,6 +1128,14 @@ SQInteger emoPhysicsBody_GetLinearVelocityFromWorldPoint(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->GetLinearVelocityFromLocalPoint
+ *
+ * @param pointer of b2Body
+ * @param point in local coordinates
+ * @return world velocity of a local point
+ */
 SQInteger emoPhysicsBody_GetLinearVelocityFromLocalPoint(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER
 		&& sq_gettype(v, 3) != OT_INSTANCE) {
@@ -813,6 +1151,13 @@ SQInteger emoPhysicsBody_GetLinearVelocityFromLocalPoint(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->GetLinearDamping
+ *
+ * @param pointer of b2Body
+ * @return linear damping of the body
+ */
 SQInteger emoPhysicsBody_GetLinearDamping(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -824,6 +1169,14 @@ SQInteger emoPhysicsBody_GetLinearDamping(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->SetLinearDamping
+ *
+ * @param pointer of b2Body
+ * @param linear damping of the body
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsBody_SetLinearDamping(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -839,6 +1192,13 @@ SQInteger emoPhysicsBody_SetLinearDamping(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2Body->GetAngularDamping
+ *
+ * @param pointer of b2Body
+ * @return angular damping
+ */
 SQInteger emoPhysicsBody_GetAngularDamping(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -850,6 +1210,13 @@ SQInteger emoPhysicsBody_GetAngularDamping(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->SetAngularDamping
+ *
+ * @param angular damping of the body
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsBody_SetAngularDamping(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -865,6 +1232,16 @@ SQInteger emoPhysicsBody_SetAngularDamping(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * set type of the body
+ * body type is one of PHYSICS_BODY_STATIC, PHYSICS_BODY_KINEMATIC,
+ * or PHYSICS_BODY_DYNAMIC
+ * 
+ * @param pointer of b2Body
+ * @param type of the body
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsBody_SetType(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -890,6 +1267,15 @@ SQInteger emoPhysicsBody_SetType(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * get type of the body
+ * body type is one of PHYSICS_BODY_STATIC, PHYSICS_BODY_KINEMATIC,
+ * or PHYSICS_BODY_DYNAMIC
+ *
+ * @param pointer of the body
+ * @return type of the body
+ */
 SQInteger emoPhysicsBody_GetType(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -913,6 +1299,13 @@ SQInteger emoPhysicsBody_GetType(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * Should this body be treated like a bullet for continuous collision detection? 
+ *
+ * @param pointer of b2Body
+ * @param treat like a bullet or not
+ */
 SQInteger emoPhysicsBody_SetBullet(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -928,6 +1321,13 @@ SQInteger emoPhysicsBody_SetBullet(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * Is this body treated like a bullet for continuous collision detection? 
+ *
+ * @param pointer of the body
+ * @return is bullet or not
+ */
 SQInteger emoPhysicsBody_IsBullet(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -939,6 +1339,14 @@ SQInteger emoPhysicsBody_IsBullet(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * set whether this body allowed to sleep
+ * 
+ * @param pointer of b2Body
+ * @param allowed to sleep or not
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsBody_SetSleepingAllowed(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
