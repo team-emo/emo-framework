@@ -478,6 +478,9 @@ bool getInstanceMemberAsInstance(HSQUIRRELVM v, int idx,
 	return true;
 }
 
+/*
+ * create a instance
+ */
 SQInteger createSQObject(HSQUIRRELVM v, 
 				const char* package_name, const char* name,
 				SQUserPointer ptr, SQRELEASEHOOK releaseHook) {

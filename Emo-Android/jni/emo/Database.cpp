@@ -37,7 +37,6 @@
 
 extern emo::Engine* engine;
 
-
 void initDatabaseFunctions() {
     registerClass(engine->sqvm, EMO_DATABASE_CLASS);
     registerClass(engine->sqvm, EMO_PREFERENCE_CLASS);
@@ -341,6 +340,17 @@ namespace emo {
     }
 
 }
+
+/*
+ * open database with given name
+ * if database is not found, creates new database with given name
+ * file mode is one of FILE_MODE_PRIVATE, FILE_MODE_WORLD_READABLE
+ * or FILE_MODE_WORLD_WRITABLE
+ *
+ * @param database name
+ * @param file mode
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDatabaseOpenOrCreate(HSQUIRRELVM v) {
     const SQChar* name;
     SQInteger nargs = sq_gettop(v);
@@ -367,6 +377,12 @@ SQInteger emoDatabaseOpenOrCreate(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * open database with given name
+ *
+ * @param database name
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDatabaseOpen(HSQUIRRELVM v) {
     const SQChar* name;
     SQInteger nargs = sq_gettop(v);
@@ -388,6 +404,9 @@ SQInteger emoDatabaseOpen(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * close database
+ */
 SQInteger emoDatabaseClose(HSQUIRRELVM v) {
     if (!engine->database->close()) {
         sq_pushinteger(v, ERR_DATABASE_CLOSE);
@@ -398,6 +417,12 @@ SQInteger emoDatabaseClose(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns database path with given name
+ *
+ * @param database name
+ * @param database path
+ */
 SQInteger emoDatabaseGetPath(HSQUIRRELVM v) {
     const SQChar* name;
     SQInteger nargs = sq_gettop(v);
@@ -417,17 +442,26 @@ SQInteger emoDatabaseGetPath(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns latest database error (integer value)
+ */
 SQInteger emoDatabaseGetLastError(HSQUIRRELVM v) {
     sq_pushinteger(v, engine->database->lastError);
     return 1;
 }
 
+/*
+ * returns latest database error message
+ */
 SQInteger emoDatabaseGetLastErrorMessage(HSQUIRRELVM v) {
     const char* str = engine->database->lastErrorMessage.c_str();
     sq_pushstring(v, str, strlen(str));
     return 1;
 }
 
+/*
+ * open preference database
+ */
 SQInteger emoDatabaseOpenPreference(HSQUIRRELVM v) {
     if (!engine->database->openPreference()) {
         sq_pushinteger(v, ERR_DATABASE_OPEN);
@@ -438,6 +472,9 @@ SQInteger emoDatabaseOpenPreference(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * open or create preference database
+ */
 SQInteger emoDatabaseOpenOrCreatePreference(HSQUIRRELVM v) {
     if (!engine->database->openOrCreatePreference()) {
         sq_pushinteger(v, ERR_DATABASE_OPEN);
@@ -448,6 +485,12 @@ SQInteger emoDatabaseOpenOrCreatePreference(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns preference value with given key
+ *
+ * @param preference key
+ * @return preference value
+ */
 SQInteger emoDatabaseGetPreference(HSQUIRRELVM v) {
     const SQChar* key;
     SQInteger nargs = sq_gettop(v);
@@ -466,6 +509,13 @@ SQInteger emoDatabaseGetPreference(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set preference value with given key
+ *
+ * @param preference key
+ * @param preference value
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDatabaseSetPreference(HSQUIRRELVM v) {
     const SQChar* key;
     SQInteger nargs = sq_gettop(v);
@@ -497,6 +547,12 @@ SQInteger emoDatabaseSetPreference(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * delete database with given name
+ *
+ * @param database name
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDatabaseDeleteDatabase(HSQUIRRELVM v) {
     const SQChar* name;
     SQInteger nargs = sq_gettop(v);
@@ -518,6 +574,12 @@ SQInteger emoDatabaseDeleteDatabase(HSQUIRRELVM v) {
 
 }
 
+/*
+ * delete preference with given key
+ *
+ * @param preference key
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoDatabaseDeletePreference(HSQUIRRELVM v) {
     const SQChar* key;
     SQInteger nargs = sq_gettop(v);
@@ -538,6 +600,9 @@ SQInteger emoDatabaseDeletePreference(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns all preference keys
+ */
 SQInteger emoDatabaseGetPreferenceKeys(HSQUIRRELVM v) {
 
     std::vector<std::string> keys = engine->database->getPreferenceKeys();

@@ -64,6 +64,9 @@ void initAudioFunctions() {
     registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "vibrate",        emoAudioVibrate);
 }
 
+/*
+ * check OpenSL error
+ */
 static SLresult checkOpenSLresult(const char* message, SLresult result) {
     if (SL_RESULT_SUCCESS != result) {
         LOGE(message);
@@ -443,6 +446,10 @@ namespace emo {
 
 /*
  * SQInteger loadAudio(SQInteger audioIndex, SQChar* filename);
+ *
+ * @param audio channel index
+ * @param file name to be loaded
+ * @return EMO_NO_ERROR if succeeds
  */
 SQInteger emoLoadAudio(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
@@ -477,6 +484,12 @@ SQInteger emoLoadAudio(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * create audio engine
+ *
+ * @param channel count
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoCreateAudioEngine(HSQUIRRELVM v) {
     if (engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CREATED);
@@ -501,6 +514,12 @@ SQInteger emoCreateAudioEngine(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * play audio with given channel 
+ *
+ * @param audio channel index
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
@@ -531,6 +550,12 @@ SQInteger emoPlayAudioChannel(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * resume audio with given channel
+ *
+ * @param audio channel index
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoResumeAudioChannel(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
@@ -561,6 +586,12 @@ SQInteger emoResumeAudioChannel(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * pause audio with given channel
+ *
+ * @param audio channel index
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPauseAudioChannel(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
@@ -591,6 +622,12 @@ SQInteger emoPauseAudioChannel(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * stop audio with given channel
+ *
+ * @param audio channel index
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoStopAudioChannel(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
@@ -621,7 +658,13 @@ SQInteger emoStopAudioChannel(HSQUIRRELVM v) {
     return 1;
 }
 
-
+/*
+ * seek audio with given channel
+ *
+ * @param audio channel index
+ * @param seek offset (milliseconds from the beginning of the audio)
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoSeekAudioChannel(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
@@ -654,6 +697,12 @@ SQInteger emoSeekAudioChannel(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * get audio volume with given channel
+ *
+ * @param audio channel index
+ * @return audio volume (0 to 1)
+ */
 SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
         LOGE("emoGetAudioChannelVolume: audio engine is closed");
@@ -683,6 +732,13 @@ SQInteger emoGetAudioChannelVolume(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set audio volume with given channel
+ *
+ * @param audio channel index
+ * @param audio volume (0 to 1)
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
@@ -717,23 +773,38 @@ SQInteger emoSetAudioChannelVolume(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns max audio volume (always 1)
+ */
 SQInteger emoGetAudioChannelMaxVolume(HSQUIRRELVM v) {
     sq_pushfloat(v, 1.0);
     return 1;
 }
 
+/*
+ * returns audio channel count
+ */
 SQInteger emoGetAudioChannelCount(HSQUIRRELVM v) {
     sq_pushinteger(v, engine->audio->getChannelCount());
     return 1;
 
 }
 
+/*
+ * returns min audio volume (always 0)
+ */
 SQInteger emoGetAudioChannelMinVolume(HSQUIRRELVM v) {
     sq_pushfloat(v, 0);
     return 1;
 }
 
-
+/*
+ * loop audio with given channel
+ *
+ * @param audio channel index
+ * @param loop or not (boolean value)
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
@@ -765,6 +836,12 @@ SQInteger emoSetAudioChannelLooping(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * returns whether audio channel is looping or not
+ *
+ * @param audio channel index
+ * @return audio channel is looping or not
+ */
 SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
         LOGE("emoGetAudioChannelLooping: audio engine is closed");
@@ -794,6 +871,12 @@ SQInteger emoGetAudioChannelLooping(HSQUIRRELVM v) {
 
 }
 
+/*
+ * get audio state of given channel
+ * 
+ * @param audio channel index
+ * @return audio status (AUDIO_CHANNEL_STOPPED, AUDIO_CHANNEL_PAUSED, AUDIO_CHANNEL_PLAYING)
+ */
 SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
         LOGE("emoGetAudioChannelState: audio engine is closed");
@@ -835,7 +918,12 @@ SQInteger emoGetAudioChannelState(HSQUIRRELVM v) {
 
 }
 
-
+/*
+ * close audio with given channel
+ *
+ * @param audio channel index
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
@@ -863,6 +951,11 @@ SQInteger emoCloseAudioChannel(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * close audio engine
+ *
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoCloseAudioEngine(HSQUIRRELVM v) {
     if (!engine->audio->isRunning()) {
         sq_pushinteger(v, ERR_AUDIO_ENGINE_CLOSED);
@@ -877,7 +970,7 @@ SQInteger emoCloseAudioEngine(HSQUIRRELVM v) {
 }
 
 /*
- * vibrate
+ * vibrate device
  */
 SQInteger emoAudioVibrate(HSQUIRRELVM v) {
 	engine->javaGlue->vibrate();

@@ -126,6 +126,9 @@ void clearGLErrors(const char* msg) {
     }
 }
 
+/*
+ * print all OpenGL errors
+ */
 bool printGLErrors(const char* msg) {
     bool result = true;
     for (GLint error = glGetError(); error; error = glGetError()) {
@@ -205,6 +208,9 @@ bool loadScriptFromAsset(const char* fname) {
     return true;
 }
 
+/*
+ * load squirrel script from given file name
+ */
 bool loadScript(const char* fname) {
     FILE* fp = fopen(fname, "r");
     if (fp == NULL) {
@@ -234,12 +240,18 @@ bool loadScript(const char* fname) {
     return true;
 }
 
+/*
+ * load squirrel script from user document
+ */
 bool loadScriptFromUserDocument(const char* fname) {
     return loadScript(engine->javaGlue->getDataFilePath(fname).c_str());
 }
 
 /*
  * Runtime logging
+ *
+ * @param log level
+ * @param log message
  */
 SQInteger emoRuntimeLog(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
@@ -271,6 +283,9 @@ SQInteger emoRuntimeLog(HSQUIRRELVM v) {
 
 /*
  * Set Runtime log level
+ *
+ * @param log level
+ * @param EMO_NO_ERROR if succeeds
  */
 SQInteger emoRuntimeSetLogLevel(HSQUIRRELVM v) {
 
@@ -300,6 +315,8 @@ SQInteger emoRuntimeSetLogLevel(HSQUIRRELVM v) {
 
 /*
  * Runtime log info
+ *
+ * @param log message
  */
 SQInteger emoRuntimeLogInfo(HSQUIRRELVM v) {
     const SQChar *str;
@@ -317,6 +334,8 @@ SQInteger emoRuntimeLogInfo(HSQUIRRELVM v) {
 
 /*
  * Runtime log error
+ * 
+ * @param log message
  */
 SQInteger emoRuntimeLogError(HSQUIRRELVM v) {
     const SQChar *str;
@@ -334,6 +353,8 @@ SQInteger emoRuntimeLogError(HSQUIRRELVM v) {
 
 /*
  * Runtime log warn
+ *
+ * @param log message
  */
 SQInteger emoRuntimeLogWarn(HSQUIRRELVM v) {
     const SQChar *str;
@@ -352,6 +373,9 @@ SQInteger emoRuntimeLogWarn(HSQUIRRELVM v) {
 
 /*
  * Runtime echo
+ *
+ * @param message
+ * @return given message
  */
 SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
 	const SQChar *str;
@@ -450,6 +474,8 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
 #ifndef EMO_WITH_SANDBOX
 /*
  * compile script from path
+ *
+ * @param script file name
  */
 SQInteger emoRuntimeCompile(HSQUIRRELVM v) {
     
@@ -483,6 +509,11 @@ SQInteger emoRuntimeCompile(HSQUIRRELVM v) {
     return 0;
 }
 
+/*
+ * compile script from given string
+ *
+ * @param squirrel program as string
+ */
 SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v) {
     const SQChar* script;
     SQInteger nargs = sq_gettop(v);
@@ -523,6 +554,8 @@ SQInteger emoRuntimeIsSandboxEnabled(HSQUIRRELVM v) {
 
 /*
  * set options function called from script
+ * 
+ * @param options to be enabled
  */
 SQInteger emoSetOptions(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
@@ -539,6 +572,8 @@ SQInteger emoSetOptions(HSQUIRRELVM v) {
 
 /*
  * register sensors function called from script
+ *
+ * @param sensors to be registered
  */
 SQInteger emoRegisterSensors(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
@@ -555,6 +590,9 @@ SQInteger emoRegisterSensors(HSQUIRRELVM v) {
 
 /*
  * enable sensor
+ *
+ * @param sensor type
+ * @param sensor interval
  */
 SQInteger emoEnableSensor(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
@@ -576,6 +614,8 @@ SQInteger emoEnableSensor(HSQUIRRELVM v) {
 
 /*
  * disable sensor
+ *
+ * @param sensor type
  */
 SQInteger emoDisableSensor(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
@@ -592,6 +632,11 @@ SQInteger emoDisableSensor(HSQUIRRELVM v) {
     return 0;
 }
 
+/*
+ * enable onDraw callback
+ *
+ * @param onDraw interval (msec)
+ */
 SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
     engine->enableOnDrawListener(true);
 
@@ -607,20 +652,35 @@ SQInteger emoEnableOnDrawCallback(HSQUIRRELVM v) {
     return 0;
 }
 
+/*
+ * disable onDraw callback
+ */
 SQInteger emoDisableOnDrawCallback(HSQUIRRELVM v) {
     engine->enableOnDrawListener(false);
     return 0;
 }
 
+/*
+ * enable onUpdate callback
+ */
 SQInteger emoEnableOnUpdateCallback(HSQUIRRELVM v) {
     engine->enableOnUpdateListener(true);
     return 0;
 }
+
+/*
+ * disable onUpdate callback
+ */
 SQInteger emoDisableOnUpdateCallback(HSQUIRRELVM v) {
     engine->enableOnUpdateListener(false);
     return 0;
 }
 
+/*
+ * enable onFps callback
+ * 
+ * @param onUpdate interval
+ */
 SQInteger emoEnableOnFpsCallback(HSQUIRRELVM v) {
     engine->enableOnFpsListener(true);
 
@@ -636,16 +696,25 @@ SQInteger emoEnableOnFpsCallback(HSQUIRRELVM v) {
     return 0;
 }
 
+/*
+ * disable onFps callback
+ */
 SQInteger emoDisableOnFpsCallback(HSQUIRRELVM v) {
     engine->enableOnFpsListener(false);
     return 0;
 }
 
+/*
+ * invoke garbage collection
+ */
 SQInteger emoRuntimeGC(HSQUIRRELVM v) {
     sq_pushinteger(v, sq_collectgarbage(v));
     return 1;
 }
 
+/*
+ * clear texture cache
+ */
 SQInteger emoClearImageCache(HSQUIRRELVM v) {
     engine->clearCachedImage();
     return 0;
