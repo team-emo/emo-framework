@@ -1362,6 +1362,13 @@ SQInteger emoPhysicsBody_SetSleepingAllowed(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * returns whether the body is allowd to sleep
+ * 
+ * @param pointer of b2Body
+ * @return sleeping is allowed or noit
+ */
 SQInteger emoPhysicsBody_IsSleepingAllowed(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1373,6 +1380,14 @@ SQInteger emoPhysicsBody_IsSleepingAllowed(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * set the body awake
+ *
+ * @param pointer of b2Body
+ * @param awake or not
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsBody_SetAwake(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1388,6 +1403,13 @@ SQInteger emoPhysicsBody_SetAwake(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * returns whether the body is awake or not
+ *
+ * @param pointer of b2Body
+ * @return awake or not
+ */
 SQInteger emoPhysicsBody_IsAwake(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1399,6 +1421,14 @@ SQInteger emoPhysicsBody_IsAwake(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * set the body active
+ * 
+ * @param pointer of b2Body
+ * @param active or not
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsBody_SetActive(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1414,6 +1444,13 @@ SQInteger emoPhysicsBody_SetActive(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * returns whether the body is active or not
+ *
+ * @param pointer of b2Body
+ * @return active or not
+ */
 SQInteger emoPhysicsBody_IsActive(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1425,6 +1462,14 @@ SQInteger emoPhysicsBody_IsActive(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Body->SetFixedRotation
+ *
+ * @param pointer of b2Body
+ * @param use fixed rotation or not
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsBody_SetFixedRotation(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1440,6 +1485,13 @@ SQInteger emoPhysicsBody_SetFixedRotation(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2Body->IsFixedRotation
+ *
+ * @param pointer of b2Body
+ * @return is fixed rotation
+ */
 SQInteger emoPhysicsBody_IsFixedRotation(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1451,6 +1503,14 @@ SQInteger emoPhysicsBody_IsFixedRotation(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * set b2CircleShape->m_p
+ *
+ * @param b2CircleShape instance
+ * @param m_p
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsCircleShape_position(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1467,6 +1527,14 @@ SQInteger emoPhysicsCircleShape_position(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * set b2CircleShape->m_radius
+ *
+ * @param b2CircleShape instance
+ * @param m_radius
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsCircleShape_radius(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1482,6 +1550,14 @@ SQInteger emoPhysicsCircleShape_radius(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * set b2PolygonShape->m_radius
+ *
+ * @param b2PolygonShape instance
+ * @param m_radius
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsPolygonShape_radius(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1497,6 +1573,13 @@ SQInteger emoPhysicsPolygonShape_radius(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2Joint->GetAnchorA
+ *
+ * @param pointer of b2Joint
+ * @return vector value of anchor A
+ */
 SQInteger emoPhysicsJoint_GetAnchorA(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1508,6 +1591,13 @@ SQInteger emoPhysicsJoint_GetAnchorA(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Joint->GetAnchorB
+ *
+ * @param pointer of b2Joint
+ * @return vector value of anchor B
+ */
 SQInteger emoPhysicsJoint_GetAnchorB(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1519,6 +1609,14 @@ SQInteger emoPhysicsJoint_GetAnchorB(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Joint->GetReactionForce
+ *
+ * @param pointer of b2Joint
+ * @param timestep
+ * @return reaction force on body at the joint anchor in Newtons
+ */
 SQInteger emoPhysicsJoint_GetReactionForce(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1533,6 +1631,14 @@ SQInteger emoPhysicsJoint_GetReactionForce(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * kkcall b2Joint->GetReactionTorque
+ *
+ * @param pointer of b2Joint
+ * @param timestep
+ * @param reaction torque
+ */
 SQInteger emoPhysicsJoint_GetReactionTorque(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1547,6 +1653,14 @@ SQInteger emoPhysicsJoint_GetReactionTorque(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Joint->SetLength
+ *
+ * @param pointer of b2DistanceJoint
+ * @param length
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsJoint_SetLength(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1563,6 +1677,13 @@ SQInteger emoPhysicsJoint_SetLength(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2DistanceJoint->GetLength
+ * 
+ * @param pointer of b2DistanceJoint
+ * @return length
+ */
 SQInteger emoPhysicsJoint_GetLength(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1574,6 +1695,14 @@ SQInteger emoPhysicsJoint_GetLength(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2DistanceJoint->SetFrequency
+ *
+ * @param pointer of b2DistanceJoint
+ * @param frequency
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsJoint_SetFrequency(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1590,6 +1719,13 @@ SQInteger emoPhysicsJoint_SetFrequency(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2DistanceJoint->GetFrequency
+ *
+ * @param pointer of b2DistanceJoint
+ * @return frequency
+ */
 SQInteger emoPhysicsJoint_GetFrequency(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1601,6 +1737,14 @@ SQInteger emoPhysicsJoint_GetFrequency(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2DistanceJoint->SetDampingRatio
+ *
+ * @param pointer of b2DistanceJoint
+ * @param damping ratio
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsJoint_SetDampingRatio(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1617,6 +1761,13 @@ SQInteger emoPhysicsJoint_SetDampingRatio(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2DistanceJoint->GetDampingRatio
+ *
+ * @param poiinter of b2DistanceJoint
+ * @return damping ratio
+ */
 SQInteger emoPhysicsJoint_GetDampingRatio(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1628,6 +1779,14 @@ SQInteger emoPhysicsJoint_GetDampingRatio(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2FrictionJoint->SetMaxForce
+ *
+ * @param pointer of b2FrictionJoint
+ * @param max force
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsJoint_SetMaxForce(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1644,6 +1803,13 @@ SQInteger emoPhysicsJoint_SetMaxForce(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2FrictionJoint->GetMaxForce
+ *
+ * @param pointer of b2FrictionJoint
+ * @return max force
+ */
 SQInteger emoPhysicsJoint_GetMaxForce(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1655,6 +1821,14 @@ SQInteger emoPhysicsJoint_GetMaxForce(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2FrictionJoint->SetMaxTorque
+ *
+ * @param pointer of b2FrictionJoint
+ * @param max torque
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsJoint_SetMaxTorque(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1671,6 +1845,13 @@ SQInteger emoPhysicsJoint_SetMaxTorque(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2FrictionJoint->GetMaxTorque
+ *
+ * @param pointer of b2FrictionJoint
+ * @return max torque
+ */
 SQInteger emoPhysicsJoint_GetMaxTorque(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1682,6 +1863,14 @@ SQInteger emoPhysicsJoint_GetMaxTorque(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2GearJoint->SetRatio
+ *
+ * @param pointer of b2GearJoint
+ * @param ratio
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsJoint_SetRatio(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1698,6 +1887,13 @@ SQInteger emoPhysicsJoint_SetRatio(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2GearJoint->GetRatio
+ *
+ * @param pointer of b2GearJoint
+ * @return ratio
+ */
 SQInteger emoPhysicsJoint_GetRatio(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1709,6 +1905,13 @@ SQInteger emoPhysicsJoint_GetRatio(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Joint->GetJointTranslation
+ *
+ * @param pointer of b2Joint
+ * @return joint translation
+ */
 SQInteger emoPhysicsJoint_GetJointTranslation(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1728,6 +1931,13 @@ SQInteger emoPhysicsJoint_GetJointTranslation(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Joint->GetJointSpeed
+ *
+ * @param pointer of b2Joint
+ * @return joint speed
+ */
 SQInteger emoPhysicsJoint_GetJointSpeed(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1750,6 +1960,13 @@ SQInteger emoPhysicsJoint_GetJointSpeed(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2RevoluteJoint->GetJointAngle
+ *
+ * @param pointer of b2RevoluteJoint
+ * @return joint angle
+ */
 SQInteger emoPhysicsJoint_GetJointAngle(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1761,6 +1978,13 @@ SQInteger emoPhysicsJoint_GetJointAngle(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Joint->IsLimitedEnabled
+ *
+ * @param pointer of b2Joint
+ * @return limited is enabled or not
+ */
 SQInteger emoPhysicsJoint_IsLimitedEnabled(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1783,6 +2007,14 @@ SQInteger emoPhysicsJoint_IsLimitedEnabled(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Joint->EnableLimit
+ *
+ * @param pointer of b2Joint
+ * @param enable limit or not
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsJoint_EnableLimit(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1810,6 +2042,13 @@ SQInteger emoPhysicsJoint_EnableLimit(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2Joint->GetLowerLimit
+ *
+ * @param pointer of b2Joint
+ * @return lower limit
+ */
 SQInteger emoPhysicsJoint_GetLowerLimit(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1832,6 +2071,13 @@ SQInteger emoPhysicsJoint_GetLowerLimit(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Joint->GetUpperLimit
+ *
+ * @param pointer of b2Joint
+ * @return upper limit
+ */
 SQInteger emoPhysicsJoint_GetUpperLimit(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1854,6 +2100,15 @@ SQInteger emoPhysicsJoint_GetUpperLimit(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Joint->SetLimits
+ *
+ * @param pointer of b2Joint
+ * @param lower limits
+ * @param upper limits
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsJoint_SetLimits(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1883,6 +2138,13 @@ SQInteger emoPhysicsJoint_SetLimits(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2Joint->IsMotorEnabled
+ * 
+ * @param pointer of b2Joint
+ * @return motor is enabled or not
+ */
 SQInteger emoPhysicsJoint_IsMotorEnabled(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1902,6 +2164,14 @@ SQInteger emoPhysicsJoint_IsMotorEnabled(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2Joint->EnableMotor
+ *
+ * @param pointer of b2Joint
+ * @param enable motor or not
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsJoint_EnableMotor(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1929,6 +2199,14 @@ SQInteger emoPhysicsJoint_EnableMotor(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2Joint->SetMotorSpeed
+ *
+ * @param pointer of b2Joint
+ * @param motor speed
+ * @param EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsJoint_SetMotorSpeed(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1956,6 +2234,14 @@ SQInteger emoPhysicsJoint_SetMotorSpeed(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2Joint->SetMaxMotorForce
+ *
+ * @param pointer of b2Joint
+ * @param max motor force
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsJoint_SetMaxMotorForce(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -1980,6 +2266,13 @@ SQInteger emoPhysicsJoint_SetMaxMotorForce(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2Joint->GetMotorForce
+ *
+ * @param pointer of b2Joint
+ * @return motor force
+ */
 SQInteger emoPhysicsJoint_GetMotorForce(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -1999,6 +2292,14 @@ SQInteger emoPhysicsJoint_GetMotorForce(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2RevoluteJoint->SetMaxMotorTorque
+ *
+ * @param pointer of b2RevoluteJoint
+ * @param max motor torque
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsJoint_SetMaxMotorTorque(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -2015,6 +2316,13 @@ SQInteger emoPhysicsJoint_SetMaxMotorTorque(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * call b2RevoluteJoint->GetMotorTorque
+ *
+ * @param pointer of b2RevoluteJoint
+ * @return motor torque
+ */
 SQInteger emoPhysicsJoint_GetMotorTorque(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -2026,6 +2334,13 @@ SQInteger emoPhysicsJoint_GetMotorTorque(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2PulleyJoint->GetGroundAnchorA
+ *
+ * @param pointer of b2PulleyJoint
+ * @return ground anchor A
+ */
 SQInteger emoPhysicsJoint_GetGroundAnchorA(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -2037,6 +2352,12 @@ SQInteger emoPhysicsJoint_GetGroundAnchorA(HSQUIRRELVM v) {
 	
 	return 1;
 }
+/*
+ * call b2PulleyJoint->GetGroundAnchorB
+ *
+ * @param pointer of b2PulleyJoint
+ * @return ground anchor B
+ */
 SQInteger emoPhysicsJoint_GetGroundAnchorB(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -2048,6 +2369,13 @@ SQInteger emoPhysicsJoint_GetGroundAnchorB(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * call b2PulleyJoint->GetLength1
+ *
+ * @param pointer of b2PulleyJoint
+ * @return length 1
+ */
 SQInteger emoPhysicsJoint_GetLength1(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -2059,6 +2387,12 @@ SQInteger emoPhysicsJoint_GetLength1(HSQUIRRELVM v) {
 	
 	return 1;
 }
+/*
+ * call b2PulleyJoint->GetLength2
+ *
+ * @param pointer of b2PulleyJoint
+ * @return length 2
+ */
 SQInteger emoPhysicsJoint_GetLength2(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
@@ -2070,6 +2404,13 @@ SQInteger emoPhysicsJoint_GetLength2(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
+/*
+ * update jointdef properties
+ *
+ * @param instance of b2JointDef
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsJointDef_Update(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -2111,6 +2452,17 @@ SQInteger emoPhysicsJointDef_Update(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * initialize distance jointdef
+ * 
+ * @param instance of b2DistanceJointDef
+ * @param pointer of b2Body A
+ * @param pointer of b2Body B
+ * @param anchor A
+ * @param anchor B
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsInitDistanceJointDef(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -2139,6 +2491,16 @@ SQInteger emoPhysicsInitDistanceJointDef(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * initialize friction jointdef
+ *
+ * @param instance of b2FrictinJointDef
+ * @param pointer of b2Body A
+ * @param pointer of b2Body B
+ * @param anchor
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsInitFrictionJointDef(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -2166,6 +2528,17 @@ SQInteger emoPhysicsInitFrictionJointDef(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * initialize LineJointDef
+ *
+ * @param instance of b2LineJointDef
+ * @param pointer of b2Body A
+ * @param pointer of b2Body B
+ * @param anchor
+ * @param axis
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsInitLineJointDef(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -2194,6 +2567,17 @@ SQInteger emoPhysicsInitLineJointDef(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * initialize PrismaticJointDef
+ * 
+ * @param instance of b2PrismaticJointDef
+ * @param pointer of b2Body A
+ * @param pointer of b2Body B
+ * @param anchor
+ * @param axis
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsInitPrismaticJointDef(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -2222,6 +2606,20 @@ SQInteger emoPhysicsInitPrismaticJointDef(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * initialize PulleyJointDef
+ *
+ * @param instance of b2PulleyJointDef
+ * @param pointer of b2Body A
+ * @param pointer of b2Body B
+ * @param ground anchor A
+ * @param ground anchor B
+ * @param anchor A
+ * @param anchor B
+ * @param ratio
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsInitPulleyJointDef(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -2255,6 +2653,16 @@ SQInteger emoPhysicsInitPulleyJointDef(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * initialize RevoluteJointDef
+ *
+ * @param instance of b2RevoluteJointDef
+ * @param pointer of b2Body A
+ * @param pointer of b2Body B
+ * @param anchor
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsInitRevoluteJointDef(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -2282,6 +2690,16 @@ SQInteger emoPhysicsInitRevoluteJointDef(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
+
+/*
+ * initialize WeldJointDef
+ * 
+ * @param instance of b2WeldJointDef
+ * @param pointer of b2Body A
+ * @param pointer of b2Body B
+ * @param anchor
+ * @return EMO_NO_ERROR if succeeds
+ */
 SQInteger emoPhysicsInitWeldJointDef(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_INSTANCE) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
