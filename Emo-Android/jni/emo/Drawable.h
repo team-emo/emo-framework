@@ -75,7 +75,7 @@ namespace emo {
         virtual void reload();
         virtual bool bindVertex();
         virtual void onDrawFrame();
-        virtual void deleteBuffer();
+        virtual void deleteBuffer(bool force);
         void generateBuffers();
 
         virtual void setFrameCount(int count);
@@ -180,7 +180,7 @@ namespace emo {
         virtual void reload();
         virtual bool bindVertex();
         virtual void onDrawFrame();
-        virtual void deleteBuffer();
+        virtual void deleteBuffer(bool force);
 
         virtual void setChild(Drawable* child);
         virtual Drawable* getChild();

@@ -714,7 +714,7 @@ namespace emo {
         drawables_t::iterator iter;
         for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
             Drawable* drawable = iter->second;
-            drawable->deleteBuffer();
+            drawable->deleteBuffer(true);
         }
     }
 
