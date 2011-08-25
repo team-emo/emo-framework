@@ -101,6 +101,7 @@ namespace emo {
         this->frameCountLoaded = false;
         this->frameIndexChanged = false;
         this->independent = true;
+        this->needTexture = false;
 
         // color param RGBA
         this->param_color[0] = 1.0f;
@@ -172,7 +173,6 @@ namespace emo {
 
     void Drawable::reload() {
         if (this->hasBuffer) return;
-
         this->generateBuffers();
 
         if (this->hasTexture) {
@@ -268,6 +268,9 @@ namespace emo {
     }
 
     bool Drawable::bindVertex() {
+        // Sprite#load is not called yet
+        if (this->needTexture && !this->hasTexture) return false;
+
         clearGLErrors("bindDrawableVertex");
 
         this->vertex_tex_coords[0] = this->getTexCoordStartX();

@@ -118,6 +118,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 
         if (strlen(name) > 0) {
             drawable->name = name;
+            drawable->needTexture = true;
         }
     } else {
         name = NULL;
@@ -217,6 +218,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
 
         if (strlen(name) > 0) {
             drawable->name = name;
+            drawable->needTexture = true;
         }
     } else {
         name = NULL;

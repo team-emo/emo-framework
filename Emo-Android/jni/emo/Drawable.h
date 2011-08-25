@@ -101,6 +101,7 @@ namespace emo {
         bool hasTexture;
         bool hasBuffer;
         bool independent;
+        bool needTexture;
 
         int border;
         int margin;
