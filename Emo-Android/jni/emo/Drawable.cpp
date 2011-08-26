@@ -331,6 +331,7 @@ namespace emo {
 
     void Drawable::onDrawFrame() {
         if (!this->loaded) return;
+        if (!this->hasBuffer) return;
 
         if (this->frameIndexChanged) {
             this->frame_index = nextFrameIndex;
