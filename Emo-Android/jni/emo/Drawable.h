@@ -145,6 +145,9 @@ namespace emo {
         float getTexCoordStartY();
         float getTexCoordEndY();
 
+        float getTexelHalfX();
+        float getTexelHalfY();
+
         bool useMesh;
     protected:
 

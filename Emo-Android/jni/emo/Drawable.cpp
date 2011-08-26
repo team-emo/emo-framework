@@ -234,9 +234,25 @@ namespace emo {
         return ((this->border + this->frameHeight) * yindex) + this->margin;
     }
 
+    float Drawable::getTexelHalfX() {
+        if (this->hasTexture) {
+            return (1.0 / this->texture->glWidth) * 0.5;
+        } else {
+            return 0;
+        }
+    }
+
+    float Drawable::getTexelHalfY() {
+        if (this->hasTexture) {
+            return (1.0 / this->texture->glHeight) * 0.5;
+        } else {
+            return 0;
+        }
+    }
+
     float Drawable::getTexCoordStartX() {
         if (this->hasSheet) {
-            return this->tex_coord_frame_startX() / (float)this->texture->glWidth;
+            return this->tex_coord_frame_startX() / (float)this->texture->glWidth + this->getTexelHalfX();
         } else {
             return 0;
         }
@@ -244,27 +260,27 @@ namespace emo {
 
     float Drawable::getTexCoordEndX() {
         if (!this->hasTexture) {
-            return 1;
+            return 1 - this->getTexelHalfX();
         } else if (this->hasSheet) {
-            return (float)(this->tex_coord_frame_startX() + this->frameWidth) / (float)this->texture->glWidth;
+            return (float)(this->tex_coord_frame_startX() + this->frameWidth) / (float)this->texture->glWidth - this->getTexelHalfX();
         } else {
-            return (float)this->texture->width / (float)this->texture->glWidth;
+            return (float)this->texture->width / (float)this->texture->glWidth - this->getTexelHalfX();
         }
     }
 
     float Drawable::getTexCoordStartY() {
         if (!this->hasTexture) {
-            return 1;
+            return 1 - this->getTexelHalfY();
         } else if (this->hasSheet) {
-            return (float)(this->tex_coord_frame_startY() + this->frameHeight) / (float)this->texture->glHeight;
+            return (float)(this->tex_coord_frame_startY() + this->frameHeight) / (float)this->texture->glHeight - this->getTexelHalfY();
         } else {
-            return (float)this->texture->height / (float)this->texture->glHeight;
+            return (float)this->texture->height / (float)this->texture->glHeight - this->getTexelHalfY();
         }
     }
 
     float Drawable::getTexCoordEndY() {
         if (this->hasSheet) {
-            return this->tex_coord_frame_startY() / (float)this->texture->glHeight;
+            return this->tex_coord_frame_startY() / (float)this->texture->glHeight + getTexelHalfY();
         } else {
             return 0;
         }
