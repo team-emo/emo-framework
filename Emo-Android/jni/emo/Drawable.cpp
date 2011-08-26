@@ -201,8 +201,9 @@ namespace emo {
             if (!force && this->texture->referenceCount > 1) {
                 // skip 
             } else {
-                glDeleteTextures(1, &this->texture->textureId);
-
+                if (engine->hasDisplay()) {
+                    glDeleteTextures(1, &this->texture->textureId);
+                }
                 this->texture->textureId = 0;
                 this->texture->loaded    = false;
             }
@@ -210,7 +211,9 @@ namespace emo {
 
         for (int i = 0; i < this->frameCount; i++) {
             if (this->frames_vbos[i] > 0) {
-                glDeleteBuffers(1, &this->frames_vbos[i]);
+                if (engine->hasDisplay()) {
+                    glDeleteBuffers(1, &this->frames_vbos[i]);
+                }
                 this->frames_vbos[i] = 0;
             }
         }
