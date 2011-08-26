@@ -147,6 +147,7 @@ namespace emo {
 
         int logLevel;
 
+        bool hasDisplay();
     protected:
         bool loaded;
         bool focused;

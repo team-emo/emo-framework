@@ -51,6 +51,9 @@ namespace emo {
         this->sensorManager = NULL;
         this->sensorEventQueue = NULL;
 
+        this->display = EGL_NO_DISPLAY;
+        this->context = EGL_NO_CONTEXT;
+        this->surface = EGL_NO_SURFACE;
     }
 
     Engine::~Engine() {
@@ -562,6 +565,10 @@ namespace emo {
         this->display = EGL_NO_DISPLAY;
         this->context = EGL_NO_CONTEXT;
         this->surface = EGL_NO_SURFACE;
+    }
+
+    bool Engine::hasDisplay() {
+        return this->display != EGL_NO_DISPLAY;
     }
 
     void Engine::onDrawFrame() {
