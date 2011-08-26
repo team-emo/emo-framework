@@ -89,7 +89,6 @@ namespace emo {
             case APP_CMD_INIT_WINDOW:
                 if (this->app->window != NULL) {
                     this->onInitDisplay();
-                    this->onDrawFrame();
                 }
                 break;
             case APP_CMD_TERM_WINDOW:
