@@ -17,8 +17,8 @@ class Main {
         " !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         16, 16, 2, 1);
     
-    box1  = emo.SpriteSheet("blocks.png", 32, 32, 4, 3);
-    box2  = emo.SpriteSheet("blocks.png", 32, 32, 4, 3);
+    box1  = emo.SpriteSheet("blocks.png", 32, 32, 2, 2);
+    box2  = emo.SpriteSheet("blocks.png", 32, 32, 2, 2);
     axis1 = emo.Rectangle();
     axis2 = emo.Rectangle();
     rope1 = emo.Line();

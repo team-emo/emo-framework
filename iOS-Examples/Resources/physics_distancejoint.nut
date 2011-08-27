@@ -12,10 +12,10 @@ const FPS = 60.0;
 const WALL_WIDTH = 10;
 
 class Main {
-    box     = emo.SpriteSheet("blocks.png", 32, 32, 4, 3);
+    box     = emo.SpriteSheet("blocks.png", 32, 32, 2, 2);
     axis    = emo.Rectangle();
     rope    = emo.Line();
-    dropBox = emo.SpriteSheet("blocks.png", 32, 32, 4, 3);
+    dropBox = emo.SpriteSheet("blocks.png", 32, 32, 2, 2);
 
     lastRecycledTime = 0;
     

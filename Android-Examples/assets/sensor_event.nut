@@ -8,7 +8,7 @@ class Main {
         " !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         16, 16, 2, 1);
         
-    dog = emo.SpriteSheet("dog.png", 34, 42, 3, 2);
+    dog = emo.SpriteSheet("dog.png", 34, 42, 1, 1);
 
     /*
      * Called when this class is loaded

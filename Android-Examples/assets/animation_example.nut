@@ -5,7 +5,7 @@ local stage = emo.Stage();
  */
 class Main {
 
-    sprite = emo.SpriteSheet("dog.png", 34, 42, 3, 2);
+    sprite = emo.SpriteSheet("dog.png", 34, 42, 1, 1);
     explosion = emo.SpriteSheet("explosion.png", 19, 19, 3, 2);
 
     direction = "RIGHT";

@@ -5,8 +5,8 @@ local stage = emo.Stage();
  */
 class Main {
 
-    // defines a sprite sheet that consists of 32x32 block with 4 pixel border and 3 pixel margin.
-    block = emo.SpriteSheet("blocks.png", 32, 32, 4, 3);
+    // defines a sprite sheet that consists of 32x32 block with 2 pixel border and 2 pixel margin.
+    block = emo.SpriteSheet("blocks.png", 32, 32, 2, 2);
 
     // current frame index
     currentFrame = 0;

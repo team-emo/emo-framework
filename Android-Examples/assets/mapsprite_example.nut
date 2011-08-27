@@ -7,8 +7,8 @@ const BLOCK_SIZE   = 32;
  */
 class Main {
 
-    // create map sprite with 32x32, 4 pixel border and 3 pixel margin
-    sprite = emo.MapSprite("blocks.png", BLOCK_SIZE, BLOCK_SIZE, 4, 3);
+    // create map sprite with 32x32, 2 pixel border and 2 pixel margin
+    sprite = emo.MapSprite("blocks.png", BLOCK_SIZE, BLOCK_SIZE, 2, 2);
     
     // 16x16 text sprite with 2 pixel border and 1 pixel margin
     text = emo.TextSprite("font_16x16.png",

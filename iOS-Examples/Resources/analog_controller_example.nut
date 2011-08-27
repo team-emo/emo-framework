@@ -5,7 +5,7 @@ local stage = emo.Stage();
  */
 class Main {
 
-    sprite = emo.SpriteSheet("dog.png", 34, 42, 3, 2);
+    sprite = emo.SpriteSheet("dog.png", 34, 42, 1, 1);
     controller = emo.AnalogOnScreenController(
         "control_base.png", "control_knob.png");
 
