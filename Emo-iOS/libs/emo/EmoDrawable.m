@@ -102,6 +102,8 @@ extern EmoEngine* engine;
 @interface EmoDrawable (PrivateMethods)
 -(NSInteger)tex_coord_frame_startX;
 -(NSInteger)tex_coord_frame_startY;
+-(float)getTexelHalfX;
+-(float)getTexelHalfY;
 @end
 
 @implementation EmoDrawable
@@ -248,9 +250,25 @@ extern EmoEngine* engine;
 	return ((border + frameHeight) * yindex) + margin;
 }
 
+-(float) getTexelHalfX {
+    if (hasTexture) {
+        return (1.0 / texture.glWidth) * 0.5;
+    } else {
+        return 0;
+    }   
+}   
+
+-(float) getTexelHalfY {
+    if (hasTexture) {
+        return (1.0 / texture.glHeight) * 0.5;
+    } else {
+        return 0;
+    }   
+}   
+
 -(float)getTexCoordStartX {
 	if (hasSheet) {
-        return [self tex_coord_frame_startX] / (float)texture.glWidth;
+        return [self tex_coord_frame_startX] / (float)texture.glWidth + [self getTexelHalfX];
     } else {
         return 0;
     }
@@ -258,27 +276,27 @@ extern EmoEngine* engine;
 
 -(float)getTexCoordEndX {
 	if (!hasTexture) {
-		return 1;
+		return 1 - [self getTexelHalfX];
     } else if (hasSheet) {
-        return (float)([self tex_coord_frame_startX] + frameWidth) / (float)texture.glWidth;
+        return (float)([self tex_coord_frame_startX] + frameWidth) / (float)texture.glWidth - [self getTexelHalfX];
     } else {
-        return (float)texture.width / (float)texture.glWidth;
+        return (float)texture.width / (float)texture.glWidth - [self getTexelHalfX];
     }
 }
 
 -(float)getTexCoordStartY {
 	if (!hasTexture) {
-		return 1;
+		return 1 - [self getTexelHalfY];
 	} else if (hasSheet) {
-        return (float)([self tex_coord_frame_startY] + frameHeight) / (float)texture.glHeight;
+        return (float)([self tex_coord_frame_startY] + frameHeight) / (float)texture.glHeight - [self getTexelHalfY];
     } else {
-        return (float)texture.height / (float)texture.glHeight;
+        return (float)texture.height / (float)texture.glHeight - [self getTexelHalfY];
     }
 }
 
 -(float)getTexCoordEndY {
     if (hasSheet) {
-        return [self tex_coord_frame_startY] / (float)texture.glHeight;
+        return [self tex_coord_frame_startY] / (float)texture.glHeight + [self getTexelHalfY];
     } else {
         return 0;
     }
