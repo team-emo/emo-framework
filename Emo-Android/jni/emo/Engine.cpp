@@ -568,11 +568,11 @@ namespace emo {
     }
 
     bool Engine::hasDisplay() {
-        return this->display != EGL_NO_DISPLAY;
+        return this->display != EGL_NO_DISPLAY && this->display != NULL;
     }
 
     void Engine::onDrawFrame() {
-        if (this->display == NULL) {
+        if (!this->hasDisplay()) {
             return;
         }
 
@@ -580,7 +580,6 @@ namespace emo {
         if (!this->focused) return;
 
         this->updateUptime();
-
 
         if (this->enableOnUpdate) {
             int32_t _delta = this->getLastOnDrawDrawablesDelta();

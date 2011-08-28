@@ -76,6 +76,8 @@ namespace emo {
     }
 
     bool Stage::onLoad() {
+        if (!engine->hasDisplay()) return false;
+
         clearGLErrors("Stage::onLoad");
 
         glGenBuffers(2, this->vbo);
@@ -97,6 +99,7 @@ namespace emo {
     }
 
     void Stage::onDrawFrame() {
+        if (!engine->hasDisplay()) return;
         if (this->dirty) {
             glViewport(0, 0, this->viewport_width, this->viewport_height); 
             glMatrixMode(GL_PROJECTION);
@@ -112,7 +115,9 @@ namespace emo {
     void Stage::deleteBuffer() {
         if (!this->loaded) return;
 
-        glDeleteBuffers(2, this->vbo);
+        if (engine->hasDisplay()) {
+            glDeleteBuffers(2, this->vbo);
+        }
         this->loaded = false;
 
         this->vbo[0] = 0;
@@ -120,6 +125,7 @@ namespace emo {
     }
 
     void Stage::rebindBuffer() {
+        if (!engine->hasDisplay()) return;
         glGenBuffers(2, this->vbo);
 
         glBindBuffer(GL_ARRAY_BUFFER, this->vbo[0]);
