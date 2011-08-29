@@ -32,6 +32,9 @@
 
 emo::Engine* engine;
 
+#define likely(x) __builtin_expect(!!(x), 1)
+#define unlikely(x) __builtin_expect(!!(x), 0)
+
 void android_main(struct android_app* state) {
 
     app_dummy();
@@ -69,14 +72,14 @@ void android_main(struct android_app* state) {
                 }
             }
 
-            if (state->destroyRequested != 0) {
+            if (unlikely(state->destroyRequested != 0)) {
                 engine->onDispose();
                 delete engine;
                 return;
             }
         }
 
-        if (engine->animating) {
+        if (likely(engine->animating)) {
             engine->onDrawFrame();
         }
     }
