@@ -101,6 +101,11 @@ namespace emo {
                 this->onTerminateDisplay();
                 break;
             case APP_CMD_GAINED_FOCUS:
+                if (this->app->window == NULL) {
+                    LOGE("Application gained focus but window equals NULL..shutdown.");
+                    ANativeActivity_finish(this->app->activity);
+                    break;
+                }
                 this->onGainedFocus();
                 break;
             case APP_CMD_LOST_FOCUS:
