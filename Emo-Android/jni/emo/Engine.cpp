@@ -54,6 +54,8 @@ namespace emo {
         this->display = EGL_NO_DISPLAY;
         this->context = EGL_NO_CONTEXT;
         this->surface = EGL_NO_SURFACE;
+
+        this->useANR = false;
     }
 
     Engine::~Engine() {
@@ -102,8 +104,8 @@ namespace emo {
                 break;
             case APP_CMD_GAINED_FOCUS:
                 if (this->app->window == NULL) {
-                    LOGE("Application gained focus but window equals NULL..shutdown.");
-                    this->app->destroyRequested = 1;
+                    LOGE("Application gained focus but window equals NULL: ANR.");
+                    this->useANR= true;
                     break;
                 }
                 this->onGainedFocus();

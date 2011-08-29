@@ -82,5 +82,10 @@ void android_main(struct android_app* state) {
         if (likely(engine->animating)) {
             engine->onDrawFrame();
         }
+        
+        // invoke ANR (Application Not Responding) dialog
+        if (unlikely(engine->useANR)) {
+            break;
+        }
     }
 }

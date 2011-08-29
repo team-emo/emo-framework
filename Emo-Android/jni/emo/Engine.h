@@ -121,6 +121,7 @@ namespace emo {
         bool animating;
         bool finishing;
         bool sortOrderDirty;
+        bool useANR;
 
         android_app* app;
         Audio* audio;
