@@ -28,6 +28,8 @@
 #ifndef EMO_CONSTANT_H
 #define EMO_CONSTANT_H
 
+#define EMO_BUILD_NUMBER 7
+
 // uncomment below to enable sandbox mode
 // #define EMO_WITH_SANDBOX
 #define PNG_NO_PEDANTIC_WARNINGS

@@ -71,6 +71,7 @@ void initRuntimeFunctions() {
 #endif
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "getDocumentDir",  emoRuntimeGetDocumentDir);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "isSandboxEnabled",  emoRuntimeIsSandboxEnabled);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "buildNumber",     emoRuntimeBuildNumber);
 
     registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "registerSensors", emoRegisterSensors);
     registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableSensor",    emoEnableSensor);
@@ -245,6 +246,14 @@ bool loadScript(const char* fname) {
  */
 bool loadScriptFromUserDocument(const char* fname) {
     return loadScript(engine->javaGlue->getDataFilePath(fname).c_str());
+}
+
+/*
+ * returns build number of the library
+ */
+SQInteger emoRuntimeBuildNumber(HSQUIRRELVM v) {
+    sq_pushinteger(v, EMO_BUILD_NUMBER);
+    return 1;
 }
 
 /*

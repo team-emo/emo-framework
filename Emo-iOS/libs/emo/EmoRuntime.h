@@ -47,6 +47,7 @@
 
 void initRuntimeFunctions();
 
+SQInteger emoRuntimeBuildNumber(HSQUIRRELVM v);
 SQInteger emoRuntimeGetOSName(HSQUIRRELVM v);
 SQInteger emoRuntimeGetDeviceName(HSQUIRRELVM v);
 SQInteger emoRuntimeIsSimulator(HSQUIRRELVM v);

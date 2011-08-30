@@ -153,8 +153,17 @@ void initRuntimeFunctions() {
     registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "enableOnFpsCallback",  emoEnableOnFpsCallback);
     registerClassFunc(engine.sqvm, EMO_EVENT_CLASS,   "disableOnFpsCallback", emoDisableOnFpsCallback);
 
+    registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "buildNumber",   emoRuntimeBuildNumber);	
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoRuntimeEcho);	
     registerClassFunc(engine.sqvm, EMO_NET_CLASS,     "request",      emoAsyncHttpRequest);
+}
+
+/*
+ * returns build number of the library
+ */
+SQInteger emoRuntimeBuildNumber(HSQUIRRELVM v) {
+    sq_pushinteger(v, EMO_BUILD_NUMBER);
+    return 1;
 }
 
 /*
