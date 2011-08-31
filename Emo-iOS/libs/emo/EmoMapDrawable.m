@@ -300,8 +300,8 @@
 	columns = [rowdata count];
 	rows    = [tiles count];
 	
-	width  = [child getScaledWidth]  * columns;
-	height = [child getScaledHeight] * rows;
+	width  = child.width  * columns;
+	height = child.height * rows;
 }
 
 -(BOOL)clearTiles {
