@@ -104,7 +104,9 @@ namespace emo {
                 break;
             case APP_CMD_GAINED_FOCUS:
                 if (this->app->window == NULL) {
-                    LOGE("Application gained focus but window equals NULL: ANR.");
+                    LOGE("Application gained focus but window was collapsed.");
+                    this->onDispose();
+                    ANativeActivity_finish(this->app->activity);
                     this->useANR= true;
                     break;
                 }
