@@ -355,6 +355,7 @@ extern EmoEngine* engine;
         printGLErrors("Could not bind OpenGL textures");
     }
 	
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 	loaded = TRUE;
 	
 	return TRUE;

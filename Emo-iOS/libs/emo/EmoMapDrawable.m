@@ -207,7 +207,8 @@
 	glEnable(GL_TEXTURE_2D);
     glBindBuffer(GL_ARRAY_BUFFER, mesh_vbos[2]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * coordCount, meshTexCoords, GL_STATIC_DRAW);
-    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 	printGLErrors("Could not create texture buffer");
 }
 

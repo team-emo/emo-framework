@@ -343,6 +343,7 @@ namespace emo {
             glBindTexture(GL_TEXTURE_2D, 0);
         }
 
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
         this->loaded = true;
 
         return true;
@@ -799,6 +800,7 @@ namespace emo {
         glEnable(GL_TEXTURE_2D);
         glBindBuffer(GL_ARRAY_BUFFER, this->mesh_vbos[2]);
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * coordCount, this->meshTexCoords, GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     
         printGLErrors("Could not create texture buffer");
     }
