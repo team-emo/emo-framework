@@ -14,6 +14,20 @@ local audioCh3 = audio.createChannel(2);
 
 /*
  * This example of multiple audio channels
+ *
+ * Supported audio format
+ * For iOS: * * emo uses 'Extended Audio File Services' for iOS 
+ * so following format can be loaded through the channel.
+ * AIFF (.aif, .aiff), CAF (.caf), MPEG-1 to 4 (.mp1, .mp2, .mp3,
+ * .acc, .m4a, .mp4), WAV (.wav), 3gpp (.3gp), 3gp2 (.3g2).. etc. 
+ *
+ * See http://developer.apple.com/library/mac/#documentation/MusicAudio/Reference/AudioFileConvertRef/Reference/reference.html
+ * Extended Audio File Services: Built-In Audio File Types for details. 
+ * 
+ *
+ * For Android:
+ * 
+ * Only PCM-WAVE audio file is supported.
  */
 class Main {
 
