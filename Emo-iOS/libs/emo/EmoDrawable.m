@@ -524,17 +524,11 @@ extern EmoEngine* engine;
 		return NSOrderedSame;
 	}
 }
--(void)garbage {
-	int retainCount = [name retainCount];
-	for (int i = 0; i < retainCount; i++) {
-		[name release];
-	}
-	name = nil;
-}
 -(void)dealloc {
 	[animations release];
+	[name release];
 	animations = nil;
-	[self garbage];
+	name = nil;
 	[super dealloc];
 }
 -(BOOL)isAnimationFinished {
