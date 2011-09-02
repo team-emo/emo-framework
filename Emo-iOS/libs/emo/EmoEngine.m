@@ -75,6 +75,8 @@ NSString* data2ns(NSData* data) {
     if (self != nil) {
 		currentOrientation = OPT_ORIENTATION_UNSPECIFIED;
 		logLevel = LOG_INFO;
+        
+        sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
     }
     return self;
 }
@@ -132,7 +134,9 @@ NSString* data2ns(NSData* data) {
 	
 	drawablesToDraw  = [NSArray alloc];
 	
-	sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
+    if (sqvm == nil) {
+        sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
+    }
 	
 	initSQVM(sqvm);
 	

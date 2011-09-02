@@ -56,6 +56,8 @@ namespace emo {
         this->surface = EGL_NO_SURFACE;
 
         this->useANR = false;
+
+        this->sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
     }
 
     Engine::~Engine() {
@@ -128,7 +130,9 @@ namespace emo {
         // initialize uptime
         this->updateUptime();
 
-        this->sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
+        if (this->sqvm == NULL) {
+            this->sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
+        }
         this->lastError = EMO_NO_ERROR;
 
         // disable drawframe callback to improve performance (default)
@@ -385,6 +389,7 @@ namespace emo {
             this->updateUptime();
             callSqFunction(this->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDISPOSE);
             sq_close(this->sqvm);
+            this->sqvm = NULL;
 
             this->unloadDrawables();
             this->stage->deleteBuffer();
