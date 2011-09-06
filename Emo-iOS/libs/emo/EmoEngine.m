@@ -255,6 +255,7 @@ NSString* data2ns(NSData* data) {
 	return sqCompileBuffer(v, script, sourcename);
 }
 
+#ifndef EMO_WITH_SANDBOX
 /*
  * load script file (full path)
  */
@@ -278,6 +279,7 @@ NSString* data2ns(NSData* data) {
 	
 	return sqCompileBuffer(v, script, sourcename);
 }
+#endif
 
 /*
  * called when the app is loaded

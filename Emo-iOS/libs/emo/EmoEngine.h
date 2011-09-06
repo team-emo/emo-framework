@@ -96,7 +96,9 @@ NSString* data2ns(NSData* data);
 @property (readwrite) NSInteger logLevel;
 
 - (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
+#ifndef EMO_WITH_SANDBOX
 - (int)loadScript:(NSString *)path vm:(HSQUIRRELVM) v;
+#endif
 - (void)registerAccelerometerSensor:(BOOL)enable;
 - (void)enableSensor:(BOOL)enable withType:(NSInteger)sensorType withInterval:(int)updateInterval;
 - (void)disableSensor:(NSInteger)sensorType;
