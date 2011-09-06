@@ -241,21 +241,10 @@ NSString* data2ns(NSData* data) {
 		LOGE(chfname);
 		return ERR_SCRIPT_OPEN;
 	}
-	
-	NSString* nscontent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error: nil];
-	if (nscontent == nil) {
-		LOGE("Script resource content does not found:");
-		LOGE(chfname);
-		return ERR_SCRIPT_OPEN;
-	}
-	
-	const char* script = [nscontent UTF8String];
-	const char* sourcename  = [path UTF8String];
-	
-	return sqCompileBuffer(v, script, sourcename);
+    
+    return [self loadScript:path vm:v];
 }
 
-#ifndef EMO_WITH_SANDBOX
 /*
  * load script file (full path)
  */
@@ -279,7 +268,6 @@ NSString* data2ns(NSData* data) {
 	
 	return sqCompileBuffer(v, script, sourcename);
 }
-#endif
 
 /*
  * called when the app is loaded
