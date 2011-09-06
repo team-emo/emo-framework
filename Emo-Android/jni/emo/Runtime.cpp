@@ -168,6 +168,17 @@ static SQInteger sq_lexer_fp(SQUserPointer fp) {
 }
 
 /*
+ * callback function for reading squuirrel bytecodes
+ */
+static SQInteger sq_lexer_bytecode(SQUserPointer asset, SQUserPointer buf, SQInteger size) {
+    SQInteger ret;
+    if ((ret = AAsset_read((AAsset*)asset, buf, size)) != 0) {
+        return ret;
+    }
+    return -1;
+}
+
+/*
  * Load squirrel script from asset
  */
 bool loadScriptFromAsset(const char* fname) {
@@ -189,18 +200,41 @@ bool loadScriptFromAsset(const char* fname) {
     	return false;
     }
 
-    if(SQ_SUCCEEDED(sq_compile(engine->sqvm, sq_lexer_asset, asset, fname, SQTrue))) {
+    unsigned short sqtag;
+    bool isByteCode = false;
+    if (AAsset_read(asset, &sqtag, 2) > 0) {
+        if (sqtag == SQ_BYTECODE_STREAM_TAG) {
+            isByteCode = true;
+        }
+        AAsset_seek(asset, 0, SEEK_SET);
+    } else {
+        AAsset_close(asset);
+        return false;
+    }
+
+    if (isByteCode && SQ_SUCCEEDED(sq_readclosure(engine->sqvm, sq_lexer_bytecode, asset))) {
         sq_pushroottable(engine->sqvm);
         if (SQ_FAILED(sq_call(engine->sqvm, 1, SQFalse, SQTrue))) {
         	engine->setLastError(ERR_SCRIPT_CALL_ROOT);
             LOGW("loadScriptFromAsset: failed to sq_call");
             LOGW(fname);
+            AAsset_close(asset);
+            return false;
+        }
+    } else if(!isByteCode && SQ_SUCCEEDED(sq_compile(engine->sqvm, sq_lexer_asset, asset, fname, SQTrue))) {
+        sq_pushroottable(engine->sqvm);
+        if (SQ_FAILED(sq_call(engine->sqvm, 1, SQFalse, SQTrue))) {
+        	engine->setLastError(ERR_SCRIPT_CALL_ROOT);
+            LOGW("loadScriptFromAsset: failed to sq_call");
+            LOGW(fname);
+            AAsset_close(asset);
             return false;
         }
     } else {
     	engine->setLastError(ERR_SCRIPT_COMPILE);
         LOGW("loadScriptFromAsset: failed to compile squirrel script");
         LOGW(fname);
+        AAsset_close(asset);
         return false;
     }
 
