@@ -82,6 +82,9 @@ void initRuntimeFunctions() {
     registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnUpdateCallback", emoDisableOnUpdateCallback);
     registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "enableOnFpsCallback",     emoEnableOnFpsCallback);
     registerClassFunc(engine->sqvm, EMO_EVENT_CLASS,   "disableOnFpsCallback",    emoDisableOnFpsCallback);
+
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "enableSimpleLog",          emoEnableSimpleLog);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "enableSimpleLogWithLevel", emoEnableSimpleLogWithLevel);
 }
 
 int32_t app_handle_input(struct android_app* app, AInputEvent* event) {
@@ -762,3 +765,24 @@ SQInteger emoClearImageCache(HSQUIRRELVM v) {
     engine->clearCachedImage();
     return 0;
 }
+
+/*
+ * Use simple log without any tag and level
+ *
+ * This takes no effect on Android
+ */
+SQInteger emoEnableSimpleLog(HSQUIRRELVM v) {
+    sq_pushinteger(v, ERR_NOT_SUPPORTED);
+    return 1;
+}
+
+/*
+ * Use simple log without tag
+ *
+ * This takes no effect on Android
+ */
+SQInteger emoEnableSimpleLogWithLevel(HSQUIRRELVM v) {
+    sq_pushinteger(v, ERR_NOT_SUPPORTED);
+    return 1;
+}
+

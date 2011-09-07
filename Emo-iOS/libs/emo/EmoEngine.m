@@ -69,12 +69,15 @@ NSString* data2ns(NSData* data) {
 @synthesize database;
 @synthesize currentOrientation;
 @synthesize logLevel;
+@synthesize enableSimpleLog, enableSimpleLogWithLevel;
 
 - (id)init {
     self = [super init];
     if (self != nil) {
 		currentOrientation = OPT_ORIENTATION_UNSPECIFIED;
 		logLevel = LOG_INFO;
+        enableSimpleLog = FALSE;
+        enableSimpleLogWithLevel = FALSE;
         
         sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
     }

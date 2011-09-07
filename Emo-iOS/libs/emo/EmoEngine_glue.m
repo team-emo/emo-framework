@@ -40,19 +40,37 @@ extern EmoEngine* engine;
  */
 void LOGI(const char* msg) {
 	if (engine.logLevel <= LOG_INFO) {
-		NSLog(@"%s INFO %s", EMO_LOG_TAG, msg);
+        if (engine.enableSimpleLogWithLevel) {
+            NSLog(@"INFO %s", msg);
+        } else if (engine.enableSimpleLog) {
+            NSLog(@"%s", msg);
+        } else {
+            NSLog(@"%s INFO %s", EMO_LOG_TAG, msg);
+        }
 	}
 }
 
 void LOGE(const char* msg) {
 	if (engine.logLevel <= LOG_ERROR) {
-		NSLog(@"%s ERROR %s", EMO_LOG_TAG, msg);
+        if (engine.enableSimpleLogWithLevel) {
+            NSLog(@"ERROR %s", msg);
+        } else if (engine.enableSimpleLog) {
+            NSLog(@"%s", msg);
+        } else {
+            NSLog(@"%s ERROR %s", EMO_LOG_TAG, msg);
+        }
 	}
 }
 
 void LOGW(const char* msg) {
 	if (engine.logLevel <= LOG_WARN) {
-		NSLog(@"%s WARN %s", EMO_LOG_TAG, msg);
+        if (engine.enableSimpleLogWithLevel) {
+            NSLog(@"WARN %s", msg);
+        } else if (engine.enableSimpleLog) {
+            NSLog(@"%s", msg);
+        } else {
+            NSLog(@"%s WARN %s", EMO_LOG_TAG, msg);
+        }
 	}
 }
 

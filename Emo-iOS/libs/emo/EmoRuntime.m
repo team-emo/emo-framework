@@ -156,6 +156,10 @@ void initRuntimeFunctions() {
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "buildNumber",   emoRuntimeBuildNumber);	
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoRuntimeEcho);	
     registerClassFunc(engine.sqvm, EMO_NET_CLASS,     "request",      emoAsyncHttpRequest);
+
+    registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "enableSimpleLog",          emoEnableSimpleLog);
+    registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "enableSimpleLogWithLevel", emoEnableSimpleLogWithLevel);
+
 }
 
 /*
@@ -697,4 +701,44 @@ SQInteger emoClearImageCache(HSQUIRRELVM v) {
 SQInteger emoRuntimeGC(HSQUIRRELVM v) {
 	sq_pushinteger(v, sq_collectgarbage(v));
 	return 1;
+}
+
+/*
+ * Use simple log without any tag and level
+ */
+SQInteger emoEnableSimpleLog(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+	
+    if (nargs <= 2 && sq_gettype(v, 2) == OT_BOOL) {
+        SQBool enable;
+        sq_getbool(v, 2, &enable);
+		
+        engine.enableSimpleLog = enable;
+    } else {
+        // called with no parameter
+        engine.enableSimpleLog = TRUE;
+    }
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+/*
+ * Use simple log without tag
+ */
+SQInteger emoEnableSimpleLogWithLevel(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+	
+    if (nargs <= 2 && sq_gettype(v, 2) == OT_BOOL) {
+        SQBool enable;
+        sq_getbool(v, 2, &enable);
+		
+        engine.enableSimpleLogWithLevel = enable;
+    } else {
+        // called with no parameter
+        engine.enableSimpleLogWithLevel = TRUE;
+    }
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
 }
