@@ -101,6 +101,7 @@ NSString* data2ns(NSData* data);
 @property (readwrite) NSInteger logLevel;
 @property (readwrite) BOOL enableSimpleLog;
 @property (readwrite) BOOL enableSimpleLogWithLevel;
+@property (readonly) BOOL useOffscreen;
 
 - (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 - (int)loadScript:(NSString *)path vm:(HSQUIRRELVM) v;

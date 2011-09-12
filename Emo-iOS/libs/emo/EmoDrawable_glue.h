@@ -90,5 +90,6 @@ SQInteger emoDrawableGetFrameCount(HSQUIRRELVM v);
 
 SQInteger emoDrawableSetLinePosition(HSQUIRRELVM v);
 
-SQInteger emoDrawableSnapshotLoad(HSQUIRRELVM v);
+SQInteger emoDrawableLoadSnapshot(HSQUIRRELVM v);
 SQInteger emoDrawableRemoveSnapshot(HSQUIRRELVM v);
+SQInteger emoDrawableDisableSnapshot(HSQUIRRELVM v);

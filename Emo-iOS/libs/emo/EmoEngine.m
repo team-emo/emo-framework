@@ -72,6 +72,7 @@ NSString* data2ns(NSData* data) {
 @synthesize currentOrientation;
 @synthesize logLevel;
 @synthesize enableSimpleLog, enableSimpleLogWithLevel;
+@synthesize useOffscreen;
 
 - (id)init {
     self = [super init];

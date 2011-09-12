@@ -663,6 +663,9 @@ extern EmoEngine* engine;
 }
 
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
+    if (!engine.useOffscreen) {
+        return [super onDrawFrame:dt withStage:stage];
+    }
     // vewport should be reset everytime on drawing
     glViewport(0, 0, width, height); 
     glMatrixMode(GL_PROJECTION);

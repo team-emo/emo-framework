@@ -97,7 +97,8 @@ void initDrawableFunctions() {
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getFrameCount",  emoDrawableGetFrameCount);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setLine",        emoDrawableSetLinePosition);
     
-    registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSnapshot",   emoDrawableSnapshotLoad);
+    registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSnapshot",   emoDrawableLoadSnapshot);
+    registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "stopSnapshot",   emoDrawableDisableSnapshot);
 }
 
 /*
@@ -392,7 +393,7 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 /*
  * load snapshot drawable
  */
-SQInteger emoDrawableSnapshotLoad(HSQUIRRELVM v) {
+SQInteger emoDrawableLoadSnapshot(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
     if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
@@ -1098,7 +1099,51 @@ SQInteger emoDrawableRemove(HSQUIRRELVM v) {
  */
 SQInteger emoDrawableRemoveSnapshot(HSQUIRRELVM v) {
     [engine disableOffscreen];
+    engine.stage.dirty = TRUE;
     return emoDrawableRemove(v);
+}
+
+/*
+ * disable snapshot
+ */
+SQInteger emoDrawableDisableSnapshot(HSQUIRRELVM v) {
+    if (!engine.useOffscreen) {
+        sq_pushinteger(v, EMO_ERROR);
+        return 1;
+    }
+    
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+    
+    drawable.width  = engine.stage.width;
+    drawable.height = engine.stage.height;
+    
+    // fix rotation and scale center
+    [drawable setRotate:1 withValue:drawable.width  * 0.5f];
+    [drawable setRotate:2 withValue:drawable.height * 0.5f];
+    [drawable setScale:2  withValue:drawable.width  * 0.5f];
+    [drawable setScale:3  withValue:drawable.height * 0.5f];
+    
+    [engine disableOffscreen];
+    engine.stage.dirty = TRUE;
+    
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
 }
 
 /*
