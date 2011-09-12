@@ -1662,6 +1662,9 @@ class emo.Snapshot extends emo.Sprite {
         }
         return status;
     }
+    function start(x = null, y = null) {
+        load(x, y);
+    }
     function stop() {
         stage.stopSnapshot(id);
     }
