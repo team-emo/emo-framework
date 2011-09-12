@@ -219,9 +219,11 @@ void sq_printfunc(HSQUIRRELVM v, const SQChar *s,...) {
  * error function
  */
 void sq_errorfunc(HSQUIRRELVM v, const SQChar *s,...) {
+    char str[4096];
+    
 	va_list args;
     va_start(args, s);
-    SQChar* str = va_arg(args, SQChar*);
+    vsnprintf(str, 4096, s, args);    
     callSqFunction_Bool_String(v, EMO_NAMESPACE, EMO_FUNC_ONERROR, str, SQFalse);
     LOGE(str);
     va_end(args);
