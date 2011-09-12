@@ -1630,6 +1630,43 @@ class emo.DigitalOnScreenController extends emo.AnalogOnScreenController {
     }
 }
 
+class emo.Snapshot extends emo.Sprite {
+    function constructor() {
+        name = null;
+        id = stage.createSnapshot();
+    }
+    function load(x = null, y = null) {
+        local status = EMO_NO_ERROR;
+        if (!loaded) {
+
+            status = stage.loadSnapshot(id, x, y);
+
+            if (status == EMO_NO_ERROR) {
+                uptime = EMO_RUNTIME_STOPWATCH.elapsed();
+                loaded = true;
+            }
+        }
+        return status;
+    }
+    function remove() {
+        local status = EMO_NO_ERROR;
+        if (loaded) {
+            clearModifier();
+            emo.Event().removeMotionListener(this);
+            if (physicsInfo != null) {
+                physicsInfo.remove();
+                physicsInfo = null;
+            }
+            status = stage.removeSnapshot(id);
+            loaded = false;
+        }
+        return status;
+    }
+    function stop() {
+        stage.stopSnapshot(id);
+    }
+}
+
 function emo::Stage::load(obj) {
 
     if (EMO_RUNTIME_DELEGATE != null &&

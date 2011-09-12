@@ -99,6 +99,7 @@ void initDrawableFunctions() {
     
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSnapshot",   emoDrawableLoadSnapshot);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "stopSnapshot",   emoDrawableDisableSnapshot);
+    registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "removeSnapshot",   emoDrawableRemoveSnapshot);
 }
 
 /*
