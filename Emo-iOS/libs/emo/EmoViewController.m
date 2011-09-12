@@ -172,7 +172,7 @@ EmoEngine* engine;
     [(EmoView *)self.view setFramebuffer];
 
     [engine initDrawFrame];
-	[engine onDrawFrame];
+	[engine onDrawFrame:((EmoView*)self.view).framebuffer];
 		
     [(EmoView *)self.view presentFramebuffer];
 }

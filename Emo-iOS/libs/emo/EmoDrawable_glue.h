@@ -33,6 +33,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);
 SQInteger emoDrawableCreateLine(HSQUIRRELVM v);
 SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v);
 
+SQInteger emoDrawableCreateSnapshot(HSQUIRRELVM v);
 SQInteger emoDrawableCreateMapSprite(HSQUIRRELVM v);
 SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v);
 SQInteger emoDrawableAddTileRow(HSQUIRRELVM v);
@@ -88,3 +89,6 @@ SQInteger emoDrawableGetFrameIndex(HSQUIRRELVM v);
 SQInteger emoDrawableGetFrameCount(HSQUIRRELVM v);
 
 SQInteger emoDrawableSetLinePosition(HSQUIRRELVM v);
+
+SQInteger emoDrawableSnapshotLoad(HSQUIRRELVM v);
+SQInteger emoDrawableRemoveSnapshot(HSQUIRRELVM v);

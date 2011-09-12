@@ -25,6 +25,8 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
+#import <OpenGLES/ES2/glext.h>
+
 #include <EmoDrawable.h>
 #include <squirrel.h>
 #include <Constants.h>
@@ -407,7 +409,7 @@ extern EmoEngine* engine;
 		texture.referenceCount--;
 		if (texture.referenceCount <= 0) {
 			[texture doUnload];
-			[engine removeCachedImage:name];
+			if (name != nil) [engine removeCachedImage:name];
 		}
 		[texture release];
 		hasTexture = FALSE;
@@ -580,5 +582,99 @@ extern EmoEngine* engine;
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	
 	return TRUE;
+}
+@end
+
+@implementation EmoSnapshotDrawable
+/*
+ * initialize drawable
+ */
+-(void)initDrawable {
+	[super initDrawable];
+    
+    // snapshot drawable should be the first drawable
+    z = -1;
+}
+/*
+ * create texture and bind OpenGL vertex
+ * self.width and self.height should be set before calling bindVertex.
+ */
+-(BOOL)bindVertex {
+    
+    clearGLErrors("EmoSnapshotDrawable:bindVertex");
+    
+    if (!hasTexture) {
+        EmoImage* imageInfo = [[EmoImage alloc]init];
+        
+        imageInfo.width  = width;
+        imageInfo.height = height;
+        
+        // calculate the size of power of two
+        imageInfo.glWidth  = imageInfo.width;
+        imageInfo.glHeight = imageInfo.height;
+        imageInfo.loaded = FALSE;
+			
+        imageInfo.referenceCount++;
+            
+        // assign OpenGL texture id
+        [imageInfo genTextures];
+        
+        texture = imageInfo;
+        hasTexture = TRUE;
+    }
+    
+	glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture.textureId);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.textureId, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    texture.loaded = TRUE;
+    
+    vertex_tex_coords[0] = [self getTexCoordStartX];
+    vertex_tex_coords[1] = [self getTexCoordStartY];
+	
+    vertex_tex_coords[2] = [self getTexCoordStartX];
+    vertex_tex_coords[3] = [self getTexCoordEndY];
+	
+    vertex_tex_coords[4] = [self getTexCoordEndX];
+    vertex_tex_coords[5] = [self getTexCoordEndY];
+	
+    vertex_tex_coords[6] = [self getTexCoordEndX];
+    vertex_tex_coords[7] = [self getTexCoordStartY];
+	
+	if (frames_vbos[frame_index] == 0) {
+		glGenBuffers (1, &frames_vbos[frame_index]);
+	}
+	
+    glBindBuffer(GL_ARRAY_BUFFER, frames_vbos[frame_index]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, vertex_tex_coords, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
+	printGLErrors("Could not create OpenGL vertex");
+	
+	loaded = TRUE;
+	
+	return TRUE;
+}
+
+-(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
+    // vewport should be reset everytime on drawing
+    glViewport(0, 0, width, height); 
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrthof(0, width, height, 0, -1, 1);
+    
+    glClearColor(param_color[0], param_color[1], param_color[2], param_color[3]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    [super onDrawFrame:dt withStage:stage];
+    engine.stage.dirty = TRUE;
+    
+    return TRUE;
 }
 @end

@@ -150,3 +150,11 @@
 -(BOOL)bindVertex;
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
 @end
+
+@interface EmoSnapshotDrawable : EmoDrawable {
+
+}
+-(void)initDrawable;
+-(BOOL)bindVertex;
+-(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
+@end

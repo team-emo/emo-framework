@@ -44,6 +44,7 @@ void initDrawableFunctions() {
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createSpriteSheet", emoDrawableCreateSpriteSheet);
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
 
+	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createSnapshot",   emoDrawableCreateSnapshot);
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createMapSprite",     emoDrawableCreateMapSprite);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadMapSprite",    emoDrawableLoadMapSprite);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "addTileRow",       emoDrawableAddTileRow);
@@ -95,6 +96,8 @@ void initDrawableFunctions() {
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getFrameIndex",  emoDrawableGetFrameIndex);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getFrameCount",  emoDrawableGetFrameCount);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setLine",        emoDrawableSetLinePosition);
+    
+    registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSnapshot",   emoDrawableSnapshotLoad);
 }
 
 /*
@@ -132,6 +135,23 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
 	drawable.frameWidth  = width;
 	drawable.frameHeight = height;
 	
+    [drawable createTextureBuffer];
+	
+    char key[DRAWABLE_KEY_LENGTH];
+	[drawable updateKey:key];
+    [engine addDrawable:drawable withKey:key];
+	
+    sq_pushstring(v, key, strlen(key));
+	
+	[drawable release];
+	
+    return 1;
+}
+
+SQInteger emoDrawableCreateSnapshot(HSQUIRRELVM v) {
+	EmoSnapshotDrawable* drawable = [[EmoSnapshotDrawable alloc] init];
+	
+    [drawable initDrawable];
     [drawable createTextureBuffer];
 	
     char key[DRAWABLE_KEY_LENGTH];
@@ -360,6 +380,57 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 	if (drawable.width == 0)  drawable.width  = 1;
 	if (drawable.height == 0) drawable.height = 1;
 	
+    if ([drawable bindVertex]) {
+        sq_pushinteger(v, EMO_NO_ERROR);
+    } else {
+        sq_pushinteger(v, ERR_CREATE_VERTEX);
+    }
+	
+    return 1;
+}
+
+/*
+ * load snapshot drawable
+ */
+SQInteger emoDrawableSnapshotLoad(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoDrawable* drawable = [engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    // drawable x
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat x;
+        sq_getfloat(v, 3, &x);
+        drawable.x = x;
+    }
+	
+    // drawable y
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
+        SQFloat y;
+        sq_getfloat(v, 4, &y);
+        drawable.y = y;
+    }
+	
+	drawable.width  = engine.stage.bufferWidth;
+	drawable.height = engine.stage.bufferHeight;
+	
+    [engine enableOffscreen];
+    [engine bindOffscreenFramebuffer];
+    
     if ([drawable bindVertex]) {
         sq_pushinteger(v, EMO_NO_ERROR);
     } else {
@@ -1020,6 +1091,14 @@ SQInteger emoDrawableRemove(HSQUIRRELVM v) {
     }
 	
     return 1;
+}
+
+/*
+ * remove snapshot drawable
+ */
+SQInteger emoDrawableRemoveSnapshot(HSQUIRRELVM v) {
+    [engine disableOffscreen];
+    return emoDrawableRemove(v);
 }
 
 /*

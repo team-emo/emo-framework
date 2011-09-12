@@ -31,6 +31,7 @@
 @implementation EmoStage
 @synthesize width, height, viewport_width, viewport_height;
 @synthesize dirty;
+@synthesize bufferWidth, bufferHeight;
 
 - (id)init {
     self = [super init];
@@ -123,6 +124,12 @@
 	
 	dirty = TRUE;
 }
+
+-(void)setBufferSize:(GLint)_width height:(GLint)_height {
+    bufferWidth  = _width;
+    bufferHeight = _height;
+}
+
 -(void)setColor:(NSInteger)index withValue:(float)value {
 	color[index] = value;
 }

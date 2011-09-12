@@ -81,6 +81,9 @@ NSString* data2ns(NSData* data);
 	NSInteger logLevel;
     BOOL enableSimpleLog;
     BOOL enableSimpleLogWithLevel;
+    
+    BOOL useOffscreen;
+    GLuint offscreenFramebuffer;
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readwrite) int  lastError;
@@ -107,7 +110,7 @@ NSString* data2ns(NSData* data);
 - (BOOL)initDrawFrame;
 - (BOOL)onLoad;
 - (BOOL)onGainedFocus;
-- (BOOL)onDrawFrame;
+- (BOOL)onDrawFrame:(GLuint)framebuffer;
 - (BOOL)onLostFocus;
 - (BOOL)onDispose;
 - (BOOL)onLowMemory;
@@ -144,5 +147,9 @@ NSString* data2ns(NSData* data);
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 
 -(NSTimeInterval)uptime;
+
+- (void)enableOffscreen;
+- (void)disableOffscreen;
+- (void)bindOffscreenFramebuffer;
 @end
 

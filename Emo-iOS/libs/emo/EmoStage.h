@@ -42,12 +42,17 @@
 	GLint height;
 	GLint viewport_width;
 	GLint viewport_height;
+    
+    GLint bufferWidth;
+    GLint bufferHeight;
 }
 @property (readwrite) GLint width;
 @property (readwrite) GLint height;
 @property (readwrite) BOOL dirty;
 @property (readwrite) GLint viewport_width;
 @property (readwrite) GLint viewport_height;
+@property (readonly) GLint bufferWidth;
+@property (readonly) GLint bufferHeight;
 
 -(GLuint)getPositionPointer;
 -(GLuint)getIndicePointer;
@@ -55,6 +60,7 @@
 -(void)setColor:(NSInteger)index withValue:(float)value;
 -(float)getColor:(NSInteger)index;
 -(void)setSize:(GLint)_width height:(GLint)_height;
+-(void)setBufferSize:(GLint)_width height:(GLint)_height;
 -(BOOL)loadBuffer;
 -(BOOL)onDrawFrame:(NSTimeInterval)dt;
 -(void)unloadBuffer;

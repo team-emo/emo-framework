@@ -62,6 +62,7 @@
 @property (readonly) GLint width;
 @property (readonly) GLint height;
 @property (readonly) BOOL isRetina;
+@property (readonly) GLuint framebuffer;
 
 - (void)setFramebuffer;
 - (BOOL)presentFramebuffer;
