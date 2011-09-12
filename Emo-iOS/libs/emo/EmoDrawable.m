@@ -597,7 +597,7 @@ extern EmoEngine* engine;
 }
 /*
  * create texture and bind OpenGL vertex
- * self.width and self.height should be set before calling bindVertex.
+ * width and height should be set before calling bindVertex.
  */
 -(BOOL)bindVertex {
     
@@ -609,7 +609,6 @@ extern EmoEngine* engine;
         imageInfo.width  = width;
         imageInfo.height = height;
         
-        // calculate the size of power of two
         imageInfo.glWidth  = imageInfo.width;
         imageInfo.glHeight = imageInfo.height;
         imageInfo.loaded = FALSE;
@@ -663,6 +662,7 @@ extern EmoEngine* engine;
 }
 
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
+    // if the snapshot ends, use default onDrawFrame
     if (!engine.useOffscreen) {
         return [super onDrawFrame:dt withStage:stage];
     }
