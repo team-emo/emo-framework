@@ -48,6 +48,9 @@
 		F953DF7713934C8A00E2529D /* database_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F953DF7013934B1900E2529D /* database_example.nut */; };
 		F95F8D3313932C2D006BB4DB /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = F95F8D3113932C2D006BB4DB /* gear.png */; };
 		F95F8D3413932C2D006BB4DB /* gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F95F8D3213932C2D006BB4DB /* gear@2x.png */; };
+		F9616055141F4E08000907BD /* transition_fade_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9616054141F4E08000907BD /* transition_fade_example.nut */; };
+		F9616057141F53D5000907BD /* transition_move_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9616056141F53D5000907BD /* transition_move_example.nut */; };
+		F9616059141F53EC000907BD /* transition_scale_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9616058141F53EC000907BD /* transition_scale_example.nut */; };
 		F967A8ED1372A3F800BEF871 /* modifier_move_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F967A8C21372A17800BEF871 /* modifier_move_example.nut */; };
 		F967E67213907137006D8F99 /* b2BroadPhase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F967E5B613907136006D8F99 /* b2BroadPhase.cpp */; };
 		F967E67313907137006D8F99 /* b2CollideCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F967E5B813907136006D8F99 /* b2CollideCircle.cpp */; };
@@ -220,6 +223,9 @@
 		F953DF7013934B1900E2529D /* database_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = database_example.nut; path = Resources/database_example.nut; sourceTree = "<group>"; };
 		F95F8D3113932C2D006BB4DB /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
 		F95F8D3213932C2D006BB4DB /* gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gear@2x.png"; sourceTree = "<group>"; };
+		F9616054141F4E08000907BD /* transition_fade_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = transition_fade_example.nut; path = Resources/transition_fade_example.nut; sourceTree = "<group>"; };
+		F9616056141F53D5000907BD /* transition_move_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = transition_move_example.nut; path = Resources/transition_move_example.nut; sourceTree = "<group>"; };
+		F9616058141F53EC000907BD /* transition_scale_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = transition_scale_example.nut; path = Resources/transition_scale_example.nut; sourceTree = "<group>"; };
 		F967A8C21372A17800BEF871 /* modifier_move_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = modifier_move_example.nut; path = Resources/modifier_move_example.nut; sourceTree = "<group>"; };
 		F967E5B413907136006D8F99 /* Box2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box2D.h; sourceTree = "<group>"; };
 		F967E5B613907136006D8F99 /* b2BroadPhase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = b2BroadPhase.cpp; sourceTree = "<group>"; };
@@ -535,11 +541,14 @@
 				F9F99BD9139E09D60059B4C8 /* audio_volume_example.nut */,
 				F9102FDB13973AA800BC7404 /* http_access_example.nut */,
 				F921620513DF8C0A008A0B59 /* compile_script_example.nut */,
+				F9616054141F4E08000907BD /* transition_fade_example.nut */,
 				F921CCA0136FFBAC00F058FF /* runtime.nut */,
 				F9D78CD213872E8A0076C937 /* physics.nut */,
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* iOS_Examples-Info.plist */,
+				F9616056141F53D5000907BD /* transition_move_example.nut */,
+				F9616058141F53EC000907BD /* transition_scale_example.nut */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1006,6 +1015,9 @@
 				F9318D5F13BD9D6500DBAD55 /* control_base.png in Resources */,
 				F9318D6013BD9D6500DBAD55 /* control_knob.png in Resources */,
 				F921620613DF8C0A008A0B59 /* compile_script_example.nut in Resources */,
+				F9616055141F4E08000907BD /* transition_fade_example.nut in Resources */,
+				F9616057141F53D5000907BD /* transition_move_example.nut in Resources */,
+				F9616059141F53EC000907BD /* transition_scale_example.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

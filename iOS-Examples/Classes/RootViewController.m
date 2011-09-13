@@ -25,7 +25,7 @@
 	sections = [[NSArray alloc] initWithObjects:@"Basic", @"Animation", 
 					@"Event", @"On-Screen Controller", @"Audio",
 					@"Database", @"Physics", @"Physics with Joints",
-					@"Misc",
+					@"Scene Transition", @"Misc",
 					nil];
 	examples = [[NSMutableArray alloc] init];
 	
@@ -91,7 +91,12 @@
 						  [NSArray arrayWithObjects:@"Using LineJoint",     @"physics_linejoint.nut", nil],
 						  [NSArray arrayWithObjects:@"Using WeldJoint",     @"physics_weldjoint.nut", nil],
 						  nil]];
-	
+	// Using Transitions
+	[examples addObject: [NSArray arrayWithObjects:
+                          [NSArray arrayWithObjects:@"Fade In/Out",        @"transition_fade_example.nut",  nil],
+                          [NSArray arrayWithObjects:@"Move In/Out",        @"transition_move_example.nut",  nil],
+                          [NSArray arrayWithObjects:@"Rotate and Scale",   @"transition_scale_example.nut", nil],
+                          nil]];
 	// Misc
 	[examples addObject: [NSArray arrayWithObjects:
 						 [NSArray arrayWithObjects:@"Loading Screen",  @"modifier_rotate_example.nut", nil],

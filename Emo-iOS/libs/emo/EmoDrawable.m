@@ -144,7 +144,7 @@ extern EmoEngine* engine;
     glColor4f(param_color[0], param_color[1], param_color[2], param_color[3]);
 	
     // update position
-    glTranslatef(x, y, 0);
+    glTranslatef(x * orthFactorX, y * orthFactorY, 0);
 	
     // rotate
     glTranslatef(param_rotate[1], param_rotate[2], 0);
@@ -234,6 +234,9 @@ extern EmoEngine* engine;
 	nextFrameIndex    = 0;
 	frameIndexChanged = FALSE;
 	currentAnimation  = nil;
+    
+    orthFactorX = 1.0;
+    orthFactorY = 1.0;
 }
 
 -(NSInteger)tex_coord_frame_startX {
@@ -671,6 +674,9 @@ extern EmoEngine* engine;
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrthof(0, width, height, 0, -1, 1);
+    
+    orthFactorX = width  / stage.width;
+    orthFactorY = height / stage.height;
     
     glClearColor([engine.stage getColor:0], [engine.stage getColor:1],
                  [engine.stage getColor:2], [engine.stage getColor:3]);

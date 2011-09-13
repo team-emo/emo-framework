@@ -87,6 +87,9 @@
 	NSMutableDictionary* animations;
 	EmoAnimationFrame* currentAnimation;
 	NSString* animationName;
+    
+    float orthFactorX;
+    float orthFactorY;
 }
 @property (copy, readwrite) NSString* name;
 @property (readwrite) float x;
