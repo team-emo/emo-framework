@@ -138,5 +138,6 @@
 }
 -(void)invertSize {
 	[self setSize:height height:width];
+    [self setBufferSize:bufferHeight height:bufferWidth];
 }
 @end
