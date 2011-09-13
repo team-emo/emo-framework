@@ -1738,10 +1738,10 @@ function emo::Stage::modifyingLoad(obj,  disposingModifier = null, loadingModifi
     EMO_RUNTIME_SNAPSHOT.addModifier(disposingModifier);
 }
 
-function emo::Stage::load(obj, disposingModifier = null, loadingModifier = null) {
+function emo::Stage::load(obj, currentSceneModifier = null, nextSceneModifier = null) {
 
-    if (disposingModifier != null || loadingModifier != null) {
-        return modifyingLoad(obj, disposingModifier, loadingModifier);
+    if (currentSceneModifier != null || nextSceneModifier != null) {
+        return modifyingLoad(obj, currentSceneModifier, nextSceneModifier);
     }
 
     if (EMO_RUNTIME_DELEGATE != null &&
