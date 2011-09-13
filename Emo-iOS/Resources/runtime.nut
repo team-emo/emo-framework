@@ -1718,7 +1718,7 @@ function emo::Stage::modifyingLoad(obj,  disposingModifier = null, loadingModifi
     EMO_RUNTIME_SNAPSHOT.start();
 
     if (disposingModifier == null) {
-        disposingModiier = emo.NoopModifier(0);
+        disposingModifier = emo.NoopModifier(0);
     }
 
     if (loadingModifier == null) {
