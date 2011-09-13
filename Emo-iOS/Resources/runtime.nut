@@ -1708,7 +1708,7 @@ function emo::Stage::modifyingLoadEventCallback(snapshot, modifier, eventType) {
     }
 }
 
-function emo::Stage::modifyingLoad(obj,  disposingModifier = null, loadingModifier = null) {
+function emo::Stage::modifyingLoad(obj,  currentSceneModifier = null, nextSceneModifier = null) {
     if (EMO_RUNTIME_SNAPSHOT != null) {
         EMO_RUNTIME_SNAPSHOT.remove();
         EMO_RUNTIME_SNAPSHOT = null;
@@ -1717,25 +1717,25 @@ function emo::Stage::modifyingLoad(obj,  disposingModifier = null, loadingModifi
     EMO_RUNTIME_SNAPSHOT.targetObj = obj;
     EMO_RUNTIME_SNAPSHOT.start();
 
-    if (disposingModifier == null) {
-        disposingModifier = emo.NoopModifier(16);
+    if (currentSceneModifier == null) {
+        currentSceneModifier = emo.NoopModifier(16);
     }
 
-    if (loadingModifier == null) {
-        loadingModifier = emo.NoopModifier(16);
+    if (nextSceneModifier == null) {
+        nextSceneModifier = emo.NoopModifier(16);
     }
 
-    loadingModifier.onPause();
+    nextSceneModifier.onPause();
 
-    disposingModifier.setName("stage_disposing");
-    loadingModifier.setName("stage_loading");
+    currentSceneModifier.setName("stage_disposing");
+    nextSceneModifier.setName("stage_loading");
 
-    disposingModifier.setEventCallback(modifyingLoadEventCallback);
-    loadingModifier.setEventCallback(modifyingLoadEventCallback);
+    currentSceneModifier.setEventCallback(modifyingLoadEventCallback);
+    nextSceneModifier.setEventCallback(modifyingLoadEventCallback);
 
-    disposingModifier.nextChain = loadingModifier;
+    currentSceneModifier.nextChain = nextSceneModifier;
 
-    EMO_RUNTIME_SNAPSHOT.addModifier(disposingModifier);
+    EMO_RUNTIME_SNAPSHOT.addModifier(currentSceneModifier);
 }
 
 function emo::Stage::load(obj, currentSceneModifier = null, nextSceneModifier = null) {
