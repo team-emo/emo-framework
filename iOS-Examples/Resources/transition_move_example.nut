@@ -37,12 +37,12 @@ class SceneA {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            // move out current scene then shows next scene immediately
+            // move out current scene then fade in next scene
             local currentSceneModifier = emo.MoveModifier(
                     [0, 0],
                     [0, stage.getWindowHeight()],
                     1000, emo.easing.BackOut);
-            local nextSceneModifier    = null;
+            local nextSceneModifier    = emo.AlphaModifier(0, 1, 1000, emo.easing.CubicOut);
             stage.load(SceneB(), currentSceneModifier, nextSceneModifier);
         }
     }
@@ -79,8 +79,8 @@ class SceneB {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            // hide current scene and move in next scene
-            local currentSceneModifier = null;
+            // fade out current scene and move in next scene
+            local currentSceneModifier = emo.AlphaModifier(1, 0, 1000, emo.easing.CubicOut);
             local nextSceneModifier = emo.MoveModifier(
                     [stage.getWindowWidth(), 0],
                     [0, 0],
@@ -121,11 +121,8 @@ class SceneC {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            // move out current scene and move in next scene
-            local currentSceneModifier = emo.MoveModifier(
-                    [0, 0],
-                    [0, stage.getWindowHeight()],
-                    1000, emo.easing.BackOut);
+            // fade out current scene and move in next scene
+            local currentSceneModifier = emo.AlphaModifier(1, 0, 1000, emo.easing.CubicOut);
             local nextSceneModifier = emo.MoveModifier(
                     [0, stage.getWindowHeight()],
                     [0, 0],
