@@ -230,6 +230,7 @@ PREFERENCE_TABLE_NAME  <- "preferences";
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 EMO_MOTION_LISTENERS    <- [];
+EMO_RUNTIME_SNAPSHOT    <- null;
 
 EMO_STAGE_CONTENT_SCALE <- 1;
 
@@ -414,6 +415,7 @@ class emo.Modifier {
     repeatCount   = null;
     currentCount  = null;
     eventCallback = null;
+    nextChain     = null;
     function constructor(_minValue, _maxValue, _duration, _easing, _repeatCount = 0, _startTime = null) {
         if (_startTime == null) {
             startTime = EMO_RUNTIME_STOPWATCH.elapsed();
@@ -1631,6 +1633,7 @@ class emo.DigitalOnScreenController extends emo.AnalogOnScreenController {
 }
 
 class emo.Snapshot extends emo.Sprite {
+    targetObj = null;
     function constructor() {
         name = null;
         id = stage.createSnapshot();
@@ -1670,7 +1673,76 @@ class emo.Snapshot extends emo.Sprite {
     }
 }
 
-function emo::Stage::load(obj) {
+function emo::Stage::modifyingLoadEventCallback(snapshot, modifier, eventType) {
+    if (modifier.getName() == "stage_disposing" && eventType == EVENT_MODIFIER_FINISH) {
+        local targetObj = EMO_RUNTIME_SNAPSHOT.targetObj;
+
+        EMO_RUNTIME_SNAPSHOT.stop();
+        if (EMO_RUNTIME_DELEGATE != null &&
+                EMO_RUNTIME_DELEGATE.rawin("onDispose")) {
+            EMO_RUNTIME_DELEGATE.onDispose();
+            EMO_RUNTIME_DELEGATE = null;
+        }
+        EMO_RUNTIME_SNAPSHOT.remove();
+        EMO_RUNTIME_SNAPSHOT = null;
+
+        EMO_RUNTIME_SNAPSHOT = emo.Snapshot();
+        EMO_RUNTIME_SNAPSHOT.targetObj = targetObj;
+        EMO_RUNTIME_SNAPSHOT.start();
+        EMO_RUNTIME_SNAPSHOT.hide();
+
+        EMO_RUNTIME_DELEGATE = targetObj;
+        if (EMO_RUNTIME_DELEGATE != null &&
+                EMO_RUNTIME_DELEGATE.rawin("onLoad")) {
+            EMO_RUNTIME_DELEGATE.onLoad();
+        }
+        EMO_RUNTIME_SNAPSHOT.show();
+
+        modifier.nextChain.onResume();
+        EMO_RUNTIME_SNAPSHOT.addModifier(modifier.nextChain);
+    }
+    if (modifier.getName() == "stage_loading" && eventType == EVENT_MODIFIER_FINISH) {
+        EMO_RUNTIME_SNAPSHOT.stop();
+        EMO_RUNTIME_SNAPSHOT.remove();
+        EMO_RUNTIME_SNAPSHOT = null;
+    }
+}
+
+function emo::Stage::modifyingLoad(obj,  disposingModifier = null, loadingModifier = null) {
+    if (EMO_RUNTIME_SNAPSHOT != null) {
+        EMO_RUNTIME_SNAPSHOT.remove();
+        EMO_RUNTIME_SNAPSHOT = null;
+    }
+    EMO_RUNTIME_SNAPSHOT = emo.Snapshot();
+    EMO_RUNTIME_SNAPSHOT.targetObj = obj;
+    EMO_RUNTIME_SNAPSHOT.start();
+
+    if (disposingModifier == null) {
+        disposingModiier = emo.NoopModifier(0);
+    }
+
+    if (loadingModifier == null) {
+        loadingModifier = emo.NoopModifier(0);
+    }
+
+    loadingModifier.onPause();
+
+    disposingModifier.setName("stage_disposing");
+    loadingModifier.setName("stage_loading");
+
+    disposingModifier.setEventCallback(modifyingLoadEventCallback);
+    loadingModifier.setEventCallback(modifyingLoadEventCallback);
+
+    disposingModifier.nextChain = loadingModifier;
+
+    EMO_RUNTIME_SNAPSHOT.addModifier(disposingModifier);
+}
+
+function emo::Stage::load(obj, disposingModifier = null, loadingModifier = null) {
+
+    if (disposingModifier != null || loadingModifier != null) {
+        return modifyingLoad(obj, disposingModifier, loadingModifier);
+    }
 
     if (EMO_RUNTIME_DELEGATE != null &&
              EMO_RUNTIME_DELEGATE.rawin("onDispose")) {
