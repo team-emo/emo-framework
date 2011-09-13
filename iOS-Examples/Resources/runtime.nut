@@ -1696,10 +1696,10 @@ function emo::Stage::modifyingLoadEventCallback(snapshot, modifier, eventType) {
                 EMO_RUNTIME_DELEGATE.rawin("onLoad")) {
             EMO_RUNTIME_DELEGATE.onLoad();
         }
-        EMO_RUNTIME_SNAPSHOT.show();
 
         modifier.nextChain.onResume();
         EMO_RUNTIME_SNAPSHOT.addModifier(modifier.nextChain);
+        EMO_RUNTIME_SNAPSHOT.show();
     }
     if (modifier.getName() == "stage_loading" && eventType == EVENT_MODIFIER_FINISH) {
         EMO_RUNTIME_SNAPSHOT.stop();
