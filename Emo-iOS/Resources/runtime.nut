@@ -1718,11 +1718,11 @@ function emo::Stage::modifyingLoad(obj,  disposingModifier = null, loadingModifi
     EMO_RUNTIME_SNAPSHOT.start();
 
     if (disposingModifier == null) {
-        disposingModifier = emo.NoopModifier(0);
+        disposingModifier = emo.NoopModifier(16);
     }
 
     if (loadingModifier == null) {
-        loadingModifier = emo.NoopModifier(0);
+        loadingModifier = emo.NoopModifier(16);
     }
 
     loadingModifier.onPause();
