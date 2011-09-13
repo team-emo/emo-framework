@@ -672,7 +672,8 @@ extern EmoEngine* engine;
     glLoadIdentity();
     glOrthof(0, width, height, 0, -1, 1);
     
-    glClearColor(param_color[0], param_color[1], param_color[2], param_color[3]);
+    glClearColor([engine.stage getColor:0], [engine.stage getColor:1],
+                 [engine.stage getColor:2], [engine.stage getColor:3]);
     glClear(GL_COLOR_BUFFER_BIT);
     
     [super onDrawFrame:dt withStage:stage];
