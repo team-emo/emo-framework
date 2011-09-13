@@ -3,7 +3,7 @@ local stage = emo.Stage();
 local text = null;
 
 /*
- * This example shows fade in/out scene transition
+ * This example shows moving in/out scene transition
  */
 class SceneA {
 

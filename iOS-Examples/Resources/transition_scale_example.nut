@@ -3,7 +3,7 @@ local stage = emo.Stage();
 local text = null;
 
 /*
- * This example shows fade in/out scene transition
+ * This example shows scale in/out scene transition
  */
 class SceneA {
 
@@ -37,9 +37,9 @@ class SceneA {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            // fade out current scene then shows next scene immediately
-            local currentSceneModifier = emo.AlphaModifier(1, 0, 2000, emo.easing.Linear);
-            local nextSceneModifier    = null;
+            // fade out current scene then rotate next scene
+            local currentSceneModifier = emo.AlphaModifier(1, 0, 1000, emo.easing.CubicIn);
+            local nextSceneModifier    = emo.RotateModifier(0, 360, 1000, emo.easing.BackOut);
             stage.load(SceneB(), currentSceneModifier, nextSceneModifier);
         }
     }
@@ -76,9 +76,9 @@ class SceneB {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            // hide current scene and fade in next scene
+            // hide current scene and zoom in next scene
             local currentSceneModifier = null;
-            local nextSceneModifier    = emo.AlphaModifier(0, 1, 2000, emo.easing.Linear);
+            local nextSceneModifier    = emo.ScaleModifier(0, 1, 1000, emo.easing.CubicIn);
             stage.load(SceneC(), currentSceneModifier, nextSceneModifier);
         }
     }
@@ -115,9 +115,9 @@ class SceneC {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            // fade out current scene and fade in next scene
-            local currentSceneModifier = emo.AlphaModifier(1, 0, 2000, emo.easing.Linear);
-            local nextSceneModifier    = emo.AlphaModifier(0, 1, 2000, emo.easing.Linear);
+            // zoom out current scene then show next scene immediately
+            local currentSceneModifier = emo.ScaleModifier(1, 0, 1000, emo.easing.CubicIn);
+            local nextSceneModifier    = null;
             stage.load(SceneA(), currentSceneModifier, nextSceneModifier);
         }
     }

@@ -542,13 +542,13 @@
 				F9102FDB13973AA800BC7404 /* http_access_example.nut */,
 				F921620513DF8C0A008A0B59 /* compile_script_example.nut */,
 				F9616054141F4E08000907BD /* transition_fade_example.nut */,
+				F9616056141F53D5000907BD /* transition_move_example.nut */,
+				F9616058141F53EC000907BD /* transition_scale_example.nut */,
 				F921CCA0136FFBAC00F058FF /* runtime.nut */,
 				F9D78CD213872E8A0076C937 /* physics.nut */,
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* iOS_Examples-Info.plist */,
-				F9616056141F53D5000907BD /* transition_move_example.nut */,
-				F9616058141F53EC000907BD /* transition_scale_example.nut */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
