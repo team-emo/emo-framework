@@ -84,6 +84,7 @@ NSString* data2ns(NSData* data);
     
     BOOL useOffscreen;
     GLuint offscreenFramebuffer;
+    BOOL stopOffscreenRequested;
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readwrite) int  lastError;
@@ -102,6 +103,7 @@ NSString* data2ns(NSData* data);
 @property (readwrite) BOOL enableSimpleLog;
 @property (readwrite) BOOL enableSimpleLogWithLevel;
 @property (readonly) BOOL useOffscreen;
+@property (readwrite) BOOL stopOffscreenRequested;
 
 - (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 - (int)loadScript:(NSString *)path vm:(HSQUIRRELVM) v;

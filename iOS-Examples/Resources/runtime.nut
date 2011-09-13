@@ -1666,23 +1666,28 @@ class emo.Snapshot extends emo.Sprite {
         return status;
     }
     function start(x = null, y = null) {
-        load(x, y);
+        return load(x, y);
     }
     function stop() {
-        stage.stopSnapshot(id);
+        return stage.stopSnapshot(id);
+    }
+}
+
+function emo::_onStopOffScreen(dt) {
+    if (EMO_RUNTIME_SNAPSHOT != null && EMO_RUNTIME_DELEGATE != null &&
+            EMO_RUNTIME_DELEGATE.rawin("onDispose")) {
+        EMO_RUNTIME_DELEGATE.onDispose();
+        EMO_RUNTIME_DELEGATE = null;
     }
 }
 
 function emo::Stage::modifyingLoadEventCallback(snapshot, modifier, eventType) {
+    if (modifier.getName() == "stage_disposing" && eventType == EVENT_MODIFIER_START) {
+        EMO_RUNTIME_SNAPSHOT.stop();
+    }
     if (modifier.getName() == "stage_disposing" && eventType == EVENT_MODIFIER_FINISH) {
         local targetObj = EMO_RUNTIME_SNAPSHOT.targetObj;
 
-        EMO_RUNTIME_SNAPSHOT.stop();
-        if (EMO_RUNTIME_DELEGATE != null &&
-                EMO_RUNTIME_DELEGATE.rawin("onDispose")) {
-            EMO_RUNTIME_DELEGATE.onDispose();
-            EMO_RUNTIME_DELEGATE = null;
-        }
         EMO_RUNTIME_SNAPSHOT.remove();
         EMO_RUNTIME_SNAPSHOT = null;
 
@@ -1702,7 +1707,6 @@ function emo::Stage::modifyingLoadEventCallback(snapshot, modifier, eventType) {
         EMO_RUNTIME_SNAPSHOT.show();
     }
     if (modifier.getName() == "stage_loading" && eventType == EVENT_MODIFIER_FINISH) {
-        EMO_RUNTIME_SNAPSHOT.stop();
         EMO_RUNTIME_SNAPSHOT.remove();
         EMO_RUNTIME_SNAPSHOT = null;
     }

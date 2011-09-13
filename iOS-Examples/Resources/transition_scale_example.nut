@@ -22,6 +22,7 @@ class SceneA {
         panel.load();
 
         text.setText("SCENE A - TAP");
+        text.show();
     }
 
     /*
@@ -30,6 +31,7 @@ class SceneA {
     function onDispose() {
         print("onDispose");
         panel.remove();
+        text.hide();
     }
 
     /*
@@ -61,6 +63,7 @@ class SceneB {
         panel.load();
 
         text.setText("SCENE B - TAP");
+        text.show();
     }
 
     /*
@@ -69,6 +72,7 @@ class SceneB {
     function onDispose() {
         print("onDispose");
         panel.remove();
+        text.hide();
     }
 
     /*
@@ -100,6 +104,7 @@ class SceneC {
         panel.load();
 
         text.setText("SCENE C - TAP");
+        text.show();
     }
 
     /*
@@ -108,6 +113,7 @@ class SceneC {
     function onDispose() {
         print("onDispose");
         panel.remove();
+        text.hide();
     }
 
     /*
@@ -148,6 +154,7 @@ function emo::loadText() {
     text.move(x, y);
 
     // load sprite to the screen
+    text.hide();
     text.load();
 }
 

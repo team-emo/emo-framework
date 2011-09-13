@@ -66,6 +66,7 @@
 #define EMO_FUNC_ONCALLBACK     "_onNetCallback"
 #define EMO_FUNC_ON_UPDATE      "_onUpdate"
 #define EMO_FUNC_ON_FPS         "_onFps"
+#define EMO_FUNC_ONSTOP_OFFSCREEN   "_onStopOffScreen"
 
 #define MOTION_EVENT_PARAMS_SIZE 8
 #define KEY_EVENT_PARAMS_SIZE    8

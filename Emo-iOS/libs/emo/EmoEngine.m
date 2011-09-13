@@ -54,6 +54,7 @@ NSString* data2ns(NSData* data) {
 - (void)updateEngineStatus;
 - (NSTimeInterval)getLastOnDrawDelta;
 - (NSTimeInterval)getLastOnDrawDrawablesDelta;
+-(void)stopOffscreenDrawable:(EmoDrawable*)drawable;
 @end
 
 @implementation EmoEngine
@@ -72,7 +73,7 @@ NSString* data2ns(NSData* data) {
 @synthesize currentOrientation;
 @synthesize logLevel;
 @synthesize enableSimpleLog, enableSimpleLogWithLevel;
-@synthesize useOffscreen;
+@synthesize useOffscreen, stopOffscreenRequested;
 
 - (id)init {
     self = [super init];
@@ -141,6 +142,7 @@ NSString* data2ns(NSData* data) {
     
     useOffscreen = FALSE;
     offscreenFramebuffer = 0;
+    stopOffscreenRequested = FALSE;
 	
 	drawablesToDraw  = [NSArray alloc];
 	
@@ -204,6 +206,7 @@ NSString* data2ns(NSData* data) {
         glGenFramebuffers(1, &offscreenFramebuffer);
     }
     useOffscreen = TRUE;
+    stopOffscreenRequested = FALSE;
 }
 
 /*
@@ -215,6 +218,7 @@ NSString* data2ns(NSData* data) {
         offscreenFramebuffer = 0;
     }
     useOffscreen = FALSE;
+    stopOffscreenRequested = FALSE;
 }
 
 /*
@@ -448,10 +452,32 @@ static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInte
 		EmoDrawable* drawable = [drawablesToDraw objectAtIndex:0];
 		if (drawable.loaded) {
 			[drawable onDrawFrame:delta withStage:stage];
+            if (stopOffscreenRequested) {
+                stopOffscreenRequested = FALSE;
+                [self stopOffscreenDrawable:drawable];
+                callSqFunction_Bool_Float(sqvm, EMO_NAMESPACE, EMO_FUNC_ONSTOP_OFFSCREEN, delta, SQFalse);
+            }
 		}
     }
 	
 	return FALSE;
+}
+
+/*
+ * stop offscreen
+ */
+-(void)stopOffscreenDrawable:(EmoDrawable*)drawable {
+    drawable.width  = stage.width;
+    drawable.height = stage.height;
+    
+    // fix rotation and scale center
+    [drawable setRotate:1 withValue:drawable.width  * 0.5f];
+    [drawable setRotate:2 withValue:drawable.height * 0.5f];
+    [drawable setScale:2  withValue:drawable.width  * 0.5f];
+    [drawable setScale:3  withValue:drawable.height * 0.5f];
+    
+    [self disableOffscreen];
+    stage.dirty = TRUE;
 }
 
 /*
