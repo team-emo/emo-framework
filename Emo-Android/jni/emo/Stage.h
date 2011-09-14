@@ -41,6 +41,7 @@ namespace emo {
         void deleteBuffer();
         void rebindBuffer();
         void setSizeAndView(int width, int height);
+        void setBufferSize(int width, int height);
         void invertSize();
         bool dirty;
 
@@ -50,6 +51,9 @@ namespace emo {
         int viewport_height;
         GLuint vbo[2];
         float color[4];
+
+        int bufferWidth;
+        int bufferHeight;
     protected:
         bool loaded;
 

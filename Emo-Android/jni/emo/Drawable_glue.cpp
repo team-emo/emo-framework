@@ -54,6 +54,11 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTilePositionAtCoord", emoDrawableGetTilePositionAtCoord);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "useMeshMapSprite", emoDrawableUseMeshMapSprite);
 
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSnapshot",   emoDrawableCreateSnapshot);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSnapshot",     emoDrawableLoadSnapshot);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "stopSnapshot",     emoDrawableDisableSnapshot);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "removeSnapshot",   emoDrawableRemoveSnapshot);
+
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getX",           emoDrawableGetX);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getY",           emoDrawableGetY);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getZ",           emoDrawableGetZ);
@@ -148,6 +153,99 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     return 1;
 }
 
+SQInteger emoDrawableCreateSnapshot(HSQUIRRELVM v) { 
+    emo::SnapshotDrawable* drawable = new emo::SnapshotDrawable();
+    
+    drawable->setFrameCount(1);
+    drawable->load();
+    
+    char key[DRAWABLE_KEY_LENGTH];
+    sprintf(key, "%ld%d-%d", 
+                engine->uptime.time, engine->uptime.millitm, drawable->getCurrentBufferId());
+
+    engine->addDrawable(key, drawable);
+
+    sq_pushstring(v, key, strlen(key));
+
+    return 1;
+}
+
+/*
+ * load snapshot drawable
+ */
+SQInteger emoDrawableLoadSnapshot(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+   
+    emo::Drawable* drawable = engine->getDrawable(id);
+   
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+   
+    // drawable x
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQFloat x;
+        sq_getfloat(v, 3, &x);
+        drawable->x = x;
+    }
+   
+    // drawable y
+    if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
+        SQFloat y;
+        sq_getfloat(v, 4, &y);
+        drawable->y = y;
+    }
+   
+    drawable->width  = engine->stage->bufferWidth;
+    drawable->height = engine->stage->bufferHeight;
+
+    engine->enableOffscreen();
+    engine->bindOffscreenFramebuffer();
+
+    if (drawable->bindVertex()) {
+        sq_pushinteger(v, EMO_NO_ERROR);
+    } else {
+        sq_pushinteger(v, ERR_CREATE_VERTEX);
+    }
+   
+    return 1;
+}
+
+/*
+ * remove snapshot drawable
+ */
+SQInteger emoDrawableRemoveSnapshot(HSQUIRRELVM v) { 
+    engine->stopOffscreenRequested = false;
+    engine->disableOffscreen();
+    engine->stage->dirty = true;
+    return emoDrawableRemove(v);
+}
+
+/*
+ * disable snapshot
+ */
+SQInteger emoDrawableDisableSnapshot(HSQUIRRELVM v) { 
+    if (!engine->useOffscreen || engine->stopOffscreenRequested) {
+        sq_pushinteger(v, EMO_ERROR);
+        return 1;
+    }    
+    
+    engine->stopOffscreenRequested = true;
+    
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
 /*
  * create line instance
  *
@@ -189,7 +287,6 @@ SQInteger emoDrawableCreateLine(HSQUIRRELVM v) {
     engine->addDrawable(key, drawable);
 
     sq_pushstring(v, key, strlen(key));
-
 	
     return 1;
 }

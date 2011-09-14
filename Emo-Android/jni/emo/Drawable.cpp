@@ -35,6 +35,8 @@
 #include "Database.h"
 #include "Util.h"
 
+#include <GLES/glext.h>
+
 extern emo::Engine* engine;
 
 namespace emo {
@@ -138,6 +140,8 @@ namespace emo {
         this->animations = new animations_t();
 
         this->useMesh = false;
+        this->orthFactorX = 1.0;
+        this->orthFactorY = 1.0;
         this->isScreenEntity = true;
     }
 
@@ -381,7 +385,7 @@ namespace emo {
         glColor4f(this->param_color[0], this->param_color[1], this->param_color[2], this->param_color[3]);
 
         // update position
-        glTranslatef(this->x, this->y, 0);
+        glTranslatef(this->x * this->orthFactorX, this->y * this->orthFactorY, 0);
 
         // rotate
         glTranslatef(this->param_rotate[1], this->param_rotate[2], 0);
@@ -926,5 +930,102 @@ namespace emo {
         glDrawArrays(GL_LINES, 0, 2);
 
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
+
+    SnapshotDrawable::SnapshotDrawable() {
+        // snapshot drawable should be the first drawable
+        this->z = -1;
+        this->isScreenEntity = false;
+    }
+
+    SnapshotDrawable::~SnapshotDrawable() {
+
+    }
+
+   /*
+    * create texture and bind OpenGL vertex
+    * width and height should be set before calling bindVertex.
+    */
+    bool SnapshotDrawable::bindVertex() {
+        clearGLErrors("SnapshotDrawable:bindVertex");
+   
+        if (!this->hasTexture) {
+            Image* imageInfo = new emo::Image();
+    
+            imageInfo->width  = this->width;
+            imageInfo->height = this->height;
+    
+            imageInfo->glWidth  = imageInfo->width;
+            imageInfo->glHeight = imageInfo->height;
+            imageInfo->loaded = false;
+
+            imageInfo->referenceCount++;
+    
+            // assign OpenGL texture id
+            imageInfo->genTextures();
+    
+            this->texture = imageInfo;
+            this->hasTexture = true;
+        }
+   
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, this->texture->textureId);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this->width, this->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+        glFramebufferTexture2DOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_TEXTURE_2D, this->texture->textureId, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+   
+        this->texture->loaded = true;
+
+        this->vertex_tex_coords[0] = this->getTexCoordStartX();
+        this->vertex_tex_coords[1] = this->getTexCoordStartY();
+
+        this->vertex_tex_coords[2] = this->getTexCoordStartX();
+        this->vertex_tex_coords[3] = this->getTexCoordEndY();
+
+        this->vertex_tex_coords[4] = this->getTexCoordEndX();
+        this->vertex_tex_coords[5] = this->getTexCoordEndY();
+
+        this->vertex_tex_coords[6] = this->getTexCoordEndX();
+        this->vertex_tex_coords[7] = this->getTexCoordStartY();
+
+        // generate buffer on demand
+        if (this->frames_vbos[this->frame_index] == 0) {
+            this->generateBuffers();
+        }
+
+        glBindBuffer(GL_ARRAY_BUFFER, this->getCurrentBufferId());
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, this->vertex_tex_coords, GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        loaded = true;
+
+        return true;
+    }
+
+    void SnapshotDrawable::onDrawFrame() {
+        // if the snapshot ends, use default onDrawFrame
+        if (!engine->useOffscreen) {
+            Drawable::onDrawFrame();
+            return;
+        }
+        // vewport should be reset everytime on drawing
+        glViewport(0, 0, this->width, this->height);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrthof(0, this->width, this->height, 0, -1, 1);
+
+        orthFactorX = this->width  / (float)engine->stage->width;
+        orthFactorY = this->height / (float)engine->stage->height;
+
+        glClearColor(engine->stage->color[0], engine->stage->color[1],
+                     engine->stage->color[2], engine->stage->color[3]);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        Drawable::onDrawFrame();
+        engine->stage->dirty = true;
     }
 }

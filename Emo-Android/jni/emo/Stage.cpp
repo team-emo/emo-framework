@@ -69,6 +69,9 @@ namespace emo {
         this->height = 0;
         this->viewport_width  = 0;
         this->viewport_height = 0;
+
+        this->bufferWidth  = 0;
+        this->bufferHeight = 0;
     }
 
     Stage::~Stage() {
@@ -149,6 +152,11 @@ namespace emo {
     	this->viewport_height = h;
     }
 
+    void Stage::setBufferSize(int w, int h) {
+        this->bufferWidth  = w;
+        this->bufferHeight = h;
+    }
+
     void Stage::invertSize() {
     	int w = this->width;
     	this->width  = this->height;
@@ -156,6 +164,8 @@ namespace emo {
 
     	this->viewport_width  = this->width;
     	this->viewport_height = this->height;
+
+        this->setBufferSize(this->bufferHeight, this->bufferWidth);
 
     	this->dirty = true;
     }

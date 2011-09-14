@@ -155,6 +155,8 @@ namespace emo {
         void bindOffscreenFramebuffer();
         void stopOffscreenDrawable(Drawable* drawable);
 
+        bool useOffscreen;
+        bool stopOffscreenRequested;
     protected:
         bool loaded;
         bool focused;
@@ -168,8 +170,6 @@ namespace emo {
 
         GLint framebuffer;
         GLuint offscreenFramebuffer;
-        bool useOffscreen;
-        bool stopOffscreenRequested;
 
         int32_t width;
         int32_t height;

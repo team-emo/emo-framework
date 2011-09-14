@@ -239,6 +239,7 @@ namespace emo {
         this->height  = h;
 
         if (this->stage->width == 0 && this->stage->height == 0) {
+            this->stage->setBufferSize(w, h);
             this->stage->setSizeAndView(w, h);
         }
 
@@ -1029,6 +1030,7 @@ namespace emo {
         }   
         useOffscreen = true;
         stopOffscreenRequested = false;
+clearGLErrors("at enableOffscreen");
     }
 
     /*
@@ -1041,6 +1043,7 @@ namespace emo {
         }   
         useOffscreen = false;
         stopOffscreenRequested = false;
+clearGLErrors("at disableOffscreen");
     }
 
     /*
@@ -1049,7 +1052,8 @@ namespace emo {
     void Engine::bindOffscreenFramebuffer() {
         if (offscreenFramebuffer > 0) {
             glBindFramebufferOES(GL_FRAMEBUFFER_OES, offscreenFramebuffer);
-        }   
+        }
+clearGLErrors("at bindOffscreen");
     }
 
 }

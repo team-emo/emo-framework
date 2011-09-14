@@ -150,6 +150,9 @@ namespace emo {
 
         bool useMesh;
 
+        float orthFactorX;
+        float orthFactorY;
+
         bool isScreenEntity;
     protected:
 
@@ -232,6 +235,16 @@ namespace emo {
 
         float   x2;
         float   y2;
+    };
+
+    class SnapshotDrawable : public Drawable {
+    public:
+        SnapshotDrawable();
+        virtual ~SnapshotDrawable();
+
+        virtual bool bindVertex();
+        virtual void onDrawFrame();
+
     };
 }
 #endif
