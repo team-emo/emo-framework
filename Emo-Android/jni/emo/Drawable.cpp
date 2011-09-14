@@ -955,8 +955,8 @@ namespace emo {
             imageInfo->width  = this->width;
             imageInfo->height = this->height;
     
-            imageInfo->glWidth  = imageInfo->width;
-            imageInfo->glHeight = imageInfo->height;
+            imageInfo->glWidth  = nextPowerOfTwo(imageInfo->width);
+            imageInfo->glHeight = nextPowerOfTwo(imageInfo->height);
             imageInfo->loaded = false;
 
             imageInfo->referenceCount++;
