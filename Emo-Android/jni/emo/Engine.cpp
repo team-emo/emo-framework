@@ -32,6 +32,7 @@
 
 #include <android/window.h>
 #include <jni.h>
+#include <GLES/glext.h>
 
 namespace emo {
     bool drawable_z_compare(const Drawable* left, const Drawable* right) {
@@ -54,6 +55,11 @@ namespace emo {
         this->display = EGL_NO_DISPLAY;
         this->context = EGL_NO_CONTEXT;
         this->surface = EGL_NO_SURFACE;
+
+        this->framebuffer = -1;
+        this->offscreenFramebuffer = 0;
+        this->useOffscreen = false;
+        this->stopOffscreenRequested = false;
 
         this->useANR = false;
 
@@ -235,6 +241,9 @@ namespace emo {
         if (this->stage->width == 0 && this->stage->height == 0) {
             this->stage->setSizeAndView(w, h);
         }
+
+        // obtain default framebuffer id
+        glGetIntegerv(GL_FRAMEBUFFER_BINDING_OES, &framebuffer);
 
         if (!this->scriptLoaded) {
             // register class and functions for script
@@ -623,8 +632,8 @@ namespace emo {
 
         this->lastOnDrawDrawablesInterval  = this->uptime;
 
-        this->stage->onDrawFrame();
-        this->onDrawDrawables();
+        if (!this->useOffscreen) this->stage->onDrawFrame();
+        this->onDrawDrawables(delta);
 
         eglSwapBuffers(this->display, this->surface);
 
@@ -681,7 +690,7 @@ namespace emo {
         return false;
     }
 
-    void Engine::onDrawDrawables() {
+    void Engine::onDrawDrawables(int32_t delta) {
         drawables_t::iterator iter;
         if (this->drawablesToRemove->size() > 0) {
             for(iter = this->drawablesToRemove->begin(); iter != this->drawablesToRemove->end(); iter++) {
@@ -701,10 +710,47 @@ namespace emo {
         }
         for (unsigned int i = 0; i < this->sortedDrawables->size(); i++) {
             Drawable* drawable = this->sortedDrawables->at(i);
+            if (useOffscreen && i == 0 && !drawable->isScreenEntity) {
+                this->bindOffscreenFramebuffer();
+                stage->onDrawFrame();
+                continue;
+            }   
             if (drawable->loaded && drawable->independent && drawable->isVisible()) {
                 drawable->onDrawFrame();
             }
         }
+
+        // render the offscreen result
+        if (useOffscreen && this->sortedDrawables->size() > 0) {
+            // restore the default framebuffer
+            Drawable* drawable = this->sortedDrawables->at(0);
+            if (drawable->loaded && !drawable->isScreenEntity) {
+                glBindFramebufferOES(GL_FRAMEBUFFER_OES, framebuffer);
+                drawable->onDrawFrame();
+                if (stopOffscreenRequested) {
+                    stopOffscreenRequested = false;
+                    this->stopOffscreenDrawable(drawable);
+                    callSqFunction_Bool_Float(sqvm, EMO_NAMESPACE, EMO_FUNC_ONSTOP_OFFSCREEN, delta, SQFalse);
+                }   
+            }   
+        }   
+    }
+
+    /*
+     * stop offscreen
+     */
+    void Engine::stopOffscreenDrawable(Drawable* drawable) {
+        drawable->width  = stage->width;
+        drawable->height = stage->height;
+    
+        // fix rotation and scale center
+        drawable->param_rotate[1] = drawable->width  * 0.5f;
+        drawable->param_rotate[2] = drawable->height * 0.5f;
+        drawable->param_scale[2]  = drawable->width  * 0.5f;
+        drawable->param_scale[3]  = drawable->height * 0.5f;
+    
+        this->disableOffscreen();
+        stage->dirty = true;
     }
 
     void Engine::rebindDrawableBuffers() {
@@ -973,5 +1019,38 @@ namespace emo {
             image->clearTexture();
         }
     }
+
+    /*
+     * enable offscreen rendering
+     */
+    void Engine::enableOffscreen() {
+        if (!useOffscreen && offscreenFramebuffer == 0) {
+            glGenFramebuffersOES(1, &offscreenFramebuffer);
+        }   
+        useOffscreen = true;
+        stopOffscreenRequested = false;
+    }
+
+    /*
+     * disable offscreen rendering
+     */
+    void Engine::disableOffscreen() {
+        if (useOffscreen && offscreenFramebuffer != 0) {
+            glDeleteFramebuffersOES(1, &offscreenFramebuffer);
+            offscreenFramebuffer = 0;
+        }   
+        useOffscreen = false;
+        stopOffscreenRequested = false;
+    }
+
+    /*
+     * bind offscreen framebuffer
+     */
+    void Engine::bindOffscreenFramebuffer() {
+        if (offscreenFramebuffer > 0) {
+            glBindFramebufferOES(GL_FRAMEBUFFER_OES, offscreenFramebuffer);
+        }   
+    }
+
 }
 

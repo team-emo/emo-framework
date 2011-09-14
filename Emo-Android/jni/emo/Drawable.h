@@ -149,6 +149,8 @@ namespace emo {
         float getTexelHalfY();
 
         bool useMesh;
+
+        bool isScreenEntity;
     protected:
 
         float      vertex_tex_coords[8];

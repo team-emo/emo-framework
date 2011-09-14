@@ -138,6 +138,7 @@ namespace emo {
         this->animations = new animations_t();
 
         this->useMesh = false;
+        this->isScreenEntity = true;
     }
 
     Drawable::~Drawable() {

@@ -105,7 +105,7 @@ namespace emo {
         bool freeDrawable(std::string key);
         Drawable* getDrawable(std::string key);
 
-        void onDrawDrawables();
+        void onDrawDrawables(int32_t delta);
         
         void rebindDrawableBuffers();
 
@@ -149,6 +149,12 @@ namespace emo {
         int logLevel;
 
         bool hasDisplay();
+
+        void enableOffscreen();
+        void disableOffscreen();
+        void bindOffscreenFramebuffer();
+        void stopOffscreenDrawable(Drawable* drawable);
+
     protected:
         bool loaded;
         bool focused;
@@ -159,6 +165,11 @@ namespace emo {
         EGLDisplay display;
         EGLSurface surface;
         EGLContext context;
+
+        GLint framebuffer;
+        GLuint offscreenFramebuffer;
+        bool useOffscreen;
+        bool stopOffscreenRequested;
 
         int32_t width;
         int32_t height;
