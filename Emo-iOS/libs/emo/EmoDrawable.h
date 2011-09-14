@@ -90,6 +90,8 @@
     
     float orthFactorX;
     float orthFactorY;
+    
+    BOOL isScreenEntity;
 }
 @property (copy, readwrite) NSString* name;
 @property (readwrite) float x;
@@ -108,6 +110,7 @@
 @property (retain, readwrite, nonatomic) EmoImage* texture;
 @property (readwrite) BOOL independent;
 @property (readonly) BOOL loaded;
+@property (readonly) BOOL isScreenEntity;
 
 -(void)doUnload;
 -(void)initDrawable;

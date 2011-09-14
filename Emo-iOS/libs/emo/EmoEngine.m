@@ -434,12 +434,12 @@ static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInte
 	for (int i = 0; i < [drawablesToDraw count]; i++) {
         // if offscreen is enabled, the first drawable is
         // the snapshot drawable that should be drawn last.
-        if (useOffscreen && i == 0) {
+		EmoDrawable* drawable = [drawablesToDraw objectAtIndex:i];
+        if (useOffscreen && i == 0 && !drawable.isScreenEntity) {
             [self bindOffscreenFramebuffer];
             [stage onDrawFrame:delta];
             continue;
         }
-		EmoDrawable* drawable = [drawablesToDraw objectAtIndex:i];
 		if (drawable.loaded && drawable.independent && [drawable isVisible]) {
 			[drawable onDrawFrame:delta withStage:stage];
 		}
@@ -448,9 +448,9 @@ static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInte
     // render the offscreen result
     if (useOffscreen && [drawablesToDraw count] > 0) {
         // restore the default framebuffer
-        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 		EmoDrawable* drawable = [drawablesToDraw objectAtIndex:0];
-		if (drawable.loaded) {
+		if (drawable.loaded && !drawable.isScreenEntity) {
+            glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 			[drawable onDrawFrame:delta withStage:stage];
             if (stopOffscreenRequested) {
                 stopOffscreenRequested = FALSE;

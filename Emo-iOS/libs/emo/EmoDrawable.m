@@ -115,6 +115,7 @@ extern EmoEngine* engine;
 @synthesize frameCount, frame_index, border, margin;
 @synthesize independent;
 @synthesize loaded;
+@synthesize isScreenEntity;
 
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
     if (!loaded) return FALSE;
@@ -237,6 +238,8 @@ extern EmoEngine* engine;
     
     orthFactorX = 1.0;
     orthFactorY = 1.0;
+    
+    isScreenEntity = TRUE;
 }
 
 -(NSInteger)tex_coord_frame_startX {
@@ -597,6 +600,8 @@ extern EmoEngine* engine;
     
     // snapshot drawable should be the first drawable
     z = -1;
+    
+    isScreenEntity = FALSE;
 }
 /*
  * create texture and bind OpenGL vertex
