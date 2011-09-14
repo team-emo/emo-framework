@@ -39,10 +39,8 @@ class SceneA {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            // fade out current scene then shows next scene immediately
-            local currentSceneModifier = emo.AlphaModifier(1, 0, 2000, emo.easing.Linear);
-            local nextSceneModifier    = null;
-            stage.load(SceneB(), currentSceneModifier, nextSceneModifier);
+            // fade out current scene then load next scene
+            stage.load(SceneB(), emo.AlphaModifier(1, 0, 2000, emo.easing.Linear));
         }
     }
 }

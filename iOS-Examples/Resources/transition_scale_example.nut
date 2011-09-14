@@ -80,10 +80,11 @@ class SceneB {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            // hide current scene and zoom in next scene
-            local currentSceneModifier = null;
-            local nextSceneModifier    = emo.ScaleModifier(0, 1, 1000, emo.easing.CubicIn);
-            stage.load(SceneC(), currentSceneModifier, nextSceneModifier);
+            // zoom out current scene then show next scene immediately
+            local currentSceneModifier = emo.ScaleModifier(1, 0, 1000, emo.easing.CubicIn);
+            local nextSceneModifier    = null;
+            local loadNextSceneImmediately = false;
+            stage.load(SceneC(), currentSceneModifier, nextSceneModifier, loadNextSceneImmediately);
         }
     }
 }
@@ -124,7 +125,8 @@ class SceneC {
             // zoom out current scene then show next scene immediately
             local currentSceneModifier = emo.ScaleModifier(1, 0, 1000, emo.easing.CubicIn);
             local nextSceneModifier    = null;
-            stage.load(SceneA(), currentSceneModifier, nextSceneModifier);
+            local loadNextSceneImmediately = true;
+            stage.load(SceneA(), currentSceneModifier, nextSceneModifier, loadNextSceneImmediately);
         }
     }
 }

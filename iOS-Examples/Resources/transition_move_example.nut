@@ -39,13 +39,14 @@ class SceneA {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            // move out current scene then fade in next scene
+            // move out the current scene after loading next scene
             local currentSceneModifier = emo.MoveModifier(
                     [0, 0],
                     [0, stage.getWindowHeight()],
-                    1000, emo.easing.BackOut);
-            local nextSceneModifier    = emo.AlphaModifier(0, 1, 1000, emo.easing.CubicOut);
-            stage.load(SceneB(), currentSceneModifier, nextSceneModifier);
+                    2000, emo.easing.BackOut);
+            local nextSceneModifier    = null;
+            local loadNextSceneImmediately = true;
+            stage.load(SceneB(), currentSceneModifier, nextSceneModifier, loadNextSceneImmediately);
         }
     }
 }
@@ -83,13 +84,14 @@ class SceneB {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            // fade out current scene and move in next scene
-            local currentSceneModifier = emo.AlphaModifier(1, 0, 1000, emo.easing.CubicOut);
-            local nextSceneModifier = emo.MoveModifier(
-                    [stage.getWindowWidth(), 0],
+            // move out the current scene after loading next scene
+            local currentSceneModifier = emo.MoveModifier(
                     [0, 0],
-                    1000, emo.easing.BackOut);
-            stage.load(SceneC(), currentSceneModifier, nextSceneModifier);
+                    [stage.getWindowWidth(), 0],
+                    2000, emo.easing.BackOut);
+            local nextSceneModifier    = null;
+            local loadNextSceneImmediately = true;
+            stage.load(SceneC(), currentSceneModifier, nextSceneModifier, loadNextSceneImmediately);
         }
     }
 }
@@ -132,7 +134,7 @@ class SceneC {
             local nextSceneModifier = emo.MoveModifier(
                     [0, stage.getWindowHeight()],
                     [0, 0],
-                    1000, emo.easing.BackOut);
+                    2000, emo.easing.BackOut);
             stage.load(SceneA(), currentSceneModifier, nextSceneModifier);
         }
     }
