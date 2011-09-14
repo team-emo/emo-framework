@@ -1027,7 +1027,8 @@ namespace emo {
     void Engine::enableOffscreen() {
         if (!useOffscreen && offscreenFramebuffer == 0) {
             glGenFramebuffersOES(1, &offscreenFramebuffer);
-        }   
+            glGenRenderbuffersOES(1, &offscreenRenderbuffer);
+        }
         useOffscreen = true;
         stopOffscreenRequested = false;
 clearGLErrors("at enableOffscreen");
@@ -1040,6 +1041,7 @@ clearGLErrors("at enableOffscreen");
         if (useOffscreen && offscreenFramebuffer != 0) {
             glDeleteFramebuffersOES(1, &offscreenFramebuffer);
             offscreenFramebuffer = 0;
+            glDeleteRenderbuffersOES(1, &offscreenRenderbuffer);
         }   
         useOffscreen = false;
         stopOffscreenRequested = false;

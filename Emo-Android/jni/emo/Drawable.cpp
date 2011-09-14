@@ -974,10 +974,21 @@ namespace emo {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this->width, this->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+        glBindRenderbufferOES(GL_RENDERBUFFER_OES, engine->offscreenRenderbuffer);
+        glRenderbufferStorageOES(GL_RENDERBUFFER_OES,
+                    GL_DEPTH_COMPONENT16_OES, this->width, this->height);
+        glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES,
+                    GL_DEPTH_ATTACHMENT_OES,
+                    GL_RENDERBUFFER_OES, engine->offscreenRenderbuffer);
         glFramebufferTexture2DOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_TEXTURE_2D, this->texture->textureId, 0);
         glBindTexture(GL_TEXTURE_2D, 0);
-   
+
+        GLenum status = glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES);
+        if (status != GL_FRAMEBUFFER_COMPLETE_OES) {
+            LOGE("Failed to create framebuffer for snapshot");
+            engine->disableOffscreen();
+        }
+
         this->texture->loaded = true;
 
         this->vertex_tex_coords[0] = this->getTexCoordStartX();
@@ -1000,6 +1011,9 @@ namespace emo {
         glBindBuffer(GL_ARRAY_BUFFER, this->getCurrentBufferId());
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, this->vertex_tex_coords, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindFramebufferOES(GL_FRAMEBUFFER_OES, 0);
+
+        printGLErrors("SnapshotDrawable::bindVertex");
 
         loaded = true;
 
