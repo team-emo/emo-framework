@@ -25,7 +25,7 @@ public class Launcher extends ExpandableListActivity {
     
     private static final String[] groupNames = {
     	"Basic", "Animation", "Event", "On-Screen Controller",
-    	"Audio", "Database", "Physics", "Physics with Joints", "Misc"
+    	"Audio", "Database", "Physics", "Physics with Joints", "Scene Transition", "Misc"
     };
     
     private static final String[][] childNames = {
@@ -76,6 +76,11 @@ public class Launcher extends ExpandableListActivity {
 			"Using GearJoint",
 			"Using LineJoint",
 			"Using WeldJoint"
+		},
+		{
+			"Fade In/Out",
+			"Move In/Out",
+			"Rotate and Scale"
 		},
 		{
 			"Loading Screen",
@@ -132,6 +137,11 @@ public class Launcher extends ExpandableListActivity {
 			".PhysicsGearJointExample",
 			".PhysicsLineJointExample",
 			".PhysicsWeldJointExample"
+		},
+		{
+			".TransitionFadeExample",
+			".TransitionMoveExample",
+			".TransitionScaleExample"
 		},
 		{
     		".RotateModifierExample",

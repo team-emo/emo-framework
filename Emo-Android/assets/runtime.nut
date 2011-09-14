@@ -230,6 +230,8 @@ PREFERENCE_TABLE_NAME  <- "preferences";
 EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 EMO_MOTION_LISTENERS    <- [];
+EMO_RUNTIME_SNAPSHOT    <- null;
+EMO_RUNTIME_SNAPSHOT_STOPPED <- false;
 
 EMO_STAGE_CONTENT_SCALE <- 1;
 
@@ -414,6 +416,7 @@ class emo.Modifier {
     repeatCount   = null;
     currentCount  = null;
     eventCallback = null;
+    nextChain     = null;
     function constructor(_minValue, _maxValue, _duration, _easing, _repeatCount = 0, _startTime = null) {
         if (_startTime == null) {
             startTime = EMO_RUNTIME_STOPWATCH.elapsed();
@@ -1630,7 +1633,156 @@ class emo.DigitalOnScreenController extends emo.AnalogOnScreenController {
     }
 }
 
-function emo::Stage::load(obj) {
+class emo.Snapshot extends emo.Sprite {
+    targetObj   = null;
+    placeHolder = null;
+    immediateLoading = null;
+    function constructor() {
+        name = null;
+        id = stage.createSnapshot();
+    }
+    function load(x = null, y = null) {
+        local status = EMO_NO_ERROR;
+        if (!loaded) {
+
+            status = stage.loadSnapshot(id, x, y);
+
+            if (status == EMO_NO_ERROR) {
+                uptime = EMO_RUNTIME_STOPWATCH.elapsed();
+                loaded = true;
+            }
+        }
+        return status;
+    }
+    function remove() {
+        local status = EMO_NO_ERROR;
+        if (loaded) {
+            clearModifier();
+            emo.Event().removeMotionListener(this);
+            if (physicsInfo != null) {
+                physicsInfo.remove();
+                physicsInfo = null;
+            }
+            status = stage.removeSnapshot(id);
+            loaded = false;
+        }
+        return status;
+    }
+    function start(x = null, y = null) {
+        return load(x, y);
+    }
+    function stop() {
+        return stage.stopSnapshot(id);
+    }
+}
+
+function emo::_onStopOffScreen(dt) {
+    if (EMO_RUNTIME_SNAPSHOT == null) return;
+
+    EMO_RUNTIME_SNAPSHOT.setZ(2147483647);
+
+    if (EMO_RUNTIME_DELEGATE != null &&
+            EMO_RUNTIME_DELEGATE.rawin("onDispose")) {
+        EMO_RUNTIME_DELEGATE.onDispose();
+        EMO_RUNTIME_DELEGATE = null;
+    }
+
+    if (EMO_RUNTIME_SNAPSHOT.immediateLoading) {
+        EMO_RUNTIME_DELEGATE = EMO_RUNTIME_SNAPSHOT.targetObj;
+        if (EMO_RUNTIME_DELEGATE != null &&
+                EMO_RUNTIME_DELEGATE.rawin("onLoad")) {
+            EMO_RUNTIME_DELEGATE.onLoad();
+        }
+    }
+    EMO_RUNTIME_SNAPSHOT_STOPPED = true;
+
+    local modifier = EMO_RUNTIME_SNAPSHOT.placeHolder;
+    modifier.onResume();
+    EMO_RUNTIME_SNAPSHOT.addModifier(modifier);
+    EMO_RUNTIME_SNAPSHOT.placeHolder = null;
+}
+
+function emo::Stage::modifyingLoadEventCallback(snapshot, modifier, eventType) {
+    if (modifier.getName() == "stage_modifying" && eventType == EVENT_MODIFIER_FINISH) {
+        EMO_RUNTIME_SNAPSHOT_STOPPED = false;
+        EMO_RUNTIME_SNAPSHOT.placeHolder = modifier.nextChain;
+        EMO_RUNTIME_SNAPSHOT.stop();
+    }
+    if (modifier.getName() == "stage_disposing" && eventType == EVENT_MODIFIER_FINISH) {
+        local targetObj        = EMO_RUNTIME_SNAPSHOT.targetObj;
+        local immediateLoading = EMO_RUNTIME_SNAPSHOT.immediateLoading;
+
+        if (!EMO_RUNTIME_SNAPSHOT_STOPPED) {
+            emo._onStopOffScreen(0);
+        }
+
+        EMO_RUNTIME_SNAPSHOT.remove();
+        EMO_RUNTIME_SNAPSHOT = null;
+
+        EMO_RUNTIME_SNAPSHOT = emo.Snapshot();
+        EMO_RUNTIME_SNAPSHOT.start();
+        EMO_RUNTIME_SNAPSHOT.hide();
+
+        if (!immediateLoading) {
+            EMO_RUNTIME_DELEGATE = targetObj;
+            if (EMO_RUNTIME_DELEGATE != null &&
+                    EMO_RUNTIME_DELEGATE.rawin("onLoad")) {
+                EMO_RUNTIME_DELEGATE.onLoad();
+            }
+        }
+
+        modifier.nextChain.onResume();
+        EMO_RUNTIME_SNAPSHOT.addModifier(modifier.nextChain);
+        EMO_RUNTIME_SNAPSHOT.show();
+    }
+    if (modifier.getName() == "stage_loading" && eventType == EVENT_MODIFIER_FINISH) {
+        EMO_RUNTIME_SNAPSHOT.remove();
+        EMO_RUNTIME_SNAPSHOT = null;
+    }
+}
+
+function emo::Stage::modifyingLoad(obj, currentSceneModifier = null, nextSceneModifier = null, immediateLoading = false) {
+    if (EMO_RUNTIME_SNAPSHOT != null) {
+        EMO_RUNTIME_SNAPSHOT.remove();
+        EMO_RUNTIME_SNAPSHOT = null;
+    }
+    EMO_RUNTIME_SNAPSHOT = emo.Snapshot();
+    EMO_RUNTIME_SNAPSHOT.targetObj = obj;
+    EMO_RUNTIME_SNAPSHOT.immediateLoading = immediateLoading;
+    EMO_RUNTIME_SNAPSHOT.start();
+
+    if (currentSceneModifier == null) {
+        currentSceneModifier = emo.NoopModifier(16);
+    }
+
+    if (nextSceneModifier == null) {
+        nextSceneModifier = emo.NoopModifier(16);
+    }
+
+    currentSceneModifier.onPause();
+    nextSceneModifier.onPause();
+
+    currentSceneModifier.setName("stage_disposing");
+    nextSceneModifier.setName("stage_loading");
+
+    currentSceneModifier.setEventCallback(modifyingLoadEventCallback);
+    nextSceneModifier.setEventCallback(modifyingLoadEventCallback);
+
+    currentSceneModifier.nextChain = nextSceneModifier;
+
+    local toStartModifier = emo.NoopModifier(16);
+    toStartModifier.setName("stage_modifying");
+    toStartModifier.setEventCallback(modifyingLoadEventCallback);
+    toStartModifier.nextChain = currentSceneModifier;
+
+    EMO_RUNTIME_SNAPSHOT.addModifier(toStartModifier);
+}
+
+function emo::Stage::load(obj, currentSceneModifier = null, nextSceneModifier = null, immediateLoading = false) {
+
+    if (currentSceneModifier != null || nextSceneModifier != null) {
+        return modifyingLoad(obj, currentSceneModifier, nextSceneModifier, immediateLoading);
+    }
 
     if (EMO_RUNTIME_DELEGATE != null &&
              EMO_RUNTIME_DELEGATE.rawin("onDispose")) {

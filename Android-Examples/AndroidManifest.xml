@@ -388,6 +388,39 @@
             <meta-data android:name="emo.script.main"
                        android:value="database_example.nut" />
         </activity-alias>
+
+        <activity-alias android:name=".TransitionFadeExample"
+            android:targetActivity="com.emo_framework.EmoActivity"
+            android:label="@string/app_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="transition_fade_example.nut" />
+        </activity-alias>
+        
+        <activity-alias android:name=".TransitionMoveExample"
+            android:targetActivity="com.emo_framework.EmoActivity"
+            android:label="@string/app_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="transition_move_example.nut" />
+        </activity-alias>
+        
+        <activity-alias android:name=".TransitionScaleExample"
+            android:targetActivity="com.emo_framework.EmoActivity"
+            android:label="@string/app_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="transition_scale_example.nut" />
+        </activity-alias>
         
         <activity-alias android:name=".HTTPAccessExample"
             android:targetActivity="com.emo_framework.EmoActivity"
