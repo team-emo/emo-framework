@@ -157,7 +157,6 @@ namespace emo {
 
         bool useOffscreen;
         bool stopOffscreenRequested;
-        GLuint offscreenRenderbuffer;
         GLuint offscreenFramebuffer;
     protected:
         bool loaded;
