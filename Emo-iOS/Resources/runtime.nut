@@ -231,6 +231,7 @@ EMO_RUNTIME_DELEGATE    <- null;
 EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
 EMO_MOTION_LISTENERS    <- [];
 EMO_RUNTIME_SNAPSHOT    <- null;
+EMO_RUNTIME_SNAPSHOT_STOPPED <- false;
 
 EMO_STAGE_CONTENT_SCALE <- 1;
 
@@ -1692,15 +1693,21 @@ function emo::_onStopOffScreen(dt) {
             EMO_RUNTIME_DELEGATE.onLoad();
         }
     }
+    EMO_RUNTIME_SNAPSHOT_STOPPED = true;
 }
 
 function emo::Stage::modifyingLoadEventCallback(snapshot, modifier, eventType) {
     if (modifier.getName() == "stage_disposing" && eventType == EVENT_MODIFIER_START) {
+        EMO_RUNTIME_SNAPSHOT_STOPPED = false;
         EMO_RUNTIME_SNAPSHOT.stop();
     }
     if (modifier.getName() == "stage_disposing" && eventType == EVENT_MODIFIER_FINISH) {
         local targetObj        = EMO_RUNTIME_SNAPSHOT.targetObj;
         local immediateLoading = EMO_RUNTIME_SNAPSHOT.immediateLoading;
+
+        if (!EMO_RUNTIME_SNAPSHOT_STOPPED) {
+            emo._onStopOffScreen(0);
+        }
 
         EMO_RUNTIME_SNAPSHOT.remove();
         EMO_RUNTIME_SNAPSHOT = null;
