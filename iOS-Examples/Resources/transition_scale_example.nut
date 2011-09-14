@@ -8,6 +8,7 @@ local text = null;
 class SceneA {
 
     panel = null;
+    loaded = null; // a flag to prevent scene to be loaded twice when stage is double-tapped.
 
     /*
      * Called when this class is loaded
@@ -23,6 +24,8 @@ class SceneA {
 
         text.setText("SCENE A - TAP");
         text.show();
+
+        loaded = true;
     }
 
     /*
@@ -39,6 +42,8 @@ class SceneA {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+            if (!loaded) return;
+            loaded = false;
             // fade out current scene then rotate next scene
             local currentSceneModifier = emo.AlphaModifier(1, 0, 1000, emo.easing.CubicIn);
             local nextSceneModifier    = emo.RotateModifier(0, 360, 1000, emo.easing.BackOut);
@@ -49,6 +54,7 @@ class SceneA {
 class SceneB {
 
     panel = null;
+    loaded = null; // a flag to prevent scene to be loaded twice when stage is double-tapped.
 
     /*
      * Called when this class is loaded
@@ -64,6 +70,8 @@ class SceneB {
 
         text.setText("SCENE B - TAP");
         text.show();
+
+        loaded = true;
     }
 
     /*
@@ -80,6 +88,8 @@ class SceneB {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+            if (!loaded) return;
+            loaded = false;
             // zoom out current scene then show next scene immediately
             local currentSceneModifier = emo.ScaleModifier(1, 0, 1000, emo.easing.CubicIn);
             local nextSceneModifier    = null;
@@ -91,6 +101,7 @@ class SceneB {
 class SceneC {
 
     panel = null;
+    loaded = null; // a flag to prevent scene to be loaded twice when stage is double-tapped.
 
     /*
      * Called when this class is loaded
@@ -106,6 +117,8 @@ class SceneC {
 
         text.setText("SCENE C - TAP");
         text.show();
+
+        loaded = true;
     }
 
     /*
@@ -122,6 +135,8 @@ class SceneC {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+            if (!loaded) return;
+            loaded = false;
             // zoom out current scene then show next scene immediately
             local currentSceneModifier = emo.ScaleModifier(1, 0, 1000, emo.easing.CubicIn);
             local nextSceneModifier    = null;

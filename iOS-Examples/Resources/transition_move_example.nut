@@ -8,6 +8,7 @@ local text = null;
 class SceneA {
 
     panel = null;
+    loaded = null; // a flag to prevent scene to be loaded twice when stage is double-tapped.
 
     /*
      * Called when this class is loaded
@@ -23,6 +24,8 @@ class SceneA {
 
         text.setText("SCENE A - TAP");
         text.show();
+
+        loaded = true;
     }
 
     /*
@@ -39,6 +42,8 @@ class SceneA {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+            if (!loaded) return;
+            loaded = false;
             // move out the current scene after loading next scene
             local currentSceneModifier = emo.MoveModifier(
                     [0, 0],
@@ -53,6 +58,7 @@ class SceneA {
 class SceneB {
 
     panel = null;
+    loaded = null; // a flag to prevent scene to be loaded twice when stage is double-tapped.
 
     /*
      * Called when this class is loaded
@@ -68,6 +74,8 @@ class SceneB {
 
         text.setText("SCENE B - TAP");
         text.show();
+
+        loaded = true;
     }
 
     /*
@@ -84,6 +92,8 @@ class SceneB {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+            if (!loaded) return;
+            loaded = false;
             // move out the current scene after loading next scene
             local currentSceneModifier = emo.MoveModifier(
                     [0, 0],
@@ -98,6 +108,7 @@ class SceneB {
 class SceneC {
 
     panel = null;
+    loaded = null; // a flag to prevent scene to be loaded twice when stage is double-tapped.
 
     /*
      * Called when this class is loaded
@@ -113,6 +124,8 @@ class SceneC {
 
         text.setText("SCENE C - TAP");
         text.show();
+
+        loaded = true;
     }
 
     /*
@@ -129,6 +142,8 @@ class SceneC {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+            if (!loaded) return;
+            loaded = false;
             // fade out current scene and move in next scene
             local currentSceneModifier = emo.AlphaModifier(1, 0, 1000, emo.easing.CubicOut);
             local nextSceneModifier = emo.MoveModifier(
