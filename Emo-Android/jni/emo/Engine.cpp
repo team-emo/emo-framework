@@ -58,6 +58,8 @@ namespace emo {
 
         this->framebuffer = -1;
         this->offscreenFramebuffer = 0;
+        this->offscreenDepthbuffer = 0;
+        this->offscreenColorbuffer = 0;
         this->useOffscreen = false;
         this->stopOffscreenRequested = false;
 
@@ -1027,7 +1029,8 @@ namespace emo {
     void Engine::enableOffscreen() {
         if (!useOffscreen && offscreenFramebuffer == 0) {
             glGenFramebuffersOES(1, &offscreenFramebuffer);
-            glGenRenderbuffersOES(1, &offscreenRenderbuffer);
+            glGenRenderbuffersOES(1, &offscreenDepthbuffer);
+            glGenRenderbuffersOES(1, &offscreenColorbuffer);
         }
         useOffscreen = true;
         stopOffscreenRequested = false;
@@ -1039,9 +1042,11 @@ namespace emo {
     void Engine::disableOffscreen() {
         if (useOffscreen && offscreenFramebuffer != 0) {
             glDeleteFramebuffersOES(1, &offscreenFramebuffer);
-            glDeleteRenderbuffersOES(1, &offscreenRenderbuffer);
+            glDeleteRenderbuffersOES(1, &offscreenDepthbuffer);
+            glDeleteRenderbuffersOES(1, &offscreenColorbuffer);
             offscreenFramebuffer  = 0;
-            offscreenRenderbuffer = 0;
+            offscreenDepthbuffer = 0;
+            offscreenColorbuffer = 0;
         }   
         useOffscreen = false;
         stopOffscreenRequested = false;
@@ -1053,7 +1058,6 @@ namespace emo {
     void Engine::bindOffscreenFramebuffer() {
         if (offscreenFramebuffer > 0) {
             glBindFramebufferOES(GL_FRAMEBUFFER_OES, offscreenFramebuffer);
-            glBindRenderbufferOES(GL_RENDERBUFFER_OES, offscreenRenderbuffer);
         }
     }
 }

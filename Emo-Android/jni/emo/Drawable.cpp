@@ -974,11 +974,16 @@ namespace emo {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glBindRenderbufferOES(GL_RENDERBUFFER_OES, engine->offscreenColorbuffer);
+        glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, engine->offscreenColorbuffer);
+
+        glBindRenderbufferOES(GL_RENDERBUFFER_OES, engine->offscreenDepthbuffer);
         glRenderbufferStorageOES(GL_RENDERBUFFER_OES,
                     GL_DEPTH_COMPONENT16_OES, this->width, this->height);
         glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES,
                     GL_DEPTH_ATTACHMENT_OES,
-                    GL_RENDERBUFFER_OES, engine->offscreenRenderbuffer);
+                    GL_RENDERBUFFER_OES, engine->offscreenDepthbuffer);
         glFramebufferTexture2DOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_TEXTURE_2D, this->texture->textureId, 0);
 
         GLenum status = glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES);
