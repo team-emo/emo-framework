@@ -34,6 +34,9 @@
 #include <jni.h>
 #include <GLES/glext.h>
 
+#define likely(x) __builtin_expect(!!(x), 1)
+#define unlikely(x) __builtin_expect(!!(x), 0)
+
 namespace emo {
     bool drawable_z_compare(const Drawable* left, const Drawable* right) {
         return left->z < right->z;
@@ -633,7 +636,7 @@ namespace emo {
 
         this->lastOnDrawDrawablesInterval  = this->uptime;
 
-        if (!this->useOffscreen) this->stage->onDrawFrame();
+        if (likely(!this->useOffscreen)) this->stage->onDrawFrame();
         this->onDrawDrawables(delta);
 
         eglSwapBuffers(this->display, this->surface);
@@ -711,7 +714,7 @@ namespace emo {
         }
         for (unsigned int i = 0; i < this->sortedDrawables->size(); i++) {
             Drawable* drawable = this->sortedDrawables->at(i);
-            if (useOffscreen && i == 0 && !drawable->isScreenEntity) {
+            if (unlikely(useOffscreen) && i == 0 && !drawable->isScreenEntity) {
                 this->bindOffscreenFramebuffer();
                 stage->onDrawFrame();
                 continue;
@@ -722,7 +725,7 @@ namespace emo {
         }
 
         // render the offscreen result
-        if (useOffscreen && this->sortedDrawables->size() > 0) {
+        if (unlikely(useOffscreen) && this->sortedDrawables->size() > 0) {
             // restore the default framebuffer
             Drawable* drawable = this->sortedDrawables->at(0);
             if (drawable->loaded && !drawable->isScreenEntity) {
