@@ -1634,7 +1634,8 @@ class emo.DigitalOnScreenController extends emo.AnalogOnScreenController {
 }
 
 class emo.Snapshot extends emo.Sprite {
-    targetObj = null;
+    targetObj   = null;
+    placeHolder = null;
     immediateLoading = null;
     function constructor() {
         name = null;
@@ -1694,11 +1695,17 @@ function emo::_onStopOffScreen(dt) {
         }
     }
     EMO_RUNTIME_SNAPSHOT_STOPPED = true;
+
+    local modifier = EMO_RUNTIME_SNAPSHOT.placeHolder;
+    modifier.onResume();
+    EMO_RUNTIME_SNAPSHOT.addModifier(modifier);
+    EMO_RUNTIME_SNAPSHOT.placeHolder = null;
 }
 
 function emo::Stage::modifyingLoadEventCallback(snapshot, modifier, eventType) {
-    if (modifier.getName() == "stage_disposing" && eventType == EVENT_MODIFIER_START) {
+    if (modifier.getName() == "stage_modifying" && eventType == EVENT_MODIFIER_FINISH) {
         EMO_RUNTIME_SNAPSHOT_STOPPED = false;
+        EMO_RUNTIME_SNAPSHOT.placeHolder = modifier.nextChain;
         EMO_RUNTIME_SNAPSHOT.stop();
     }
     if (modifier.getName() == "stage_disposing" && eventType == EVENT_MODIFIER_FINISH) {
@@ -1752,6 +1759,7 @@ function emo::Stage::modifyingLoad(obj, currentSceneModifier = null, nextSceneMo
         nextSceneModifier = emo.NoopModifier(16);
     }
 
+    currentSceneModifier.onPause();
     nextSceneModifier.onPause();
 
     currentSceneModifier.setName("stage_disposing");
@@ -1762,7 +1770,12 @@ function emo::Stage::modifyingLoad(obj, currentSceneModifier = null, nextSceneMo
 
     currentSceneModifier.nextChain = nextSceneModifier;
 
-    EMO_RUNTIME_SNAPSHOT.addModifier(currentSceneModifier);
+    local toStartModifier = emo.NoopModifier(16);
+    toStartModifier.setName("stage_modifying");
+    toStartModifier.setEventCallback(modifyingLoadEventCallback);
+    toStartModifier.nextChain = currentSceneModifier;
+
+    EMO_RUNTIME_SNAPSHOT.addModifier(toStartModifier);
 }
 
 function emo::Stage::load(obj, currentSceneModifier = null, nextSceneModifier = null, immediateLoading = false) {
