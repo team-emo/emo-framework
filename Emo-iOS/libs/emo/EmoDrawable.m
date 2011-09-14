@@ -680,8 +680,8 @@ extern EmoEngine* engine;
     glLoadIdentity();
     glOrthof(0, width, height, 0, -1, 1);
     
-    orthFactorX = width  / stage.width;
-    orthFactorY = height / stage.height;
+    orthFactorX = width  / (float)stage.width;
+    orthFactorY = height / (float)stage.height;
     
     glClearColor([engine.stage getColor:0], [engine.stage getColor:1],
                  [engine.stage getColor:2], [engine.stage getColor:3]);
