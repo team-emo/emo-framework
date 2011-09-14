@@ -231,6 +231,15 @@ NSString* data2ns(NSData* data) {
 }
 
 /*
+ * unbind offscreen framebuffer
+ */
+- (void)unbindOffscreenFramebuffer {
+    if (offscreenFramebuffer > 0) {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+}
+
+/*
  * initialize OpenGL state 
  */
 - (BOOL)initDrawFrame {
@@ -447,6 +456,7 @@ static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInte
     
     // render the offscreen result
     if (useOffscreen && [drawablesToDraw count] > 0) {
+        [self unbindOffscreenFramebuffer];
         // restore the default framebuffer
 		EmoDrawable* drawable = [drawablesToDraw objectAtIndex:0];
 		if (drawable.loaded && !drawable.isScreenEntity) {

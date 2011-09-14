@@ -439,6 +439,8 @@ SQInteger emoDrawableLoadSnapshot(HSQUIRRELVM v) {
         sq_pushinteger(v, ERR_CREATE_VERTEX);
     }
 	
+    [engine unbindOffscreenFramebuffer];
+    
     return 1;
 }
 

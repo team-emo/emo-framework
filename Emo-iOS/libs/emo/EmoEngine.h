@@ -154,5 +154,6 @@ NSString* data2ns(NSData* data);
 - (void)enableOffscreen;
 - (void)disableOffscreen;
 - (void)bindOffscreenFramebuffer;
+- (void)unbindOffscreenFramebuffer;
 @end
 
