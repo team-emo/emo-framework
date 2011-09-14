@@ -441,9 +441,11 @@ class emo.Modifier {
     }
     function onPause() {
         pausedTime = EMO_RUNTIME_STOPWATCH.elapsed();
+        return this;
     }
     function onResume() {
         startTime = startTime + (EMO_RUNTIME_STOPWATCH.elapsed() - pausedTime);
+        return this;
     }
     function onUpdate() {
         if (!started) {
