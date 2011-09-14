@@ -158,6 +158,7 @@ namespace emo {
         bool useOffscreen;
         bool stopOffscreenRequested;
         GLuint offscreenRenderbuffer;
+        GLuint offscreenFramebuffer;
     protected:
         bool loaded;
         bool focused;
@@ -170,7 +171,6 @@ namespace emo {
         EGLContext context;
 
         GLint framebuffer;
-        GLuint offscreenFramebuffer;
 
         int32_t width;
         int32_t height;

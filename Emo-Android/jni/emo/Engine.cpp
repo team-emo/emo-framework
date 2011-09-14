@@ -1031,7 +1031,6 @@ namespace emo {
         }
         useOffscreen = true;
         stopOffscreenRequested = false;
-clearGLErrors("at enableOffscreen");
     }
 
     /*
@@ -1040,12 +1039,12 @@ clearGLErrors("at enableOffscreen");
     void Engine::disableOffscreen() {
         if (useOffscreen && offscreenFramebuffer != 0) {
             glDeleteFramebuffersOES(1, &offscreenFramebuffer);
-            offscreenFramebuffer = 0;
             glDeleteRenderbuffersOES(1, &offscreenRenderbuffer);
+            offscreenFramebuffer  = 0;
+            offscreenRenderbuffer = 0;
         }   
         useOffscreen = false;
         stopOffscreenRequested = false;
-clearGLErrors("at disableOffscreen");
     }
 
     /*
@@ -1054,9 +1053,8 @@ clearGLErrors("at disableOffscreen");
     void Engine::bindOffscreenFramebuffer() {
         if (offscreenFramebuffer > 0) {
             glBindFramebufferOES(GL_FRAMEBUFFER_OES, offscreenFramebuffer);
+            glBindRenderbufferOES(GL_RENDERBUFFER_OES, offscreenRenderbuffer);
         }
-clearGLErrors("at bindOffscreen");
     }
-
 }
 
