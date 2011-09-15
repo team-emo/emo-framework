@@ -224,7 +224,26 @@ void sq_errorfunc(HSQUIRRELVM v, const SQChar *s,...) {
 	va_list args;
     va_start(args, s);
     vsnprintf(str, 4096, s, args);    
-    callSqFunction_Bool_String(v, EMO_NAMESPACE, EMO_FUNC_ONERROR, str, SQFalse);
+    
+    // check if the error was called from emo::onError
+    // because error inside onError causes infinite loop.
+    bool fromOnError = false;
+    SQInteger level = 1;
+    SQStackInfos si;
+    while(SQ_SUCCEEDED(sq_stackinfos(v,level,&si))) {
+        const SQChar *fn = _SC("unknown");
+        if (si.funcname) fn = si.funcname;
+        level++;
+        if (strcmp(fn, "_onError") == 0 || strcmp(fn, "onError") == 0) {
+            fromOnError = true;
+            break;
+        }
+    }
+    
+    if (!fromOnError) {
+        callSqFunction_Bool_String(v, EMO_NAMESPACE, EMO_FUNC_ONERROR, str, SQFalse);
+    }
+    
     LOGE(str);
     va_end(args);
 }
