@@ -1023,6 +1023,8 @@ namespace emo {
     void SnapshotDrawable::onDrawFrame() {
         // if the snapshot ends, use default onDrawFrame
         if (!engine->useOffscreen) {
+            orthFactorX = this->width  / (float)engine->stage->width;
+            orthFactorY = this->height / (float)engine->stage->height;
             Drawable::onDrawFrame();
             return;
         }
@@ -1032,8 +1034,8 @@ namespace emo {
         glLoadIdentity();
         glOrthof(0, this->width, this->height, 0, -1, 1);
 
-        orthFactorX = this->width  / (float)engine->stage->width;
-        orthFactorY = this->height / (float)engine->stage->height;
+        orthFactorX = 1.0;
+        orthFactorY = 1.0;
 
         glClearColor(engine->stage->color[0], engine->stage->color[1],
                      engine->stage->color[2], engine->stage->color[3]);

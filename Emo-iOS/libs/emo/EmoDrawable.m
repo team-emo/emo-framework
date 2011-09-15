@@ -672,6 +672,8 @@ extern EmoEngine* engine;
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
     // if the snapshot ends, use default onDrawFrame
     if (!engine.useOffscreen) {
+        orthFactorX = width  / (float)stage.width;
+        orthFactorY = height / (float)stage.height;
         return [super onDrawFrame:dt withStage:stage];
     }
     // vewport should be reset everytime on drawing
@@ -680,8 +682,8 @@ extern EmoEngine* engine;
     glLoadIdentity();
     glOrthof(0, width, height, 0, -1, 1);
     
-    orthFactorX = width  / (float)stage.width;
-    orthFactorY = height / (float)stage.height;
+    orthFactorX = 1.0;
+    orthFactorY = 1.0;
     
     glClearColor([engine.stage getColor:0], [engine.stage getColor:1],
                  [engine.stage getColor:2], [engine.stage getColor:3]);
