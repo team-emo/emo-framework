@@ -538,6 +538,7 @@ class emo.SequenceModifier {
     repeatCount     = null;
     currentCount    = null;
     listener        = null;
+    nextChain       = null;
     
     function constructor(...) {
         modifiers = [];
