@@ -832,12 +832,12 @@ function emo::easing::BounceOut(elapsed, duration, modifier) {
 }
 
 function emo::easing::BounceIn(elapsed, duration, modifier) {
-    return 1 - emo.easing.BounceOut(duration - elapsed, duration);
+    return 1 - emo.easing.BounceOut(duration - elapsed, duration, modifier);
 }
 
 function emo::easing::BounceInOut(elapsed, duration, modifier) {
     if (elapsed < duration / 2.0) return emo.easing.BounceIn(elapsed * 2.0, duration) * 0.5;
-    else return emo.easing.BounceOut(t * 2.0 - duration, duration) * 0.5 + 0.5;
+    else return emo.easing.BounceOut(t * 2.0 - duration, duration, modifier) * 0.5 + 0.5;
 }
 
 function emo::easing::ExpoIn(elapsed, duration, modifier) {
