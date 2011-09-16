@@ -246,8 +246,13 @@ namespace emo {
             this->stage->setSizeAndView(w, h);
         }
 
+        clearGLErrors("emo::Engine::onInitDisplay");
+
         // obtain default framebuffer id
         glGetIntegerv(GL_FRAMEBUFFER_BINDING_OES, &framebuffer);
+        if (glGetError() != GL_NO_ERROR) {
+            LOGW("Offscreen framebuffer is not supported on this device.");
+        }
 
         if (!this->scriptLoaded) {
             // register class and functions for script

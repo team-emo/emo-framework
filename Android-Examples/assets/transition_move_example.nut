@@ -185,6 +185,9 @@ function emo::loadText() {
 }
 
 function emo::onLoad() {
+    if (emo.Runtime.isSimulator() && emo.Runtime.os() == OS_ANDROID) {
+        error("This program cannot run on the Android simulator.");
+    }
     loadText();
     stage.load(SceneA());
 }

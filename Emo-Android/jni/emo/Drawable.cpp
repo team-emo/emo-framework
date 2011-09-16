@@ -982,7 +982,7 @@ namespace emo {
         GLenum status = glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES);
         if (status != GL_FRAMEBUFFER_COMPLETE_OES) {
             char str[256];
-            sprintf(str, "Failed to create framebuffer for snapshot: status=0x%04x", status);
+            sprintf(str, "Failed to create offscreen: status=0x%04x.", status);
             LOGE(str);
             engine->disableOffscreen();
         }
