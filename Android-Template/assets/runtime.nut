@@ -528,6 +528,99 @@ class emo.Modifier {
     }
 }
 
+class emo.ConcurrentModifier {
+    modifiers       = null;
+    name            = null;
+    eventCallback   = null;
+    listener        = null;
+    nextChain       = null;
+    finished        = null;
+
+    function constructor(...) {
+        modifiers = [];
+        for (local i = 0; i < vargv.len(); i++) {
+            addModifier(vargv[i]);
+        }
+        finished = false;
+    }
+    
+    function addModifier(_modifier) {
+        _modifier.setEventListener(this);
+        _modifier.onResume();
+        
+        modifiers.append(_modifier);
+    }
+    
+    function onModifierEvent(targetObj, _modifier, eventType) {
+        if (eventType == EVENT_MODIFIER_FINISH) {
+            if (finished) return;
+            finished = true;
+            for (local i = 0; i < modifiers.len(); i++) {
+                emo.Event().removeOnUpdateListener(modifiers[i]);
+            }
+            emo.Event().removeOnUpdateListener(this);
+            if (eventCallback != null) {
+                eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
+            }
+            if (listener != null) {
+                listener.onModifierEvent(targetObj, this, EVENT_MODIFIER_FINISH);
+            }
+        }
+    }
+    
+    function setObject(obj) {
+        for (local i = 0; i < modifiers.len(); i++) {
+            modifiers[i].setObject(obj);
+        }
+    }
+
+    function setName(_name) {
+        name = _name;
+    }
+    
+    function onPause() {
+        for (local i = 0; i < modifiers.len(); i++) {
+            modifiers[i].onPause();
+        }
+    }
+    
+    function onResume() {
+        for (local i = 0; i < modifiers.len(); i++) {
+            modifiers[i].onResume();
+        }
+    }
+    
+    function onUpdate() {
+        for (local i = 0; i < modifiers.len(); i++) {
+            modifiers[i].onUpdate();
+        }
+    }
+    
+    function getObject() {
+        if (modifiers.len() > 0) {
+            return modifiers[0].getObject();
+        } else {
+            return null;
+        }
+    }
+    
+    function getName() {
+        return name;
+    }
+
+    function setEventCallback(func) {
+        eventCallback = func;
+    }
+    
+    function setEventListener(prnt) {
+        listener = prnt;
+    }
+    
+    function getEventListener() {
+        return listener;
+    }
+}
+
 class emo.SequenceModifier {
     modifiers       = null;
     name            = null;
