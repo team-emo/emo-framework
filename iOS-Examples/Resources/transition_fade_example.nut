@@ -137,7 +137,53 @@ class SceneC {
             // fade out current scene and fade in next scene
             local currentSceneModifier = emo.AlphaModifier(1, 0, 2000, emo.easing.Linear);
             local nextSceneModifier    = emo.AlphaModifier(0, 1, 2000, emo.easing.Linear);
-            stage.load(SceneA(), currentSceneModifier, nextSceneModifier);
+            stage.load(SceneD(), currentSceneModifier, nextSceneModifier);
+        }
+    }
+}
+class SceneD {
+
+    panel = null;
+    loaded = null; // a flag to prevent scene to be loaded twice when stage is double-tapped.
+
+    /*
+     * Called when this class is loaded
+     */
+    function onLoad() {
+        print("onLoad");
+
+        panel = emo.Rectangle();
+        panel.setSize(stage.getWindowWidth(), stage.getWindowHeight());
+        panel.color(0, 0, 0);
+        panel.setZ(0);
+        panel.load();
+
+        text.setText("SCENE D - TAP");
+        text.show();
+
+        loaded = true;
+    }
+
+    /*
+     * Called when the class ends
+     */
+    function onDispose() {
+        print("onDispose");
+        panel.remove();
+        text.hide();
+    }
+
+    /*
+     * touch event
+     */
+    function onMotionEvent(mevent) {
+        if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+            if (!loaded) return;
+            loaded = false;
+            // fade out current scene with blending
+            local currentSceneModifier = emo.AlphaModifier(1, 0, 2000, emo.easing.Linear);
+            local nextSceneModifier = null;
+            stage.load(SceneA(), currentSceneModifier, nextSceneModifier, true);
         }
     }
 }
