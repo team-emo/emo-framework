@@ -48,7 +48,7 @@ class SceneA {
             local currentSceneModifier = emo.MoveModifier(
                     [0, 0],
                     [0, stage.getWindowHeight()],
-                    2000, emo.easing.BackOut);
+                    2000, emo.easing.BackIn);
             local nextSceneModifier    = null;
             local loadNextSceneImmediately = true;
             stage.load(SceneB(), currentSceneModifier, nextSceneModifier, loadNextSceneImmediately);
@@ -98,7 +98,7 @@ class SceneB {
             local currentSceneModifier = emo.MoveModifier(
                     [0, 0],
                     [stage.getWindowWidth(), 0],
-                    2000, emo.easing.BackOut);
+                    2000, emo.easing.BackIn);
             local nextSceneModifier    = null;
             local loadNextSceneImmediately = true;
             stage.load(SceneC(), currentSceneModifier, nextSceneModifier, loadNextSceneImmediately);
