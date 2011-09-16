@@ -534,14 +534,12 @@ class emo.ConcurrentModifier {
     eventCallback   = null;
     listener        = null;
     nextChain       = null;
-    finished        = null;
 
     function constructor(...) {
         modifiers = [];
         for (local i = 0; i < vargv.len(); i++) {
             addModifier(vargv[i]);
         }
-        finished = false;
     }
     
     function addModifier(_modifier) {
@@ -553,11 +551,12 @@ class emo.ConcurrentModifier {
     
     function onModifierEvent(targetObj, _modifier, eventType) {
         if (eventType == EVENT_MODIFIER_FINISH) {
-            if (finished) return;
-            finished = true;
-            for (local i = 0; i < modifiers.len(); i++) {
-                emo.Event().removeOnUpdateListener(modifiers[i]);
-            }
+            emo.Event().removeOnUpdateListener(_modifier);
+
+            local idx = modifiers.find(_modifier);
+            if (idx != null) modifiers.remove(idx);
+            if (modifiers.len() > 0) return;
+
             emo.Event().removeOnUpdateListener(this);
             if (eventCallback != null) {
                 eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
