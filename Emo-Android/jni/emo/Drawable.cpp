@@ -147,7 +147,7 @@ namespace emo {
 
     Drawable::~Drawable() {
         this->deleteAnimations();
-        this->deleteBuffer(false, false);
+        this->deleteBuffer(false);
         if (this->hasTexture) {
             this->texture->referenceCount--;
             if (this->texture->referenceCount <= 0) {
@@ -200,14 +200,14 @@ namespace emo {
         return this->frames_vbos[this->frame_index] > 0;
     }
 
-    void Drawable::deleteBuffer(bool force, bool skipGL) {
+    void Drawable::deleteBuffer(bool force) {
         if (!this->hasBuffer) return;
         if (this->hasTexture && this->texture->textureId > 0) {
             if (!force && this->texture->referenceCount > 1) {
                 // skip 
             } else {
                 if (engine->hasDisplay()) {
-                    if (!skipGL) glDeleteTextures(1, &this->texture->textureId);
+                    glDeleteTextures(1, &this->texture->textureId);
                 }
                 this->texture->textureId = 0;
                 this->texture->loaded    = false;
@@ -217,7 +217,7 @@ namespace emo {
         for (int i = 0; i < this->frameCount; i++) {
             if (this->frames_vbos[i] > 0) {
                 if (engine->hasDisplay()) {
-                    if (!skipGL) glDeleteBuffers(1, &this->frames_vbos[i]);
+                    glDeleteBuffers(1, &this->frames_vbos[i]);
                 }
                 this->frames_vbos[i] = 0;
             }
@@ -583,8 +583,8 @@ namespace emo {
         this->unbindMeshVertex();
     }
 
-    void MapDrawable::deleteBuffer(bool force, bool skipGL) {
-        Drawable::deleteBuffer(force, skipGL);
+    void MapDrawable::deleteBuffer(bool force) {
+        Drawable::deleteBuffer(force);
         this->unbindMeshVertex();
     }
 

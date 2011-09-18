@@ -115,10 +115,10 @@ namespace emo {
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    void Stage::deleteBuffer(bool skipGL) {
+    void Stage::deleteBuffer() {
         if (!this->loaded) return;
 
-        if (engine->hasDisplay() && !skipGL) {
+        if (engine->hasDisplay()) {
             glDeleteBuffers(2, this->vbo);
         }
         this->loaded = false;

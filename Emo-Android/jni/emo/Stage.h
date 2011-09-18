@@ -38,7 +38,7 @@ namespace emo {
         ~Stage();
         bool onLoad();
         void onDrawFrame();
-        void deleteBuffer(bool skipGL);
+        void deleteBuffer();
         void rebindBuffer();
         void setSizeAndView(int width, int height);
         void setBufferSize(int width, int height);

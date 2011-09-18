@@ -410,7 +410,7 @@ namespace emo {
             this->sqvm = NULL;
 
             this->unloadDrawables();
-            this->stage->deleteBuffer(false);
+            this->stage->deleteBuffer();
 
             this->loaded = false;
         }
@@ -579,7 +579,7 @@ namespace emo {
 
             if (this->loaded) {
                 this->deleteDrawableBuffers();
-                this->stage->deleteBuffer(true);
+                this->stage->deleteBuffer();
             }
 
             eglMakeCurrent(this->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
@@ -786,7 +786,7 @@ namespace emo {
         drawables_t::iterator iter;
         for(iter = this->drawables->begin(); iter != this->drawables->end(); iter++) {
             Drawable* drawable = iter->second;
-            drawable->deleteBuffer(true, true);
+            drawable->deleteBuffer(true);
         }
     }
 
