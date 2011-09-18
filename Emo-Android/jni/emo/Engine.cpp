@@ -418,6 +418,7 @@ namespace emo {
 
     void Engine::onGainedFocus() {
         if (!this->loaded) return;
+        if (this->focused) return;
 
         this->focused = true;
 
@@ -428,6 +429,7 @@ namespace emo {
 
     void Engine::onLostFocus() {
         if (!this->loaded) return;
+        if (!this->focused) return;
 
         this->focused = false;
 
@@ -647,7 +649,7 @@ namespace emo {
         eglSwapBuffers(this->display, this->surface);
 
         if (this->finishing) {
-            this->animating = false;
+            this->onLostFocus();
             ANativeActivity_finish(this->app->activity);
         }
     }
