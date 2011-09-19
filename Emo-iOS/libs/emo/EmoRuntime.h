@@ -87,3 +87,5 @@ SQInteger emoEnableOnFpsCallback(HSQUIRRELVM v);
 SQInteger emoDisableOnFpsCallback(HSQUIRRELVM v);
 SQInteger emoEnableSimpleLog(HSQUIRRELVM v);
 SQInteger emoEnableSimpleLogWithLevel(HSQUIRRELVM v);
+SQInteger emoRuntimeRandom(HSQUIRRELVM v);
+

@@ -795,7 +795,7 @@ SQInteger emoRuntimeRandom(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 
     SQInteger max = INT_MAX;
-    if (nargs <= 2 && sq_gettype(v, 2) != OT_INTEGER) {
+    if (nargs <= 2 && sq_gettype(v, 2) == OT_INTEGER) {
         sq_getinteger(v, 2, &max);
     }
 
