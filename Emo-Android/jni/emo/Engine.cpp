@@ -650,6 +650,7 @@ namespace emo {
 
         if (this->finishing) {
             this->onLostFocus();
+            this->onTerminateDisplay();
             ANativeActivity_finish(this->app->activity);
         }
     }
