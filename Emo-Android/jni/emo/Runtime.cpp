@@ -794,7 +794,7 @@ SQInteger emoEnableSimpleLogWithLevel(HSQUIRRELVM v) {
 SQInteger emoRuntimeRandom(HSQUIRRELVM v) {
     SQInteger nargs = sq_gettop(v);
 
-    SQInteger max = INT_MAX;
+    SQInteger max = RAND_MAX;
     if (nargs <= 2 && sq_gettype(v, 2) == OT_INTEGER) {
         sq_getinteger(v, 2, &max);
     }
