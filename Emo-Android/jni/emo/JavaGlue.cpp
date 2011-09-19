@@ -208,6 +208,23 @@ namespace emo {
         return value;
     }
 
+    /*  
+     * Call java method with int parameter that returns int.
+     */  
+    jint JavaGlue::callInt_Int(std::string methodName, jint passValue) {
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, methodName.c_str(), "(I)I");
+        jint value = env->CallIntMethod(engine->app->activity->clazz, methodj, passValue);
+        vm->DetachCurrentThread();
+
+        return value;
+    }   
+
     /*
      * Call java method with one string parameter that returns string.
      */

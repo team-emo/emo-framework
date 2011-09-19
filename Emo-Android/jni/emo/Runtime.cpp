@@ -85,6 +85,7 @@ void initRuntimeFunctions() {
 
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "enableSimpleLog",          emoEnableSimpleLog);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "enableSimpleLogWithLevel", emoEnableSimpleLogWithLevel);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "random", emoRuntimeRandom);
 }
 
 int32_t app_handle_input(struct android_app* app, AInputEvent* event) {
@@ -786,3 +787,18 @@ SQInteger emoEnableSimpleLogWithLevel(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * Returns a integer value with a positive sign,
+ * greater than or equal to 0.0 and less than max.
+ */
+SQInteger emoRuntimeRandom(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+
+    SQInteger max = INT_MAX;
+    if (nargs <= 2 && sq_gettype(v, 2) != OT_INTEGER) {
+        sq_getinteger(v, 2, &max);
+    }
+
+    sq_pushinteger(v, engine->javaGlue->callInt_Int("random", max));
+    return 1;
+}

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,6 +37,23 @@ public class EmoActivity extends NativeActivity {
 
     protected String lastErrorMessage;
     protected String lastErrorCode;
+
+    private static Random randomNumberGenerator;
+    
+    private static synchronized Random initRNG() {
+        Random rnd = randomNumberGenerator;
+        return (rnd == null) ? (randomNumberGenerator = new Random()) : rnd;
+    }
+
+    /*
+     * Returns a pseudorandom, uniformly distributed int value between 0 (inclusive) 
+     * and the specified max value (exclusive), drawn from this random number generator's sequence.
+     */
+    public int random(int max) {
+        Random rnd = randomNumberGenerator;
+        if (rnd == null) rnd = initRNG();
+        return rnd.nextInt(max);
+    }
     
     public String echo(String str) {
         callback(ECHO, str, "", "");
