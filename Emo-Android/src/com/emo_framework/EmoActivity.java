@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Vibrator;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -75,6 +76,14 @@ public class EmoActivity extends NativeActivity {
 
     public String getDataFilePath(String name) {
         return getFilesDir() + File.separator + name;
+    }
+    
+    public void toast(final String text, final int duration) {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				Toast.makeText(EmoActivity.this, text, duration).show();
+			}
+		});
     }
 
     public void asyncHttpRequest(final String name, final int timeout, final String... params) {
