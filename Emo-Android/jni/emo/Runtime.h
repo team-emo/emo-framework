@@ -87,4 +87,5 @@ SQInteger emoEnableSimpleLog(HSQUIRRELVM v);
 SQInteger emoEnableSimpleLogWithLevel(HSQUIRRELVM v);
 SQInteger emoRuntimeNativeRandom(HSQUIRRELVM v);
 SQInteger emoRuntimeRandom(HSQUIRRELVM v);
+SQInteger emoRuntimeAndroidToast(HSQUIRRELVM v);
 #endif

@@ -53,6 +53,7 @@
 #define EMO_PREFERENCE_CLASS "Preference"
 #define EMO_STOPWATCH_CLASS "Stopwatch"
 #define EMO_PHYSICS_CLASS "Physics"
+#define EMO_ANDROID_CLASS "Android"
 
 #define EMO_FUNC_ONLOAD         "_onLoad"
 #define EMO_FUNC_ONGAINED_FOUCS "_onGainedFocus"
@@ -206,4 +207,7 @@
 
 #define TYPE_ASSET    0
 #define TYPE_DOCUMENT 1
+
+#define ANDROID_TOAST_SHORT 0x00000001
+#define ANDROID_TOAST_LONG  0x00000000
 #endif

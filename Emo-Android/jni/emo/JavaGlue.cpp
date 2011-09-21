@@ -264,6 +264,21 @@ namespace emo {
         vm->DetachCurrentThread();
     }
 
+    /*
+     * Call java method with (string,int) parameter that returns void.
+     */
+    void JavaGlue::callStringInt_Void(std::string methodName, std::string value1, jint value2) {
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, methodName.c_str(), "(Ljava/lang/String;I)V");
+        env->CallVoidMethod(engine->app->activity->clazz, methodj, env->NewStringUTF(value1.c_str()), value2);
+        vm->DetachCurrentThread();
+    }
+
     std::string JavaGlue::getDataFilePath(std::string name) {
         return this->callString_String("getDataFilePath", name);
     }

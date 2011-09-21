@@ -56,6 +56,7 @@ namespace emo {
         jint callInt_Int(std::string methodName, jint passValue);
         std::string callString_String(std::string methodName, std::string passValue);
         void callTwoString_Void(std::string methodName, std::string value1, std::string value2);
+        void callStringInt_Void(std::string methodName, std::string value1, jint value2);
         void setOrientationLandscape();
         void setOrientationPortrait();
         std::string getDeviceName();

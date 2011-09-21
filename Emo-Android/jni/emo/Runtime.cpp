@@ -47,6 +47,7 @@ void initRuntimeFunctions() {
     registerClass(engine->sqvm, EMO_RUNTIME_CLASS);
     registerClass(engine->sqvm, EMO_EVENT_CLASS);
     registerClass(engine->sqvm, EMO_STOPWATCH_CLASS);
+    registerClass(engine->sqvm, EMO_ANDROID_CLASS);
 
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
@@ -87,6 +88,8 @@ void initRuntimeFunctions() {
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "enableSimpleLogWithLevel", emoEnableSimpleLogWithLevel);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "nativeRandom", emoRuntimeNativeRandom);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "random",       emoRuntimeRandom);
+
+    registerClassFunc(engine->sqvm, EMO_ANDROID_CLASS,   "toast",        emoRuntimeAndroidToast);
 }
 
 int32_t app_handle_input(struct android_app* app, AInputEvent* event) {
@@ -820,4 +823,27 @@ SQInteger emoRuntimeRandom(HSQUIRRELVM v) {
 
     sq_pushinteger(v, rand() % max);
     return 1;
+}
+
+/*
+ * Shows Android toast message
+ */
+SQInteger emoRuntimeAndroidToast(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+
+    const SQChar* text;
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &text);
+        sq_poptop(v);
+    }
+
+    SQInteger duration = ANDROID_TOAST_SHORT;
+    if (nargs <= 3 && sq_gettype(v, 3) == OT_INTEGER) {
+        sq_getinteger(v, 3, &duration);
+    }
+
+    engine->javaGlue->callStringInt_Void("toast", text, duration);
+
+    return 0;
 }
