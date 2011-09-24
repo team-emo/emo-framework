@@ -40,6 +40,7 @@ extern EmoEngine* engine;
 @synthesize name;
 @synthesize start, count, loop, interval;
 @synthesize lastOnAnimationInterval;
+@synthesize frames;
 - (id)init {
     self = [super init];
     if (self != nil) {
@@ -50,12 +51,25 @@ extern EmoEngine* engine;
         currentLoopCount = 0;
         currentCount = 0;
         lastOnAnimationInterval = [engine uptime];
+        frames = nil;
     }
     return self;
 }
 
 -(BOOL)isFinished {
 	return (loop >= 0 && currentLoopCount > loop);
+}
+
+-(void)initializeFrames {
+    if (frames != nil) free(frames);
+    frames = (NSInteger *)malloc(sizeof(NSInteger) * count);
+    for (int i = 0; i < count; i++) {
+        frames[i] = 0;
+    }
+}
+
+-(void)setFrame:(NSInteger)index withValue:(NSInteger)value {
+    frames[index] = value;
 }
 
 -(NSInteger)getNextIndex:(NSInteger)frameCount withIndex:(NSInteger)currentIndex {
@@ -79,24 +93,25 @@ extern EmoEngine* engine;
 		currentCount = 0;
 	}
 	
-	int nextIndex = currentCount + start;
-	
-	return nextIndex;
+    if (frames != nil) {
+        return frames[currentCount];
+    } else {
+        return currentCount + start;
+	}
 }
 -(NSTimeInterval)getLastOnAnimationDelta:(NSTimeInterval)uptime {
 	return (uptime - lastOnAnimationInterval) * 1000;
 }
--(void)garbage {
+-(void)dealloc {
 	[name release];
 	name = nil;
-}
--(void)dealloc {
-	[self garbage];
+    
+    if (frames != nil) free(frames);
+    
 	[super dealloc];
 }
 
 @end
-
 
 @interface EmoDrawable (PrivateMethods)
 -(NSInteger)tex_coord_frame_startX;

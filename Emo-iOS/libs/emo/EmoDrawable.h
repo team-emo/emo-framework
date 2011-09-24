@@ -40,6 +40,8 @@
 	NSInteger   currentCount;
 	
 	NSTimeInterval lastOnAnimationInterval;
+    
+    NSInteger*  frames;
 }
 @property (copy, readwrite) NSString* name;
 @property (readwrite)NSInteger start;
@@ -47,9 +49,12 @@
 @property (readwrite)NSInteger loop;
 @property (readwrite)NSInteger interval;
 @property (readwrite)NSTimeInterval lastOnAnimationInterval;
+@property (readonly) NSInteger* frames;
 
 -(NSInteger)getNextIndex:(NSInteger)frameCount withIndex:(NSInteger)currentIndex;
 -(NSTimeInterval)getLastOnAnimationDelta:(NSTimeInterval)uptime;
+-(void)initializeFrames;
+-(void)setFrame:(NSInteger)index withValue:(NSInteger)value;
 @end
 
 @interface EmoDrawable : NSObject {
