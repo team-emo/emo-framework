@@ -18,6 +18,7 @@ JOINT_TYPE_REVOLUTE  <-  1;
 JOINT_TYPE_PRISMATIC <-  2;
 JOINT_TYPE_DISTANCE  <-  3;
 JOINT_TYPE_PULLEY    <-  4;
+JOINT_TYPE_MOUSE     <-  5;
 JOINT_TYPE_GEAR      <-  6;
 JOINT_TYPE_LINE      <-  7;
 JOINT_TYPE_WELD      <-  8;
@@ -37,6 +38,7 @@ class emo.physics.World {
     physics = emo.Physics();
     scale   = null;
     sprites = null;
+    groundBody = null;
     function constructor(gravity, doSleep) {
         id = physics.newWorld(gravity, doSleep);
         scale = PTM_RATIO;
@@ -63,7 +65,11 @@ class emo.physics.World {
     function getScale() {
         return scale;
     }
-    
+
+    function getWorldCoord(x, y) {
+        return emo.Vec2(x.tofloat() / scale.tofloat(), y.tofloat() / scale.tofloat());
+    }
+
     function addPhysicsObject(pSprite) {
         sprites.append(pSprite);
     }
@@ -79,6 +85,13 @@ class emo.physics.World {
     
     function destroyBody(body) {
         return physics.destroyBody(id, body.id);
+    }
+
+    function getGroundBody() {
+        if (groundBody == null) {
+            groundBody = emo.physics.Body(physics.createGroundBody(id));
+        }
+        return groundBody;
     }
     
     function createJoint(jointdef) {
@@ -107,6 +120,9 @@ class emo.physics.World {
             break;
         case JOINT_TYPE_WELD:
             return emo.physics.WeldJoint(physics.createJoint(id, jointdef.id));
+            break;
+        case JOINT_TYPE_MOUSE:
+            return emo.physics.MouseJoint(physics.createJoint(id, jointdef.id));
             break;
         }
     }
@@ -578,6 +594,36 @@ class emo.physics.WeldJoint extends emo.physics.Joint {
         type = JOINT_TYPE_WELD;
     }
 }
+class emo.physics.MouseJoint extends emo.physics.Joint {
+    function constructor(_id) {
+        id = _id;
+        type = JOINT_TYPE_MOUSE;
+    }
+    function getTarget() {
+        return physics.joint_getTarget(id);
+    }
+    function setTarget(target) {
+        return physics.joint_setTarget(id, target);
+    }
+    function setMaxForce(force) {
+        return physics.joint_setMaxForce(id, force);
+    }
+    function getMaxForce() {
+        return physics.joint_getMaxForce(id);
+    }
+    function setFrequency(hz) {
+        return physics.joint_setFrequency(id, hz);
+    }
+    function getFrequency() {
+        return physics.joint_getFrequency(id);
+    }
+    function setDampingRatio(ratio) {
+        return physics.joint_setDampingRatio(id, ratio);
+    }
+    function getDampingRatio() {
+        return physics.joint_getDampingRatio(id);
+    }
+}
 class emo.physics.JointDef {
     id       = null;
     type     = null;
@@ -687,7 +733,17 @@ class emo.physics.WeldJointDef extends emo.physics.JointDef {
         return physics.initWeldJointDef(id, bodyA.id, bodyB.id, anchor);
     }
 }
+class emo.physics.MouseJointDef extends emo.physics.JointDef {
+    type = JOINT_TYPE_MOUSE;
+    target       = null;
+    maxForce     = null;
+    frequencyHz  = null;
+    dampingRatio = null;
 
+    function constructor() {
+        id = physics.newJointDef(type);
+    }
+}
 class emo.physics.PolygonShape {
     id      = null;
     physics = emo.Physics();

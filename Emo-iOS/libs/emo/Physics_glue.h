@@ -30,6 +30,7 @@
 SQInteger emoPhysicsNewWorld(HSQUIRRELVM v);
 SQInteger emoPhysicsNewShape(HSQUIRRELVM v);
 SQInteger emoPhysicsCreateBody(HSQUIRRELVM v);
+SQInteger emoPhysicsCreateGroundBody(HSQUIRRELVM v);
 SQInteger emoPhysicsDestroyBody(HSQUIRRELVM v);
 SQInteger emoPhysicsCreateJoint(HSQUIRRELVM v);
 SQInteger emoPhysicsDestroyJoint(HSQUIRRELVM v);
@@ -125,6 +126,8 @@ SQInteger emoPhysicsJoint_GetGroundAnchorA(HSQUIRRELVM v);
 SQInteger emoPhysicsJoint_GetGroundAnchorB(HSQUIRRELVM v);
 SQInteger emoPhysicsJoint_GetLength1(HSQUIRRELVM v);
 SQInteger emoPhysicsJoint_GetLength2(HSQUIRRELVM v);
+SQInteger emoPhysicsJoint_GetTarget(HSQUIRRELVM v);
+SQInteger emoPhysicsJoint_SetTarget(HSQUIRRELVM v);
 SQInteger emoPhysicsJointDef_Update(HSQUIRRELVM v);
 SQInteger emoPhysicsInitDistanceJointDef(HSQUIRRELVM v);
 SQInteger emoPhysicsInitFrictionJointDef(HSQUIRRELVM v);

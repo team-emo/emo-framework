@@ -90,6 +90,7 @@
 						  [NSArray arrayWithObjects:@"Using GearJoint",     @"physics_gearjoint.nut", nil],
 						  [NSArray arrayWithObjects:@"Using LineJoint",     @"physics_linejoint.nut", nil],
 						  [NSArray arrayWithObjects:@"Using WeldJoint",     @"physics_weldjoint.nut", nil],
+						  [NSArray arrayWithObjects:@"Using MouseJoint",    @"physics_mousejoint.nut", nil],
 						  nil]];
 	// Using Transitions
 	[examples addObject: [NSArray arrayWithObjects:

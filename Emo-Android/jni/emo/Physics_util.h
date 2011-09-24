@@ -38,3 +38,4 @@ void getPrismaticJointDef(HSQUIRRELVM v, int idx, b2PrismaticJointDef* def);
 void getPulleyJointDef(HSQUIRRELVM v, int idx, b2PulleyJointDef* def);
 void getRevoluteJointDef(HSQUIRRELVM v, int idx, b2RevoluteJointDef* def);
 void getWeldJointDef(HSQUIRRELVM v, int idx, b2WeldJointDef* def);
+void getMouseJointDef(HSQUIRRELVM v, int idx, b2MouseJointDef* def);

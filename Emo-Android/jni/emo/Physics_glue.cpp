@@ -27,6 +27,7 @@
 // 
 #include "Box2D/Box2D.h"
 #include "squirrel.h"
+
 #include "Physics_glue.h"
 #include "Constants.h"
 #include "VmFunc.h"
@@ -58,7 +59,7 @@ static SQInteger b2JointDefReleaseHook(SQUserPointer ptr, SQInteger size) {
 	delete reinterpret_cast<b2JointDef*>(ptr);
 	return 0;
 }
-
+	
 /*
  * create new physics world
  *
@@ -109,6 +110,26 @@ SQInteger emoPhysicsCreateBody(HSQUIRRELVM v) {
 	b2BodyDef def;
 	getBodyDefInstance(v, 3, &def);
 	
+	sq_pushuserpointer(v, world->CreateBody(&def));
+	
+	return 1;
+}
+
+/*
+ * create new physics ground body
+ *
+ * @param instance of physics world
+ * @return pointer of physics body
+ */
+SQInteger emoPhysicsCreateGroundBody(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+	if (nargs < 2 || sq_gettype(v, 2) != OT_INSTANCE) {
+		return 0;
+	}
+	b2World* world = NULL;
+	sq_getinstanceup(v, 2, (SQUserPointer*)&world, 0);
+	
+	b2BodyDef def;
 	sq_pushuserpointer(v, world->CreateBody(&def));
 	
 	return 1;
@@ -656,7 +677,7 @@ SQInteger emoPhysicsPolygonShape_SetAsEdge(HSQUIRRELVM v) {
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
-
+    
 /*
  * call b2PolygonShape->GetVertex
  * 
@@ -794,7 +815,7 @@ SQInteger emoPhysicsBody_GetLocalCenter(HSQUIRRELVM v) {
 	
 	return 1;
 }
-
+    
 /*
  * Set the linear velocity of the center of mass
  * 
@@ -1633,7 +1654,7 @@ SQInteger emoPhysicsJoint_GetReactionForce(HSQUIRRELVM v) {
 }
 
 /*
- * kkcall b2Joint->GetReactionTorque
+ * call b2Joint->GetReactionTorque
  *
  * @param pointer of b2Joint
  * @param timestep
@@ -1708,13 +1729,19 @@ SQInteger emoPhysicsJoint_SetFrequency(HSQUIRRELVM v) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
-	b2DistanceJoint* joint = NULL;
+	b2Joint* joint = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
 	
 	SQFloat value;
 	sq_getfloat(v, 3, &value);
 	
-	joint->SetFrequency(value);
+	if (joint->GetType() == e_distanceJoint) {
+		b2DistanceJoint* _joint = reinterpret_cast<b2DistanceJoint*>(joint);
+        _joint->SetFrequency(value);
+    } else if (joint->GetType() == e_mouseJoint) {
+		b2MouseJoint* _joint = reinterpret_cast<b2MouseJoint*>(joint);
+        _joint->SetFrequency(value);
+    }
 	
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
@@ -1730,10 +1757,16 @@ SQInteger emoPhysicsJoint_GetFrequency(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
 	}
-	b2DistanceJoint* joint = NULL;
+	b2Joint* joint = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
 	
-	sq_pushfloat(v, joint->GetFrequency());
+	if (joint->GetType() == e_distanceJoint) {
+		b2DistanceJoint* _joint = reinterpret_cast<b2DistanceJoint*>(joint);
+        sq_pushfloat(v, _joint->GetFrequency());
+    } else if (joint->GetType() == e_mouseJoint) {
+		b2MouseJoint* _joint = reinterpret_cast<b2MouseJoint*>(joint);
+        sq_pushfloat(v, _joint->GetFrequency());
+    }
 	
 	return 1;
 }
@@ -1750,13 +1783,19 @@ SQInteger emoPhysicsJoint_SetDampingRatio(HSQUIRRELVM v) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
-	b2DistanceJoint* joint = NULL;
+	b2Joint* joint = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
 	
 	SQFloat value;
 	sq_getfloat(v, 3, &value);
 	
-	joint->SetDampingRatio(value);
+	if (joint->GetType() == e_distanceJoint) {
+		b2DistanceJoint* _joint = reinterpret_cast<b2DistanceJoint*>(joint);
+        _joint->SetDampingRatio(value);
+    } else if (joint->GetType() == e_mouseJoint) {
+		b2MouseJoint* _joint = reinterpret_cast<b2MouseJoint*>(joint);
+        _joint->SetDampingRatio(value);
+    }
 	
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
@@ -1772,10 +1811,16 @@ SQInteger emoPhysicsJoint_GetDampingRatio(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
 	}
-	b2DistanceJoint* joint = NULL;
+	b2Joint* joint = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
 	
-	sq_pushfloat(v, joint->GetDampingRatio());
+	if (joint->GetType() == e_distanceJoint) {
+		b2DistanceJoint* _joint = reinterpret_cast<b2DistanceJoint*>(joint);
+        sq_pushfloat(v, _joint->GetDampingRatio());
+    } else if (joint->GetType() == e_mouseJoint) {
+		b2MouseJoint* _joint = reinterpret_cast<b2MouseJoint*>(joint);
+        sq_pushfloat(v, _joint->GetDampingRatio());
+    }
 	
 	return 1;
 }
@@ -1792,14 +1837,20 @@ SQInteger emoPhysicsJoint_SetMaxForce(HSQUIRRELVM v) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
-	b2FrictionJoint* joint = NULL;
+	b2Joint* joint = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
 	
 	SQFloat value;
 	sq_getfloat(v, 3, &value);
 	
-	joint->SetMaxForce(value);
-	
+	if (joint->GetType() == e_frictionJoint) {
+		b2FrictionJoint* _joint = reinterpret_cast<b2FrictionJoint*>(joint);
+        _joint->SetMaxForce(value);
+	} else if (joint->GetType() == e_mouseJoint) {
+		b2MouseJoint* _joint = reinterpret_cast<b2MouseJoint*>(joint);
+        _joint->SetMaxForce(value);
+	}
+    
 	sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }
@@ -1814,10 +1865,16 @@ SQInteger emoPhysicsJoint_GetMaxForce(HSQUIRRELVM v) {
 	if (sq_gettype(v, 2) != OT_USERPOINTER) {
 		return 0;
 	}
-	b2FrictionJoint* joint = NULL;
+	b2Joint* joint = NULL;
 	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
 	
-	sq_pushfloat(v, joint->GetMaxForce());
+	if (joint->GetType() == e_frictionJoint) {
+		b2FrictionJoint* _joint = reinterpret_cast<b2FrictionJoint*>(joint);
+        sq_pushfloat(v, _joint->GetMaxForce());
+    } else 	if (joint->GetType() == e_mouseJoint) {
+		b2MouseJoint* _joint = reinterpret_cast<b2MouseJoint*>(joint);
+        sq_pushfloat(v, _joint->GetMaxForce());
+    }
 	
 	return 1;
 }
@@ -2352,6 +2409,7 @@ SQInteger emoPhysicsJoint_GetGroundAnchorA(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
 /*
  * call b2PulleyJoint->GetGroundAnchorB
  *
@@ -2387,6 +2445,7 @@ SQInteger emoPhysicsJoint_GetLength1(HSQUIRRELVM v) {
 	
 	return 1;
 }
+
 /*
  * call b2PulleyJoint->GetLength2
  *
@@ -2401,6 +2460,47 @@ SQInteger emoPhysicsJoint_GetLength2(HSQUIRRELVM v) {
 	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
 	
 	sq_pushfloat(v, joint->GetLength2());
+	
+	return 1;
+}
+
+/*
+ * call b2MouseJoint->SetTarget
+ *
+ * @param pointer of b2MouoseJoint
+ * @param target vector
+ * @return EMO_NO_ERROR if succeeds
+ */
+SQInteger emoPhysicsJoint_SetTarget(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2MouseJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	b2Vec2 value;
+	getVec2Instance(v, 3, &value);
+    
+    joint->SetTarget(value);
+	
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+
+/*
+ * call b2MouseJoint->GetTarget
+ *
+ * @param pointer of b2MouoseJoint
+ * @return target vector
+ */
+SQInteger emoPhysicsJoint_GetTarget(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2MouseJoint* joint = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&joint);
+	
+	pushVec2(v, joint->GetTarget());
 	
 	return 1;
 }
@@ -2443,6 +2543,9 @@ SQInteger emoPhysicsJointDef_Update(HSQUIRRELVM v) {
 			break;
 		case e_weldJoint:
 			getWeldJointDef(v, 3, reinterpret_cast<b2WeldJointDef*> (def));
+			break;
+		case e_mouseJoint:
+			getMouseJointDef(v, 3, reinterpret_cast<b2MouseJointDef*> (def));
 			break;
 		default:
 			sq_pushinteger(v, ERR_INVALID_PARAM);
@@ -2645,8 +2748,10 @@ SQInteger emoPhysicsInitPulleyJointDef(HSQUIRRELVM v) {
 	getVec2Instance(v, 7, &anchorA);
 	getVec2Instance(v, 8, &anchorB);
 	
-	SQFloat ratio;
+	SQFloat ratio = 0;
 	sq_getfloat(v, 9, &ratio);
+	
+	if (ratio <= 0) ratio = 1.0;
 	
 	def->Initialize(bodyA, bodyB, gAnchorA, gAnchorB, anchorA, anchorB, ratio);
 	

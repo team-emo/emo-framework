@@ -75,7 +75,8 @@ public class Launcher extends ExpandableListActivity {
 			"Using PulleyJoint",
 			"Using GearJoint",
 			"Using LineJoint",
-			"Using WeldJoint"
+			"Using WeldJoint",
+			"Using MouseJoint"
 		},
 		{
 			"Fade In/Out",
@@ -136,7 +137,8 @@ public class Launcher extends ExpandableListActivity {
 			".PhysicsPulleyJointExample",
 			".PhysicsGearJointExample",
 			".PhysicsLineJointExample",
-			".PhysicsWeldJointExample"
+			".PhysicsWeldJointExample",
+			".PhysicsMouseJointExample"
 		},
 		{
 			".TransitionFadeExample",

@@ -37,6 +37,7 @@ void initPhysicsFunctions() {
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "newWorld",      emoPhysicsNewWorld);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "newShape",      emoPhysicsNewShape);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "createBody",    emoPhysicsCreateBody);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "createGroundBody", emoPhysicsCreateGroundBody);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "destroyBody",   emoPhysicsDestroyBody);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "createJoint",   emoPhysicsCreateJoint);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "destroyJoint",  emoPhysicsDestroyJoint);
@@ -131,6 +132,8 @@ void initPhysicsFunctions() {
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getGroundAnchorB",   emoPhysicsJoint_GetGroundAnchorB);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getLength1",   emoPhysicsJoint_GetLength1);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getLength2",   emoPhysicsJoint_GetLength2);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_setTarget",    emoPhysicsJoint_SetTarget);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getTarget",    emoPhysicsJoint_GetTarget);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "updateJointDef",     emoPhysicsJointDef_Update);
 	registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "initDistanceJointDef",     emoPhysicsInitDistanceJointDef);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "initFrictionJointDef",     emoPhysicsInitFrictionJointDef);

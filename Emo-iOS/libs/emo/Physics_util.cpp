@@ -208,6 +208,29 @@ void getRevoluteJointDef(HSQUIRRELVM v, int idx, b2RevoluteJointDef* def) {
 void getWeldJointDef(HSQUIRRELVM v, int idx, b2WeldJointDef* def) {
 	// no item to convert
 }
+
+/*
+ * Get b2MouseJointDef from emo.MouseJointDef instance
+ */
+void getMouseJointDef(HSQUIRRELVM v, int idx, b2MouseJointDef* def) {
+	getInstanceMemberAsFloat(v, idx, "maxForce",     &def->maxForce);
+	getInstanceMemberAsFloat(v, idx, "frequencyHz",  &def->frequencyHz);
+	getInstanceMemberAsFloat(v, idx, "dampingRatio", &def->dampingRatio);
+	getInstanceMemberAsBool(v, idx,  "collideConnected", &def->collideConnected);
+	
+	getVec2InstanceFromMember(v, idx, "target",  &def->target);
+
+	SQUserPointer ptr_bodyA;
+	if (getInstanceMemberAsUserPointer(v, idx, "bodyA", "id", &ptr_bodyA)) {
+		def->bodyA = reinterpret_cast<b2Body*>(ptr_bodyA);
+	}
+	
+	SQUserPointer ptr_bodyB;
+	if (getInstanceMemberAsUserPointer(v, idx, "bodyB", "id", &ptr_bodyB)) {
+		def->bodyB = reinterpret_cast<b2Body*>(ptr_bodyB); 
+	}
+}
+
 #if __cplusplus
 }   // Extern C
 #endif
