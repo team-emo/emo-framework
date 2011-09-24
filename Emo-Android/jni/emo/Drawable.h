@@ -50,6 +50,8 @@ namespace emo {
         int   loop;
         int32_t interval;
 
+        int*  frames;
+
         int   currentLoopCount;
         int   currentCount;
 
@@ -59,6 +61,8 @@ namespace emo {
         int getNextIndex(int frameCount, int currentIndex);
 
         bool isFinished();
+        void initializeFrames();
+        void setFrame(int index, int value);
     };
 
     typedef std::hash_map <std::string, emo::AnimationFrame *> animations_t;

@@ -49,10 +49,23 @@ namespace emo {
         this->currentLoopCount = 0;
         this->currentCount = 0;
         this->lastOnAnimationInterval = engine->uptime;
+        this->frames = NULL;
     }
 
     AnimationFrame::~AnimationFrame() {
+        if (this->frames != NULL) delete[] this->frames;
+    }
 
+    void AnimationFrame::initializeFrames() {
+        if (this->frames != NULL) delete[] this->frames;
+        this->frames = new int[this->count];
+        for (int i = 0; i < this->count; i++) {
+            this->frames[i] = 0;
+        }
+    }
+
+    void AnimationFrame::setFrame(int index, int value) {
+        this->frames[index] = value;
     }
 
     int32_t AnimationFrame::getLastOnAnimationDelta() {
@@ -62,7 +75,6 @@ namespace emo {
         return (deltaSec * 1000) + deltaMsec;
     }
     
-
     bool AnimationFrame::isFinished() {
         return (this->loop >= 0 && this->currentLoopCount > this->loop);
     }
@@ -88,9 +100,11 @@ namespace emo {
             currentCount = 0;
         }
 
-        int nextIndex = this->currentCount + this->start;
-
-        return nextIndex;
+        if (this->frames != NULL) {
+            return this->frames[this->currentCount];
+        } else {
+            return this->currentCount + this->start;
+        }
     }
 
 
@@ -554,6 +568,7 @@ namespace emo {
                 this->currentAnimation = animation;
                 engine->updateUptime();
                 animation->lastOnAnimationInterval = engine->uptime;
+                this->setFrameIndex(animation->start);
             }
         }
         return true;
