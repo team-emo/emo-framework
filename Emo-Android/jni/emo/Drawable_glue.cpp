@@ -1960,7 +1960,7 @@ SQInteger emoDrawableAnimate(HSQUIRRELVM v) {
     SQInteger interval = 0;
     SQInteger loop  = 0;
     
-    if (nargs >= 3 && sq_gettype(v, 3) == OT_INTEGER) {
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL && sq_gettype(v, 3) != OT_ARRAY) {
         sq_getinteger(v, 3, &start);
     }
     if (nargs >= 4 && sq_gettype(v, 4) != OT_NULL) {
