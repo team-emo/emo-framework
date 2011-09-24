@@ -516,6 +516,7 @@ extern EmoEngine* engine;
 		} else {
 			currentAnimation = animation;
 			animation.lastOnAnimationInterval = [engine uptime];
+			[self setFrameIndex:animation.start];
 		}
 	}
 	return TRUE;
