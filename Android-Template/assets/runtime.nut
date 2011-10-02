@@ -294,8 +294,8 @@ function emo::Event::removeMotionListener(listener) {
 }
 
 function emo::Stage::setContentScale(scale) {
-    EMO_STAGE_CONTENT_SCALE = scale.tofloat();
-    ortho(getWindowWidth() / EMO_STAGE_CONTENT_SCALE, getWindowHeight() / EMO_STAGE_CONTENT_SCALE);
+    EMO_STAGE_CONTENT_SCALE = EMO_STAGE_CONTENT_SCALE * scale.tofloat();
+    ortho(getWindowWidth() / scale.tofloat(), getWindowHeight() / scale.tofloat());
 }
 
 function emo::Stage::getContentScale() {
