@@ -1267,7 +1267,9 @@ class emo.Sprite {
         return name;
     }
     
-    function addModifier(modifier) {
+    function addModifier(modifier, startTime = null) {
+        if (startTime != null) modifier.startTime = startTime;
+
         modifier.setObject(this);
         emo.Event().addOnUpdateListener(modifier);
     }
