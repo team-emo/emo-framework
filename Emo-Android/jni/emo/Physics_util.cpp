@@ -26,7 +26,7 @@
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
 #include "Box2D/Box2D.h"
-#include "Squirrel.h"
+#include "squirrel.h"
 
 #include "stdio.h"
 #include "Physics_util.h"
