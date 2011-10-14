@@ -595,7 +595,7 @@ SQInteger emoPhysicsPolygonShape_Set(HSQUIRRELVM v) {
 	b2PolygonShape* shape;
 	sq_getinstanceup(v, 2, (SQUserPointer*)&shape, 0);
 
-	int size = 2; // b2PolygonShape->Set accepts only 2 vertices
+	int size = sq_getsize(v, 3);
 	b2Vec2* vec2 = new b2Vec2[size];
 	
 	for (int i = 0; i < size; i++)
@@ -604,7 +604,7 @@ SQInteger emoPhysicsPolygonShape_Set(HSQUIRRELVM v) {
 		sq_get(v, 3);
 		
 		getVec2Instance(v, sq_gettop(v), &vec2[i]);
-		
+        
 		sq_pop(v, 1);
 	}
 	
