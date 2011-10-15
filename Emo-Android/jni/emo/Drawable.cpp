@@ -165,6 +165,7 @@ namespace emo {
 
         this->animations = new animations_t();
         this->imagepacks = new imagepack_t();
+        this->imagepacks_names = new std::vector<std::string>;
 
         this->useMesh = false;
         this->orthFactorX = 1.0;
@@ -188,6 +189,7 @@ namespace emo {
         }
         delete this->animations;
         delete this->imagepacks;
+        delete this->imagepacks_names;
     }
 
     void Drawable::load() {
@@ -256,12 +258,18 @@ namespace emo {
     }
 
     int Drawable::tex_coord_frame_startX() {
+        if (this->isPackedAtlas) {
+            return this->getImagePack(this->imagepacks_names->at(frame_index))->x;
+        }
         int xcount = (int)round((this->texture->width - (this->margin * 2) + this->border) / (float)(this->frameWidth  + this->border));
         int xindex = this->frame_index % xcount;
         return ((this->border + this->frameWidth) * xindex) + this->margin;
     }
 
     int Drawable::tex_coord_frame_startY() {
+        if (this->isPackedAtlas) {
+            return this->texture->height - this->frameHeight - this->getImagePack(this->imagepacks_names->at(frame_index))->y;
+        }
         int xcount = (int)round((this->texture->width - (this->margin * 2) + this->border) / (float)(this->frameWidth  + this->border));
         int ycount = (int)round((this->texture->height - (this->margin * 2) + this->border) / (float)(this->frameHeight + this->border));
         int yindex = ycount - (this->frame_index / xcount) - 1;
@@ -390,6 +398,14 @@ namespace emo {
         if (this->frameIndexChanged) {
             this->frame_index = nextFrameIndex;
             frameIndexChanged = false;
+
+            if (this->isPackedAtlas) {
+                ImagePackInfo* info = this->getImagePack(this->imagepacks_names->at(this->frame_index));
+                this->width  = info->width;
+                this->height = info->height;
+                this->frameWidth  = info->width;
+                this->frameHeight = info->height;
+            }
         }
 
         engine->updateUptime();
@@ -485,6 +501,7 @@ namespace emo {
         if (index < 0 || this->frameCount <= index) return false;
         this->nextFrameIndex = index;
         this->frameIndexChanged = true;
+
         return true;
     }
 
@@ -529,6 +546,15 @@ namespace emo {
     void Drawable::addImagePack(ImagePackInfo* info) {
         this->deleteImagePack(info->name);
         this->imagepacks->insert(std::make_pair(info->name, info)); 
+        this->imagepacks_names->push_back(info->name);
+    }
+
+    ImagePackInfo* Drawable::getImagePack(std::string name) {
+        imagepack_t::iterator iter = this->imagepacks->find(name);
+        if (iter != this->imagepacks->end()) {
+            return iter->second;
+        }
+        return NULL;
     }
 
     bool Drawable::deleteImagePack(std::string name) {
@@ -550,6 +576,7 @@ namespace emo {
             delete info;
         }
         this->imagepacks->clear();
+        this->imagepacks_names->clear();
     }
 
     void Drawable::addAnimation(AnimationFrame* animation) {

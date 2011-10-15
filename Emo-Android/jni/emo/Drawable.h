@@ -152,6 +152,7 @@ namespace emo {
         bool loadPackedAtlasXml(int initialFrameIndex);
         void addImagePack(ImagePackInfo* info);
         bool deleteImagePack(std::string name);
+        ImagePackInfo* getImagePack(std::string name);
 
         /* 
          * virtual methods for MapDrawable
@@ -205,6 +206,7 @@ namespace emo {
 
         void deleteImagePacks();
         imagepack_t* imagepacks;
+        std::vector<std::string>* imagepacks_names;
     };
 
     class MapDrawable : public Drawable {
