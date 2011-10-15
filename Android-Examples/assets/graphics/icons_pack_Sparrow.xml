@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="icons_pack.png">
+    <!-- Created with TexturePacker -->
+    <!-- http://texturepacker.com -->
+    <!-- $TexturePacker:SmartUpdate:73056414fcd48e0deceeea2a58f9295d$ -->
+    <SubTexture name="A" x="0" y="0" width="64" height="64"/>
+    <SubTexture name="B" x="0" y="64" width="64" height="64"/>
+    <SubTexture name="ball" x="98" y="80" width="29" height="29"/>
+    <SubTexture name="block" x="64" y="50" width="34" height="34"/>
+    <SubTexture name="gear" x="98" y="50" width="30" height="30"/>
+    <SubTexture name="tv" x="64" y="0" width="53" height="50"/>
+</TextureAtlas>

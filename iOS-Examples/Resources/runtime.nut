@@ -1309,7 +1309,7 @@ class emo.Sprite {
 
 class emo.SpriteSheet extends emo.Sprite {
 
-    function constructor(rawname, frameWidth, frameHeight, border = 0, margin = 0, frameIndex = 0) {
+    function constructor(rawname, frameWidth = 1, frameHeight = 1, border = 0, margin = 0, frameIndex = 0) {
         name = base.getResourceName(rawname);
         id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border, margin);
     }
@@ -1341,6 +1341,10 @@ class emo.SpriteSheet extends emo.Sprite {
 
     function setFrame(frameIndex) {
         return pauseAt(frameIndex);
+    }
+
+    function selectFrame(frameName) {
+        return stage.selectFrame(id, frameName);
     }
 
     function stop() {
