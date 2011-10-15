@@ -113,6 +113,74 @@ extern EmoEngine* engine;
 
 @end
 
+@implementation EmoImagePackInfo 
+@synthesize name;
+@synthesize x, y, width, height, index;
+-(void)dealloc {
+    [name release];
+    name = nil;
+    [super dealloc];
+}
+@end
+
+@implementation EmoImagePackParser
+@synthesize drawable;
+@synthesize frameIndex;
+
+- (id)init {
+    self = [super init];
+    if (self != nil) {
+        itemCount  = 0;
+        frameIndex = 0;
+    }
+    return self;
+}
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName
+  namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+    attributes:(NSDictionary *)attributeDict {
+    if ([elementName isEqualToString:@"Imageset"] || [elementName isEqualToString:@"TextureAtlas"]) {
+        for (id key in attributeDict) {
+            if ([key isEqualToString:@"Imagefile"] || [key isEqualToString:@"imagePath"]) {
+                drawable.name = [attributeDict objectForKey:key];
+                break;
+            }
+        }
+    } else if ([elementName isEqualToString:@"Image"] || [elementName isEqualToString:@"SubTexture"]) {
+        EmoImagePackInfo* info = [[EmoImagePackInfo alloc]init];
+        
+        for (id key in attributeDict) {
+            if ([key isEqualToString:@"name"] || [key isEqualToString:@"Name"]) {
+                info.name = [attributeDict objectForKey:key];
+            } else if ([key isEqualToString:@"x"] || [key isEqualToString:@"XPos"]) {
+                info.x = [[attributeDict objectForKey:key] intValue];
+            } else if ([key isEqualToString:@"y"] || [key isEqualToString:@"YPos"]) {
+                info.y = [[attributeDict objectForKey:key] intValue];
+            } else if ([key isEqualToString:@"width"] || [key isEqualToString:@"Width"]) {
+                info.width = [[attributeDict objectForKey:key] intValue];
+            } else if ([key isEqualToString:@"height"] || [key isEqualToString:@"Height"]) {
+                info.height = [[attributeDict objectForKey:key] intValue];
+            }
+        }
+        if ([info.name length] > 0) {
+            info.index = itemCount;
+            if (info.index == frameIndex) {
+                drawable.width  = info.width;
+                drawable.height = info.height;
+                drawable.frameWidth  = info.width;
+                drawable.frameHeight = info.height;
+                drawable.margin = 0;
+                drawable.border = 0;
+            }
+            [drawable addImagePack:info];
+            [info release];
+            itemCount++;
+        }
+    }
+}
+
+@end
+
 @interface EmoDrawable (PrivateMethods)
 -(NSInteger)tex_coord_frame_startX;
 -(NSInteger)tex_coord_frame_startY;
@@ -131,6 +199,73 @@ extern EmoEngine* engine;
 @synthesize independent;
 @synthesize loaded;
 @synthesize isScreenEntity;
+@synthesize isPackedAtlas;
+
+-(BOOL)loadPackedAtlasXml:(NSInteger)initialFrameIndex {
+    // check if the length is shorter than the length of ".xml"
+    if ([name length] <= 4) return false;
+
+    NSString* path = [[NSBundle mainBundle] pathForResource:name ofType:nil];
+    
+    if (path == nil) {
+        NSLOGE(@"Requested resource is not found:");
+        NSLOGE(path);
+        return FALSE;
+    }
+    NSURL *url = [NSURL fileURLWithPath:path];
+    
+    EmoImagePackParser* pack = [[EmoImagePackParser alloc]init];
+    pack.drawable = self;
+    pack.frameIndex = initialFrameIndex;
+    
+    NSXMLParser *parser = [[NSXMLParser alloc] initWithContentsOfURL:url];
+    [parser setDelegate:pack];
+    [parser parse];
+    [parser release];
+    
+    [pack release];
+
+    frameCount = [imagepacks_names count];
+    
+    return TRUE;
+}
+
+-(BOOL)selectFrame:(NSString*)_name {
+    EmoImagePackInfo* info = [self getImagePack:_name];
+    if (info == nil) return FALSE;
+    
+    return [self setFrameIndex:info.index];
+}
+
+-(void)addImagePack:(EmoImagePackInfo*) info {
+	[info retain];
+	[self deleteImagePack:info.name];
+	[imagepacks setObject:info forKey:info.name];
+    [imagepacks_names addObject:info.name];
+}
+
+-(EmoImagePackInfo*)getImagePack:(NSString*)_name {
+	return [imagepacks objectForKey:_name];
+}
+
+-(BOOL)deleteImagePack:(NSString*)_name {
+	EmoImagePackInfo* info = [self getImagePack:_name];
+    
+	if (info == nil) return FALSE;
+	
+	[info release];
+	[imagepacks removeObjectForKey:_name];
+	
+	return TRUE;
+}
+
+-(void)deleteImagePacks {
+	for (NSString* key in imagepacks) {
+		[[imagepacks objectForKey:key] release];
+	}
+	[imagepacks removeAllObjects];
+}
+
 
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
     if (!loaded) return FALSE;
@@ -222,6 +357,7 @@ extern EmoEngine* engine;
 	hasSheet   = FALSE;
 	animating  = FALSE;
 	independent = TRUE;
+    isPackedAtlas = FALSE;
 
 	// color param RGBA
     param_color[0] = 1.0f;
@@ -255,15 +391,24 @@ extern EmoEngine* engine;
     orthFactorY = 1.0;
     
     isScreenEntity = TRUE;
+    
+    imagepacks = [[NSMutableDictionary alloc]init];
+    imagepacks_names = [[NSMutableArray alloc]init];
 }
 
 -(NSInteger)tex_coord_frame_startX {
+    if (isPackedAtlas) {
+        return [self getImagePack:[imagepacks_names objectAtIndex:frame_index]].x;
+    }
 	int xcount = (int)round((texture.width - (margin * 2) + border) / (float)(frameWidth  + border));
 	int xindex = frame_index % xcount;
 	return ((border + frameWidth) * xindex) + margin;
 }
 
 -(NSInteger) tex_coord_frame_startY {
+    if (isPackedAtlas) {
+        return texture.height - frameHeight - [self getImagePack:[imagepacks_names objectAtIndex:frame_index]].y;
+    }
 	int xcount = (int)round((texture.width - (margin * 2) + border) / (float)(frameWidth  + border));
 	int ycount = (int)round((texture.height - (margin * 2) + border) / (float)(frameHeight + border));
 	int yindex = ycount - (frame_index / xcount) - 1;
@@ -445,6 +590,7 @@ extern EmoEngine* engine;
 	free(frames_vbos);
 	
 	[self deleteAnimations];
+    [self deleteImagePacks];
 	
 	loaded = FALSE;
 }
@@ -458,6 +604,15 @@ extern EmoEngine* engine;
         nextFrameIndex = index;
         frameIndexChanged = TRUE;
     }
+    
+    if (isPackedAtlas) {
+        EmoImagePackInfo* info = [self getImagePack:[imagepacks_names objectAtIndex:index]];
+        self.width  = info.width;
+        self.height = info.height;
+        self.frameWidth  = info.width;
+        self.frameHeight = info.height;
+    }
+    
 	return TRUE;
 }
 
@@ -548,7 +703,9 @@ extern EmoEngine* engine;
 -(void)dealloc {
 	[animations release];
 	[name release];
-	animations = nil;
+    [imagepacks release];
+    [imagepacks_names release];
+    
 	name = nil;
 	[super dealloc];
 }

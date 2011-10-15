@@ -398,14 +398,6 @@ namespace emo {
         if (this->frameIndexChanged) {
             this->frame_index = nextFrameIndex;
             frameIndexChanged = false;
-
-            if (this->isPackedAtlas) {
-                ImagePackInfo* info = this->getImagePack(this->imagepacks_names->at(this->frame_index));
-                this->width  = info->width;
-                this->height = info->height;
-                this->frameWidth  = info->width;
-                this->frameHeight = info->height;
-            }
         }
 
         engine->updateUptime();
@@ -501,6 +493,14 @@ namespace emo {
         if (index < 0 || this->frameCount <= index) return false;
         this->nextFrameIndex = index;
         this->frameIndexChanged = true;
+
+        if (this->isPackedAtlas) {
+            ImagePackInfo* info = this->getImagePack(this->imagepacks_names->at(index));
+            this->width  = info->width;
+            this->height = info->height;
+            this->frameWidth  = info->width;
+            this->frameHeight = info->height;
+        }
 
         return true;
     }

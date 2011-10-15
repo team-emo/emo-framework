@@ -100,6 +100,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSnapshot",   emoDrawableLoadSnapshot);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "stopSnapshot",   emoDrawableDisableSnapshot);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "removeSnapshot",   emoDrawableRemoveSnapshot);
+    registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "selectFrame",    emoDrawableSelectFrame);
 }
 
 /*
@@ -220,6 +221,11 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
 		
         if (strlen(name) > 0) {
 			drawable.name = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
+            
+            // if the filename ends with .xml, assumes texture is packed as atlas
+            if ([drawable.name hasSuffix:@".xml"]) {
+                drawable.isPackedAtlas = TRUE;
+            }
         }
     } else {
 		drawable.name = nil;
@@ -243,7 +249,17 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     if (nargs >= 7 && sq_gettype(v, 7) != OT_NULL) {
         sq_getinteger(v, 7, &margin);
     }
-	
+
+    if ([drawable isPackedAtlas]) {
+        if (![drawable loadPackedAtlasXml:frameIndex]) {
+            [drawable release];
+            return 0;
+        }
+        
+        // retrieve image filename to load
+        name = [drawable.name UTF8String];
+    }
+    
     int width  = 0;
     int height = 0;
     
@@ -254,23 +270,27 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     }
 	
     drawable.hasSheet = true;
-    drawable.frame_index = frameIndex;
-    drawable.width  = frameWidth;
-    drawable.height = frameHeight;
-	drawable.frameWidth  = frameWidth;
-	drawable.frameHeight = frameHeight;
-    drawable.border = border;
+    
+    if (!drawable.isPackedAtlas) {
+        drawable.width  = frameWidth;
+        drawable.height = frameHeight;
+        drawable.frameWidth  = frameWidth;
+        drawable.frameHeight = frameHeight;
+        drawable.border = border;
 	
-    if (margin == 0 && border != 0) {
-        drawable.margin = border;
-    } else {
-        drawable.margin = margin;
+        if (margin == 0 && border != 0) {
+            drawable.margin = border;
+        } else {
+            drawable.margin = margin;
+        }
+	
+        drawable.frameCount = (int)floor(width / (float)(frameWidth  + border)) 
+        * floor(height /(float)(frameHeight + border));
     }
-	
-    drawable.frameCount = (int)floor(width / (float)(frameWidth  + border)) 
-	* floor(height /(float)(frameHeight + border));
+    
     if (drawable.frameCount <= 0) drawable.frameCount = 1;
 	
+    [drawable setFrameIndex:frameIndex];
     [drawable createTextureBuffer];
 	
     char key[DRAWABLE_KEY_LENGTH];
@@ -1608,6 +1628,48 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
 		return 1;
 	}
 	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+/*
+ * select frame that has given name 
+ */
+SQInteger emoDrawableSelectFrame(HSQUIRRELVM v) { 
+    
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }    
+    
+    EmoDrawable* drawable = [engine getDrawable:id];
+    
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }    
+    
+    const SQChar* frame_name;
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_STRING) {
+        sq_tostring(v, 3);
+        sq_getstring(v, -1, &frame_name);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }    
+    
+    if (![drawable selectFrame:char2ns(frame_name)]) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }    
+    
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }
