@@ -6,8 +6,7 @@ local stage = emo.Stage();
 class Main {
 
     // defines a sprite sheet that consists of 32x32 block with 2 pixel border and 2 pixel margin.
-    //block = emo.SpriteSheet("blocks.png", 32, 32, 2, 2);
-    block = emo.SpriteSheet("icons_pack_Sparrow.xml");
+    block = emo.SpriteSheet("blocks.png", 32, 32, 2, 2);
 
     // current frame index
     currentFrame = 0;
@@ -32,8 +31,6 @@ class Main {
             // on Retina and non-Retina display.
             stage.setContentScale(stage.getWindowWidth() / 320.0);
         }
-
-        block.selectFrame("ball");
         
         // move sprite to the center of the screen
         local x = (stage.getWindowWidth()  - block.getWidth())  / 2;
@@ -90,10 +87,6 @@ class Main {
                 currentFrame = 0;
             }
             block.setFrame(currentFrame);
-        local x = (stage.getWindowWidth()  - block.getWidth())  / 2;
-        local y = (stage.getWindowHeight() - block.getHeight()) / 2;
-        
-        block.move(x, y);
         }
     }
 }
