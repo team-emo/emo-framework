@@ -152,6 +152,7 @@
 		F98DA7CB139E5F8D00D3835A /* physics_add_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F98DA7CA139E5F8300D3835A /* physics_add_example.nut */; };
 		F993C36B1390ECE9003E18CA /* ball@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F993C3691390ECE9003E18CA /* ball@2x.png */; };
 		F993C36C1390ECE9003E18CA /* tv@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F993C36A1390ECE9003E18CA /* tv@2x.png */; };
+		F99422C01449C0170033B046 /* atlas_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F99422BF1449C0170033B046 /* atlas_example.nut */; };
 		F99D44841391DF28006622F8 /* physics_distancejoint.nut in Resources */ = {isa = PBXBuildFile; fileRef = F99D44831391DF1E006622F8 /* physics_distancejoint.nut */; };
 		F9B132EE14496B4300D37B79 /* icons_pack_OGRE.xml in Resources */ = {isa = PBXBuildFile; fileRef = F9B132EB14496B4300D37B79 /* icons_pack_OGRE.xml */; };
 		F9B132EF14496B4300D37B79 /* icons_pack_Sparrow.xml in Resources */ = {isa = PBXBuildFile; fileRef = F9B132EC14496B4300D37B79 /* icons_pack_Sparrow.xml */; };
@@ -418,6 +419,7 @@
 		F98EABC7138784D800902E31 /* physics_circle.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_circle.nut; path = Resources/physics_circle.nut; sourceTree = "<group>"; };
 		F993C3691390ECE9003E18CA /* ball@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball@2x.png"; sourceTree = "<group>"; };
 		F993C36A1390ECE9003E18CA /* tv@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tv@2x.png"; sourceTree = "<group>"; };
+		F99422BF1449C0170033B046 /* atlas_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = atlas_example.nut; path = Resources/atlas_example.nut; sourceTree = "<group>"; };
 		F99D44831391DF1E006622F8 /* physics_distancejoint.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_distancejoint.nut; path = Resources/physics_distancejoint.nut; sourceTree = "<group>"; };
 		F9B132EB14496B4300D37B79 /* icons_pack_OGRE.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = icons_pack_OGRE.xml; sourceTree = "<group>"; };
 		F9B132EC14496B4300D37B79 /* icons_pack_Sparrow.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = icons_pack_Sparrow.xml; sourceTree = "<group>"; };
@@ -519,6 +521,7 @@
 				F921CCA7136FFBAC00F058FF /* sprite_example.nut */,
 				F9B14CF0138C854B004A8FD8 /* textsprite_example.nut */,
 				F9856D8D1375576B00F6C00F /* tiles_example.nut */,
+				F99422BF1449C0170033B046 /* atlas_example.nut */,
 				F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */,
 				F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */,
 				F967A8C21372A17800BEF871 /* modifier_move_example.nut */,
@@ -1034,6 +1037,7 @@
 				F9B132EE14496B4300D37B79 /* icons_pack_OGRE.xml in Resources */,
 				F9B132EF14496B4300D37B79 /* icons_pack_Sparrow.xml in Resources */,
 				F9B132F014496B4300D37B79 /* icons_pack.png in Resources */,
+				F99422C01449C0170033B046 /* atlas_example.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

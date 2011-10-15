@@ -34,7 +34,8 @@ public class Launcher extends ExpandableListActivity {
     		"Drawing a Sprite",
     		"Drawing Texts",
 			"Drawing Tiles",
-			"Drawing TiledMap"
+			"Drawing TiledMap",
+			"Using a Texture Atlas"
     	},
     	{
     		"Sprite Animation",
@@ -96,7 +97,8 @@ public class Launcher extends ExpandableListActivity {
     		".SpriteExample",
     		".TextSpriteExample",
 			".TileExample",
-			".TiledMapExample"
+			".TiledMapExample",
+			".AtlasExample"
     	},
     	{
     		".SpriteAnimationExample",

@@ -36,6 +36,7 @@
 		[NSArray arrayWithObjects:@"Drawing Texts",    @"textsprite_example.nut", nil],
 		[NSArray arrayWithObjects:@"Drawing Tiles",    @"tiles_example.nut", nil],
 		[NSArray arrayWithObjects:@"Drawing TiledMap", @"mapsprite_example.nut", nil],
+        [NSArray arrayWithObjects:@"Using a Texture Atlas",   @"atlas_example.nut", nil],
 		nil]];
 	
 	// Amimation
