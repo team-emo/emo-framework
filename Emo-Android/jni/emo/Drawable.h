@@ -65,7 +65,21 @@ namespace emo {
         void setFrame(int index, int value);
     };
 
+    class ImagePackInfo {
+    public:
+        ImagePackInfo();
+        ~ImagePackInfo();
+
+        std::string name;
+        int x;
+        int y;
+        int width;
+        int height;
+        int index;
+    };
+
     typedef std::hash_map <std::string, emo::AnimationFrame *> animations_t;
+    typedef std::hash_map <std::string, emo::ImagePackInfo *> imagepack_t;
 
     class Drawable {
     public:
@@ -106,6 +120,7 @@ namespace emo {
         bool hasBuffer;
         bool independent;
         bool needTexture;
+        bool isPackedAtlas;
 
         int border;
         int margin;
@@ -134,6 +149,10 @@ namespace emo {
         virtual void setChild(Drawable* child);
         virtual Drawable* getChild();
 
+        bool loadPackedAtlasXml(int initialFrameIndex);
+        void addImagePack(ImagePackInfo* info);
+        bool deleteImagePack(std::string name);
+
         /* 
          * virtual methods for MapDrawable
          */
@@ -158,6 +177,7 @@ namespace emo {
         float orthFactorY;
 
         bool isScreenEntity;
+
     protected:
 
         float      vertex_tex_coords[8];
@@ -182,6 +202,9 @@ namespace emo {
 
         std::string animationName;
         AnimationFrame* currentAnimation;
+
+        void deleteImagePacks();
+        imagepack_t* imagepacks;
     };
 
     class MapDrawable : public Drawable {

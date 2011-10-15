@@ -36,6 +36,7 @@
 #include "Util.h"
 
 #include <GLES/glext.h>
+#include <rapidxml/rapidxml.hpp>
 
 extern emo::Engine* engine;
 
@@ -107,6 +108,16 @@ namespace emo {
         }
     }
 
+    ImagePackInfo::ImagePackInfo() {
+        this->x = 0;
+        this->y = 0;
+        this->width  = 1;
+        this->height = 1;
+    }
+
+    ImagePackInfo::~ImagePackInfo() {
+
+    }
 
     Drawable::Drawable() {
         this->hasTexture = false;
@@ -118,6 +129,7 @@ namespace emo {
         this->frameIndexChanged = false;
         this->independent = true;
         this->needTexture = false;
+        this->isPackedAtlas = false;
 
         // color param RGBA
         this->param_color[0] = 1.0f;
@@ -152,6 +164,7 @@ namespace emo {
         this->margin      = 0;
 
         this->animations = new animations_t();
+        this->imagepacks = new imagepack_t();
 
         this->useMesh = false;
         this->orthFactorX = 1.0;
@@ -161,6 +174,7 @@ namespace emo {
 
     Drawable::~Drawable() {
         this->deleteAnimations();
+        this->deleteImagePacks();
         this->deleteBuffer(false);
         if (this->hasTexture) {
             this->texture->referenceCount--;
@@ -173,6 +187,7 @@ namespace emo {
             delete[] this->frames_vbos;
         }
         delete this->animations;
+        delete this->imagepacks;
     }
 
     void Drawable::load() {
@@ -511,6 +526,32 @@ namespace emo {
         return this->child;
     }
 
+    void Drawable::addImagePack(ImagePackInfo* info) {
+        this->deleteImagePack(info->name);
+        this->imagepacks->insert(std::make_pair(info->name, info)); 
+    }
+
+    bool Drawable::deleteImagePack(std::string name) {
+        imagepack_t::iterator iter = this->imagepacks->find(name);
+        if (iter != this->imagepacks->end()) {
+            ImagePackInfo* info = iter->second;
+            if (this->imagepacks->erase(iter->first)){
+                delete info;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    void Drawable::deleteImagePacks() {
+        imagepack_t::iterator iter;
+        for(iter = this->imagepacks->begin(); iter != this->imagepacks->end(); iter++) {
+            ImagePackInfo* info = iter->second;
+            delete info;
+        }
+        this->imagepacks->clear();
+    }
+
     void Drawable::addAnimation(AnimationFrame* animation) {
         this->deleteAnimation(animation->name);
         this->animations->insert(std::make_pair(animation->name, animation)); 
@@ -578,6 +619,73 @@ namespace emo {
         if (this->animating && this->currentAnimation != NULL) {
             return this->currentAnimation->isFinished();
         }
+        return true;
+    }
+
+    bool Drawable::loadPackedAtlasXml(int initialFrameIndex) {
+        // check if the length is shorter than the length of ".xml"
+        if (this->name.length() <= 4) return false;
+
+        std::string data = loadContentFromAsset(this->name);
+        unsigned int pos = this->name.find_last_of("/");
+        
+        std::string base_dir = "";
+        if (pos != std::string::npos) base_dir = this->name.substr(0, pos + 1);
+
+        rapidxml::xml_document<char> doc;
+        doc.parse<0>((char*)data.c_str());
+
+        if (doc.first_node() == 0) {
+            return false;
+        }
+
+        int itemCount = 0;
+        ImagePackInfo* selectedItem = NULL;
+
+        for (rapidxml::xml_node<> *node = doc.first_node(); node; node = node->next_sibling()) {
+            if (strcmp(node->name(), "Imageset") != 0 && strcmp(node->name(), "TextureAtlas") != 0) continue;
+            for (rapidxml::xml_attribute<> *attr = node->first_attribute(); attr; attr = attr->next_attribute()) {
+                if (strcmp(attr->name(), "Imagefile") == 0 || strcmp(attr->name(), "imagePath") == 0) {
+                    this->name = base_dir + attr->value();
+                }
+            }
+            for (rapidxml::xml_node<> *child  = node->first_node(); child; child = child->next_sibling()) {
+                if (strcmp(child->name(), "Image") != 0 && strcmp(child->name(), "SubTexture") != 0) continue;
+
+                ImagePackInfo* info = new ImagePackInfo();
+                for (rapidxml::xml_attribute<> *attr = child->first_attribute(); attr; attr = attr->next_attribute()) {
+                    if (strcmp(attr->name(), "name") == 0 || strcmp(attr->name(), "Name") == 0) {
+                        info->name = attr->value();
+                    } else if (strcmp(attr->name(), "x") == 0 || strcmp(attr->name(), "XPos") == 0) {
+                        info->x = atoi(attr->value());
+                    } else if (strcmp(attr->name(), "y") == 0 || strcmp(attr->name(), "YPos") == 0) {
+                        info->y = atoi(attr->value());
+                    } else if (strcmp(attr->name(), "width") == 0 || strcmp(attr->name(), "Width") == 0) {
+                        info->width = atoi(attr->value());
+                    } else if (strcmp(attr->name(), "height") == 0 || strcmp(attr->name(), "Height") == 0) {
+                        info->height = atoi(attr->value());
+                    }
+                }
+                if (!info->name.empty()) {
+                    if (itemCount == initialFrameIndex) selectedItem = info;
+                    info->index = itemCount;
+                    this->addImagePack(info);
+                    itemCount++;
+                }
+            }
+        }
+
+        if (selectedItem == NULL) return false;
+
+        this->width       = selectedItem->width;
+        this->height      = selectedItem->height;
+        this->frameWidth  = selectedItem->width;
+        this->frameHeight = selectedItem->height;
+
+        this->setFrameCount(itemCount);
+        this->margin = 0;
+        this->border = 0;
+
         return true;
     }
 

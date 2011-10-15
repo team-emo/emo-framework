@@ -28,6 +28,7 @@
 #ifndef EMO_RUNTIME_H
 #define EMO_RUNTIME_H
 
+#include <string>
 #include <../native_app_glue.h>
 #include <squirrel.h>
 
@@ -47,6 +48,9 @@ void emoUpdateOptions(SQInteger value);
 bool loadScriptFromAsset(const char* fname);
 bool loadScriptFromDocument(const char* fname);
 bool loadScript(const char* fname);
+
+bool endsWith(std::string const &fullString, std::string const &ending);
+std::string loadContentFromAsset(std::string fname);
 
 SQInteger emoImportScript(HSQUIRRELVM v);
 SQInteger emoSetOptions(HSQUIRRELVM v);

@@ -316,6 +316,11 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
         if (strlen(name) > 0) {
             drawable->name = name;
             drawable->needTexture = true;
+
+            // if the filename ends with .xml, assumes texture is packed as atlas
+            if (endsWith(name, ".xml")) {
+                drawable->isPackedAtlas = true;
+            }
         }
     } else {
         name = NULL;
@@ -340,6 +345,16 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
         sq_getinteger(v, 7, &margin);
     }
 
+    if (drawable->isPackedAtlas) {
+        if (!drawable->loadPackedAtlasXml(frameIndex)) {
+            delete drawable;
+            return 0;
+        }
+
+        // retrieve image filename to load
+        name = drawable->name.c_str();
+    }
+
     int width  = 0;
     int height = 0;
 
@@ -351,20 +366,24 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     }
 
     drawable->hasSheet = true;
-    drawable->width  = frameWidth;
-    drawable->height = frameHeight;
-    drawable->border = border;
-    drawable->frameWidth  = frameWidth;
-    drawable->frameHeight = frameHeight;
 
-    if (margin == 0 && border != 0) {
-        drawable->margin = border;
-    } else {
-        drawable->margin = margin;
-    }
+    if (!drawable->isPackedAtlas) {
+        drawable->width  = frameWidth;
+        drawable->height = frameHeight;
+        drawable->border = border;
+        drawable->frameWidth  = frameWidth;
+        drawable->frameHeight = frameHeight;
 
-    drawable->setFrameCount((int)floor(width / (float)(frameWidth  + border)) 
+        if (margin == 0 && border != 0) {
+            drawable->margin = border;
+        } else {
+            drawable->margin = margin;
+        }
+
+        drawable->setFrameCount((int)floor(width / (float)(frameWidth  + border)) 
                                        * floor(height /(float)(frameHeight + border)));
+
+    }
     if (drawable->getFrameCount() <= 0) drawable->setFrameCount(1);
 
     drawable->setFrameIndex(frameIndex);

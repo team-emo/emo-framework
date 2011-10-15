@@ -33,6 +33,7 @@
 // uncomment below to enable sandbox mode
 // #define EMO_WITH_SANDBOX
 #define PNG_NO_PEDANTIC_WARNINGS
+#define RAPIDXML_NO_EXCEPTIONS
 
 #define EMO_LOG_TAG "EmoFramework"
 
@@ -210,4 +211,5 @@
 
 #define ANDROID_TOAST_SHORT 0x00000001
 #define ANDROID_TOAST_LONG  0x00000000
+
 #endif

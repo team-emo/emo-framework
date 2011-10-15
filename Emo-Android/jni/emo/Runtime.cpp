@@ -187,6 +187,48 @@ static SQInteger sq_lexer_bytecode(SQUserPointer asset, SQUserPointer buf, SQInt
 }
 
 /*
+ * load text content from asset
+ */
+std::string loadContentFromAsset(std::string fname) {
+    std::string content;
+    /*
+     * read squirrel script from asset
+     */
+    AAssetManager* mgr = engine->app->activity->assetManager;
+    if (mgr == NULL) {
+    	engine->setLastError(ERR_SCRIPT_LOAD);
+    	LOGE("loadScriptFromAsset: failed to load AAssetManager");
+    	return content;
+    }
+
+    AAsset* asset = AAssetManager_open(mgr, fname.c_str(), AASSET_MODE_UNKNOWN);
+    if (asset == NULL) {
+    	engine->setLastError(ERR_SCRIPT_OPEN);
+    	LOGW("loadScriptFromAsset: failed to open main script file");
+        LOGW(fname.c_str());
+    	return content;
+    }
+
+    off_t length = AAsset_getLength(asset);
+    char* buffer = new char[length + 1];
+
+    for (int i = 0; i < length; i++) {
+	    SQChar c;
+		if(AAsset_read((AAsset*)asset, &c, 1) > 0) {
+            buffer[i] = c;
+        }
+    }
+    buffer[length] = NULL;
+
+    content = buffer;
+    delete buffer;
+
+    AAsset_close(asset);
+
+    return content;
+}
+
+/*
  * Load squirrel script from asset
  */
 bool loadScriptFromAsset(const char* fname) {
@@ -288,6 +330,26 @@ bool loadScript(const char* fname) {
  */
 bool loadScriptFromUserDocument(const char* fname) {
     return loadScript(engine->javaGlue->getDataFilePath(fname).c_str());
+}
+
+/*
+ * returns if the given string ends with the other string
+ */
+bool endsWith(std::string const &fullString, std::string const &ending) {
+    if (fullString.length() >= ending.length()) {
+        return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+    } else {
+        return false;
+    }
+}
+
+/*
+ * prints xml parse error
+ */
+namespace rapidxml {
+    void parse_error_handler(const char *what, void *where_void) { 
+        LOGE(what);
+    }
 }
 
 /*
