@@ -106,6 +106,7 @@ namespace emo {
         bool setFrameIndex(int index);
         bool forceSetFrameIndex(int index);
         int  getFrameIndex();
+        bool selectFrame(std::string name);
 
         void setTexture(Image* image);
         Image* getTexture();

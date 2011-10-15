@@ -100,6 +100,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getFrameIndex",  emoDrawableGetFrameIndex);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getFrameCount",  emoDrawableGetFrameCount);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setLine",        emoDrawableSetLinePosition);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "selectFrame",    emoDrawableSelectFrame);
 }
 
 /*
@@ -1876,6 +1877,48 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
 
     drawable->setFrameIndex(index);
     drawable->enableAnimation(false);
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+/*
+ * select frame that has given name
+ */
+SQInteger emoDrawableSelectFrame(HSQUIRRELVM v) {
+
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+    
+    const SQChar* frame_name;
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_STRING) {
+        sq_tostring(v, 3);
+        sq_getstring(v, -1, &frame_name);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    if (!drawable->selectFrame(frame_name)) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
 
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;

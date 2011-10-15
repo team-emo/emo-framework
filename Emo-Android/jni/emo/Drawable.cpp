@@ -557,6 +557,12 @@ namespace emo {
         return NULL;
     }
 
+    bool Drawable::selectFrame(std::string name) {
+        ImagePackInfo* info = this->getImagePack(name);
+        if (info == NULL) return false;
+        return this->setFrameIndex(info->index);
+    }
+
     bool Drawable::deleteImagePack(std::string name) {
         imagepack_t::iterator iter = this->imagepacks->find(name);
         if (iter != this->imagepacks->end()) {
