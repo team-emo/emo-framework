@@ -290,7 +290,7 @@ NSString* data2ns(NSData* data) {
 	NSString* path = [[NSBundle mainBundle] pathForResource:fname ofType:nil];
 	[fname release];
 	if (path == nil) {
-		LOGE("Script resource does not found:");
+		LOGE("Script resource is not found:");
 		LOGE(chfname);
 		return ERR_SCRIPT_OPEN;
 	}
@@ -318,14 +318,14 @@ static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInte
 -(int)loadScript:(NSString *)path vm:(HSQUIRRELVM) v {
 	NSFileManager* manager = [NSFileManager defaultManager];
 	if (![manager fileExistsAtPath:path]) {
-		LOGE("Script file does not found:");
+		LOGE("Script file is not found:");
 		NSLOGE(path);
 		return ERR_SCRIPT_OPEN;
     }
 
     NSFileHandle* file = [NSFileHandle fileHandleForReadingAtPath: path];
 	if (file == nil) {
-		LOGE("Script file does not found:");
+		LOGE("Script file is not found:");
 		NSLOGE(path);
 		return ERR_SCRIPT_OPEN;
 	}
@@ -361,7 +361,7 @@ static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInte
     
 	NSString* nscontent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error: nil];
 	if (nscontent == nil) {
-		LOGE("Script content does not found:");
+		LOGE("Script content is not found:");
 		NSLOGE(path);
 		return ERR_SCRIPT_OPEN;
 	}

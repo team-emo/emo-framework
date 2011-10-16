@@ -161,7 +161,7 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
 		}
 	} else {
 		self.lastError = ERR_FILE_OPEN;
-		self.lastErrorMessage = @"Database file does not found.";
+		self.lastErrorMessage = @"Database file is not found.";
 		return FALSE;
 	}
 	return TRUE;

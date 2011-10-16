@@ -95,7 +95,7 @@ extern EmoEngine* engine;
 	[fileName release];
 	
 	if (path == nil) {
-		LOGE("Audio resource does not found:");
+		LOGE("Audio resource is not found:");
 		LOGE(fname);
 		return FALSE;
 	}

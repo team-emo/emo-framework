@@ -117,7 +117,7 @@ BOOL printGLErrors(const char* msg) {
 BOOL loadPngSizeFromAsset(NSString* filename, int *width, int *height) {
 	NSString* path = [[NSBundle mainBundle] pathForResource:filename ofType:nil];
 	if (path == nil) {
-		LOGE("loadPngFromResource: resource does not found");
+		LOGE("loadPngFromResource: resource is not found");
 		NSLOGE(filename);
 		return FALSE;
 	}
@@ -161,7 +161,7 @@ BOOL loadPngSizeFromAsset(NSString* filename, int *width, int *height) {
 BOOL loadPngFromResource(NSString* filename, EmoImage* imageInfo) {
 	NSString* path = [[NSBundle mainBundle] pathForResource:filename ofType:nil];
 	if (path == nil) {
-		LOGE("loadPngFromResource: resource does not found");
+		LOGE("loadPngFromResource: resource is not found");
 		NSLOGE(filename);
 		return FALSE;
 	}
