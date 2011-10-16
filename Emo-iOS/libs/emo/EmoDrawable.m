@@ -209,7 +209,7 @@ extern EmoEngine* engine;
     
     if (path == nil) {
         NSLOGE(@"Requested resource is not found:");
-        NSLOGE(path);
+        NSLOGE(name);
         return FALSE;
     }
     NSURL *url = [NSURL fileURLWithPath:path];
