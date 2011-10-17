@@ -72,6 +72,7 @@ SQInteger emoDrawableAnimate(HSQUIRRELVM v);
 SQInteger emoDrawableIsAnimationFinished(HSQUIRRELVM v);
 
 SQInteger emoDrawableSetFontSpriteParam(HSQUIRRELVM v);
+SQInteger emoDrawableReloadFontSprite(HSQUIRRELVM v);
 SQInteger emoDrawableSelectFrame(HSQUIRRELVM v);
 
 SQInteger emoDrawableGetX(HSQUIRRELVM v);

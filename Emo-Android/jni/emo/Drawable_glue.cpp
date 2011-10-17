@@ -55,6 +55,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getTilePositionAtCoord", emoDrawableGetTilePositionAtCoord);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "useMeshMapSprite", emoDrawableUseMeshMapSprite);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setFontSpriteParam",  emoDrawableSetFontSpriteParam);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "reloadFontSprite",  emoDrawableReloadFontSprite);
 
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSnapshot",   emoDrawableCreateSnapshot);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSnapshot",     emoDrawableLoadSnapshot);
@@ -530,6 +531,54 @@ SQInteger emoDrawableSetFontSpriteParam(HSQUIRRELVM v) {
         fontDrawable->param6 = param;
         sq_poptop(v);
     }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+
+    return 1;
+}
+
+/*
+ * Reload parameter of FontSprite
+ */
+SQInteger emoDrawableReloadFontSprite(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+
+    const SQChar* name;
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_STRING) {
+        sq_tostring(v, 3);
+        sq_getstring(v, -1, &name);
+
+        engine->removeCachedImage(drawable->name);
+        engine->addCachedImage(name, drawable->getTexture());
+
+        drawable->name = name;
+    }
+
+    drawable->deleteBuffer(true);
+    drawable->getTexture()->clearTexture();
+
+    engine->javaGlue->loadTextBitmap(drawable, drawable->getTexture(), true);
+
+    drawable->getTexture()->genTextures();
+
+    drawable->reload();
+    drawable->bindVertex();
 
     sq_pushinteger(v, EMO_NO_ERROR);
 

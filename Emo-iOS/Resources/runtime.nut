@@ -1321,6 +1321,10 @@ class emo.FontSprite extends emo.Sprite {
         if (param6 != null) param6 = param6.tostring();
         stage.setFontSpriteParam(id, param1, param2, param3, param4, param5, param6);
     }
+    function reload(_name = null) {
+        if (_name != null) name = _name;
+        stage.reloadFontSprite(id, _name);
+    }
 }
 
 class emo.SpriteSheet extends emo.Sprite {
