@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
 import android.graphics.Paint.Style;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Vibrator;
 import android.util.Log;
@@ -53,7 +54,8 @@ public class EmoActivity extends NativeActivity {
         return (rnd == null) ? (randomNumberGenerator = new Random()) : rnd;
     }
 
-    public byte[] loadTextBitmap(String name, String fontFace, int fontSize) {
+    public byte[] loadTextBitmap(String name, int fontSize,
+    		String fontFace, boolean isBold, boolean isItalic) {
     	// extract property name
     	String targetName = name.substring(name.indexOf("::") + 2);
     	int targetId = getResources().getIdentifier(targetName, "string", getPackageName());
@@ -66,8 +68,45 @@ public class EmoActivity extends NativeActivity {
     	Paint forePaint = new Paint();
     	Paint backPaint = new Paint();
     	
+    	if (fontFace.length() == 0) {
+    		if (isBold && isItalic) {
+    			forePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD_ITALIC));
+    		} else if (isBold) {
+    			forePaint.setTypeface(Typeface.DEFAULT_BOLD);
+    		}
+    	} else if (fontFace.contains(".")) {
+    		Typeface typeface = Typeface.createFromAsset(getAssets(), fontFace);
+    		
+    		if (isBold && isItalic) {
+    			typeface = Typeface.create(typeface, Typeface.BOLD_ITALIC);
+    		} else if (isBold) {
+    			typeface = Typeface.create(typeface, Typeface.BOLD);
+    		}
+    		
+    		forePaint.setTypeface(typeface);
+    	} else {
+    		Typeface typeface = Typeface.DEFAULT;
+    		String lowerCase = fontFace.toLowerCase();
+    		
+    		if (lowerCase.equals("serif")) {
+    			typeface = Typeface.SERIF;
+    		} else if (lowerCase.equals("sans_serif")) {
+    			typeface = Typeface.SANS_SERIF;
+    		} else if (lowerCase.equals("monospace")) {
+    			typeface = Typeface.MONOSPACE;
+    		}
+    		
+    		if (isBold && isItalic) {
+    			forePaint.setTypeface(Typeface.create(typeface, Typeface.BOLD_ITALIC));
+    		} else if (isBold) {
+    			forePaint.setTypeface(Typeface.create(typeface, Typeface.BOLD));
+    		} else {
+    			forePaint.setTypeface(typeface);
+    		}
+    	}
+    	
     	forePaint.setColor(Color.WHITE);
-    	forePaint.setTextSize(fontSize);
+    	if (fontSize > 0) forePaint.setTextSize(fontSize);
     	forePaint.setAntiAlias(true);
     	
     	backPaint.setColor(Color.TRANSPARENT);

@@ -1308,13 +1308,13 @@ class emo.Sprite {
 }
 
 class emo.FontSprite extends emo.Sprite {
-    function constructor(_name, _fontsize = null, _fontface = null) {
+    function constructor(_name, _fontsize = null, _fontface = null, _isBold = false, _isItalic = false) {
         name = "emo.FontSprite::" + _name;
-        id = stage.createFontSprite(name, _fontsize, _fontface);
+        id = stage.createFontSprite(name, _fontsize, _fontface, _isBold, _isItalic);
     }
-    function selectText(_name, _fontsize = null, _fontface = null) {
+    function selectText(_name, _fontsize = null, _fontface = null, _isBold = false, _isItalic = false) {
         name = _name;
-        stage.fontSpriteSelectText(id, _name, _fontsize, _fontface);
+        stage.fontSpriteSelectText(id, _name, _fontsize, _fontface, _isBold, _isItalic);
     }
 }
 
