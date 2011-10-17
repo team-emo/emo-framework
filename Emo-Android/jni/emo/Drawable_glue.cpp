@@ -196,6 +196,12 @@ SQInteger emoDrawableCreateFontSprite(HSQUIRRELVM v) {
             drawable->fontFace = fontFace;
         }
     }
+    if (nargs >= 5 && sq_gettype(v, 5) == OT_BOOL) {
+        sq_getbool(v, 5, &drawable->isBold);
+    }
+    if (nargs >= 6 && sq_gettype(v, 6) == OT_BOOL) {
+        sq_getbool(v, 6, &drawable->isItalic);
+    }
 
     drawable->fontSize = fontSize;
     drawable->useFont  = true;

@@ -324,11 +324,14 @@ namespace emo {
         vm->AttachCurrentThread(&env, NULL);
 
         jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
-        jmethodID methodj = env->GetMethodID(clazz, "loadTextBitmap", "(Ljava/lang/String;Ljava/lang/String;I)[B");
+        jmethodID methodj = env->GetMethodID(clazz, "loadTextBitmap", "(Ljava/lang/String;ILjava/lang/String;ZZ)[B");
         jbyteArray src = (jbyteArray)env->CallObjectMethod(engine->app->activity->clazz, methodj,
                                  env->NewStringUTF(fontDrawable->name.c_str()),
+                                 (jint)fontDrawable->fontSize,
                                  env->NewStringUTF(fontDrawable->fontFace.c_str()),
-                                 (jint)fontDrawable->fontSize);
+                                 fontDrawable->isBold   ? JNI_TRUE : JNI_FALSE,
+                                 fontDrawable->isItalic ? JNI_TRUE : JNI_FALSE
+                                 );
         jsize size = env->GetArrayLength(src);
 
         jbyte* png = env->GetByteArrayElements(src, NULL);

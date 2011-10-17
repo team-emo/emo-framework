@@ -285,6 +285,8 @@ namespace emo {
 
         int fontSize;
         std::string fontFace;
+        SQBool isBold;
+        SQBool isItalic;
     };
 }
 #endif

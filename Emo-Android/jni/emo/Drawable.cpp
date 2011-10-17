@@ -1207,7 +1207,8 @@ namespace emo {
     }
 
     FontDrawable::FontDrawable() {
-
+        this->isBold   = false;
+        this->isItalic = false;
     }
 
     FontDrawable::~FontDrawable() {
