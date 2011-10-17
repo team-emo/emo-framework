@@ -127,8 +127,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     int width  = 0;
     int height = 0;
 	
-    if (drawable.name != nil && (!loadPngSizeFromAsset(drawable.name, 
-				&width, &height) || width <= 0 || height <= 0)) {
+    if (drawable.name != nil && !loadPngSizeFromAsset(drawable.name, &width, &height)) {
         [drawable release];
         return 0;
     }
@@ -263,8 +262,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     int width  = 0;
     int height = 0;
     
-    if ((drawable.name != nil && !loadPngSizeFromAsset(drawable.name, &width, &height)) || 
-		(width <= 0 || height <= 0 || frameWidth <= 0 || frameHeight <= 0)) {
+    if (drawable.name != nil && !loadPngSizeFromAsset(drawable.name, &width, &height)) {
         [drawable release];
         return 0;
     }

@@ -152,7 +152,7 @@ BOOL loadPngSizeFromAsset(NSString* filename, int *width, int *height) {
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 	fclose(fp);
 	
-    return TRUE;
+    return width > 0 && height > 0;
 }
 
 /* 

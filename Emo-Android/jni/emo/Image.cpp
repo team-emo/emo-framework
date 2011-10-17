@@ -114,7 +114,7 @@ bool loadPngSizeFromAsset(const char *fname, int *width, int *height) {
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
     AAsset_close(asset);
 
-    return true;
+    return width > 0 && height > 0;
 }
 
 /* 

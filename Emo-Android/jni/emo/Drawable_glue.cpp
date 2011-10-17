@@ -133,7 +133,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     int width  = 0;
     int height = 0;
     if (name != NULL && strlen(name) > 0) {
-        if (!loadPngSizeFromAsset(name, &width, &height) || width <= 0 || height <= 0) {
+        if (!loadPngSizeFromAsset(name, &width, &height)) {
             delete drawable;
             return 0;
         }
@@ -360,7 +360,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     int height = 0;
 
     if (name != NULL && strlen(name) > 0) {
-         if (!loadPngSizeFromAsset(name, &width, &height) || width <= 0 || height <= 0 || frameWidth <= 0 || frameHeight <= 0) {
+         if (!loadPngSizeFromAsset(name, &width, &height)) {
             delete drawable;
             return 0;
         }
