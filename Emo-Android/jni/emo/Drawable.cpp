@@ -171,6 +171,7 @@ namespace emo {
         this->orthFactorX = 1.0;
         this->orthFactorY = 1.0;
         this->isScreenEntity = true;
+        this->useFont = false;
     }
 
     Drawable::~Drawable() {
@@ -217,7 +218,11 @@ namespace emo {
 
         // reload texture data when the data is freed
         if (this->hasTexture && this->texture->mustReload) {
-            loadPngFromAsset(this->name.c_str(), this->texture, false);
+            if (this->useFont) {
+                engine->javaGlue->loadTextBitmap(this, this->texture, false);
+            } else {
+                loadPngFromAsset(this->name.c_str(), this->texture, false);
+            }
         }
 
         this->hasBuffer = true;
@@ -1200,4 +1205,13 @@ namespace emo {
         Drawable::onDrawFrame();
         engine->stage->dirty = true;
     }
+
+    FontDrawable::FontDrawable() {
+
+    }
+
+    FontDrawable::~FontDrawable() {
+
+    }
+
 }

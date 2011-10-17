@@ -1307,6 +1307,17 @@ class emo.Sprite {
 
 }
 
+class emo.FontSprite extends emo.Sprite {
+    function constructor(_name, _fontsize = null, _fontface = null) {
+        name = "emo.FontSprite::" + _name;
+        id = stage.createFontSprite(name, _fontsize, _fontface);
+    }
+    function selectText(_name, _fontsize = null, _fontface = null) {
+        name = _name;
+        stage.fontSpriteSelectText(id, _name, _fontsize, _fontface);
+    }
+}
+
 class emo.SpriteSheet extends emo.Sprite {
 
     function constructor(rawname, frameWidth = 1, frameHeight = 1, border = 0, margin = 0, frameIndex = 0) {

@@ -3,6 +3,12 @@ package com.emo_framework;
 import android.app.NativeActivity;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.FontMetrics;
+import android.graphics.Paint.Style;
 import android.os.AsyncTask;
 import android.os.Vibrator;
 import android.util.Log;
@@ -11,6 +17,7 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,6 +51,41 @@ public class EmoActivity extends NativeActivity {
     private static synchronized Random initRNG() {
         Random rnd = randomNumberGenerator;
         return (rnd == null) ? (randomNumberGenerator = new Random()) : rnd;
+    }
+
+    public byte[] loadTextBitmap(String name, String fontFace, int fontSize) {
+    	// extract property name
+    	String targetName = name.substring(name.indexOf("::") + 2);
+    	int targetId = getResources().getIdentifier(targetName, "string", getPackageName());
+
+    	String targetValue = " ";
+    	if (targetId != 0) {
+        	targetValue = getResources().getString(targetId);
+    	}
+    	
+    	Paint forePaint = new Paint();
+    	Paint backPaint = new Paint();
+    	
+    	forePaint.setColor(Color.WHITE);
+    	forePaint.setTextSize(fontSize);
+    	forePaint.setAntiAlias(true);
+    	
+    	backPaint.setColor(Color.TRANSPARENT);
+    	backPaint.setStyle(Style.FILL);
+
+    	FontMetrics metrics = forePaint.getFontMetrics();
+    	int width  = (int)Math.ceil(forePaint.measureText(targetValue));
+    	int height = (int)Math.ceil(Math.abs(metrics.ascent) + 
+    			Math.abs(metrics.descent) + Math.abs(metrics.leading));
+    	
+    	Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+    	Canvas canvas = new Canvas(bitmap);
+    	canvas.drawRect(0, 0, width, height, backPaint);
+    	canvas.drawText(targetValue, 0, height - metrics.descent , forePaint);
+
+    	ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+        return os.toByteArray();
     }
 
     /*

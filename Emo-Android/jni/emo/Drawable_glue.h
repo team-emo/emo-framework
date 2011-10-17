@@ -33,6 +33,7 @@
 void initDrawableFunctions();
 
 SQInteger emoDrawableCreateSprite(HSQUIRRELVM v);
+SQInteger emoDrawableCreateFontSprite(HSQUIRRELVM v);
 SQInteger emoDrawableCreateLine(HSQUIRRELVM v);
 SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v);
 SQInteger emoDrawableCreateMapSprite(HSQUIRRELVM v);

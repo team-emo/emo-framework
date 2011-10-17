@@ -41,6 +41,7 @@ void initDrawableFunctions() {
     registerClass(engine->sqvm, EMO_STAGE_CLASS);
 
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSprite",     emoDrawableCreateSprite);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createFontSprite", emoDrawableCreateFontSprite);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createLine",       emoDrawableCreateLine);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createMapSprite",     emoDrawableCreateMapSprite);
@@ -142,6 +143,62 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     drawable->height = height;
     drawable->frameWidth  = width;
     drawable->frameHeight = height;
+
+    char key[DRAWABLE_KEY_LENGTH];
+    sprintf(key, "%ld%d-%d", 
+                engine->uptime.time, engine->uptime.millitm, drawable->getCurrentBufferId());
+
+    engine->addDrawable(key, drawable);
+
+    sq_pushstring(v, key, strlen(key));
+
+    return 1;
+}
+
+/*
+ * create font drawable instance (single sprite)
+ * 
+ * @param property name that indicates the text string
+ * @return drawable id
+ */
+SQInteger emoDrawableCreateFontSprite(HSQUIRRELVM v) {
+
+    emo::FontDrawable* drawable = new emo::FontDrawable();
+    drawable->setFrameCount(1);
+    drawable->load();
+
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+
+        if (strlen(name) > 0) {
+            drawable->name = name;
+            drawable->needTexture = true;
+        }
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    int fontSize = 0;
+    
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        sq_getinteger(v, 3, &fontSize);
+    }
+    if (nargs >= 4 && sq_gettype(v, 4) == OT_STRING) {
+        const SQChar* fontFace;
+        sq_tostring(v, 4);
+        sq_getstring(v, -1, &fontFace);
+
+        if (strlen(fontFace) > 0) {
+            drawable->fontFace = fontFace;
+        }
+    }
+
+    drawable->fontSize = fontSize;
+    drawable->useFont  = true;
 
     char key[DRAWABLE_KEY_LENGTH];
     sprintf(key, "%ld%d-%d", 
@@ -436,6 +493,28 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 
         if (engine->hasCachedImage(drawable->name)) {
             image = engine->getCachedImage(drawable->name);
+        } else if (drawable->useFont) {
+            image = new emo::Image();
+            if (engine->javaGlue->loadTextBitmap(drawable, image, true)) {
+
+                drawable->width  = image->width;
+                drawable->height = image->height;
+                drawable->frameWidth  = image->width;
+                drawable->frameHeight = image->height;
+
+                // calculate the size of power of two
+                image->glWidth  = nextPowerOfTwo(image->width);
+                image->glHeight = nextPowerOfTwo(image->height);
+                image->loaded   = false;
+
+                image->genTextures();
+
+                engine->addCachedImage(drawable->name, image);
+            } else {
+                delete image;
+                sq_pushinteger(v, ERR_ASSET_LOAD);
+                return 1;
+            }
         } else {
             image = new emo::Image();
             if (loadPngFromAsset(drawable->name.c_str(), image, true)) {

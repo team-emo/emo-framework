@@ -179,6 +179,7 @@ namespace emo {
         float orthFactorY;
 
         bool isScreenEntity;
+        bool useFont;
 
     protected:
 
@@ -275,6 +276,15 @@ namespace emo {
         virtual bool bindVertex();
         virtual void onDrawFrame();
 
+    };
+
+    class FontDrawable : public Drawable {
+    public:
+        FontDrawable();
+        virtual ~FontDrawable();
+
+        int fontSize;
+        std::string fontFace;
     };
 }
 #endif

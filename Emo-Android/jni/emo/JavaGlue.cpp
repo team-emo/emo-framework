@@ -69,7 +69,6 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_callback
     errMsg = strdup(cmsg);
     env->ReleaseStringUTFChars(jerrMsg, cmsg);
 
-
     callSqFunction_Bool_Strings(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, name, value, errCode, errMsg, false);
 
     free(name);
@@ -312,6 +311,32 @@ namespace emo {
 
     void JavaGlue::vibrate() {
     	this->callVoid_Void("vibrate");
+    }
+
+    bool JavaGlue::loadTextBitmap(Drawable* drawable, Image* image, bool forceUpdate) {
+        emo::FontDrawable* fontDrawable = reinterpret_cast<emo::FontDrawable*>(drawable);
+
+        image->filename = drawable->name;
+
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "loadTextBitmap", "(Ljava/lang/String;Ljava/lang/String;I)[B");
+        jbyteArray src = (jbyteArray)env->CallObjectMethod(engine->app->activity->clazz, methodj,
+                                 env->NewStringUTF(fontDrawable->name.c_str()),
+                                 env->NewStringUTF(fontDrawable->fontFace.c_str()),
+                                 (jint)fontDrawable->fontSize);
+        jsize size = env->GetArrayLength(src);
+
+        jbyte* png = env->GetByteArrayElements(src, NULL);
+        loadPngFromBytes((unsigned char*)png, size, image, forceUpdate);
+        env->ReleaseByteArrayElements(src, png, JNI_ABORT);
+        vm->DetachCurrentThread();
+
+        return image->width > 0 && image->height > 0;
     }
 }
 

@@ -63,6 +63,7 @@ namespace emo {
         bool isSimulator();
         void vibrate();
         std::string getDataFilePath(std::string name);
+        bool loadTextBitmap(Drawable* drawable, Image* image, bool forceUpdate);
     };
 }
 

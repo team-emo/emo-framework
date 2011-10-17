@@ -70,6 +70,86 @@ static void png_asset_read(png_structp png_ptr, png_bytep data, png_uint_32 leng
     AAsset_read(asset, data, length);
 }
 
+struct png_data {
+    unsigned char* data;
+    unsigned long  length;
+    unsigned long  offset;
+};
+
+static void png_data_read(png_structp png_ptr, png_bytep data, png_uint_32 length){
+    png_data* buffer = (png_data *)png_get_io_ptr(png_ptr);
+    if (buffer->offset + length <= buffer->length) {
+        memcpy(data, buffer->data + buffer->offset, length);
+        buffer->offset += length;
+    } else {
+        png_error(png_ptr, "png_data_read failed");
+    }
+}
+
+/*
+ * load png from byte array
+ */
+bool loadPngFromBytes(unsigned char* data, int data_size, emo::Image* imageInfo, bool forcePropertyUpdate) {
+    png_data png_data;
+    png_data.data = data;
+    png_data.offset = 0;
+    png_data.length = data_size;
+
+    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    png_infop info_ptr = png_create_info_struct(png_ptr);
+
+    if (info_ptr == NULL) {
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        return false;
+    }
+
+    if (setjmp(png_jmpbuf(png_ptr))) {
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        return false;
+    }
+
+    png_set_read_fn(png_ptr, (void *)&png_data, png_data_read);
+
+    unsigned int sig_read = 0;
+    png_set_sig_bytes(png_ptr, sig_read);
+
+    png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND, NULL);
+
+    if (forcePropertyUpdate) {
+        imageInfo->textureId = 0;
+        imageInfo->width  = info_ptr->width;
+        imageInfo->height = info_ptr->height;
+    }
+
+    switch (info_ptr->color_type) {
+        case PNG_COLOR_TYPE_RGBA:
+            imageInfo->hasAlpha = true;
+            break;
+        case PNG_COLOR_TYPE_RGB:
+            imageInfo->hasAlpha = false;
+            break;
+        default:
+            LOGE("loadPngFromAsset: unsupported color type");
+            png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+            return false;
+    }
+    unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
+    imageInfo->data = (unsigned char*) malloc(row_bytes * imageInfo->height);
+
+    png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
+
+    for (int i = 0; i < imageInfo->height; i++) {
+        memcpy(imageInfo->data+(row_bytes * (imageInfo->height-1-i)), row_pointers[i], row_bytes);
+    }
+
+    png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+
+    imageInfo->hasData = true;
+    imageInfo->mustReload = false;
+
+    return imageInfo->width > 0 && imageInfo->height > 0;
+}
+
 bool loadPngSizeFromAsset(const char *fname, int *width, int *height) {
     AAssetManager* mgr = engine->app->activity->assetManager;
     if (mgr == NULL) {

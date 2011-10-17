@@ -59,5 +59,6 @@ namespace emo {
 
 bool loadPngSizeFromAsset(const char *fname, int *width, int *height);
 bool loadPngFromAsset(const char *fname, emo::Image* image, bool forcePropertyUpdate);
+bool loadPngFromBytes(unsigned char* data, int data_size, emo::Image* imageInfo, bool forcePropertyUpdate);
 
 #endif
