@@ -55,7 +55,9 @@ public class EmoActivity extends NativeActivity {
     }
 
     public byte[] loadTextBitmap(String name, int fontSize,
-    		String fontFace, boolean isBold, boolean isItalic) {
+    		String fontFace, boolean isBold, boolean isItalic,
+    		String param1, String param2, String param3,
+    		String param4, String param5, String param6) {
     	// extract property name
     	String targetName = name.substring(name.indexOf("::") + 2);
     	int targetId = getResources().getIdentifier(targetName, "string", getPackageName());
@@ -64,6 +66,10 @@ public class EmoActivity extends NativeActivity {
     	if (targetId != 0) {
         	targetValue = getResources().getString(targetId);
     	}
+    	
+    	// target value accepts 6 parameters at most
+    	targetValue = String.format(targetValue,
+    			param1, param2, param3, param4, param5, param6);
     	
     	Paint forePaint = new Paint();
     	Paint backPaint = new Paint();

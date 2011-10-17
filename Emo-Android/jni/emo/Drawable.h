@@ -287,6 +287,13 @@ namespace emo {
         std::string fontFace;
         SQBool isBold;
         SQBool isItalic;
+
+        std::string param1;
+        std::string param2;
+        std::string param3;
+        std::string param4;
+        std::string param5;
+        std::string param6;
     };
 }
 #endif

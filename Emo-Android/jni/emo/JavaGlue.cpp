@@ -324,13 +324,20 @@ namespace emo {
         vm->AttachCurrentThread(&env, NULL);
 
         jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
-        jmethodID methodj = env->GetMethodID(clazz, "loadTextBitmap", "(Ljava/lang/String;ILjava/lang/String;ZZ)[B");
+        jmethodID methodj = env->GetMethodID(clazz, "loadTextBitmap", 
+            "(Ljava/lang/String;ILjava/lang/String;ZZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)[B");
         jbyteArray src = (jbyteArray)env->CallObjectMethod(engine->app->activity->clazz, methodj,
                                  env->NewStringUTF(fontDrawable->name.c_str()),
                                  (jint)fontDrawable->fontSize,
                                  env->NewStringUTF(fontDrawable->fontFace.c_str()),
                                  fontDrawable->isBold   ? JNI_TRUE : JNI_FALSE,
-                                 fontDrawable->isItalic ? JNI_TRUE : JNI_FALSE
+                                 fontDrawable->isItalic ? JNI_TRUE : JNI_FALSE,
+                                 env->NewStringUTF(fontDrawable->param1.c_str()),
+                                 env->NewStringUTF(fontDrawable->param2.c_str()),
+                                 env->NewStringUTF(fontDrawable->param3.c_str()),
+                                 env->NewStringUTF(fontDrawable->param4.c_str()),
+                                 env->NewStringUTF(fontDrawable->param5.c_str()),
+                                 env->NewStringUTF(fontDrawable->param6.c_str())
                                  );
         jsize size = env->GetArrayLength(src);
 

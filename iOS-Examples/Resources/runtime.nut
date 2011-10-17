@@ -1312,6 +1312,15 @@ class emo.FontSprite extends emo.Sprite {
         name = "emo.FontSprite::" + _name;
         id = stage.createFontSprite(name, _fontsize, _fontface, _isBold, _isItalic);
     }
+    function setParam(param1, param2 = null, param3 = null, param4 = null, param5 = null, param6 = null) {
+        if (param1 != null) param1 = param1.tostring();
+        if (param2 != null) param2 = param2.tostring();
+        if (param3 != null) param3 = param3.tostring();
+        if (param4 != null) param4 = param4.tostring();
+        if (param5 != null) param5 = param5.tostring();
+        if (param6 != null) param6 = param6.tostring();
+        stage.setFontSpriteParam(id, param1, param2, param3, param4, param5, param6);
+    }
 }
 
 class emo.SpriteSheet extends emo.Sprite {
