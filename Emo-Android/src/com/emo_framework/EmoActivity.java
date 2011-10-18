@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -52,6 +53,10 @@ public class EmoActivity extends NativeActivity {
     private static synchronized Random initRNG() {
         Random rnd = randomNumberGenerator;
         return (rnd == null) ? (randomNumberGenerator = new Random()) : rnd;
+    }
+    
+    public String getDefaultLocale() {
+    	return Locale.getDefault().toString();
     }
 
     public byte[] loadTextBitmap(String name, int fontSize,

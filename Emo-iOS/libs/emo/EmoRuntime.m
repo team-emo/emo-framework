@@ -156,6 +156,7 @@ void initRuntimeFunctions() {
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "buildNumber",   emoRuntimeBuildNumber);	
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoRuntimeEcho);	
     registerClassFunc(engine.sqvm, EMO_NET_CLASS,     "request",      emoAsyncHttpRequest);
+    registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "getDefaultLocale",   emoRuntimeGetDefaultLocale);
 
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "enableSimpleLog",          emoEnableSimpleLog);
     registerClassFunc(engine.sqvm, EMO_RUNTIME_CLASS, "enableSimpleLogWithLevel", emoEnableSimpleLogWithLevel);
@@ -756,5 +757,13 @@ SQInteger emoRuntimeRandom(HSQUIRRELVM v) {
     }   
     
     sq_pushinteger(v, arc4random() % max);
+    return 1;
+}
+
+/*
+ * Returns default locale
+ */
+SQInteger emoRuntimeGetDefaultLocale(HSQUIRRELVM v) {
+    sq_pushstring(v, [[[NSLocale currentLocale] objectForKey:NSLocaleIdentifier] UTF8String], -1);
     return 1;
 }

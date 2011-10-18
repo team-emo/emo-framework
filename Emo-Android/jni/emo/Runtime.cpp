@@ -88,6 +88,7 @@ void initRuntimeFunctions() {
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "enableSimpleLogWithLevel", emoEnableSimpleLogWithLevel);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "nativeRandom", emoRuntimeNativeRandom);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "random",       emoRuntimeRandom);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "getDefaultLocale",         emoGetDefaultLocale);
 
     registerClassFunc(engine->sqvm, EMO_ANDROID_CLASS,   "toast",        emoRuntimeAndroidToast);
 }
@@ -908,4 +909,12 @@ SQInteger emoRuntimeAndroidToast(HSQUIRRELVM v) {
     engine->javaGlue->callStringInt_Void("toast", text, duration);
 
     return 0;
+}
+
+/*
+ * Returns default locale
+ */
+SQInteger emoGetDefaultLocale(HSQUIRRELVM v) {
+    sq_pushstring(v, engine->javaGlue->callVoid_String("getDefaultLocale").c_str(), -1);
+    return 1;
 }

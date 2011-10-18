@@ -1,4 +1,5 @@
 local stage = emo.Stage();
+local runtime = emo.Runtime();
 
 /*
  * This example shows a font sprite that uses native fonts and 
@@ -69,6 +70,9 @@ class Main {
         text3.color(1, 0, 1, 1);
         text4.color(0, 1, 1, 1);
         text5.color(0, 1, 0, 1);
+        
+        // print current locale
+        print(runtime.getDefaultLocale());
     }
 
     /*
