@@ -48,6 +48,7 @@
 @property (readwrite) BOOL hasAlpha;
 @property (readwrite) BOOL loaded;
 @property (readwrite) int referenceCount;
+@property (readwrite) BOOL freed;
 
 -(void)genTextures;
 -(void)doUnload;

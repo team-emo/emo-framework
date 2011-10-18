@@ -35,12 +35,14 @@
 @synthesize data;
 @synthesize hasAlpha, loaded;
 @synthesize referenceCount;
+@synthesize freed;
 
 - (id)init {
     self = [super init];
     if (self != nil) {
 		referenceCount = 0;
         freed = FALSE;
+        data  = nil;
     }
     return self;
 }
@@ -57,9 +59,10 @@
 	textureId = 0;
 }
 -(void)freeData {
-    if (freed) return;
+    if (freed || data == nil) return;
     free(data);
     freed = TRUE;
+    data = nil;
 }
 -(void)dealloc {
 	[filename release];

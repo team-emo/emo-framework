@@ -902,6 +902,8 @@ extern EmoEngine* engine;
 }
 
 -(void)loadTextBitmap {
+    [texture freeData];
+    
     UIFont* font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
     
     if ([fontFace length] > 0) {
@@ -958,6 +960,7 @@ extern EmoEngine* engine;
     texture.glHeight = nextPowerOfTwo(texture.height);
     texture.data   = bitmap;
     texture.hasAlpha = TRUE;
+    texture.freed = FALSE;
     
 }
 @end
