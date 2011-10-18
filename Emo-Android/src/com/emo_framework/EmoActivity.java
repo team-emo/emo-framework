@@ -80,16 +80,6 @@ public class EmoActivity extends NativeActivity {
     		} else if (isBold) {
     			forePaint.setTypeface(Typeface.DEFAULT_BOLD);
     		}
-    	} else if (fontFace.contains(".")) {
-    		Typeface typeface = Typeface.createFromAsset(getAssets(), fontFace);
-    		
-    		if (isBold && isItalic) {
-    			typeface = Typeface.create(typeface, Typeface.BOLD_ITALIC);
-    		} else if (isBold) {
-    			typeface = Typeface.create(typeface, Typeface.BOLD);
-    		}
-    		
-    		forePaint.setTypeface(typeface);
     	} else {
     		Typeface typeface = Typeface.DEFAULT;
     		String lowerCase = fontFace.toLowerCase();
@@ -100,6 +90,10 @@ public class EmoActivity extends NativeActivity {
     			typeface = Typeface.SANS_SERIF;
     		} else if (lowerCase.equals("monospace")) {
     			typeface = Typeface.MONOSPACE;
+    		} else if (fontFace.contains(".")) {
+        		typeface = Typeface.createFromAsset(getAssets(), fontFace);
+    		} else {
+        		typeface = Typeface.createFromAsset(getAssets(), fontFace + ".ttf");
     		}
     		
     		if (isBold && isItalic) {

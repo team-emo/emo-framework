@@ -575,6 +575,15 @@ SQInteger emoDrawableReloadFontSprite(HSQUIRRELVM v) {
 
     engine->javaGlue->loadTextBitmap(drawable, drawable->getTexture(), true);
 
+    drawable->width  = drawable->getTexture()->width;
+    drawable->height = drawable->getTexture()->height;
+    drawable->frameWidth  = drawable->width;
+    drawable->frameHeight = drawable->height;
+
+    // calculate the size of power of two
+    drawable->getTexture()->glWidth  = nextPowerOfTwo(drawable->width);
+    drawable->getTexture()->glHeight = nextPowerOfTwo(drawable->height);
+
     drawable->getTexture()->genTextures();
 
     drawable->reload();

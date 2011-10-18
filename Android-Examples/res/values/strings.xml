@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Emo Examples</string>
+    <string name="hello">Hello, %s!</string>
+    <string name="hello_ja">こんにちは</string>
+    <string name="hello_kr">안녕하세요</string>
+    <string name="hello_ru">привет</string>
+    <string name="hello_gr">Γεια σας</string>
+    <string name="hello_ch">您好</string>
 </resources>

@@ -31,6 +31,8 @@
 		F921CCB2136FFBAC00F058FF /* drums.wav in Resources */ = {isa = PBXBuildFile; fileRef = F921CCA5136FFBAC00F058FF /* drums.wav */; };
 		F921CCB3136FFBAC00F058FF /* tada.wav in Resources */ = {isa = PBXBuildFile; fileRef = F921CCA6136FFBAC00F058FF /* tada.wav */; };
 		F921CCB4136FFBAC00F058FF /* sprite_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F921CCA7136FFBAC00F058FF /* sprite_example.nut */; };
+		F9293F28144D21780021BA53 /* strings.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9293F27144D21780021BA53 /* strings.plist */; };
+		F9293F2A144D40690021BA53 /* fontsprite_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9293F29144D40690021BA53 /* fontsprite_example.nut */; };
 		F92B7209136FD37200DD803C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B7208136FD37200DD803C /* AudioToolbox.framework */; };
 		F92B720D136FD38000DD803C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B720C136FD38000DD803C /* OpenAL.framework */; };
 		F92B720F136FD38000DD803C /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B720E136FD38000DD803C /* OpenGLES.framework */; };
@@ -212,6 +214,8 @@
 		F921CCA5136FFBAC00F058FF /* drums.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = drums.wav; sourceTree = "<group>"; };
 		F921CCA6136FFBAC00F058FF /* tada.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = tada.wav; sourceTree = "<group>"; };
 		F921CCA7136FFBAC00F058FF /* sprite_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = sprite_example.nut; path = Resources/sprite_example.nut; sourceTree = "<group>"; };
+		F9293F27144D21780021BA53 /* strings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = strings.plist; path = Resources/strings.plist; sourceTree = "<group>"; };
+		F9293F29144D40690021BA53 /* fontsprite_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fontsprite_example.nut; path = Resources/fontsprite_example.nut; sourceTree = "<group>"; };
 		F92B7208136FD37200DD803C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F92B720C136FD38000DD803C /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		F92B720E136FD38000DD803C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -522,6 +526,7 @@
 				F9B14CF0138C854B004A8FD8 /* textsprite_example.nut */,
 				F9856D8D1375576B00F6C00F /* tiles_example.nut */,
 				F99422BF1449C0170033B046 /* atlas_example.nut */,
+				F9293F29144D40690021BA53 /* fontsprite_example.nut */,
 				F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */,
 				F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */,
 				F967A8C21372A17800BEF871 /* modifier_move_example.nut */,
@@ -561,6 +566,7 @@
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* iOS_Examples-Info.plist */,
+				F9293F27144D21780021BA53 /* strings.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1038,6 +1044,8 @@
 				F9B132EF14496B4300D37B79 /* icons_pack_Sparrow.xml in Resources */,
 				F9B132F014496B4300D37B79 /* icons_pack.png in Resources */,
 				F99422C01449C0170033B046 /* atlas_example.nut in Resources */,
+				F9293F28144D21780021BA53 /* strings.plist in Resources */,
+				F9293F2A144D40690021BA53 /* fontsprite_example.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

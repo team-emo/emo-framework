@@ -65,7 +65,7 @@ namespace emo {
 /*
  * callback function to read png image
  */
-static void png_asset_read(png_structp png_ptr, png_bytep data, png_uint_32 length) {
+static void png_asset_read(png_structp png_ptr, png_bytep data, png_size_t length) {
     AAsset* asset = (AAsset*)png_get_io_ptr(png_ptr);
     AAsset_read(asset, data, length);
 }
@@ -76,8 +76,8 @@ struct png_data {
     unsigned long  offset;
 };
 
-static void png_data_read(png_structp png_ptr, png_bytep data, png_uint_32 length){
-    png_data* buffer = (png_data *)png_get_io_ptr(png_ptr);
+static void png_data_read(png_structp png_ptr, png_bytep data, png_size_t length){
+    struct png_data* buffer = (struct png_data *)png_get_io_ptr(png_ptr);
     if (buffer->offset + length <= buffer->length) {
         memcpy(data, buffer->data + buffer->offset, length);
         buffer->offset += length;
@@ -90,7 +90,7 @@ static void png_data_read(png_structp png_ptr, png_bytep data, png_uint_32 lengt
  * load png from byte array
  */
 bool loadPngFromBytes(unsigned char* data, int data_size, emo::Image* imageInfo, bool forcePropertyUpdate) {
-    png_data png_data;
+    struct png_data png_data;
     png_data.data = data;
     png_data.offset = 0;
     png_data.length = data_size;

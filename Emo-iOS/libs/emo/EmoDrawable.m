@@ -33,6 +33,7 @@
 #include <VmFunc.h>
 #include <EmoEngine.h>
 #include <EmoEngine_glue.h>
+#include <Util.h>
 
 extern EmoEngine* engine;
 
@@ -903,7 +904,10 @@ extern EmoEngine* engine;
 -(void)loadTextBitmap {
     UIFont* font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
     
-    if (fontSize > 0) {
+    if ([fontFace length] > 0) {
+        NSInteger size = fontSize > 0 ? fontSize : [UIFont systemFontSize];
+        font = [UIFont fontWithName:fontFace size:size];
+    } else if (fontSize > 0) {
         font = [UIFont systemFontOfSize:fontSize];
     }
     
@@ -950,6 +954,8 @@ extern EmoEngine* engine;
     
     texture.width  = textWidth;
     texture.height = textHeight;
+    texture.glWidth  = nextPowerOfTwo(texture.width);
+    texture.glHeight = nextPowerOfTwo(texture.height);
     texture.data   = bitmap;
     texture.hasAlpha = TRUE;
     

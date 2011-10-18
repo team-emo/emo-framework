@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>hello</key>
+	<string>Hello, %s!</string>
+	<key>hello_ja</key>
+	<string>こんにちは</string>
+	<key>hello_kr</key>
+	<string>안녕하세요</string>
+	<key>hello_ru</key>
+	<string>привет</string>
+	<key>hello_gr</key>
+	<string>Γεια σας</string>
+	<key>hello_ch</key>
+	<string>您好</string>
+</dict>
+</plist>

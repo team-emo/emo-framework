@@ -477,6 +477,11 @@ SQInteger emoDrawableReloadFontSprite(HSQUIRRELVM v) {
     
     [drawable loadTextBitmap];
     
+    drawable.width  = drawable.texture.width;
+    drawable.height = drawable.texture.height;
+    drawable.frameWidth  = drawable.texture.width;
+    drawable.frameHeight = drawable.texture.height;
+    
     [drawable.texture genTextures];
     [drawable bindVertex];
     

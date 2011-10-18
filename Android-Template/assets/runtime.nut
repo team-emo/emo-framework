@@ -1309,8 +1309,11 @@ class emo.Sprite {
 
 class emo.FontSprite extends emo.Sprite {
     function constructor(_name, _fontsize = null, _fontface = null, _isBold = false, _isItalic = false) {
-        name = "emo.FontSprite::" + _name;
+        updateName(_name);
         id = stage.createFontSprite(name, _fontsize, _fontface, _isBold, _isItalic);
+    }
+    function updateName(_name) {
+        name = "emo.FontSprite::" + _name;
     }
     function setParam(param1, param2 = null, param3 = null, param4 = null, param5 = null, param6 = null) {
         if (param1 != null) param1 = param1.tostring();
@@ -1322,8 +1325,8 @@ class emo.FontSprite extends emo.Sprite {
         stage.setFontSpriteParam(id, param1, param2, param3, param4, param5, param6);
     }
     function reload(_name = null) {
-        if (_name != null) name = _name;
-        stage.reloadFontSprite(id, _name);
+        if (_name != null) updateName(_name);
+        stage.reloadFontSprite(id, name);
     }
 }
 
