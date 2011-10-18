@@ -200,6 +200,7 @@ extern EmoEngine* engine;
 @synthesize loaded;
 @synthesize isScreenEntity;
 @synthesize isPackedAtlas;
+@synthesize useFont;
 
 -(BOOL)loadPackedAtlasXml:(NSInteger)initialFrameIndex {
     // check if the length is shorter than the length of ".xml"
@@ -391,6 +392,7 @@ extern EmoEngine* engine;
     orthFactorY = 1.0;
     
     isScreenEntity = TRUE;
+    useFont = FALSE;
     
     imagepacks = [[NSMutableDictionary alloc]init];
     imagepacks_names = [[NSMutableArray alloc]init];
@@ -569,7 +571,7 @@ extern EmoEngine* engine;
 	}
 	glGenBuffers (1, &frames_vbos[frame_index]);
 }
--(void)doUnload {
+-(void)doUnload:(BOOL)doAll {
 	if (!loaded) return;
 	if (hasTexture) {
 		texture.referenceCount--;
@@ -577,7 +579,7 @@ extern EmoEngine* engine;
 			[texture doUnload];
 			if (name != nil) [engine removeCachedImage:name];
 		}
-		[texture release];
+		if (doAll) [texture release];
 		hasTexture = FALSE;
 	}
 	for (int i = 0; i < frameCount; i++) {
@@ -589,8 +591,10 @@ extern EmoEngine* engine;
 	frame_index = 0;
 	free(frames_vbos);
 	
-	[self deleteAnimations];
-    [self deleteImagePacks];
+    if (doAll) {
+        [self deleteAnimations];
+        [self deleteImagePacks];
+    }
 	
 	loaded = FALSE;
 }
@@ -866,5 +870,85 @@ extern EmoEngine* engine;
     engine.stage.dirty = TRUE;
     
     return TRUE;
+}
+@end
+
+@implementation EmoFontDrawable
+@synthesize fontSize, fontFace, isBold, isItalic;
+@synthesize param1, param2, param3, param4, param5, param6;
+
+-(void)initDrawable {
+	[super initDrawable];
+    
+    fontSize = 0;
+    isBold   = FALSE;
+    isItalic = FALSE;
+}
+
+-(void)dealloc {
+    [fontFace release];
+    [param1 release];
+    [param2 release];
+    [param3 release];
+    [param4 release];
+    [param5 release];
+    [param6 release];
+    
+    [super dealloc];
+}
+
+-(void)loadTextBitmap {
+    UIFont* font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    
+    if (fontSize > 0) {
+        font = [UIFont systemFontOfSize:fontSize];
+    }
+    
+    NSString* text = @" ";
+    
+    // extract property name
+    NSString* propName = 
+            [name substringFromIndex:[name rangeOfString:@"::"].location+2];
+
+    // retrieve property value
+    NSDictionary* plist = [NSDictionary dictionaryWithContentsOfFile:[
+            [NSBundle mainBundle] pathForResource:@"strings" ofType:@"plist"]];  
+    if ([plist objectForKey:propName] != nil) {
+        NSString* formatStr = [[plist objectForKey:propName] 
+                               stringByReplacingOccurrencesOfString:@"%s" withString:@"%@"];
+        
+        text = [NSString stringWithFormat:formatStr,
+                param1, param2, param3, param4, param5, param6];
+    }
+    
+    CGSize textSize = [text sizeWithFont:font]; 
+    
+    int textWidth  = textSize.width;
+    int textHeight = textSize.height;
+    
+    GLubyte *bitmap = (GLubyte *)malloc(textWidth * textHeight * 4);
+    memset(bitmap, 0, textWidth * textHeight * 4);
+
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(
+                    bitmap, textWidth, textHeight,
+                    8, textWidth * 4, colorSpace,
+                    kCGImageAlphaPremultipliedLast);
+    
+    UIGraphicsPushContext(context);
+
+    [[UIColor whiteColor] set];
+    [text drawAtPoint:CGPointMake(0, 0) withFont:font];
+    
+    UIGraphicsPopContext();
+    
+    CGColorSpaceRelease(colorSpace);
+    CGContextRelease(context);
+    
+    texture.width  = textWidth;
+    texture.height = textHeight;
+    texture.data   = bitmap;
+    texture.hasAlpha = TRUE;
+    
 }
 @end

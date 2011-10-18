@@ -623,7 +623,7 @@ static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInte
 
 	[_key retain];
 	EmoDrawable* drawable = [drawables objectForKey:_key];
-	[drawable doUnload];
+	[drawable doUnload:TRUE];
 	[drawable release];
 	[drawables removeObjectForKey:_key];
 	[_key release];
@@ -635,7 +635,7 @@ static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInte
 -(void)clearDrawables {
 	
 	for (NSString* key in drawables) {
-		[[drawables objectForKey:key] doUnload];
+		[[drawables objectForKey:key] doUnload:TRUE];
 		[[drawables objectForKey:key] release];
 	}
 	

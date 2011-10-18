@@ -56,5 +56,5 @@
 -(NSInteger)getTileAt:(NSInteger) row column:(NSInteger)column;
 -(NSArray*)getTileIndexAtCoord:(float) x y:(float)y;
 -(NSArray*)getTilePositionAtCoord:(float)x y:(float)y;
-
+-(void)doUnload:(BOOL)doAll;
 @end

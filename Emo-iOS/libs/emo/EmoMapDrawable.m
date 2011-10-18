@@ -60,9 +60,9 @@
 	[super dealloc];
 }
 
--(void)doUnload {
+-(void)doUnload:(BOOL)doAll {
     [self unbindMeshVertex];
-    [super doUnload];
+    [super doUnload:doAll];
 }
 
 -(void)unbindMeshVertex {
