@@ -182,6 +182,7 @@
 		F9E503BE138BD4B900C7F0BD /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = F9E503BD138BD4B900C7F0BD /* loading.png */; };
 		F9F5AB9F138880D90068EC12 /* tv.png in Resources */ = {isa = PBXBuildFile; fileRef = F9F5AB9E138880D90068EC12 /* tv.png */; };
 		F9F99BDA139E09EB0059B4C8 /* audio_volume_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9F99BD9139E09D60059B4C8 /* audio_volume_example.nut */; };
+		F9FC6D55144E3C7F00C5E087 /* TestarossaNF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F9FC6D54144E3C7F00C5E087 /* TestarossaNF.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -451,6 +452,7 @@
 		F9E503BD138BD4B900C7F0BD /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		F9F5AB9E138880D90068EC12 /* tv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tv.png; sourceTree = "<group>"; };
 		F9F99BD9139E09D60059B4C8 /* audio_volume_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = audio_volume_example.nut; path = Resources/audio_volume_example.nut; sourceTree = "<group>"; };
+		F9FC6D54144E3C7F00C5E087 /* TestarossaNF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = TestarossaNF.ttf; path = Resources/TestarossaNF.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -567,6 +569,7 @@
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* iOS_Examples-Info.plist */,
 				F9293F27144D21780021BA53 /* strings.plist */,
+				F9FC6D54144E3C7F00C5E087 /* TestarossaNF.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1046,6 +1049,7 @@
 				F99422C01449C0170033B046 /* atlas_example.nut in Resources */,
 				F9293F28144D21780021BA53 /* strings.plist in Resources */,
 				F9293F2A144D40690021BA53 /* fontsprite_example.nut in Resources */,
+				F9FC6D55144E3C7F00C5E087 /* TestarossaNF.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

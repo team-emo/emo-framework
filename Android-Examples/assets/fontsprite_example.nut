@@ -40,7 +40,12 @@ class Main {
         text2 = emo.FontSprite("hello_ja", 30);
         text3 = emo.FontSprite("hello_kr", 30);
         text4 = emo.FontSprite("hello_ru", 30);
-        text5 = emo.FontSprite("hello_ch", 30);
+        
+        // To use with custom TrueType fonts:
+        // 
+        // For iOS: Add UIAppFonts property into your Info.plist
+        // FYI: http://richardwarrender.com/2010/08/custom-fonts-on-ipad-and-iphone/
+        text5 = emo.FontSprite("hello_font", 30, "TestarossaNF"); 
         
         // additional parameter can be set for formatted string.
         // e.g. "Hello, %s!"

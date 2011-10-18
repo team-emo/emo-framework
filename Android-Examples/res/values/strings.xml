@@ -7,4 +7,5 @@
     <string name="hello_ru">привет</string>
     <string name="hello_gr">Γεια σας</string>
     <string name="hello_ch">您好</string>
+    <string name="hello_font">Hello, TrueType!</string>
 </resources>

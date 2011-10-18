@@ -32,5 +32,9 @@
 	<true/>
 	<key>UIPrerenderedIcon</key>
 	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>TestarossaNF.ttf</string>
+	</array>
 </dict>
 </plist>

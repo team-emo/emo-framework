@@ -14,5 +14,7 @@
 	<string>Γεια σας</string>
 	<key>hello_ch</key>
 	<string>您好</string>
+	<key>hello_font</key>
+	<string>Hello, TrueType!</string>
 </dict>
 </plist>
