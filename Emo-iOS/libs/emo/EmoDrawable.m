@@ -577,10 +577,13 @@ extern EmoEngine* engine;
 		texture.referenceCount--;
 		if (texture.referenceCount <= 0) {
 			[texture doUnload];
+            texture.loaded = FALSE;
 			if (name != nil) [engine removeCachedImage:name];
 		}
-		if (doAll) [texture release];
-		hasTexture = FALSE;
+		if (doAll) {
+            [texture release];
+            hasTexture = FALSE;
+        }
 	}
 	for (int i = 0; i < frameCount; i++) {
 		if (frames_vbos[i] > 0) {
