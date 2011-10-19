@@ -42,10 +42,8 @@ class Main {
             stage.setContentScale(stage.getWindowWidth() / 320.0);
         }
         
-        box1.setFrame(7);
         box1.move(stage.getWindowWidth() / 4, stage.getWindowHeight() - box1.getHeight());
     
-        box2.setFrame(6);
         box2.setSize(box1.getWidth() * 1.1, box1.getHeight() * 1.1);
         box2.move(stage.getWindowWidth() / 4 * 2, box1.getHeight());
         
@@ -110,6 +108,9 @@ class Main {
         rope2.load();
         rope3.load();
     
+        box1.setFrame(7);
+        box2.setFrame(6);
+
         // change the text
         text.setText("TAP TO ADD VELOCITY");
         text.scale(0.7, 0.7);

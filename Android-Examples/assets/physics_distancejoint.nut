@@ -36,13 +36,11 @@ class Main {
         
         createWall();
         
-        box.setFrame(7);
         box.setSize(stage.getWindowWidth() / 4, 20);
         box.move(
             (stage.getWindowWidth()  - box.getWidth())  / 2,
             (stage.getWindowHeight() - box.getHeight()) / 2);
         
-        dropBox.setFrame(6);
         dropBox.setSize(box.getWidth(), 10);
         dropBox.hide();
         dropBox.load();
@@ -80,6 +78,9 @@ class Main {
         rope.setWidth(2);
         rope.load();
     
+        box.setFrame(7);
+        dropBox.setFrame(6);
+
         // apply linear velocity to sprite to see how the DistanceJoint works.
         boxInfo.getBody().setLinearVelocity(emo.Vec2(5, 0));
     
