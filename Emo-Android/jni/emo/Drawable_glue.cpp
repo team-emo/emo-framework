@@ -2090,7 +2090,7 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
     }
 
     if (!drawable->loaded) {
-        LOGW("SpriteSheet#setFrame should not be used before the sprite is loaded.");
+        LOGW("It is recommended not to use SpriteSheet#setFrame BEFORE the sprite has been loaded by load().");
     }
 
     drawable->setFrameIndex(index);
@@ -2134,7 +2134,7 @@ SQInteger emoDrawableSelectFrame(HSQUIRRELVM v) {
     }
 
     if (!drawable->loaded) {
-        LOGW("SpriteSheet#selectFrame should not be used before the sprite is loaded.");
+        LOGW("It is recommended not to use SpriteSheet#selectFrame BEFORE the sprite has been loaded by load().");
     }
 
     if (!drawable->selectFrame(frame_name)) {
