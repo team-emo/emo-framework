@@ -46,6 +46,13 @@ class Main {
         block1.load();
         block2.load();
                 
+        // Frame selection by both index and image name is supported.
+        // Note that do not call setFrame/selectFrame BEFORE calling SpriteSheet#load()
+        // otherwise the texture will not be updated correctly.
+        //
+        //block1.setFrame(2);
+        //block2.selectFrame("ball");
+
         // change the text
         text.setText("TAP TO CHANGE THE TILE");
         text.scale(0.7, 0.7);
@@ -94,9 +101,6 @@ class Main {
             block1.setFrame(currentFrame);
             block2.setFrame(currentFrame);
             
-            // frame selection by the image name is also supported 
-            // block1.selectFrame("ball");
-
             block1.moveCenter(stage.getWindowWidth() / 2, stage.getWindowHeight() / 2);
             block2.move(block1.getX(), block1.getY() + block1.getHeight());
         }
