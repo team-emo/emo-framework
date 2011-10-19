@@ -8,8 +8,8 @@ class Main {
     // defines a sprite sheet that uses texture atlas.
     // XML formatted texture atlas file used by Sparrow & OGRE/CEGUI is supported by emo.
     // Those xml can be create by using packing tools like TexturePacker http://www.texturepacker.com/
-    block = emo.SpriteSheet("icons_pack_OGRE.xml"); // Uses OGRE file
-    // block = emo.SpriteSheet("icons_pack_Sparrow.xml"); // Uses Sparrow file
+    block1 = emo.SpriteSheet("icons_pack_OGRE.xml");    // Uses OGRE file
+    block2 = emo.SpriteSheet("icons_pack_Sparrow.xml"); // Uses Sparrow file
 
     // current frame index
     currentFrame = 0;
@@ -36,13 +36,15 @@ class Main {
         }
         
         // move sprite to the center of the screen
-        local x = (stage.getWindowWidth()  - block.getWidth())  / 2;
-        local y = (stage.getWindowHeight() - block.getHeight()) / 2;
+        local x = (stage.getWindowWidth()  - block1.getWidth())  / 2;
+        local y = (stage.getWindowHeight() - block1.getHeight()) / 2;
         
-        block.move(x, y);
+        block1.move(x, y);
+        block2.move(block1.getX(), block1.getY() + block1.getHeight());
 
         // load sprite to the screen
-        block.load();
+        block1.load();
+        block2.load();
                 
         // change the text
         text.setText("TAP TO CHANGE THE TILE");
@@ -75,7 +77,7 @@ class Main {
         print("onDispose");
         
         // remove sprite from the screen
-        block.remove();
+        block1.remove();
         text.remove();
     }
 
@@ -86,15 +88,17 @@ class Main {
         // change frame index on touch down event
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
             currentFrame++;
-            if (currentFrame >= block.getFrameCount()) {
+            if (currentFrame >= block1.getFrameCount()) {
                 currentFrame = 0;
             }
-            block.setFrame(currentFrame);
+            block1.setFrame(currentFrame);
+            block2.setFrame(currentFrame);
             
             // frame selection by the image name is also supported 
-            // block.selectFrame("ball");
+            // block1.selectFrame("ball");
 
-            block.moveCenter(stage.getWindowWidth() / 2, stage.getWindowHeight() / 2);
+            block1.moveCenter(stage.getWindowWidth() / 2, stage.getWindowHeight() / 2);
+            block2.move(block1.getX(), block1.getY() + block1.getHeight());
         }
     }
 }

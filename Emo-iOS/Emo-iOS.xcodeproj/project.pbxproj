@@ -105,6 +105,7 @@
 		F92D9EB0139070A10077ED19 /* sqstate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E95139070A10077ED19 /* sqstate.cpp */; };
 		F92D9EB1139070A10077ED19 /* sqtable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E98139070A10077ED19 /* sqtable.cpp */; };
 		F92D9EB2139070A10077ED19 /* sqvm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E9C139070A10077ED19 /* sqvm.cpp */; };
+		F97B0C00144E8CE500D81EC8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F97B0BFF144E8CE500D81EC8 /* CoreGraphics.framework */; };
 		F98A7F791395B8BB008F984C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F98A7F781395B8BB008F984C /* Icon.png */; };
 		F9B500CA13807A31009BB773 /* physics.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9B500AF13807682009BB773 /* physics.nut */; };
 		F9C31C191345FC8600B066DC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C31C181345FC8600B066DC /* AudioToolbox.framework */; };
@@ -304,6 +305,7 @@
 		F92D9E9B139070A10077ED19 /* squtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = squtils.h; sourceTree = "<group>"; };
 		F92D9E9C139070A10077ED19 /* sqvm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqvm.cpp; sourceTree = "<group>"; };
 		F92D9E9D139070A10077ED19 /* sqvm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqvm.h; sourceTree = "<group>"; };
+		F97B0BFF144E8CE500D81EC8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		F98A7F781395B8BB008F984C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/graphics/Icon.png; sourceTree = "<group>"; };
 		F9B500AF13807682009BB773 /* physics.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics.nut; path = Resources/physics.nut; sourceTree = "<group>"; };
 		F9C31C181345FC8600B066DC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -319,6 +321,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F97B0C00144E8CE500D81EC8 /* CoreGraphics.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
@@ -388,6 +391,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F97B0BFF144E8CE500D81EC8 /* CoreGraphics.framework */,
 				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
 				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,

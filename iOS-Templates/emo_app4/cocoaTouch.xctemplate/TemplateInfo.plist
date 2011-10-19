@@ -43,6 +43,7 @@
 				<string>UIKit</string>
 				<string>Foundation</string>
 				<string>QuartzCore</string>
+				<string>CoreGraphics</string>
 				<string>Foundation</string>
 				<string>OpenAL</string>
 				<string>OpenGLES</string>
