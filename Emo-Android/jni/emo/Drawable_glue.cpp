@@ -2089,6 +2089,10 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
         return 1;
     }
 
+    if (!drawable->loaded) {
+        LOGW("SpriteSheet#setFrame should not be used before the sprite is loaded.");
+    }
+
     drawable->setFrameIndex(index);
     drawable->enableAnimation(false);
 
@@ -2127,6 +2131,10 @@ SQInteger emoDrawableSelectFrame(HSQUIRRELVM v) {
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
+    }
+
+    if (!drawable->loaded) {
+        LOGW("SpriteSheet#selectFrame should not be used before the sprite is loaded.");
     }
 
     if (!drawable->selectFrame(frame_name)) {

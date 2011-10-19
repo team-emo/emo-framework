@@ -1834,7 +1834,11 @@ SQInteger emoDrawablePauseAt(HSQUIRRELVM v) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
 	}
-	
+
+    if (!drawable.loaded) {
+        LOGW("SpriteSheet#setFrame should not be used before the sprite is loaded.");
+    }
+    
 	if (![drawable pauseAt:index]) {
 		sq_pushinteger(v, ERR_INVALID_PARAM);
 		return 1;
@@ -1875,7 +1879,11 @@ SQInteger emoDrawableSelectFrame(HSQUIRRELVM v) {
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
-    }    
+    }
+    
+    if (!drawable.loaded) {
+        LOGW("SpriteSheet#selectFrame should not be used before the sprite is loaded.");
+    }
     
     if (![drawable selectFrame:char2ns(frame_name)]) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
