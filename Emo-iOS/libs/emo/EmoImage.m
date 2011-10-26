@@ -36,6 +36,7 @@
 @synthesize hasAlpha, loaded;
 @synthesize referenceCount;
 @synthesize freed;
+@synthesize isPVR;
 
 - (id)init {
     self = [super init];
@@ -43,6 +44,7 @@
 		referenceCount = 0;
         freed = FALSE;
         data  = nil;
+        isPVR = FALSE;
     }
     return self;
 }
@@ -69,3 +71,127 @@
 	[super dealloc];
 }
 @end
+
+/* 
+ * load png image size from resource
+ */
+static BOOL loadPngSizeFromResource(NSString* filename, int *width, int *height) {
+	NSString* path = [[NSBundle mainBundle] pathForResource:filename ofType:nil];
+	if (path == nil) {
+		LOGE("loadPngSizeFromResource: resource is not found");
+		NSLOGE(filename);
+		return FALSE;
+	}
+	
+	FILE* fp = fopen([path cStringUsingEncoding:1], "r");
+	
+    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    png_infop info_ptr = png_create_info_struct(png_ptr);
+	
+    if (info_ptr == NULL) {
+		fclose(fp);
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        return FALSE;
+    }
+	
+    if (setjmp(png_jmpbuf(png_ptr))) {
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+		fclose(fp);
+        return FALSE;
+    }
+	
+	png_init_io(png_ptr, fp);
+	
+    unsigned int sig_read = 0;
+    png_set_sig_bytes(png_ptr, sig_read);
+	
+    png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND, NULL);
+	
+    *width  = info_ptr->width;
+    *height = info_ptr->height;
+    
+    png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+	fclose(fp);
+	
+    return width > 0 && height > 0;
+}
+
+/* 
+ * load png image from resource
+ */
+static BOOL loadPngFromResource(NSString* filename, EmoImage* imageInfo) {
+	NSString* path = [[NSBundle mainBundle] pathForResource:filename ofType:nil];
+	if (path == nil) {
+		LOGE("loadPngFromResource: resource is not found");
+		NSLOGE(filename);
+		return FALSE;
+	}
+	
+	FILE* fp = fopen([path cStringUsingEncoding:1], "r");
+	
+    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    png_infop info_ptr = png_create_info_struct(png_ptr);
+	
+    if (info_ptr == NULL) {
+		fclose(fp);
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        return FALSE;
+    }
+	
+    if (setjmp(png_jmpbuf(png_ptr))) {
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+		fclose(fp);
+        return FALSE;
+    }
+    
+	png_init_io(png_ptr, fp);
+	
+    unsigned int sig_read = 0;
+    png_set_sig_bytes(png_ptr, sig_read);
+	
+    png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND, NULL);
+	
+    imageInfo.textureId = -1;
+    imageInfo.filename = filename;
+    imageInfo.width  = info_ptr->width;
+    imageInfo.height = info_ptr->height;
+	
+    switch (info_ptr->color_type) {
+        case PNG_COLOR_TYPE_RGBA:
+            imageInfo.hasAlpha = true;
+            break;
+        case PNG_COLOR_TYPE_RGB:
+            imageInfo.hasAlpha = false;
+            break;
+        default:
+            LOGE("loadPngFromAsset: unsupported color type");
+            png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+			fclose(fp);
+            return FALSE;
+    }
+    unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
+    GLubyte* data = (unsigned char*) malloc(row_bytes * imageInfo.height);
+	
+    png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
+	
+    for (int i = 0; i < imageInfo.height; i++) {
+        memcpy(data+(row_bytes * (imageInfo.height-1-i)), row_pointers[i], row_bytes);
+    }
+	
+	imageInfo.data = data;
+	
+    png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+	fclose(fp);
+	
+    return TRUE;
+}
+
+BOOL loadImageSizeFromResource(NSString* filename, int *width, int *height) {
+    if ([filename hasSuffix:@".png"]) return loadPngSizeFromResource(filename, width, height);
+    return FALSE;
+}
+
+BOOL loadImageFromResource(NSString* filename, EmoImage* imageInfo) {
+    if ([filename hasSuffix:@".png"]) return loadPngFromResource(filename, imageInfo);
+    return FALSE;
+}

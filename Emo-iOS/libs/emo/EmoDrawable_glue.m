@@ -131,7 +131,7 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     int width  = 0;
     int height = 0;
 	
-    if (drawable.name != nil && !loadPngSizeFromResource(drawable.name, &width, &height)) {
+    if (drawable.name != nil && !loadImageSizeFromResource(drawable.name, &width, &height)) {
         [drawable release];
         return 0;
     }
@@ -331,7 +331,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     int width  = 0;
     int height = 0;
     
-    if (drawable.name != nil && !loadPngSizeFromResource(drawable.name, &width, &height)) {
+    if (drawable.name != nil && !loadImageSizeFromResource(drawable.name, &width, &height)) {
         [drawable release];
         return 0;
     }
@@ -550,7 +550,7 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 			[imageInfo release];
 		} else {
 			imageInfo = [[EmoImage alloc]init];
-			if (loadPngFromResource(drawable.name, imageInfo)) {
+			if (loadImageFromResource(drawable.name, imageInfo)) {
 		
 				// calculate the size of power of two
 				imageInfo.glWidth  = nextPowerOfTwo(imageInfo.width);
@@ -754,7 +754,7 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
 			imageInfo.referenceCount++;
 		} else {
 			imageInfo = [[EmoImage alloc]init];
-			if (loadPngFromResource(drawable.name, imageInfo)) {
+			if (loadImageFromResource(drawable.name, imageInfo)) {
 				
 				// calculate the size of power of two
 				imageInfo.glWidth  = nextPowerOfTwo(imageInfo.width);
