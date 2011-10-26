@@ -645,7 +645,6 @@ extern EmoEngine* engine;
 }
 
 -(void)addAnimation:(EmoAnimationFrame*)animation {
-	[animation retain];
 	[self deleteAnimation:animation.name];
 	[animations setObject:animation forKey:animation.name];
 }
@@ -669,16 +668,12 @@ extern EmoEngine* engine;
 
 	if (animation == nil) return FALSE;
 	
-	[animation release];
 	[animations removeObjectForKey:_name];
 	
 	return TRUE;
 }
 
 -(void)deleteAnimations {
-	for (NSString* key in animations) {
-		[[animations objectForKey:key] release];
-	}
 	[animations removeAllObjects];
 }
 

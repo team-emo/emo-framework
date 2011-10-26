@@ -117,6 +117,7 @@ void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
 						 ALenum* dataFormat, ALsizei *sampleRate, bool *loaded) {
     OSStatus    err;
     UInt32      size;
+    void*       data = NULL;
     
 	*loaded = false;
 	
@@ -162,7 +163,6 @@ void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
     }
     
     UInt32          bufferSize;
-    void*           data;
     AudioBufferList dataBuffer;
     bufferSize = fileLengthFrames * outputFormat.mBytesPerFrame;;
     data = malloc(bufferSize);
