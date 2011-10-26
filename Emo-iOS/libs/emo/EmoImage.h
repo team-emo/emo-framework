@@ -42,7 +42,9 @@
 	BOOL     loaded;
 	int      referenceCount;
     BOOL     freed;
-    BOOL     isPVR;
+    BOOL     isPVRTC_2;
+    BOOL     isPVRTC_4;
+    int      dataLength;
 }
 @property (copy, readwrite) NSString* filename;
 @property (readwrite) GLuint textureId;
@@ -52,7 +54,9 @@
 @property (readwrite) BOOL loaded;
 @property (readwrite) int referenceCount;
 @property (readwrite) BOOL freed;
-@property (readwrite) BOOL isPVR;
+@property (readwrite) BOOL isPVRTC_2;
+@property (readwrite) BOOL isPVRTC_4;
+@property (readwrite) int  dataLength;
 
 -(void)genTextures;
 -(void)doUnload;

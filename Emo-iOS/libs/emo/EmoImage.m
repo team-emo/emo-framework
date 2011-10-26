@@ -36,7 +36,8 @@
 @synthesize hasAlpha, loaded;
 @synthesize referenceCount;
 @synthesize freed;
-@synthesize isPVR;
+@synthesize isPVRTC_2, isPVRTC_4;
+@synthesize dataLength;
 
 - (id)init {
     self = [super init];
@@ -44,7 +45,10 @@
 		referenceCount = 0;
         freed = FALSE;
         data  = nil;
-        isPVR = FALSE;
+        
+        isPVRTC_2 = FALSE;
+        isPVRTC_4 = FALSE;
+        dataLength = 0;
     }
     return self;
 }
@@ -179,19 +183,142 @@ static BOOL loadPngFromResource(NSString* filename, EmoImage* imageInfo) {
     }
 	
 	imageInfo.data = data;
+    imageInfo.dataLength = row_bytes * imageInfo.height;
 	
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 	fclose(fp);
 	
     return TRUE;
 }
+/*
+ * Constants and data types for PVR Texture
+ */
+#define PVR_TEXTURE_FLAG_TYPE_MASK	0xff
+
+static char gPVRTexIdentifier[4] = "PVR!";
+
+enum {
+    kPVRTextureFlagTypePVRTC_2 = 24,
+    kPVRTextureFlagTypePVRTC_4
+};
+
+typedef struct _PVRTexHeader {
+	uint32_t headerLength;
+	uint32_t height;
+	uint32_t width;
+	uint32_t numMipmaps;
+	uint32_t flags;
+	uint32_t dataLength;
+	uint32_t bpp;
+	uint32_t bitmaskRed;
+	uint32_t bitmaskGreen;
+	uint32_t bitmaskBlue;
+	uint32_t bitmaskAlpha;
+	uint32_t pvrTag;
+	uint32_t numSurfs;
+} PVRTexHeader;
+
+/* 
+ * load pvr image size from resource
+ */
+static BOOL loadPvrSizeFromResource(NSString* filename, int *width, int *height) {
+	NSString* path = [[NSBundle mainBundle] pathForResource:filename ofType:nil];
+	if (path == nil) {
+		LOGE("loadPvrSizeFromResource: resource is not found");
+		NSLOGE(filename);
+		return FALSE;
+	}
+    
+    NSData* data = [NSData dataWithContentsOfFile:path];
+	PVRTexHeader* header = (PVRTexHeader *)[data bytes];
+	
+	uint32_t pvrTag = CFSwapInt32LittleToHost(header->pvrTag);
+    
+	if (gPVRTexIdentifier[0] != ((pvrTag >>  0) & 0xff) ||
+		gPVRTexIdentifier[1] != ((pvrTag >>  8) & 0xff) ||
+		gPVRTexIdentifier[2] != ((pvrTag >> 16) & 0xff) ||
+		gPVRTexIdentifier[3] != ((pvrTag >> 24) & 0xff)) {
+		return FALSE;
+	}
+	
+	uint32_t flags = CFSwapInt32LittleToHost(header->flags);
+	uint32_t formatFlags = flags & PVR_TEXTURE_FLAG_TYPE_MASK;
+	
+	if (formatFlags == kPVRTextureFlagTypePVRTC_4 || formatFlags == kPVRTextureFlagTypePVRTC_2){
+		*width  = CFSwapInt32LittleToHost(header->width);
+		*height = CFSwapInt32LittleToHost(header->height);
+	} else {
+        return FALSE;
+    }
+	
+	return TRUE;
+}
+
+/* 
+ * load pvr image from resource
+ */
+static BOOL loadPvrFromResource(NSString* filename, EmoImage* imageInfo) {
+	NSString* path = [[NSBundle mainBundle] pathForResource:filename ofType:nil];
+	if (path == nil) {
+		LOGE("loadPvrFromResource: resource is not found");
+		NSLOGE(filename);
+		return FALSE;
+	}
+    
+    NSData* data = [NSData dataWithContentsOfFile:path];
+	PVRTexHeader* header = (PVRTexHeader *)[data bytes];
+	
+	uint32_t pvrTag = CFSwapInt32LittleToHost(header->pvrTag);
+    
+	if (gPVRTexIdentifier[0] != ((pvrTag >>  0) & 0xff) ||
+		gPVRTexIdentifier[1] != ((pvrTag >>  8) & 0xff) ||
+		gPVRTexIdentifier[2] != ((pvrTag >> 16) & 0xff) ||
+		gPVRTexIdentifier[3] != ((pvrTag >> 24) & 0xff)) {
+		return FALSE;
+	}
+	
+	uint32_t flags = CFSwapInt32LittleToHost(header->flags);
+	uint32_t formatFlags = flags & PVR_TEXTURE_FLAG_TYPE_MASK;
+	
+	if (formatFlags == kPVRTextureFlagTypePVRTC_4 || formatFlags == kPVRTextureFlagTypePVRTC_2){
+		if (formatFlags == kPVRTextureFlagTypePVRTC_4) {
+			imageInfo.isPVRTC_4 = TRUE;
+        } else if (formatFlags == kPVRTextureFlagTypePVRTC_2) {
+			imageInfo.isPVRTC_2 = TRUE;
+        }
+		imageInfo.width  = CFSwapInt32LittleToHost(header->width);
+		imageInfo.height = CFSwapInt32LittleToHost(header->height);
+		
+		if (CFSwapInt32LittleToHost(header->bitmaskAlpha)) {
+			imageInfo.hasAlpha = TRUE;
+        } else {
+			imageInfo.hasAlpha = FALSE;
+        }
+		
+		imageInfo.dataLength = CFSwapInt32LittleToHost(header->dataLength);
+        
+        GLubyte* rawData = (GLubyte *)malloc(sizeof(GLubyte) * imageInfo.dataLength);
+        memcpy(rawData, [data bytes] + sizeof(PVRTexHeader), imageInfo.dataLength);
+		imageInfo.data = rawData;
+        
+        imageInfo.textureId = -1;
+        imageInfo.filename = filename;
+        
+	} else {
+        return FALSE;
+    }
+	
+	return TRUE;
+}
 
 BOOL loadImageSizeFromResource(NSString* filename, int *width, int *height) {
     if ([filename hasSuffix:@".png"]) return loadPngSizeFromResource(filename, width, height);
+    if ([filename hasSuffix:@".pvr"]) return loadPvrSizeFromResource(filename, width, height);
     return FALSE;
 }
 
 BOOL loadImageFromResource(NSString* filename, EmoImage* imageInfo) {
     if ([filename hasSuffix:@".png"]) return loadPngFromResource(filename, imageInfo);
+    if ([filename hasSuffix:@".pvr"]) return loadPvrFromResource(filename, imageInfo);
     return FALSE;
 }

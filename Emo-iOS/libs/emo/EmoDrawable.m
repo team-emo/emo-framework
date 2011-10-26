@@ -504,7 +504,13 @@ extern EmoEngine* engine;
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        if (texture.hasAlpha) {
+        if (texture.isPVRTC_2) {
+            glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG,
+                                   texture.width, texture.height, 0, texture.dataLength, texture.data);
+        } else if (texture.isPVRTC_4) {
+            glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,
+                                   texture.width, texture.height, 0, texture.dataLength, texture.data);
+        } else if (texture.hasAlpha) {
             GLubyte* holder = (GLubyte*)malloc(sizeof(GLubyte) * texture.glWidth * texture.glHeight * 4);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.glWidth, texture.glHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, holder);
             glTexSubImage2D(GL_TEXTURE_2D, 0, 
