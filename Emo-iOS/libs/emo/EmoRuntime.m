@@ -177,13 +177,18 @@ SQInteger emoRuntimeBuildNumber(HSQUIRRELVM v) {
 SQInteger emoRuntimeEcho(HSQUIRRELVM v) {
 	const SQChar *str;
     SQInteger nargs = sq_gettop(v);
+    BOOL found = FALSE;
     for(SQInteger n = 1; n <= nargs; n++) {
     	if (sq_gettype(v, n) == OT_STRING) {
             sq_tostring(v, n);
             sq_getstring(v, -1, &str);
             sq_poptop(v);
+            found = TRUE;
+            break;
     	}
     }
+    
+    if (!found) return 0;
 	
 	if (strlen(str) > 0) {
 		sq_pushstring(v, str, -1);
