@@ -18,7 +18,7 @@
 	
 	// initialize emo framework
 	viewController = [[EmoViewController alloc] init];
-	viewController.view = [[EmoView alloc] initWithFrame:frame];
+	viewController.view = [[[EmoView alloc] initWithFrame:frame] autorelease];
 	[viewController awakeFromNib];
 	didReturnRootView = FALSE;
 	

@@ -175,6 +175,7 @@ SQInteger emoDrawableCreateFontSprite(HSQUIRRELVM v) {
             drawable.name = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
         }
     } else {
+        [drawable release];
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }

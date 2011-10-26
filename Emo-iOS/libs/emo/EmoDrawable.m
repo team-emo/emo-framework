@@ -174,9 +174,9 @@ extern EmoEngine* engine;
                 drawable.border = 0;
             }
             [drawable addImagePack:info];
-            [info release];
             itemCount++;
         }
+        [info release];
     }
 }
 

@@ -12,7 +12,7 @@
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
     viewController = [[EmoViewController alloc] init];
-	viewController.view = [[EmoView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	viewController.view = [[[EmoView alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 	[viewController awakeFromNib];
 	
     [self.window addSubview:self.viewController.view];
