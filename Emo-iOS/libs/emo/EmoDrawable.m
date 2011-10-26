@@ -355,6 +355,7 @@ extern EmoEngine* engine;
 	animating  = FALSE;
 	independent = TRUE;
     isPackedAtlas = FALSE;
+    flipY       = FALSE;
 
 	// color param RGBA
     param_color[0] = 1.0f;
@@ -404,7 +405,9 @@ extern EmoEngine* engine;
 }
 
 -(NSInteger) tex_coord_frame_startY {
-    if (isPackedAtlas) {
+    if (isPackedAtlas && flipY) {
+        return [self getImagePack:[imagepacks_names objectAtIndex:frame_index]].y;
+    } else if (isPackedAtlas) {
         return texture.height - frameHeight - [self getImagePack:[imagepacks_names objectAtIndex:frame_index]].y;
     }
 	int xcount = (int)round((texture.width - (margin * 2) + border) / (float)(frameWidth  + border));
@@ -467,18 +470,21 @@ extern EmoEngine* engine;
 
 -(BOOL)bindVertex {
     clearGLErrors("EmoDrawable:bindVertex");
-	
+    
+    // if the texture is pvr, flip Y axis
+    flipY = hasTexture && (texture.isPVRTC_2 || texture.isPVRTC_4);
+ 	
     vertex_tex_coords[0] = [self getTexCoordStartX];
-    vertex_tex_coords[1] = [self getTexCoordStartY];
+    vertex_tex_coords[1] = flipY ? [self getTexCoordEndY] : [self getTexCoordStartY];
 	
     vertex_tex_coords[2] = [self getTexCoordStartX];
-    vertex_tex_coords[3] = [self getTexCoordEndY];
+    vertex_tex_coords[3] = flipY ? [self getTexCoordStartY] : [self getTexCoordEndY];
 	
     vertex_tex_coords[4] = [self getTexCoordEndX];
-    vertex_tex_coords[5] = [self getTexCoordEndY];
+    vertex_tex_coords[5] = flipY ? [self getTexCoordStartY] : [self getTexCoordEndY];
 	
     vertex_tex_coords[6] = [self getTexCoordEndX];
-    vertex_tex_coords[7] = [self getTexCoordStartY];
+    vertex_tex_coords[7] = flipY ? [self getTexCoordEndY] : [self getTexCoordStartY];
 	
 	if (frames_vbos[frame_index] == 0) {
 		glGenBuffers (1, &frames_vbos[frame_index]);

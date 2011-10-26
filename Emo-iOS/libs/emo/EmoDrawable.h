@@ -86,6 +86,7 @@
 	BOOL animating;
 	BOOL independent;
     BOOL isPackedAtlas;
+    BOOL flipY;
 	
     float      vertex_tex_coords[8];
 	
