@@ -114,10 +114,10 @@ BOOL printGLErrors(const char* msg) {
     return result;
 }
 
-BOOL loadPngSizeFromAsset(NSString* filename, int *width, int *height) {
+BOOL loadPngSizeFromResource(NSString* filename, int *width, int *height) {
 	NSString* path = [[NSBundle mainBundle] pathForResource:filename ofType:nil];
 	if (path == nil) {
-		LOGE("loadPngFromResource: resource is not found");
+		LOGE("loadPngSizeFromResource: resource is not found");
 		NSLOGE(filename);
 		return FALSE;
 	}
