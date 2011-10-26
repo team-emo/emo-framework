@@ -36,7 +36,6 @@ extern EmoEngine* engine;
 @implementation EmoNetTask
 @synthesize name, method;
 @synthesize timeout;
-
 -(void)asyncHttpRequest:(NSString*)baseUrl withParam:(NSMutableDictionary*)params {
 	
 	NSMutableString* paramsAsStr = [NSMutableString string];

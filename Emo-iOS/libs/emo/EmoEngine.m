@@ -651,12 +651,12 @@ static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInte
 	
 	[netTasks setObject:net forKey:taskName];
 	
+    [net release];
+    
 	return net;
 }
 
 -(void)removeNetTask:(NSString*)taskName {
-	EmoNetTask* netTask = [netTasks objectForKey:taskName];
-	[netTask release];
 	[netTasks removeObjectForKey:taskName];
 }
 
