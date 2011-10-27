@@ -6,7 +6,7 @@ local stage = emo.Stage();
 class Main {
 
     block = emo.Sprite("block.png");
-    // As emo.Sprite supports PVR compression format, it can be loaded like below.
+    // On iOS, emo.Sprite supports PVR compression with no-mipmap texture:
     // block = emo.Sprite("potblocks.pvr");
 
     /*

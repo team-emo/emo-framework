@@ -37,6 +37,8 @@ class Main {
     // uncomment below to uses dynamic scaled image like iOS way(i.e. ball@2x.png).
     // sprite  = emo.Sprite(getScaledImage("ball.png"));
     sprite  = emo.Sprite("ball.png");
+    // On iOS, emo.Sprite supports PVR compression with no-mipmap texture:
+    // sprite  = emo.Sprite("A.pvr");
     
     /*
      * Called when this class is loaded

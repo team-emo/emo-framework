@@ -7,6 +7,8 @@ class Main {
 
     // defines a sprite sheet that consists of 32x32 block with 2 pixel border and 2 pixel margin.
     block = emo.SpriteSheet("blocks.png", 32, 32, 2, 2);
+    // On iOS, emo.SpriteSheet supports PVR compression with no-mipmap texture:
+    // block = emo.SpriteSheet("potblocks.pvr", 32, 32, 0, 0);
 
     // current frame index
     currentFrame = 0;

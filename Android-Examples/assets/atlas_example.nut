@@ -10,6 +10,9 @@ class Main {
     // Those xml can be create by using packing tools like TexturePacker http://www.texturepacker.com/
     block1 = emo.SpriteSheet("icons_pack_OGRE.xml");    // Uses OGRE file
     block2 = emo.SpriteSheet("icons_pack_Sparrow.xml"); // Uses Sparrow file
+    
+    // On iOS, emo.SpriteSheet supports PVR compression with no-mipmap texture:
+    // block2 = emo.SpriteSheet("icons_pack_Sparrow_pvr.xml");
 
     // current frame index
     currentFrame = 0;
