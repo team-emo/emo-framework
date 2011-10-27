@@ -312,13 +312,13 @@ static BOOL loadPvrFromResource(NSString* filename, EmoImage* imageInfo) {
 }
 
 BOOL loadImageSizeFromResource(NSString* filename, int *width, int *height) {
-    if ([filename hasSuffix:@".png"]) return loadPngSizeFromResource(filename, width, height);
-    if ([filename hasSuffix:@".pvr"]) return loadPvrSizeFromResource(filename, width, height);
+    if ([[filename lowercaseString] hasSuffix:@".png"]) return loadPngSizeFromResource(filename, width, height);
+    if ([[filename lowercaseString] hasSuffix:@".pvr"]) return loadPvrSizeFromResource(filename, width, height);
     return FALSE;
 }
 
 BOOL loadImageFromResource(NSString* filename, EmoImage* imageInfo) {
-    if ([filename hasSuffix:@".png"]) return loadPngFromResource(filename, imageInfo);
-    if ([filename hasSuffix:@".pvr"]) return loadPvrFromResource(filename, imageInfo);
+    if ([[filename lowercaseString] hasSuffix:@".png"]) return loadPngFromResource(filename, imageInfo);
+    if ([[filename lowercaseString] hasSuffix:@".pvr"]) return loadPvrFromResource(filename, imageInfo);
     return FALSE;
 }
