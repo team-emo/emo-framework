@@ -412,7 +412,7 @@ extern EmoEngine* engine;
     }
 	int xcount = (int)round((texture.width - (margin * 2) + border) / (float)(frameWidth  + border));
 	int ycount = (int)round((texture.height - (margin * 2) + border) / (float)(frameHeight + border));
-	int yindex = ycount - (frame_index / xcount) - 1;
+	int yindex = [self flipY] ? (frame_index / xcount) : ycount - (frame_index / xcount) - 1;
 	return ((border + frameHeight) * yindex) + margin;
 }
 

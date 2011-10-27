@@ -171,6 +171,10 @@
 		F9D0CAB113A22834008CA998 /* modifier_multiple.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D0CAAB13A225E0008CA998 /* modifier_multiple.nut */; };
 		F9D2182E13947A8900463396 /* explosion.png in Resources */ = {isa = PBXBuildFile; fileRef = F9D2182D13947A8900463396 /* explosion.png */; };
 		F9D2183013947B0B00463396 /* physics_contact.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D2182F13947AAB00463396 /* physics_contact.nut */; };
+		F9D3112F1458D5F800E4B165 /* A.pvr in Resources */ = {isa = PBXBuildFile; fileRef = F9D3112E1458D5F800E4B165 /* A.pvr */; };
+		F9D311311458D60600E4B165 /* icons_pack.pvr in Resources */ = {isa = PBXBuildFile; fileRef = F9D311301458D60600E4B165 /* icons_pack.pvr */; };
+		F9D311331458D61300E4B165 /* potblocks.pvr in Resources */ = {isa = PBXBuildFile; fileRef = F9D311321458D61300E4B165 /* potblocks.pvr */; };
+		F9D311351458D61C00E4B165 /* icons_pack_Sparrow_pvr.xml in Resources */ = {isa = PBXBuildFile; fileRef = F9D311341458D61C00E4B165 /* icons_pack_Sparrow_pvr.xml */; };
 		F9D43A3F1388E5920069C3C1 /* motion_event.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43A3D1388E57B0069C3C1 /* motion_event.nut */; };
 		F9D43A401388E5920069C3C1 /* sensor_event.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43A3E1388E58C0069C3C1 /* sensor_event.nut */; };
 		F9D43A921388F9830069C3C1 /* motion_event_multi.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */; };
@@ -441,6 +445,10 @@
 		F9D0CAAC13A22665008CA998 /* flare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flare.png; sourceTree = "<group>"; };
 		F9D2182D13947A8900463396 /* explosion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = explosion.png; sourceTree = "<group>"; };
 		F9D2182F13947AAB00463396 /* physics_contact.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_contact.nut; path = Resources/physics_contact.nut; sourceTree = "<group>"; };
+		F9D3112E1458D5F800E4B165 /* A.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; path = A.pvr; sourceTree = "<group>"; };
+		F9D311301458D60600E4B165 /* icons_pack.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; path = icons_pack.pvr; sourceTree = "<group>"; };
+		F9D311321458D61300E4B165 /* potblocks.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; path = potblocks.pvr; sourceTree = "<group>"; };
+		F9D311341458D61C00E4B165 /* icons_pack_Sparrow_pvr.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = icons_pack_Sparrow_pvr.xml; sourceTree = "<group>"; };
 		F9D43A3D1388E57B0069C3C1 /* motion_event.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = motion_event.nut; path = Resources/motion_event.nut; sourceTree = "<group>"; };
 		F9D43A3E1388E58C0069C3C1 /* sensor_event.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = sensor_event.nut; path = Resources/sensor_event.nut; sourceTree = "<group>"; };
 		F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = motion_event_multi.nut; path = Resources/motion_event_multi.nut; sourceTree = "<group>"; };
@@ -614,6 +622,10 @@
 				F921CC9A136FFBAC00F058FF /* block.png */,
 				F921CC9B136FFBAC00F058FF /* blocks.png */,
 				F921CC9C136FFBAC00F058FF /* dog.png */,
+				F9D311341458D61C00E4B165 /* icons_pack_Sparrow_pvr.xml */,
+				F9D311321458D61300E4B165 /* potblocks.pvr */,
+				F9D311301458D60600E4B165 /* icons_pack.pvr */,
+				F9D3112E1458D5F800E4B165 /* A.pvr */,
 			);
 			name = graphics;
 			path = Resources/graphics;
@@ -1050,6 +1062,10 @@
 				F9293F28144D21780021BA53 /* strings.plist in Resources */,
 				F9293F2A144D40690021BA53 /* fontsprite_example.nut in Resources */,
 				F9FC6D55144E3C7F00C5E087 /* TestarossaNF.ttf in Resources */,
+				F9D3112F1458D5F800E4B165 /* A.pvr in Resources */,
+				F9D311311458D60600E4B165 /* icons_pack.pvr in Resources */,
+				F9D311331458D61300E4B165 /* potblocks.pvr in Resources */,
+				F9D311351458D61C00E4B165 /* icons_pack_Sparrow_pvr.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,6 +6,8 @@ local stage = emo.Stage();
 class Main {
 
     block = emo.Sprite("block.png");
+    // As emo.Sprite supports PVR compression format, it can be loaded like below.
+    // block = emo.Sprite("potblocks.pvr");
 
     /*
      * Called when this class is loaded
