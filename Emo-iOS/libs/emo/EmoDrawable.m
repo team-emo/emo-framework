@@ -789,10 +789,10 @@ extern EmoEngine* engine;
 
 -(BOOL)updateSegmentCoords:(NSInteger)index sx:(float)sx sy:(float)sy {
 	if (!loaded) return FALSE;
-    if (segmentCount <= 0) return FALSE;
+    if (index >= segmentCount) return FALSE;
     
-    textureCoords[index][0] = sx;
-    textureCoords[index][1] = sy;
+    segmentCoords[index][0] = sx;
+    segmentCoords[index][1] = sy;
     
     return TRUE;
 }
