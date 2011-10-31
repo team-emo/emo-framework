@@ -1515,6 +1515,27 @@ class emo.TextSprite extends emo.MapSprite {
     }
 }
 
+class emo.LiquidSprite extends emo.Sprite {
+    function constructor(rawname) {
+        name = this.getResourceName(rawname);
+        id   = stage.createLiquidSprite(name);
+        childId = -1;
+        loaded = false;
+    }
+    
+    function updateTextureCoords(coords) {
+        return stage.updateLiquidTextureCoords(id, coords);
+    }
+    
+    function updateSegmentCoords(coords) {
+        return stage.updateLiquidSegmentCoords(id, coords);
+    }
+
+    function getSegmentCount() {
+        return stage.getLiquidSegmentCount(id);
+    }
+}
+
 class emo.AnalogOnScreenController extends emo.Sprite {
     knob    = null;
     padding = null;

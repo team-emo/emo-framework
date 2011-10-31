@@ -184,3 +184,18 @@
 @property (assign, readwrite) EmoDrawable* drawable;
 @property (readwrite) NSInteger frameIndex;
 @end
+
+@interface EmoLiquidDrawable : EmoDrawable {
+    GLsizei segmentCount;
+    
+    float** textureCoords;
+    float** segmentCoords;
+}
+@property (readwrite) GLsizei segmentCount;
+
+-(void)initDrawable;
+-(BOOL)bindVertex;
+-(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
+-(BOOL)updateTextureCoords:(NSInteger)index tx:(float)tx ty:(float)ty;
+-(BOOL)updateSegmentCoords:(NSInteger)index sx:(float)sx sy:(float)sy;
+@end

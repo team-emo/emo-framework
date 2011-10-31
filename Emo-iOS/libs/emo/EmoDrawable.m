@@ -730,3 +730,121 @@ extern EmoEngine* engine;
 	return TRUE;
 }
 @end
+
+@interface EmoLiquidDrawable (PrivateMethods)
+-(void)freePoint:(float**)points;
+@end
+
+@implementation EmoLiquidDrawable
+@synthesize segmentCount;
+-(void)initDrawable {
+	[super initDrawable];
+    
+    textureCoords = NULL;
+    segmentCoords = NULL;
+    
+    segmentCount = 16;
+}
+
+-(void)freePoint:(float**)points {
+    for (int i = 0; i < segmentCount; i++) {
+        free(points[i]);
+    }
+    free(points);
+}
+
+-(BOOL)bindVertex {
+    if (segmentCount <= 0) return FALSE;
+
+    if (textureCoords != NULL) [self freePoint:textureCoords];
+    if (segmentCoords != NULL) [self freePoint:segmentCoords];
+    
+    textureCoords = (float**)malloc(sizeof(float*) * segmentCount);
+    for (int i = 0; i < segmentCount; i++) {
+        textureCoords[i] = (float*)malloc(sizeof(float) * 2);
+        textureCoords[i][0] = 0;
+        textureCoords[i][1] = 0;
+    }
+
+    segmentCoords = (float**)malloc(sizeof(float*) * segmentCount);
+    for (int i = 0; i < segmentCount; i++) {
+        segmentCoords[i] = (float*)malloc(sizeof(float) * 2);
+        segmentCoords[i][0] = 0;
+        segmentCoords[i][1] = 0;
+    }
+
+	loaded = TRUE;
+	return TRUE;
+}
+
+-(BOOL)updateTextureCoords:(NSInteger)index tx:(float)tx ty:(float)ty {
+	if (!loaded) return FALSE;
+    if (index >= segmentCount) return FALSE;
+
+    textureCoords[index][0] = tx;
+    textureCoords[index][1] = ty;
+    
+    return TRUE;
+}
+
+-(BOOL)updateSegmentCoords:(NSInteger)index sx:(float)sx sy:(float)sy {
+	if (!loaded) return FALSE;
+    if (segmentCount <= 0) return FALSE;
+    
+    textureCoords[index][0] = sx;
+    textureCoords[index][1] = sy;
+    
+    return TRUE;
+}
+
+-(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage {
+	if (!loaded) return FALSE;
+    if (segmentCount <= 0) return FALSE;
+
+    glMatrixMode (GL_MODELVIEW);
+    glLoadIdentity (); 
+	
+    // update colors
+    glColor4f(param_color[0], param_color[1], param_color[2], param_color[3]);
+    
+    // rotate
+    glTranslatef(param_rotate[1], param_rotate[2], 0);
+    if (param_rotate[3] == AXIS_X) {
+        glRotatef(param_rotate[0], 1, 0, 0);
+    } else if (param_rotate[3] == AXIS_Y) {
+        glRotatef(param_rotate[0], 0, 1, 0);
+    } else {
+        glRotatef(param_rotate[0], 0, 0, 1);
+    }
+    glTranslatef(-param_rotate[1], -param_rotate[2], 0);
+	
+    // scale
+    glTranslatef(param_scale[2], param_scale[3], 0);
+    glScalef(param_scale[0], param_scale[1], 1);
+    glTranslatef(-param_scale[2], -param_scale[3], 0);
+    
+	if ([self hasTexture]) {
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture.textureId);
+    
+        glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
+    }
+    
+    glVertexPointer(2, GL_FLOAT, 0, segmentCoords);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, segmentCount);
+    
+	return TRUE;
+}
+-(void)doUnload:(BOOL)doAll {
+	if (!loaded) return;
+    
+    if (textureCoords != NULL) [self freePoint:textureCoords];
+    if (segmentCoords != NULL) [self freePoint:segmentCoords];
+    
+    textureCoords = NULL;
+    segmentCoords = NULL;
+    
+    [super doUnload:doAll];
+}
+
+@end
