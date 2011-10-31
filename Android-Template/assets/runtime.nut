@@ -252,6 +252,22 @@ class emo.Vec2 {
         if (arg == null || arg.len() < 2) return null;
         return emo.Vec2(arg[0], arg[1]);
     }
+    
+    function _add(other) {
+        return emo.Vec2(x+other.x, y+other.y);
+    }
+    function _sub(other) {
+        return emo.Vec2(x-other.x, y-other.y);
+    }
+    function _mul(other) {
+        return emo.Vec2(x*other.x, y*other.y);
+    }
+    function _div(other) {
+        return emo.Vec2(x/other.x.tofloat(), y/other.y.tofloat());
+    }
+    function _modulo(other) {
+        return emo.Vec2(x%other.x.tofloat(), y%other.y.tofloat());
+    }
 }
 
 class emo.TileIndex {
