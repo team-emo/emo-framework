@@ -25,9 +25,9 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-#include <sys/sysctl.h> 
+#include "sys/sysctl.h"
 
-#import <OpenGLES/ES2/glext.h>
+#import "OpenGLES/ES2/glext.h"
 
 #import "Constants.h"
 #import "VmFunc.h"

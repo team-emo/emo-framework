@@ -29,8 +29,8 @@
 #import "EmoEngine_glue.h"
 #import "Constants.h"
 
-#import <OpenGLES/ES1/gl.h>
-#import <OpenGLES/ES1/glext.h>
+#import "OpenGLES/ES1/gl.h"
+#import "OpenGLES/ES1/glext.h"
 
 extern EmoEngine* engine;
 

@@ -25,8 +25,8 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-#import <Foundation/Foundation.h>
-#import <sqlite3.h>
+#import "Foundation/Foundation.h"
+#import "sqlite3.h"
 
 @interface EmoDatabase : NSObject {
 	sqlite3* db;

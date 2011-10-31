@@ -25,9 +25,9 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-#include <squirrel.h>
-#include <EmoImage.h>
-#include <EmoStage.h>
+#import "squirrel.h"
+#import "EmoImage.h"
+#import "EmoStage.h"
 
 @interface EmoAnimationFrame : NSObject {
 	NSString*   name;

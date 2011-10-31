@@ -25,15 +25,15 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-#import <OpenGLES/ES2/glext.h>
+#import "OpenGLES/ES2/glext.h"
 
-#include <EmoDrawable.h>
-#include <squirrel.h>
-#include <Constants.h>
-#include <VmFunc.h>
-#include <EmoEngine.h>
-#include <EmoEngine_glue.h>
-#include <Util.h>
+#import "EmoDrawable.h"
+#import "squirrel.h"
+#import "Constants.h"
+#import "VmFunc.h"
+#import "EmoEngine.h"
+#import "EmoEngine_glue.h"
+#import "Util.h"
 
 extern EmoEngine* engine;
 

@@ -27,7 +27,7 @@
 // 
 #import "OpenAL/al.h"
 #import "OpenAL/alc.h"
-#import <AudioToolbox/AudioToolbox.h>
+#import "AudioToolbox/AudioToolbox.h"
 
 @interface EmoAudioManager : NSObject {
 	BOOL audioEngineCreated;

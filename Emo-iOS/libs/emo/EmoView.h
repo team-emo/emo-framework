@@ -25,12 +25,12 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-#import <UIKit/UIKit.h>
+#import "UIKit/UIKit.h"
 
-#import <OpenGLES/ES1/gl.h>
-#import <OpenGLES/ES1/glext.h>
-#import <OpenGLES/ES2/gl.h>
-#import <OpenGLES/ES2/glext.h>
+#import "OpenGLES/ES1/gl.h"
+#import "OpenGLES/ES1/glext.h"
+#import "OpenGLES/ES2/gl.h"
+#import "OpenGLES/ES2/glext.h"
 
 @protocol EmoViewEventHandler <NSObject>
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;

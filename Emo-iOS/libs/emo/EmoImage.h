@@ -25,8 +25,8 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-#import <OpenGLES/ES1/gl.h>
-#import <OpenGLES/ES1/glext.h>
+#import "OpenGLES/ES1/gl.h"
+#import "OpenGLES/ES1/glext.h"
 #import "Constants.h"
 #import "png.h"
 

@@ -25,7 +25,7 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-#import <QuartzCore/QuartzCore.h>
+#import "QuartzCore/QuartzCore.h"
 
 #import "EmoView.h"
 #import "Constants.h"

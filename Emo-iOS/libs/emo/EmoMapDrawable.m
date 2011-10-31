@@ -28,7 +28,7 @@
 #import "EmoMapDrawable.h"
 #import "Util.h"
 #import "Constants.h"
-#include <EmoEngine_glue.h>
+#import "EmoEngine_glue.h"
 
 @interface EmoMapDrawable (PrivateMethods)
 -(BOOL)isInRange:(EmoStage*)stage;
