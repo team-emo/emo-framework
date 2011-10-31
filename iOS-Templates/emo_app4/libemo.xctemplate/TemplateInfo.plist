@@ -134,6 +134,72 @@
 			<key>Path</key>
 			<string>libs/emo/EmoDrawable.m</string>
 		</dict>
+		<key>libs/emo/EmoLineDrawable.m</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>libs</string>
+				<string>emo</string>
+			</array>
+			<key>Path</key>
+			<string>libs/emo/EmoLineDrawable.m</string>
+		</dict>
+		<key>libs/emo/EmoLineDrawable.h</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>libs</string>
+				<string>emo</string>
+			</array>
+			<key>Path</key>
+			<string>libs/emo/EmoLineDrawable.h</string>
+			<key>TargetIndices</key>
+			<array/>
+		</dict>
+		<key>libs/emo/EmoSnapshotDrawable.m</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>libs</string>
+				<string>emo</string>
+			</array>
+			<key>Path</key>
+			<string>libs/emo/EmoSnapshotDrawable.m</string>
+		</dict>
+		<key>libs/emo/EmoSnapshotDrawable.h</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>libs</string>
+				<string>emo</string>
+			</array>
+			<key>Path</key>
+			<string>libs/emo/EmoSnapshotDrawable.h</string>
+			<key>TargetIndices</key>
+			<array/>
+		</dict>
+		<key>libs/emo/EmoFontDrawable.m</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>libs</string>
+				<string>emo</string>
+			</array>
+			<key>Path</key>
+			<string>libs/emo/EmoFontDrawable.m</string>
+		</dict>
+		<key>libs/emo/EmoFontDrawable.h</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>libs</string>
+				<string>emo</string>
+			</array>
+			<key>Path</key>
+			<string>libs/emo/EmoFontDrawable.h</string>
+			<key>TargetIndices</key>
+			<array/>
+		</dict>
 		<key>libs/emo/EmoDrawable_glue.h</key>
 		<dict>
 			<key>Group</key>
@@ -478,6 +544,12 @@
 		<string>libs/emo/EmoDatabase_glue.m</string>
 		<string>libs/emo/EmoDrawable.h</string>
 		<string>libs/emo/EmoDrawable.m</string>
+		<string>libs/emo/EmoLineDrawable.h</string>
+		<string>libs/emo/EmoLineDrawable.m</string>
+		<string>libs/emo/EmoSnapshotDrawable.h</string>
+		<string>libs/emo/EmoSnapshotDrawable.m</string>
+		<string>libs/emo/EmoFontDrawable.h</string>
+		<string>libs/emo/EmoFontDrawable.m</string>
 		<string>libs/emo/EmoDrawable_glue.h</string>
 		<string>libs/emo/EmoDrawable_glue.m</string>
 		<string>libs/emo/EmoEngine.h</string>
