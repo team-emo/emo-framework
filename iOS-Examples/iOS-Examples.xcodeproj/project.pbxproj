@@ -39,6 +39,9 @@
 		F92B7219136FD39100DD803C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B7218136FD39100DD803C /* libz.dylib */; };
 		F92B7253136FD42F00DD803C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F92B7252136FD42F00DD803C /* QuartzCore.framework */; };
 		F92BBE991373E53000796475 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F92BBE981373E53000796475 /* libsqlite3.dylib */; };
+		F92D530D145E248C002B97DF /* EmoFontDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D5308145E248C002B97DF /* EmoFontDrawable.m */; };
+		F92D530E145E248C002B97DF /* EmoLineDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D530A145E248C002B97DF /* EmoLineDrawable.m */; };
+		F92D530F145E248C002B97DF /* EmoSnapshotDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D530C145E248C002B97DF /* EmoSnapshotDrawable.m */; };
 		F9318D5F13BD9D6500DBAD55 /* control_base.png in Resources */ = {isa = PBXBuildFile; fileRef = F9318D5D13BD9D6500DBAD55 /* control_base.png */; };
 		F9318D6013BD9D6500DBAD55 /* control_knob.png in Resources */ = {isa = PBXBuildFile; fileRef = F9318D5E13BD9D6500DBAD55 /* control_knob.png */; };
 		F9396B26139F1A8700D968C1 /* physics_pulleyjoint.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9396B25139F1A7D00D968C1 /* physics_pulleyjoint.nut */; };
@@ -227,6 +230,12 @@
 		F92B7218136FD39100DD803C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F92B7252136FD42F00DD803C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F92BBE981373E53000796475 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		F92D5307145E248C002B97DF /* EmoFontDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoFontDrawable.h; sourceTree = "<group>"; };
+		F92D5308145E248C002B97DF /* EmoFontDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoFontDrawable.m; sourceTree = "<group>"; };
+		F92D5309145E248C002B97DF /* EmoLineDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoLineDrawable.h; sourceTree = "<group>"; };
+		F92D530A145E248C002B97DF /* EmoLineDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoLineDrawable.m; sourceTree = "<group>"; };
+		F92D530B145E248C002B97DF /* EmoSnapshotDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoSnapshotDrawable.h; sourceTree = "<group>"; };
+		F92D530C145E248C002B97DF /* EmoSnapshotDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoSnapshotDrawable.m; sourceTree = "<group>"; };
 		F9318D5D13BD9D6500DBAD55 /* control_base.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = control_base.png; sourceTree = "<group>"; };
 		F9318D5E13BD9D6500DBAD55 /* control_knob.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = control_knob.png; sourceTree = "<group>"; };
 		F9396B25139F1A7D00D968C1 /* physics_pulleyjoint.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_pulleyjoint.nut; path = Resources/physics_pulleyjoint.nut; sourceTree = "<group>"; };
@@ -794,6 +803,12 @@
 				F967E60A13907136006D8F99 /* EmoDatabase_glue.m */,
 				F967E60B13907136006D8F99 /* EmoDrawable.h */,
 				F967E60C13907136006D8F99 /* EmoDrawable.m */,
+				F92D5307145E248C002B97DF /* EmoFontDrawable.h */,
+				F92D5308145E248C002B97DF /* EmoFontDrawable.m */,
+				F92D5309145E248C002B97DF /* EmoLineDrawable.h */,
+				F92D530A145E248C002B97DF /* EmoLineDrawable.m */,
+				F92D530B145E248C002B97DF /* EmoSnapshotDrawable.h */,
+				F92D530C145E248C002B97DF /* EmoSnapshotDrawable.m */,
 				F967E60D13907136006D8F99 /* EmoDrawable_glue.h */,
 				F967E60E13907136006D8F99 /* EmoDrawable_glue.m */,
 				F967E60F13907136006D8F99 /* EmoEngine.h */,
@@ -1169,6 +1184,9 @@
 				F967E6CB13907137006D8F99 /* sqstate.cpp in Sources */,
 				F967E6CC13907137006D8F99 /* sqtable.cpp in Sources */,
 				F967E6CD13907137006D8F99 /* sqvm.cpp in Sources */,
+				F92D530D145E248C002B97DF /* EmoFontDrawable.m in Sources */,
+				F92D530E145E248C002B97DF /* EmoLineDrawable.m in Sources */,
+				F92D530F145E248C002B97DF /* EmoSnapshotDrawable.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

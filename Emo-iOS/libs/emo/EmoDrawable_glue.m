@@ -30,7 +30,10 @@
 #import "Constants.h"
 #import "EmoEngine.h"
 #import "EmoDrawable.h"
+#import "EmoLineDrawable.h"
 #import "EmoMapDrawable.h"
+#import "EmoFontDrawable.h"
+#import "EmoSnapshotDrawable.h"
 #import "VmFunc.h"
 #import "Util.h"
 

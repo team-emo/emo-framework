@@ -13,6 +13,9 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		F92D52FD145E205A002B97DF /* EmoFontDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D52FC145E205A002B97DF /* EmoFontDrawable.m */; };
+		F92D5300145E2261002B97DF /* EmoSnapshotDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D52FF145E2261002B97DF /* EmoSnapshotDrawable.m */; };
+		F92D5303145E23A0002B97DF /* EmoLineDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D5302145E239F002B97DF /* EmoLineDrawable.m */; };
 		F92D9DE6139070770077ED19 /* b2BroadPhase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F92D9D9B139070770077ED19 /* b2BroadPhase.cpp */; };
 		F92D9DE7139070770077ED19 /* b2CollideCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F92D9D9D139070770077ED19 /* b2CollideCircle.cpp */; };
 		F92D9DE8139070770077ED19 /* b2CollidePolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F92D9D9E139070770077ED19 /* b2CollidePolygon.cpp */; };
@@ -127,6 +130,12 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Emo_iOS_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emo_iOS_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Emo_iOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Emo_iOS-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		F92D52FB145E205A002B97DF /* EmoFontDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoFontDrawable.h; sourceTree = "<group>"; };
+		F92D52FC145E205A002B97DF /* EmoFontDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoFontDrawable.m; sourceTree = "<group>"; };
+		F92D52FE145E2261002B97DF /* EmoSnapshotDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoSnapshotDrawable.h; sourceTree = "<group>"; };
+		F92D52FF145E2261002B97DF /* EmoSnapshotDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoSnapshotDrawable.m; sourceTree = "<group>"; };
+		F92D5301145E239F002B97DF /* EmoLineDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoLineDrawable.h; sourceTree = "<group>"; };
+		F92D5302145E239F002B97DF /* EmoLineDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoLineDrawable.m; sourceTree = "<group>"; };
 		F92D9D99139070770077ED19 /* Box2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box2D.h; sourceTree = "<group>"; };
 		F92D9D9B139070770077ED19 /* b2BroadPhase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = b2BroadPhase.cpp; sourceTree = "<group>"; };
 		F92D9D9C139070770077ED19 /* b2BroadPhase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = b2BroadPhase.h; sourceTree = "<group>"; };
@@ -556,6 +565,14 @@
 				F92D9E12139070820077ED19 /* EmoDatabase_glue.m */,
 				F92D9E13139070820077ED19 /* EmoDrawable.h */,
 				F92D9E14139070820077ED19 /* EmoDrawable.m */,
+				F92D9E1D139070820077ED19 /* EmoMapDrawable.h */,
+				F92D9E1E139070820077ED19 /* EmoMapDrawable.m */,
+				F92D52FB145E205A002B97DF /* EmoFontDrawable.h */,
+				F92D52FC145E205A002B97DF /* EmoFontDrawable.m */,
+				F92D52FE145E2261002B97DF /* EmoSnapshotDrawable.h */,
+				F92D52FF145E2261002B97DF /* EmoSnapshotDrawable.m */,
+				F92D5301145E239F002B97DF /* EmoLineDrawable.h */,
+				F92D5302145E239F002B97DF /* EmoLineDrawable.m */,
 				F92D9E15139070820077ED19 /* EmoDrawable_glue.h */,
 				F92D9E16139070820077ED19 /* EmoDrawable_glue.m */,
 				F92D9E17139070820077ED19 /* EmoEngine.h */,
@@ -564,8 +581,6 @@
 				F92D9E1A139070820077ED19 /* EmoEngine_glue.m */,
 				F92D9E1B139070820077ED19 /* EmoImage.h */,
 				F92D9E1C139070820077ED19 /* EmoImage.m */,
-				F92D9E1D139070820077ED19 /* EmoMapDrawable.h */,
-				F92D9E1E139070820077ED19 /* EmoMapDrawable.m */,
 				F92D9E1F139070820077ED19 /* EmoPhysics.h */,
 				F92D9E20139070820077ED19 /* EmoPhysics.m */,
 				F92D9E21139070820077ED19 /* EmoRuntime.h */,
@@ -872,6 +887,9 @@
 				F92D9EB0139070A10077ED19 /* sqstate.cpp in Sources */,
 				F92D9EB1139070A10077ED19 /* sqtable.cpp in Sources */,
 				F92D9EB2139070A10077ED19 /* sqvm.cpp in Sources */,
+				F92D52FD145E205A002B97DF /* EmoFontDrawable.m in Sources */,
+				F92D5300145E2261002B97DF /* EmoSnapshotDrawable.m in Sources */,
+				F92D5303145E23A0002B97DF /* EmoLineDrawable.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

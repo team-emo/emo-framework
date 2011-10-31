@@ -176,25 +176,6 @@
 -(void)deleteImagePacks;
 @end
 
-@interface EmoLineDrawable : EmoDrawable {
-	float x2, y2;
-}
-@property (readwrite) float x2;
-@property (readwrite) float y2;
-
--(void)initDrawable;
--(BOOL)bindVertex;
--(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
-@end
-
-@interface EmoSnapshotDrawable : EmoDrawable {
-
-}
--(void)initDrawable;
--(BOOL)bindVertex;
--(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
-@end
-
 @interface EmoImagePackParser : NSObject <NSXMLParserDelegate> {
     EmoDrawable* drawable;
     NSInteger frameIndex;
@@ -203,30 +184,3 @@
 @property (assign, readwrite) EmoDrawable* drawable;
 @property (readwrite) NSInteger frameIndex;
 @end
-
-@interface EmoFontDrawable : EmoDrawable {
-    NSInteger fontSize;
-    NSString* fontFace;
-    BOOL isBold;
-    BOOL isItalic;
-    
-    NSString* param1;
-    NSString* param2;
-    NSString* param3;
-    NSString* param4;
-    NSString* param5;
-    NSString* param6;
-}
-@property (readwrite) NSInteger fontSize;
-@property (copy, readwrite) NSString* fontFace;
-@property (readwrite) BOOL isBold, isItalic;
-@property (copy, readwrite) NSString* param1;
-@property (copy, readwrite) NSString* param2;
-@property (copy, readwrite) NSString* param3;
-@property (copy, readwrite) NSString* param4;
-@property (copy, readwrite) NSString* param5;
-@property (copy, readwrite) NSString* param6;
-
--(void)loadTextBitmap;
-@end
-
