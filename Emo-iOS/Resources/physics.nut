@@ -874,19 +874,43 @@ class emo.physics.PhysicsInfo {
 class emo.physics.SoftPhysicsInfo extends emo.physics.PhysicsInfo {
 
     markers       = null;
+    lines         = null;
+    
     segments      = null;
     segmentJoints = null;
     innerJoints   = null;
+
+    segmentCount  = null;    
+    segmentPos    = null;
+    texturePos    = null;
     
     function constructor(_world, _sprite, _fixture) {
         base.constructor(_world, _sprite, _fixture, PHYSICS_BODY_TYPE_DYNAMIC);
+        
         markers  = [];
-        segments = [];
+        lines    = [];
+        
+        segments      = [];
         segmentJoints = [];
         innerJoints   = [];
+        
+        segmentPos = [];
+        texturePos = [];
+        
+        segmentCount = _sprite.getSegmentCount().tofloat();
+        
+        for (local i = 0; i < segmentCount; i++) {
+            segmentPos.append(null);
+            texturePos.append(null);
+        }
     }
 
     function update(timeStep, scale) {
+    
+        if (sprite.rawin("updateTextureCoords")) {
+            updateTexture(timeStep, scale);
+        }
+    
         base.update(timeStep, scale);
         
         for (local i = 0; i < markers.len(); i++) {
@@ -900,7 +924,64 @@ class emo.physics.SoftPhysicsInfo extends emo.physics.PhysicsInfo {
         }
     }
     
+    function updateTexture(timeStep, scale) {
+    
+        local centerPos = emo.Vec2(getBody().getPosition().x * scale,
+                                   getBody().getPosition().y * scale);
+    
+        segmentPos[0] = emo.Vec2(0, 0);
+        
+        for (local i = 0; i < segmentCount - 2; i++) {
+        
+            local part = segments[i];
+            local partPos = emo.Vec2(part.getPosition().x * scale, part.getPosition().y * scale);
+   
+            segmentPos[i + 1] = partPos - centerPos;
+        }
+        
+        segmentPos[segmentCount - 1] = segmentPos[1];
+    
+        for (local i = 0; i < segmentCount; i++) {
+            segmentPos[i] = centerPos + segmentPos[i];
+        }
+    
+        local baseAngle = PI;
+        local angle     = 0;
+     
+        texturePos[0] = emo.Vec2(0, 0);
+        
+        for (local i = 0; i < segmentCount - 2; i++) {
+            angle = baseAngle + (2 * PI / segmentCount * i);
+            texturePos[i + 1] = emo.Vec2(sin(angle), cos(angle));
+        }
+        texturePos[segmentCount - 1] = texturePos[1];
+    
+        local textureCenter = emo.Vec2(0.5, 0.5);
+        for (local i = 0; i < segmentCount; i++) {
+            texturePos[i] = (texturePos[i] * emo.Vec2(0.5, 0.5)) + textureCenter;
+        }
+        
+        sprite.updateTextureCoords(texturePos);
+        sprite.updateSegmentCoords(segmentPos);
+        
+        for (local i = 0; i < segmentCount; i++) {
+            if (lines.len() == 0) break;
+            if (i == 0) {
+                lines[0].move(
+                    segmentPos[i].x, segmentPos[i].y,
+                    segmentPos[segmentPos.len()-1].x, segmentPos[segmentPos.len()-1].y);
+            } else {
+                lines[i].move(
+                segmentPos[i-1].x, segmentPos[i-1].y,
+                segmentPos[i].x,   segmentPos[i].y);
+            }
+        }
+    }
+    
     function remove() {
+        foreach (line in lines) {
+            line.remove();
+        }
         foreach (marker in markers) {
             marker.remove();
         }
@@ -943,6 +1024,7 @@ function emo::Physics::createSoftCircleSprite(world, sprite, fixtureDef = null, 
     
     local angle    = 0;
     local markers  = [];
+    local lines    = [];
     local segments = [];
     
     for (local i = 0; i < segmentCount; i++) {
@@ -969,6 +1051,16 @@ function emo::Physics::createSoftCircleSprite(world, sprite, fixtureDef = null, 
             marker.moveCenter(offset.x * scale, offset.y * scale);
             marker.load();
             markers.append(marker);
+        }
+    }
+    
+    if (debug) {
+        for (local i = 0; i < segmentCount + 2; i++) {
+           local line = emo.Line();
+           line.setWidth(2);
+           line.load();
+            
+           lines.append(line);
         }
     }
     
@@ -1009,10 +1101,13 @@ function emo::Physics::createSoftCircleSprite(world, sprite, fixtureDef = null, 
     
     local physicsInfo = emo.physics.SoftPhysicsInfo(world, sprite, fixture);
     physicsInfo.markers  = markers;
+    physicsInfo.lines    = lines;
     physicsInfo.segments = segments;
     
     world.addPhysicsObject(physicsInfo);
     sprite.setPhysicsInfo(physicsInfo);
+    
+    physicsInfo.update(0, scale);
     
     return physicsInfo;
 }

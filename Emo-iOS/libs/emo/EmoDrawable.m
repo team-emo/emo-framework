@@ -731,10 +731,6 @@ extern EmoEngine* engine;
 }
 @end
 
-@interface EmoLiquidDrawable (PrivateMethods)
--(void)freePoint:(float**)points;
-@end
-
 @implementation EmoLiquidDrawable
 @synthesize segmentCount;
 -(void)initDrawable {
@@ -746,31 +742,18 @@ extern EmoEngine* engine;
     segmentCount = 18;
 }
 
--(void)freePoint:(float**)points {
-    for (int i = 0; i < segmentCount; i++) {
-        free(points[i]);
-    }
-    free(points);
-}
-
 -(BOOL)bindVertex {
     if (segmentCount <= 0) return FALSE;
 
-    if (textureCoords != NULL) [self freePoint:textureCoords];
-    if (segmentCoords != NULL) [self freePoint:segmentCoords];
+    if (textureCoords != NULL) free(textureCoords);
+    if (segmentCoords != NULL) free(segmentCoords);
     
-    textureCoords = (float**)malloc(sizeof(float*) * segmentCount);
-    for (int i = 0; i < segmentCount; i++) {
-        textureCoords[i] = (float*)malloc(sizeof(float) * 2);
-        textureCoords[i][0] = 0;
-        textureCoords[i][1] = 0;
-    }
-
-    segmentCoords = (float**)malloc(sizeof(float*) * segmentCount);
-    for (int i = 0; i < segmentCount; i++) {
-        segmentCoords[i] = (float*)malloc(sizeof(float) * 2);
-        segmentCoords[i][0] = 0;
-        segmentCoords[i][1] = 0;
+    textureCoords = (float*)malloc(sizeof(float) * segmentCount * 2);
+    segmentCoords = (float*)malloc(sizeof(float) * segmentCount * 2);
+    
+    for (int i = 0; i < segmentCount * 2; i++) {
+        textureCoords[i] = 0.0f;
+        segmentCoords[i] = 0.0f;
     }
 
     [super bindVertex];
@@ -783,8 +766,9 @@ extern EmoEngine* engine;
 	if (!loaded) return FALSE;
     if (index >= segmentCount) return FALSE;
 
-    textureCoords[index][0] = tx;
-    textureCoords[index][1] = ty;
+    int realIndex = index * 2;
+    textureCoords[realIndex]     = tx;
+    textureCoords[realIndex + 1] = ty;
     
     return TRUE;
 }
@@ -793,8 +777,9 @@ extern EmoEngine* engine;
 	if (!loaded) return FALSE;
     if (index >= segmentCount) return FALSE;
     
-    segmentCoords[index][0] = sx;
-    segmentCoords[index][1] = sy;
+    int realIndex = index * 2;
+    segmentCoords[realIndex]     = sx;
+    segmentCoords[realIndex + 1] = sy;
     
     return TRUE;
 }
@@ -804,26 +789,10 @@ extern EmoEngine* engine;
     if (segmentCount <= 0) return FALSE;
 
     glMatrixMode (GL_MODELVIEW);
-    glLoadIdentity (); 
+    glLoadIdentity ();
 	
     // update colors
     glColor4f(param_color[0], param_color[1], param_color[2], param_color[3]);
-    
-    // rotate
-    glTranslatef(param_rotate[1], param_rotate[2], 0);
-    if (param_rotate[3] == AXIS_X) {
-        glRotatef(param_rotate[0], 1, 0, 0);
-    } else if (param_rotate[3] == AXIS_Y) {
-        glRotatef(param_rotate[0], 0, 1, 0);
-    } else {
-        glRotatef(param_rotate[0], 0, 0, 1);
-    }
-    glTranslatef(-param_rotate[1], -param_rotate[2], 0);
-	
-    // scale
-    glTranslatef(param_scale[2], param_scale[3], 0);
-    glScalef(param_scale[0], param_scale[1], 1);
-    glTranslatef(-param_scale[2], -param_scale[3], 0);
     
 	if ([self hasTexture]) {
         glEnable(GL_TEXTURE_2D);
@@ -842,8 +811,8 @@ extern EmoEngine* engine;
 -(void)doUnload:(BOOL)doAll {
 	if (!loaded) return;
     
-    if (textureCoords != NULL) [self freePoint:textureCoords];
-    if (segmentCoords != NULL) [self freePoint:segmentCoords];
+    if (textureCoords != NULL) free(textureCoords);
+    if (segmentCoords != NULL) free(segmentCoords);
     
     textureCoords = NULL;
     segmentCoords = NULL;

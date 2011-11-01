@@ -188,8 +188,8 @@
 @interface EmoLiquidDrawable : EmoDrawable {
     GLsizei segmentCount;
     
-    float** textureCoords;
-    float** segmentCoords;
+    float* textureCoords;
+    float* segmentCoords;
 }
 @property (readwrite) GLsizei segmentCount;
 
