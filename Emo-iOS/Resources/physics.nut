@@ -871,6 +871,152 @@ class emo.physics.PhysicsInfo {
     }
 }
 
+class emo.physics.SoftPhysicsInfo extends emo.physics.PhysicsInfo {
+
+    markers       = null;
+    segments      = null;
+    segmentJoints = null;
+    innerJoints   = null;
+    
+    function constructor(_world, _sprite, _fixture) {
+        base.constructor(_world, _sprite, _fixture, PHYSICS_BODY_TYPE_DYNAMIC);
+        markers  = [];
+        segments = [];
+        segmentJoints = [];
+        innerJoints   = [];
+    }
+
+    function update(timeStep, scale) {
+        base.update(timeStep, scale);
+        
+        for (local i = 0; i < markers.len(); i++) {
+            local pos = segments[i].getPosition();
+            
+            local x = pos.x * scale;
+            local y = pos.y * scale;
+            
+            markers[i].moveCenter(x, y);
+            markers[i].rotate(emo.toDegree(segments[i].getAngle()));
+        }
+    }
+    
+    function remove() {
+        foreach (marker in markers) {
+            marker.remove();
+        }
+        foreach (segment in segments) {
+            world.destroyBody(segment);
+        }
+        foreach (joint in segmentJoints) {
+            world.destroyJoint(joint);
+        }
+        foreach (joint in innerJoints) {
+            world.destroyJoint(joint);
+        }
+        base.remove();
+    }
+}
+
+function emo::Physics::createSoftCircleSprite(world, sprite, fixtureDef = null, debug = false) {
+    local segmentCount = sprite.rawin("getSegmentCount") ? sprite.getSegmentCount() - 2 : 16;
+    
+    local scale  = world.scale.tofloat();
+    local radius = sprite.getWidth() / 2.0 / scale;
+    local angleStep = (PI * 2.0) / segmentCount; 
+    local sinHalfAngle = sin(angleStep * 0.5);
+    local subCircleRadius = sinHalfAngle * radius / (1.0 + sinHalfAngle); 
+     
+    local vecOffset = emo.Vec2(radius - subCircleRadius, radius - subCircleRadius);
+
+    if (fixtureDef == null) {
+        fixtureDef = emo.physics.FixtureDef();
+        fixtureDef.density     = 0.1; 
+        fixtureDef.restitution = 0.05;
+        fixtureDef.friction    = 1.0;
+    }
+    fixtureDef.shape = emo.physics.CircleShape();
+    fixtureDef.shape.radius(subCircleRadius);
+    
+    local innerBodyPos = emo.Vec2(
+                sprite.getCenterX() / scale,
+                sprite.getCenterY() / scale);
+    
+    local angle    = 0;
+    local markers  = [];
+    local segments = [];
+    
+    for (local i = 0; i < segmentCount; i++) {
+            
+        local offset = emo.Vec2(sin(angle), cos(angle));
+        offset = offset * vecOffset;
+        offset = offset + innerBodyPos;
+        angle += angleStep;
+
+        local bodyDef = emo.physics.BodyDef();
+        bodyDef.type  = PHYSICS_BODY_TYPE_DYNAMIC;
+        bodyDef.position = offset;
+        
+        local segment = world.createBody(bodyDef);
+        segment.createFixture(fixtureDef);
+            
+        segments.append(segment);
+        
+        if (debug) {
+            local marker = emo.Rectangle();
+            marker.color(1, 0, 0, 1);
+            marker.setSize(5, 5);
+            marker.setZ(sprite.getZ() + 1);
+            marker.moveCenter(offset.x * scale, offset.y * scale);
+            marker.load();
+            markers.append(marker);
+        }
+    }
+    
+    local bodyDef = emo.physics.BodyDef();
+    bodyDef.type  = PHYSICS_BODY_TYPE_DYNAMIC;
+    bodyDef.position = innerBodyPos;
+    
+    fixtureDef.shape.radius((radius - subCircleRadius * 2.0) * 0.5);
+    
+    local innerBody = world.createBody(bodyDef);
+    local fixture = innerBody.createFixture(fixtureDef);
+    
+    local segmentJoints = [];
+    local innerJoints   = [];
+    local jointDef = emo.physics.DistanceJointDef();
+    
+    for (local i = 0; i < segmentCount; i++) {
+        local neighborIndex = (i + 1) % segmentCount;
+        
+        // joints between outer circles
+        jointDef.initialize(segments[i], segments[neighborIndex],
+                                segments[i].getWorldCenter(), 
+                                segments[neighborIndex].getWorldCenter());
+        jointDef.collideConnected = true;
+        jointDef.frequencyHz = 10.0;
+        jointDef.dampingRatio = 0.5;
+        
+        segmentJoints.append(world.createJoint(jointDef));
+        
+        // create joints - outer circles with inner circle
+        jointDef.initialize(segments[i], innerBody, segments[i].getWorldCenter(), innerBodyPos);
+        jointDef.collideConnected = true;
+        jointDef.frequencyHz = 10.0;
+        jointDef.dampingRatio = 0.5;
+            
+        innerJoints.append(world.createJoint(jointDef));
+    }
+    
+    local physicsInfo = emo.physics.SoftPhysicsInfo(world, sprite, fixture);
+    physicsInfo.markers  = markers;
+    physicsInfo.segments = segments;
+    
+    world.addPhysicsObject(physicsInfo);
+    sprite.setPhysicsInfo(physicsInfo);
+    
+    return physicsInfo;
+}
+
 function emo::Physics::createSprite(world, sprite, bodyType, shape, fixtureDef = null, bodyDef = null) {
 
     local halfWidth  = sprite.getWidth()  * 0.5;

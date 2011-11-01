@@ -743,7 +743,7 @@ extern EmoEngine* engine;
     textureCoords = NULL;
     segmentCoords = NULL;
     
-    segmentCount = 16;
+    segmentCount = 18;
 }
 
 -(void)freePoint:(float**)points {
