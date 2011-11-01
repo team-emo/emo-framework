@@ -897,7 +897,9 @@ class emo.physics.SoftPhysicsInfo extends emo.physics.PhysicsInfo {
         segmentPos = [];
         texturePos = [];
         
-        segmentCount = _sprite.getSegmentCount().tofloat();
+        if (_sprite.rawin("getSegmentCount")) {
+            segmentCount = _sprite.getSegmentCount().tofloat();
+        }
         
         for (local i = 0; i < segmentCount; i++) {
             segmentPos.append(null);
