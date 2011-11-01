@@ -1559,6 +1559,10 @@ class emo.LiquidSprite extends emo.Sprite {
     function getSegmentCount() {
         return stage.getLiquidSegmentCount(id);
     }
+    
+    function setSegmentCount(count) {
+        return stage.updateLiquidSegmentCount(id, count + 2);
+    }
 }
 
 class emo.AnalogOnScreenController extends emo.Sprite {
