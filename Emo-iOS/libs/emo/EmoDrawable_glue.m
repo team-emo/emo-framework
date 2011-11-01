@@ -2436,8 +2436,7 @@ SQInteger emoDrawableUpdateLiquidTextureCoords(HSQUIRRELVM v) {
     if (nargs >= 3 && sq_gettype(v, 3) == OT_ARRAY) {
         int size = sq_getsize(v, 3);
         
-        for (int i = 0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             sq_pushinteger(v, i);
             sq_get(v, 3);
             
@@ -2481,8 +2480,7 @@ SQInteger emoDrawableUpdateLiquidSegmentCoords(HSQUIRRELVM v) {
     if (nargs >= 3 && sq_gettype(v, 3) == OT_ARRAY) {
         int size = sq_getsize(v, 3);
         
-        for (int i = 0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             sq_pushinteger(v, i);
             sq_get(v, 3);
             

@@ -773,6 +773,8 @@ extern EmoEngine* engine;
         segmentCoords[i][1] = 0;
     }
 
+    [super bindVertex];
+    
 	loaded = TRUE;
 	return TRUE;
 }
@@ -828,6 +830,8 @@ extern EmoEngine* engine;
         glBindTexture(GL_TEXTURE_2D, texture.textureId);
     
         glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
+    } else {
+        glDisable(GL_TEXTURE_2D);
     }
     
     glVertexPointer(2, GL_FLOAT, 0, segmentCoords);
