@@ -253,6 +253,15 @@ class emo.Vec2 {
         return emo.Vec2(arg[0], arg[1]);
     }
     
+    function distance(other) {
+        local c = emo.Vec2(x-other.x, y-other.y);
+        return c.length();
+    }
+    
+    function length() {
+        return sqrt(x * x + y * y);
+    }
+    
     function _add(other) {
         return emo.Vec2(x+other.x, y+other.y);
     }
