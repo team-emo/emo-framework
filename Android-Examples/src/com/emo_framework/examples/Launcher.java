@@ -66,6 +66,7 @@ public class Launcher extends ExpandableListActivity {
     		"HelloWorld (No Graphics)",
     		"Using Box Shape",
     		"Using Circle Shape",
+    		"Using Soft Circle",
 			"Using with Sensor",
 			"Using ContactListener",
 			"Adding Physics"
@@ -130,6 +131,7 @@ public class Launcher extends ExpandableListActivity {
     		".Box2DHelloWorld",
     		".PhysicsHelloWorld",
     		".PhysicsCircleExample",
+    		".PhysicsSoftCircleExample",
 			".PhysicsSensorExample",
 			".PhysicsContactExample",
 			".PhysicsAddExample"

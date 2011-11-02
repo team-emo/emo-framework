@@ -187,6 +187,7 @@
 		F9E30413138E3B1A00DB5B60 /* digital_controller_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9E30412138E3ACB00DB5B60 /* digital_controller_example.nut */; };
 		F9E30439138E3D0600DB5B60 /* multiple_controllers_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9E30434138E3C9000DB5B60 /* multiple_controllers_example.nut */; };
 		F9E503BE138BD4B900C7F0BD /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = F9E503BD138BD4B900C7F0BD /* loading.png */; };
+		F9ED180314610DB300D52926 /* physics_softcircle.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9ED180214610DB300D52926 /* physics_softcircle.nut */; };
 		F9F5AB9F138880D90068EC12 /* tv.png in Resources */ = {isa = PBXBuildFile; fileRef = F9F5AB9E138880D90068EC12 /* tv.png */; };
 		F9F99BDA139E09EB0059B4C8 /* audio_volume_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9F99BD9139E09D60059B4C8 /* audio_volume_example.nut */; };
 		F9FC6D55144E3C7F00C5E087 /* TestarossaNF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F9FC6D54144E3C7F00C5E087 /* TestarossaNF.ttf */; };
@@ -467,6 +468,7 @@
 		F9E30412138E3ACB00DB5B60 /* digital_controller_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = digital_controller_example.nut; path = Resources/digital_controller_example.nut; sourceTree = "<group>"; };
 		F9E30434138E3C9000DB5B60 /* multiple_controllers_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = multiple_controllers_example.nut; path = Resources/multiple_controllers_example.nut; sourceTree = "<group>"; };
 		F9E503BD138BD4B900C7F0BD /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
+		F9ED180214610DB300D52926 /* physics_softcircle.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_softcircle.nut; path = Resources/physics_softcircle.nut; sourceTree = "<group>"; };
 		F9F5AB9E138880D90068EC12 /* tv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tv.png; sourceTree = "<group>"; };
 		F9F99BD9139E09D60059B4C8 /* audio_volume_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = audio_volume_example.nut; path = Resources/audio_volume_example.nut; sourceTree = "<group>"; };
 		F9FC6D54144E3C7F00C5E087 /* TestarossaNF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = TestarossaNF.ttf; path = Resources/TestarossaNF.ttf; sourceTree = "<group>"; };
@@ -557,6 +559,7 @@
 				F9E30434138E3C9000DB5B60 /* multiple_controllers_example.nut */,
 				F985282113875C2F007DD0CF /* physics_helloworld.nut */,
 				F98EABC7138784D800902E31 /* physics_circle.nut */,
+				F9ED180214610DB300D52926 /* physics_softcircle.nut */,
 				F9D43B0B138916040069C3C1 /* physics_sensor.nut */,
 				F9CFE9B91391D28D00DDD12F /* physics_revolutejoint.nut */,
 				F99D44831391DF1E006622F8 /* physics_distancejoint.nut */,
@@ -1081,6 +1084,7 @@
 				F9D311311458D60600E4B165 /* icons_pack.pvr in Resources */,
 				F9D311331458D61300E4B165 /* potblocks.pvr in Resources */,
 				F9D311351458D61C00E4B165 /* icons_pack_Sparrow_pvr.xml in Resources */,
+				F9ED180314610DB300D52926 /* physics_softcircle.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
