@@ -295,5 +295,23 @@ namespace emo {
         std::string param5;
         std::string param6;
     };
+
+    class LiquidDrawable : public Drawable {
+    public:
+        LiquidDrawable();
+        virtual ~LiquidDrawable();
+
+        virtual bool bindVertex();
+        virtual void onDrawFrame();
+
+        bool updateTextureCoords(int index, float tx, float ty);
+        bool updateSegmentCoords(int index, float sx, float sy);
+
+        GLsizei segmentCount;
+    
+    protected:
+        float* textureCoords;
+        float* segmentCoords;
+    };
 }
 #endif

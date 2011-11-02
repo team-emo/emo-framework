@@ -1215,4 +1215,83 @@ namespace emo {
 
     }
 
+    LiquidDrawable::LiquidDrawable() {
+        this->segmentCount  = 18;
+        this->textureCoords = NULL;
+        this->segmentCoords = NULL;
+    }
+
+    LiquidDrawable::~LiquidDrawable() {
+        if (this->textureCoords != NULL) free(this->textureCoords);
+        if (this->segmentCoords != NULL) free(this->segmentCoords);
+    
+        this->textureCoords = NULL;
+        this->segmentCoords = NULL;
+    }
+
+    bool LiquidDrawable::bindVertex() {
+        if (!Drawable::bindVertex()) return false;
+        if (this->segmentCount <= 0) return false;
+
+        if (this->textureCoords != NULL) free(textureCoords);
+        if (this->segmentCoords != NULL) free(segmentCoords);
+
+        this->textureCoords = (float*)malloc(sizeof(float) * this->segmentCount * 2);
+        this->segmentCoords = (float*)malloc(sizeof(float) * this->segmentCount * 2);
+
+        for (int i = 0; i < this->segmentCount * 2; i++) {
+            this->textureCoords[i] = 0.0f;
+            this->segmentCoords[i] = 0.0f;
+        }
+
+        return true;
+    }
+
+    void LiquidDrawable::onDrawFrame() {
+        if (!this->loaded) return;
+        if (!this->hasBuffer) return;
+        if (this->segmentCount <= 0) return;
+
+        engine->updateUptime();
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        // update colors
+        glColor4f(param_color[0], param_color[1], param_color[2], param_color[3]);
+
+        if (this->hasTexture) {
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, this->texture->textureId);
+
+            glTexCoordPointer(2, GL_FLOAT, 0, this->textureCoords);
+        } else {
+            glDisable(GL_TEXTURE_2D);
+        }
+
+        glVertexPointer(2, GL_FLOAT, 0,  this->segmentCoords);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, this->segmentCount);
+    }
+
+    bool LiquidDrawable::updateTextureCoords(int index, float tx, float ty) {
+        if (!this->loaded) return false;
+        if (index >= this->segmentCount) return false;
+
+        int realIndex = index * 2;
+        this->textureCoords[realIndex]     = tx;
+        this->textureCoords[realIndex + 1] = ty;
+
+        return true;
+    }
+
+    bool LiquidDrawable::updateSegmentCoords(int index, float sx, float sy) {
+        if (!this->loaded) return false;
+        if (index >= this->segmentCount) return false;
+    
+        int realIndex = index * 2;
+        this->segmentCoords[realIndex]     = sx; 
+        this->segmentCoords[realIndex + 1] = sy;
+
+        return true;
+    }
 }
