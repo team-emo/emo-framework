@@ -2,7 +2,7 @@
 
 echo 'emo-framework template installer for Xcode 4'
 
-EMO_VER='emo-framework 0.1.7'
+EMO_VER='emo-framework 0.1.8'
 TEMPLATE_DIR="$HOME/Library/Developer/Xcode/Templates/emo-framework/"
 SCRIPT_DIR=$(dirname $0)
 
