@@ -44,6 +44,8 @@ class Main {
         for (local i = 0; i < NUMBER_OF_BALLS; i++) {
             // The size of texture image should be squared, power-of-two (64x64, 128x128)
             local sprite = emo.LiquidSprite("softcircle.png");
+            // number of segments can be changed, default count equals 16
+            sprite.setSegmentCount(12);
             sprite.hide();
             sprite.load();
             sprites.append(sprite);
