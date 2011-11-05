@@ -190,6 +190,7 @@
 		F9ED180314610DB300D52926 /* physics_softcircle.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9ED180214610DB300D52926 /* physics_softcircle.nut */; };
 		F9F5AB9F138880D90068EC12 /* tv.png in Resources */ = {isa = PBXBuildFile; fileRef = F9F5AB9E138880D90068EC12 /* tv.png */; };
 		F9F99BDA139E09EB0059B4C8 /* audio_volume_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9F99BD9139E09D60059B4C8 /* audio_volume_example.nut */; };
+		F9FA83241464DA2F00CB49DE /* softcircle.png in Resources */ = {isa = PBXBuildFile; fileRef = F9FA83231464DA2F00CB49DE /* softcircle.png */; };
 		F9FC6D55144E3C7F00C5E087 /* TestarossaNF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F9FC6D54144E3C7F00C5E087 /* TestarossaNF.ttf */; };
 /* End PBXBuildFile section */
 
@@ -471,6 +472,7 @@
 		F9ED180214610DB300D52926 /* physics_softcircle.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_softcircle.nut; path = Resources/physics_softcircle.nut; sourceTree = "<group>"; };
 		F9F5AB9E138880D90068EC12 /* tv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tv.png; sourceTree = "<group>"; };
 		F9F99BD9139E09D60059B4C8 /* audio_volume_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = audio_volume_example.nut; path = Resources/audio_volume_example.nut; sourceTree = "<group>"; };
+		F9FA83231464DA2F00CB49DE /* softcircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = softcircle.png; sourceTree = "<group>"; };
 		F9FC6D54144E3C7F00C5E087 /* TestarossaNF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = TestarossaNF.ttf; path = Resources/TestarossaNF.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -613,6 +615,7 @@
 		F921CC99136FFBAC00F058FF /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				F9FA83231464DA2F00CB49DE /* softcircle.png */,
 				F9B132EB14496B4300D37B79 /* icons_pack_OGRE.xml */,
 				F9B132EC14496B4300D37B79 /* icons_pack_Sparrow.xml */,
 				F9B132ED14496B4300D37B79 /* icons_pack.png */,
@@ -1085,6 +1088,7 @@
 				F9D311331458D61300E4B165 /* potblocks.pvr in Resources */,
 				F9D311351458D61C00E4B165 /* icons_pack_Sparrow_pvr.xml in Resources */,
 				F9ED180314610DB300D52926 /* physics_softcircle.nut in Resources */,
+				F9FA83241464DA2F00CB49DE /* softcircle.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

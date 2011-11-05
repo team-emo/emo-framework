@@ -9,12 +9,19 @@ local world   = emo.physics.World(gravity, true);
 
 const FPS = 60.0;
 const WALL_WIDTH = 10;
-const NUMBER_OF_BALLS = 10;
+const NUMBER_OF_BALLS = 5;
 
 local nextBallIndex = 0;
 local ballFixture   = null;
 local ballDef       = null;
 
+/*
+ * This example shows how to use soft circle liquid sprite with physics.
+ *
+ * emo.Physics.createSoftCircleSprite creates soft circle inside the physics world.
+ * Note that the size of texture image for LiquidSprite should be squared, 
+ * power-of-two. (64x64, 128x128...), otherwise texture will not be updated correctly.
+ */
 class Main {
 
     sprites  = [];
@@ -35,7 +42,8 @@ class Main {
         ballDef.allowSleep = false;
         
         for (local i = 0; i < NUMBER_OF_BALLS; i++) {
-            local sprite = emo.LiquidSprite("gear@2x.png");
+            // The size of texture image should be squared, power-of-two (64x64, 128x128)
+            local sprite = emo.LiquidSprite("softcircle.png");
             sprite.hide();
             sprite.load();
             sprites.append(sprite);

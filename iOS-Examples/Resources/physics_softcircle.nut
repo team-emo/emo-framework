@@ -9,7 +9,7 @@ local world   = emo.physics.World(gravity, true);
 
 const FPS = 60.0;
 const WALL_WIDTH = 10;
-const NUMBER_OF_BALLS = 10;
+const NUMBER_OF_BALLS = 5;
 
 local nextBallIndex = 0;
 local ballFixture   = null;
@@ -43,7 +43,7 @@ class Main {
         
         for (local i = 0; i < NUMBER_OF_BALLS; i++) {
             // The size of texture image should be squared, power-of-two (64x64, 128x128)
-            local sprite = emo.LiquidSprite("gear@2x.png");
+            local sprite = emo.LiquidSprite("softcircle.png");
             sprite.hide();
             sprite.load();
             sprites.append(sprite);
