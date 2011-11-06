@@ -50,7 +50,7 @@ class Main {
             // number of segments can be changed, default count equals 18
             // segment count should be bigger than 5 (triangle)
             // print(sprite.getSegmentCount());
-            sprite.setSegmentCount(14);
+            sprite.setSegmentCount(emo.LiquidSprite.CIRCLE);
             sprite.hide();
             sprite.load();
             sprites.append(sprite);
