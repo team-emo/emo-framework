@@ -1547,8 +1547,7 @@ class emo.LiquidSprite extends emo.Sprite {
     OCTAGON  = 10;
     POLYGON10 = 12;
     POLYGON12 = 14;
-    CIRCLE   = 18;
-    
+    CIRCLE    = 18;
     function constructor(rawname) {
         name = this.getResourceName(rawname);
         id   = stage.createLiquidSprite(name);
