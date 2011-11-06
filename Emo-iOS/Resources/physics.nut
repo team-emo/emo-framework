@@ -884,6 +884,8 @@ class emo.physics.SoftPhysicsInfo extends emo.physics.PhysicsInfo {
     segmentPos    = null;
     texturePos    = null;
     
+    texScale      = 1.0;
+    
     function constructor(_world, _sprite, _fixture) {
         base.constructor(_world, _sprite, _fixture, PHYSICS_BODY_TYPE_DYNAMIC);
         
@@ -938,7 +940,7 @@ class emo.physics.SoftPhysicsInfo extends emo.physics.PhysicsInfo {
             local part = segments[i];
             local partPos = emo.Vec2(part.getPosition().x * scale, part.getPosition().y * scale);
    
-            segmentPos[i + 1] = partPos - centerPos;
+            segmentPos[i + 1] = (partPos - centerPos) * emo.Vec2(texScale, texScale);
         }
         
         segmentPos[segmentCount - 1] = segmentPos[1];
@@ -1048,7 +1050,7 @@ function emo::Physics::createSoftCircleSprite(world, sprite, fixtureDef = null, 
         if (debug) {
             local marker = emo.Rectangle();
             marker.color(1, 0, 0, 1);
-            marker.setSize(5, 5);
+            marker.setSize(subCircleRadius * scale * 2.0, subCircleRadius * scale * 2.0);
             marker.setZ(sprite.getZ() + 1);
             marker.moveCenter(offset.x * scale, offset.y * scale);
             marker.load();
@@ -1074,7 +1076,14 @@ function emo::Physics::createSoftCircleSprite(world, sprite, fixtureDef = null, 
     
     local innerBody = world.createBody(bodyDef);
     local fixture = innerBody.createFixture(fixtureDef);
-    
+
+    local partToCentDist = segments[0].getPosition().distance(innerBody.getPosition());
+    local partToOffset = emo.Vec2(sin(0), cos(0));
+    partToOffset = partToOffset * emo.Vec2(radius, radius);
+    local partEdgePos = innerBodyPos + partToOffset;
+    local partEdgeToCentDist = partEdgePos.distance(innerBody.getPosition());
+    local texScale = partEdgeToCentDist / partToCentDist;
+
     local segmentJoints = [];
     local innerJoints   = [];
     local jointDef = emo.physics.DistanceJointDef();
@@ -1105,6 +1114,7 @@ function emo::Physics::createSoftCircleSprite(world, sprite, fixtureDef = null, 
     physicsInfo.markers  = markers;
     physicsInfo.lines    = lines;
     physicsInfo.segments = segments;
+    physicsInfo.texScale = texScale;
     
     world.addPhysicsObject(physicsInfo);
     sprite.setPhysicsInfo(physicsInfo);

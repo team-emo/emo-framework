@@ -9,7 +9,7 @@ local world   = emo.physics.World(gravity, true);
 
 const FPS = 60.0;
 const WALL_WIDTH = 10;
-const NUMBER_OF_BALLS = 5;
+const NUMBER_OF_BALLS = 10;
 
 local nextBallIndex = 0;
 local ballFixture   = null;
