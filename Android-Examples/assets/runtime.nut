@@ -1557,7 +1557,7 @@ class emo.LiquidSprite extends emo.Sprite {
     }
 
     function getSegmentCount() {
-        return stage.getLiquidSegmentCount(id);
+        return stage.getLiquidSegmentCount(id) - 2;
     }
     
     function setSegmentCount(count) {

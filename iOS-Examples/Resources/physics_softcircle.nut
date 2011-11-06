@@ -17,6 +17,9 @@ local ballDef       = null;
 
 /*
  * This example shows how to use soft circle liquid sprite with physics.
+ * 
+ * The implementation of soft circle is inspired by Dashiell Gough's SoftCircle.
+ * http://dashiellgough.wordpress.com/2011/10/29/cocos2d-box2d-textured-soft-body/
  *
  * emo.Physics.createSoftCircleSprite creates soft circle inside the physics world.
  * Note that the size of texture image for LiquidSprite should be squared, 
@@ -44,6 +47,7 @@ class Main {
         for (local i = 0; i < NUMBER_OF_BALLS; i++) {
             // The size of texture image should be squared, power-of-two (64x64, 128x128)
             local sprite = emo.LiquidSprite("softcircle.png");
+            // print(sprite.getSegmentCount());
             // number of segments can be changed, default count equals 16
             sprite.setSegmentCount(12);
             sprite.hide();
