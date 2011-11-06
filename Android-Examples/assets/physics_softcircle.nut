@@ -175,7 +175,12 @@ class Main {
         }
             
         sprites[i].moveCenter(x, y);
-        physics.createSoftCircleSprite(world, sprites[i], ballFixture, false);
+        // Create soft circle sprite with given fixture
+        physics.createSoftCircleSprite(world, sprites[i], ballFixture);
+        // The third parameter (Fixture) can be omitted
+        // physics.createSoftCircleSprite(world, sprites[i]);
+        // The forth parameter indicates debug drawing
+        // physics.createSoftCircleSprite(world, sprites[i], ballFixture, true);
         sprites[i].show();
             
         nextBallIndex++;

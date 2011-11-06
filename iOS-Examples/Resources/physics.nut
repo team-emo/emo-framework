@@ -1061,6 +1061,7 @@ function emo::Physics::createSoftCircleSprite(world, sprite, fixtureDef = null, 
     if (debug) {
         for (local i = 0; i < segmentCount + 2; i++) {
            local line = emo.Line();
+           line.setZ(sprite.getZ() + 1);
            line.setWidth(2);
            line.load();
             
