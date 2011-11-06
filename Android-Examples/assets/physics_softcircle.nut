@@ -48,8 +48,8 @@ class Main {
             // The size of texture image should be squared, power-of-two (64x64, 128x128)
             local sprite = emo.LiquidSprite("softcircle.png");
             // print(sprite.getSegmentCount());
-            // number of segments can be changed, default count equals 16
-            sprite.setSegmentCount(12);
+            // number of segments can be changed, default count equals 18
+            sprite.setSegmentCount(14);
             sprite.hide();
             sprite.load();
             sprites.append(sprite);

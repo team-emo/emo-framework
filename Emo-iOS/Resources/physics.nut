@@ -900,7 +900,7 @@ class emo.physics.SoftPhysicsInfo extends emo.physics.PhysicsInfo {
         texturePos = [];
         
         if (_sprite.rawin("getSegmentCount")) {
-            segmentCount = _sprite.getSegmentCount().tofloat() + 2;
+            segmentCount = _sprite.getSegmentCount().tofloat();
         }
         
         for (local i = 0; i < segmentCount; i++) {
@@ -1003,7 +1003,7 @@ class emo.physics.SoftPhysicsInfo extends emo.physics.PhysicsInfo {
 }
 
 function emo::Physics::createSoftCircleSprite(world, sprite, fixtureDef = null, debug = false) {
-    local segmentCount = sprite.rawin("getSegmentCount") ? sprite.getSegmentCount() : 16;
+    local segmentCount = sprite.rawin("getSegmentCount") ? sprite.getSegmentCount() - 2 : 16;
     
     local scale  = world.scale.tofloat();
     local radius = sprite.getWidth() / 2.0 / scale;
