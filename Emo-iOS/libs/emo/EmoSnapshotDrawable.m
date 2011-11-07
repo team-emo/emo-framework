@@ -29,6 +29,7 @@
 #import "EmoSnapshotDrawable.h"
 #import "EmoEngine.h"
 #import "EmoEngine_glue.h"
+#import "OpenGLES/ES2/glext.h"
 
 extern EmoEngine* engine;
 
