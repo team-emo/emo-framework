@@ -954,7 +954,7 @@ function emo::easing::BounceIn(elapsed, duration, modifier) {
 }
 
 function emo::easing::BounceInOut(elapsed, duration, modifier) {
-    if (elapsed < duration / 2.0) return emo.easing.BounceIn(elapsed * 2.0, duration) * 0.5;
+    if (elapsed < duration / 2.0) return emo.easing.BounceIn(elapsed * 2.0, duration, modifier) * 0.5;
     else return emo.easing.BounceOut(t * 2.0 - duration, duration, modifier) * 0.5 + 0.5;
 }
 
