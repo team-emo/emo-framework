@@ -488,7 +488,7 @@ class emo.Modifier {
         local current  = currentValue(minValue, maxValue, percent);
         if (elapsedf >= duration) {
             onModify(maxValue);
-            if (repeatCount == currentCount) {
+            if (repeatCount >= 0 && repeatCount <= currentCount) {
                 emo.Event().removeOnUpdateListener(this);
                 if (eventCallback != null) {
                     eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
@@ -810,7 +810,7 @@ class emo.MultiModifier extends emo.Modifier {
         for (local i = 0; i < minValue.len(); i++) {
             if (elapsedf >= duration) {
                 onModify(maxValue);
-                if (repeatCount == currentCount) {
+                if (repeatCount >= 0 && repeatCount <= currentCount) {
                     emo.Event().removeOnUpdateListener(this);
                     if (eventCallback != null) {
                         eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
