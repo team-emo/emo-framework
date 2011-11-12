@@ -34,6 +34,7 @@
 // #define EMO_WITH_SANDBOX
 #define PNG_NO_PEDANTIC_WARNINGS
 #define RAPIDXML_NO_EXCEPTIONS
+#define GL_GLEXT_PROTOTYPES
 
 #define EMO_LOG_TAG "EmoFramework"
 
