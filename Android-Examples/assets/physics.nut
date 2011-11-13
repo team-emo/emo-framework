@@ -955,7 +955,7 @@ class emo.physics.SoftPhysicsInfo extends emo.physics.PhysicsInfo {
         texturePos[0] = emo.Vec2(0, 0);
         
         for (local i = 0; i < segmentCount - 2; i++) {
-            angle = baseAngle + (2 * PI / segmentCount * i);
+            angle = baseAngle + (2 * PI / (segmentCount - 2) * i);
             texturePos[i + 1] = emo.Vec2(sin(angle), cos(angle));
         }
         texturePos[segmentCount - 1] = texturePos[1];
