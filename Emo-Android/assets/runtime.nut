@@ -1548,11 +1548,15 @@ class emo.LiquidSprite extends emo.Sprite {
     POLYGON10 = 12;
     POLYGON12 = 14;
     CIRCLE    = 18;
-    function constructor(rawname) {
+    function constructor(rawname, segmentCount = null) {
         name = this.getResourceName(rawname);
         id   = stage.createLiquidSprite(name);
         childId = -1;
         loaded = false;
+        
+        if (segmentCount != null) {
+            this.setSegmentCount(segmentCount);
+        }
     }
     
     function updateTextureCoords(coords) {
@@ -1569,6 +1573,31 @@ class emo.LiquidSprite extends emo.Sprite {
     
     function setSegmentCount(count) {
         return stage.updateLiquidSegmentCount(id, count);
+    }
+}
+
+class emo.PointSprite extends emo.Sprite {
+    function constructor(rawname, pointCount = null) {
+        name = this.getResourceName(rawname);
+        id   = stage.createPointSprite(name);
+        childId = -1;
+        loaded = false;
+        
+        if (pointCount != null) {
+            this.setPointCount(pointCount);
+        }
+    }
+    
+    function updatePointCoords(coords) {
+        return stage.updatePointDrawablePointCoords(id, coords);
+    }
+    
+    function getPointCount() {
+        return stage.getPointDrawablePointCount(id);
+    }
+    
+    function setPointCount(count) {
+        return stage.updatePointDrawablePointCount(id, count);
     }
 }
 

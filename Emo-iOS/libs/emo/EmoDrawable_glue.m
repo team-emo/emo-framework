@@ -35,6 +35,7 @@
 #import "EmoFontDrawable.h"
 #import "EmoSnapshotDrawable.h"
 #import "EmoLiquidDrawable.h"
+#import "EmoPointDrawable.h"
 #import "VmFunc.h"
 #import "Util.h"
 
@@ -47,6 +48,7 @@ void initDrawableFunctions() {
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createLine",     emoDrawableCreateLine);
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createSpriteSheet", emoDrawableCreateSpriteSheet);
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createLiquidSprite",   emoDrawableCreateLiquidSprite);
+	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createPointSprite",    emoDrawableCreatePointSprite);
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "loadSprite",     emoDrawableLoad);
     
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "createFontSprite",     emoDrawableCreateFontSprite);
@@ -115,6 +117,10 @@ void initDrawableFunctions() {
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "updateLiquidSegmentCoords",  emoDrawableUpdateLiquidSegmentCoords);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "updateLiquidSegmentCount", emoDrawableUpdateLiquidSegmentCount);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getLiquidSegmentCount",    emoDrawableGetLiquidSegmentCount);
+
+    registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "updatePointDrawablePointCoords",  emoPointDrawableUpdatePointCoords);
+    registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "updatePointDrawablePointCount",   emoPointDrawableUpdatePointCount);
+    registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getPointDrawablePointCount",      emoPointDrawableGetPointCount);
 }
 
 /*
@@ -387,6 +393,53 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
  */
 SQInteger emoDrawableCreateLiquidSprite(HSQUIRRELVM v) {
 	EmoLiquidDrawable* drawable = [[EmoLiquidDrawable alloc] init];
+	
+    [drawable initDrawable];
+	
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+		
+        if (strlen(name) > 0) {
+			drawable.name = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
+        }
+    } else {
+		drawable.name = nil;
+	}
+	
+    int width  = 0;
+    int height = 0;
+	
+    if (drawable.name != nil && !loadImageSizeFromResource(drawable.name, &width, &height)) {
+        [drawable release];
+        return 0;
+    }
+	
+	drawable.width  = width;
+	drawable.height = height;
+	drawable.frameWidth  = width;
+	drawable.frameHeight = height;
+	
+    [drawable createTextureBuffer];
+	
+    char key[DRAWABLE_KEY_LENGTH];
+	[drawable updateKey:key];
+    [engine addDrawable:drawable withKey:key];
+	
+    sq_pushstring(v, key, strlen(key));
+	
+	[drawable release];
+	
+    return 1;
+}
+
+/*
+ * create point drawable instance(single sprite)
+ */
+SQInteger emoDrawableCreatePointSprite(HSQUIRRELVM v) {
+	EmoPointDrawable* drawable = [[EmoPointDrawable alloc] init];
 	
     [drawable initDrawable];
 	
@@ -2492,6 +2545,110 @@ SQInteger emoDrawableUpdateLiquidSegmentCoords(HSQUIRRELVM v) {
             
             [drawable updateSegmentCoords:i sx:vx sy:vy];
 
+            sq_pop(v, 1);
+        }
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoPointDrawableUpdatePointCount(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoPointDrawable* drawable = (EmoPointDrawable*)[engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+    
+    if (drawable.loaded) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQInteger count;
+        sq_getinteger(v, 3, &count);
+        drawable.pointCount = count;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoPointDrawableGetPointCount(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoPointDrawable* drawable = (EmoPointDrawable*)[engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+    
+    sq_pushinteger(v, drawable.pointCount);
+    return 1;
+}
+
+SQInteger emoPointDrawableUpdatePointCoords(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    EmoPointDrawable* drawable = (EmoPointDrawable*)[engine getDrawable:id];
+	
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_ARRAY) {
+        int size = sq_getsize(v, 3);
+        
+        for (int i = 0; i < size; i++) {
+            sq_pushinteger(v, i);
+            sq_get(v, 3);
+            
+            float px = 0;
+            float py = 0;
+            getInstanceMemberAsFloat(v, sq_gettop(v), "x", &px);
+            getInstanceMemberAsFloat(v, sq_gettop(v), "y", &py);
+            
+            [drawable updatePointCoords:i px:px py:py];
+            
             sq_pop(v, 1);
         }
     } else {
