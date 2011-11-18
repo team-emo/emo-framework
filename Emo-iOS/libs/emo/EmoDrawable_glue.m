@@ -34,6 +34,7 @@
 #import "EmoMapDrawable.h"
 #import "EmoFontDrawable.h"
 #import "EmoSnapshotDrawable.h"
+#import "EmoLiquidDrawable.h"
 #import "VmFunc.h"
 #import "Util.h"
 

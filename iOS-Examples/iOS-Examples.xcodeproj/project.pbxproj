@@ -189,6 +189,7 @@
 		F9E30439138E3D0600DB5B60 /* multiple_controllers_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9E30434138E3C9000DB5B60 /* multiple_controllers_example.nut */; };
 		F9E503BE138BD4B900C7F0BD /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = F9E503BD138BD4B900C7F0BD /* loading.png */; };
 		F9ED180314610DB300D52926 /* physics_softcircle.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9ED180214610DB300D52926 /* physics_softcircle.nut */; };
+		F9F496FF1476165B005EAF37 /* EmoLiquidDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F496FE1476165B005EAF37 /* EmoLiquidDrawable.m */; };
 		F9F5AB9F138880D90068EC12 /* tv.png in Resources */ = {isa = PBXBuildFile; fileRef = F9F5AB9E138880D90068EC12 /* tv.png */; };
 		F9F99BDA139E09EB0059B4C8 /* audio_volume_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9F99BD9139E09D60059B4C8 /* audio_volume_example.nut */; };
 		F9FA83241464DA2F00CB49DE /* softcircle.png in Resources */ = {isa = PBXBuildFile; fileRef = F9FA83231464DA2F00CB49DE /* softcircle.png */; };
@@ -209,9 +210,9 @@
 		28F335F01007B36200424DE2 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* iOS_Examples-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iOS_Examples-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
-		F908827513872BEA0065EC77 /* box2d_helloworld.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = box2d_helloworld.nut; path = Resources/box2d_helloworld.nut; sourceTree = "<group>"; };
+		F908827513872BEA0065EC77 /* box2d_helloworld.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = box2d_helloworld.nut; path = Resources/box2d_helloworld.nut; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
 		F9102FDB13973AA800BC7404 /* http_access_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = http_access_example.nut; path = Resources/http_access_example.nut; sourceTree = "<group>"; };
-		F917F96E1387AC0D003F4B53 /* animation_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = animation_example.nut; path = Resources/animation_example.nut; sourceTree = "<group>"; };
+		F917F96E1387AC0D003F4B53 /* animation_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = animation_example.nut; path = Resources/animation_example.nut; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
 		F91C5146138DD63C00464576 /* analog_controller_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = analog_controller_example.nut; path = Resources/analog_controller_example.nut; sourceTree = "<group>"; };
 		F91DF9D21395AC730083DA0E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		F921620513DF8C0A008A0B59 /* compile_script_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = compile_script_example.nut; path = Resources/compile_script_example.nut; sourceTree = "<group>"; };
@@ -466,12 +467,14 @@
 		F9D43A3E1388E58C0069C3C1 /* sensor_event.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = sensor_event.nut; path = Resources/sensor_event.nut; sourceTree = "<group>"; };
 		F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = motion_event_multi.nut; path = Resources/motion_event_multi.nut; sourceTree = "<group>"; };
 		F9D43B0B138916040069C3C1 /* physics_sensor.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_sensor.nut; path = Resources/physics_sensor.nut; sourceTree = "<group>"; };
-		F9D78CD213872E8A0076C937 /* physics.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics.nut; path = Resources/physics.nut; sourceTree = "<group>"; };
+		F9D78CD213872E8A0076C937 /* physics.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics.nut; path = Resources/physics.nut; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
 		F9DAAC2F13961E27005DA4C1 /* audio_channel_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = audio_channel_example.nut; path = Resources/audio_channel_example.nut; sourceTree = "<group>"; };
 		F9E30412138E3ACB00DB5B60 /* digital_controller_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = digital_controller_example.nut; path = Resources/digital_controller_example.nut; sourceTree = "<group>"; };
 		F9E30434138E3C9000DB5B60 /* multiple_controllers_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = multiple_controllers_example.nut; path = Resources/multiple_controllers_example.nut; sourceTree = "<group>"; };
 		F9E503BD138BD4B900C7F0BD /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		F9ED180214610DB300D52926 /* physics_softcircle.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_softcircle.nut; path = Resources/physics_softcircle.nut; sourceTree = "<group>"; };
+		F9F496FD1476165A005EAF37 /* EmoLiquidDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoLiquidDrawable.h; sourceTree = "<group>"; };
+		F9F496FE1476165B005EAF37 /* EmoLiquidDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoLiquidDrawable.m; sourceTree = "<group>"; };
 		F9F5AB9E138880D90068EC12 /* tv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tv.png; sourceTree = "<group>"; };
 		F9F99BD9139E09D60059B4C8 /* audio_volume_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = audio_volume_example.nut; path = Resources/audio_volume_example.nut; sourceTree = "<group>"; };
 		F9FA83231464DA2F00CB49DE /* softcircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = softcircle.png; sourceTree = "<group>"; };
@@ -818,6 +821,8 @@
 				F92D530A145E248C002B97DF /* EmoLineDrawable.m */,
 				F92D530B145E248C002B97DF /* EmoSnapshotDrawable.h */,
 				F92D530C145E248C002B97DF /* EmoSnapshotDrawable.m */,
+				F9F496FD1476165A005EAF37 /* EmoLiquidDrawable.h */,
+				F9F496FE1476165B005EAF37 /* EmoLiquidDrawable.m */,
 				F967E60D13907136006D8F99 /* EmoDrawable_glue.h */,
 				F967E60E13907136006D8F99 /* EmoDrawable_glue.m */,
 				F967E60F13907136006D8F99 /* EmoEngine.h */,
@@ -1199,6 +1204,7 @@
 				F92D530D145E248C002B97DF /* EmoFontDrawable.m in Sources */,
 				F92D530E145E248C002B97DF /* EmoLineDrawable.m in Sources */,
 				F92D530F145E248C002B97DF /* EmoSnapshotDrawable.m in Sources */,
+				F9F496FF1476165B005EAF37 /* EmoLiquidDrawable.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
