@@ -46,7 +46,7 @@
 		[NSArray arrayWithObjects:@"Periodic Update",  @"periodic_update_example.nut", nil],
 		[NSArray arrayWithObjects:@"Modifiers with Easing", @"modifier_move_example.nut", nil],
 		[NSArray arrayWithObjects:@"Multiple Modifiers", @"modifier_multiple.nut", nil],
-        [NSArray arrayWithObjects:@"Using Points",  @"pointsprite_example.nut", nil],
+        [NSArray arrayWithObjects:@"Using Point Sprite",  @"pointsprite_example.nut", nil],
 		nil]];
 
 	// Event
