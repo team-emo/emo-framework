@@ -1548,14 +1548,20 @@ class emo.LiquidSprite extends emo.Sprite {
     POLYGON10 = 12;
     POLYGON12 = 14;
     CIRCLE    = 18;
-    function constructor(rawname, segmentCount = null) {
+    function constructor(rawname, segments = null, texCoords = null) {
         name = this.getResourceName(rawname);
         id   = stage.createLiquidSprite(name);
         childId = -1;
         loaded = false;
         
-        if (segmentCount != null) {
-            this.setSegmentCount(segmentCount);
+        if (type(segments) == "array") {
+            this.setSegmentCount(segments.len());
+            this.updateSegmentCoords(segments);
+        }
+        
+        if (type(texCoords) == "array") {
+            this.setSegmentCount(texCoords.len());
+            this.updateTextureCoords(texCoords);
         }
     }
     
@@ -1577,14 +1583,15 @@ class emo.LiquidSprite extends emo.Sprite {
 }
 
 class emo.PointSprite extends emo.Sprite {
-    function constructor(rawname, pointCount = null) {
+    function constructor(rawname, points = null) {
         name = this.getResourceName(rawname);
         id   = stage.createPointSprite(name);
         childId = -1;
         loaded = false;
         
-        if (pointCount != null) {
-            this.setPointCount(pointCount);
+        if (type(points) == "array") {
+            this.setPointCount(points.len());
+            this.updatePointCoords(points);
         }
     }
     
