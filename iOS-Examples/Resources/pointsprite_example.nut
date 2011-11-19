@@ -20,7 +20,7 @@ class Bullet extends emo.Vec2 {
 }
 
 /*
- * This example shows single point sprite
+ * This example shows single point sprite that is much faster than normal sprite.
  */
 class Main {
 
