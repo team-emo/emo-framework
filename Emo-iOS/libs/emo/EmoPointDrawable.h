@@ -30,6 +30,7 @@
 @interface EmoPointDrawable : EmoDrawable {
     GLsizei pointCount;
     float*  pointCoords;
+    GLint   pointSizeRange[2];
 }
 @property (readonly) GLsizei pointCount;
 

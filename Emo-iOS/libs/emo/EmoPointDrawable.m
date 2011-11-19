@@ -34,6 +34,7 @@
 	[super initDrawable];
     
     pointCoords = NULL;
+    glGetIntegerv(GL_SMOOTH_POINT_SIZE_RANGE, pointSizeRange);
     
     [self updatePointCount:1];
 }
@@ -91,7 +92,7 @@
         glDisable(GL_TEXTURE_2D);
     }
     
-    if (width > 64) width = 64;
+    if (width > pointSizeRange[1]) width = pointSizeRange[1];
     
     glPointSize(width);
     glVertexPointer(2, GL_FLOAT, 0, pointCoords);
