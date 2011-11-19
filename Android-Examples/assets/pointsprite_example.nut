@@ -20,7 +20,12 @@ class Bullet extends emo.Vec2 {
 }
 
 /*
- * This example shows single point sprite that is much faster than normal sprite.
+ * This example shows single point sprite.
+ * 
+ * The PointSprite is a set of points that have same texture.
+ * Each points can not be rotated and scaled. The texture should be square.
+ * This sprite is much faster than normal sprite if you need a lot of points
+ * with same texture (i.e. bullets on bullet-hell like shooter games)
  */
 class Main {
 
