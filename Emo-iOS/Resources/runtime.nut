@@ -1594,6 +1594,11 @@ class emo.PointSprite extends emo.Sprite {
             this.updatePointCoords(points);
         }
     }
+
+    function setPoints(points) {
+        this.setPointCount(points.len());
+        this.updatePointCoords(points);
+    }
     
     function updatePointCoords(coords) {
         return stage.updatePointDrawablePointCoords(id, coords);

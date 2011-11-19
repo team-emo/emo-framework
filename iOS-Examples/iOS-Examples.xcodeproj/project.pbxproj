@@ -49,6 +49,7 @@
 		F93DA7AA1395CC840068C514 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F93DA7A91395CC840068C514 /* Default.png */; };
 		F93DA8261395D6750068C514 /* modifier_event.nut in Resources */ = {isa = PBXBuildFile; fileRef = F93DA7AB1395CCC10068C514 /* modifier_event.nut */; };
 		F93DA88B1395E0230068C514 /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = F93DA88A1395E0230068C514 /* Splash.png */; };
+		F941D40714776A1C009FE09E /* pointsprite_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F941D40614776A1C009FE09E /* pointsprite_example.nut */; };
 		F94CA3CC138785650006123B /* physics_circle.nut in Resources */ = {isa = PBXBuildFile; fileRef = F98EABC7138784D800902E31 /* physics_circle.nut */; };
 		F953DF7713934C8A00E2529D /* database_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F953DF7013934B1900E2529D /* database_example.nut */; };
 		F95F8D3313932C2D006BB4DB /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = F95F8D3113932C2D006BB4DB /* gear.png */; };
@@ -248,6 +249,7 @@
 		F93DA7A91395CC840068C514 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		F93DA7AB1395CCC10068C514 /* modifier_event.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = modifier_event.nut; path = Resources/modifier_event.nut; sourceTree = "<group>"; };
 		F93DA88A1395E0230068C514 /* Splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Splash.png; sourceTree = "<group>"; };
+		F941D40614776A1C009FE09E /* pointsprite_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = pointsprite_example.nut; path = Resources/pointsprite_example.nut; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
 		F953DF7013934B1900E2529D /* database_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = database_example.nut; path = Resources/database_example.nut; sourceTree = "<group>"; };
 		F95F8D3113932C2D006BB4DB /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
 		F95F8D3213932C2D006BB4DB /* gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gear@2x.png"; sourceTree = "<group>"; };
@@ -559,6 +561,7 @@
 				F99422BF1449C0170033B046 /* atlas_example.nut */,
 				F9293F29144D40690021BA53 /* fontsprite_example.nut */,
 				F93A8F5B1387B3E40032FE66 /* mapsprite_example.nut */,
+				F941D40614776A1C009FE09E /* pointsprite_example.nut */,
 				F97C156E13722E1A00551C94 /* modifier_rotate_example.nut */,
 				F967A8C21372A17800BEF871 /* modifier_move_example.nut */,
 				F9D0CAAB13A225E0008CA998 /* modifier_multiple.nut */,
@@ -1103,6 +1106,7 @@
 				F9ED180314610DB300D52926 /* physics_softcircle.nut in Resources */,
 				F9FA83241464DA2F00CB49DE /* softcircle.png in Resources */,
 				F9887B0514674A320000E843 /* physics_soft_polygon.nut in Resources */,
+				F941D40714776A1C009FE09E /* pointsprite_example.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
