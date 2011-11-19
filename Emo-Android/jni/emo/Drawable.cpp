@@ -1266,7 +1266,6 @@ namespace emo {
     }
 
     bool LiquidDrawable::updateTextureCoords(int index, float tx, float ty) {
-        if (!this->loaded) return false;
         if (index >= this->segmentCount) return false;
 
         int realIndex = index * 2;
@@ -1277,7 +1276,6 @@ namespace emo {
     }
 
     bool LiquidDrawable::updateSegmentCoords(int index, float sx, float sy) {
-        if (!this->loaded) return false;
         if (index >= this->segmentCount) return false;
     
         int realIndex = index * 2;

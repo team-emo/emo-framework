@@ -63,7 +63,6 @@
 }
 
 -(BOOL)updatePointCoords:(NSInteger)index px:(float)px py:(float)py {
-	if (!loaded) return FALSE;
     if (index >= pointCount) return FALSE;
     
     int realIndex = index * 2;

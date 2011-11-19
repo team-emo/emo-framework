@@ -69,7 +69,6 @@
 }
 
 -(BOOL)updateTextureCoords:(NSInteger)index tx:(float)tx ty:(float)ty {
-	if (!loaded) return FALSE;
     if (index >= segmentCount) return FALSE;
     
     int realIndex = index * 2;
@@ -80,7 +79,6 @@
 }
 
 -(BOOL)updateSegmentCoords:(NSInteger)index sx:(float)sx sy:(float)sy {
-	if (!loaded) return FALSE;
     if (index >= segmentCount) return FALSE;
     
     int realIndex = index * 2;
