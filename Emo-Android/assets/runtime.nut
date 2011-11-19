@@ -1175,6 +1175,7 @@ class emo.Sprite {
     }
 
     function getResourceName(rawname) {
+        if (rawname == null) return null;
         if (runtime.os() == OS_ANDROID) {
             rawname = ANDROID_GRAPHICS_DIR + rawname;
         }
@@ -1583,7 +1584,7 @@ class emo.LiquidSprite extends emo.Sprite {
 }
 
 class emo.PointSprite extends emo.Sprite {
-    function constructor(rawname, points = null) {
+    function constructor(rawname = null, points = null) {
         name = this.getResourceName(rawname);
         id   = stage.createPointSprite(name);
         childId = -1;
