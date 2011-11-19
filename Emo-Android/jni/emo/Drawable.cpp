@@ -1216,9 +1216,9 @@ namespace emo {
     }
 
     LiquidDrawable::LiquidDrawable() {
-        this->segmentCount  = 18;
         this->textureCoords = NULL;
         this->segmentCoords = NULL;
+        this->segmentCount  = 0;
     }
 
     LiquidDrawable::~LiquidDrawable() {
@@ -1230,19 +1230,11 @@ namespace emo {
     }
 
     bool LiquidDrawable::bindVertex() {
+        // set default segment count if empty
+        int count = this->segmentCount <= 0 ? 18 : this->segmentCount;
+
+        if (!this->updateSegmentCount(count)) return false;
         if (!Drawable::bindVertex()) return false;
-        if (this->segmentCount <= 0) return false;
-
-        if (this->textureCoords != NULL) free(textureCoords);
-        if (this->segmentCoords != NULL) free(segmentCoords);
-
-        this->textureCoords = (float*)malloc(sizeof(float) * this->segmentCount * 2);
-        this->segmentCoords = (float*)malloc(sizeof(float) * this->segmentCount * 2);
-
-        for (int i = 0; i < this->segmentCount * 2; i++) {
-            this->textureCoords[i] = 0.0f;
-            this->segmentCoords[i] = 0.0f;
-        }
 
         return true;
     }
@@ -1291,6 +1283,27 @@ namespace emo {
         int realIndex = index * 2;
         this->segmentCoords[realIndex]     = sx; 
         this->segmentCoords[realIndex + 1] = sy;
+
+        return true;
+    }
+
+    bool LiquidDrawable::updateSegmentCount(GLsizei count) {
+
+        if (count <= 0) return false;
+        if (count == segmentCount) return true;
+    
+        this->segmentCount = count;
+    
+        if (this->textureCoords != NULL) free(this->textureCoords);
+        if (this->segmentCoords != NULL) free(this->segmentCoords);
+    
+        this->textureCoords = (float*)malloc(sizeof(float) * this->segmentCount * 2);
+        this->segmentCoords = (float*)malloc(sizeof(float) * this->segmentCount * 2);
+    
+        for (int i = 0; i < this->segmentCount * 2; i++) {
+            this->textureCoords[i] = 0.0f;
+            this->segmentCoords[i] = 0.0f;
+        }
 
         return true;
     }

@@ -34,22 +34,32 @@
 	[super initDrawable];
     
     pointCoords = NULL;
-    pointCount  = 1;
+    
+    [self updatePointCount:1];
 }
 
 -(BOOL)bindVertex {
+    if (![self updatePointCount:pointCount]) return FALSE;
+    if (![super bindVertex]) return FALSE;
+    
+	loaded = TRUE;
+	return TRUE;
+}
+
+-(BOOL)updatePointCount:(NSInteger)count {
+    if (count <= 0) return FALSE;
+    if (count == pointCount) return TRUE;
+    
     if (pointCoords != NULL) free(pointCoords);
     
+    pointCount  = count;
     pointCoords = (float*)malloc(sizeof(float) * pointCount * 2);
     
     for (int i = 0; i < pointCount * 2; i++) {
         pointCoords[i] = 0.0f;
     }
     
-    [super bindVertex];
-    
-	loaded = TRUE;
-	return TRUE;
+    return TRUE;
 }
 
 -(BOOL)updatePointCoords:(NSInteger)index px:(float)px py:(float)py {

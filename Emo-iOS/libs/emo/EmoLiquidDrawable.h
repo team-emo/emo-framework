@@ -33,11 +33,12 @@
     float* textureCoords;
     float* segmentCoords;
 }
-@property (readwrite) GLsizei segmentCount;
+@property (readonly) GLsizei segmentCount;
 
 -(void)initDrawable;
 -(BOOL)bindVertex;
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
 -(BOOL)updateTextureCoords:(NSInteger)index tx:(float)tx ty:(float)ty;
 -(BOOL)updateSegmentCoords:(NSInteger)index sx:(float)sx sy:(float)sy;
+-(BOOL)updateSegmentCount:(NSInteger)count;
 @end

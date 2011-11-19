@@ -306,6 +306,7 @@ namespace emo {
 
         bool updateTextureCoords(int index, float tx, float ty);
         bool updateSegmentCoords(int index, float sx, float sy);
+        bool updateSegmentCount(GLsizei count);
 
         GLsizei segmentCount;
     

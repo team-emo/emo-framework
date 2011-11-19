@@ -31,11 +31,12 @@
     GLsizei pointCount;
     float*  pointCoords;
 }
-@property (readwrite) GLsizei pointCount;
+@property (readonly) GLsizei pointCount;
 
 -(void)initDrawable;
 -(BOOL)bindVertex;
 -(BOOL)onDrawFrame:(NSTimeInterval)dt withStage:(EmoStage*)stage;
 -(BOOL)updatePointCoords:(NSInteger)index px:(float)px py:(float)py;
+-(BOOL)updatePointCount:(NSInteger)count;
 -(void)doUnload:(BOOL)doAll;
 @end

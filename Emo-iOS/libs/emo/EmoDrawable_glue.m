@@ -2435,7 +2435,7 @@ SQInteger emoDrawableUpdateLiquidSegmentCount(HSQUIRRELVM v) {
     if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQInteger count;
         sq_getinteger(v, 3, &count);
-        drawable.segmentCount = count;
+        [drawable updateSegmentCount:count];
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
@@ -2583,7 +2583,7 @@ SQInteger emoPointDrawableUpdatePointCount(HSQUIRRELVM v) {
     if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
         SQInteger count;
         sq_getinteger(v, 3, &count);
-        drawable.pointCount = count;
+        [drawable updatePointCount:count];
     } else {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;

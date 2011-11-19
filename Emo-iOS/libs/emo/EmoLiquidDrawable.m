@@ -34,12 +34,25 @@
     
     textureCoords = NULL;
     segmentCoords = NULL;
-    
-    segmentCount = 18;
+    segmentCount  = 0;
 }
 
 -(BOOL)bindVertex {
-    if (segmentCount <= 0) return FALSE;
+    // set default segment count if empty
+    int count = segmentCount <= 0 ? 18 : segmentCount;
+    
+    if (![self updateSegmentCount:count]) return FALSE;
+    if (![super bindVertex]) return FALSE;
+    
+	loaded = TRUE;
+	return TRUE;
+}
+
+-(BOOL)updateSegmentCount:(NSInteger)count {
+    if (count <= 0) return FALSE;
+    if (count == segmentCount) return TRUE;
+    
+    segmentCount = count;
     
     if (textureCoords != NULL) free(textureCoords);
     if (segmentCoords != NULL) free(segmentCoords);
@@ -52,10 +65,7 @@
         segmentCoords[i] = 0.0f;
     }
     
-    [super bindVertex];
-    
-	loaded = TRUE;
-	return TRUE;
+    return TRUE;
 }
 
 -(BOOL)updateTextureCoords:(NSInteger)index tx:(float)tx ty:(float)ty {
