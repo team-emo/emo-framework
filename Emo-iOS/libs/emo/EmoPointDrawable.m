@@ -43,7 +43,6 @@
     if (![self updatePointCount:pointCount]) return FALSE;
     if (![super bindVertex]) return FALSE;
     
-	loaded = TRUE;
 	return TRUE;
 }
 

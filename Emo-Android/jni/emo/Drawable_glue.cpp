@@ -46,6 +46,8 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createSpriteSheet",   emoDrawableCreateSpriteSheet);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createMapSprite",     emoDrawableCreateMapSprite);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createLiquidSprite",  emoDrawableCreateLiquidSprite);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "createPointSprite",  emoDrawableCreatePointSprite);
+
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadSprite",       emoDrawableLoad);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "loadMapSprite",    emoDrawableLoadMapSprite);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "addTileRow",       emoDrawableAddTileRow);
@@ -110,6 +112,10 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "updateLiquidSegmentCoords",  emoDrawableUpdateLiquidSegmentCoords);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "updateLiquidSegmentCount",   emoDrawableUpdateLiquidSegmentCount);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getLiquidSegmentCount",      emoDrawableGetLiquidSegmentCount);
+
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "updatePointDrawablePointCoords",  emoPointDrawableUpdatePointCoords);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "updatePointDrawablePointCount",   emoPointDrawableUpdatePointCount);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getPointDrawablePointCount",      emoPointDrawableGetPointCount);
 }
 
 /*
@@ -251,6 +257,57 @@ SQInteger emoDrawableCreateSnapshot(HSQUIRRELVM v) {
 SQInteger emoDrawableCreateLiquidSprite(HSQUIRRELVM v) {
 
     emo::LiquidDrawable* drawable = new emo::LiquidDrawable();
+
+    drawable->setFrameCount(1);
+    drawable->load();
+
+    const SQChar* name;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &name);
+
+        if (strlen(name) > 0) {
+            drawable->name = name;
+            drawable->needTexture = true;
+        }
+    } else {
+        name = NULL;
+    }
+
+    int width  = 0;
+    int height = 0;
+    if (name != NULL && strlen(name) > 0) {
+        if (!loadPngSizeFromAsset(name, &width, &height)) {
+            delete drawable;
+            return 0;
+        }
+    }
+    drawable->width  = width;
+    drawable->height = height;
+    drawable->frameWidth  = width;
+    drawable->frameHeight = height;
+
+    char key[DRAWABLE_KEY_LENGTH];
+    sprintf(key, "%ld%d-%d", 
+                engine->uptime.time, engine->uptime.millitm, drawable->getCurrentBufferId());
+
+    engine->addDrawable(key, drawable);
+
+    sq_pushstring(v, key, strlen(key));
+
+    return 1;
+}
+
+/*
+ * create point drawable instance (single sprite)
+ * 
+ * @param image file name (only png can be used)
+ * @return drawable id
+ */
+SQInteger emoDrawableCreatePointSprite(HSQUIRRELVM v) {
+
+    emo::PointDrawable* drawable = new emo::PointDrawable();
 
     drawable->setFrameCount(1);
     drawable->load();
@@ -2843,6 +2900,110 @@ SQInteger emoDrawableUpdateLiquidSegmentCoords(HSQUIRRELVM v) {
             
             drawable->updateSegmentCoords(i, vx, vy);
 
+            sq_pop(v, 1);
+        }
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoPointDrawableUpdatePointCount(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    emo::PointDrawable* drawable = reinterpret_cast<emo::PointDrawable*>(engine->getDrawable(id));
+	
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+    
+    if (drawable->loaded) {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        SQInteger count;
+        sq_getinteger(v, 3, &count);
+        drawable->updatePointCount(count);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+SQInteger emoPointDrawableGetPointCount(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    emo::PointDrawable* drawable = reinterpret_cast<emo::PointDrawable*>(engine->getDrawable(id));
+	
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+    
+    sq_pushinteger(v, drawable->pointCount);
+    return 1;
+}
+
+SQInteger emoPointDrawableUpdatePointCoords(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    emo::PointDrawable* drawable = reinterpret_cast<emo::PointDrawable*>(engine->getDrawable(id));
+	
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+	
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_ARRAY) {
+        int size = sq_getsize(v, 3);
+        
+        for (int i = 0; i < size; i++) {
+            sq_pushinteger(v, i);
+            sq_get(v, 3);
+            
+            float vx = 0;
+            float vy = 0;
+            getInstanceMemberAsFloat(v, sq_gettop(v), "x", &vx);
+            getInstanceMemberAsFloat(v, sq_gettop(v), "y", &vy);
+            
+            drawable->updatePointCoords(i, vx, vy);
+            
             sq_pop(v, 1);
         }
     } else {

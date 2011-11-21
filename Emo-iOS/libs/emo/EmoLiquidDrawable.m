@@ -44,7 +44,6 @@
     if (![self updateSegmentCount:count]) return FALSE;
     if (![super bindVertex]) return FALSE;
     
-	loaded = TRUE;
 	return TRUE;
 }
 

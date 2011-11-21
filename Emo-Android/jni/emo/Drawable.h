@@ -314,5 +314,20 @@ namespace emo {
         float* textureCoords;
         float* segmentCoords;
     };
+
+    class PointDrawable : public Drawable {
+    public:
+        PointDrawable();
+        virtual ~PointDrawable();
+        virtual bool bindVertex();
+        virtual void onDrawFrame();
+
+        bool updatePointCoords(int index, float px, float py);
+        bool updatePointCount(GLsizei count);
+
+        GLsizei pointCount;
+    protected:
+        float* pointCoords;
+    };
 }
 #endif

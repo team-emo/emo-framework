@@ -38,6 +38,7 @@ SQInteger emoDrawableCreateLine(HSQUIRRELVM v);
 SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v);
 SQInteger emoDrawableCreateMapSprite(HSQUIRRELVM v);
 SQInteger emoDrawableCreateLiquidSprite(HSQUIRRELVM v);
+SQInteger emoDrawableCreatePointSprite(HSQUIRRELVM v);
 SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v);
 SQInteger emoDrawableAddTileRow(HSQUIRRELVM v);
 SQInteger emoDrawableClearTiles(HSQUIRRELVM v);
@@ -105,4 +106,8 @@ SQInteger emoDrawableUpdateLiquidTextureCoords(HSQUIRRELVM v);
 SQInteger emoDrawableUpdateLiquidSegmentCoords(HSQUIRRELVM v); 
 SQInteger emoDrawableUpdateLiquidSegmentCount(HSQUIRRELVM v); 
 SQInteger emoDrawableGetLiquidSegmentCount(HSQUIRRELVM v); 
+
+SQInteger emoPointDrawableUpdatePointCoords(HSQUIRRELVM v);
+SQInteger emoPointDrawableUpdatePointCount(HSQUIRRELVM v);
+SQInteger emoPointDrawableGetPointCount(HSQUIRRELVM v);
 #endif

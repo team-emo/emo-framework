@@ -1305,4 +1305,89 @@ namespace emo {
 
         return true;
     }
+
+    PointDrawable::PointDrawable() {
+        this->pointCoords = NULL;
+        this->pointCount  = 0;
+
+        this->updatePointCount(1);
+    }
+
+    PointDrawable::~PointDrawable() {
+        if (this->pointCoords != NULL) free(this->pointCoords);
+        this->pointCoords = NULL;
+    }
+
+    bool PointDrawable::bindVertex() {
+        if (!this->updatePointCount(pointCount)) return false;
+        if (!Drawable::bindVertex()) return false;
+
+        return true;
+    }
+
+    void PointDrawable::onDrawFrame() {
+        if (!this->loaded) return;
+        if (!this->hasBuffer) return;
+        if (this->pointCount <= 0) return;
+
+        engine->updateUptime();
+
+        glMatrixMode (GL_MODELVIEW);
+        glLoadIdentity ();
+	
+        // update colors
+        glColor4f(param_color[0], param_color[1], param_color[2], param_color[3]);
+    
+        if (this->hasTexture) {
+            glEnable(GL_POINT_SPRITE_OES);
+            glEnable(GL_TEXTURE_2D);
+            glTexEnvi(GL_POINT_SPRITE_OES, GL_COORD_REPLACE_OES, GL_TRUE);
+            glBindTexture(GL_TEXTURE_2D, texture->textureId);
+        } else {
+            glDisable(GL_TEXTURE_2D);
+        }
+    
+        glPointSize(width);
+        glVertexPointer(2, GL_FLOAT, 0, pointCoords);
+        glTexCoordPointer(2, GL_FLOAT, 0, vertex_tex_coords);
+        glDrawArrays(GL_POINTS, 0, pointCount);
+    
+        if (this->hasTexture) {
+            glDisable(GL_POINT_SPRITE_OES);
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
+    
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+    }
+
+    bool PointDrawable::updatePointCount(GLsizei count) {
+        if (count <= 0) return false;
+        if (count == pointCount) return true;
+
+        this->pointCount = count;
+
+        if (this->pointCoords != NULL) free(this->pointCoords);
+
+        this->pointCoords = (float*)malloc(sizeof(float) * this->pointCount * 2);
+
+        for (int i = 0; i < this->pointCount * 2; i++) {
+            this->pointCoords[i] = 0.0f;
+        }
+
+        return true;
+    }
+
+    bool PointDrawable::updatePointCoords(int index, float px, float py) {
+        if (index >= this->pointCount) return false;
+
+        int realIndex = index * 2;
+        this->pointCoords[realIndex]     = px;
+        this->pointCoords[realIndex + 1] = py;
+
+        return true;
+    }
+
 }
