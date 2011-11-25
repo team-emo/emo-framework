@@ -200,6 +200,50 @@
 			<key>TargetIndices</key>
 			<array/>
 		</dict>
+        <key>libs/emo/EmoLiquidDrawable.m</key>
+        <dict>
+            <key>Group</key>
+            <array>
+                <string>libs</string>
+                <string>emo</string>
+            </array>
+            <key>Path</key>
+            <string>libs/emo/EmoLiquidDrawable.m</string>
+        </dict>
+        <key>libs/emo/EmoLiquidDrawable.h</key>
+        <dict>
+            <key>Group</key>
+            <array>
+                <string>libs</string>
+                <string>emo</string>
+            </array>
+            <key>Path</key>
+            <string>libs/emo/EmoLiquidDrawable.h</string>
+            <key>TargetIndices</key>
+            <array/>
+        </dict>
+        <key>libs/emo/EmoPointDrawable.m</key>
+        <dict>
+            <key>Group</key>
+            <array>
+                <string>libs</string>
+                <string>emo</string>
+            </array>
+            <key>Path</key>
+            <string>libs/emo/EmoPointDrawable.m</string>
+        </dict>
+        <key>libs/emo/EmoPointDrawable.h</key>
+        <dict>
+            <key>Group</key>
+            <array>
+                <string>libs</string>
+                <string>emo</string>
+            </array>
+            <key>Path</key>
+            <string>libs/emo/EmoPointDrawable.h</string>
+            <key>TargetIndices</key>
+            <array/>
+        </dict>
 		<key>libs/emo/EmoDrawable_glue.h</key>
 		<dict>
 			<key>Group</key>
@@ -550,6 +594,10 @@
 		<string>libs/emo/EmoSnapshotDrawable.m</string>
 		<string>libs/emo/EmoFontDrawable.h</string>
 		<string>libs/emo/EmoFontDrawable.m</string>
+		<string>libs/emo/EmoLiquidDrawable.h</string>
+		<string>libs/emo/EmoLiquidDrawable.m</string>
+		<string>libs/emo/EmoPointDrawable.h</string>
+		<string>libs/emo/EmoPointDrawable.m</string>
 		<string>libs/emo/EmoDrawable_glue.h</string>
 		<string>libs/emo/EmoDrawable_glue.m</string>
 		<string>libs/emo/EmoEngine.h</string>

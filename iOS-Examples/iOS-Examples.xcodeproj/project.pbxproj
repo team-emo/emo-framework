@@ -222,7 +222,7 @@
 		F921CC9B136FFBAC00F058FF /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blocks.png; sourceTree = "<group>"; };
 		F921CC9C136FFBAC00F058FF /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dog.png; sourceTree = "<group>"; };
 		F921CC9F136FFBAC00F058FF /* periodic_update_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = periodic_update_example.nut; path = Resources/periodic_update_example.nut; sourceTree = "<group>"; };
-		F921CCA0136FFBAC00F058FF /* runtime.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = runtime.nut; path = Resources/runtime.nut; sourceTree = "<group>"; };
+		F921CCA0136FFBAC00F058FF /* runtime.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = runtime.nut; path = Resources/runtime.nut; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
 		F921CCA1136FFBAC00F058FF /* shape_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = shape_example.nut; path = Resources/shape_example.nut; sourceTree = "<group>"; };
 		F921CCA4136FFBAC00F058FF /* clang.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = clang.wav; sourceTree = "<group>"; };
 		F921CCA5136FFBAC00F058FF /* drums.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = drums.wav; sourceTree = "<group>"; };
