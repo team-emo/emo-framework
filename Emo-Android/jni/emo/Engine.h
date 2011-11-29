@@ -155,6 +155,7 @@ namespace emo {
         void bindOffscreenFramebuffer();
         void stopOffscreenDrawable(Drawable* drawable);
 
+        bool canUseOffscreen;
         bool useOffscreen;
         bool stopOffscreenRequested;
         GLuint offscreenFramebuffer;

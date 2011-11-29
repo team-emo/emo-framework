@@ -116,6 +116,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "updatePointDrawablePointCoords",  emoPointDrawableUpdatePointCoords);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "updatePointDrawablePointCount",   emoPointDrawableUpdatePointCount);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getPointDrawablePointCount",      emoPointDrawableGetPointCount);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "isOffscreenSupported",            emoStageIsOffscreenSupported);
 }
 
 /*
@@ -3014,3 +3015,12 @@ SQInteger emoPointDrawableUpdatePointCoords(HSQUIRRELVM v) {
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }
+
+/*
+ * returns whether offscreen is supported or not.
+ */
+SQInteger emoStageIsOffscreenSupported(HSQUIRRELVM v) {
+    sq_pushbool(v, engine->canUseOffscreen);
+    return 1;
+}
+

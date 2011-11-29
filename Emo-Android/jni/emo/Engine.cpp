@@ -63,6 +63,7 @@ namespace emo {
         this->offscreenFramebuffer = 0;
         this->useOffscreen = false;
         this->stopOffscreenRequested = false;
+        this->canUseOffscreen = true;
 
         this->useANR = false;
 
@@ -252,6 +253,7 @@ namespace emo {
         glGetIntegerv(GL_FRAMEBUFFER_BINDING_OES, &framebuffer);
         if (glGetError() != GL_NO_ERROR) {
             LOGW("Offscreen framebuffer is not supported on this device.");
+            this->canUseOffscreen = false;
         }
 
         if (!this->scriptLoaded) {
@@ -1034,6 +1036,7 @@ namespace emo {
      * enable offscreen rendering
      */
     void Engine::enableOffscreen() {
+        if (!canUseOffscreen) return;
         if (!useOffscreen && offscreenFramebuffer == 0) {
             glGenFramebuffersOES(1, &offscreenFramebuffer);
         }
@@ -1045,6 +1048,7 @@ namespace emo {
      * disable offscreen rendering
      */
     void Engine::disableOffscreen() {
+        if (!canUseOffscreen) return;
         if (useOffscreen && offscreenFramebuffer != 0) {
             glDeleteFramebuffersOES(1, &offscreenFramebuffer);
             offscreenFramebuffer  = 0;
@@ -1057,6 +1061,7 @@ namespace emo {
      * bind offscreen framebuffer
      */
     void Engine::bindOffscreenFramebuffer() {
+        if (!canUseOffscreen) return;
         if (offscreenFramebuffer > 0) {
             glBindFramebufferOES(GL_FRAMEBUFFER_OES, offscreenFramebuffer);
         }

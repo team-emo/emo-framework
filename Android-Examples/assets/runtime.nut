@@ -1901,7 +1901,7 @@ class emo.Snapshot extends emo.Sprite {
 
 function emo::_onStopOffScreen(dt) {
     if (EMO_RUNTIME_SNAPSHOT == null) return;
-
+    
     EMO_RUNTIME_SNAPSHOT.setZ(2147483647);
 
     if (EMO_RUNTIME_DELEGATE != null &&
@@ -1926,6 +1926,7 @@ function emo::_onStopOffScreen(dt) {
 }
 
 function emo::Stage::modifyingLoadEventCallback(snapshot, modifier, eventType) {
+    if (!isOffscreenSupported()) return;
     if (modifier.getName() == "stage_modifying" && eventType == EVENT_MODIFIER_FINISH) {
         EMO_RUNTIME_SNAPSHOT_STOPPED = false;
         EMO_RUNTIME_SNAPSHOT.placeHolder = modifier.nextChain;
@@ -1965,6 +1966,7 @@ function emo::Stage::modifyingLoadEventCallback(snapshot, modifier, eventType) {
 }
 
 function emo::Stage::modifyingLoad(obj, currentSceneModifier = null, nextSceneModifier = null, immediateLoading = false) {
+    if (!isOffscreenSupported()) return;
     if (EMO_RUNTIME_SNAPSHOT != null) {
         EMO_RUNTIME_SNAPSHOT.remove();
         EMO_RUNTIME_SNAPSHOT = null;
@@ -2003,7 +2005,7 @@ function emo::Stage::modifyingLoad(obj, currentSceneModifier = null, nextSceneMo
 
 function emo::Stage::load(obj, currentSceneModifier = null, nextSceneModifier = null, immediateLoading = false) {
 
-    if (currentSceneModifier != null || nextSceneModifier != null) {
+    if (isOffscreenSupported() && currentSceneModifier != null || nextSceneModifier != null) {
         return modifyingLoad(obj, currentSceneModifier, nextSceneModifier, immediateLoading);
     }
 
