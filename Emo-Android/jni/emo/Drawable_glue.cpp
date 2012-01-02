@@ -2394,6 +2394,12 @@ SQInteger emoDrawableAnimate(HSQUIRRELVM v) {
                 SQInteger value;
                 sq_getinteger(v, -1, &value);
                 animation->setFrame(idx, value);
+            } else if(sq_gettype(v, -1) == OT_STRING) {
+                const SQChar *value;
+                sq_getstring(v, -1, &value);
+                emo::ImagePackInfo* info = drawable->getImagePack(value);
+                if (info == NULL) continue;
+                animation->setFrame(idx, info->index);
             }
             idx++;
             sq_pop(v, 2);

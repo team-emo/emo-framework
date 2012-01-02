@@ -2115,7 +2115,16 @@ SQInteger emoDrawableAnimate(HSQUIRRELVM v) {
                 SQInteger value;
                 sq_getinteger(v, -1, &value);
                 [animation setFrame:idx withValue:value];
+            } else if(sq_gettype(v, -1) == OT_STRING) {
+                const SQChar *value;
+                sq_getstring(v, -1, &value);
+                EmoImagePackInfo* info = [drawable getImagePack:
+                                        [NSString stringWithCString:value
+                                            encoding:NSASCIIStringEncoding]];
+                if (info == nil) continue;
+                [animation setFrame:idx withValue:info.index];
             }
+            
             idx++;
             sq_pop(v, 2);
         }
