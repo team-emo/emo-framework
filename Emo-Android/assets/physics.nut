@@ -1169,6 +1169,11 @@ function emo::Physics::createDynamicSprite(world, sprite, fixtureDef = null, bod
     return emo.Physics.createSprite(world, sprite, PHYSICS_BODY_TYPE_DYNAMIC, shape, fixtureDef, bodyDef);
 }
 
+function emo::Physics::createKinematicSprite(world, sprite, fixtureDef = null, bodyDef = null) {
+    local shape = emo.physics.PolygonShape();
+    return emo.Physics.createSprite(world, sprite, PHYSICS_BODY_TYPE_KINEMATIC, shape, fixtureDef, bodyDef);
+}
+
 function emo::Physics::createStaticCircleSprite(world, sprite, radius, fixtureDef = null, bodyDef = null) {
     local shape = emo.physics.CircleShape();
     shape.radius(radius / world.scale.tofloat());
