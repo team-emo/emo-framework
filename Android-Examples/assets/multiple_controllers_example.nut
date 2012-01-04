@@ -48,8 +48,6 @@ class Main {
         // sprite2 is painted
         sprite2.red(0.5);
         
-        sprite2.blendFunc(GL_SRC_ALPHA, GL_ONE);
-
         // load sprite into the screen
         sprite1.load();
         sprite2.load();
