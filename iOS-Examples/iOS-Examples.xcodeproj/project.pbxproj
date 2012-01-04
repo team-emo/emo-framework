@@ -54,6 +54,7 @@
 		F953DF7713934C8A00E2529D /* database_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F953DF7013934B1900E2529D /* database_example.nut */; };
 		F95F8D3313932C2D006BB4DB /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = F95F8D3113932C2D006BB4DB /* gear.png */; };
 		F95F8D3413932C2D006BB4DB /* gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F95F8D3213932C2D006BB4DB /* gear@2x.png */; };
+		F961062814B4138C00A2C48A /* blendfunc_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F961062714B4138C00A2C48A /* blendfunc_example.nut */; };
 		F9616055141F4E08000907BD /* transition_fade_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9616054141F4E08000907BD /* transition_fade_example.nut */; };
 		F9616057141F53D5000907BD /* transition_move_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9616056141F53D5000907BD /* transition_move_example.nut */; };
 		F9616059141F53EC000907BD /* transition_scale_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9616058141F53EC000907BD /* transition_scale_example.nut */; };
@@ -253,6 +254,7 @@
 		F953DF7013934B1900E2529D /* database_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = database_example.nut; path = Resources/database_example.nut; sourceTree = "<group>"; };
 		F95F8D3113932C2D006BB4DB /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
 		F95F8D3213932C2D006BB4DB /* gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gear@2x.png"; sourceTree = "<group>"; };
+		F961062714B4138C00A2C48A /* blendfunc_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = blendfunc_example.nut; path = Resources/blendfunc_example.nut; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
 		F9616054141F4E08000907BD /* transition_fade_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = transition_fade_example.nut; path = Resources/transition_fade_example.nut; sourceTree = "<group>"; };
 		F9616056141F53D5000907BD /* transition_move_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = transition_move_example.nut; path = Resources/transition_move_example.nut; sourceTree = "<group>"; };
 		F9616058141F53EC000907BD /* transition_scale_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = transition_scale_example.nut; path = Resources/transition_scale_example.nut; sourceTree = "<group>"; };
@@ -597,6 +599,7 @@
 				F9616054141F4E08000907BD /* transition_fade_example.nut */,
 				F9616056141F53D5000907BD /* transition_move_example.nut */,
 				F9616058141F53EC000907BD /* transition_scale_example.nut */,
+				F961062714B4138C00A2C48A /* blendfunc_example.nut */,
 				F921CCA0136FFBAC00F058FF /* runtime.nut */,
 				F9D78CD213872E8A0076C937 /* physics.nut */,
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
@@ -1107,6 +1110,7 @@
 				F9FA83241464DA2F00CB49DE /* softcircle.png in Resources */,
 				F9887B0514674A320000E843 /* physics_soft_polygon.nut in Resources */,
 				F941D40714776A1C009FE09E /* pointsprite_example.nut in Resources */,
+				F961062814B4138C00A2C48A /* blendfunc_example.nut in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

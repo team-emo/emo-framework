@@ -92,7 +92,8 @@ public class Launcher extends ExpandableListActivity {
 			"Loading Screen",
 			"Splash Screen",
 			"HTTP Access",
-			"Compiling a Script"
+			"Compiling a Script",
+			"Using Blendfunc"
 		}
     };
     private static final String[][] activities = {
@@ -159,7 +160,8 @@ public class Launcher extends ExpandableListActivity {
     		".RotateModifierExample",
 			".ModifierEventExample",
 			".HTTPAccessExample",
-			".CompileScriptExample"
+			".CompileScriptExample",
+			".BlendfuncExample"
 		}
     	
     };

@@ -109,6 +109,7 @@
 						 [NSArray arrayWithObjects:@"Splash Screen",   @"modifier_event.nut", nil],
 						 [NSArray arrayWithObjects:@"Accessing via HTTP", @"http_access_example.nut", nil],
                          [NSArray arrayWithObjects:@"Compiling a Script", @"compile_script_example.nut", nil],
+                         [NSArray arrayWithObjects:@"Using Blendfunc", @"blendfunc_example.nut", nil],
 						 nil]];
 }
 
