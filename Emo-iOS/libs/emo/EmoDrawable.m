@@ -203,6 +203,7 @@ extern EmoEngine* engine;
 @synthesize isScreenEntity;
 @synthesize isPackedAtlas;
 @synthesize useFont;
+@synthesize srcBlendFactor, dstBlendFactor;
 
 -(BOOL)loadPackedAtlasXml:(NSInteger)initialFrameIndex {
     // check if the length is shorter than the length of ".xml"
@@ -393,6 +394,9 @@ extern EmoEngine* engine;
     
     imagepacks = [[NSMutableDictionary alloc]init];
     imagepacks_names = [[NSMutableArray alloc]init];
+    
+    srcBlendFactor = GL_SRC_ALPHA;
+    dstBlendFactor = GL_ONE_MINUS_SRC_ALPHA;
 }
 
 -(NSInteger)tex_coord_frame_startX {

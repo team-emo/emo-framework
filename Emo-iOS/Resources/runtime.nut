@@ -235,6 +235,18 @@ EMO_RUNTIME_SNAPSHOT_STOPPED <- false;
 
 EMO_STAGE_CONTENT_SCALE <- 1;
 
+GL_ZERO                <- 0;
+GL_ONE                 <- 1;
+GL_SRC_COLOR           <- 0x0300;
+GL_ONE_MINUS_SRC_COLOR <- 0x0301;
+GL_SRC_ALPHA           <- 0x0302;
+GL_ONE_MINUS_SRC_ALPHA <- 0x0303;
+GL_DST_ALPHA           <- 0x0304;
+GL_ONE_MINUS_DST_ALPHA <- 0x0305;
+GL_DST_COLOR           <- 0x0306;
+GL_ONE_MINUS_DST_COLOR <- 0x0307;
+GL_SRC_ALPHA_SATURATE  <- 0x0308;
+
 class emo.Vec2 {
     x = null;
     y = null;
@@ -1331,6 +1343,9 @@ class emo.Sprite {
         return EMO_RUNTIME_STOPWATCH.elapsed() - uptime;
     }
 
+    function blendFunc(sfactor, dfactor) {
+        return stage.blendFunc(id, sfactor, dfactor);
+    }
 }
 
 class emo.FontSprite extends emo.Sprite {

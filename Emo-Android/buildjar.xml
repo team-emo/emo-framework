@@ -4,7 +4,7 @@
 	<property environment="env" />
 	<property name="target" value="1.6" />
 	<property name="source" value="1.6" />
-	<property name="bin" value="bin" />
+	<property name="bin" value="bin/classes" />
 	<property name="src" value="src" />
 	
 	<property name="binfile" value="export/emo_framework.jar" />

@@ -65,6 +65,10 @@ namespace emo {
         this->stopOffscreenRequested = false;
         this->canUseOffscreen = true;
 
+        this->srcBlendFactor = GL_SRC_ALPHA;
+        this->dstBlendFactor = GL_ONE_MINUS_SRC_ALPHA;
+
+
         this->useANR = false;
 
         this->sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
@@ -728,6 +732,13 @@ namespace emo {
                 continue;
             }   
             if (drawable->loaded && drawable->independent && drawable->isVisible()) {
+                if ((this->srcBlendFactor != drawable->srcBlendFactor) ||
+                    (this->dstBlendFactor != drawable->dstBlendFactor)) {
+                    this->srcBlendFactor = drawable->srcBlendFactor;
+                    this->dstBlendFactor = drawable->dstBlendFactor;
+                    glBlendFunc(this->srcBlendFactor, this->dstBlendFactor);
+                }
+
                 drawable->onDrawFrame();
             }
         }

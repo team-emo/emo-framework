@@ -85,6 +85,9 @@ NSString* data2ns(NSData* data);
     BOOL useOffscreen;
     GLuint offscreenFramebuffer;
     BOOL stopOffscreenRequested;
+    
+    GLint srcBlendFactor;
+    GLint dstBlendFactor;
 }
 @property (readonly) HSQUIRRELVM sqvm;
 @property (readwrite) int  lastError;

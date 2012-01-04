@@ -172,6 +172,10 @@ namespace emo {
         this->orthFactorY = 1.0;
         this->isScreenEntity = true;
         this->useFont = false;
+
+        this->srcBlendFactor = GL_SRC_ALPHA;
+        this->dstBlendFactor = GL_ONE_MINUS_SRC_ALPHA;
+
     }
 
     Drawable::~Drawable() {

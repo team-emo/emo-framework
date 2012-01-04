@@ -111,3 +111,5 @@ SQInteger emoPointDrawableUpdatePointCoords(HSQUIRRELVM v);
 SQInteger emoPointDrawableUpdatePointCount(HSQUIRRELVM v);
 SQInteger emoPointDrawableGetPointCount(HSQUIRRELVM v);
 SQInteger emoStageIsOffscreenSupported(HSQUIRRELVM v);
+
+SQInteger emoDrawableBlendFunc(HSQUIRRELVM v);

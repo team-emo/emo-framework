@@ -144,6 +144,9 @@ NSString* data2ns(NSData* data) {
     offscreenFramebuffer = 0;
     stopOffscreenRequested = FALSE;
 	
+    srcBlendFactor = GL_SRC_ALPHA;
+    dstBlendFactor = GL_ONE_MINUS_SRC_ALPHA;
+    
 	drawablesToDraw  = [NSArray alloc];
 	
     if (sqvm == nil) {
@@ -448,6 +451,12 @@ static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInte
             continue;
         }
 		if (drawable.loaded && drawable.independent && [drawable isVisible]) {
+            if ((srcBlendFactor != drawable.srcBlendFactor) ||
+                (dstBlendFactor != drawable.dstBlendFactor)) {
+                srcBlendFactor = drawable.srcBlendFactor;
+                dstBlendFactor = drawable.dstBlendFactor;
+                glBlendFunc(srcBlendFactor, dstBlendFactor);
+            }
 			[drawable onDrawFrame:delta withStage:stage];
 		}
 	}

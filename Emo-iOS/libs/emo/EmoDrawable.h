@@ -114,6 +114,9 @@
     
 	NSMutableDictionary* imagepacks;
     NSMutableArray* imagepacks_names;
+    
+    GLint srcBlendFactor;
+    GLint dstBlendFactor;
 }
 @property (copy, readwrite) NSString* name;
 @property (readwrite) float x;
@@ -135,6 +138,8 @@
 @property (readonly) BOOL isScreenEntity;
 @property (readwrite) BOOL isPackedAtlas;
 @property (readwrite) BOOL useFont;
+@property (readwrite) GLint srcBlendFactor;
+@property (readwrite) GLint dstBlendFactor;
 
 -(void)doUnload:(BOOL)doAll;
 -(void)initDrawable;

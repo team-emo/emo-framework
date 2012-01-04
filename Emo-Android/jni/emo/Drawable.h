@@ -181,6 +181,9 @@ namespace emo {
         bool isScreenEntity;
         bool useFont;
 
+        GLint srcBlendFactor;
+        GLint dstBlendFactor;
+
     protected:
 
         float      vertex_tex_coords[8];

@@ -117,6 +117,8 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "updatePointDrawablePointCount",   emoPointDrawableUpdatePointCount);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getPointDrawablePointCount",      emoPointDrawableGetPointCount);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "isOffscreenSupported",            emoStageIsOffscreenSupported);
+
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "blendFunc",      emoDrawableBlendFunc);
 }
 
 /*
@@ -3027,6 +3029,44 @@ SQInteger emoPointDrawableUpdatePointCoords(HSQUIRRELVM v) {
  */
 SQInteger emoStageIsOffscreenSupported(HSQUIRRELVM v) {
     sq_pushbool(v, engine->canUseOffscreen);
+    return 1;
+}
+
+/*
+ * Set blend function of the sprite
+ */
+SQInteger emoDrawableBlendFunc(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+	
+    emo::Drawable* drawable = engine->getDrawable(id);
+	
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+    
+    if (nargs >= 4 && sq_gettype(v, 3) != OT_NULL && sq_gettype(v, 4) != OT_NULL) {
+        SQInteger src, dst;
+        sq_getinteger(v, 3, &src);
+        sq_getinteger(v, 4, &dst);
+        
+        drawable->srcBlendFactor = src;
+        drawable->dstBlendFactor = dst;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+    
+    sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }
 
