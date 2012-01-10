@@ -68,6 +68,7 @@ namespace emo {
         this->srcBlendFactor = GL_SRC_ALPHA;
         this->dstBlendFactor = GL_ONE_MINUS_SRC_ALPHA;
 
+        this->nativeOrientation = OPT_ORIENTATION_PORTRAIT;
 
         this->useANR = false;
 
@@ -245,6 +246,8 @@ namespace emo {
         this->surface = surface;
         this->width   = w;
         this->height  = h;
+
+        this->nativeOrientation = this->javaGlue->getNativeOrientation(w, h);
 
         if (this->stage->width == 0 && this->stage->height == 0) {
             this->stage->setBufferSize(w, h);
@@ -507,8 +510,13 @@ namespace emo {
         switch(event->type) {
         case ASENSOR_TYPE_ACCELEROMETER:
             this->accelerometerEventParamCache[0] = event->type;
-            this->accelerometerEventParamCache[1] = event->acceleration.x / -ASENSOR_STANDARD_GRAVITY;
-            this->accelerometerEventParamCache[2] = event->acceleration.y / -ASENSOR_STANDARD_GRAVITY;
+            if (this->nativeOrientation == OPT_ORIENTATION_LANDSCAPE) {
+                this->accelerometerEventParamCache[1] =  event->acceleration.y / -ASENSOR_STANDARD_GRAVITY;
+                this->accelerometerEventParamCache[2] = -event->acceleration.x / -ASENSOR_STANDARD_GRAVITY;
+            } else {
+                this->accelerometerEventParamCache[1] = event->acceleration.x / -ASENSOR_STANDARD_GRAVITY;
+                this->accelerometerEventParamCache[2] = event->acceleration.y / -ASENSOR_STANDARD_GRAVITY;
+            }
             this->accelerometerEventParamCache[3] = event->acceleration.z / -ASENSOR_STANDARD_GRAVITY;
             if (callSqFunction_Bool_Floats(this->sqvm, EMO_NAMESPACE, EMO_FUNC_SENSOREVENT, this->accelerometerEventParamCache, ACCELEROMETER_EVENT_PARAMS_SIZE, false)) {
                 return 1;

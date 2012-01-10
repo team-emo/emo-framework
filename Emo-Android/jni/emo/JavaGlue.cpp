@@ -207,6 +207,23 @@ namespace emo {
         return value;
     }
 
+    /*
+     * Call java method with no parameter that returns int.
+     */
+    jint JavaGlue::callVoid_Int(std::string methodName) {
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, methodName.c_str(), "()I");
+        jint value = env->CallIntMethod(engine->app->activity->clazz, methodj);
+        vm->DetachCurrentThread();
+
+        return value;
+    }
+
     /*  
      * Call java method with int parameter that returns int.
      */  
@@ -219,6 +236,23 @@ namespace emo {
         jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
         jmethodID methodj = env->GetMethodID(clazz, methodName.c_str(), "(I)I");
         jint value = env->CallIntMethod(engine->app->activity->clazz, methodj, passValue);
+        vm->DetachCurrentThread();
+
+        return value;
+    }   
+
+    /*  
+     * Call java method with int,int parameter that returns int.
+     */  
+    jint JavaGlue::callIntInt_Int(std::string methodName, jint passValue1, jint passValue2) {
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+
+        vm->AttachCurrentThread(&env, NULL);
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, methodName.c_str(), "(II)I");
+        jint value = env->CallIntMethod(engine->app->activity->clazz, methodj, passValue1, passValue2);
         vm->DetachCurrentThread();
 
         return value;
@@ -303,6 +337,23 @@ namespace emo {
 
     std::string JavaGlue::getDeviceName() {
     	return this->callVoid_String("getDeviceName");
+    }
+
+    std::string JavaGlue::getOSVersion() {
+    	return this->callVoid_String("getOSVersion");
+    }
+
+    int JavaGlue::getSDKVersion() {
+    	return this->callVoid_Int("getSDKVersion");
+    }
+
+    int JavaGlue::getNativeOrientation(int width, int height) {
+        int jorient = this->callIntInt_Int("getNativeOrientation", width, height);
+        if (jorient == 0) {
+            return OPT_ORIENTATION_LANDSCAPE;
+        } else {
+            return OPT_ORIENTATION_PORTRAIT;
+        }
     }
 
     bool JavaGlue::isSimulator() {

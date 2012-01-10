@@ -93,4 +93,7 @@ SQInteger emoRuntimeNativeRandom(HSQUIRRELVM v);
 SQInteger emoRuntimeRandom(HSQUIRRELVM v);
 SQInteger emoRuntimeAndroidToast(HSQUIRRELVM v);
 SQInteger emoGetDefaultLocale(HSQUIRRELVM v);
+SQInteger emoRuntimeAndroidGetOSVersion(HSQUIRRELVM v);
+SQInteger emoRuntimeAndroidGetSDKVersion(HSQUIRRELVM v);
+SQInteger emoRuntimeAndroidGetNativeOrientation(HSQUIRRELVM v);
 #endif

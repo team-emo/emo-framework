@@ -163,6 +163,7 @@ namespace emo {
         GLint srcBlendFactor;
         GLint dstBlendFactor;
 
+        int nativeOrientation;
     protected:
         bool loaded;
         bool focused;

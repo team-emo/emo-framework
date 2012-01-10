@@ -13,6 +13,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.Surface;
 import android.widget.Toast;
 
 import java.util.List;
@@ -351,6 +352,40 @@ public class EmoActivity extends NativeActivity {
     public boolean isSimulator() {
     	return "sdk".equals(android.os.Build.MODEL) && "generic".equals(android.os.Build.DEVICE);
     }
+    
+    public int getSDKVersion() {
+    	return android.os.Build.VERSION.SDK_INT;
+    }
+    
+    public String getOSVersion() {
+    	return android.os.Build.VERSION.RELEASE;
+    }
 
+    public int getRotation() {                           
+        int orientation = getWindowManager().getDefaultDisplay().getOrientation();
+        switch (orientation) {
+        case Surface.ROTATION_0:
+            return 0;
+        case Surface.ROTATION_90:
+            return 90;
+        case Surface.ROTATION_180:
+            return 180;
+        case Surface.ROTATION_270:
+            return 270;
+        default:
+            return 0;
+        }
+    }
+    
+    public int getNativeOrientation(int width, int height) {
+    	int rotation = getRotation();
+        if(((rotation == 0 || rotation == 180) && (width >= height)) ||
+        		((rotation == 90 || rotation == 270) && (width <= height))) {
+            return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+        } else {
+            return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+        }               
+    }
+    
     public native void callback(String name, String value, String errCode, String errMsg);
 }
