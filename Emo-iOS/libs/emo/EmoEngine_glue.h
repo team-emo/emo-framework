@@ -43,3 +43,9 @@ BOOL printGLErrors(const char* msg);
 
 void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
 						 ALenum* dataFormat, ALsizei *sampleRate, bool *loaded);
+
+void gluLookAt(GLfloat eyex, GLfloat eyey, GLfloat eyez,
+               GLfloat centerx, GLfloat centery, GLfloat centerz,
+               GLfloat upx, GLfloat upy, GLfloat upz);
+
+void gluPerspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar);

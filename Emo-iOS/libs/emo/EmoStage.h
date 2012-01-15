@@ -28,6 +28,21 @@
 #import "OpenGLES/ES1/gl.h"
 #import "OpenGLES/ES1/glext.h"
 
+typedef struct CameraInfo {
+    BOOL    loaded;
+	GLfloat eyeX;
+	GLfloat eyeY;
+	GLfloat eyeZ;
+    GLfloat centerX;
+    GLfloat centerY;
+    GLfloat centerZ;
+    GLfloat upX;   // read only
+    GLfloat upY;   // read only
+    GLfloat upZ;   // read only
+    GLfloat zNear; // read only
+    GLfloat zFar;  // read only
+} CameraInfo;
+
 @interface EmoStage : NSObject {
 	GLuint vbo[2];
 
@@ -45,6 +60,11 @@
     
     GLint bufferWidth;
     GLint bufferHeight;
+    
+    CameraInfo defaultPortraitCamera;
+    CameraInfo defaultLandscapeCamera;
+    
+    BOOL usePerspective;
 }
 @property (readwrite) GLint width;
 @property (readwrite) GLint height;

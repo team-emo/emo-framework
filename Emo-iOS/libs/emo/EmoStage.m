@@ -26,7 +26,10 @@
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
 #import "EmoStage.h"
+#import "EmoEngine.h"
 #import "EmoEngine_glue.h"
+
+extern EmoEngine* engine;
 
 @implementation EmoStage
 @synthesize width, height, viewport_width, viewport_height;
@@ -43,6 +46,8 @@
 		color[1] = 0;
 		color[2] = 0;
 		color[3] = 1;
+        
+        usePerspective = FALSE;
     }
     return self;
 }
@@ -96,12 +101,73 @@
 	return vbo[1];
 }
 
+- (void)updateCameraInfo {
+    float zfar = fmaxf(width, height) * 4;
+    
+    defaultPortraitCamera.eyeX = width  * 0.5;
+    defaultPortraitCamera.eyeY = height * 0.5;
+    defaultPortraitCamera.eyeZ = height * 0.5;
+    defaultPortraitCamera.centerX = width * 0.5;
+    defaultPortraitCamera.centerY = height * 0.5;
+    defaultPortraitCamera.centerZ = 0;
+    defaultPortraitCamera.upX = 0;
+    defaultPortraitCamera.upY = 1;
+    defaultPortraitCamera.upZ = 0;
+    defaultPortraitCamera.zNear = 1;
+    defaultPortraitCamera.zFar  = zfar;
+    defaultPortraitCamera.loaded = TRUE;
+    
+    defaultLandscapeCamera.eyeX = width  * 0.5;
+    defaultLandscapeCamera.eyeY = height * 0.5;
+    defaultLandscapeCamera.eyeZ = width  * 0.5;
+    defaultLandscapeCamera.centerX = width  * 0.5;
+    defaultLandscapeCamera.centerY = height * 0.5;
+    defaultLandscapeCamera.centerZ = 0;
+    defaultLandscapeCamera.upX = 1;
+    defaultLandscapeCamera.upY = 0;
+    defaultLandscapeCamera.upZ = 0;
+    defaultLandscapeCamera.zNear = 1;
+    defaultLandscapeCamera.zFar  = zfar;
+    defaultLandscapeCamera.loaded = TRUE;
+}
+
 -(BOOL)onDrawFrame:(NSTimeInterval)dt {
     if (dirty) {
-        glViewport(0, 0, viewport_width, viewport_height); 
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrthof(0, width, height, 0, -1, 1);
+        if (usePerspective) {
+            [self updateCameraInfo];
+            CameraInfo camera = defaultPortraitCamera;
+            
+            if (engine.currentOrientation == OPT_ORIENTATION_LANDSCAPE_LEFT) {
+                float ratio = viewport_height / (float)viewport_width;
+                glViewport(0, 0, viewport_height, viewport_width); 
+                glMatrixMode(GL_PROJECTION);
+                glLoadIdentity();
+                camera = defaultLandscapeCamera;
+                glFrustumf(ratio, -ratio, -1, 1, camera.zNear, camera.zFar);
+            } else if (engine.currentOrientation == OPT_ORIENTATION_LANDSCAPE_RIGHT) {
+                float ratio = viewport_height / (float)viewport_width;
+                glViewport(0, 0, viewport_height, viewport_width); 
+                glMatrixMode(GL_PROJECTION);
+                glLoadIdentity();
+                camera = defaultLandscapeCamera;
+                glFrustumf(-ratio, ratio, 1, -1, camera.zNear, camera.zFar);
+            } else {
+                float ratio = viewport_width / (float)viewport_height;
+                glViewport(0, 0, viewport_width, viewport_height); 
+                glMatrixMode(GL_PROJECTION);
+                glLoadIdentity();
+                glFrustumf(-ratio, ratio, 1, -1, camera.zNear, camera.zFar);
+            }
+            
+            gluLookAt(camera.eyeX,    camera.eyeY,    camera.eyeZ, 
+                      camera.centerX, camera.centerY, camera.centerZ,
+                      camera.upX,     camera.upY,     camera.upZ);
+        } else {
+            glViewport(0, 0, viewport_width, viewport_height); 
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            glOrthof(0, width, height, 0, -1, 1);
+        }
         dirty = FALSE;
     }
 	
