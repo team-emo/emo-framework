@@ -31,6 +31,21 @@
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 
+typedef struct CameraInfo {
+    bool    loaded;
+    GLfloat eyeX;
+    GLfloat eyeY;
+    GLfloat eyeZ;
+    GLfloat centerX;
+    GLfloat centerY;
+    GLfloat centerZ;
+    GLfloat upX;   // read only
+    GLfloat upY;   // read only
+    GLfloat upZ;   // read only
+    GLfloat zNear; // read only
+    GLfloat zFar;  // read only
+} CameraInfo;
+
 namespace emo {
     class Stage {
     public:
@@ -54,12 +69,17 @@ namespace emo {
 
         int bufferWidth;
         int bufferHeight;
+
+        CameraInfo defaultPortraitCamera;
+        CameraInfo defaultLandscapeCamera;
+        bool usePerspective;
     protected:
         bool loaded;
 
         short  indices[4];
         float  positions[12];
 
+        void updateCameraInfo();
     };
 }
 #endif

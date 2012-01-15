@@ -72,6 +72,8 @@ namespace emo {
 
         this->bufferWidth  = 0;
         this->bufferHeight = 0;
+
+        this->usePerspective = false;
     }
 
     Stage::~Stage() {
@@ -101,13 +103,60 @@ namespace emo {
 
     }
 
+    void Stage::updateCameraInfo() {
+        float zfar = max(width, height) * 4;
+    
+        defaultPortraitCamera.eyeX = width  * 0.5;
+        defaultPortraitCamera.eyeY = height * 0.5;
+        defaultPortraitCamera.eyeZ = height * 0.5;
+        defaultPortraitCamera.centerX = width * 0.5;
+        defaultPortraitCamera.centerY = height * 0.5;
+        defaultPortraitCamera.centerZ = 0;
+        defaultPortraitCamera.upX = 0;
+        defaultPortraitCamera.upY = 1;
+        defaultPortraitCamera.upZ = 0;
+        defaultPortraitCamera.zNear = 1;
+        defaultPortraitCamera.zFar  = zfar;
+        defaultPortraitCamera.loaded = true;
+    
+        defaultLandscapeCamera.eyeX = width  * 0.5;
+        defaultLandscapeCamera.eyeY = height * 0.5;
+        defaultLandscapeCamera.eyeZ = width  * 0.5;
+        defaultLandscapeCamera.centerX = width  * 0.5;
+        defaultLandscapeCamera.centerY = height * 0.5;
+        defaultLandscapeCamera.centerZ = 0;
+        defaultLandscapeCamera.upX = 1;
+        defaultLandscapeCamera.upY = 0;
+        defaultLandscapeCamera.upZ = 0;
+        defaultLandscapeCamera.zNear = 1;
+        defaultLandscapeCamera.zFar  = zfar;
+        defaultLandscapeCamera.loaded = true;
+    }
+
     void Stage::onDrawFrame() {
         if (!engine->hasDisplay()) return;
         if (this->dirty) {
-            glViewport(0, 0, this->viewport_width, this->viewport_height); 
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            glOrthof(0, this->width, this->height, 0, -1, 1);
+
+            if (this->usePerspective) {
+                this->updateCameraInfo();
+
+                CameraInfo camera = defaultPortraitCamera;
+            
+                float ratio = viewport_width / (float)viewport_height;
+                glViewport(0, 0, viewport_width, viewport_height); 
+                glMatrixMode(GL_PROJECTION);
+                glLoadIdentity();
+                glFrustumf(-ratio, ratio, 1, -1, camera.zNear, camera.zFar);
+            
+                gluLookAt(camera.eyeX,    camera.eyeY,    camera.eyeZ, 
+                      camera.centerX, camera.centerY, camera.centerZ,
+                      camera.upX,     camera.upY,     camera.upZ);
+            } else {
+                glViewport(0, 0, this->viewport_width, this->viewport_height); 
+                glMatrixMode(GL_PROJECTION);
+                glLoadIdentity();
+                glOrthof(0, this->width, this->height, 0, -1, 1);
+            }
             this->dirty = false;
         }
 

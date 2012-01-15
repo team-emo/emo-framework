@@ -32,6 +32,9 @@
 #include <../native_app_glue.h>
 #include <squirrel.h>
 
+#include <EGL/egl.h>
+#include <GLES/gl.h>
+
 void initRuntimeFunctions();
 
 int32_t app_handle_input(struct android_app* app, AInputEvent* event);
@@ -43,6 +46,12 @@ void LOGE(const char* msg);
 
 void clearGLErrors(const char* msg);
 bool printGLErrors(const char* msg);
+
+void gluLookAt(GLfloat eyex, GLfloat eyey, GLfloat eyez,
+               GLfloat centerx, GLfloat centery, GLfloat centerz,
+               GLfloat upx, GLfloat upy, GLfloat upz);
+
+void gluPerspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar);
 
 void emoUpdateOptions(SQInteger value);
 bool loadScriptFromAsset(const char* fname);
