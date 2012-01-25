@@ -73,7 +73,8 @@ namespace emo {
         this->bufferWidth  = 0;
         this->bufferHeight = 0;
 
-        this->usePerspective = true;
+        // experimental
+        this->usePerspective = false;
     }
 
     Stage::~Stage() {

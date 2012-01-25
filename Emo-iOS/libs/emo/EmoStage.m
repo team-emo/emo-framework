@@ -47,7 +47,8 @@ extern EmoEngine* engine;
 		color[2] = 0;
 		color[3] = 1;
         
-        usePerspective = TRUE;
+        // experimental
+        usePerspective = FALSE;
     }
     return self;
 }
