@@ -1047,7 +1047,7 @@ function emo::easing::QuartOut(elapsed, duration, modifier) {
 }
 
 function emo::easing::QuartInOut(elapsed, duration, modifier) {
-    if ((t /= duration / 2.0) < 1) return 1.0 / 2.0 * elapsed * elapsed * elapsed * elapsed;
+    if ((elapsed /= duration / 2.0) < 1) return 1.0 / 2.0 * elapsed * elapsed * elapsed * elapsed;
     return -1.0 / 2.0 * ((elapsed -= 2) * elapsed * elapsed * elapsed - 2);
 }
 
