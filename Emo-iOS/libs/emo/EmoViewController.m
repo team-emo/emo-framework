@@ -60,8 +60,10 @@ EmoEngine* engine;
 	[aContext release];
 	
 	EmoView* eview = (EmoView *)self.view;
-	
-	[eview enableRetina:TRUE];
+
+	// retina display only for iPhone
+    BOOL retinaMode = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone);
+	[eview enableRetina:retinaMode];
     [eview setContext:context];
     [eview setFramebuffer];
         
