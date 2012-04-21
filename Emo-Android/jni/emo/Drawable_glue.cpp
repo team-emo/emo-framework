@@ -98,6 +98,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "windowHeight",   emoGetWindowHeight);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "show",           emoDrawableShow);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "hide",           emoDrawableHide);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setAsGui",       emoDrawableSetAsGui);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "red",            emoDrawableColorRed);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "green",          emoDrawableColorGreen);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "blue",           emoDrawableColorBlue);
@@ -121,6 +122,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "updatePointDrawablePointCount",   emoPointDrawableUpdatePointCount);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getPointDrawablePointCount",      emoPointDrawableGetPointCount);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "isOffscreenSupported",            emoStageIsOffscreenSupported);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "moveCamera",      emoStageMoveCamera);
 
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "blendFunc",      emoDrawableBlendFunc);
 }
