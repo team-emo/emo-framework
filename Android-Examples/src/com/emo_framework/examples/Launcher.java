@@ -71,7 +71,8 @@ public class Launcher extends ExpandableListActivity {
     		"Using Soft Polygon",
 			"Using with Sensor",
 			"Using ContactListener",
-			"Adding Physics"
+			"Adding Physics",
+			"Using Camera with Physics"
     	},
 		{
 			"Using DistanceJoint",
@@ -139,7 +140,8 @@ public class Launcher extends ExpandableListActivity {
     		".PhysicsSoftPolygonExample",
 			".PhysicsSensorExample",
 			".PhysicsContactExample",
-			".PhysicsAddExample"
+			".PhysicsAddExample",
+			".PhysicsCameraMovingExample"
     	},
 		{
 			".PhysicsDistanceJointExample",

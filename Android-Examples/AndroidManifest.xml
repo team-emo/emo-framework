@@ -409,6 +409,16 @@
             <meta-data android:name="emo.script.main"
                        android:value="physics_contact.nut" />
         </activity-alias>
+        <activity-alias android:name=".PhysicsCameraMovingExample"
+            android:targetActivity="com.emo_framework.EmoActivity"
+            android:label="@string/app_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="physics_camera_moving.nut" />
+        </activity-alias>
 
         <activity-alias android:name=".AudioExample"
             android:targetActivity="com.emo_framework.EmoActivity"
