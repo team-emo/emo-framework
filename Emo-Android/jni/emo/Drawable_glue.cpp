@@ -1940,6 +1940,34 @@ SQInteger emoDrawableHide(HSQUIRRELVM v) {
 }
 
 /*
+ * set selected drawable as GUI component(non camera object)
+ */
+SQInteger emoDrawableSetAsGui(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+
+    drawable->isCameraObject = false;
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+/*
  * set drawable color (red)
  *
  * @param drawable id
@@ -3178,6 +3206,39 @@ SQInteger emoPointDrawableUpdatePointCoords(HSQUIRRELVM v) {
  */
 SQInteger emoStageIsOffscreenSupported(HSQUIRRELVM v) {
     sq_pushbool(v, engine->canUseOffscreen);
+    return 1;
+}
+
+/*
+ * move relative camera to the given coordinate
+ *
+ * @param x
+ * @param y
+ */
+SQInteger emoStageMoveCamera(HSQUIRRELVM v) {
+	SQInteger nargs = sq_gettop(v);
+    SQFloat x;
+    SQFloat y;
+
+    if (nargs >= 2 && sq_gettype(v, 2) != OT_NULL) {
+        sq_getfloat(v, 2, &x);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        sq_getfloat(v, 3, &y);
+    }else{
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    //char msg [128];
+    //sprintf(msg,"CameraInfo : x = %f, y = %f", x, y);
+    //LOGI(msg);
+
+    engine->stage->moveRelativeCamera(x, y);
+    sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }
 

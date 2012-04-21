@@ -184,6 +184,8 @@ namespace emo {
         GLint srcBlendFactor;
         GLint dstBlendFactor;
 
+        bool isCameraObject;
+
     protected:
 
         float      vertex_tex_coords[8];

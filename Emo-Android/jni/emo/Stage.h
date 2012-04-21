@@ -31,7 +31,7 @@
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 
-typedef struct CameraInfo {
+typedef struct PerspectiveCameraInfo {
     bool    loaded;
     GLfloat eyeX;
     GLfloat eyeY;
@@ -44,7 +44,12 @@ typedef struct CameraInfo {
     GLfloat upZ;   // read only
     GLfloat zNear; // read only
     GLfloat zFar;  // read only
-} CameraInfo;
+} PerspectiveCameraInfo;
+
+typedef struct RelativeCameraInfo {
+    float x;
+    float y;
+} RelativeCameraInfo;
 
 namespace emo {
     class Stage {
@@ -70,16 +75,19 @@ namespace emo {
         int bufferWidth;
         int bufferHeight;
 
-        CameraInfo defaultPortraitCamera;
-        CameraInfo defaultLandscapeCamera;
+        PerspectiveCameraInfo defaultPortraitCamera;
+        PerspectiveCameraInfo defaultLandscapeCamera;
+        RelativeCameraInfo    defaultRelativeCamera;
         bool usePerspective;
+        void resetRelativeCameraInfo();
+        void moveRelativeCamera(float x, float y);
     protected:
         bool loaded;
 
         short  indices[4];
         float  positions[12];
 
-        void updateCameraInfo();
+        void updatePerspectiveCameraInfo();
     };
 }
 #endif

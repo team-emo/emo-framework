@@ -75,6 +75,7 @@ namespace emo {
 
         // experimental
         this->usePerspective = false;
+        this->resetRelativeCameraInfo();
     }
 
     Stage::~Stage() {
@@ -104,7 +105,7 @@ namespace emo {
 
     }
 
-    void Stage::updateCameraInfo() {
+    void Stage::updatePerspectiveCameraInfo() {
         float zfar = max(width, height) * 4;
     
         defaultPortraitCamera.eyeX = width  * 0.5;
@@ -134,14 +135,22 @@ namespace emo {
         defaultLandscapeCamera.loaded = true;
     }
 
+    void Stage::resetRelativeCameraInfo(){
+        defaultRelativeCamera.x = 0;
+        defaultRelativeCamera.y = 0;
+    }
+
+    void Stage::moveRelativeCamera(float x, float y){
+        defaultRelativeCamera.x = x;
+        defaultRelativeCamera.y = y;
+    }
+
     void Stage::onDrawFrame() {
         if (!engine->hasDisplay()) return;
-        if (this->dirty) {
-
+        if (this->dirty){
             if (this->usePerspective) {
-                this->updateCameraInfo();
-
-                CameraInfo camera = defaultPortraitCamera;
+            	this->updatePerspectiveCameraInfo();
+                PerspectiveCameraInfo camera = defaultPortraitCamera;
             
                 float ratio = viewport_width / (float)viewport_height;
                 glViewport(0, 0, viewport_width, viewport_height); 

@@ -176,6 +176,8 @@ namespace emo {
         this->srcBlendFactor = GL_SRC_ALPHA;
         this->dstBlendFactor = GL_ONE_MINUS_SRC_ALPHA;
 
+        this->isCameraObject = true;
+
     }
 
     Drawable::~Drawable() {
@@ -431,7 +433,12 @@ namespace emo {
         glColor4f(this->param_color[0], this->param_color[1], this->param_color[2], this->param_color[3]);
 
         // update position
-        glTranslatef(this->x * this->orthFactorX, this->y * this->orthFactorY, 0);
+        if(engine->stage->usePerspective || this->isCameraObject == false){
+            glTranslatef(this->x * this->orthFactorX, this->y * this->orthFactorY, 0);
+        }else{
+            glTranslatef( (this->x - engine->stage->defaultRelativeCamera.x) * this->orthFactorX,
+                          (this->y - engine->stage->defaultRelativeCamera.y) * this->orthFactorY, 0);
+        }
 
         // rotate
         glTranslatef(this->param_rotate[1], this->param_rotate[2], 0);
