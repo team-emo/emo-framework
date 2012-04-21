@@ -74,6 +74,7 @@ void initPhysicsFunctions() {
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "body_applyLinearImpulse",   emoPhysicsBody_ApplyLinearImpulse);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "body_applyAngularImpulse",   emoPhysicsBody_ApplyAngularImpulse);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "body_getMass",   emoPhysicsBody_GetMass);
+    registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "body_setCenterOfMass",   emoPhysicsBody_SetCenterOfMass);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "body_getInertia",   emoPhysicsBody_GetInertia);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "body_getWorldPoint",   emoPhysicsBody_GetWorldPoint);
     registerClassFunc(engine->sqvm, EMO_PHYSICS_CLASS, "body_getWorldVector",   emoPhysicsBody_GetWorldVector);
