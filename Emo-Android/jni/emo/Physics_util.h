@@ -28,6 +28,8 @@
 void getVec2Instance(HSQUIRRELVM v, int idx, b2Vec2* vec2);
 void getVec2InstanceFromMember(HSQUIRRELVM v, int idx, const char* member, b2Vec2* vec2);
 void pushVec2(HSQUIRRELVM v, b2Vec2 vec2);
+void getFilterInstance(HSQUIRRELVM v, int idx, b2Filter* filter);
+void getFilterInstanceFromMember(HSQUIRRELVM v, int idx, const char* member, b2Filter* filter);
 void getBodyDefInstance(HSQUIRRELVM v, int idx, b2BodyDef* def);
 void getFixtureDefInstance(HSQUIRRELVM v, int idx, b2FixtureDef* def);
 void getDistanceJointDef(HSQUIRRELVM v, int idx, b2DistanceJointDef* def);

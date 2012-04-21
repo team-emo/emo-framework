@@ -1562,6 +1562,33 @@ SQInteger emoPhysicsBody_IsFixedRotation(HSQUIRRELVM v) {
 }
 
 /*
+ * call b2Body->fixture[index]->SetFilterData
+ *
+ * @param pointer of b2Body
+ * @param pointer of b2Fixture index
+ * @param pointer of b2Filter
+ * @return EMO_NO_ERROR if succeeds
+ */
+SQInteger emoPhysicsBody_SetFilter(HSQUIRRELVM v) {
+	if (sq_gettype(v, 2) != OT_USERPOINTER) {
+		return 0;
+	}
+	b2Body* body = NULL;
+	sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+
+	SQInteger index;
+	sq_getinteger(v, 3, &index);
+
+	b2Filter * filter = new b2Filter();
+	getFilterInstance(v, 4, filter);
+
+	body->GetFixtureList()[index].SetFilterData(*filter);
+
+	sq_pushinteger(v, EMO_NO_ERROR);
+	return 1;
+}
+
+/*
  * set b2CircleShape->m_p
  *
  * @param b2CircleShape instance

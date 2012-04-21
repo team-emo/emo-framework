@@ -88,6 +88,7 @@ SQInteger emoPhysicsBody_SetActive(HSQUIRRELVM v);
 SQInteger emoPhysicsBody_IsActive(HSQUIRRELVM v);
 SQInteger emoPhysicsBody_SetFixedRotation(HSQUIRRELVM v);
 SQInteger emoPhysicsBody_IsFixedRotation(HSQUIRRELVM v);
+SQInteger emoPhysicsBody_SetFilter(HSQUIRRELVM v);
 SQInteger emoPhysicsCircleShape_position(HSQUIRRELVM v);
 SQInteger emoPhysicsCircleShape_radius(HSQUIRRELVM v);
 SQInteger emoPhysicsPolygonShape_radius(HSQUIRRELVM v);
