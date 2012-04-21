@@ -247,6 +247,8 @@ GL_DST_COLOR           <- 0x0306;
 GL_ONE_MINUS_DST_COLOR <- 0x0307;
 GL_SRC_ALPHA_SATURATE  <- 0x0308;
 
+MATH_RADIAN <- 0.017453292519943295769236907684886;
+
 class emo.Vec2 {
     x = null;
     y = null;
@@ -263,6 +265,25 @@ class emo.Vec2 {
     function fromArray(arg) {
         if (arg == null || arg.len() < 2) return null;
         return emo.Vec2(arg[0], arg[1]);
+    }
+    
+    function fromRadian(rad){
+        return emo.Vec2(cos(rad), sin(rad));
+    }
+    
+    function fromDegree(deg){
+        return fromRadian(deg * MATH_RADIAN);
+    }
+    
+    function getRadianTo(other){
+        local diffY = other.y - y;
+        local diffX = other.x - x;
+        return atan2(diffY, diffX);
+    }
+    
+    function getDegreeTo(other){
+        local atan2Value = getRadianTo(other);
+        return (atan2Value / PI) * 180.0;
     }
     
     function distance(other) {
@@ -1346,6 +1367,10 @@ class emo.Sprite {
     function blendFunc(sfactor, dfactor) {
         return stage.blendFunc(id, sfactor, dfactor);
     }
+    
+    function setAsGui() {
+        stage.setAsGui(id);
+    }
 }
 
 class emo.FontSprite extends emo.Sprite {
@@ -1643,6 +1668,9 @@ class emo.AnalogOnScreenController extends emo.Sprite {
     function constructor(_name, _knobname, _alpha = 0.5) {
         base.constructor(_name);
         knob = emo.Sprite(_knobname);
+        
+        setAsGui();
+        knob.setAsGui();
         
         alpha(_alpha);
         
