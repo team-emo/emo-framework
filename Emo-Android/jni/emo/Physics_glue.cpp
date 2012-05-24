@@ -385,6 +385,9 @@ SQInteger emoPhysicsWorld_EnableContactState(HSQUIRRELVM v) {
 		case PHYSICS_STATE_REMOVE:
 			emoPhysicsContactListener->enableRemoveEvent  = state;
 			break;
+		case PHYSICS_STATE_IMPACT:
+			emoPhysicsContactListener->enableImpactEvent  = state;
+			break;
 	}
 	
 	sq_pushinteger(v, EMO_NO_ERROR);
