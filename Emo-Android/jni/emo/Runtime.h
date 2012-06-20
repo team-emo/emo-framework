@@ -63,6 +63,7 @@ std::string loadContentFromAsset(std::string fname);
 
 SQInteger emoImportScript(HSQUIRRELVM v);
 SQInteger emoSetOptions(HSQUIRRELVM v);
+SQInteger emoRuntimeTest(HSQUIRRELVM v);
 SQInteger emoRuntimeEcho(HSQUIRRELVM v);
 SQInteger emoRuntimeLog(HSQUIRRELVM v);
 SQInteger emoRuntimeLogInfo(HSQUIRRELVM v);

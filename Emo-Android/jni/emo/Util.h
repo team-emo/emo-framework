@@ -30,6 +30,18 @@
 
 using namespace std;
 
+char* base64Encode(const unsigned char* src, int size);
+unsigned char* base64Decode(const char* src, int* size);
+
+unsigned char* encryptEcbMode(const unsigned char* key, const unsigned char* src, int size, int* cipherSize);
+unsigned char* decryptEcbMode(const unsigned char* key, const unsigned char* src, int size, int* plainSize);
+
+unsigned char* encryptCbcMode(const unsigned char* key, const unsigned char* src, int size, int* cipherSize);
+unsigned char* decryptCbcMode(const unsigned char* key, const unsigned char* src, int size, int* plainSize);
+
+string encryptString(const string& src);
+string decryptString(const string& src);
+
 bool isPowerOfTwo(int x);
 int nextPowerOfTwo(int minimum);
 
@@ -37,4 +49,8 @@ int max(int a, int b);
 int min(int a, int b);
 
 vector<string> split( string s, string c );
+
+void test();
+
+
 #endif

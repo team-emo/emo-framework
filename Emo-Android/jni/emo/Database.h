@@ -37,6 +37,22 @@
 void initDatabaseFunctions();
 
 namespace emo {
+    class CipherHolder {
+    public:
+        CipherHolder();
+        ~CipherHolder();
+        std::string getPlainText();
+        void setPlainText(std::string cipher);
+        std::string getCipher();
+        void setCipher(std::string cipher);
+        bool hasCipher();
+        bool compareWithCipher(std::string cipher);
+        bool compareWithHolder(CipherHolder holder);
+    protected:
+        std::string plainText;
+        std::string cipher;
+    };
+
     class Database {
     public:
         Database();
@@ -53,14 +69,14 @@ namespace emo {
         bool openPreference();
         std::string getPreference(std::string key);
         bool setPreference(std::string key, std::string value);
-        std::vector<std::string> getPreferenceKeys();
+        std::vector<emo::CipherHolder> getPreferenceKeys();
         bool deletePreference(std::string key);
     protected:
         sqlite3* db;
         bool isOpen;
         int  exec(std::string sql);
         int  exec_count(std::string sql, int* count);
-        int  query_vector(std::string sql, std::vector<std::string>* values);
+        int  query_vector(std::string sql, std::vector<emo::CipherHolder>* values);
     };
 }
 

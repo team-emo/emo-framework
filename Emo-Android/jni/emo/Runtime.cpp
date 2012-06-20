@@ -37,6 +37,7 @@
 #include "Runtime.h"
 #include "Engine.h"
 #include "VmFunc.h"
+#include "Util.h"
 
 extern emo::Engine* engine;
 
@@ -48,7 +49,9 @@ void initRuntimeFunctions() {
 
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
+
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "echo",            emoRuntimeEcho);
+    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "test",            emoRuntimeTest);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "log",             emoRuntimeLog);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "info",            emoRuntimeLogInfo);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "error",           emoRuntimeLogError);
@@ -465,6 +468,14 @@ namespace rapidxml {
 SQInteger emoRuntimeBuildNumber(HSQUIRRELVM v) {
     sq_pushinteger(v, EMO_BUILD_NUMBER);
     return 1;
+}
+
+/*
+ * Calls test function
+ */
+SQInteger emoRuntimeTest(HSQUIRRELVM v){
+	test();
+	return 0;
 }
 
 /*
