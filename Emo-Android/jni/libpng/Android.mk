@@ -15,4 +15,4 @@ LIBPNG_SRC_FILES :=\
 	libpng/pngwtran.c \
 	libpng/pngwutil.c 
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/libpng
+LIBPNG_C_INCLUDES := $(LOCAL_PATH)/libpng

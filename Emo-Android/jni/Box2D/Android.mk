@@ -1,4 +1,5 @@
-BOX2D_SRC_FILES += Box2D/Collision/b2BroadPhase.cpp \
+BOX2D_SRC_FILES := \
+Box2D/Collision/b2BroadPhase.cpp \
 Box2D/Collision/b2CollideCircle.cpp \
 Box2D/Collision/b2CollidePolygon.cpp \
 Box2D/Collision/b2Collision.cpp \
@@ -34,4 +35,4 @@ Box2D/Dynamics/Joints/b2PulleyJoint.cpp \
 Box2D/Dynamics/Joints/b2RevoluteJoint.cpp \
 Box2D/Dynamics/Joints/b2WeldJoint.cpp
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/Box2D
+BOX2D_C_INCLUDES := $(LOCAL_PATH)/Box2D

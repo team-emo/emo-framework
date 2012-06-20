@@ -18,18 +18,18 @@ include $(CLEAR_VARS)
 include $(LOCAL_PATH)/emo/Android.mk
 include $(LOCAL_PATH)/squirrel/Android.mk
 include $(LOCAL_PATH)/libpng/Android.mk
-include $(LOCAL_PATH)/sqlite/Android.mk
 include $(LOCAL_PATH)/Box2D/Android.mk
 include $(LOCAL_PATH)/rapidxml/Android.mk
+include $(LOCAL_PATH)/sqlite/Android.mk
+include $(LOCAL_PATH)/aes/Android.mk
 
-SQUIRREL_CFLAGS := -O0 -Wall -g
-
-APP_OPTIM       := release
-LOCAL_MODULE    := emo-android
-LOCAL_ARM_MODE  := arm
-LOCAL_SRC_FILES := native_app_glue.c main.cpp $(EMO_SRC_FILES) $(SQUIRREL_SRC_FILES) $(LIBPNG_SRC_FILES) $(SQLITE_SRC_FILES) $(BOX2D_SRC_FILES)
-LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lOpenSLES -lz
-LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/squirrel/include $(LOCAL_PATH)/libpng $(LOCAL_PATH)/sqlite $(LOCAL_PATH)/emo $(LOCAL_PATH)/Box2D $(LOCAL_PATH)/rapidxml
-LOCAL_CFLAGS    := $(SQUIRREL_CFLAGS) $(SQLITE_CFLAGS)
+APP_OPTIM              := release
+LOCAL_MODULE           := emo-android
+LOCAL_ARM_MODE         := arm
+LOCAL_LDLIBS           := -llog -landroid -lEGL -lGLESv1_CM -lOpenSLES -lz -lGLESv2 $(SQLITE_LDLIBS)
+LOCAL_SHARED_LIBRARIES := $(SQLITE_SHARED_LIBRARIES) $(SQLCIPHER_SHARED_LIBRARIES)
+LOCAL_CFLAGS           := $(SQUIRREL_CFLAGS) $(SQLITE_CFLAGS)
+LOCAL_C_INCLUDES       := $(EMO_C_INCLUDES) $(SQUIRREL_C_INCLUDES) $(LIBPNG_C_INCLUDES) $(BOX2D_C_INCLUDES) $(SQLITE_C_INCLUDES) $(AES_C_INCLUDES)
+LOCAL_SRC_FILES        := native_app_glue.c main.cpp $(EMO_SRC_FILES) $(SQUIRREL_SRC_FILES) $(LIBPNG_SRC_FILES) $(BOX2D_SRC_FILES) $(SQLITE_SRC_FILES) $(AES_SRC_FILES)
 
 include $(BUILD_SHARED_LIBRARY)

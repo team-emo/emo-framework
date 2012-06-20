@@ -15,5 +15,5 @@ EMO_SRC_FILES :=\
 	emo/Physics_util.cpp \
 	emo/Physics_contact.cpp
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/emo
+EMO_C_INCLUDES := $(LOCAL_PATH)/emo
 

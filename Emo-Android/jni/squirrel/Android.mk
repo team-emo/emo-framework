@@ -1,4 +1,4 @@
-SQUIRREL_SRC_FILES += squirrel/squirrel/sqapi.cpp \
+SQUIRREL_SRC_FILES := squirrel/squirrel/sqapi.cpp \
 	squirrel/squirrel/sqbaselib.cpp \
 	squirrel/squirrel/sqfuncstate.cpp \
 	squirrel/squirrel/sqdebug.cpp \
@@ -19,4 +19,5 @@ SQUIRREL_SRC_FILES += squirrel/squirrel/sqapi.cpp \
 	squirrel/sqstdlib/sqstdaux.cpp \
 	squirrel/sqstdlib/sqstdrex.cpp
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/squirrel/include
+SQUIRREL_C_INCLUDES := $(LOCAL_PATH)/squirrel/include
+SQUIRREL_CFLAGS := -O0 -Wall -g
