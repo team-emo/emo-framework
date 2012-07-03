@@ -1,0 +1,85 @@
+<Packer>
+    <!-- Target SQLite Database                             -->
+    <!-- path : Set relative path for the target database.  -->
+    <Database path="output/emoruntime.db" />
+
+    <!-- Basic pack setting                                                                           -->
+    <!-- mode   : Configure packing mode. "pack" for usual purpose. "unpack" is provided for testing. -->
+    <!-- input  : Set relative path for input directory. Can only be used on "pack" mode.             -->
+    <!-- output : Set relative path for output directory. Can only be on "unpack" mode.               -->
+    <!-- reset  : Program removes target database every time before packing with this attribute "on". -->
+    <!-- ignore : Specify a file name you want to ignore.                                             -->
+    <Pack mode="pack" input="input" output="output" reset="on" ignore=".gitignore">
+    
+        <!-- Tables                                             -->
+        <!-- pack : Enter "on" for target, otherwise ignored.      -->
+        <!-- name : Enter file name of the target SQLite database. -->
+        <Tables pack="off" name="tables.db">
+        
+            <!-- Encryption                                   -->
+            <!-- encrypt : Enter "on" for encrypting records. -->
+            <Encryption encrypt="on">
+            
+                <!-- Exception entries (only available on pack mode)                                        -->
+                <!-- tableName : Enter name of table you don't want to pack or encrypt.                     -->
+                <!-- copy      : Program copies the table without encryption when copy="on", otherwise the  -->
+                <!--             table will be just ignored.                                                -->
+                <Exception tableName="ANDROID_METADATA" copy="on"/>
+                <Exception tableName="PREFERENCES" copy="off"/>
+            </Encryption>
+        </Tables>
+        
+        <!-- Scripts                                                                                         -->
+        <!-- pack : Enter "on" for target, otherwise ignored                                                 -->
+        <!-- name : Enter folder name for your assets. The name will be combined with "input" or "output"    -->
+        <!--        directory specified in "Pack" element definition.                                        -->
+        <Scripts pack="off" name="scripts">
+            
+            <!-- Encryption                                                                                  -->
+            <!-- encrypt       : Enter "on" for encrypting file                                              -->
+            <!-- exceptContent : With this attribute "on", program will only encrypts file name(column) but  -->
+            <!--                 its content. This may save CPU power and memory in exchange for security.   -->
+            <Encryption encrypt="on" exceptContent="off" />
+        </Scripts>
+        
+        <!-- Sounds -->
+        <Sounds  pack="off" name="sounds">
+            <Encryption encrypt="on" exceptContent="off" />
+        </Sounds>
+        
+        <!-- Images -->
+        <Images  pack="off" name="images">
+            <Encryption encrypt="on" exceptContent="off" />
+        </Images>
+        
+        <!-- Maps -->
+        <Maps    pack="off" name="maps">
+            <Encryption encrypt="on" exceptContent="off" />
+        </Maps>
+        
+        <!-- 3D models -->
+        <Models  pack="off" name="models">
+            <Encryption encrypt="on" exceptContent="off" />
+        </Models>
+        
+        <!-- Config file                                             -->
+        <!-- YOU SHOULD NOT EDIT THIS SETTING!                       -->
+        <!-- The config file is needed for entire encryption feature -->
+        <Config  pack="on" name="emo-config.xml">
+            <Encryption encrypt="on" exceptContent="off" />
+        </Config>
+    </Pack>
+    
+        
+    <!-- Key for encryption                                                                            -->
+    <!-- value   : Key value must be 16 bytes. Ignored when autoGen="on" and mode="pack".              -->
+    <!--           The key can be specified with 16 ASCII chars or with 32 hex chars starts with "0x". -->
+    <!-- autoGen : Enter "on" to generate key automatically. Note that the generated key value is      -->
+    <!--           needed to be defined in "value" attribute on "unpack" mode.                         -->
+    <!--           NOTICE! Program will overwrite generated key each time running.                     --> 
+    <!--           It is recommended to copy the generated key to "value" attribute and reset this     -->
+    <!--           attribute to "off".                                                                 -->
+    <!-- path    : Set relative path for the generated key. This will be ignored when autoGen="off".   -->
+    <Key value="keyMustBeChanged" autoGen="off" path="key.txt" />
+    
+</Packer>

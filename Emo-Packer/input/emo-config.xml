@@ -1,0 +1,11 @@
+<Config>
+    <Encryption  encrypt="on">
+        <Tables  encrypt="on"/>
+        <Config  encrypt="on" exceptContent="false" />
+        <Scripts encrypt="on" exceptContent="false" />
+        <Sounds  encrypt="on" exceptContent="true" />
+        <Images  encrypt="on" exceptContent="true" />
+        <Maps    encrypt="on" exceptContent="false" />
+        <Models  encrypt="on" exceptContent="false" />
+    </Encryption>
+</Config>

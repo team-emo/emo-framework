@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="buildjar" name="emo_packer">
+
+  <!-- Jar File Name -->
+  <property name="jarName" value="emo-packer.jar" />
+  
+  <!-- Main Class Name -->
+  <property name="mainClass" value="com.emo_framework.tools.database.Packer" />
+  
+  <!-- Binaries Directory -->
+  <property name="homeDir" value="." />
+  <property name="binDir" value="${homeDir}/bin" />
+
+  <!-- Scala Library -->
+  <property name="scalaLib" value="ext/scala-library.jar" />
+
+  <target name="buildjar">
+    <jar destfile="${jarName}" filesetmanifest="mergewithoutmain">
+      <manifest>
+        <attribute name="Main-Class" value="${mainClass}" />
+      	<attribute name="Class-Path" value="./ext/commons-codec-1.6.jar" />
+      	<attribute name="Class-Path" value="./ext/commons-io-2.4.jar" />
+        <attribute name="Class-Path" value="./ext/sqlitejdbc-v053.jar" />
+      </manifest>
+      <fileset dir="${binDir}" />
+      <zipfileset src="${scalaLib}"
+                  excludes="META-INF/*.SF,library.properties" />
+    </jar>
+  </target>
+</project>
