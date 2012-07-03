@@ -2,7 +2,7 @@
 <project basedir="." default="buildjar" name="emo_packer">
 
   <!-- Jar File Name -->
-  <property name="jarName" value="emo-packer.jar" />
+  <property name="jarName" value="emo_packer.jar" />
   
   <!-- Main Class Name -->
   <property name="mainClass" value="com.emo_framework.tools.database.Packer" />
