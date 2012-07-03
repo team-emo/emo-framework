@@ -21,6 +21,7 @@
       	<attribute name="Class-Path" value="./ext/commons-codec-1.6.jar" />
       	<attribute name="Class-Path" value="./ext/commons-io-2.4.jar" />
         <attribute name="Class-Path" value="./ext/sqlitejdbc-v053.jar" />
+      	<attribute name="Class-Path" value="./ext/log4j-1.2.17.jar" />
       </manifest>
       <fileset dir="${binDir}" />
       <zipfileset src="${scalaLib}"
