@@ -135,6 +135,7 @@ unsigned char* encrypt(const unsigned char* key, const unsigned char* src, int s
     AES_RETURN aesResult = encryptor->cbc_encrypt(targetData, encryptedData, targetDataSize, iv);
     if( aesResult != EXIT_SUCCESS ){
         LOGE("encryptCbcMode: AES(CBC mode) encryption failed");
+        free(targetData);
         free(encryptedData);
         return NULL;
     }
@@ -147,6 +148,7 @@ unsigned char* encrypt(const unsigned char* key, const unsigned char* src, int s
     // attach IV to the head
     memcpy(cipher, ivClone, AES_BLOCK_SIZE);
     memcpy(&cipher[AES_BLOCK_SIZE], encryptedData, targetDataSize);
+    free(targetData);
     free(encryptedData);
 
     return cipher;
