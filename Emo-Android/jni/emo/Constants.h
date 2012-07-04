@@ -214,6 +214,6 @@
 #define ANDROID_TOAST_SHORT 0x00000001
 #define ANDROID_TOAST_LONG  0x00000000
 
-#define AES_PRIVATE_KEY "ThisMustBeChanged"
+#define AES_PRIVATE_KEY "keyMustBeChanged"
 
 #endif

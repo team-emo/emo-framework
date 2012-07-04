@@ -105,53 +105,7 @@ unsigned char* base64Decode(const char *src, int* size ){
     return dst;
 }
 
-unsigned char* encryptEcbMode(const unsigned char* key, const unsigned char* src, int size, int* cipherSize){
-
-    // initialize encryptor
-    AESencrypt * encryptor = new AESencrypt(key);
-
-    // prepare cipher blocks
-    int padding = (size > AES_BLOCK_SIZE) ? AES_BLOCK_SIZE - ( size % AES_BLOCK_SIZE ) : AES_BLOCK_SIZE - size;
-    *cipherSize = size + padding;
-    unsigned char * cipher = (unsigned char *) calloc( *cipherSize + 1, sizeof(char));
-
-    // encrypt with ECB mode
-    AES_RETURN aesResult = encryptor->ecb_encrypt(src, cipher, *cipherSize);
-    if( aesResult != EXIT_SUCCESS ){
-        LOGE("encryptEcbMode: AES(ECB mode) encryption failed");
-        free(cipher);
-
-        return NULL;
-    }
-
-    return cipher;
-}
-
-unsigned char* decryptEcbMode(const unsigned char* key, const unsigned char* src, int size, int* plainSize) {
-
-    // Initialize decryptor
-    AESdecrypt * decryptor = new AESdecrypt(key);
-
-    int padding = (size > AES_BLOCK_SIZE) ? AES_BLOCK_SIZE - ( size % AES_BLOCK_SIZE ) : AES_BLOCK_SIZE - size;
-    *plainSize = size + padding;
-
-    // memory allocation for decrypted bytes
-    unsigned char * plainBytes = (unsigned char *) calloc( *plainSize + 1, sizeof(char) );
-
-    // decrypt with ECB mode
-    AES_RETURN aesResult = decryptor->ecb_decrypt(src, plainBytes, *plainSize);
-    if( aesResult != EXIT_SUCCESS ){
-         LOGE("decryptEcbMode: AES(ECB mode) decryption failed");
-         free(plainBytes);
-         return NULL;
-    }
-
-    *plainSize = strlen((char*)plainBytes);
-
-    return plainBytes;
-}
-
-unsigned char* encryptCbcMode(const unsigned char* key, const unsigned char* src, int size, int* cipherSize){
+unsigned char* encrypt(const unsigned char* key, const unsigned char* src, int size, int* cipherSize){
 
     // initialize encryptor
     AESencrypt * encryptor = new AESencrypt(key);
@@ -159,84 +113,73 @@ unsigned char* encryptCbcMode(const unsigned char* key, const unsigned char* src
     // prepare initialisation vector
     unsigned char iv [AES_BLOCK_SIZE] = {0};
     unsigned char ivClone [AES_BLOCK_SIZE] = {0};
-    if( size > AES_BLOCK_SIZE ){
-        for(int i = 0 ; i < AES_BLOCK_SIZE ; i++ ) {
-            iv[i] = rand() & 0xFF;
-            ivClone[i] = iv[i];
-        }
+    for( int i = 0 ; i < AES_BLOCK_SIZE ; i++ ) {
+        iv[i] = rand() & 0xFF;
+        ivClone[i] = iv[i];
     }
 
-    // prepare cipher blocks
+    // check padding size
     int padding = (size > AES_BLOCK_SIZE) ? AES_BLOCK_SIZE - ( size % AES_BLOCK_SIZE ) : AES_BLOCK_SIZE - size;
-    int encryptedDataSize = size + padding;
-    unsigned char * encryptedData = (unsigned char *) calloc( encryptedDataSize + 1, sizeof(char));
+    if(padding == 0) padding = AES_BLOCK_SIZE; // apply PKCS#5 padding rule
+    int targetDataSize = size + padding;
+
+    // prepare buffers
+    unsigned char * targetData = (unsigned char *) calloc( targetDataSize + 1, sizeof(char));
+    unsigned char * encryptedData = (unsigned char *) calloc( targetDataSize + 1, sizeof(char));
+    memcpy(targetData, src, size);
+
+    // pad with number of padded bytes
+    for(int i = 0, offset = targetDataSize-1 ; i < padding ; i++, offset--) targetData[offset] = padding;
 
     // encrypt with CBC mode
-    AES_RETURN aesResult = encryptor->cbc_encrypt(src, encryptedData, encryptedDataSize, iv);
+    AES_RETURN aesResult = encryptor->cbc_encrypt(targetData, encryptedData, targetDataSize, iv);
     if( aesResult != EXIT_SUCCESS ){
         LOGE("encryptCbcMode: AES(CBC mode) encryption failed");
         free(encryptedData);
-
         return NULL;
     }
 
     // complete encryption by attaching IV
     unsigned char * cipher = 0;
-    if( size > AES_BLOCK_SIZE) {
-        *cipherSize = encryptedDataSize + AES_BLOCK_SIZE ;
-        cipher = (unsigned char *) calloc( *cipherSize + 1, sizeof(char));
+    *cipherSize = targetDataSize + AES_BLOCK_SIZE ;
+    cipher = (unsigned char *) calloc( *cipherSize + 1, sizeof(char));
 
-        // attach IV to the head
-        memcpy(cipher, ivClone, AES_BLOCK_SIZE);
-        memcpy(&cipher[AES_BLOCK_SIZE], encryptedData, encryptedDataSize);
-        free(encryptedData);
-
-    }else{
-        // IV is not necessary when content size is lower than block size
-        *cipherSize = encryptedDataSize;
-        cipher = encryptedData;
-
-    }
+    // attach IV to the head
+    memcpy(cipher, ivClone, AES_BLOCK_SIZE);
+    memcpy(&cipher[AES_BLOCK_SIZE], encryptedData, targetDataSize);
+    free(encryptedData);
 
     return cipher;
 }
 
-unsigned char* decryptCbcMode(const unsigned char* key, const unsigned char* src, int size, int* plainSize) {
+unsigned char* decrypt(const unsigned char* key, const unsigned char* src, int size, int* plainSize) {
 
     // Initialize decryptor
     AESdecrypt * decryptor = new AESdecrypt(key);
 
     // prepare initialisation vector
     unsigned char iv [AES_BLOCK_SIZE] = {0};
-    if( size > AES_BLOCK_SIZE ){
-        memcpy(iv, src, AES_BLOCK_SIZE);
-    }
+    memcpy(iv, src, AES_BLOCK_SIZE);
 
     // memory allocation for decrypted bytes
     unsigned char * plainBytes = 0;
-    if( size > AES_BLOCK_SIZE){
-        *plainSize = size - AES_BLOCK_SIZE; // subtract block size for IV
-        plainBytes = (unsigned char *) calloc( *plainSize + 1, sizeof(char) );
-
-    }else{
-        *plainSize = size;
-        plainBytes = (unsigned char *) calloc( *plainSize + 1, sizeof(char) );
-
-    }
-
-    // set offset for cipher contains IV
-    int decryptOffset = 0;
-    if( size > AES_BLOCK_SIZE ){
-        decryptOffset = AES_BLOCK_SIZE;
-    }
+    *plainSize = size - AES_BLOCK_SIZE; // subtract block size for IV
+    plainBytes = (unsigned char *) calloc( *plainSize, sizeof(char) );
 
     // decrypt with CBC mode
-    AES_RETURN aesResult = decryptor->cbc_decrypt(&src[decryptOffset], plainBytes, *plainSize , iv);
+    AES_RETURN aesResult = decryptor->cbc_decrypt(&src[AES_BLOCK_SIZE], plainBytes, *plainSize , iv);
     if( aesResult != EXIT_SUCCESS ){
          LOGE("decryptCbcMode: AES(CBC mode) decryption failed");
          free(plainBytes);
          return NULL;
      }
+
+    // convert padded bytes to NULL
+    unsigned char padding = plainBytes[*plainSize - 1];
+    for(int i = 0 ; i < (int)padding ; i++ ){
+        plainBytes[*plainSize -1 - i] = NULL;
+    }
+    *plainSize -= padding;
 
     return plainBytes;
 
@@ -246,9 +189,7 @@ string encryptString(const string& src){
 
     // convert string to a single space if null string specified
     string targetString = src;
-    if( src.empty() == true){
-        targetString = string(" ");
-    }
+    if( src.empty() == true) targetString = string(" ");
 
     // get bytes from string
     int size = targetString.size();
@@ -259,7 +200,7 @@ string encryptString(const string& src){
 
     // encrypt bytes
     int cipherSize = 0;
-    unsigned char * encryptedBytes = encryptCbcMode(key, bytes, size, &cipherSize);
+    unsigned char * encryptedBytes = encrypt(key, bytes, size, &cipherSize);
 
     // base64 encoding
     char * encodedChars = base64Encode(encryptedBytes, cipherSize) ;
@@ -279,7 +220,7 @@ string decryptString(const string& src){
 
     // decrypt bytes
     int plainSize = 0;
-    unsigned char * decryptedBytes = decryptCbcMode(key, decodedBytes, size, &plainSize);
+    unsigned char * decryptedBytes = decrypt(key, decodedBytes, size, &plainSize);
     string dst = string( (char*) decryptedBytes);
 
     return dst;
@@ -290,16 +231,16 @@ bool isPowerOfTwo(int x) {
 }
 
 int nextPowerOfTwo(int minimum) {
-	if(isPowerOfTwo(minimum)) {
-		return minimum;
-	}
-	int i = 0;
-	while(true) {
-		i++;
-		if(pow((float)2, i) >= minimum) {
-			return (int)pow((float)2, i);
-		}
-	}
+    if(isPowerOfTwo(minimum)) {
+        return minimum;
+    }
+    int i = 0;
+    while(true) {
+        i++;
+        if(pow((float)2, i) >= minimum) {
+            return (int)pow((float)2, i);
+        }
+    }
 }
 
 int max(int a, int b) {
@@ -311,7 +252,6 @@ int min(int a, int b) {
 }
 
 vector <string> split( string s, string c ) {
-
     vector<string> ret;
     for( unsigned int i=0, n; i <= s.length(); i=n+1 ){
         n = s.find_first_of( c, i );
