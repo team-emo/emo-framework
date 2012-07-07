@@ -1,4 +1,4 @@
-SQUIRREL_SRC_FILES := squirrel/squirrel/sqapi.cpp \
+SQUIRREL_SRC_FILES += squirrel/squirrel/sqapi.cpp \
 	squirrel/squirrel/sqbaselib.cpp \
 	squirrel/squirrel/sqfuncstate.cpp \
 	squirrel/squirrel/sqdebug.cpp \
