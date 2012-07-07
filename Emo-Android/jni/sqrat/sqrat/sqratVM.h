@@ -94,21 +94,22 @@ public:
     #define scvprintf vprintf
 #endif
 
+static std::map<HSQUIRRELVM, SqratVM*> sqratVMs;
 
 inline void SqratVM::s_addVM(HSQUIRRELVM vm, SqratVM* sqratvm)
 {
     //TODO: use mutex to lock ms_sqratVMs
-    ms_sqratVMs.insert(std::make_pair(vm, sqratvm));
+    sqratVMs.insert(std::make_pair(vm, sqratvm));
 }
 inline void SqratVM::s_deleteVM(HSQUIRRELVM vm)
 {
     //TODO: use mutex to lock ms_sqratVMs
-    ms_sqratVMs.erase(vm);
+    sqratVMs.erase(vm);
 }
 inline SqratVM* SqratVM::s_getVM(HSQUIRRELVM vm)
 {
     //TODO: use mutex to lock ms_sqratVMs
-    return ms_sqratVMs[vm];
+    return sqratVMs[vm];
 }
 
 inline void SqratVM::printFunc(HSQUIRRELVM v, const SQChar *s, ...)
