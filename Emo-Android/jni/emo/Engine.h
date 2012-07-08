@@ -48,6 +48,7 @@
 #include "Audio.h"
 #include "Database.h"
 #include "JavaGlue.h"
+#include "SquirrelGlue.h"
 
 namespace emo {
     class Engine {
@@ -128,6 +129,7 @@ namespace emo {
         Stage* stage;
         Database* database;
         JavaGlue* javaGlue;
+        SquirrelGlue* squirrelGlue;
         timeb uptime;
 
         int32_t onDrawFrameInterval;
@@ -164,6 +166,7 @@ namespace emo {
         GLint dstBlendFactor;
 
         int nativeOrientation;
+
     protected:
         bool loaded;
         bool focused;
@@ -217,8 +220,6 @@ namespace emo {
         const ASensor* gyroscopeSensor;
         const ASensor* lightSensor;
         const ASensor* proximitySensor;
-
-        void initScriptFunctions();
 
         std::string getRuntimeScriptName();
         std::string getMainScriptName();

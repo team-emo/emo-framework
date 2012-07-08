@@ -33,6 +33,8 @@
 #include <squirrel.h>
 #include "Types.h"
 
+using namespace std;
+
 void initJavaGlueFunctions();
 
 /*
@@ -46,28 +48,29 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_callback
 namespace emo {
     class JavaGlue {
     public:
-        std::string echo(std::string echo);
-        void asyncHttpRequest(std::string name, jint timeout, std::string url, std::string method, kvs_t* params);
+        string echo(string echo);
+        void asyncHttpRequest(string name, jint timeout, string url, string method, kvs_t* params);
         bool registerJavaGlue();
         int registerNativeMethods(JNIEnv* env, JNINativeMethod* gMethods, int numMethods);
-        void callVoid_Void(std::string methodName);
-        std::string callVoid_String(std::string methodName);
-        bool callVoid_Bool(std::string methodName);
-        jint callVoid_Int(std::string methodName);
-        jint callInt_Int(std::string methodName, jint passValue);
-        jint callIntInt_Int(std::string methodName, jint passValue1, jint passValue2);
-        std::string callString_String(std::string methodName, std::string passValue);
-        void callTwoString_Void(std::string methodName, std::string value1, std::string value2);
-        void callStringInt_Void(std::string methodName, std::string value1, jint value2);
+        void callVoid_Void(string methodName);
+        string callVoid_String(string methodName);
+        bool callVoid_Bool(string methodName);
+        jint callVoid_Int(string methodName);
+        jint callInt_Int(string methodName, jint passValue);
+        jint callIntInt_Int(string methodName, jint passValue1, jint passValue2);
+        string callString_String(string methodName, string passValue);
+        void callTwoString_Void(string methodName, string value1, string value2);
+        void callStringInt_Void(string methodName, string value1, jint value2);
         void setOrientationLandscape();
         void setOrientationPortrait();
-        std::string getDeviceName();
-        std::string getOSVersion();
+        string getDeviceName();
+        string getOSVersion();
         int getSDKVersion();
         int getNativeOrientation(int width, int height);
+        int transit(string targetClass, kvs_t* extras, int optionFlag, int requestCode);
         bool isSimulator();
         void vibrate();
-        std::string getDataFilePath(std::string name);
+        string getDataFilePath(string name);
         bool loadTextBitmap(Drawable* drawable, Image* image, bool forceUpdate);
     };
 }

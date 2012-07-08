@@ -31,6 +31,8 @@
 #include "VmFunc.h"
 #include "Engine.h"
 
+using namespace std;
+
 extern emo::Engine* engine;
 
 void initJavaGlueFunctions() {
@@ -78,11 +80,11 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_callback
 }
 
 namespace emo {
-    std::string JavaGlue::echo(std::string value) {
+    string JavaGlue::echo(string value) {
     	return this->callString_String("echo", value);
     }
 
-    void JavaGlue::asyncHttpRequest(std::string name, jint timeout, std::string url, std::string method, kvs_t* params) {
+    void JavaGlue::asyncHttpRequest(string name, jint timeout, string url, string method, kvs_t* params) {
         int count = (params->size() * 2) + 2;
 
         JNIEnv* env;
@@ -152,7 +154,7 @@ namespace emo {
     /*
      * Call java method with no parameter that returns void.
      */
-    void JavaGlue::callVoid_Void(std::string methodName) {
+    void JavaGlue::callVoid_Void(string methodName) {
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
 
@@ -168,8 +170,8 @@ namespace emo {
     /*
      * Call java method with no parameter that returns string.
      */
-    std::string JavaGlue::callVoid_String(std::string methodName) {
-        std::string value;
+    string JavaGlue::callVoid_String(string methodName) {
+        string value;
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
 
@@ -191,7 +193,7 @@ namespace emo {
     /*
      * Call java method with no parameter that returns boolean.
      */
-    bool JavaGlue::callVoid_Bool(std::string methodName) {
+    bool JavaGlue::callVoid_Bool(string methodName) {
     	jboolean value = false;
 
         JNIEnv* env;
@@ -210,7 +212,7 @@ namespace emo {
     /*
      * Call java method with no parameter that returns int.
      */
-    jint JavaGlue::callVoid_Int(std::string methodName) {
+    jint JavaGlue::callVoid_Int(string methodName) {
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
 
@@ -227,7 +229,7 @@ namespace emo {
     /*  
      * Call java method with int parameter that returns int.
      */  
-    jint JavaGlue::callInt_Int(std::string methodName, jint passValue) {
+    jint JavaGlue::callInt_Int(string methodName, jint passValue) {
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
 
@@ -244,7 +246,7 @@ namespace emo {
     /*  
      * Call java method with int,int parameter that returns int.
      */  
-    jint JavaGlue::callIntInt_Int(std::string methodName, jint passValue1, jint passValue2) {
+    jint JavaGlue::callIntInt_Int(string methodName, jint passValue1, jint passValue2) {
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
 
@@ -261,8 +263,8 @@ namespace emo {
     /*
      * Call java method with one string parameter that returns string.
      */
-    std::string JavaGlue::callString_String(std::string methodName, std::string passValue) {
-        std::string value;
+    string JavaGlue::callString_String(string methodName, string passValue) {
+        string value;
 
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
@@ -285,7 +287,7 @@ namespace emo {
     /*
      * Call java method with two string parameter that returns void.
      */
-    void JavaGlue::callTwoString_Void(std::string methodName, std::string value1, std::string value2) {
+    void JavaGlue::callTwoString_Void(string methodName, string value1, string value2) {
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
 
@@ -300,7 +302,7 @@ namespace emo {
     /*
      * Call java method with (string,int) parameter that returns void.
      */
-    void JavaGlue::callStringInt_Void(std::string methodName, std::string value1, jint value2) {
+    void JavaGlue::callStringInt_Void(string methodName, string value1, jint value2) {
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
 
@@ -312,7 +314,7 @@ namespace emo {
         vm->DetachCurrentThread();
     }
 
-    std::string JavaGlue::getDataFilePath(std::string name) {
+    string JavaGlue::getDataFilePath(string name) {
         return this->callString_String("getDataFilePath", name);
     }
 
@@ -335,11 +337,11 @@ namespace emo {
     	this->callVoid_Void("setOrientationPortrait");
     }
 
-    std::string JavaGlue::getDeviceName() {
+    string JavaGlue::getDeviceName() {
     	return this->callVoid_String("getDeviceName");
     }
 
-    std::string JavaGlue::getOSVersion() {
+    string JavaGlue::getOSVersion() {
     	return this->callVoid_String("getOSVersion");
     }
 
@@ -354,6 +356,35 @@ namespace emo {
         } else {
             return OPT_ORIENTATION_PORTRAIT;
         }
+    }
+
+    int JavaGlue::transit(string targetClass, kvs_t* extras, int optionFlag, int requestCode){
+        int count = (extras->size() * 2) + 2;
+
+        JNIEnv* env;
+        JavaVM* vm = engine->app->activity->vm;
+        vm->AttachCurrentThread(&env, NULL);
+
+        jobjectArray jstrArray= (jobjectArray)env->NewObjectArray(count, env->FindClass("java/lang/String"), env->NewStringUTF(""));
+
+        env->SetObjectArrayElement(jstrArray, 0, env->NewStringUTF("key"));
+        env->SetObjectArrayElement(jstrArray, 1, env->NewStringUTF("value"));
+
+        int i = 2;
+        kvs_t::iterator iter;
+        for(iter = extras->begin(); iter != extras->end(); iter++) {
+           env->SetObjectArrayElement(jstrArray, i, env->NewStringUTF(iter->first.c_str()));
+           i++;
+           env->SetObjectArrayElement(jstrArray, i, env->NewStringUTF(iter->second.c_str()));
+           i++;
+        }
+
+        jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
+        jmethodID methodj = env->GetMethodID(clazz, "transit", "(Ljava/lang/String;II[Ljava/lang/String;)I");
+        int ret = env->CallIntMethod(engine->app->activity->clazz, methodj,  env->NewStringUTF(targetClass.c_str()), optionFlag, requestCode, jstrArray);
+
+        vm->DetachCurrentThread();
+        return ret;
     }
 
     bool JavaGlue::isSimulator() {
@@ -414,7 +445,7 @@ SQInteger emoJavaEcho(HSQUIRRELVM v) {
             str = NULL;
         }
     	if (str != NULL) {
-            std::string value = engine->javaGlue->echo(str);
+            string value = engine->javaGlue->echo(str);
 	    	sq_pushstring(v, value.c_str(), -1);
     	}
     }
@@ -460,7 +491,7 @@ SQInteger emoJavaAsyncHttpRequest(HSQUIRRELVM v) {
     }
 
     kvs_t* params = new kvs_t();
-    std::string param_key;
+    string param_key;
     for(SQInteger n = 6; n <= nargs; n++) {
 
         const SQChar* param;
@@ -471,7 +502,7 @@ SQInteger emoJavaAsyncHttpRequest(HSQUIRRELVM v) {
         if (n % 2 == 0) {
             param_key = param;
         } else if (!param_key.empty()) {
-            params->insert(std::make_pair(param_key, param));
+            params->insert(make_pair(param_key, param));
             param_key.clear();
         }
     }

@@ -1,6 +1,7 @@
 package com.emo_framework;
 
 import android.app.NativeActivity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -222,7 +223,6 @@ public class EmoActivity extends NativeActivity {
             			} else if (i < params.length -1){
             				NameValuePair pair = new BasicNameValuePair(key, params[i]);
             				data.add(pair);
-            				key = "";
             			}
             		}
             	}
@@ -385,6 +385,37 @@ public class EmoActivity extends NativeActivity {
         } else {
             return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         }               
+    }
+    
+    public int transit(final String className, int optionFlag, int reqCode, final String... extras) {
+        Intent intent;
+        try{
+            intent = new Intent(this, Class.forName(className));
+        }catch(ClassNotFoundException e){
+            LOGE("transit(Java) : target class not found.");
+            LOGE(e.getMessage());
+            return -1;
+        }
+        intent.setFlags(optionFlag);
+        
+        if (extras.length > 2) {
+            String key = "";
+            for (int i = 2; i < extras.length; i++) {
+                if (i % 2 == 0) {
+                    key = extras[i];
+                } else if (i < extras.length -1){
+                    intent.putExtra(key, extras[i]);
+                }
+            }
+        }
+        
+        if (reqCode != -1){
+            startActivity(intent);
+        }else{
+            startActivityForResult(intent, reqCode);
+        }
+        
+        return 0;
     }
     
     public native void callback(String name, String value, String errCode, String errMsg);

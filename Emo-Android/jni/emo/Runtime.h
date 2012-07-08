@@ -31,9 +31,22 @@
 #include <string>
 #include <../native_app_glue.h>
 #include <squirrel.h>
+#include "SquirrelGlue.h"
 
 #include <EGL/egl.h>
 #include <GLES/gl.h>
+
+namespace emo {
+    class Android {
+    public:
+        Android();
+        void toast(std::string text);
+        std::string getOSVersion();
+        int getSDKVersion();
+        int getNativeOrientation();
+        int transit(Sqrat::Object intent, int requestCode);
+    };
+}
 
 void initRuntimeFunctions();
 
@@ -78,10 +91,12 @@ SQInteger emoRuntimeStopwatchStop(HSQUIRRELVM v);
 SQInteger emoRuntimeStopwatchElapsed(HSQUIRRELVM v);
 SQInteger emoRuntimeSetLogLevel(HSQUIRRELVM v);
 SQInteger emoClearImageCache(HSQUIRRELVM v);
+
 #ifndef EMO_WITH_SANDBOX
 SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v);
 SQInteger emoRuntimeCompile(HSQUIRRELVM v);
 #endif
+
 SQInteger emoRuntimeGetDocumentDir(HSQUIRRELVM v);
 SQInteger emoRuntimeIsSandboxEnabled(HSQUIRRELVM v);
 

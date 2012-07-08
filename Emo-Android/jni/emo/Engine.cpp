@@ -43,7 +43,7 @@ namespace emo {
     }
 
     Engine::Engine() {
-    	this->logLevel = LOG_INFO;
+        this->logLevel = LOG_INFO;
 
         this->focused = false;
         this->loaded  = false;
@@ -73,6 +73,7 @@ namespace emo {
         this->useANR = false;
 
         this->sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
+
     }
 
     Engine::~Engine() {
@@ -84,17 +85,6 @@ namespace emo {
         delete this->javaGlue;
         delete this->sortedDrawables;
         delete this->imageCache;
-    }
-
-    void Engine::initScriptFunctions() {
-        register_table(this->sqvm, EMO_NAMESPACE);
-
-        initRuntimeFunctions();
-        initDrawableFunctions();
-        initAudioFunctions();
-        initJavaGlueFunctions();
-        initDatabaseFunctions();
-        initPhysicsFunctions();
     }
 
     int32_t Engine::event_handle_input(android_app* app, AInputEvent* event) {
@@ -184,6 +174,9 @@ namespace emo {
         // create JavaGlue instance
         javaGlue = new JavaGlue();
 
+        // create SquirrelGlue instance
+        squirrelGlue = new SquirrelGlue();
+
         this->focused = false;
         this->loadedCalled = false;
         this->initialized  = false;
@@ -264,7 +257,7 @@ namespace emo {
 
         if (!this->scriptLoaded) {
             // register class and functions for script
-            this->initScriptFunctions();
+            this->squirrelGlue->initScriptFunctions();
 
             // load runtime and main script
             loadScriptFromAsset(this->getRuntimeScriptName().c_str());

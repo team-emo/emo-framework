@@ -41,11 +41,45 @@
 
 extern emo::Engine* engine;
 
+namespace emo {
+    Android::Android(){
+    }
+    void Android::toast(std::string text) {
+        int duration = ANDROID_TOAST_SHORT;
+        engine->javaGlue->callStringInt_Void("toast", text, duration);
+    }
+
+    std::string Android::getOSVersion(){
+        return engine->javaGlue->getOSVersion();
+    }
+
+    int Android::getSDKVersion(){
+        return engine->javaGlue->getSDKVersion();
+    }
+
+    int Android::getNativeOrientation(){
+        return engine->nativeOrientation;
+    }
+
+    int Android::transit(Sqrat::Object intent, int requestCode = -1){
+        std::string targetClass = intent.GetSlot("target").Cast<std::string>();
+        int optionFlag = intent.GetSlot("optionFlag").Cast<int>();
+
+        kvs_t* extras = new kvs_t();
+        Sqrat::Array extraArray = intent.GetSlot("extras");
+        for(int i=0, size=extraArray.GetSize(); i < size ; i++){
+            std::string key = extraArray[i].GetSlot("key").Cast<std::string>();
+            std::string value = extraArray[i].GetSlot("value").Cast<std::string>();
+            extras->insert(make_pair(key, value));
+        }
+        return engine->javaGlue->transit(targetClass, extras, optionFlag, requestCode);
+    }
+}
+
 void initRuntimeFunctions() {
     registerClass(engine->sqvm, EMO_RUNTIME_CLASS);
     registerClass(engine->sqvm, EMO_EVENT_CLASS);
     registerClass(engine->sqvm, EMO_STOPWATCH_CLASS);
-    registerClass(engine->sqvm, EMO_ANDROID_CLASS);
 
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "import",          emoImportScript);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setOptions",      emoSetOptions);
@@ -90,10 +124,7 @@ void initRuntimeFunctions() {
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "random",       emoRuntimeRandom);
     registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,   "getDefaultLocale",         emoGetDefaultLocale);
 
-    registerClassFunc(engine->sqvm, EMO_ANDROID_CLASS,   "toast",         emoRuntimeAndroidToast);
-    registerClassFunc(engine->sqvm, EMO_ANDROID_CLASS,   "getOSVersion",  emoRuntimeAndroidGetOSVersion);
-    registerClassFunc(engine->sqvm, EMO_ANDROID_CLASS,   "getSDKVersion", emoRuntimeAndroidGetSDKVersion);
-    registerClassFunc(engine->sqvm, EMO_ANDROID_CLASS,   "getNativeOrientation", emoRuntimeAndroidGetNativeOrientation);
+
 }
 
 int32_t app_handle_input(struct android_app* app, AInputEvent* event) {
@@ -1006,58 +1037,9 @@ SQInteger emoRuntimeRandom(HSQUIRRELVM v) {
 }
 
 /*
- * Shows Android toast message
- */
-SQInteger emoRuntimeAndroidToast(HSQUIRRELVM v) {
-    SQInteger nargs = sq_gettop(v);
-
-    const SQChar* text;
-    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
-        sq_tostring(v, 2);
-        sq_getstring(v, -1, &text);
-        sq_poptop(v);
-    }
-
-    SQInteger duration = ANDROID_TOAST_SHORT;
-    if (nargs <= 3 && sq_gettype(v, 3) == OT_INTEGER) {
-        sq_getinteger(v, 3, &duration);
-    }
-
-    engine->javaGlue->callStringInt_Void("toast", text, duration);
-
-    return 0;
-}
-
-/*
  * Returns default locale
  */
 SQInteger emoGetDefaultLocale(HSQUIRRELVM v) {
     sq_pushstring(v, engine->javaGlue->callVoid_String("getDefaultLocale").c_str(), -1);
-    return 1;
-}
-
-/*
- * Returns Android OS version
- */
-SQInteger emoRuntimeAndroidGetOSVersion(HSQUIRRELVM v) {
-    sq_pushstring(v, engine->javaGlue->getOSVersion().c_str(), -1);
-    return 1;
-}
-
-/*
- * Returns Android SDK version
- */
-SQInteger emoRuntimeAndroidGetSDKVersion(HSQUIRRELVM v) {
-    sq_pushinteger(v, engine->javaGlue->getSDKVersion());
-    return 1;
-}
-
-/*
- * Returns Android Native Orientation
- * 
- * See: http://www.badlogicgames.com/wordpress/?p=2041
- */
-SQInteger emoRuntimeAndroidGetNativeOrientation(HSQUIRRELVM v) {
-    sq_pushinteger(v, engine->nativeOrientation);
     return 1;
 }

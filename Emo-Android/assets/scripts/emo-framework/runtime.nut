@@ -247,7 +247,18 @@ GL_DST_COLOR           <- 0x0306;
 GL_ONE_MINUS_DST_COLOR <- 0x0307;
 GL_SRC_ALPHA_SATURATE  <- 0x0308;
 
+ANDROID_FLAG_NEW_TASK      <- 0
+ANDROID_FLAG_SINGLE_TOP    <- 1
+ANDROID_FLAG_CLEAR_TOP     <- 2
+ANDROID_FLAG_NO_ANIMATION  <- 3
+ANDROID_FLAG_NO_HISTORY    <- 4
+ANDROID_FLAG_FROM_HISTORY  <- 5 // deprecated
+ANDROID_FLAG_FROM_RECENTS  <- 6
+ANDROID_FLAG_PREVIOUS_TOP  <- 7
+ANDROID_FLAG_REORDER_FRONT <- 8
+
 MATH_RADIAN <- 0.017453292519943295769236907684886;
+
 
 class emo.Vec2 {
     x = null;
@@ -2243,5 +2254,38 @@ function emo::_onControlEvent(...) {
     if (EMO_RUNTIME_DELEGATE != null &&
              EMO_RUNTIME_DELEGATE.rawin("onControlEvent")) {
         EMO_RUNTIME_DELEGATE.onControlEvent(vargv[0], vargv[1], vargv[2], vargv[3]);
+    }
+}
+
+class emo.Extra {
+    key = null;
+    value = null;
+    function constructor(_key, _value) {
+        key = _key;
+        value = _value;
+    }
+}
+
+class emo.Intent {
+    target = null;
+    optionFlag = null;
+    extras = null;
+    function constructor(_target, _optionFlag = ANDROID_FLAG_NEW_TASK) {
+        target = _target;
+        optionFlag = _optionFlag;
+        extras = [];
+    }
+    function putExtra(extra){
+        extras.add(extra);
+    }
+}
+
+function emo::_onReturn(...) {
+    if (emo.rawin("onReturn")) {
+        emo.onReturn(vargv[0], vargv[1], vargv[2]);
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onReturn")) {
+        EMO_RUNTIME_DELEGATE.onReturn(vargv[0], vargv[1], vargv[2]);
     }
 }

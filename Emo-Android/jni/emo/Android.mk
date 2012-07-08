@@ -10,6 +10,7 @@ EMO_SRC_FILES :=\
 	emo/Database.cpp \
 	emo/Util.cpp \
 	emo/JavaGlue.cpp \
+	emo/SquirrelGlue.cpp \
 	emo/Physics.cpp \
 	emo/Physics_glue.cpp \
 	emo/Physics_util.cpp \
