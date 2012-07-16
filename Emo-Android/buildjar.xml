@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="all" name="emo_framework">
+<project basedir="." default="all" name="emo_framework_zero">
 
 	<property environment="env" />
 	<property name="target" value="1.6" />
@@ -10,8 +10,16 @@
 	<property name="binfile" value="export/emo_framework.jar" />
 	<property name="sofile"  value="libs/armeabi/libemo-android.so" />
 
-	<property name="example_dir"   value="../Android-Examples/" />
-	<property name="template_dir"  value="../Android-Template/" />
+	<!--property name="example_dir"   value="../Android-Examples/" /-->
+	<!--property name="template_dir"  value="../Android-Template/" /-->
+	<!--property name="target_dir"    value="YOUR GAME PROJECT PATH" /-->
+	
+	<target name="copy2game">
+		<antcall target="buildjar"/>
+		<antcall target="copyjar">
+			<param name="to_dir" value="${target_dir}" />
+		</antcall>
+	</target>
 
 	<target name="buildjar">
 		<jar destfile="${binfile}">
@@ -27,8 +35,8 @@
 	<target name="copyjar">
 		<copy file="${binfile}" todir="${to_dir}libs/" />
 		<copy file="${sofile}" todir="${to_dir}libs/armeabi/" />
-		<copy todir="${to_dir}assets/">
-			<fileset dir="assets/" includes="*.nut" />
+		<copy todir="${to_dir}assets/scripts/emo-framework">
+			<fileset dir="assets/scripts/emo-framework" includes="*.nut" />
 		</copy>
 		<eclipse.refreshLocal resource="${to_dir}" depth="infinite"/>
 	</target>
@@ -36,10 +44,7 @@
 	<target name="all">
 	    <antcall target="buildjar"/>
 	    <antcall target="copyjar">
-			<param name="to_dir" value="${example_dir}" />
-		</antcall>
-	    <antcall target="copyjar">
-			<param name="to_dir" value="${template_dir}" />
+			<param name="to_dir" value="${target_dir}" />
 		</antcall>
 	</target>
 </project>
