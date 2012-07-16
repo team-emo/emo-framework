@@ -247,18 +247,43 @@ GL_DST_COLOR           <- 0x0306;
 GL_ONE_MINUS_DST_COLOR <- 0x0307;
 GL_SRC_ALPHA_SATURATE  <- 0x0308;
 
-ANDROID_FLAG_NEW_TASK      <- 0
-ANDROID_FLAG_SINGLE_TOP    <- 1
-ANDROID_FLAG_CLEAR_TOP     <- 2
-ANDROID_FLAG_NO_ANIMATION  <- 3
-ANDROID_FLAG_NO_HISTORY    <- 4
-ANDROID_FLAG_FROM_HISTORY  <- 5 // deprecated
-ANDROID_FLAG_FROM_RECENTS  <- 6
-ANDROID_FLAG_PREVIOUS_TOP  <- 7
-ANDROID_FLAG_REORDER_FRONT <- 8
-
 MATH_RADIAN <- 0.017453292519943295769236907684886;
 
+// Intent flags for Android
+// Reference : http://developer.android.com/reference/android/content/Intent.html
+FLAG_GRANT_READ_URI_PERMISSION            <- 0x00000001;
+FLAG_GRANT_WRITE_URI_PERMISSION           <- 0x00000002;
+FLAG_FROM_BACKGROUND                      <- 0x00000004;
+FLAG_DEBUG_LOG_RESOLUTION                 <- 0x00000008;
+FLAG_EXCLUDE_STOPPED_PACKAGES             <- 0x00000010;
+FLAG_INCLUDE_STOPPED_PACKAGES             <- 0x00000020;
+FLAG_ACTIVITY_NO_HISTORY                  <- 0x40000000;
+FLAG_ACTIVITY_SINGLE_TOP                  <- 0x20000000;
+FLAG_ACTIVITY_NEW_TASK                    <- 0x10000000;
+FLAG_ACTIVITY_MULTIPLE_TASK               <- 0x08000000;
+FLAG_ACTIVITY_CLEAR_TOP                   <- 0x04000000;
+FLAG_ACTIVITY_FORWARD_RESULT              <- 0x02000000;
+FLAG_ACTIVITY_PREVIOUS_IS_TOP             <- 0x01000000;
+FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS        <- 0x00800000;
+FLAG_ACTIVITY_BROUGHT_TO_FRONT            <- 0x00400000;
+FLAG_ACTIVITY_RESET_TASK_IF_NEEDED        <- 0x00200000;
+FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY       <- 0x00100000;
+FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET       <- 0x00080000;
+FLAG_ACTIVITY_NO_USER_ACTION              <- 0x00040000;
+FLAG_ACTIVITY_REORDER_TO_FRONT            <- 0x00020000;
+FLAG_ACTIVITY_NO_ANIMATION                <- 0x00010000;
+FLAG_ACTIVITY_CLEAR_TASK                  <- 0x00008000;
+FLAG_ACTIVITY_TASK_ON_HOME                <- 0x00004000;
+FLAG_RECEIVER_REGISTERED_ONLY             <- 0x40000000;
+FLAG_RECEIVER_REPLACE_PENDING             <- 0x20000000;
+FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT <- 0x10000000;
+FLAG_RECEIVER_BOOT_UPGRADE                <- 0x08000000;
+
+// Result codes of previous Activity
+// Prefix "ANDROID_" is added for Emo.
+ANDROID_RESULT_CANCELED   <- 0x00000000;
+ANDROID_RESULT_FIRST_USER <- 0x00000001;
+ANDROID_RESULT_OK         <- 0xFFFFFFFF;
 
 class emo.Vec2 {
     x = null;
@@ -2100,7 +2125,7 @@ function emo::_onLoad() {
 function emo::_onGainedFocus() {
     emo.Runtime.clearTextureCache();
 
-    EMO_RUNTIME_STOPWATCH.start();
+    EMO_RUNTIME_STOPWATCH.restart();
     EMO_ON_UPDATE_MANAGER.onResume();
 
     if (emo.rawin("onGainedFocus")) {
@@ -2257,35 +2282,36 @@ function emo::_onControlEvent(...) {
     }
 }
 
-class emo.Extra {
-    key = null;
-    value = null;
-    function constructor(_key, _value) {
-        key = _key;
-        value = _value;
-    }
-}
-
-class emo.Intent {
-    target = null;
+class emo.Android.Intent {
+    className = null;
     optionFlag = null;
     extras = null;
-    function constructor(_target, _optionFlag = ANDROID_FLAG_NEW_TASK) {
-        target = _target;
-        optionFlag = _optionFlag;
-        extras = [];
+    function constructor(target) {
+        className = target;
+        optionFlag = 0x00000000;
+        extras = {};
     }
-    function putExtra(extra){
-        extras.add(extra);
+    function putExtra(key, value){
+        extras.key <- value;
+    }
+    function setFlag(flag){
+        optionFlag = (optionFlag | flag);
     }
 }
 
 function emo::_onReturn(...) {
+    local requestCode = vargv[0];
+    local resultCode = vargv[1];
+    local srcClass = vargv[2];
+    local thisClass = vargv[3];
+    
+    local extras = emo.ANDROID.EXTRA_POST.rawget(srcClass);
+    
     if (emo.rawin("onReturn")) {
-        emo.onReturn(vargv[0], vargv[1], vargv[2]);
+        emo.onReturn(requestCode, resultCode, srcClass, extras);
     }
     if (EMO_RUNTIME_DELEGATE != null &&
              EMO_RUNTIME_DELEGATE.rawin("onReturn")) {
-        EMO_RUNTIME_DELEGATE.onReturn(vargv[0], vargv[1], vargv[2]);
+        EMO_RUNTIME_DELEGATE.onReturn(requestCode, resultCode, srcClass, extras);
     }
 }

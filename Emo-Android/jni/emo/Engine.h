@@ -42,6 +42,7 @@
 
 #include "Constants.h"
 #include "Types.h"
+#include "Runtime.h"
 #include "Stage.h"
 #include "Drawable.h"
 #include "Drawable_glue.h"
@@ -118,6 +119,7 @@ namespace emo {
         void setLastError(int32_t error);
 
         HSQUIRRELVM sqvm;
+        Sqrat::Table* emoSpace;
 
         bool animating;
         bool finishing;
@@ -130,6 +132,7 @@ namespace emo {
         Database* database;
         JavaGlue* javaGlue;
         SquirrelGlue* squirrelGlue;
+        Android* android;
         timeb uptime;
 
         int32_t onDrawFrameInterval;
@@ -139,8 +142,11 @@ namespace emo {
         std::string getJavaPackageName();
 
         void stopwatchStart();
+        void stopwatchRestart();
         void stopwatchStop();
         int32_t stopwatchElapsed();
+        int32_t stopwatchRealElapsed();
+        bool stopwatchIsStopped();
 
         bool hasCachedImage(std::string key);
         Image* getCachedImage(std::string key);
@@ -197,7 +203,10 @@ namespace emo {
         int32_t frameCount;
 
         bool      stopwatchStarted;
+        bool      stopwatchStopped;
         timeb     stopwatchStartTime;
+        timeb     stopwatchRestartTime;
+        timeb     stopwatchAccumulateTime;
         int32_t   stopwatchElapsedTime;
         int32_t   getLastStopwatchElapsedDelta();
 

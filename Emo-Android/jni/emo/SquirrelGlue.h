@@ -28,7 +28,7 @@
 #ifndef EMO_SQUIRRELGLUE_H
 #define EMO_SQUIRRELGLUE_H
 
-#include "sqrat.h"
+#include "sqratVM.h"
 
 void initScriptFunctions();
 

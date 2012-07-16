@@ -135,9 +135,16 @@ namespace emo {
         // initialize uptime
         this->updateUptime();
 
+        // init Squirrel VM
         if (this->sqvm == NULL) {
             this->sqvm = sq_open(SQUIRREL_VM_INITIAL_STACK_SIZE);
         }
+        initSQVM(this->sqvm);
+
+        // bind name space "emo"
+        this->emoSpace = new Sqrat::Table(this->sqvm);
+        Sqrat::RootTable(this->sqvm).Bind(EMO_NAMESPACE, *(this->emoSpace));
+
         this->lastError = EMO_NO_ERROR;
 
         // disable drawframe callback to improve performance (default)
@@ -177,11 +184,15 @@ namespace emo {
         // create SquirrelGlue instance
         squirrelGlue = new SquirrelGlue();
 
+        // create Android(mediator) instance
+        android = new Android();
+
         this->focused = false;
         this->loadedCalled = false;
         this->initialized  = false;
         this->scriptLoaded = false;
         this->stopwatchStarted = false;
+        this->stopwatchStopped = false;
 
         this->drawables = new drawables_t();
         this->drawablesToRemove = new drawables_t();
@@ -189,11 +200,11 @@ namespace emo {
 
         this->imageCache = new images_t();
 
-        // init Squirrel VM
-        initSQVM(this->sqvm);
-
         // register activity's native methods
         this->javaGlue->registerJavaGlue();
+
+        // start the stop watch automatically
+        this->stopwatchStart();
 
         this->loaded  = true;
     }
@@ -467,8 +478,8 @@ namespace emo {
     }
 
     int32_t Engine::getLastStopwatchElapsedDelta() {
-        int32_t deltaSec  = this->uptime.time - this->stopwatchStartTime.time;
-        int32_t deltaMsec = this->uptime.millitm - this->stopwatchStartTime.millitm;
+        int32_t deltaSec  = this->stopwatchAccumulateTime.time + (this->uptime.time - this->stopwatchRestartTime.time);
+        int32_t deltaMsec = this->stopwatchAccumulateTime.millitm + (this->uptime.millitm - this->stopwatchRestartTime.millitm);
 
         return (deltaSec * 1000) + deltaMsec;
      }
@@ -476,22 +487,51 @@ namespace emo {
     void Engine::stopwatchStart() {
         this->updateUptime();
         this->stopwatchStartTime = this->uptime;
+        this->stopwatchRestartTime = this->uptime;
         this->stopwatchStarted = true;
+        this->stopwatchStopped = false;
+        this->stopwatchAccumulateTime.time = 0;
+        this->stopwatchAccumulateTime.millitm = 0;
+
+    }
+
+    void Engine::stopwatchRestart() {
+        if(this->stopwatchStopped == false){
+            this->stopwatchStart();
+        }else{
+            this->updateUptime();
+            this->stopwatchRestartTime = this->uptime;
+            this->stopwatchStopped = false;
+        }
     }
 
     void Engine::stopwatchStop() {
         this->updateUptime();
         this->stopwatchElapsedTime = this->getLastStopwatchElapsedDelta();
-        this->stopwatchStarted = false;
+        this->stopwatchAccumulateTime.time += (this->uptime.time - this->stopwatchRestartTime.time);
+        this->stopwatchAccumulateTime.millitm = this->uptime.millitm;
+        this->stopwatchStopped = true;
     }
 
     int32_t Engine::stopwatchElapsed() {
-        if (this->stopwatchStarted) {
+        if (this->stopwatchStarted == true && this->stopwatchStopped == false) {
             this->updateUptime();
             this->stopwatchElapsedTime = this->getLastStopwatchElapsedDelta();
         }
 
         return this->stopwatchElapsedTime;
+    }
+
+    int32_t Engine::stopwatchRealElapsed() {
+        this->updateUptime();
+        int32_t deltaSec  = this->uptime.time - this->stopwatchStartTime.time;
+        int32_t deltaMsec = this->uptime.millitm - this->stopwatchStartTime.millitm;
+
+        return (deltaSec * 1000) + deltaMsec;
+    }
+
+    bool Engine::stopwatchIsStopped(){
+        return this->stopwatchStopped;
     }
 
     int32_t Engine::onSensorEvent(ASensorEvent* event) {

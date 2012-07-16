@@ -253,14 +253,14 @@ int min(int a, int b) {
     return a < b ? a : b;
 }
 
-vector <string> split( string s, string c ) {
+vector <string> split( string target, string splitter ) {
     vector<string> ret;
-    for( unsigned int i=0, n; i <= s.length(); i=n+1 ){
-        n = s.find_first_of( c, i );
+    for( unsigned int i=0, n; i <= target.length(); i=n+1 ){
+        n = target.find_first_of( splitter, i );
         if( n == string::npos ) {
-        	n = s.length();
+        	n = target.length();
         }
-        string tmp = s.substr( i, n-i );
+        string tmp = target.substr( i, n-i );
         ret.push_back(tmp);
     }
     return ret;

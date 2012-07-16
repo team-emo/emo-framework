@@ -37,6 +37,17 @@ using namespace std;
 
 void initJavaGlueFunctions();
 
+// JNI function with C++ needs to be surrounded by these lines below
+extern "C" {
+
+/*
+ * Class:     com_emo_framework_EmoActivity
+ * Method:    checkNative
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_checkNative
+  (JNIEnv *, jclass);
+
 /*
  * Class:     com_emo_framework_EmoActivity
  * Method:    callback
@@ -44,6 +55,18 @@ void initJavaGlueFunctions();
  */
 JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_callback
   (JNIEnv *, jobject, jstring, jstring, jstring, jstring);
+
+/*
+ * Class:     com_emo_framework_EmoActivity
+ * Method:    onReturnToSquirrel
+ * Signature: (IILjava/lang/String;[Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_onReturnToSquirrel
+  (JNIEnv *, jobject, jint, jint, jstring, jobjectArray);
+
+char * getCStringFromJava(JNIEnv* env, jstring javaString );
+
+}// end of extrern "C"
 
 namespace emo {
     class JavaGlue {
@@ -67,7 +90,7 @@ namespace emo {
         string getOSVersion();
         int getSDKVersion();
         int getNativeOrientation(int width, int height);
-        int transit(string targetClass, kvs_t* extras, int optionFlag, int requestCode);
+        void transit(string targetClass, kvs_t* extras, int optionFlag, int requestCode);
         bool isSimulator();
         void vibrate();
         string getDataFilePath(string name);
@@ -77,4 +100,5 @@ namespace emo {
 
 SQInteger emoJavaEcho(HSQUIRRELVM v);
 SQInteger emoJavaAsyncHttpRequest(HSQUIRRELVM v);
+
 #endif

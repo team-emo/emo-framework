@@ -45,7 +45,7 @@ int nextPowerOfTwo(int minimum);
 int max(int a, int b);
 int min(int a, int b);
 
-vector<string> split( string s, string c );
+vector<string> split( string target, string splitter );
 
 void test();
 

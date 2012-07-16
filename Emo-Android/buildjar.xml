@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="all" name="emo_framework_zero">
+<project basedir="." default="all" name="emo_framework">
 
 	<property environment="env" />
 	<property name="target" value="1.6" />
@@ -32,6 +32,7 @@
 		</jar>
 	</target>
 
+	<!-- DO NOT USE THIS TARGET DIRECTLY -->
 	<target name="copyjar">
 		<copy file="${binfile}" todir="${to_dir}libs/" />
 		<copy file="${sofile}" todir="${to_dir}libs/armeabi/" />

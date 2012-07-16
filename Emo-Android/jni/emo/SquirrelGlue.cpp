@@ -37,13 +37,12 @@ using namespace Sqrat;
 
 namespace emo {
     void SquirrelGlue::initScriptFunctions() {
-        // Binding "emo" table
-        DefaultVM::Set(engine->sqvm);
-        Table *emoSpace = new Table();
-        RootTable().Bind(EMO_NAMESPACE, *emoSpace);
 
-        // Binding "Android" class
-        emoSpace->Bind(
+        // Set default VM
+        DefaultVM::Set(engine->sqvm);
+
+        // "Android" class binding
+        engine->emoSpace->Bind(
             EMO_ANDROID_CLASS,
             Class<emo::Android>().Func("toast", &emo::Android::toast)
                                  .Func("getOSVersion", &emo::Android::getOSVersion)

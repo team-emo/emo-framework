@@ -45,17 +45,17 @@
 #define SQUIRREL_RUNTIME_SCRIPT "runtime.nut"
 #define SQUIRREL_MAIN_SCRIPT "main.nut"
 
-#define EMO_NAMESPACE  "emo"
-#define EMO_RUNTIME_CLASS  "Runtime"
-#define EMO_EVENT_CLASS    "Event"
-#define EMO_STAGE_CLASS    "Stage"
-#define EMO_AUDIO_CLASS    "Audio"
-#define EMO_NET_CLASS      "Net"
-#define EMO_DATABASE_CLASS "Database"
+#define EMO_NAMESPACE        "emo"
+#define EMO_RUNTIME_CLASS    "Runtime"
+#define EMO_EVENT_CLASS      "Event"
+#define EMO_STAGE_CLASS      "Stage"
+#define EMO_AUDIO_CLASS      "Audio"
+#define EMO_NET_CLASS        "Net"
+#define EMO_DATABASE_CLASS   "Database"
 #define EMO_PREFERENCE_CLASS "Preference"
-#define EMO_STOPWATCH_CLASS "Stopwatch"
-#define EMO_PHYSICS_CLASS "Physics"
-#define EMO_ANDROID_CLASS "Android"
+#define EMO_STOPWATCH_CLASS  "Stopwatch"
+#define EMO_PHYSICS_CLASS    "Physics"
+#define EMO_ANDROID_CLASS    "Android"
 
 #define EMO_FUNC_ONLOAD         "_onLoad"
 #define EMO_FUNC_ONGAINED_FOUCS "_onGainedFocus"
@@ -213,6 +213,8 @@
 
 #define ANDROID_TOAST_SHORT 0x00000001
 #define ANDROID_TOAST_LONG  0x00000000
+
+#define EXTRA_PREFIX_SIZE 16
 
 #define AES_PRIVATE_KEY "keyMustBeChanged"
 

@@ -29,6 +29,7 @@
 #define EMO_RUNTIME_H
 
 #include <string>
+#include <hash_map>
 #include <../native_app_glue.h>
 #include <squirrel.h>
 #include "SquirrelGlue.h"
@@ -44,7 +45,13 @@ namespace emo {
         std::string getOSVersion();
         int getSDKVersion();
         int getNativeOrientation();
-        int transit(Sqrat::Object intent, int requestCode);
+        void transit(Sqrat::Object intent, int requestCode);
+
+    public:
+        std::hash_map<int, std::string> activityMap;
+        Sqrat::Table* androidTable;
+        Sqrat::Table* extraPostTable;
+
     };
 }
 
@@ -87,8 +94,11 @@ SQInteger emoRuntimeGetOSName(HSQUIRRELVM v);
 SQInteger emoRuntimeGetDeviceName(HSQUIRRELVM v);
 SQInteger emoRuntimeIsSimulator(HSQUIRRELVM v);
 SQInteger emoRuntimeStopwatchStart(HSQUIRRELVM v);
+SQInteger emoRuntimeStopwatchRestart(HSQUIRRELVM v);
 SQInteger emoRuntimeStopwatchStop(HSQUIRRELVM v);
+SQInteger emoRuntimeStopwatchIsStopped(HSQUIRRELVM v);
 SQInteger emoRuntimeStopwatchElapsed(HSQUIRRELVM v);
+SQInteger emoRuntimeStopwatchRealElapsed(HSQUIRRELVM v);
 SQInteger emoRuntimeSetLogLevel(HSQUIRRELVM v);
 SQInteger emoClearImageCache(HSQUIRRELVM v);
 

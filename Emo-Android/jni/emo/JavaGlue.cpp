@@ -30,6 +30,7 @@
 #include "Runtime.h"
 #include "VmFunc.h"
 #include "Engine.h"
+#include "SquirrelGlue.h"
 
 using namespace std;
 
@@ -42,6 +43,19 @@ void initJavaGlueFunctions() {
     registerClassFunc(engine->sqvm, EMO_NET_CLASS, "request",   emoJavaAsyncHttpRequest);
 }
 
+// JNI function with C++ needs to be surrounded by these lines below
+extern "C" {
+
+/*
+ * Class:     com_emo_framework_EmoActivity
+ * Method:    checkNative
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_checkNative
+  (JNIEnv *, jclass){
+    LOGI("checkNative : OK");
+}
+
 /*
  * Class:     com_emo_framework_EmoActivity
  * Method:    callback
@@ -50,26 +64,10 @@ void initJavaGlueFunctions() {
 JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_callback
   (JNIEnv* env, jobject thiz, jstring jname, jstring jvalue, jstring jerrCode, jstring jerrMsg) {
 
-    char* name;
-    char* value;
-    char* errCode;
-    char* errMsg;
-
-    const char* cname = env->GetStringUTFChars(jname, NULL);
-    name = strdup(cname);
-    env->ReleaseStringUTFChars(jname, cname);
-
-    const char* cvalue = env->GetStringUTFChars(jvalue, NULL);
-    value = strdup(cvalue);
-    env->ReleaseStringUTFChars(jvalue, cvalue);
-
-    const char* ccode = env->GetStringUTFChars(jerrCode, NULL);
-    errCode = strdup(ccode);
-    env->ReleaseStringUTFChars(jerrCode, ccode);
-
-    const char* cmsg = env->GetStringUTFChars(jerrMsg, NULL);
-    errMsg = strdup(cmsg);
-    env->ReleaseStringUTFChars(jerrMsg, cmsg);
+    char* name = getCStringFromJava(env, jname);
+    char* value = getCStringFromJava(env, jvalue);
+    char* errCode = getCStringFromJava(env, jerrCode);
+    char* errMsg = getCStringFromJava(env, jerrMsg);
 
     callSqFunction_Bool_Strings(engine->sqvm, EMO_NAMESPACE, EMO_FUNC_ONCALLBACK, name, value, errCode, errMsg, false);
 
@@ -78,6 +76,101 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_callback
     free(errCode);
     free(errMsg);
 }
+
+/*
+ * Class:     com_emo_framework_EmoActivity
+ * Method:    onReturnToSquirrel
+ * Signature: (IILjava/lang/String;[Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_onReturnToSquirrel
+  (JNIEnv* env, jobject thiz, jint requestCode, jint resultCode, jstring jThisClassName, jobjectArray extras){
+
+    // Set default VM
+    Sqrat::DefaultVM::Set(engine->sqvm);
+
+    // Build extra table
+    Sqrat::Table* extraTable = new Sqrat::Table();
+    jint extraSize = env->GetArrayLength(extras);
+
+    for(int i = 0; i < extraSize ; i+=2){
+        jstring jExtraKey = (jstring) env->GetObjectArrayElement(extras, i);
+        string extraKeyWithPrefix = string( getCStringFromJava(env, jExtraKey) );
+        string extraKey = extraKeyWithPrefix.substr(EXTRA_PREFIX_SIZE - 1);
+
+        jstring jExtraValue = (jstring) env->GetObjectArrayElement(extras, i + 1);
+        string extraValueString = string( getCStringFromJava(env, jExtraValue) );
+
+        // check "int" parameter
+        if(extraKeyWithPrefix.find("emo_prefix_int_") != string::npos ){
+            int extraValue = atoi(extraValueString.c_str());
+            extraTable->SetValue(extraKey.c_str(), extraValue);
+
+        // check "float" parameter
+        }else if(extraKeyWithPrefix.find("emo_prefix_flo_") != string::npos ){
+            float extraValue = atof(extraValueString.c_str());
+            extraTable->SetValue(extraKey.c_str(), extraValue);
+
+        // check "bool" parameter
+        }else if(extraKeyWithPrefix.find("emo_prefix_boo_") != string::npos ){
+            bool extraValue = false;
+            if(extraValueString.find("TRUE") != string::npos || extraValueString.find("true") != string::npos) extraValue = true;
+            extraTable->SetValue(extraKey.c_str(), extraValue);
+
+        // check "String Array" prefix
+        }else if(extraKeyWithPrefix.find("emo_prefix_ars_") != string::npos ){
+            vector<string> extraValueVector = split( extraValueString, string("|") );
+
+            Sqrat::Array extraStringArray = Sqrat::Array();
+            for(unsigned int i = 0; i < extraValueVector.size() ; i++){
+                extraStringArray.Append(extraValueVector[i]);
+            }
+            extraTable->Bind(extraKey.c_str(), extraStringArray);
+
+        // check "Int Array" prefix
+        }else if(extraKeyWithPrefix.find("emo_prefix_ari_") != string::npos ){
+            vector<string> extraValueVector = split( extraValueString, string("|") );
+
+            Sqrat::Array extraIntArray = Sqrat::Array();
+            for(unsigned int i = 0; i < extraValueVector.size() ; i++){
+                extraIntArray.Append(atoi(extraValueVector[i].c_str()));
+            }
+            extraTable->Bind(extraKey.c_str(), extraIntArray);
+
+        // put parameter as a "String"
+        }else{
+            extraTable->SetValue(extraKey.c_str(), extraValueString);
+
+        }
+    }
+
+    Sqrat::Object returnobj = Sqrat::RootTable().GetSlot(EMO_NAMESPACE).GetSlot("_onReturn");
+    if(returnobj.IsNull()){
+        LOGI("onReturnToSquirrel : Function \"_onReturn\" does not exist on the Squirrel code");
+    }
+
+    Sqrat::Function returnFunc = returnobj.Cast<Sqrat::Function>();
+
+    // get source class name this class name
+    std::string srcClassName = engine->android->activityMap[requestCode];
+    std::string thisClassName= string( getCStringFromJava(env, jThisClassName) );
+
+    engine->android->extraPostTable->Bind(srcClassName.c_str(), *extraTable);
+
+    LOGI("onReturnToSquirrel : switching onto Squirrel function");
+    returnFunc.Execute(requestCode, resultCode, srcClassName, thisClassName);
+}
+
+char * getCStringFromJava(JNIEnv* env, jstring javaString ){
+    char * resultChars;
+    const char * cString = env->GetStringUTFChars(javaString, NULL);
+    resultChars = strdup(cString);
+    env->ReleaseStringUTFChars(javaString, cString);
+
+    return resultChars;
+}
+
+}// end of extrern "C"
+
 
 namespace emo {
     string JavaGlue::echo(string value) {
@@ -358,7 +451,10 @@ namespace emo {
         }
     }
 
-    int JavaGlue::transit(string targetClass, kvs_t* extras, int optionFlag, int requestCode){
+    void JavaGlue::transit(string targetClass, kvs_t* extras, int optionFlag, int requestCode){
+
+        engine->android->activityMap[requestCode] = targetClass;
+
         int count = (extras->size() * 2) + 2;
 
         JNIEnv* env;
@@ -380,11 +476,10 @@ namespace emo {
         }
 
         jclass clazz = env->GetObjectClass(engine->app->activity->clazz);
-        jmethodID methodj = env->GetMethodID(clazz, "transit", "(Ljava/lang/String;II[Ljava/lang/String;)I");
-        int ret = env->CallIntMethod(engine->app->activity->clazz, methodj,  env->NewStringUTF(targetClass.c_str()), optionFlag, requestCode, jstrArray);
+        jmethodID methodj = env->GetMethodID(clazz, "transit", "(Ljava/lang/String;II[Ljava/lang/String;)V");
+        env->CallVoidMethod(engine->app->activity->clazz, methodj,  env->NewStringUTF(targetClass.c_str()), optionFlag, requestCode, jstrArray);
 
         vm->DetachCurrentThread();
-        return ret;
     }
 
     bool JavaGlue::isSimulator() {
