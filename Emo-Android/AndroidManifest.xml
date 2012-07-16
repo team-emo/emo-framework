@@ -13,7 +13,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="scripts/emo-framework/runtime.nut" />
+                       android:value="scripts/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="scripts/main.nut" />
             <intent-filter>
