@@ -2,7 +2,7 @@
  * Physics example by Box2D with one dynamic body and one static body.
  * This example uses OnDrawCallback to step the physics world.
  */
-emo.Runtime.import("physics.nut");
+emo.Runtime.import("emo-framework/physics.nut");
 
 local stage   = emo.Stage();
 local physics = emo.Physics();

@@ -1,4 +1,4 @@
-emo.Runtime.import("physics.nut");
+emo.Runtime.import("emo-framework/physics.nut");
 
 local stage = emo.Stage();
 local event = emo.Event();

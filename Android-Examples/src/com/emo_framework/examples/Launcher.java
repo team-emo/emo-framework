@@ -24,8 +24,8 @@ public class Launcher extends ExpandableListActivity {
     private List<List<Map<String, String>>> childData = new ArrayList<List<Map<String, String>>>();
     
     private static final String[] groupNames = {
-    	"Basic", "Animation", "Event", "On-Screen Controller",
-    	"Audio", "Database", "Physics", "Physics with Joints", "Scene Transition", "Misc"
+    	"Basic", "Animation", "Event", "On-Screen Controller","Audio", "Database", "Physics",
+    	"Physics with Joints", "Scene Transition", "Misc", "Android"
     };
     
     private static final String[][] childNames = {
@@ -95,7 +95,10 @@ public class Launcher extends ExpandableListActivity {
 			"HTTP Access",
 			"Compiling a Script",
 			"Using Blendfunc"
-		}
+		},
+		{
+            "Java Interaction"
+        }
     };
     private static final String[][] activities = {
     	{
@@ -164,6 +167,9 @@ public class Launcher extends ExpandableListActivity {
 			".HTTPAccessExample",
 			".CompileScriptExample",
 			".BlendfuncExample"
+		},
+		{
+		    ".JavaInteractionExample"
 		}
     	
     };

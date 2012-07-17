@@ -1,4 +1,4 @@
-emo.Runtime.import("physics.nut");
+emo.Runtime.import("emo-framework/physics.nut");
 
 local stage = emo.Stage();
 local event = emo.Event();
@@ -16,7 +16,7 @@ local ballFixture   = null;
 local ballDef       = null;
 
 /*
- * This example shows how to use soft polygon liquid sprite with physics.
+ * This example shows how to use soft circle liquid sprite with physics.
  * 
  * The implementation of soft circle is inspired by Dashiell Gough's SoftCircle.
  * http://dashiellgough.wordpress.com/2011/10/29/cocos2d-box2d-textured-soft-body/
@@ -50,18 +50,7 @@ class Main {
             // number of segments can be changed, default count equals 18
             // segment count should be bigger than 5 (triangle)
             // print(sprite.getSegmentCount());
-            switch (i % 5) {
-            case 0:
-                sprite.setSegmentCount(emo.LiquidSprite.TRIANGLE); break;
-            case 1:
-                sprite.setSegmentCount(emo.LiquidSprite.RHOMBUS); break;
-            case 2:
-                sprite.setSegmentCount(emo.LiquidSprite.HEXAGON); break;
-            case 3:
-                sprite.setSegmentCount(emo.LiquidSprite.OCTAGON); break;
-            case 4:
-                sprite.setSegmentCount(emo.LiquidSprite.POLYGON10); break;
-            }
+            sprite.setSegmentCount(emo.LiquidSprite.CIRCLE);
             sprite.hide();
             sprite.load();
             sprites.append(sprite);

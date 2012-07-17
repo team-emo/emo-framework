@@ -23,6 +23,8 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
         </activity>
+        
+        <activity android:name="com.emo_framework.examples.JavaActivity"/>
 
         <activity-alias android:name=".ShapeExample"
             android:targetActivity="com.emo_framework.EmoActivity"
@@ -30,7 +32,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="shape_example.nut" />
         </activity-alias>
@@ -41,7 +43,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="sprite_example.nut" />
         </activity-alias>
@@ -52,7 +54,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="textsprite_example.nut" />
         </activity-alias>
@@ -63,7 +65,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="tiles_example.nut" />
         </activity-alias>
@@ -74,7 +76,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="mapsprite_example.nut" />
         </activity-alias>
@@ -85,7 +87,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="atlas_example.nut" />
         </activity-alias>
@@ -96,7 +98,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="fontsprite_example.nut" />
         </activity-alias>
@@ -107,7 +109,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="animation_example.nut" />
         </activity-alias>
@@ -118,7 +120,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="periodic_update_example.nut" />
         </activity-alias>
@@ -129,7 +131,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="modifier_rotate_example.nut" />
         </activity-alias>
@@ -140,7 +142,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="modifier_move_example.nut" />
         </activity-alias>
@@ -151,7 +153,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="modifier_event.nut" />
         </activity-alias>
@@ -162,7 +164,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="modifier_multiple.nut" />
         </activity-alias>
@@ -173,7 +175,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="pointsprite_example.nut" />
         </activity-alias>
@@ -184,7 +186,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="box2d_helloworld.nut" />
         </activity-alias>
@@ -195,7 +197,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_helloworld.nut" />
         </activity-alias>
@@ -206,7 +208,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_circle.nut" />
         </activity-alias>
@@ -217,7 +219,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_softcircle.nut" />
         </activity-alias>
@@ -228,7 +230,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_soft_polygon.nut" />
         </activity-alias>
@@ -239,7 +241,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_sensor.nut" />
         </activity-alias>
@@ -250,7 +252,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_add_example.nut" />
         </activity-alias>
@@ -261,7 +263,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="motion_event.nut" />
         </activity-alias>
@@ -272,7 +274,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="motion_event_multi.nut" />
         </activity-alias>
@@ -283,7 +285,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="sensor_event.nut" />
         </activity-alias>
@@ -294,7 +296,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="analog_controller_example.nut" />
         </activity-alias>
@@ -304,7 +306,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="digital_controller_example.nut" />
         </activity-alias>
@@ -314,7 +316,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="multiple_controllers_example.nut" />
         </activity-alias>
@@ -325,7 +327,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_distancejoint.nut" />
         </activity-alias>
@@ -335,7 +337,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_revolutejoint.nut" />
         </activity-alias>
@@ -345,7 +347,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_prismaticjoint.nut" />
         </activity-alias>
@@ -355,7 +357,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_pulleyjoint.nut" />
         </activity-alias>
@@ -365,7 +367,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_gearjoint.nut" />
         </activity-alias>
@@ -375,7 +377,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_linejoint.nut" />
         </activity-alias>
@@ -385,7 +387,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_weldjoint.nut" />
         </activity-alias>
@@ -395,7 +397,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_mousejoint.nut" />
         </activity-alias>
@@ -405,7 +407,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_contact.nut" />
         </activity-alias>
@@ -415,7 +417,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="physics_camera_moving.nut" />
         </activity-alias>
@@ -426,7 +428,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="audio_example.nut" />
         </activity-alias>
@@ -437,7 +439,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="audio_channel_example.nut" />
         </activity-alias>
@@ -448,7 +450,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="audio_volume_example.nut" />
         </activity-alias>
@@ -459,7 +461,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="database_example.nut" />
         </activity-alias>
@@ -470,7 +472,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="transition_fade_example.nut" />
         </activity-alias>
@@ -481,7 +483,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="transition_move_example.nut" />
         </activity-alias>
@@ -492,7 +494,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="transition_scale_example.nut" />
         </activity-alias>
@@ -503,7 +505,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="http_access_example.nut" />
         </activity-alias>
@@ -514,7 +516,7 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="compile_script_example.nut" />
         </activity-alias>
@@ -525,9 +527,20 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
                        android:value="blendfunc_example.nut" />
+        </activity-alias>
+        
+        <activity-alias android:name=".JavaInteractionExample"
+            android:targetActivity="com.emo_framework.EmoActivity"
+            android:label="@string/app_name">
+            <meta-data android:name="android.app.lib_name"
+                       android:value="emo-android" />
+            <meta-data android:name="emo.script.runtime"
+                       android:value="emo-framework/runtime.nut" />
+            <meta-data android:name="emo.script.main"
+                       android:value="java_interaction_example.nut" />
         </activity-alias>
         </application>
     <!-- uses-permission android:name="android.permission.VIBRATE" / -->

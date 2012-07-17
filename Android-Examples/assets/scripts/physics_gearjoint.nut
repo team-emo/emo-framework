@@ -2,7 +2,7 @@
  * Physics example by Box2D with dynamic body and GearJoint.
  * This example uses OnDrawCallback to step the physics world.
  */
-emo.Runtime.import("physics.nut");
+emo.Runtime.import("emo-framework/physics.nut");
 
 local stage   = emo.Stage();
 local physics = emo.Physics();

@@ -2,7 +2,7 @@
  * Physics example by Box2D with dynamic body and PrismaticJoint.
  * This example uses OnDrawCallback to step the physics world.
  */
-emo.Runtime.import("physics.nut");
+emo.Runtime.import("emo-framework/physics.nut");
 
 local stage   = emo.Stage();
 local physics = emo.Physics();
@@ -13,6 +13,7 @@ const FPS = 60.0;
 class Main {
     gear = emo.Sprite("gear@2x.png");
     axis = emo.Rectangle();
+    rope = emo.Line();
     
     /*
      * Called when this class is loaded
@@ -28,7 +29,7 @@ class Main {
             stage.setContentScale(stage.getWindowWidth() / 320.0);
         }
         
-        axis.setSize(stage.getWindowWidth() * 0.5, 2);
+        axis.setSize(stage.getWindowWidth() / 4, 2);
         axis.moveCenter(stage.getCenterX(), stage.getCenterY());
         gear.moveCenter(axis.getX() + axis.getWidth(), stage.getCenterY());
         
@@ -41,7 +42,7 @@ class Main {
                             world, gear, gear.getWidth() * 0.5, fixture);
         local axisInfo = physics.createStaticSprite(world, axis);
         
-        local jointDef = emo.physics.PrismaticJointDef();
+        local jointDef = emo.physics.LineJointDef();
         jointDef.initialize(
             gearInfo.getBody(), axisInfo.getBody(),
             gearInfo.getBody().getWorldCenter(), emo.Vec2(1, 0));
@@ -61,6 +62,11 @@ class Main {
         // load the sprites
         axis.load();
         gear.load();
+        
+        rope.move(axis.getX() + axis.getWidth(), stage.getCenterY(), gear.getCenterX(), gear.getCenterY());
+        rope.color(0.41, 0.41, 0.41);
+        rope.setWidth(2);
+        rope.load();
     
         // Set OnDrawCallback interval (millisecond)
         emo.Event.enableOnDrawCallback(1000.0 / FPS);
@@ -76,9 +82,7 @@ class Main {
         world.step(dt / 1000.0, 6, 2);
         world.clearForces();
         
-        if (gear.getX() + (gear.getWidth() * 0.5) <= axis.getX()) {
-            gear.getPhysicsBody().setLinearVelocity(emo.Vec2(5, 0));
-        }
+        rope.move(axis.getX() + axis.getWidth(), stage.getCenterY(), gear.getCenterX(), gear.getCenterY());
     }
     
     /*
