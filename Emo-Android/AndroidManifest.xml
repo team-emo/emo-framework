@@ -13,9 +13,9 @@
             <meta-data android:name="android.app.lib_name"
                        android:value="emo-android" />
             <meta-data android:name="emo.script.runtime"
-                       android:value="scripts/runtime.nut" />
+                       android:value="emo-framework/runtime.nut" />
             <meta-data android:name="emo.script.main"
-                       android:value="scripts/main.nut" />
+                       android:value="main.nut" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

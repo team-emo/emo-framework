@@ -420,6 +420,10 @@ std::string loadContentFromAsset(std::string fname) {
  * Load squirrel script from asset
  */
 bool loadScriptFromAsset(const char* fname) {
+
+    std::string fpath = std::string( SQUIRREL_SCRIPT_DIR );
+    fpath.append(fname);
+
     /*
      * read squirrel script from asset
      */
@@ -430,7 +434,7 @@ bool loadScriptFromAsset(const char* fname) {
         return false;
     }
 
-    AAsset* asset = AAssetManager_open(mgr, fname, AASSET_MODE_UNKNOWN);
+    AAsset* asset = AAssetManager_open(mgr, fpath.c_str(), AASSET_MODE_UNKNOWN);
     if (asset == NULL) {
         engine->setLastError(ERR_SCRIPT_OPEN);
         LOGW("loadScriptFromAsset: failed to open main script file");
