@@ -109,10 +109,14 @@ namespace emo {
     }
 
     ImagePackInfo::ImagePackInfo() {
+
         this->x = 0;
         this->y = 0;
+        this->centeringX = 0;
+        this->centeringY = 0;
         this->width  = 1;
         this->height = 1;
+        this->isCenterTarget = false;
     }
 
     ImagePackInfo::~ImagePackInfo() {
@@ -433,11 +437,21 @@ namespace emo {
         glColor4f(this->param_color[0], this->param_color[1], this->param_color[2], this->param_color[3]);
 
         // update position
+        int drawableX = this->x;
+        int drawableY = this->y;
+        if(this->isPackedAtlas == true){
+            ImagePackInfo* info = this->getImagePack(this->imagepacks_names->at(this->frame_index));
+            if(info->isCenterTarget){
+                drawableX = this->x + info->centeringX;
+                drawableY = this->y + info->centeringY;
+            }
+        }
+
         if(engine->stage->usePerspective || this->isCameraObject == false){
-            glTranslatef(this->x * this->orthFactorX, this->y * this->orthFactorY, 0);
+            glTranslatef(drawableX * this->orthFactorX, drawableY * this->orthFactorY, 0);
         }else{
-            glTranslatef( (this->x - engine->stage->defaultRelativeCamera.x) * this->orthFactorX,
-                          (this->y - engine->stage->defaultRelativeCamera.y) * this->orthFactorY, 0);
+            glTranslatef( (drawableX - engine->stage->defaultRelativeCamera.x) * this->orthFactorX,
+                          (drawableY - engine->stage->defaultRelativeCamera.y) * this->orthFactorY, 0);
         }
 
         // rotate
@@ -671,10 +685,11 @@ namespace emo {
         return true;
     }
 
-    bool Drawable::loadPackedAtlasXml(int initialFrameIndex) {
+    bool Drawable::loadPackedAtlasXml(int initialFrameIdx, bool centerFlag) {
         // check if the length is shorter than the length of ".xml"
         if (this->name.length() <= 4) return false;
 
+        this->initialFrameIndex = initialFrameIdx;
         std::string data = loadContentFromAsset(this->name);
         unsigned int pos = this->name.find_last_of("/");
         
@@ -716,15 +731,26 @@ namespace emo {
                     }
                 }
                 if (!info->name.empty()) {
-                    if (itemCount == initialFrameIndex) selectedItem = info;
+                    if (itemCount == this->initialFrameIndex) selectedItem = info;
                     info->index = itemCount;
                     this->addImagePack(info);
                     itemCount++;
                 }
+
+                info->isCenterTarget = centerFlag;
             }
         }
 
         if (selectedItem == NULL) return false;
+
+        // Register correct value for centering each sprites
+        ImagePackInfo* target;
+        for(int i = 0 ; i < itemCount ; i++){
+            if(i == this->initialFrameIndex) continue;
+            target = this->getImagePack(this->imagepacks_names->at(i));
+            target->centeringX = (selectedItem->width - target->width) * 0.5;
+            target->centeringY = (selectedItem->height - target->height) * 0.5;
+        }
 
         this->width       = selectedItem->width;
         this->height      = selectedItem->height;
@@ -736,6 +762,17 @@ namespace emo {
         this->border = 0;
 
         return true;
+    }
+
+    void Drawable::centerFrames(bool centerFlag){
+        if(this->isPackedAtlas){
+            ImagePackInfo* target;
+            for(int i = 0 ; i < this->frameCount ; i++){
+                if(i == this->initialFrameIndex) continue;
+                target = this->getImagePack(this->imagepacks_names->at(i));
+                target->isCenterTarget = centerFlag;
+            }
+        }
     }
 
     MapDrawable::MapDrawable(Drawable* drawable) : Drawable() {

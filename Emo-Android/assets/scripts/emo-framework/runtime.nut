@@ -1434,9 +1434,9 @@ class emo.FontSprite extends emo.Sprite {
 
 class emo.SpriteSheet extends emo.Sprite {
 
-    function constructor(rawname, frameWidth = 1, frameHeight = 1, border = 0, margin = 0, frameIndex = 0) {
+    function constructor(rawname, frameWidth = 1, frameHeight = 1, border = 0, margin = 0, frameIndex = 0, centerFlag = false) {
         name = base.getResourceName(rawname);
-        id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border, margin);
+        id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border, margin, centerFlag);
     }
     
     function load(x = null, y = null, frameIndex = null) {
@@ -1482,6 +1482,10 @@ class emo.SpriteSheet extends emo.Sprite {
     
     function getFrameCount() {
         return stage.getFrameCount(id);
+    }
+    
+    function centerFrames(centerFlag = true){
+        stage.centerFrames(id, centerFlag)
     }
     
     function isAnimationFinished() {

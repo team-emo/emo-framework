@@ -73,9 +73,13 @@ namespace emo {
         std::string name;
         int x;
         int y;
+        int centeringX;
+        int centeringY;
         int width;
         int height;
         int index;
+
+        bool isCenterTarget;
     };
 
     typedef std::hash_map <std::string, emo::AnimationFrame *> animations_t;
@@ -150,10 +154,11 @@ namespace emo {
         virtual void setChild(Drawable* child);
         virtual Drawable* getChild();
 
-        bool loadPackedAtlasXml(int initialFrameIndex);
+        bool loadPackedAtlasXml(int initialFrameIndex, bool centerFlag);
         void addImagePack(ImagePackInfo* info);
         bool deleteImagePack(std::string name);
         ImagePackInfo* getImagePack(std::string name);
+        void centerFrames(bool centerFlag);
 
         /* 
          * virtual methods for MapDrawable
@@ -207,6 +212,7 @@ namespace emo {
 
         bool frameIndexChanged;
         int  nextFrameIndex;
+        int  initialFrameIndex;
 
         std::string animationName;
         AnimationFrame* currentAnimation;

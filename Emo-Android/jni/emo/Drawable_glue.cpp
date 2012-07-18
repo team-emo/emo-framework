@@ -112,6 +112,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "getFrameCount",  emoDrawableGetFrameCount);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "setLine",        emoDrawableSetLinePosition);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "selectFrame",    emoDrawableSelectFrame);
+    registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "centerFrames",   emoDrawableCenterFrames);
 
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "updateLiquidTextureCoords",  emoDrawableUpdateLiquidTextureCoords);
     registerClassFunc(engine->sqvm, EMO_STAGE_CLASS,    "updateLiquidSegmentCoords",  emoDrawableUpdateLiquidSegmentCoords);
@@ -520,6 +521,7 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     SQInteger frameHeight = 0;
     SQInteger border = 0;
     SQInteger margin = 0;
+    SQBool    centerFlag = false;
     if (nargs >= 5 && sq_gettype(v, 3) != OT_NULL && sq_gettype(v, 4) != OT_NULL && sq_gettype(v, 5) != OT_NULL) {
         sq_getinteger(v, 3, &frameIndex);
         sq_getinteger(v, 4, &frameWidth);
@@ -534,8 +536,12 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
         sq_getinteger(v, 7, &margin);
     }
 
+    if (nargs >= 8 && sq_gettype(v, 8) != OT_NULL) {
+        sq_getbool(v, 8, &centerFlag);
+    }
+
     if (drawable->isPackedAtlas) {
-        if (!drawable->loadPackedAtlasXml(frameIndex)) {
+        if (!drawable->loadPackedAtlasXml(frameIndex, centerFlag)) {
             delete drawable;
             return 0;
         }
@@ -2437,6 +2443,43 @@ SQInteger emoDrawableSelectFrame(HSQUIRRELVM v) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+/*
+ * set centering flag to all frames in this sheet
+ */
+SQInteger emoDrawableCenterFrames(HSQUIRRELVM v) {
+
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    emo::Drawable* drawable = engine->getDrawable(id);
+
+    if (drawable == NULL) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+
+    SQBool centerFlag = false;
+    if (nargs >= 3 && sq_gettype(v, 3) == OT_BOOL) {
+        getBool(v, 3, &centerFlag);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+    drawable->centerFrames(centerFlag);
+
 
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
