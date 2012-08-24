@@ -98,6 +98,7 @@ void initPhysicsFunctions() {
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "body_isActive",   emoPhysicsBody_IsActive);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "body_setFixedRotation",   emoPhysicsBody_SetFixedRotation);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "body_isFixedRotation",   emoPhysicsBody_IsFixedRotation);
+    registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "body_setFilter",   emoPhysicsBody_SetFilter);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getAnchorA",   emoPhysicsJoint_GetAnchorA);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getAnchorB",   emoPhysicsJoint_GetAnchorB);
     registerClassFunc(engine.sqvm, EMO_PHYSICS_CLASS, "joint_getReactionForce",   emoPhysicsJoint_GetReactionForce);

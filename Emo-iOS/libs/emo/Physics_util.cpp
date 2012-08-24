@@ -71,6 +71,40 @@ void pushVec2(HSQUIRRELVM v, b2Vec2 vec2) {
 }	
 
 /*
+ *  Get b2Filter from emo.Filter
+ */
+void getFilterInstance(HSQUIRRELVM v, int idx, b2Filter* filter) {
+    SQInteger cate = NULL;
+    SQInteger mask = NULL;
+    SQInteger group = NULL;
+
+    getInstanceMemberAsInteger(v, idx, "categoryBits", &cate);
+    getInstanceMemberAsInteger(v, idx, "maskBits", &mask);
+    getInstanceMemberAsInteger(v, idx, "groupIndex", &group);
+
+    filter->categoryBits = (uint16)cate;
+    filter->maskBits = (uint16)mask;
+    filter->groupIndex = (int16)group;
+}
+
+/*
+ * Get b2Filter from emo.Filter of instance member
+ */
+void getFilterInstanceFromMember(HSQUIRRELVM v, int idx, const char* member, b2Filter* filter) {
+    SQFloat cate  = NULL;
+    SQFloat mask  = NULL;
+    SQFloat group = NULL;
+
+    getInstanceMemberAsTable(v, idx, member, "categoryBits", &cate);
+    getInstanceMemberAsTable(v, idx, member, "maskBits", &mask);
+    getInstanceMemberAsTable(v, idx, member, "groupIndex", &group);
+
+    filter->categoryBits = (uint16)cate;
+    filter->maskBits = (uint16)mask;
+    filter->groupIndex = (int16)group;
+}
+
+/*
  * get b2BodyDef from emo.BodyDef instance
  */
 void getBodyDefInstance(HSQUIRRELVM v, int idx, b2BodyDef* def) {
@@ -105,10 +139,11 @@ void getBodyDefInstance(HSQUIRRELVM v, int idx, b2BodyDef* def) {
  * Get b2FixtureDef from emo.FixtureDef instance
  */
 void getFixtureDefInstance(HSQUIRRELVM v, int idx, b2FixtureDef* def) {
-	getInstanceMemberAsFloat(v,  idx, "friction",    &def->friction);
-	getInstanceMemberAsFloat(v,  idx, "restitution", &def->restitution);
-	getInstanceMemberAsFloat(v,  idx, "density",     &def->density);
-	getInstanceMemberAsBool(v,   idx, "isSensor",    &def->isSensor);
+    getInstanceMemberAsFloat(v,    idx, "friction",    &def->friction);
+    getInstanceMemberAsFloat(v,    idx, "restitution", &def->restitution);
+    getInstanceMemberAsFloat(v,    idx, "density",     &def->density);
+    getInstanceMemberAsBool(v,     idx, "isSensor",    &def->isSensor);
+    getFilterInstanceFromMember(v, idx, "filter",      &def->filter);
 	
 	SQUserPointer ptr_shape;
 	if (getInstanceMemberAsInstance(v, idx, "shape", "id", &ptr_shape)) {

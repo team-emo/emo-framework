@@ -348,6 +348,7 @@ class emo.physics.BodyDef {
 }
 
 class emo.physics.Fixture {
+    physics = emo.Physics();
     id     = null;
     bodyId = null;
     function constructor(_bodyId, _id) {
@@ -356,6 +357,9 @@ class emo.physics.Fixture {
     }
     function getBody() {
         return emo.physics.Body(bodyId);
+    }
+    function setFilter(filter){
+        physics.body_setFilter(bodyId, 0, filter);
     }
 }
 
@@ -366,6 +370,20 @@ class emo.physics.FixtureDef {
     density     = null;
     isSensor    = null;
     filter      = null;
+    function constructor(){
+        filter = emo.physics.Filter();
+    }
+}
+
+class emo.physics.Filter {
+    categoryBits = null;
+    maskBits = null;
+    groupIndex = null;
+    function constructor(){
+        categoryBits = 0xFFFF;
+        maskBits = 0xFFFF;
+        groupIndex = 0;
+    }
 }
 
 class emo.physics.Joint {
