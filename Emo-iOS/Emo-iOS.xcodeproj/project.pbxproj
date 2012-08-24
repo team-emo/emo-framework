@@ -132,6 +132,24 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Emo_iOS_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emo_iOS_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Emo_iOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Emo_iOS-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		9D4F04B115E7D84900D7E882 /* sqmodule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqmodule.h; sourceTree = "<group>"; };
+		9D4F04B315E7D84900D7E882 /* sqratAllocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratAllocator.h; sourceTree = "<group>"; };
+		9D4F04B415E7D84900D7E882 /* sqratArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratArray.h; sourceTree = "<group>"; };
+		9D4F04B515E7D84900D7E882 /* sqratClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratClass.h; sourceTree = "<group>"; };
+		9D4F04B615E7D84900D7E882 /* sqratClassType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratClassType.h; sourceTree = "<group>"; };
+		9D4F04B715E7D84900D7E882 /* sqratConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratConst.h; sourceTree = "<group>"; };
+		9D4F04B815E7D84900D7E882 /* sqratFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratFunction.h; sourceTree = "<group>"; };
+		9D4F04B915E7D84900D7E882 /* sqratGlobalMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratGlobalMethods.h; sourceTree = "<group>"; };
+		9D4F04BA15E7D84900D7E882 /* sqratMemberMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratMemberMethods.h; sourceTree = "<group>"; };
+		9D4F04BB15E7D84900D7E882 /* sqratObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratObject.h; sourceTree = "<group>"; };
+		9D4F04BC15E7D84900D7E882 /* sqratOverloadMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratOverloadMethods.h; sourceTree = "<group>"; };
+		9D4F04BD15E7D84900D7E882 /* sqratScript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratScript.h; sourceTree = "<group>"; };
+		9D4F04BE15E7D84900D7E882 /* sqratTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratTable.h; sourceTree = "<group>"; };
+		9D4F04BF15E7D84900D7E882 /* sqratTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratTypes.h; sourceTree = "<group>"; };
+		9D4F04C015E7D84900D7E882 /* sqratUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratUtil.h; sourceTree = "<group>"; };
+		9D4F04C115E7D84900D7E882 /* sqratVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratVM.h; sourceTree = "<group>"; };
+		9D4F04C215E7D84900D7E882 /* sqrat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqrat.h; sourceTree = "<group>"; };
+		9D4F04C315E7D84900D7E882 /* sqratimport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqratimport.h; path = libs/sqrat/sqratimport.h; sourceTree = SOURCE_ROOT; };
 		F92D52FB145E205A002B97DF /* EmoFontDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoFontDrawable.h; sourceTree = "<group>"; };
 		F92D52FC145E205A002B97DF /* EmoFontDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoFontDrawable.m; sourceTree = "<group>"; };
 		F92D52FE145E2261002B97DF /* EmoSnapshotDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoSnapshotDrawable.h; sourceTree = "<group>"; };
@@ -419,11 +437,46 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9D4F04AF15E7D84900D7E882 /* sqrat */ = {
+			isa = PBXGroup;
+			children = (
+				9D4F04B215E7D84900D7E882 /* sqrat */,
+				9D4F04C315E7D84900D7E882 /* sqratimport.h */,
+				9D4F04B115E7D84900D7E882 /* sqmodule.h */,
+				9D4F04C215E7D84900D7E882 /* sqrat.h */,
+			);
+			name = sqrat;
+			path = libs/sqrat;
+			sourceTree = "<group>";
+		};
+		9D4F04B215E7D84900D7E882 /* sqrat */ = {
+			isa = PBXGroup;
+			children = (
+				9D4F04B315E7D84900D7E882 /* sqratAllocator.h */,
+				9D4F04B415E7D84900D7E882 /* sqratArray.h */,
+				9D4F04B515E7D84900D7E882 /* sqratClass.h */,
+				9D4F04B615E7D84900D7E882 /* sqratClassType.h */,
+				9D4F04B715E7D84900D7E882 /* sqratConst.h */,
+				9D4F04B815E7D84900D7E882 /* sqratFunction.h */,
+				9D4F04B915E7D84900D7E882 /* sqratGlobalMethods.h */,
+				9D4F04BA15E7D84900D7E882 /* sqratMemberMethods.h */,
+				9D4F04BB15E7D84900D7E882 /* sqratObject.h */,
+				9D4F04BC15E7D84900D7E882 /* sqratOverloadMethods.h */,
+				9D4F04BD15E7D84900D7E882 /* sqratScript.h */,
+				9D4F04BE15E7D84900D7E882 /* sqratTable.h */,
+				9D4F04BF15E7D84900D7E882 /* sqratTypes.h */,
+				9D4F04C015E7D84900D7E882 /* sqratUtil.h */,
+				9D4F04C115E7D84900D7E882 /* sqratVM.h */,
+			);
+			path = sqrat;
+			sourceTree = "<group>";
+		};
 		F92D9D93139070490077ED19 /* emo Sources */ = {
 			isa = PBXGroup;
 			children = (
 				F92D9E09139070820077ED19 /* emo */,
 				F92D9E6C139070A10077ED19 /* squirrel */,
+				9D4F04AF15E7D84900D7E882 /* sqrat */,
 				F92D9E471390708B0077ED19 /* libpng */,
 				F92D9D98139070770077ED19 /* Box2D */,
 			);
