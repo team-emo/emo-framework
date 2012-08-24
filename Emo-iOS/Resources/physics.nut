@@ -532,10 +532,10 @@ class emo.physics.PrismaticJoint extends emo.physics.Joint {
         return physics.joint_setLimits(id, lower, upper);
     }
     function isMotorEnabled() {
-        return physics.joint_isMoterEnabled(id);
+        return physics.joint_isMotorEnabled(id);
     }
-    function enableMoter(flag) {
-        return physics.joint_enableMoter(id, flag);
+    function enableMotor(flag) {
+        return physics.joint_enableMotor(id, flag);
     }
     function setMotorSpeed(speed) {
         return physics.joint_setMotorSpeed(id, speed);
@@ -595,10 +595,10 @@ class emo.physics.RevoluteJoint extends emo.physics.Joint {
         return physics.joint_setLimits(id, lower, upper);
     }
     function isMotorEnabled() {
-        return physics.joint_isMoterEnabled(id);
+        return physics.joint_isMotorEnabled(id);
     }
-    function enableMoter(flag) {
-        return physics.joint_enableMoter(id, flag);
+    function enableMotor(flag) {
+        return physics.joint_enableMotor(id, flag);
     }
     function setMotorSpeed(speed) {
         return physics.joint_setMotorSpeed(id, speed);
