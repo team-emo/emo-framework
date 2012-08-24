@@ -234,6 +234,10 @@ class emo.physics.Body {
         return physics.body_getMass(id);
     }
     
+    function setCenterOfMass(mass, center, inertia){
+        return physics.body_setCenterOfMass(id, mass, center, inertia);
+    }
+    
     function getInertia() {
         return physics.body_getInertia(id);
     }

@@ -64,6 +64,7 @@ SQInteger emoPhysicsBody_ApplyTorque(HSQUIRRELVM v);
 SQInteger emoPhysicsBody_ApplyLinearImpulse(HSQUIRRELVM v);
 SQInteger emoPhysicsBody_ApplyAngularImpulse(HSQUIRRELVM v);
 SQInteger emoPhysicsBody_GetMass(HSQUIRRELVM v);
+SQInteger emoPhysicsBody_SetCenterOfMass(HSQUIRRELVM v);
 SQInteger emoPhysicsBody_GetInertia(HSQUIRRELVM v);
 SQInteger emoPhysicsBody_GetWorldPoint(HSQUIRRELVM v);
 SQInteger emoPhysicsBody_GetWorldVector(HSQUIRRELVM v);

@@ -1021,6 +1021,42 @@ SQInteger emoPhysicsBody_GetMass(HSQUIRRELVM v) {
 }
 
 /*
+ * call b2Body->setMassData
+ *
+ * @param pointer of b2Body
+ * @param mass
+ * @param center (vec2 instance)
+ * @param inertia
+ */
+SQInteger emoPhysicsBody_SetCenterOfMass(HSQUIRRELVM v) {
+    if (sq_gettype(v, 2) != OT_USERPOINTER
+            && sq_gettype(v, 3) != OT_INSTANCE) {
+        return 0;
+    }
+    b2Body* body = NULL;
+    sq_getuserpointer(v, 2, (SQUserPointer*)&body);
+
+    SQFloat mass;
+    sq_getfloat(v, 3, &mass);
+
+    b2Vec2 center;
+    getVec2Instance(v, 4, &center);
+
+    SQFloat inertia;
+    sq_getfloat(v, 5, &inertia);
+
+    b2MassData massData;
+    massData.mass = mass;
+    massData.center = center;
+    massData.I = inertia;
+
+    body->SetMassData(&massData);
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+/*
  * call b2Body->getInertia
  *
  * @param pointer of b2Body
