@@ -1367,6 +1367,10 @@ class emo.Sprite {
     function blendFunc(sfactor, dfactor) {
         return stage.blendFunc(id, sfactor, dfactor);
     }
+    
+    function setAsGui() {
+        stage.setAsGui(id);
+    }
 }
 
 class emo.FontSprite extends emo.Sprite {
@@ -1664,6 +1668,9 @@ class emo.AnalogOnScreenController extends emo.Sprite {
     function constructor(_name, _knobname, _alpha = 0.5) {
         base.constructor(_name);
         knob = emo.Sprite(_knobname);
+        
+        setAsGui();
+        knob.setAsGui();
         
         alpha(_alpha);
         

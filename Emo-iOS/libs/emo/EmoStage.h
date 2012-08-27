@@ -28,7 +28,7 @@
 #import "OpenGLES/ES1/gl.h"
 #import "OpenGLES/ES1/glext.h"
 
-typedef struct CameraInfo {
+typedef struct PerspectiveCameraInfo {
     BOOL    loaded;
 	GLfloat eyeX;
 	GLfloat eyeY;
@@ -41,7 +41,12 @@ typedef struct CameraInfo {
     GLfloat upZ;   // read only
     GLfloat zNear; // read only
     GLfloat zFar;  // read only
-} CameraInfo;
+} PerspectiveCameraInfo;
+
+typedef struct RelativeCameraInfo {
+    float x;
+    float y;
+} RelativeCameraInfo;
 
 @interface EmoStage : NSObject {
 	GLuint vbo[2];
@@ -61,8 +66,9 @@ typedef struct CameraInfo {
     GLint bufferWidth;
     GLint bufferHeight;
     
-    CameraInfo defaultPortraitCamera;
-    CameraInfo defaultLandscapeCamera;
+    PerspectiveCameraInfo defaultPortraitCamera;
+    PerspectiveCameraInfo defaultLandscapeCamera;
+    RelativeCameraInfo    defaultRelativeCamera;
     
     BOOL usePerspective;
 }
@@ -73,6 +79,8 @@ typedef struct CameraInfo {
 @property (readwrite) GLint viewport_height;
 @property (readonly) GLint bufferWidth;
 @property (readonly) GLint bufferHeight;
+@property (readwrite) BOOL usePerspective;
+@property (readwrite) RelativeCameraInfo defaultRelativeCamera;
 
 -(GLuint)getPositionPointer;
 -(GLuint)getIndicePointer;
@@ -85,4 +93,8 @@ typedef struct CameraInfo {
 -(BOOL)onDrawFrame:(NSTimeInterval)dt;
 -(void)unloadBuffer;
 -(void)invertSize;
+
+-(void)resetRelativeCameraInfo;
+-(void)moveRelativeCameraX:(float)x y:(float)y;
+- (void)updatePerspectiveCameraInfo;
 @end

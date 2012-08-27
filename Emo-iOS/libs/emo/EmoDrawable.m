@@ -204,6 +204,7 @@ extern EmoEngine* engine;
 @synthesize isPackedAtlas;
 @synthesize useFont;
 @synthesize srcBlendFactor, dstBlendFactor;
+@synthesize isCameraObject;
 
 -(BOOL)loadPackedAtlasXml:(NSInteger)initialFrameIndex {
     // check if the length is shorter than the length of ".xml"
@@ -294,7 +295,12 @@ extern EmoEngine* engine;
     glColor4f(param_color[0], param_color[1], param_color[2], param_color[3]);
 	
     // update position
-    glTranslatef(x * orthFactorX, y * orthFactorY, 0);
+    if (engine.stage.usePerspective || self.isCameraObject == false){
+        glTranslatef(x * orthFactorX, y * orthFactorY, 0);
+    }else{
+        glTranslatef( (x - engine.stage.defaultRelativeCamera.x) * orthFactorX,
+                      (y - engine.stage.defaultRelativeCamera.y) * orthFactorY, 0);
+    }
 	
     // rotate
     glTranslatef(param_rotate[1], param_rotate[2], 0);
@@ -397,6 +403,8 @@ extern EmoEngine* engine;
     
     srcBlendFactor = GL_SRC_ALPHA;
     dstBlendFactor = GL_ONE_MINUS_SRC_ALPHA;
+    
+    isCameraObject = true;
 }
 
 -(NSInteger)tex_coord_frame_startX {

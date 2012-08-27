@@ -99,6 +99,7 @@ void initDrawableFunctions() {
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "windowHeight",   emoGetWindowHeight);
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "show",           emoDrawableShow);
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "hide",           emoDrawableHide);
+    registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "setAsGui",       emoDrawableSetAsGui);
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "red",            emoDrawableColorRed);
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "green",          emoDrawableColorGreen);
 	registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "blue",           emoDrawableColorBlue);
@@ -126,6 +127,7 @@ void initDrawableFunctions() {
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "updatePointDrawablePointCount",   emoPointDrawableUpdatePointCount);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "getPointDrawablePointCount",      emoPointDrawableGetPointCount);
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "isOffscreenSupported",            emoStageIsOffscreenSupported);
+    registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "moveCamera",      emoStageMoveCamera);
 
     registerClassFunc(engine.sqvm, EMO_STAGE_CLASS,    "blendFunc",      emoDrawableBlendFunc);
 }
@@ -1617,6 +1619,34 @@ SQInteger emoDrawableHide(HSQUIRRELVM v) {
     return 1;
 }
 
+/*
+ * set selected drawable as GUI component(non camera object)
+ */
+SQInteger emoDrawableSetAsGui(HSQUIRRELVM v) {
+    const SQChar* id;
+    SQInteger nargs = sq_gettop(v);
+    if (nargs >= 2 && sq_gettype(v, 2) == OT_STRING) {
+        sq_tostring(v, 2);
+        sq_getstring(v, -1, &id);
+        sq_poptop(v);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    EmoDrawable* drawable = [engine getDrawable:id];
+
+    if (drawable == nil) {
+        sq_pushinteger(v, ERR_INVALID_ID);
+        return 1;
+    }
+
+    drawable.isCameraObject = false;
+
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
 SQInteger emoDrawableColorRed(HSQUIRRELVM v) {
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -2681,6 +2711,39 @@ SQInteger emoPointDrawableUpdatePointCoords(HSQUIRRELVM v) {
  */
 SQInteger emoStageIsOffscreenSupported(HSQUIRRELVM v) {
     sq_pushbool(v, true);
+    return 1;
+}
+
+/*
+ * move relative camera to the given coordinate
+ *
+ * @param x
+ * @param y
+ */
+SQInteger emoStageMoveCamera(HSQUIRRELVM v) {
+    SQInteger nargs = sq_gettop(v);
+    SQFloat x;
+    SQFloat y;
+
+    if (nargs >= 2 && sq_gettype(v, 2) != OT_NULL) {
+        sq_getfloat(v, 2, &x);
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+    if (nargs >= 3 && sq_gettype(v, 3) != OT_NULL) {
+        sq_getfloat(v, 3, &y);
+    }else{
+        sq_pushinteger(v, ERR_INVALID_PARAM);
+        return 1;
+    }
+
+    //char msg [128];
+    //sprintf(msg,"CameraInfo : x = %f, y = %f", x, y);
+    //LOGI(msg);
+
+    [engine.stage moveRelativeCameraX:x y:y];
+    sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }
 

@@ -117,6 +117,8 @@
     
     GLint srcBlendFactor;
     GLint dstBlendFactor;
+    
+    BOOL isCameraObject;
 }
 @property (copy, readwrite) NSString* name;
 @property (readwrite) float x;
@@ -140,6 +142,7 @@
 @property (readwrite) BOOL useFont;
 @property (readwrite) GLint srcBlendFactor;
 @property (readwrite) GLint dstBlendFactor;
+@property (readwrite) BOOL isCameraObject;
 
 -(void)doUnload:(BOOL)doAll;
 -(void)initDrawable;

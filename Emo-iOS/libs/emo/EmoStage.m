@@ -33,8 +33,9 @@ extern EmoEngine* engine;
 
 @implementation EmoStage
 @synthesize width, height, viewport_width, viewport_height;
-@synthesize dirty;
+@synthesize dirty, usePerspective;
 @synthesize bufferWidth, bufferHeight;
+@synthesize defaultRelativeCamera;
 
 - (id)init {
     self = [super init];
@@ -49,6 +50,7 @@ extern EmoEngine* engine;
         
         // experimental
         usePerspective = FALSE;
+        [self resetRelativeCameraInfo];
     }
     return self;
 }
@@ -102,7 +104,7 @@ extern EmoEngine* engine;
 	return vbo[1];
 }
 
-- (void)updateCameraInfo {
+- (void)updatePerspectiveCameraInfo {
     float zfar = fmaxf(width, height) * 4;
     
     defaultPortraitCamera.eyeX = width  * 0.5;
@@ -132,11 +134,21 @@ extern EmoEngine* engine;
     defaultLandscapeCamera.loaded = TRUE;
 }
 
+-(void)resetRelativeCameraInfo {
+    defaultRelativeCamera.x = 0;
+    defaultRelativeCamera.y = 0;
+}
+
+-(void)moveRelativeCameraX:(float)x y:(float)y {
+    defaultRelativeCamera.x = x;
+    defaultRelativeCamera.y = y;
+}
+
 -(BOOL)onDrawFrame:(NSTimeInterval)dt {
     if (dirty) {
         if (usePerspective) {
-            [self updateCameraInfo];
-            CameraInfo camera = defaultPortraitCamera;
+            [self updatePerspectiveCameraInfo];
+            PerspectiveCameraInfo camera = defaultPortraitCamera;
             
             if (engine.currentOrientation == OPT_ORIENTATION_LANDSCAPE_LEFT) {
                 float ratio = viewport_height / (float)viewport_width;

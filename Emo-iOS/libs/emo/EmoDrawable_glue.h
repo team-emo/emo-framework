@@ -60,6 +60,7 @@ SQInteger emoDrawableRemove(HSQUIRRELVM v);
 SQInteger emoSetOnDrawInterval(HSQUIRRELVM v);
 SQInteger emoDrawableShow(HSQUIRRELVM v);
 SQInteger emoDrawableHide(HSQUIRRELVM v);
+SQInteger emoDrawableSetAsGui(HSQUIRRELVM v);
 SQInteger emoDrawableColorRed(HSQUIRRELVM v);
 SQInteger emoDrawableColorGreen(HSQUIRRELVM v);
 SQInteger emoDrawableColorBlue(HSQUIRRELVM v);
@@ -112,5 +113,6 @@ SQInteger emoPointDrawableUpdatePointCoords(HSQUIRRELVM v);
 SQInteger emoPointDrawableUpdatePointCount(HSQUIRRELVM v);
 SQInteger emoPointDrawableGetPointCount(HSQUIRRELVM v);
 SQInteger emoStageIsOffscreenSupported(HSQUIRRELVM v);
+SQInteger emoStageMoveCamera(HSQUIRRELVM v);
 
 SQInteger emoDrawableBlendFunc(HSQUIRRELVM v);
