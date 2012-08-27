@@ -234,6 +234,10 @@ class emo.physics.Body {
         return physics.body_getMass(id);
     }
     
+    function setCenterOfMass(mass, center, inertia){
+        return physics.body_setCenterOfMass(id, mass, center, inertia);
+    }
+    
     function getInertia() {
         return physics.body_getInertia(id);
     }
@@ -344,6 +348,7 @@ class emo.physics.BodyDef {
 }
 
 class emo.physics.Fixture {
+    physics = emo.Physics();
     id     = null;
     bodyId = null;
     function constructor(_bodyId, _id) {
@@ -352,6 +357,9 @@ class emo.physics.Fixture {
     }
     function getBody() {
         return emo.physics.Body(bodyId);
+    }
+    function setFilter(filter){
+        physics.body_setFilter(bodyId, 0, filter);
     }
 }
 
@@ -362,6 +370,20 @@ class emo.physics.FixtureDef {
     density     = null;
     isSensor    = null;
     filter      = null;
+    function constructor(){
+        filter = emo.physics.Filter();
+    }
+}
+
+class emo.physics.Filter {
+    categoryBits = null;
+    maskBits = null;
+    groupIndex = null;
+    function constructor(){
+        categoryBits = 0xFFFF;
+        maskBits = 0xFFFF;
+        groupIndex = 0;
+    }
 }
 
 class emo.physics.Joint {
@@ -510,10 +532,10 @@ class emo.physics.PrismaticJoint extends emo.physics.Joint {
         return physics.joint_setLimits(id, lower, upper);
     }
     function isMotorEnabled() {
-        return physics.joint_isMoterEnabled(id);
+        return physics.joint_isMotorEnabled(id);
     }
-    function enableMoter(flag) {
-        return physics.joint_enableMoter(id, flag);
+    function enableMotor(flag) {
+        return physics.joint_enableMotor(id, flag);
     }
     function setMotorSpeed(speed) {
         return physics.joint_setMotorSpeed(id, speed);
@@ -573,10 +595,10 @@ class emo.physics.RevoluteJoint extends emo.physics.Joint {
         return physics.joint_setLimits(id, lower, upper);
     }
     function isMotorEnabled() {
-        return physics.joint_isMoterEnabled(id);
+        return physics.joint_isMotorEnabled(id);
     }
-    function enableMoter(flag) {
-        return physics.joint_enableMoter(id, flag);
+    function enableMotor(flag) {
+        return physics.joint_enableMotor(id, flag);
     }
     function setMotorSpeed(speed) {
         return physics.joint_setMotorSpeed(id, speed);

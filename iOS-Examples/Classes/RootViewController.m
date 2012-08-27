@@ -84,6 +84,7 @@
 						  [NSArray arrayWithObjects:@"Using with Sensor",  @"physics_sensor.nut", nil],
 						  [NSArray arrayWithObjects:@"Using ContactListener",  @"physics_contact.nut", nil],
 						  [NSArray arrayWithObjects:@"Adding Physics",     @"physics_add_example.nut", nil],
+						  [NSArray arrayWithObjects:@"Using Camera with Physics",     @"physics_camera_moving.nut", nil],
 						  nil]];
 	
 	// Physics with Joints

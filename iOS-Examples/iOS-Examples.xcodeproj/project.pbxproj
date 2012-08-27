@@ -15,6 +15,10 @@
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
+		9D4F051A15EB209A00D7E882 /* license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9D4F051815EB209A00D7E882 /* license.txt */; };
+		9D4F053C15EB29CC00D7E882 /* physics_camera_moving.nut in Resources */ = {isa = PBXBuildFile; fileRef = 9D4F053B15EB29CC00D7E882 /* physics_camera_moving.nut */; };
+		9D4F053F15EB29DF00D7E882 /* desert_chips.png in Resources */ = {isa = PBXBuildFile; fileRef = 9D4F053D15EB29DF00D7E882 /* desert_chips.png */; };
+		9D4F054015EB29DF00D7E882 /* desert.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 9D4F053E15EB29DF00D7E882 /* desert.tmx */; };
 		F908827613872BFD0065EC77 /* box2d_helloworld.nut in Resources */ = {isa = PBXBuildFile; fileRef = F908827513872BEA0065EC77 /* box2d_helloworld.nut */; };
 		F9102FDC13973AB300BC7404 /* http_access_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F9102FDB13973AA800BC7404 /* http_access_example.nut */; };
 		F917F96F1387AC15003F4B53 /* animation_example.nut in Resources */ = {isa = PBXBuildFile; fileRef = F917F96E1387AC0D003F4B53 /* animation_example.nut */; };
@@ -99,7 +103,7 @@
 		F967E69713907137006D8F99 /* EmoDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F967E60813907136006D8F99 /* EmoDatabase.m */; };
 		F967E69813907137006D8F99 /* EmoDatabase_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F967E60A13907136006D8F99 /* EmoDatabase_glue.m */; };
 		F967E69913907137006D8F99 /* EmoDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F967E60C13907136006D8F99 /* EmoDrawable.m */; };
-		F967E69A13907137006D8F99 /* EmoDrawable_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F967E60E13907136006D8F99 /* EmoDrawable_glue.m */; };
+		F967E69A13907137006D8F99 /* EmoDrawable_glue.mm in Sources */ = {isa = PBXBuildFile; fileRef = F967E60E13907136006D8F99 /* EmoDrawable_glue.mm */; };
 		F967E69B13907137006D8F99 /* EmoEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = F967E61013907136006D8F99 /* EmoEngine.m */; };
 		F967E69C13907137006D8F99 /* EmoEngine_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F967E61213907136006D8F99 /* EmoEngine_glue.m */; };
 		F967E69D13907137006D8F99 /* EmoImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F967E61413907136006D8F99 /* EmoImage.m */; };
@@ -213,6 +217,29 @@
 		28F335F01007B36200424DE2 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* iOS_Examples-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iOS_Examples-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		9D4F051815EB209A00D7E882 /* license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = license.txt; sourceTree = "<group>"; };
+		9D4F051915EB209A00D7E882 /* rapidxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rapidxml.h; sourceTree = "<group>"; };
+		9D4F052815EB290600D7E882 /* sqmodule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqmodule.h; sourceTree = "<group>"; };
+		9D4F052A15EB290600D7E882 /* sqratAllocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratAllocator.h; sourceTree = "<group>"; };
+		9D4F052B15EB290600D7E882 /* sqratArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratArray.h; sourceTree = "<group>"; };
+		9D4F052C15EB290600D7E882 /* sqratClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratClass.h; sourceTree = "<group>"; };
+		9D4F052D15EB290600D7E882 /* sqratClassType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratClassType.h; sourceTree = "<group>"; };
+		9D4F052E15EB290600D7E882 /* sqratConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratConst.h; sourceTree = "<group>"; };
+		9D4F052F15EB290600D7E882 /* sqratFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratFunction.h; sourceTree = "<group>"; };
+		9D4F053015EB290600D7E882 /* sqratGlobalMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratGlobalMethods.h; sourceTree = "<group>"; };
+		9D4F053115EB290600D7E882 /* sqratMemberMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratMemberMethods.h; sourceTree = "<group>"; };
+		9D4F053215EB290600D7E882 /* sqratObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratObject.h; sourceTree = "<group>"; };
+		9D4F053315EB290600D7E882 /* sqratOverloadMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratOverloadMethods.h; sourceTree = "<group>"; };
+		9D4F053415EB290600D7E882 /* sqratScript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratScript.h; sourceTree = "<group>"; };
+		9D4F053515EB290600D7E882 /* sqratTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratTable.h; sourceTree = "<group>"; };
+		9D4F053615EB290600D7E882 /* sqratTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratTypes.h; sourceTree = "<group>"; };
+		9D4F053715EB290600D7E882 /* sqratUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratUtil.h; sourceTree = "<group>"; };
+		9D4F053815EB290600D7E882 /* sqratVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratVM.h; sourceTree = "<group>"; };
+		9D4F053915EB290600D7E882 /* sqrat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqrat.h; sourceTree = "<group>"; };
+		9D4F053A15EB290600D7E882 /* sqratimport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratimport.h; sourceTree = "<group>"; };
+		9D4F053B15EB29CC00D7E882 /* physics_camera_moving.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = physics_camera_moving.nut; path = Resources/physics_camera_moving.nut; sourceTree = "<group>"; };
+		9D4F053D15EB29DF00D7E882 /* desert_chips.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desert_chips.png; sourceTree = "<group>"; };
+		9D4F053E15EB29DF00D7E882 /* desert.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = desert.tmx; sourceTree = "<group>"; };
 		F908827513872BEA0065EC77 /* box2d_helloworld.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = box2d_helloworld.nut; path = Resources/box2d_helloworld.nut; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
 		F9102FDB13973AA800BC7404 /* http_access_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = http_access_example.nut; path = Resources/http_access_example.nut; sourceTree = "<group>"; };
 		F917F96E1387AC0D003F4B53 /* animation_example.nut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = animation_example.nut; path = Resources/animation_example.nut; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
@@ -342,7 +369,7 @@
 		F967E60B13907136006D8F99 /* EmoDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDrawable.h; sourceTree = "<group>"; };
 		F967E60C13907136006D8F99 /* EmoDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDrawable.m; sourceTree = "<group>"; };
 		F967E60D13907136006D8F99 /* EmoDrawable_glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDrawable_glue.h; sourceTree = "<group>"; };
-		F967E60E13907136006D8F99 /* EmoDrawable_glue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDrawable_glue.m; sourceTree = "<group>"; };
+		F967E60E13907136006D8F99 /* EmoDrawable_glue.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EmoDrawable_glue.mm; sourceTree = "<group>"; };
 		F967E60F13907136006D8F99 /* EmoEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoEngine.h; sourceTree = "<group>"; };
 		F967E61013907136006D8F99 /* EmoEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoEngine.m; sourceTree = "<group>"; };
 		F967E61113907136006D8F99 /* EmoEngine_glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoEngine_glue.h; sourceTree = "<group>"; };
@@ -587,6 +614,7 @@
 				F975F4DA142DD1CE00789B9B /* physics_mousejoint.nut */,
 				F9D2182F13947AAB00463396 /* physics_contact.nut */,
 				F98DA7CA139E5F8300D3835A /* physics_add_example.nut */,
+				9D4F053B15EB29CC00D7E882 /* physics_camera_moving.nut */,
 				F9D43A3D1388E57B0069C3C1 /* motion_event.nut */,
 				F9D43A7D1388F1C50069C3C1 /* motion_event_multi.nut */,
 				F9D43A3E1388E58C0069C3C1 /* sensor_event.nut */,
@@ -627,6 +655,50 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9D4F051715EB209A00D7E882 /* rapidxml */ = {
+			isa = PBXGroup;
+			children = (
+				9D4F051815EB209A00D7E882 /* license.txt */,
+				9D4F051915EB209A00D7E882 /* rapidxml.h */,
+			);
+			name = rapidxml;
+			path = "../Emo-iOS/libs/rapidxml";
+			sourceTree = "<group>";
+		};
+		9D4F052715EB290600D7E882 /* sqrat */ = {
+			isa = PBXGroup;
+			children = (
+				9D4F052815EB290600D7E882 /* sqmodule.h */,
+				9D4F052915EB290600D7E882 /* sqrat */,
+				9D4F053915EB290600D7E882 /* sqrat.h */,
+				9D4F053A15EB290600D7E882 /* sqratimport.h */,
+			);
+			name = sqrat;
+			path = "../Emo-iOS/libs/sqrat";
+			sourceTree = "<group>";
+		};
+		9D4F052915EB290600D7E882 /* sqrat */ = {
+			isa = PBXGroup;
+			children = (
+				9D4F052A15EB290600D7E882 /* sqratAllocator.h */,
+				9D4F052B15EB290600D7E882 /* sqratArray.h */,
+				9D4F052C15EB290600D7E882 /* sqratClass.h */,
+				9D4F052D15EB290600D7E882 /* sqratClassType.h */,
+				9D4F052E15EB290600D7E882 /* sqratConst.h */,
+				9D4F052F15EB290600D7E882 /* sqratFunction.h */,
+				9D4F053015EB290600D7E882 /* sqratGlobalMethods.h */,
+				9D4F053115EB290600D7E882 /* sqratMemberMethods.h */,
+				9D4F053215EB290600D7E882 /* sqratObject.h */,
+				9D4F053315EB290600D7E882 /* sqratOverloadMethods.h */,
+				9D4F053415EB290600D7E882 /* sqratScript.h */,
+				9D4F053515EB290600D7E882 /* sqratTable.h */,
+				9D4F053615EB290600D7E882 /* sqratTypes.h */,
+				9D4F053715EB290600D7E882 /* sqratUtil.h */,
+				9D4F053815EB290600D7E882 /* sqratVM.h */,
+			);
+			path = sqrat;
+			sourceTree = "<group>";
+		};
 		F921CC99136FFBAC00F058FF /* graphics */ = {
 			isa = PBXGroup;
 			children = (
@@ -656,6 +728,8 @@
 				F9D311321458D61300E4B165 /* potblocks.pvr */,
 				F9D311301458D60600E4B165 /* icons_pack.pvr */,
 				F9D3112E1458D5F800E4B165 /* A.pvr */,
+				9D4F053D15EB29DF00D7E882 /* desert_chips.png */,
+				9D4F053E15EB29DF00D7E882 /* desert.tmx */,
 			);
 			name = graphics;
 			path = Resources/graphics;
@@ -679,6 +753,8 @@
 				F967E60113907136006D8F99 /* emo */,
 				F967E62B13907136006D8F99 /* libpng */,
 				F967E64013907136006D8F99 /* squirrel */,
+				9D4F052715EB290600D7E882 /* sqrat */,
+				9D4F051715EB209A00D7E882 /* rapidxml */,
 			);
 			name = "emo Sources";
 			sourceTree = "<group>";
@@ -835,7 +911,7 @@
 				F9F4970014762456005EAF37 /* EmoPointDrawable.h */,
 				F9F4970114762456005EAF37 /* EmoPointDrawable.m */,
 				F967E60D13907136006D8F99 /* EmoDrawable_glue.h */,
-				F967E60E13907136006D8F99 /* EmoDrawable_glue.m */,
+				F967E60E13907136006D8F99 /* EmoDrawable_glue.mm */,
 				F967E60F13907136006D8F99 /* EmoEngine.h */,
 				F967E61013907136006D8F99 /* EmoEngine.m */,
 				F967E61113907136006D8F99 /* EmoEngine_glue.h */,
@@ -1111,6 +1187,10 @@
 				F9887B0514674A320000E843 /* physics_soft_polygon.nut in Resources */,
 				F941D40714776A1C009FE09E /* pointsprite_example.nut in Resources */,
 				F961062814B4138C00A2C48A /* blendfunc_example.nut in Resources */,
+				9D4F051A15EB209A00D7E882 /* license.txt in Resources */,
+				9D4F053C15EB29CC00D7E882 /* physics_camera_moving.nut in Resources */,
+				9D4F053F15EB29DF00D7E882 /* desert_chips.png in Resources */,
+				9D4F054015EB29DF00D7E882 /* desert.tmx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1164,7 +1244,7 @@
 				F967E69713907137006D8F99 /* EmoDatabase.m in Sources */,
 				F967E69813907137006D8F99 /* EmoDatabase_glue.m in Sources */,
 				F967E69913907137006D8F99 /* EmoDrawable.m in Sources */,
-				F967E69A13907137006D8F99 /* EmoDrawable_glue.m in Sources */,
+				F967E69A13907137006D8F99 /* EmoDrawable_glue.mm in Sources */,
 				F967E69B13907137006D8F99 /* EmoEngine.m in Sources */,
 				F967E69C13907137006D8F99 /* EmoEngine_glue.m in Sources */,
 				F967E69D13907137006D8F99 /* EmoImage.m in Sources */,
