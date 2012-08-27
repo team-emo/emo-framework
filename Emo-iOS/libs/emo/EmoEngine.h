@@ -108,6 +108,7 @@ NSString* data2ns(NSData* data);
 @property (readonly) BOOL useOffscreen;
 @property (readwrite) BOOL stopOffscreenRequested;
 
+- (const char*)loadContentFromResource:(const char*)chfname;
 - (int)loadScriptFromResource:(const char*)fname vm:(HSQUIRRELVM) v;
 - (int)loadScript:(NSString *)path vm:(HSQUIRRELVM) v;
 - (void)registerAccelerometerSensor:(BOOL)enable;

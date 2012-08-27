@@ -28,9 +28,28 @@
 #ifndef EMO_UTIL_H
 #define EMO_UTIL_H
 
+#ifdef _cplusplus
+extern "C" {
+#endif
+
 bool isPowerOfTwo(int x);
 int nextPowerOfTwo(int minimum);
 
 int max(int a, int b);
 int min(int a, int b);
+
+#ifdef _cplusplus
+}
+
+extern "C++" {
+
+#include <string>
+#include <vector>
+using namespace std;
+
+vector<string> split( string s, string c );
+
+}
+#endif
+
 #endif

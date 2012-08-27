@@ -45,6 +45,7 @@ SQInteger emoDrawableGetTileAt(HSQUIRRELVM v);
 SQInteger emoDrawableGetTileIndexAtCoord(HSQUIRRELVM v);
 SQInteger emoDrawableGetTilePositionAtCoord(HSQUIRRELVM v);
 SQInteger emoDrawableUseMeshMapSprite(HSQUIRRELVM v);
+SQInteger emoDrawableGetMapDataFromTmx(HSQUIRRELVM v);
 
 SQInteger emoDrawableCreateFontSprite(HSQUIRRELVM v);
 SQInteger emoDrawableSetFontSpriteParam(HSQUIRRELVM v);

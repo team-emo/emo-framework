@@ -13,6 +13,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		9D4F051215EABC5B00D7E882 /* license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9D4F051015EABC5B00D7E882 /* license.txt */; };
 		F92D52FD145E205A002B97DF /* EmoFontDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D52FC145E205A002B97DF /* EmoFontDrawable.m */; };
 		F92D5300145E2261002B97DF /* EmoSnapshotDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D52FF145E2261002B97DF /* EmoSnapshotDrawable.m */; };
 		F92D5303145E23A0002B97DF /* EmoLineDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D5302145E239F002B97DF /* EmoLineDrawable.m */; };
@@ -56,7 +57,7 @@
 		F92D9E35139070820077ED19 /* EmoDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E10139070820077ED19 /* EmoDatabase.m */; };
 		F92D9E36139070820077ED19 /* EmoDatabase_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E12139070820077ED19 /* EmoDatabase_glue.m */; };
 		F92D9E37139070820077ED19 /* EmoDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E14139070820077ED19 /* EmoDrawable.m */; };
-		F92D9E38139070820077ED19 /* EmoDrawable_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E16139070820077ED19 /* EmoDrawable_glue.m */; };
+		F92D9E38139070820077ED19 /* EmoDrawable_glue.mm in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E16139070820077ED19 /* EmoDrawable_glue.mm */; };
 		F92D9E39139070820077ED19 /* EmoEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E18139070820077ED19 /* EmoEngine.m */; };
 		F92D9E3A139070820077ED19 /* EmoEngine_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E1A139070820077ED19 /* EmoEngine_glue.m */; };
 		F92D9E3B139070820077ED19 /* EmoImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E1C139070820077ED19 /* EmoImage.m */; };
@@ -150,6 +151,8 @@
 		9D4F04C115E7D84900D7E882 /* sqratVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratVM.h; sourceTree = "<group>"; };
 		9D4F04C215E7D84900D7E882 /* sqrat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqrat.h; sourceTree = "<group>"; };
 		9D4F04C315E7D84900D7E882 /* sqratimport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqratimport.h; path = libs/sqrat/sqratimport.h; sourceTree = SOURCE_ROOT; };
+		9D4F051015EABC5B00D7E882 /* license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = license.txt; sourceTree = "<group>"; };
+		9D4F051115EABC5B00D7E882 /* rapidxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rapidxml.h; sourceTree = "<group>"; };
 		F92D52FB145E205A002B97DF /* EmoFontDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoFontDrawable.h; sourceTree = "<group>"; };
 		F92D52FC145E205A002B97DF /* EmoFontDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoFontDrawable.m; sourceTree = "<group>"; };
 		F92D52FE145E2261002B97DF /* EmoSnapshotDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoSnapshotDrawable.h; sourceTree = "<group>"; };
@@ -239,7 +242,7 @@
 		F92D9E13139070820077ED19 /* EmoDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDrawable.h; sourceTree = "<group>"; };
 		F92D9E14139070820077ED19 /* EmoDrawable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDrawable.m; sourceTree = "<group>"; };
 		F92D9E15139070820077ED19 /* EmoDrawable_glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDrawable_glue.h; sourceTree = "<group>"; };
-		F92D9E16139070820077ED19 /* EmoDrawable_glue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDrawable_glue.m; sourceTree = "<group>"; };
+		F92D9E16139070820077ED19 /* EmoDrawable_glue.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EmoDrawable_glue.mm; sourceTree = "<group>"; };
 		F92D9E17139070820077ED19 /* EmoEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoEngine.h; sourceTree = "<group>"; };
 		F92D9E18139070820077ED19 /* EmoEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoEngine.m; sourceTree = "<group>"; };
 		F92D9E19139070820077ED19 /* EmoEngine_glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoEngine_glue.h; sourceTree = "<group>"; };
@@ -471,6 +474,16 @@
 			path = sqrat;
 			sourceTree = "<group>";
 		};
+		9D4F050F15EABC5B00D7E882 /* rapidxml */ = {
+			isa = PBXGroup;
+			children = (
+				9D4F051015EABC5B00D7E882 /* license.txt */,
+				9D4F051115EABC5B00D7E882 /* rapidxml.h */,
+			);
+			name = rapidxml;
+			path = libs/rapidxml;
+			sourceTree = "<group>";
+		};
 		F92D9D93139070490077ED19 /* emo Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -479,6 +492,7 @@
 				9D4F04AF15E7D84900D7E882 /* sqrat */,
 				F92D9E471390708B0077ED19 /* libpng */,
 				F92D9D98139070770077ED19 /* Box2D */,
+				9D4F050F15EABC5B00D7E882 /* rapidxml */,
 			);
 			name = "emo Sources";
 			sourceTree = "<group>";
@@ -637,7 +651,7 @@
 				F931FE1B14772C41001125BB /* EmoPointDrawable.h */,
 				F931FE1C14772C41001125BB /* EmoPointDrawable.m */,
 				F92D9E15139070820077ED19 /* EmoDrawable_glue.h */,
-				F92D9E16139070820077ED19 /* EmoDrawable_glue.m */,
+				F92D9E16139070820077ED19 /* EmoDrawable_glue.mm */,
 				F92D9E17139070820077ED19 /* EmoEngine.h */,
 				F92D9E18139070820077ED19 /* EmoEngine.m */,
 				F92D9E19139070820077ED19 /* EmoEngine_glue.h */,
@@ -848,6 +862,7 @@
 				F92D9E5C1390708B0077ED19 /* LICENSE in Resources */,
 				F92D9E9E139070A10077ED19 /* COPYRIGHT in Resources */,
 				F98A7F791395B8BB008F984C /* Icon.png in Resources */,
+				9D4F051215EABC5B00D7E882 /* license.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -900,7 +915,7 @@
 				F92D9E35139070820077ED19 /* EmoDatabase.m in Sources */,
 				F92D9E36139070820077ED19 /* EmoDatabase_glue.m in Sources */,
 				F92D9E37139070820077ED19 /* EmoDrawable.m in Sources */,
-				F92D9E38139070820077ED19 /* EmoDrawable_glue.m in Sources */,
+				F92D9E38139070820077ED19 /* EmoDrawable_glue.mm in Sources */,
 				F92D9E39139070820077ED19 /* EmoEngine.m in Sources */,
 				F92D9E3A139070820077ED19 /* EmoEngine_glue.m in Sources */,
 				F92D9E3B139070820077ED19 /* EmoImage.m in Sources */,

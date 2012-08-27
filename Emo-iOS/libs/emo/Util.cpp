@@ -58,4 +58,25 @@ int min(int a, int b) {
 
 #if __cplusplus
 }   // Extern C
+
+extern "C++" {
+
+#include <string>
+#include <vector>
+using namespace std;
+
+vector <string> split( string s, string c )
+{
+
+    vector<string> ret;
+    for( unsigned int i=0, n; i <= s.length(); i=n+1 ){
+        n = s.find_first_of( c, i );
+        if( n == string::npos ) n = s.length();
+        string tmp = s.substr( i, n-i );
+        ret.push_back(tmp);
+    }
+    return ret;
+}
+
+} // Extern C++
 #endif

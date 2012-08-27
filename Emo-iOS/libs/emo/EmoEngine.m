@@ -286,6 +286,36 @@ NSString* data2ns(NSData* data) {
 }
 
 /*
+ * load content from resource
+ */
+- (const char*)loadContentFromResource:(const char*)chfname {
+	NSString* fname = [[NSString alloc] initWithUTF8String:chfname];
+	NSString* path = [[NSBundle mainBundle] pathForResource:fname ofType:nil];
+	[fname release];
+	if (path == nil) {
+		LOGE("Content file is not found:");
+		LOGE(chfname);
+		return nil;
+	}
+    
+    NSFileHandle* file = [NSFileHandle fileHandleForReadingAtPath: path];
+	if (file == nil) {
+		LOGE("Content file is not found:");
+		NSLOGE(path);
+		return nil;
+	}
+    
+	NSString* nscontent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error: nil];
+	if (nscontent == nil) {
+		LOGE("Content file is empty:");
+		NSLOGE(path);
+		return nil;
+	}
+	
+    return [nscontent UTF8String];
+}
+
+/*
  * load script from resource
  */
 -(int)loadScriptFromResource:(const char*)chfname vm:(HSQUIRRELVM) v {
