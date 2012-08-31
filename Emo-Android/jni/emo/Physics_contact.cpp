@@ -173,6 +173,8 @@ namespace emo {
 
 		for (int32 i = 0; i < manifold->pointCount; ++i)
 		{
+			static ContactPoint previousContactPoint;
+
 			ContactPoint cp;
 			cp.fixtureA = fixtureA;
 			cp.fixtureB = fixtureB;
@@ -182,7 +184,15 @@ namespace emo {
 			cp.tangentImpulse = impulse->tangentImpulses[i];
 			cp.state = b2_nullState;
 
-			invokeImpactEvent(sqvm, cp);
+            if ((cp.fixtureA != previousContactPoint.fixtureA ||
+                    cp.fixtureB != previousContactPoint.fixtureB ||
+                    cp.normalImpulse != previousContactPoint.normalImpulse ||
+                    cp.tangentImpulse != previousContactPoint.tangentImpulse) &&
+                    cp.normalImpulse != 0.0) {
+            	invokeImpactEvent(sqvm, cp);
+            	previousContactPoint = cp;
+            }
+            previousContactPoint = cp;
 		}
 
 	}
