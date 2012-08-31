@@ -104,12 +104,10 @@ extern EmoEngine* engine;
 	return (uptime - lastOnAnimationInterval) * 1000;
 }
 -(void)dealloc {
-	[name release];
 	name = nil;
     
     if (frames != nil) free(frames);
     
-	[super dealloc];
 }
 
 @end
@@ -118,9 +116,7 @@ extern EmoEngine* engine;
 @synthesize name;
 @synthesize x, y, width, height, index;
 -(void)dealloc {
-    [name release];
     name = nil;
-    [super dealloc];
 }
 @end
 
@@ -176,7 +172,6 @@ extern EmoEngine* engine;
             [drawable addImagePack:info];
             itemCount++;
         }
-        [info release];
     }
 }
 
@@ -226,9 +221,6 @@ extern EmoEngine* engine;
     NSXMLParser *parser = [[NSXMLParser alloc] initWithContentsOfURL:url];
     [parser setDelegate:pack];
     [parser parse];
-    [parser release];
-    
-    [pack release];
 
     frameCount = [imagepacks_names count];
     
@@ -605,7 +597,6 @@ extern EmoEngine* engine;
 			if (name != nil) [engine removeCachedImage:name];
 		}
 		if (doAll) {
-            [texture release];
             hasTexture = FALSE;
         }
 	}
@@ -727,13 +718,7 @@ extern EmoEngine* engine;
 	}
 }
 -(void)dealloc {
-	[animations release];
-	[name release];
-    [imagepacks release];
-    [imagepacks_names release];
-    
 	name = nil;
-	[super dealloc];
 }
 -(BOOL)isAnimationFinished {
 	if (animating && currentAnimation != nil) {

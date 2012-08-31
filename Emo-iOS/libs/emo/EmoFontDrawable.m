@@ -40,18 +40,6 @@
     isItalic = FALSE;
 }
 
--(void)dealloc {
-    [fontFace release];
-    [param1 release];
-    [param2 release];
-    [param3 release];
-    [param4 release];
-    [param5 release];
-    [param6 release];
-    
-    [super dealloc];
-}
-
 -(void)loadTextBitmap {
     [texture freeData];
     

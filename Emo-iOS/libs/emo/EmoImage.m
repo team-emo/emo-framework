@@ -70,10 +70,6 @@
     freed = TRUE;
     data = nil;
 }
--(void)dealloc {
-	[filename release];
-	[super dealloc];
-}
 @end
 
 /* 

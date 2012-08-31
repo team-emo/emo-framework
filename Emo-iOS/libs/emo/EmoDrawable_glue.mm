@@ -157,7 +157,6 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     int height = 0;
 	
     if (drawable.name != nil && !loadImageSizeFromResource(drawable.name, &width, &height)) {
-        [drawable release];
         return 0;
     }
 	
@@ -173,9 +172,6 @@ SQInteger emoDrawableCreateSprite(HSQUIRRELVM v) {
     [engine addDrawable:drawable withKey:key];
 	
     sq_pushstring(v, key, strlen(key));
-	
-	[drawable release];
-	
     return 1;
 }
 
@@ -200,7 +196,6 @@ SQInteger emoDrawableCreateFontSprite(HSQUIRRELVM v) {
             drawable.name = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
         }
     } else {
-        [drawable release];
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
@@ -240,8 +235,6 @@ SQInteger emoDrawableCreateFontSprite(HSQUIRRELVM v) {
     [engine addDrawable:drawable withKey:key];
 	
     sq_pushstring(v, key, strlen(key));
-    
-	[drawable release];
     return 1;
 }
 
@@ -256,9 +249,6 @@ SQInteger emoDrawableCreateSnapshot(HSQUIRRELVM v) {
     [engine addDrawable:drawable withKey:key];
 	
     sq_pushstring(v, key, strlen(key));
-	
-	[drawable release];
-	
     return 1;
 }
 
@@ -293,9 +283,6 @@ SQInteger emoDrawableCreateLine(HSQUIRRELVM v) {
     [engine addDrawable:drawable withKey:key];
 	
     sq_pushstring(v, key, strlen(key));
-	
-	[drawable release];
-	
     return 1;
 }
 
@@ -346,7 +333,6 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
 
     if ([drawable isPackedAtlas]) {
         if (![drawable loadPackedAtlasXml:frameIndex]) {
-            [drawable release];
             return 0;
         }
         
@@ -358,7 +344,6 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     int height = 0;
     
     if (drawable.name != nil && !loadImageSizeFromResource(drawable.name, &width, &height)) {
-        [drawable release];
         return 0;
     }
 	
@@ -391,9 +376,6 @@ SQInteger emoDrawableCreateSpriteSheet(HSQUIRRELVM v) {
     [engine addDrawable:drawable withKey:key];
 	
     sq_pushstring(v, key, strlen(key));
-	
-	[drawable release];
-	
     return 1;
 }
 
@@ -422,7 +404,6 @@ SQInteger emoDrawableCreateLiquidSprite(HSQUIRRELVM v) {
     int height = 0;
 	
     if (drawable.name != nil && !loadImageSizeFromResource(drawable.name, &width, &height)) {
-        [drawable release];
         return 0;
     }
 	
@@ -438,9 +419,6 @@ SQInteger emoDrawableCreateLiquidSprite(HSQUIRRELVM v) {
     [engine addDrawable:drawable withKey:key];
 	
     sq_pushstring(v, key, strlen(key));
-	
-	[drawable release];
-	
     return 1;
 }
 
@@ -469,7 +447,6 @@ SQInteger emoDrawableCreatePointSprite(HSQUIRRELVM v) {
     int height = 0;
 	
     if (drawable.name != nil && !loadImageSizeFromResource(drawable.name, &width, &height)) {
-        [drawable release];
         return 0;
     }
 	
@@ -485,9 +462,6 @@ SQInteger emoDrawableCreatePointSprite(HSQUIRRELVM v) {
     [engine addDrawable:drawable withKey:key];
 	
     sq_pushstring(v, key, strlen(key));
-	
-	[drawable release];
-	
     return 1;
 }
 
@@ -667,7 +641,6 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
             
             [engine addCachedImage:drawable.name value:imageInfo];
             
-			[imageInfo release];
 		} else {
 			imageInfo = [[EmoImage alloc]init];
 			if (loadImageFromResource(drawable.name, imageInfo)) {
@@ -687,7 +660,6 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 				
 				[engine addCachedImage:drawable.name value:imageInfo];
 			} else {
-				[imageInfo release];
 				sq_pushinteger(v, ERR_ASSET_LOAD);
 				return 1;
 			}
@@ -699,7 +671,6 @@ SQInteger emoDrawableLoad(HSQUIRRELVM v) {
 					drawable.height = imageInfo.height;
 				}
 			}
-			[imageInfo release];
 		}
 	}
 	
@@ -829,9 +800,6 @@ SQInteger emoDrawableCreateMapSprite(HSQUIRRELVM v) {
     [engine addDrawable:parent withKey:key];
 	
     sq_pushstring(v, key, strlen(key));
-	
-	[parent release];
-	
     return 1;
 }
 
@@ -891,7 +859,6 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
 				
 				[engine addCachedImage:drawable.name value:imageInfo];
 			} else {
-				[imageInfo release];
 				sq_pushinteger(v, ERR_ASSET_LOAD);
 				return 1;
 			}
@@ -903,7 +870,6 @@ SQInteger emoDrawableLoadMapSprite(HSQUIRRELVM v) {
 					drawable.height = imageInfo.height;
 				}
 			}
-			[imageInfo release];
 		}
 	}
 		
@@ -2174,8 +2140,6 @@ SQInteger emoDrawableAnimate(HSQUIRRELVM v) {
     [drawable setAnimation:animation.name];
     [drawable enableAnimation:TRUE];
 
-	[animation release];
-	
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }

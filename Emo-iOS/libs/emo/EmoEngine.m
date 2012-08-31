@@ -128,7 +128,7 @@ NSString* data2ns(NSData* data) {
 	[stage setSize:width height:height];
 	
 	// engine startup time
-	startTime = [[NSDate date] retain];
+	startTime = [NSDate date];
 	
 	onDrawFrameInterval = 0;
 	onDrawDrawablesInterval = 0;
@@ -177,25 +177,14 @@ NSString* data2ns(NSData* data) {
 	lastOnDrawDrawablesInterval = 0;
 	
 	[audioManager closeEngine];
-	[audioManager release];
 	audioManager = nil;
 
 	[self clearDrawables];
-	[drawables release];
 	drawables = nil;
 	
 	[stage unloadBuffer];
-	[stage release];
 	stage = nil;
-	
-	[startTime release];
-	[drawablesToDraw release];
-	[imageCache release];
-	
-	[netTasks release];
 	netTasks = nil;
-	
-	[database release];
 	database = nil;
 	
 	return TRUE;
@@ -291,7 +280,6 @@ NSString* data2ns(NSData* data) {
 - (const char*)loadContentFromResource:(const char*)chfname {
 	NSString* fname = [[NSString alloc] initWithUTF8String:chfname];
 	NSString* path = [[NSBundle mainBundle] pathForResource:fname ofType:nil];
-	[fname release];
 	if (path == nil) {
 		LOGE("Content file is not found:");
 		LOGE(chfname);
@@ -321,7 +309,6 @@ NSString* data2ns(NSData* data) {
 -(int)loadScriptFromResource:(const char*)chfname vm:(HSQUIRRELVM) v {
 	NSString* fname = [[NSString alloc] initWithUTF8String:chfname];
 	NSString* path = [[NSBundle mainBundle] pathForResource:fname ofType:nil];
-	[fname release];
 	if (path == nil) {
 		LOGE("Script resource is not found:");
 		LOGE(chfname);
@@ -335,7 +322,7 @@ NSString* data2ns(NSData* data) {
  * callback function to read squirrel script
  */
 static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInteger size) {
-    NSData* data = [(NSFileHandle*)file readDataOfLength:size];
+    NSData* data = [(__bridge NSFileHandle*)file readDataOfLength:size];
     NSUInteger len = [data length];
     if (len > 0) {
         [data getBytes:buf length:len];
@@ -369,7 +356,7 @@ static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInte
     
     // bytecode
     if (magic_number == SQ_BYTECODE_STREAM_TAG) {
-        if (SQ_SUCCEEDED(sq_readclosure(v, sq_lexer_bytecode, file))) {
+        if (SQ_SUCCEEDED(sq_readclosure(v, sq_lexer_bytecode, (__bridge void *)(file)))) {
             
             [file closeFile];
             
@@ -436,8 +423,7 @@ static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInte
 	}
     
 	if (sortOrderDirty) {
-		[drawablesToDraw release];
-		drawablesToDraw = [[[drawables allValues] sortedArrayUsingSelector:@selector(compareZ:)] retain];
+		drawablesToDraw = [[drawables allValues] sortedArrayUsingSelector:@selector(compareZ:)];
 		sortOrderDirty = FALSE;
 	}
 	
@@ -689,9 +675,6 @@ static SQInteger sq_lexer_bytecode(SQUserPointer file, SQUserPointer buf, SQInte
 	net.name = taskName;
 	
 	[netTasks setObject:net forKey:taskName];
-	
-    [net release];
-    
 	return net;
 }
 

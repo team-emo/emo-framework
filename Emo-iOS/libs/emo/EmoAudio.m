@@ -92,7 +92,6 @@ extern EmoEngine* engine;
 
 	NSString* fileName =  [[NSString alloc] initWithUTF8String:fname];
 	NSString* path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
-	[fileName release];
 	
 	if (path == nil) {
 		LOGE("Audio resource is not found:");
@@ -105,7 +104,7 @@ extern EmoEngine* engine;
 	ALsizei dataSize;
 	ALenum  dataFormat;
 	ALsizei sampleRate;
-	audioData = GetOpenALAudioData((CFURLRef)[NSURL fileURLWithPath:path], &dataSize, &dataFormat, &sampleRate, &audioLoaded);
+	audioData = GetOpenALAudioData((__bridge CFURLRef)[NSURL fileURLWithPath:path], &dataSize, &dataFormat, &sampleRate, &audioLoaded);
 
 	if (!audioLoaded) return FALSE;
 		

@@ -12,7 +12,7 @@
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
     viewController = [[EmoViewController alloc] init];
-	viewController.view = [[[EmoView alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+	viewController.view = [[EmoView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	[viewController awakeFromNib];
 	
     [self.window addSubview:self.viewController.view];
@@ -41,13 +41,6 @@
 	[self.viewController onLostFocus];
     [self.viewController stopAnimation];
 	[self.viewController onDispose];
-}
-
-- (void)dealloc
-{
-    [viewController release];
-    [window release];
-    [super dealloc];
 }
 
 @end

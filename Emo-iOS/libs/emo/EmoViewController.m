@@ -38,8 +38,8 @@ EmoEngine* engine;
 - (void)updateTouchId;
 - (void)fireMotionEvent:(NSSet *)touches withEvent:(UIEvent *) event withAction:(NSInteger) action;
 
-@property (nonatomic, retain) EAGLContext *context;
-@property (nonatomic, assign) CADisplayLink *displayLink;
+@property (nonatomic, strong) EAGLContext *context;
+@property (nonatomic, unsafe_unretained) CADisplayLink *displayLink;
 @end
 
 @implementation EmoViewController
@@ -57,7 +57,6 @@ EmoEngine* engine;
         LOGE("Failed to set ES context current");
     
 	self.context = aContext;
-	[aContext release];
 	
 	EmoView* eview = (EmoView *)self.view;
 
@@ -86,15 +85,6 @@ EmoEngine* engine;
     // Tear down context.
     if ([EAGLContext currentContext] == context)
         [EAGLContext setCurrentContext:nil];
-    
-	[runtimeScript release];
-	[mainScript release];
-	
-    [context release];
-	[engine release];
-	[touchIdMaster release];
-    
-    [super dealloc];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -230,7 +220,7 @@ EmoEngine* engine;
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	for (UITouch *touch in touches) {
 		if ([touchIdMaster objectForKey:touch] == nil) {
-			[touchIdMaster setObject:[NSNumber numberWithInteger:nextTouchId] forKey:[NSValue valueWithPointer:touch]];
+			[touchIdMaster setObject:[NSNumber numberWithInteger:nextTouchId] forKey:[NSValue valueWithPointer:(__bridge const void *)(touch)]];
 			nextTouchId++;
 		}
 	}
@@ -244,8 +234,8 @@ EmoEngine* engine;
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	[self fireMotionEvent: touches withEvent:event withAction: MOTION_EVENT_ACTION_UP];
 	for (UITouch *touch in touches) {
-		if ([touchIdMaster objectForKey:[NSValue valueWithPointer:touch]] != nil) {
-			[touchIdMaster removeObjectForKey:[NSValue valueWithPointer:touch]];
+		if ([touchIdMaster objectForKey:[NSValue valueWithPointer:(__bridge const void *)(touch)]] != nil) {
+			[touchIdMaster removeObjectForKey:[NSValue valueWithPointer:(__bridge const void *)(touch)]];
 		}
 	}
 	[self updateTouchId];
@@ -254,8 +244,8 @@ EmoEngine* engine;
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
 	[self fireMotionEvent: touches withEvent:event withAction: MOTION_EVENT_ACTION_CANCEL];
 	for (UITouch *touch in touches) {
-		if ([touchIdMaster objectForKey:[NSValue valueWithPointer:touch]] != nil) {
-			[touchIdMaster removeObjectForKey:[NSValue valueWithPointer:touch]];
+		if ([touchIdMaster objectForKey:[NSValue valueWithPointer:(__bridge const void *)(touch)]] != nil) {
+			[touchIdMaster removeObjectForKey:[NSValue valueWithPointer:(__bridge const void *)(touch)]];
 		}
 	}
 	[self updateTouchId];
@@ -266,7 +256,7 @@ EmoEngine* engine;
  */
 - (void)fireMotionEvent:(NSSet *)touches withEvent:(UIEvent *)event withAction:(NSInteger) action {
 	for (UITouch *touch in touches) {
-		NSNumber *touchId = [touchIdMaster objectForKey:[NSValue valueWithPointer:touch]];
+		NSNumber *touchId = [touchIdMaster objectForKey:[NSValue valueWithPointer:(__bridge const void *)(touch)]];
 		CGPoint location = [touch locationInView:self.view];
 		
 		if (((EmoView*)self.view).isRetina) {

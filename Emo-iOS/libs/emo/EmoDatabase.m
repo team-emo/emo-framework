@@ -31,7 +31,7 @@
 #import "EmoEngine_glue.h"
 
 static int database_preference_callback(void *arg, int argc, char **argv, char **column)  {
-    NSMutableString* value = (NSMutableString*)arg;
+    NSMutableString* value = (__bridge NSMutableString*)arg;
     if (argc > 0) [value setString:char2ns(argv[0])];
     return SQLITE_OK;
 }
@@ -43,7 +43,7 @@ static int database_count_callback(void *arg, int argc, char **argv, char **colu
 }
 
 static int database_query_vector_callback(void *arg, int argc, char **argv, char **column)  {
-    NSMutableArray* values = (NSMutableArray*)arg;
+    NSMutableArray* values = (__bridge NSMutableArray*)arg;
 	
     for (int i = 0; i < argc; i++) {
         [values addObject:char2ns(argv[i])];
@@ -96,7 +96,7 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
 
 -(NSInteger)query_vector:(const char*) sql values:(NSMutableArray*)values {
 	char* error;
-	int rcode = sqlite3_exec(db, sql, database_query_vector_callback, values, &error);
+	int rcode = sqlite3_exec(db, sql, database_query_vector_callback, (__bridge void *)(values), &error);
 	if (rcode != SQLITE_OK) {
 		self.lastError = rcode;
 		self.lastErrorMessage = char2ns(error);
@@ -194,7 +194,7 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
 	char* sql = sqlite3_mprintf("SELECT VALUE FROM %q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, [key UTF8String]);
 	
 	char* error;
-	int rcode = sqlite3_exec(db, sql, database_preference_callback, value, &error);
+	int rcode = sqlite3_exec(db, sql, database_preference_callback, (__bridge void *)(value), &error);
 	if (rcode != SQLITE_OK) {
 		self.lastError = rcode;
 		self.lastErrorMessage = char2ns(error);
@@ -281,10 +281,6 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
 	NSString* docDir = [NSSearchPathForDirectoriesInDomains(
 			NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	return [NSString stringWithFormat:@"%@/%@", docDir, name];
-}
--(void)dealloc {
-	[lastErrorMessage release];
-	[super dealloc];
 }
 
 @end

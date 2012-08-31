@@ -92,7 +92,6 @@ extern EmoEngine* engine;
 					[[NSString stringWithFormat:@"%d", statusCode] UTF8String],
 					[statusMessage UTF8String], SQFalse);
 	}
-	[response release];
 	[engine removeNetTask:name];
 }
 
@@ -102,14 +101,6 @@ extern EmoEngine* engine;
 					[[NSString stringWithFormat: @"%d" ,[error code]] UTF8String],
 					[[error localizedDescription] UTF8String], SQFalse);
 	[engine removeNetTask:name];
-}
--(void)dealloc {
-	[connection release];
-	[content release];
-	[name release];
-	[method release];
-	
-	[super dealloc];
 }
 @end
 
@@ -638,9 +629,6 @@ SQInteger emoAsyncHttpRequest(HSQUIRRELVM v) {
 		
         [net asyncHttpRequest: char2ns(url) withParam:params];
 	}
-
-	[params release];
-	
     sq_pushinteger(v, EMO_NO_ERROR);
 	return 1;
 }

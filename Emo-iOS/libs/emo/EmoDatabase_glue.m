@@ -73,10 +73,8 @@ SQInteger emoDatabaseOpenOrCreate(HSQUIRRELVM v) {
 	NSString* nsname = [[NSString alloc]initWithUTF8String:name];
     if (![engine.database openOrCreate:nsname mode:mode]) {
         sq_pushinteger(v, ERR_DATABASE_OPEN);
-		[nsname release];
         return 1;
     }
-	[nsname release];
 	
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
@@ -97,10 +95,8 @@ SQInteger emoDatabaseOpen(HSQUIRRELVM v) {
 	NSString* nsname = [[NSString alloc]initWithUTF8String:name];
     if (![engine.database open:nsname]) {
         sq_pushinteger(v, ERR_DATABASE_OPEN);
-		[nsname release];
         return 1;
     }
-	[nsname release];
 	
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
@@ -128,7 +124,6 @@ SQInteger emoDatabaseGetPath(HSQUIRRELVM v) {
     }
 	NSString* nsname = [[NSString alloc]initWithUTF8String:name];
     const char* path = [[engine.database getPath:nsname] UTF8String];
-	[nsname release];
 	
     sq_pushstring(v, path, strlen(path));
 	
@@ -179,7 +174,6 @@ SQInteger emoDatabaseGetPreference(HSQUIRRELVM v) {
 	
 	NSString* nskey = [[NSString alloc]initWithUTF8String:key];
     const char* str = [[engine.database getPreference:nskey] UTF8String];
-	[nskey release];
 	
     sq_pushstring(v, str, strlen(str));
     return 1;
@@ -211,12 +205,8 @@ SQInteger emoDatabaseSetPreference(HSQUIRRELVM v) {
 	NSString* nsvalue = [[NSString alloc]initWithUTF8String:value];
     if (![engine.database setPreference:nskey value:nsvalue]) {
         sq_pushinteger(v, ERR_DATABASE);
-		[nskey release];
-		[nsvalue release];
         return 1;
     }
-	[nskey release];
-	[nsvalue release];
 
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
@@ -236,10 +226,8 @@ SQInteger emoDatabaseDeleteDatabase(HSQUIRRELVM v) {
 	NSString* nsname = [[NSString alloc]initWithUTF8String:name];
     if (![engine.database deleteDatabase:nsname]) {
         sq_pushinteger(v, ERR_DATABASE);
-		[nsname release];
         return 1;
     }
-	[nsname release];
 	
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
@@ -260,10 +248,8 @@ SQInteger emoDatabaseDeletePreference(HSQUIRRELVM v) {
 	NSString* nskey   = [[NSString alloc]initWithUTF8String:key];
     if (![engine.database deletePreference:nskey]) {
         sq_pushinteger(v, ERR_DATABASE);
-		[nskey release];
         return 1;
     }
-	[nskey release];
 	
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;

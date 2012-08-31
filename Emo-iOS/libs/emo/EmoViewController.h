@@ -40,7 +40,7 @@
     
     BOOL animating;
     NSInteger animationFrameInterval;
-    CADisplayLink *displayLink;
+    CADisplayLink *__unsafe_unretained displayLink;
 	
 	NSMutableDictionary *touchIdMaster;
 	float touchEventParamCache[MOTION_EVENT_PARAMS_SIZE];

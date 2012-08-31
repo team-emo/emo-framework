@@ -134,7 +134,7 @@
 @property (readwrite) NSInteger frame_index;
 @property (readwrite) NSInteger border;
 @property (readwrite) NSInteger margin;
-@property (retain, readwrite, nonatomic) EmoImage* texture;
+@property (strong, readwrite, nonatomic) EmoImage* texture;
 @property (readwrite) BOOL independent;
 @property (readonly) BOOL loaded;
 @property (readonly) BOOL isScreenEntity;
@@ -185,11 +185,11 @@
 @end
 
 @interface EmoImagePackParser : NSObject <NSXMLParserDelegate> {
-    EmoDrawable* drawable;
+    EmoDrawable* __unsafe_unretained drawable;
     NSInteger frameIndex;
     NSInteger itemCount;
 }
-@property (assign, readwrite) EmoDrawable* drawable;
+@property (unsafe_unretained, readwrite) EmoDrawable* drawable;
 @property (readwrite) NSInteger frameIndex;
 @end
 

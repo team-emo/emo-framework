@@ -55,9 +55,7 @@
 }
 
 -(void)dealloc {
-	[tiles release];
     [self unbindMeshVertex];
-	[super dealloc];
 }
 
 -(void)doUnload:(BOOL)doAll {

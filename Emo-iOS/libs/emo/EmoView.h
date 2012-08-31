@@ -51,14 +51,14 @@
     // The OpenGL ES names for the framebuffer and renderbuffer used to render to this view.
     GLuint defaultFramebuffer, colorRenderbuffer;
 	
-	id<EmoViewEventHandler> eventDelegate;
+	id<EmoViewEventHandler> __unsafe_unretained eventDelegate;
 	
 	BOOL isRetina;
 	BOOL useRetina;
 }
 
-@property (nonatomic, retain) EAGLContext *context;
-@property (nonatomic,readwrite,assign) id<EmoViewEventHandler> eventDelegate;
+@property (nonatomic, strong) EAGLContext *context;
+@property (nonatomic,readwrite,unsafe_unretained) id<EmoViewEventHandler> eventDelegate;
 @property (readonly) GLint width;
 @property (readonly) GLint height;
 @property (readonly) BOOL isRetina;
