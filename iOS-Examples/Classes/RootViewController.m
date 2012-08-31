@@ -18,7 +18,7 @@
 	
 	// initialize emo framework
 	viewController = [[EmoViewController alloc] init];
-	viewController.view = [[[EmoView alloc] initWithFrame:frame] autorelease];
+	viewController.view = [[EmoView alloc] initWithFrame:frame];
 	[viewController awakeFromNib];
 	didReturnRootView = FALSE;
 	
@@ -150,7 +150,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
 	if (indexPath.section >= [examples count]) return cell;
@@ -190,17 +190,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
-
-- (void)viewDidUnload {
-	[examples release];
-	[viewController release];
-}
-
-
-- (void)dealloc {
-    [super dealloc];
-}
-
 
 @end
 
