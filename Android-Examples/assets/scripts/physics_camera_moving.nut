@@ -118,6 +118,8 @@ class Main {
         world.enableContactState(PHYSICS_STATE_NULL,    false);
         world.enableContactState(PHYSICS_STATE_PERSIST, false);
         world.enableContactState(PHYSICS_STATE_REMOVE,  false);
+        world.enableContactState(PHYSICS_STATE_ADD,     true);
+        world.enableContactState(PHYSICS_STATE_IMPACT,  true);
     }
      
      /*
@@ -212,8 +214,23 @@ class Main {
             // get the event coordinate
             local x = position.x * world.getScale();
             local y = position.y * world.getScale();
-            //print(format("%4.2f, x=%4.2f, y=%4.2f", normalImpulse, x, y));
+            //print(
+            //    format("PHYSICS_STATE_ADD normalImpulse=%4.2f, tangentImpulse=%4.2f, x=%4.2f, y=%4.2f",
+            //    normalImpulse, tangentImpulse, x, y));
         }
+    }
+
+    /*
+     * Called when the physics objects are collided.
+     */
+    function onImpact(fixtureA, fixtureB,
+            position, normal, normalImpulse, tangentImpulse) {
+        // get the event coordinate
+        local x = position.x * world.getScale();
+        local y = position.y * world.getScale();
+        //print(
+        //    format("PHYSICS_STATE_IMPACT normalImpulse=%4.5f, tangentImpulse=%4.5f, x=%4.2f, y=%4.2f", 
+        //    normalImpulse, tangentImpulse, x, y));
     }
 }
 
