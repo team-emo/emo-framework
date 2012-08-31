@@ -28,6 +28,7 @@ PHYSICS_STATE_NULL    <- -1;
 PHYSICS_STATE_ADD     <- 0;
 PHYSICS_STATE_PERSIST <- 1;
 PHYSICS_STATE_REMOVE  <- 2;
+PHYSICS_STATE_IMPACT  <- 3;
 
 PTM_RATIO <- 32;
 
@@ -835,6 +836,24 @@ function emo::_onContact(...) {
     if (EMO_RUNTIME_DELEGATE != null &&
              EMO_RUNTIME_DELEGATE.rawin("onContact")) {
         EMO_RUNTIME_DELEGATE.onContact(state, fixtureA, fixtureB, position, normal, normalImpulse, tangentImpulse);
+    }
+}
+
+function emo::_onImpact(...) {
+    //_fixA, _fixB, _bodyA, _bodyB, _pos, _normal, normalImpulse, tangentImpulse
+    local fixtureA = emo.physics.Fixture(vargv[2], vargv[0]);
+    local fixtureB = emo.physics.Fixture(vargv[3], vargv[1]);
+    local position = emo.Vec2.fromArray(vargv[4]);
+    local normal   = emo.Vec2.fromArray(vargv[5]);
+    local normalImpulse  = vargv[6];
+    local tangentImpulse = vargv[7];
+
+    if (emo.rawin("onImpact")) {
+        emo.onImpact(fixtureA, fixtureB, position, normal, normalImpulse, tangentImpulse);
+    }
+    if (EMO_RUNTIME_DELEGATE != null &&
+             EMO_RUNTIME_DELEGATE.rawin("onImpact")) {
+        EMO_RUNTIME_DELEGATE.onImpact(fixtureA, fixtureB, position, normal, normalImpulse, tangentImpulse);
     }
 }
 

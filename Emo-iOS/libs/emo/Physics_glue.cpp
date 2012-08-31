@@ -344,7 +344,8 @@ SQInteger emoPhysicsWorld_EnableContactListener(HSQUIRRELVM v) {
  * enable/disable contact state of physics world
  *
  * state is one of PHYSICS_STATE_NULL, PHYSICS_STATE_ADD,
- * PHYSICS_STATE_PERSIST or PHYSICS_STATE_REMOVE
+ * PHYSICS_STATE_PERSIST, PHYSICS_STATE_REMOVE or 
+ * PHYSICS_STATE_IMPACT
  * 
  * @param physics world instance
  * @param contact state type
@@ -388,6 +389,9 @@ SQInteger emoPhysicsWorld_EnableContactState(HSQUIRRELVM v) {
 		case PHYSICS_STATE_REMOVE:
 			emoPhysicsContactListener->enableRemoveEvent  = state;
 			break;
+        case PHYSICS_STATE_IMPACT:
+            emoPhysicsContactListener->enableImpactEvent  = state;
+            break;
 	}
 	
 	sq_pushinteger(v, EMO_NO_ERROR);

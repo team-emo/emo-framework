@@ -83,6 +83,35 @@ namespace emo {
 		return result;
 	}
 	
+    /*
+     * invoke impact event
+     */
+    static SQBool invokeImpactEvent(HSQUIRRELVM v, ContactPoint cp) {
+        SQBool result = false;
+        SQInteger top = sq_gettop(v);
+        sq_pushroottable(v);
+        sq_pushstring(v, "emo", -1);
+        if (SQ_SUCCEEDED(sq_get(v, -2))) {
+            sq_pushstring(v, "_onImpact", -1);
+            if(SQ_SUCCEEDED(sq_get(v, -2))) {
+                sq_pushroottable(v);
+                sq_pushuserpointer(v, cp.fixtureA);
+                sq_pushuserpointer(v, cp.fixtureB);
+                sq_pushuserpointer(v, cp.fixtureA->GetBody());
+                sq_pushuserpointer(v, cp.fixtureB->GetBody());
+                pushVec2(v, cp.position);
+                pushVec2(v, cp.normal);
+                sq_pushfloat(v, cp.normalImpulse);
+                sq_pushfloat(v, cp.tangentImpulse);
+
+                result = SQ_SUCCEEDED(sq_call(v, 9, SQFalse, SQTrue));
+            }
+        }
+        sq_settop(v,top);
+
+        return result;
+    }
+
 	EmoPhysicsContactListener::EmoPhysicsContactListener(HSQUIRRELVM v) {
 		this->sqvm = v;
 		this->enableNullEvent    = false;
@@ -132,6 +161,46 @@ namespace emo {
 		}
 		
 	}
+
+    void EmoPhysicsContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {
+        const b2Manifold* manifold = contact->GetManifold();
+
+        if (!this->enableImpactEvent || manifold->pointCount == 0){
+            return;
+        }
+
+        b2Fixture* fixtureA = contact->GetFixtureA();
+        b2Fixture* fixtureB = contact->GetFixtureB();
+
+        b2WorldManifold worldManifold;
+        contact->GetWorldManifold(&worldManifold);
+
+        for (int32 i = 0; i < manifold->pointCount; ++i)
+        {
+            static ContactPoint previousContactPoint;
+
+            ContactPoint cp;
+            cp.fixtureA = fixtureA;
+            cp.fixtureB = fixtureB;
+            cp.position = worldManifold.points[i];
+            cp.normal = worldManifold.normal;
+            cp.normalImpulse  = impulse->normalImpulses[i];
+            cp.tangentImpulse = impulse->tangentImpulses[i];
+            cp.state = b2_nullState;
+
+            if ((cp.fixtureA != previousContactPoint.fixtureA ||
+                    cp.fixtureB != previousContactPoint.fixtureB ||
+                    cp.normalImpulse != previousContactPoint.normalImpulse ||
+                    cp.tangentImpulse != previousContactPoint.tangentImpulse) &&
+                    cp.normalImpulse != 0.0) {
+                invokeImpactEvent(sqvm, cp);
+                previousContactPoint = cp;
+            }
+            previousContactPoint = cp;
+        }
+
+    }
+
 }
 #if __cplusplus
 }   // Extern C
