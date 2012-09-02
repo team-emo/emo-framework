@@ -1,7 +1,8 @@
 <Packer>
-    <!-- Target SQLite Database                             -->
-    <!-- path : Set relative path for the target database.  -->
-    <Database path="output/emoruntime.db" />
+    <!-- Target SQLite Database                                                                    -->
+    <!-- path : Set relative path for the target database.                                         -->
+    <!-- zip  : Enter "on" for archiving the database as ".zip" file. This must be on for Android. -->
+    <Database path="output/emoruntime.db" zip="on"/>
 
     <!-- Basic pack setting                                                                           -->
     <!-- mode   : Configure packing mode. "pack" for usual purpose. "unpack" is provided for testing. -->
@@ -14,7 +15,7 @@
         <!-- Tables                                             -->
         <!-- pack : Enter "on" for target, otherwise ignored.      -->
         <!-- name : Enter file name of the target SQLite database. -->
-        <Tables pack="off" name="tables.db">
+        <Tables pack="on" name="tables.db">
         
             <!-- Encryption                                   -->
             <!-- encrypt : Enter "on" for encrypting records. -->
@@ -37,7 +38,7 @@
             
             <!-- Encryption                                                                                  -->
             <!-- encrypt       : Enter "on" for encrypting file                                              -->
-            <!-- exceptContent : With this attribute "on", program will only encrypts file name(column) but  -->
+            <!-- exceptContent : With this attribute "on", program will only encrypt file name(column) but  -->
             <!--                 its content. This may save CPU power and memory in exchange for security.   -->
             <Encryption encrypt="on" exceptContent="off" />
         </Scripts>
@@ -62,9 +63,9 @@
             <Encryption encrypt="on" exceptContent="off" />
         </Models>
         
-        <!-- Config file                                             -->
-        <!-- YOU SHOULD NOT EDIT THIS SETTING!                       -->
-        <!-- The config file is needed for entire encryption feature -->
+        <!-- Config file                       -->
+        <!-- DO NOT EDIT THIS SETTING!         -->
+        <!-- The config file must be encrypted -->
         <Config  pack="on" name="emo-config.xml">
             <Encryption encrypt="on" exceptContent="off" />
         </Config>

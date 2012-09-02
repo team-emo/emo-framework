@@ -47,6 +47,13 @@ import org.apache.log4j.PatternLayout
 import org.apache.log4j.FileAppender
 import org.apache.log4j.BasicConfigurator
 import org.apache.log4j.PropertyConfigurator
+import java.util.zip.ZipOutputStream
+import java.io.FileOutputStream
+import java.util.zip.ZipEntry
+import java.io.BufferedInputStream
+import java.io.FileInputStream
+import java.util.zip.ZipInputStream
+import java.io.BufferedOutputStream
 
 object Packer extends LogWriter{
     def main(args: Array[String]) = {
@@ -54,7 +61,6 @@ object Packer extends LogWriter{
         PropertyConfigurator.configure(Constants.LOG_FILE);
         logger.info("Emo-Packer started!");
         logger.info("Important Info : mode = " + Config.packModeString + ", autoGen=" + Config.keyGenString + ", key(XML)=" + Config.keyString )
-        
         
         // execute packing
         try {
@@ -67,8 +73,9 @@ object Packer extends LogWriter{
     }
 
     def pack() = {
-        if(Config.resetFlag && Config.targetFile.exists()) 
-            if(!Config.targetFile.delete()) error("pack : failed to delete target database");
+        val targetFile   =  new File(Config.target);
+        if(Config.resetFlag && targetFile.exists()) 
+            if(!targetFile.delete()) error("pack : failed to delete target database");
         
         if ( Config.getPackFlag("Tables") == true )  packTables();
         if ( Config.getPackFlag("Config") == true )  packFiles("Config", Constants.TABLE_NAME_CONFIG, false);
@@ -77,6 +84,9 @@ object Packer extends LogWriter{
         if ( Config.getPackFlag("Images") == true )  packFiles("Images", Constants.TABLE_NAME_IMAGES, true);
         if ( Config.getPackFlag("Maps") == true )    packFiles("Maps", Constants.TABLE_NAME_MAPS, true);
         if ( Config.getPackFlag("Models") == true )  packFiles("Models", Constants.TABLE_NAME_MODELS, true);
+        
+        // zip database file
+        if( Config.zipFlag == true) zip(Config.target, Config.target + ".zip");
     }
     
     def unpack() = {
@@ -127,6 +137,22 @@ object Packer extends LogWriter{
         dstMediator.deployFromFile(srcMediator);
         dstMediator.close();
     }
+    
+    def zip(inFileName: String, outFileName: String ) = {
+        val zip = new ZipOutputStream(new FileOutputStream(outFileName));
+        val fileName = new File(inFileName).getName();
+        zip.putNextEntry(new ZipEntry(fileName));
+        val in = new BufferedInputStream(new FileInputStream(inFileName));
+        var b = in.read();
+        while (b > -1) {
+            zip.write(b);
+            b = in.read();
+        }
+        in.close();
+        zip.closeEntry();
+        zip.close();
+    }
+    
 }
 
 object Config {
@@ -134,7 +160,8 @@ object Config {
     
     // Database
     val target       = (xml \ "Database" \ "@path").toString();
-    val targetFile   = new File(target);
+    val zip          = (xml \ "Database" \ "@zip").toString();
+    val zipFlag      = zip == "on";
     
     // Pack
     val packModeString = (xml \ "Pack" \ "@mode").toString();
