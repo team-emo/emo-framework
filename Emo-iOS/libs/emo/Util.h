@@ -37,6 +37,12 @@ int nextPowerOfTwo(int minimum);
 
 int max(int a, int b);
 int min(int a, int b);
+    
+char* base64Encode(const unsigned char* src, int size);
+unsigned char* base64Decode(const char* src, int* size);
+
+unsigned char* emoEncrypt(const unsigned char* key, const unsigned char* src, int size, int* cipherSize);
+unsigned char* emoDecrypt(const unsigned char* key, const unsigned char* src, int size, int* plainSize);
 
 #ifdef _cplusplus
 }
@@ -48,6 +54,9 @@ extern "C++" {
 using namespace std;
 
 vector<string> split( string s, string c );
+
+string encryptString(const string& src);
+string decryptString(const string& src);
 
 }
 #endif

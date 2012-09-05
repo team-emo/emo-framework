@@ -15,6 +15,11 @@
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
+		9D25B22115F15AF300FD46D3 /* aes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9D25B21715F15AF300FD46D3 /* aes.txt */; };
+		9D25B22215F15AF300FD46D3 /* aes_modes.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D25B21815F15AF300FD46D3 /* aes_modes.c */; };
+		9D25B22315F15AF300FD46D3 /* aescrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D25B21A15F15AF300FD46D3 /* aescrypt.c */; };
+		9D25B22415F15AF300FD46D3 /* aeskey.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D25B21B15F15AF300FD46D3 /* aeskey.c */; };
+		9D25B22515F15AF300FD46D3 /* aestab.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D25B21D15F15AF300FD46D3 /* aestab.c */; };
 		9D4F051A15EB209A00D7E882 /* license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9D4F051815EB209A00D7E882 /* license.txt */; };
 		9D4F053C15EB29CC00D7E882 /* physics_camera_moving.nut in Resources */ = {isa = PBXBuildFile; fileRef = 9D4F053B15EB29CC00D7E882 /* physics_camera_moving.nut */; };
 		9D4F053F15EB29DF00D7E882 /* desert_chips.png in Resources */ = {isa = PBXBuildFile; fileRef = 9D4F053D15EB29DF00D7E882 /* desert_chips.png */; };
@@ -100,7 +105,7 @@
 		F967E69413907137006D8F99 /* b2WeldJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F967E5FF13907136006D8F99 /* b2WeldJoint.cpp */; };
 		F967E69513907137006D8F99 /* EmoAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = F967E60413907136006D8F99 /* EmoAudio.m */; };
 		F967E69613907137006D8F99 /* EmoAudio_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F967E60613907136006D8F99 /* EmoAudio_glue.m */; };
-		F967E69713907137006D8F99 /* EmoDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F967E60813907136006D8F99 /* EmoDatabase.m */; };
+		F967E69713907137006D8F99 /* EmoDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = F967E60813907136006D8F99 /* EmoDatabase.mm */; };
 		F967E69813907137006D8F99 /* EmoDatabase_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F967E60A13907136006D8F99 /* EmoDatabase_glue.m */; };
 		F967E69913907137006D8F99 /* EmoDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F967E60C13907136006D8F99 /* EmoDrawable.m */; };
 		F967E69A13907137006D8F99 /* EmoDrawable_glue.mm in Sources */ = {isa = PBXBuildFile; fileRef = F967E60E13907136006D8F99 /* EmoDrawable_glue.mm */; };
@@ -217,6 +222,17 @@
 		28F335F01007B36200424DE2 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* iOS_Examples-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iOS_Examples-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		9D25B21615F15AF300FD46D3 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		9D25B21715F15AF300FD46D3 /* aes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aes.txt; sourceTree = "<group>"; };
+		9D25B21815F15AF300FD46D3 /* aes_modes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aes_modes.c; sourceTree = "<group>"; };
+		9D25B21915F15AF300FD46D3 /* aescpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aescpp.h; sourceTree = "<group>"; };
+		9D25B21A15F15AF300FD46D3 /* aescrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aescrypt.c; sourceTree = "<group>"; };
+		9D25B21B15F15AF300FD46D3 /* aeskey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aeskey.c; sourceTree = "<group>"; };
+		9D25B21C15F15AF300FD46D3 /* aesopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aesopt.h; sourceTree = "<group>"; };
+		9D25B21D15F15AF300FD46D3 /* aestab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aestab.c; sourceTree = "<group>"; };
+		9D25B21E15F15AF300FD46D3 /* aestab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aestab.h; sourceTree = "<group>"; };
+		9D25B21F15F15AF300FD46D3 /* brg_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_endian.h; sourceTree = "<group>"; };
+		9D25B22015F15AF300FD46D3 /* brg_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_types.h; sourceTree = "<group>"; };
 		9D4F051815EB209A00D7E882 /* license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = license.txt; sourceTree = "<group>"; };
 		9D4F051915EB209A00D7E882 /* rapidxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rapidxml.h; sourceTree = "<group>"; };
 		9D4F052815EB290600D7E882 /* sqmodule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqmodule.h; sourceTree = "<group>"; };
@@ -363,7 +379,7 @@
 		F967E60513907136006D8F99 /* EmoAudio_glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoAudio_glue.h; sourceTree = "<group>"; };
 		F967E60613907136006D8F99 /* EmoAudio_glue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoAudio_glue.m; sourceTree = "<group>"; };
 		F967E60713907136006D8F99 /* EmoDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDatabase.h; sourceTree = "<group>"; };
-		F967E60813907136006D8F99 /* EmoDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDatabase.m; sourceTree = "<group>"; };
+		F967E60813907136006D8F99 /* EmoDatabase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EmoDatabase.mm; sourceTree = "<group>"; };
 		F967E60913907136006D8F99 /* EmoDatabase_glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDatabase_glue.h; sourceTree = "<group>"; };
 		F967E60A13907136006D8F99 /* EmoDatabase_glue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDatabase_glue.m; sourceTree = "<group>"; };
 		F967E60B13907136006D8F99 /* EmoDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDrawable.h; sourceTree = "<group>"; };
@@ -655,6 +671,25 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9D25B21515F15AF300FD46D3 /* aes */ = {
+			isa = PBXGroup;
+			children = (
+				9D25B21615F15AF300FD46D3 /* aes.h */,
+				9D25B21715F15AF300FD46D3 /* aes.txt */,
+				9D25B21815F15AF300FD46D3 /* aes_modes.c */,
+				9D25B21915F15AF300FD46D3 /* aescpp.h */,
+				9D25B21A15F15AF300FD46D3 /* aescrypt.c */,
+				9D25B21B15F15AF300FD46D3 /* aeskey.c */,
+				9D25B21C15F15AF300FD46D3 /* aesopt.h */,
+				9D25B21D15F15AF300FD46D3 /* aestab.c */,
+				9D25B21E15F15AF300FD46D3 /* aestab.h */,
+				9D25B21F15F15AF300FD46D3 /* brg_endian.h */,
+				9D25B22015F15AF300FD46D3 /* brg_types.h */,
+			);
+			name = aes;
+			path = "../Emo-iOS/libs/aes";
+			sourceTree = "<group>";
+		};
 		9D4F051715EB209A00D7E882 /* rapidxml */ = {
 			isa = PBXGroup;
 			children = (
@@ -749,12 +784,13 @@
 		F967E5B213907116006D8F99 /* emo Sources */ = {
 			isa = PBXGroup;
 			children = (
-				F967E5B313907136006D8F99 /* Box2D */,
 				F967E60113907136006D8F99 /* emo */,
-				F967E62B13907136006D8F99 /* libpng */,
 				F967E64013907136006D8F99 /* squirrel */,
 				9D4F052715EB290600D7E882 /* sqrat */,
+				F967E62B13907136006D8F99 /* libpng */,
+				F967E5B313907136006D8F99 /* Box2D */,
 				9D4F051715EB209A00D7E882 /* rapidxml */,
+				9D25B21515F15AF300FD46D3 /* aes */,
 			);
 			name = "emo Sources";
 			sourceTree = "<group>";
@@ -895,7 +931,7 @@
 				F967E60513907136006D8F99 /* EmoAudio_glue.h */,
 				F967E60613907136006D8F99 /* EmoAudio_glue.m */,
 				F967E60713907136006D8F99 /* EmoDatabase.h */,
-				F967E60813907136006D8F99 /* EmoDatabase.m */,
+				F967E60813907136006D8F99 /* EmoDatabase.mm */,
 				F967E60913907136006D8F99 /* EmoDatabase_glue.h */,
 				F967E60A13907136006D8F99 /* EmoDatabase_glue.m */,
 				F967E60B13907136006D8F99 /* EmoDrawable.h */,
@@ -1191,6 +1227,7 @@
 				9D4F053C15EB29CC00D7E882 /* physics_camera_moving.nut in Resources */,
 				9D4F053F15EB29DF00D7E882 /* desert_chips.png in Resources */,
 				9D4F054015EB29DF00D7E882 /* desert.tmx in Resources */,
+				9D25B22115F15AF300FD46D3 /* aes.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1241,7 +1278,7 @@
 				F967E69413907137006D8F99 /* b2WeldJoint.cpp in Sources */,
 				F967E69513907137006D8F99 /* EmoAudio.m in Sources */,
 				F967E69613907137006D8F99 /* EmoAudio_glue.m in Sources */,
-				F967E69713907137006D8F99 /* EmoDatabase.m in Sources */,
+				F967E69713907137006D8F99 /* EmoDatabase.mm in Sources */,
 				F967E69813907137006D8F99 /* EmoDatabase_glue.m in Sources */,
 				F967E69913907137006D8F99 /* EmoDrawable.m in Sources */,
 				F967E69A13907137006D8F99 /* EmoDrawable_glue.mm in Sources */,
@@ -1299,6 +1336,10 @@
 				F92D530F145E248C002B97DF /* EmoSnapshotDrawable.m in Sources */,
 				F9F496FF1476165B005EAF37 /* EmoLiquidDrawable.m in Sources */,
 				F9F4970214762456005EAF37 /* EmoPointDrawable.m in Sources */,
+				9D25B22215F15AF300FD46D3 /* aes_modes.c in Sources */,
+				9D25B22315F15AF300FD46D3 /* aescrypt.c in Sources */,
+				9D25B22415F15AF300FD46D3 /* aeskey.c in Sources */,
+				9D25B22515F15AF300FD46D3 /* aestab.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

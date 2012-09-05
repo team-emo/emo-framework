@@ -28,6 +28,19 @@
 #import "Foundation/Foundation.h"
 #import "sqlite3.h"
 
+@interface CipherHolder : NSObject { 
+    NSString *_plainText;
+    NSString *_cipher;
+};
+
+@property (readwrite) NSString *plainText;
+@property (readwrite) NSString *cipher;
+
+- (BOOL)hasCipher;
+- (BOOL)compareWithCipher:(NSString *)cipher;
+- (BOOL)compareWithHolder:(CipherHolder *)holder;
+@end
+
 @interface EmoDatabase : NSObject {
 	sqlite3* db;
 	BOOL isOpen;

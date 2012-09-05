@@ -29,10 +29,63 @@
 #import "Constants.h"
 #import "EmoEngine.h"
 #import "EmoEngine_glue.h"
+#include "Util.h"
+
+NSString* char2ns(const char* str) {
+	return [NSString stringWithCString:(char*)str
+							  encoding:NSUTF8StringEncoding];
+}
+
+NSString* data2ns(NSData* data) {
+	return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+}
+
+NSString * decryptNSString(NSString *cipher) {
+    // base64 decoding
+    int size = 0;
+    unsigned char * decodedBytes = base64Decode( [cipher UTF8String], &size );
+    
+    // retrieve common (private) key
+    const unsigned char * key = (unsigned char *)AES_PRIVATE_KEY;
+    
+    // decrypt bytes
+    int plainSize = 0;
+    const unsigned char * decryptedBytes = emoDecrypt(key, decodedBytes, size, &plainSize);
+    NSString *dst = char2ns((char *)decryptedBytes);
+    
+    return dst;
+}
+
+NSString * encryptNSString(NSString *plainText) {
+    // convert string to a single space if null string specified
+    NSString *targetString = plainText;
+    if (plainText.length == 0){
+        targetString = @" ";
+    }
+    
+    // get bytes from string
+    int size = targetString.length;
+    unsigned char *  bytes = (unsigned char *)[targetString UTF8String];
+    
+    // retrieve the common (private) key
+    const unsigned char * key = (unsigned char *)AES_PRIVATE_KEY;
+    
+    // encrypt bytes
+    int cipherSize = 0;
+    unsigned char * encryptedBytes = emoEncrypt(key, bytes, size, &cipherSize);
+    
+    // base64 encoding
+    char * encodedChars = base64Encode(encryptedBytes, cipherSize) ;
+    NSString *dst = char2ns(encodedChars);
+    
+    return dst;
+}
 
 static int database_preference_callback(void *arg, int argc, char **argv, char **column)  {
-    NSMutableString* value = (__bridge NSMutableString*)arg;
-    if (argc > 0) [value setString:char2ns(argv[0])];
+    CipherHolder* value = (__bridge CipherHolder*)arg;
+    if (argc > 0){
+        value.cipher = char2ns(argv[0]);
+    }
     return SQLITE_OK;
 }
 
@@ -46,11 +99,58 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
     NSMutableArray* values = (__bridge NSMutableArray*)arg;
 	
     for (int i = 0; i < argc; i++) {
-        [values addObject:char2ns(argv[i])];
+        CipherHolder *holder = [[CipherHolder alloc] init];
+        holder.cipher = char2ns(argv[i]);
+        [values addObject:holder];
     }
 	
     return SQLITE_OK;
 }
+
+@implementation CipherHolder
+
+@dynamic plainText, cipher;
+
+- (id)init {
+    self = [super init];
+    if (self != nil) {
+        self.plainText = @"";
+    }
+    return self;
+}
+
+
+- (NSString *)cipher {
+    return _cipher;
+}
+
+- (void)setCipher:(NSString *)cipher {
+    _plainText  = decryptNSString(cipher);
+    _cipher     = cipher;
+}
+
+- (NSString *)plainText {
+    return _plainText;
+}
+
+- (void)setPlainText:(NSString *)plainText {
+    _plainText = plainText;
+    _cipher     = encryptNSString(plainText);
+}
+
+- (BOOL)hasCipher {
+    return self.cipher.length != 0;
+}
+
+- (BOOL)compareWithCipher:(NSString *)cipher {
+    return [self.plainText isEqualToString:decryptNSString(cipher)];
+}
+
+- (BOOL)compareWithHolder:(CipherHolder *)holder {
+    return [self.plainText isEqualToString:holder.plainText];
+}
+
+@end
 
 @interface EmoDatabase (PrivateMethods)
 -(NSInteger)exec:(const char*) sql;
@@ -190,8 +290,23 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
 		forceClose = TRUE;
 	}
 	
-	NSMutableString* value =  [NSMutableString string];
-	char* sql = sqlite3_mprintf("SELECT VALUE FROM %q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, [key UTF8String]);
+    CipherHolder *keyHolder = nil;
+    NSArray *keyList = [self getPreferenceKeys];
+    for( CipherHolder *aKeyHolder in keyList ) {
+        if( [aKeyHolder.plainText isEqualToString:key] ){
+            keyHolder = aKeyHolder;
+            break;
+        }
+    }
+
+    if(!keyHolder.hasCipher){
+		self.lastError = ERR_INVALID_PARAM;
+		self.lastErrorMessage = [NSString stringWithFormat:@"Database::getPreference : key %@ does not exist", key];
+        return @"";
+    }
+
+    CipherHolder *value = [[CipherHolder alloc] init];
+    char* sql = sqlite3_mprintf("SELECT VALUE FROM %q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, [keyHolder.cipher UTF8String]);
 	
 	char* error;
 	int rcode = sqlite3_exec(db, sql, database_preference_callback, (__bridge void *)(value), &error);
@@ -205,7 +320,7 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
 	if (forceClose) {
 		[self close];
 	}
-	return value;
+	return value.plainText;
 }
 -(BOOL)setPreference:(NSString*) key value:(NSString*)value {
 	BOOL forceClose = FALSE;
@@ -214,21 +329,27 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
 		forceClose = TRUE;
 	}
 	
-	NSInteger count;
-	char *csql = sqlite3_mprintf("SELECT COUNT(*) FROM %q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, [key UTF8String]);
-	[self exec_count:csql count:&count];
-	sqlite3_free(csql);
-	
+    CipherHolder *keyHolder;
+    NSArray *keyList = [self getPreferenceKeys];
+    for( CipherHolder *aKeyHolder in keyList ) {
+        if( [aKeyHolder.plainText isEqualToString:key] ){
+            keyHolder = aKeyHolder;
+            break;
+        }
+    }
+
+    NSString *encryptedValue = encryptNSString(value);
+    	
 	int rcode = SQLITE_OK;
-	if (count == 0) {
-		char* sql = sqlite3_mprintf("INSERT INTO %q(KEY,VALUE) VALUES(%Q,%Q)", PREFERENCE_TABLE_NAME, [key UTF8String], [value UTF8String]);
-		rcode = [self exec:sql];
-		sqlite3_free(sql);
+    char* sql;
+    if(!keyHolder.hasCipher){
+        NSString *encryptedKey = encryptNSString(key);
+		sql = sqlite3_mprintf("INSERT INTO %q(KEY,VALUE) VALUES(%Q,%Q)", PREFERENCE_TABLE_NAME, [encryptedKey UTF8String], [encryptedValue UTF8String]);
 	} else {
-		char* sql = sqlite3_mprintf("UPDATE %q SET VALUE=%Q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, [value UTF8String], [key UTF8String]);
-		rcode = [self exec:sql];
-		sqlite3_free(sql);
+		sql = sqlite3_mprintf("UPDATE %q SET VALUE=%Q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, [encryptedValue UTF8String], [keyHolder.cipher UTF8String]);
 	}
+    rcode = [self exec:sql];
+    sqlite3_free(sql);
 	
 	if (forceClose) {
 		[self close];
@@ -260,7 +381,21 @@ static int database_query_vector_callback(void *arg, int argc, char **argv, char
 		forceClose = TRUE;
 	}
 	
-	char *sql = sqlite3_mprintf("DELETE FROM %q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, [key UTF8String]);
+    CipherHolder *keyHolder;
+    NSArray *keyList = [self getPreferenceKeys];
+    for( CipherHolder *aKeyHolder in keyList ) {
+        if( [aKeyHolder.plainText isEqualToString:key] ){
+            keyHolder = aKeyHolder;
+            break;
+        }
+    }
+    
+    if(!keyHolder.hasCipher){
+		self.lastError = ERR_INVALID_PARAM;
+		self.lastErrorMessage = [NSString stringWithFormat:@"Database::deletePreference : key %@ does not exist", key];
+        return NO;
+    }
+	char *sql = sqlite3_mprintf("DELETE FROM %q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, [keyHolder.cipher UTF8String]);
 	int rcode = [self exec:sql];
 	sqlite3_free(sql);
 	

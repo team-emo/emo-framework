@@ -206,4 +206,7 @@
 
 #define TYPE_ASSET    0
 #define TYPE_DOCUMENT 1
+
+#define AES_PRIVATE_KEY "keyMustBeChanged"
+
 #endif

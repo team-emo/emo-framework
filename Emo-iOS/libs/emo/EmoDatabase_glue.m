@@ -262,7 +262,8 @@ SQInteger emoDatabaseGetPreferenceKeys(HSQUIRRELVM v) {
     sq_newarray(v, 0);
 	
     for (int i = 0; i < [keys count]; i++) {
-		const char* key = [[keys objectAtIndex:i] UTF8String];
+        NSString *plainText = ((CipherHolder *)[keys objectAtIndex:i]).plainText;
+		const char* key = [plainText UTF8String];
         sq_pushstring(v, key, -1);
         sq_arrayappend(v, -2);
     }

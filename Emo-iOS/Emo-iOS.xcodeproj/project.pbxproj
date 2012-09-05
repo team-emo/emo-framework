@@ -13,6 +13,11 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		9D25B20F15F15A6F00FD46D3 /* aes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9D25B20515F15A6F00FD46D3 /* aes.txt */; };
+		9D25B21015F15A6F00FD46D3 /* aes_modes.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D25B20615F15A6F00FD46D3 /* aes_modes.c */; };
+		9D25B21115F15A6F00FD46D3 /* aescrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D25B20815F15A6F00FD46D3 /* aescrypt.c */; };
+		9D25B21215F15A6F00FD46D3 /* aeskey.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D25B20915F15A6F00FD46D3 /* aeskey.c */; };
+		9D25B21315F15A6F00FD46D3 /* aestab.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D25B20B15F15A6F00FD46D3 /* aestab.c */; };
 		9D4F051215EABC5B00D7E882 /* license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9D4F051015EABC5B00D7E882 /* license.txt */; };
 		F92D52FD145E205A002B97DF /* EmoFontDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D52FC145E205A002B97DF /* EmoFontDrawable.m */; };
 		F92D5300145E2261002B97DF /* EmoSnapshotDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D52FF145E2261002B97DF /* EmoSnapshotDrawable.m */; };
@@ -54,7 +59,7 @@
 		F92D9E08139070770077ED19 /* b2WeldJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F92D9DE4139070770077ED19 /* b2WeldJoint.cpp */; };
 		F92D9E33139070820077ED19 /* EmoAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E0C139070820077ED19 /* EmoAudio.m */; };
 		F92D9E34139070820077ED19 /* EmoAudio_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E0E139070820077ED19 /* EmoAudio_glue.m */; };
-		F92D9E35139070820077ED19 /* EmoDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E10139070820077ED19 /* EmoDatabase.m */; };
+		F92D9E35139070820077ED19 /* EmoDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E10139070820077ED19 /* EmoDatabase.mm */; };
 		F92D9E36139070820077ED19 /* EmoDatabase_glue.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E12139070820077ED19 /* EmoDatabase_glue.m */; };
 		F92D9E37139070820077ED19 /* EmoDrawable.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E14139070820077ED19 /* EmoDrawable.m */; };
 		F92D9E38139070820077ED19 /* EmoDrawable_glue.mm in Sources */ = {isa = PBXBuildFile; fileRef = F92D9E16139070820077ED19 /* EmoDrawable_glue.mm */; };
@@ -133,6 +138,17 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Emo_iOS_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emo_iOS_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Emo_iOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Emo_iOS-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		9D25B20415F15A6F00FD46D3 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		9D25B20515F15A6F00FD46D3 /* aes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aes.txt; sourceTree = "<group>"; };
+		9D25B20615F15A6F00FD46D3 /* aes_modes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aes_modes.c; sourceTree = "<group>"; };
+		9D25B20715F15A6F00FD46D3 /* aescpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aescpp.h; sourceTree = "<group>"; };
+		9D25B20815F15A6F00FD46D3 /* aescrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aescrypt.c; sourceTree = "<group>"; };
+		9D25B20915F15A6F00FD46D3 /* aeskey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aeskey.c; sourceTree = "<group>"; };
+		9D25B20A15F15A6F00FD46D3 /* aesopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aesopt.h; sourceTree = "<group>"; };
+		9D25B20B15F15A6F00FD46D3 /* aestab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aestab.c; sourceTree = "<group>"; };
+		9D25B20C15F15A6F00FD46D3 /* aestab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aestab.h; sourceTree = "<group>"; };
+		9D25B20D15F15A6F00FD46D3 /* brg_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_endian.h; sourceTree = "<group>"; };
+		9D25B20E15F15A6F00FD46D3 /* brg_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_types.h; sourceTree = "<group>"; };
 		9D4F04B115E7D84900D7E882 /* sqmodule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqmodule.h; sourceTree = "<group>"; };
 		9D4F04B315E7D84900D7E882 /* sqratAllocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratAllocator.h; sourceTree = "<group>"; };
 		9D4F04B415E7D84900D7E882 /* sqratArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqratArray.h; sourceTree = "<group>"; };
@@ -236,7 +252,7 @@
 		F92D9E0D139070820077ED19 /* EmoAudio_glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoAudio_glue.h; sourceTree = "<group>"; };
 		F92D9E0E139070820077ED19 /* EmoAudio_glue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoAudio_glue.m; sourceTree = "<group>"; };
 		F92D9E0F139070820077ED19 /* EmoDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDatabase.h; sourceTree = "<group>"; };
-		F92D9E10139070820077ED19 /* EmoDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDatabase.m; sourceTree = "<group>"; };
+		F92D9E10139070820077ED19 /* EmoDatabase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EmoDatabase.mm; sourceTree = "<group>"; };
 		F92D9E11139070820077ED19 /* EmoDatabase_glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDatabase_glue.h; sourceTree = "<group>"; };
 		F92D9E12139070820077ED19 /* EmoDatabase_glue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmoDatabase_glue.m; sourceTree = "<group>"; };
 		F92D9E13139070820077ED19 /* EmoDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmoDrawable.h; sourceTree = "<group>"; };
@@ -440,6 +456,25 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9D25B20315F15A6F00FD46D3 /* aes */ = {
+			isa = PBXGroup;
+			children = (
+				9D25B20415F15A6F00FD46D3 /* aes.h */,
+				9D25B20515F15A6F00FD46D3 /* aes.txt */,
+				9D25B20615F15A6F00FD46D3 /* aes_modes.c */,
+				9D25B20715F15A6F00FD46D3 /* aescpp.h */,
+				9D25B20815F15A6F00FD46D3 /* aescrypt.c */,
+				9D25B20915F15A6F00FD46D3 /* aeskey.c */,
+				9D25B20A15F15A6F00FD46D3 /* aesopt.h */,
+				9D25B20B15F15A6F00FD46D3 /* aestab.c */,
+				9D25B20C15F15A6F00FD46D3 /* aestab.h */,
+				9D25B20D15F15A6F00FD46D3 /* brg_endian.h */,
+				9D25B20E15F15A6F00FD46D3 /* brg_types.h */,
+			);
+			name = aes;
+			path = libs/aes;
+			sourceTree = "<group>";
+		};
 		9D4F04AF15E7D84900D7E882 /* sqrat */ = {
 			isa = PBXGroup;
 			children = (
@@ -493,6 +528,7 @@
 				F92D9E471390708B0077ED19 /* libpng */,
 				F92D9D98139070770077ED19 /* Box2D */,
 				9D4F050F15EABC5B00D7E882 /* rapidxml */,
+				9D25B20315F15A6F00FD46D3 /* aes */,
 			);
 			name = "emo Sources";
 			sourceTree = "<group>";
@@ -633,7 +669,7 @@
 				F92D9E0D139070820077ED19 /* EmoAudio_glue.h */,
 				F92D9E0E139070820077ED19 /* EmoAudio_glue.m */,
 				F92D9E0F139070820077ED19 /* EmoDatabase.h */,
-				F92D9E10139070820077ED19 /* EmoDatabase.m */,
+				F92D9E10139070820077ED19 /* EmoDatabase.mm */,
 				F92D9E11139070820077ED19 /* EmoDatabase_glue.h */,
 				F92D9E12139070820077ED19 /* EmoDatabase_glue.m */,
 				F92D9E13139070820077ED19 /* EmoDrawable.h */,
@@ -863,6 +899,7 @@
 				F92D9E9E139070A10077ED19 /* COPYRIGHT in Resources */,
 				F98A7F791395B8BB008F984C /* Icon.png in Resources */,
 				9D4F051215EABC5B00D7E882 /* license.txt in Resources */,
+				9D25B20F15F15A6F00FD46D3 /* aes.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -912,7 +949,7 @@
 				F92D9E08139070770077ED19 /* b2WeldJoint.cpp in Sources */,
 				F92D9E33139070820077ED19 /* EmoAudio.m in Sources */,
 				F92D9E34139070820077ED19 /* EmoAudio_glue.m in Sources */,
-				F92D9E35139070820077ED19 /* EmoDatabase.m in Sources */,
+				F92D9E35139070820077ED19 /* EmoDatabase.mm in Sources */,
 				F92D9E36139070820077ED19 /* EmoDatabase_glue.m in Sources */,
 				F92D9E37139070820077ED19 /* EmoDrawable.m in Sources */,
 				F92D9E38139070820077ED19 /* EmoDrawable_glue.mm in Sources */,
@@ -970,6 +1007,10 @@
 				F92D5303145E23A0002B97DF /* EmoLineDrawable.m in Sources */,
 				F931FE1D14772C41001125BB /* EmoLiquidDrawable.m in Sources */,
 				F931FE1E14772C41001125BB /* EmoPointDrawable.m in Sources */,
+				9D25B21015F15A6F00FD46D3 /* aes_modes.c in Sources */,
+				9D25B21115F15A6F00FD46D3 /* aescrypt.c in Sources */,
+				9D25B21215F15A6F00FD46D3 /* aeskey.c in Sources */,
+				9D25B21315F15A6F00FD46D3 /* aestab.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
