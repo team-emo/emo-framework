@@ -9,6 +9,9 @@
 		<string>com.emo_framework.libpng</string>
 		<string>com.emo_framework.libsquirrel</string>
 		<string>com.emo_framework.libemo</string>
+		<string>com.emo_framework.libsqrat</string>
+		<string>com.emo_framework.librapidxml</string>
+		<string>com.emo_framework.libaes</string>
 	</array>
 	<key>Concrete</key>
 	<true/>
@@ -128,11 +131,15 @@
 				<key>OTHER_LDFLAGS</key>
 				<string>-ObjC -all_load -lz -lsqlite3</string>
 				<key>HEADER_SEARCH_PATHS</key>
-				<string>$(BUILT_PRODUCTS_DIR)/usr/local/include ___PACKAGENAME___/Classes ___PACKAGENAME___/libs ___PACKAGENAME___/libs/libpng ___PACKAGENAME___/libs/emo ___PACKAGENAME___/libs/squirrel/include</string>
+				<string>$(BUILT_PRODUCTS_DIR)/usr/local/include ___PACKAGENAME___/Classes ___PACKAGENAME___/libs ___PACKAGENAME___/libs/libpng ___PACKAGENAME___/libs/emo ___PACKAGENAME___/libs/squirrel/include ___PACKAGENAME___/libs/sqrat ___PACKAGENAME___/libs/rapidxml ___PACKAGENAME___/libs/aes</string>
 				<key>IPHONE_OPTIMIZE_OPTIONS</key>
 				<string>-skip-PNGs</string>
 				<key>COMPRESS_PNG_FILES</key>
 				<string>NO</string>
+				<key>GCC_VERSION</key>
+				<string>com.apple.compilers.llvm.clang.1_0</string>
+				<key>CLANG_ENABLE_OBJC_ARC</key>
+				<string>YES</string>
 			</dict>
 		</dict>
 	</array>

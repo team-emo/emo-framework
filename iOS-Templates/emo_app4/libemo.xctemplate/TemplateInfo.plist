@@ -80,7 +80,7 @@
 			<key>TargetIndices</key>
 			<array/>
 		</dict>
-		<key>libs/emo/EmoDatabase.m</key>
+		<key>libs/emo/EmoDatabase.mm</key>
 		<dict>
 			<key>Group</key>
 			<array>
@@ -88,7 +88,7 @@
 				<string>emo</string>
 			</array>
 			<key>Path</key>
-			<string>libs/emo/EmoDatabase.m</string>
+			<string>libs/emo/EmoDatabase.mm</string>
 		</dict>
 		<key>libs/emo/EmoDatabase_glue.h</key>
 		<dict>
@@ -256,7 +256,7 @@
 			<key>TargetIndices</key>
 			<array/>
 		</dict>
-		<key>libs/emo/EmoDrawable_glue.m</key>
+		<key>libs/emo/EmoDrawable_glue.mm</key>
 		<dict>
 			<key>Group</key>
 			<array>
@@ -264,7 +264,7 @@
 				<string>emo</string>
 			</array>
 			<key>Path</key>
-			<string>libs/emo/EmoDrawable_glue.m</string>
+			<string>libs/emo/EmoDrawable_glue.mm</string>
 		</dict>
 		<key>libs/emo/EmoEngine.h</key>
 		<dict>
@@ -583,7 +583,7 @@
 		<string>libs/emo/EmoAudio_glue.h</string>
 		<string>libs/emo/EmoAudio_glue.m</string>
 		<string>libs/emo/EmoDatabase.h</string>
-		<string>libs/emo/EmoDatabase.m</string>
+		<string>libs/emo/EmoDatabase.mm</string>
 		<string>libs/emo/EmoDatabase_glue.h</string>
 		<string>libs/emo/EmoDatabase_glue.m</string>
 		<string>libs/emo/EmoDrawable.h</string>
@@ -599,7 +599,7 @@
 		<string>libs/emo/EmoPointDrawable.h</string>
 		<string>libs/emo/EmoPointDrawable.m</string>
 		<string>libs/emo/EmoDrawable_glue.h</string>
-		<string>libs/emo/EmoDrawable_glue.m</string>
+		<string>libs/emo/EmoDrawable_glue.mm</string>
 		<string>libs/emo/EmoEngine.h</string>
 		<string>libs/emo/EmoEngine.m</string>
 		<string>libs/emo/EmoEngine_glue.h</string>

@@ -102,6 +102,27 @@ copy_project_templates(){
 
 	copy_files Emo-iOS/libs/libpng "$LIBS_DIR"
 
+	echo ...copying sqrat files
+
+	DST_DIR="$TEMPLATE_DIR"libsqrat.xctemplate/
+	LIBS_DIR="$DST_DIR"libs
+
+	copy_files Emo-iOS/libs/sqrat "$LIBS_DIR"
+
+	echo ...copying rapidxml files
+
+	DST_DIR="$TEMPLATE_DIR"librapidxml.xctemplate/
+	LIBS_DIR="$DST_DIR"libs
+
+	copy_files Emo-iOS/libs/rapidxml "$LIBS_DIR"
+
+	echo ...copying aes files
+
+	DST_DIR="$TEMPLATE_DIR"libaes.xctemplate/
+	LIBS_DIR="$DST_DIR"libs
+
+	copy_files Emo-iOS/libs/aes "$LIBS_DIR"
+
 	echo done!
 }
 

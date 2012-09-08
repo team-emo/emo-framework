@@ -19,9 +19,9 @@
 			<key>ARCHS</key>
 			<string>$(ARCHS_STANDARD_32_BIT)</string>
 			<key>GCC_VERSION</key>
-			<string>com.apple.compilers.llvmgcc42</string>
+			<string>com.apple.compilers.llvm.clang.1_0</string>
 			<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-			<string>latest_iphoneos</string>
+			<string>4.2</string>
 		</dict>
 	</dict>
 </dict>
