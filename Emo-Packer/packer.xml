@@ -26,7 +26,6 @@
                 <!-- copy      : Program copies the table without encryption when copy="on", otherwise the  -->
                 <!--             table will be just ignored.                                                -->
                 <Exception tableName="ANDROID_METADATA" copy="on"/>
-                <Exception tableName="PREFERENCES" copy="off"/>
             </Encryption>
         </Tables>
         

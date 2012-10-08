@@ -1,10 +1,13 @@
 <Config>
-    <Encryption  encrypt="on">
-        <Tables  encrypt="on"/>
-        <Scripts encrypt="on" exceptContent="false" />
-        <Sounds  encrypt="on" exceptContent="true"  />
-        <Images  encrypt="on" exceptContent="true"  />
-        <Maps    encrypt="on" exceptContent="false" />
-        <Models  encrypt="on" exceptContent="false" />
-    </Encryption>
+    <Assets>
+        <Scripts pack="on" encrypt="on" exceptContent="false">
+            <Runtime name="runtime.nut" />
+            <Main    name="main.nut" />
+        </Scripts>
+        <Tables  pack="off" encrypt="on" />
+        <Sounds  pack="off" encrypt="on" exceptContent="false"  />
+        <Images  pack="off" encrypt="on" exceptContent="false"  />
+        <Maps    pack="off" encrypt="on" exceptContent="false" />
+        <Models  pack="off" encrypt="on" exceptContent="false" />
+    </Assets>
 </Config>
