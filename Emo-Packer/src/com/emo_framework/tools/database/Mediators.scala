@@ -263,18 +263,17 @@ class SQLiteMediator(val path: String, val dataHolder: DatabaseHolder, val targe
 
     def deployFromFile(src: FileMediator) = {
         val tableName = if (src.encryptFlag == true) src.getTableNameHolder().getCipherString() else src.getTableNameHolder().getPlainString();
-
         val fileList = src.getFileList();
-        for (i <- 0 until fileList.length) {
-            val file = fileList(i);
-            if (file.getName() != Config.ignoreFile) {
-                val fileContent = FileUtils.readFileToByteArray(file);
+        for (i <- 0 until fileList.size()) {
+            val fileHolder = fileList.get(i);
+            if (fileHolder.file.getName() != Config.ignoreFile) {
+                val fileContent = FileUtils.readFileToByteArray(fileHolder.file);
 
                 val sql = new String("INSERT INTO '" + tableName + "' VALUES (?, ?)");
                 logger.info("SQL : " + sql);
 
                 val stmt = database.prepareStatement(sql);
-                val nameHolder = new CipherHolder(file.getName().getBytes(Constants.CHAR_ENCODE), key, Config.packModeFlag, encryptFlag, true);
+                val nameHolder = new CipherHolder(fileHolder.getKeyName().getBytes(Constants.CHAR_ENCODE), key, Config.packModeFlag, encryptFlag, true);
                 val contentHolder = new CipherHolder(fileContent, key, Config.packModeFlag, encryptFlag, false);
 
                 if (encryptFlag) {
@@ -299,15 +298,34 @@ class SQLiteMediator(val path: String, val dataHolder: DatabaseHolder, val targe
     }
 }
 
-class FileMediator(val path: String, val tableName:String, val dataHolder: DatabaseHolder, val target:String) extends LogWriter {
+class FileMediator(val path: String, val tableName:String, val dataHolder: DatabaseHolder, val target:String, dirFlag: Boolean) extends LogWriter {
     val key = Config.key;
     val file = new File(path);
-    val dirFlag = file.isDirectory();
     val encryptFlag = Config.getEncryptFlag(target);
     val exceptFlag = Config.getExceptFlag(target);
 
     def getTableNameHolder(): CipherHolder = { return dataHolder.tables.get(0).tableName }
-    def getFileList(): List[File] = if (dirFlag == true) file.listFiles().toList else List[File](file)
+    def getFileList(): ArrayList[FileHolder] = {
+        val fileHolderList = new ArrayList[FileHolder]();
+        if (dirFlag == true) {
+            val fileList = file.listFiles().toList;
+            for (i <- 0 until fileList.length) {
+                val file = fileList(i);
+                if(file.isDirectory()){
+                    val subFileList = file.listFiles().toList;
+                    for (j <- 0 until subFileList.length) {
+                        val subFile = subFileList(j);
+                        fileHolderList.add( new FileHolder(subFile, true, file.getName()) );
+                    }
+                }else{
+                    fileHolderList.add( new FileHolder(file, false, "") );
+                }
+            }
+        } else {
+            fileHolderList.add( new FileHolder(file, false, "") );
+        }
+        return fileHolderList;
+    }
 
     def buildTableHolder() = {
         logger.info("Building table for \"" + target + "\"");
@@ -327,10 +345,12 @@ class FileMediator(val path: String, val tableName:String, val dataHolder: Datab
         val fileNames = srcMediator.selectColumn(tableHolder, nameColHolder);
         val iteFiles = fileNames.iterator();
         while (iteFiles.hasNext()) {
-            val fileName = iteFiles.next();
-            val destination = if (dirFlag) path + "/" + fileName.getPlainString() else path;
-            val fileHolder = srcMediator.getFileFromTable(tableHolder, nameColHolder, contentColHolder, fileName, exceptFlag);
+            val keyName = iteFiles.next();
+            val destination = if (dirFlag) path + "/" + keyName.getPlainString() else path;
+            val fileHolder = srcMediator.getFileFromTable(tableHolder, nameColHolder, contentColHolder, keyName, exceptFlag);
             val targetFile = new File(destination);
+            val parentFolder = targetFile.getParentFile();
+            if(!parentFolder.exists()) parentFolder.mkdirs();
             val writeBytes = if (exceptFlag) fileHolder.cipher else fileHolder.plainText;
             FileUtils.writeByteArrayToFile(targetFile, writeBytes);
         }

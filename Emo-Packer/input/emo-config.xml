@@ -1,7 +1,7 @@
 <Config>
     <Assets>
-        <Scripts pack="on" encrypt="on" exceptContent="false">
-            <Runtime name="runtime.nut" />
+        <Scripts pack="off" encrypt="on" exceptContent="false">
+            <Runtime name="emo-framework/runtime.nut" />
             <Main    name="main.nut" />
         </Scripts>
         <Tables  pack="off" encrypt="on" />

@@ -29,6 +29,7 @@
 package com.emo_framework.tools.database
 import java.util.ArrayList
 import org.apache.commons.codec.binary.Base64
+import java.io.File
 
 class DatabaseHolder() {
     val tables = new ArrayList[TableHolder]();
@@ -85,4 +86,8 @@ class CipherHolder(bytes: Array[Byte], private val key: Array[Byte], val packMod
         
     def getPlainString() = new String(plainText);
     def getCipherString() = new String(cipher);
+}
+
+class FileHolder(val file: File, val hasDirFlag:Boolean, val folderName: String){
+    def getKeyName() = if(hasDirFlag == true) new String(folderName + "/" + file.getName()) else file.getName();
 }

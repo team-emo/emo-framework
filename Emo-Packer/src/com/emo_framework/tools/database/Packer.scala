@@ -122,7 +122,7 @@ object Packer extends LogWriter{
     def unpackFiles(target:String, tableName:String, dirFlag:Boolean){
         val dataHolder = new DatabaseHolder();
         val srcMediator = new SQLiteMediator(Config.target, dataHolder, target);
-        val dstMediator = new FileMediator(Config.getOutputPath(target), tableName, dataHolder, target);
+        val dstMediator = new FileMediator(Config.getOutputPath(target), tableName, dataHolder, target, dirFlag);
         srcMediator.buildTableHolders();
         dstMediator.deployFromTable(srcMediator, tableName);
         srcMediator.close();
@@ -130,7 +130,7 @@ object Packer extends LogWriter{
     
     def packFiles(target:String, tableName:String, dirFlag:Boolean){
         val dataHolder = new DatabaseHolder();
-        val srcMediator = new FileMediator(Config.getInputPath(target), tableName, dataHolder, target);
+        val srcMediator = new FileMediator(Config.getInputPath(target), tableName, dataHolder, target, dirFlag);
         val dstMediator = new SQLiteMediator(Config.target, dataHolder, target);
         srcMediator.buildTableHolder();
         dstMediator.createTables();
@@ -152,7 +152,6 @@ object Packer extends LogWriter{
         zip.closeEntry();
         zip.close();
     }
-    
 }
 
 object Config {
@@ -210,7 +209,6 @@ object Config {
     val key: Array[Byte] = if (keyGenFlag && packModeFlag) 
         // generate key if "autoGen" specified on "pack" mode
         Encryptor.generateKey(Constants.CRYPTO_ALGORITHM, Constants.CRYPTO_KEY_LENGTH) else keyEntered;
-
 }
 
 trait LogWriter {
