@@ -1,5 +1,6 @@
-/bin
-/.settings
-/test
+bin/
+.settings/
+test/
 /.cache
 /key.txt
+/emo_packer.log
