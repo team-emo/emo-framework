@@ -67,14 +67,6 @@ static int database_callback_count(void *arg, int argc, char **argv, char **colu
     return SQLITE_OK;
 }
 
-static int database_callback_string(void *arg, int argc, char **argv, char **column)  {
-    vector<string>* values = (vector<string>*)arg;
-
-    if(argc > 0) values->push_back(string(argv[0]) );
-
-    return SQLITE_OK;
-}
-
 static int database_callback_string_cipher(void *arg, int argc, char **argv, char **column)  {
     vector<emo::CipherHolder>* values = (vector<emo::CipherHolder>*)arg;
 
@@ -83,18 +75,6 @@ static int database_callback_string_cipher(void *arg, int argc, char **argv, cha
         holder.setCipher( string(argv[i]) );
         values->push_back(holder);
     }
-
-    return SQLITE_OK;
-}
-
-static int database_callback_multiple_string(void *arg, int argc, char **argv, char **column)  {
-    vector< vector<string> >* values = (vector< vector<string> >*)arg;
-
-    vector<string> cols;
-    for (int i = 0; i < argc; i++) {
-        cols.push_back( string(argv[i]) );
-    }
-    values->push_back(cols);
 
     return SQLITE_OK;
 }
@@ -428,19 +408,6 @@ namespace emo {
         return rcode;
     }
 
-    int Database::selectString(std::string* value, const string& contentColumn, const string& tableName, const string& keyColumn, const string& keyValue){
-        std::vector<std::string> container;
-        char *sqlScript = sqlite3_mprintf(
-                "SELECT \"%q\" FROM %Q WHERE \"%q\"=\"%q\"",
-                contentColumn.c_str(), tableName.c_str(), keyColumn.c_str(), keyValue.c_str() );
-
-        int rcode = this->query(sqlScript, database_callback_string, &container, true);
-        if( rcode == SQLITE_OK ){
-            *value = container.at(0);
-        }
-        return rcode;
-    }
-
     int Database::selectStringCipher(emo::CipherHolder* value, const string& contentColumn, const string& tableName, const string& keyColumn, const string& keyValue){
         std::vector<emo::CipherHolder> container;
         char *sqlScript = sqlite3_mprintf(
@@ -452,13 +419,6 @@ namespace emo {
             *value = container.at(0);
         }
         return rcode;
-    }
-
-    int Database::selectStrings(std::vector<std::string>* value, const string& targetColumn, const string& tableName){
-        char *sqlScript = sqlite3_mprintf(
-                "SELECT \"%q\" FROM %Q", targetColumn.c_str(), tableName.c_str() );
-
-        return this->query(sqlScript, database_callback_string, value, true);
     }
 
     int Database::selectStringCiphers(std::vector<emo::CipherHolder>* value, const string& targetColumn, const string& tableName){

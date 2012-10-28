@@ -114,9 +114,7 @@ namespace emo {
 
         int exec(char* sql, bool freeSqlFlag);
         int query(char* sql, sqlite3_callback callback, void* values, bool freeSqlFlag);
-        int selectString(string* value, const string& contentColumn, const string& tableName, const string& keyColumn, const string& keyValue);
         int selectStringCipher(emo::CipherHolder* value, const string& contentColumn, const string& tableName, const string& keyColumn, const string& keyValue);
-        int selectStrings(vector<string>* value, const string& targetColumn, const string& tableName);
         int selectStringCiphers(vector<emo::CipherHolder>* value, const string& targetColumn, const string& tableName);
         int selectBinaryContent(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName);
         int selectBinaryCipherContent(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName);
