@@ -51,9 +51,40 @@
 #include "JavaGlue.h"
 #include "SquirrelGlue.h"
 
-namespace emo {
-    class Engine {
+#include <rapidxml/rapidxml.hpp>
 
+namespace emo {
+
+    class AssetPackInfo{
+    public:
+        AssetPackInfo();
+        ~AssetPackInfo();
+        void setPackInfo(rapidxml::xml_node<> * node, bool hasContent);
+
+        bool packed;
+        bool encrypted;
+        bool contentEncrypted;
+
+    };
+
+    class Config {
+    public:
+        Config();
+        ~Config();
+        void loadConfig(Database* database);
+
+        AssetPackInfo tablesInfo;
+        AssetPackInfo scriptsInfo;
+        AssetPackInfo soundsInfo;
+        AssetPackInfo imagesInfo;
+        AssetPackInfo mapsInfo;
+        AssetPackInfo modelsInfo;
+
+        std::string mainScriptName;
+        std::string runtimeScriptName;
+    };
+
+    class Engine {
     public:
         Engine();
         ~Engine();
@@ -127,6 +158,7 @@ namespace emo {
         bool useANR;
 
         android_app* app;
+        Config* config;
         Audio* audio;
         Stage* stage;
         Database* database;

@@ -5,8 +5,8 @@
             <Main    name="main.nut" />
         </Scripts>
         <Tables  pack="off" encrypt="on" />
-        <Sounds  pack="off" encrypt="on" exceptContent="false"  />
-        <Images  pack="off" encrypt="on" exceptContent="false"  />
+        <Sounds  pack="off" encrypt="on" exceptContent="false" />
+        <Images  pack="off" encrypt="on" exceptContent="false" />
         <Maps    pack="off" encrypt="on" exceptContent="false" />
         <Models  pack="off" encrypt="on" exceptContent="false" />
     </Assets>

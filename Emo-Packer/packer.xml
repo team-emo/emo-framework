@@ -15,7 +15,7 @@
         <!-- Tables                                             -->
         <!-- pack : Enter "on" for target, otherwise ignored.      -->
         <!-- name : Enter file name of the target SQLite database. -->
-        <Tables pack="on" name="tables.db">
+        <Tables pack="off" name="tables.db">
         
             <!-- Encryption                                   -->
             <!-- encrypt : Enter "on" for encrypting records. -->

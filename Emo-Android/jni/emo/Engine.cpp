@@ -42,6 +42,76 @@ namespace emo {
         return left->z < right->z;
     }
 
+    AssetPackInfo::AssetPackInfo(){
+        this->packed           = false;
+        this->encrypted        = false;
+        this->contentEncrypted = false;
+    }
+
+    AssetPackInfo::~AssetPackInfo() {
+
+    }
+
+    void AssetPackInfo::setPackInfo(rapidxml::xml_node<> * node, bool hasContent){
+        rapidxml::xml_attribute<> *packAttr    = node->first_attribute("pack");
+        rapidxml::xml_attribute<> *encryptAttr = node->first_attribute("encrypt");
+
+        if( strcmp(packAttr->value(), "on")    == 0 ) this->packed = true;
+        if( strcmp(encryptAttr->value(), "on") == 0)  this->encrypted = true;
+
+        if(hasContent == true){
+            rapidxml::xml_attribute<> *exceptContentAttr = node->first_attribute("exceptContent");
+            if( strcmp(exceptContentAttr->value(), "on") != 0) this->contentEncrypted = true;
+        }
+    }
+
+    Config::Config() {
+        this->tablesInfo  = AssetPackInfo();
+        this->scriptsInfo = AssetPackInfo();
+        this->soundsInfo  = AssetPackInfo();
+        this->imagesInfo  = AssetPackInfo();
+        this->mapsInfo    = AssetPackInfo();
+        this->modelsInfo  = AssetPackInfo();
+
+    }
+
+    Config::~Config() {
+
+    }
+
+    void Config::loadConfig(Database* database){
+        char* configChars = database->getConfig();
+
+        rapidxml::xml_document<> doc;
+        doc.parse<0>(configChars);
+
+        rapidxml::xml_node<> * rootNode = doc.first_node("Config");
+        rapidxml::xml_node<> * assetsNode = rootNode->first_node("Assets");
+
+        // Retrieve assets nodes
+        rapidxml::xml_node<> * scriptsNode = assetsNode->first_node("Scripts");
+        rapidxml::xml_node<> * tablesNode  = assetsNode->first_node("Tables");
+        rapidxml::xml_node<> * soundsNode  = assetsNode->first_node("Sounds");
+        rapidxml::xml_node<> * imagesNode  = assetsNode->first_node("Images");
+        rapidxml::xml_node<> * mapsNode    = assetsNode->first_node("Maps");
+        rapidxml::xml_node<> * modelsNode  = assetsNode->first_node("Models");
+
+        // Set pack info for each asset type
+        this->scriptsInfo.setPackInfo(scriptsNode, true);
+        this->tablesInfo.setPackInfo(tablesNode, false);
+        this->soundsInfo.setPackInfo(soundsNode, true);
+        this->imagesInfo.setPackInfo(imagesNode, true);
+        this->mapsInfo.setPackInfo(mapsNode, true);
+        this->modelsInfo.setPackInfo(modelsNode, true);
+
+        // Read main and runtime script's names
+        rapidxml::xml_node<> * runtimeScriptNode = scriptsNode->first_node("Runtime");
+        rapidxml::xml_node<> * mainScriptNode    = scriptsNode->first_node("Main");
+        this->runtimeScriptName = std::string(runtimeScriptNode->first_attribute("name")->value());
+        this->mainScriptName    = std::string(mainScriptNode->first_attribute("name")->value());
+
+    }
+
     Engine::Engine() {
         this->logLevel = LOG_INFO;
 
@@ -169,6 +239,9 @@ namespace emo {
         // force fullscreen
         this->updateOptions(OPT_WINDOW_FORCE_FULLSCREEN);
 
+        // create config instance
+        config = new Config();
+
         // create stage instance
         stage = new Stage();
 
@@ -186,6 +259,10 @@ namespace emo {
 
         // create Android(mediator) instance
         android = new Android();
+
+#ifdef EMO_PACKED
+        config->loadConfig(database);
+#endif
 
         this->focused = false;
         this->loadedCalled = false;
@@ -271,8 +348,13 @@ namespace emo {
             this->squirrelGlue->initScriptFunctions();
 
             // load runtime and main script
-            loadScriptFromAsset(this->getRuntimeScriptName().c_str());
-            loadScriptFromAsset(this->getMainScriptName().c_str());
+            if(this->config->scriptsInfo.packed == true){
+                loadScriptFromDatabase(this->config->runtimeScriptName.c_str());
+                loadScriptFromDatabase(this->config->mainScriptName.c_str());
+            }else{
+                loadScriptFromAsset(this->getRuntimeScriptName().c_str());
+                loadScriptFromAsset(this->getMainScriptName().c_str());
+            }
 
             this->scriptLoaded = true;
         }

@@ -28,6 +28,8 @@
 #ifndef EMO_UTIL_H
 #define EMO_UTIL_H
 
+#include "Database.h"
+
 using namespace std;
 
 char* base64Encode(const unsigned char* src, int size);
@@ -46,6 +48,8 @@ int max(int a, int b);
 int min(int a, int b);
 
 vector<string> split( string target, string splitter );
+bool findString(vector<string>& strings, string target);
+emo::CipherHolder* findCipherHolder(vector<emo::CipherHolder>& holders, string target );
 
 void test();
 

@@ -488,6 +488,31 @@ bool loadScriptFromAsset(const char* fname) {
 }
 
 /*
+ * Load squirrel script from database
+ */
+bool loadScriptFromDatabase(const char* fname) {
+
+    const char* script = engine->database->getScript(fname);
+
+    if(sqCompileBuffer(engine->sqvm, script, EMO_RUNTIME_CLASS) == EMO_NO_ERROR ){
+        sq_pushroottable(engine->sqvm);
+        if (SQ_FAILED(sq_call(engine->sqvm, 1, SQFalse, SQTrue))) {
+            engine->setLastError(ERR_SCRIPT_CALL_ROOT);
+            LOGW("loadScriptFromDatabase: failed to sq_call");
+            LOGW(fname);
+            return false;
+        }
+    } else {
+        engine->setLastError(ERR_SCRIPT_COMPILE);
+        LOGW("loadScriptFromDatabase: failed to compile squirrel script");
+        LOGW(fname);
+        return false;
+    }
+
+    return true;
+}
+
+/*
  * load squirrel script from given file name
  */
 bool loadScript(const char* fname) {
@@ -806,7 +831,11 @@ SQInteger emoImportScript(HSQUIRRELVM v) {
             sq_getstring(v, -1, &fname);
             sq_poptop(v);
 
-            loadScriptFromAsset((char*) fname);
+            if(engine->config->scriptsInfo.packed == true){
+                loadScriptFromDatabase((char*) fname);
+            }else{
+                loadScriptFromAsset((char*) fname);
+            }
         }
     }
     return 0;

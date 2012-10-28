@@ -1,5 +1,32 @@
 package com.emo_framework;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+import java.util.Set;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
+import com.readystatesoftware.sqliteasset.SQLiteAssetException;
+
 import android.app.NativeActivity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -12,37 +39,14 @@ import android.graphics.Paint.FontMetrics;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.Surface;
 import android.widget.Toast;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Random;
-import java.util.Set;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.io.IOException;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.StatusLine;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.HttpResponse;
-
 public class EmoActivity extends NativeActivity {
+    public static char DELIMITER = '|';
     
     // This line is needed for calling C/C++ Function
     static{ System.loadLibrary("emo-android"); }
@@ -59,6 +63,30 @@ public class EmoActivity extends NativeActivity {
     protected String lastErrorCode;
     
     protected static Random randomNumberGenerator;
+    
+    protected EmoDatabase database;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        // copy database from assets/database folder
+        try{
+            database = new EmoDatabase(this);
+            database.getWritableDatabase();
+        }catch(SQLiteAssetException e){
+            LOGI("onCreate : No database file found in assets/database");
+        }catch(Exception e){
+            LOGE("onCreate : Unknown error has occurred while reading database file");
+            LOGE(e.getMessage());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        database.close();
+    }
     
     private static synchronized Random initRNG() {
         Random rnd = randomNumberGenerator;
@@ -467,7 +495,7 @@ public class EmoActivity extends NativeActivity {
                         ArrayList <String> extraStrList = data.getStringArrayListExtra(key);
                         
                         for(int i = 0; i < extraStrList.size() ;i++){
-                            if(i != 0) extraBuilder.append('|');
+                            if(i != 0) extraBuilder.append(DELIMITER);
                             String value = extraStrList.get(i);
                             extraBuilder.append(value);
                         }
@@ -476,7 +504,7 @@ public class EmoActivity extends NativeActivity {
                         ArrayList<Integer> extraIntList = data.getIntegerArrayListExtra(key);
                         
                         for(int i = 0; i < extraIntList.size() ;i++){
-                            if(i != 0) extraBuilder.append('|');
+                            if(i != 0) extraBuilder.append(DELIMITER);
                             String value = extraIntList.get(i).toString();
                             extraBuilder.append(value);
                         }

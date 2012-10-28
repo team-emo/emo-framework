@@ -75,6 +75,7 @@ void gluPerspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar);
 
 void emoUpdateOptions(SQInteger value);
 bool loadScriptFromAsset(const char* fname);
+bool loadScriptFromDatabase(const char* fname);
 bool loadScriptFromDocument(const char* fname);
 bool loadScript(const char* fname);
 

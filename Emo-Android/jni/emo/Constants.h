@@ -28,13 +28,17 @@
 #ifndef EMO_CONSTANT_H
 #define EMO_CONSTANT_H
 
-#define EMO_BUILD_NUMBER 31
+#define EMO_BUILD_NUMBER 32
 
-// uncomment below to enable sandbox mode
-// #define EMO_WITH_SANDBOX
+// Uncomment below to enable sandbox mode
+//#define EMO_WITH_SANDBOX
 #define PNG_NO_PEDANTIC_WARNINGS
 #define RAPIDXML_NO_EXCEPTIONS
 #define GL_GLEXT_PROTOTYPES
+
+//#define EMO_PACKED
+#define AES_PRIVATE_KEY "keyMustBeChanged"
+//#define PREFERENCE_WITHOUT_ENCRYPTION
 
 #define EMO_LOG_TAG "EmoFramework"
 
@@ -216,7 +220,5 @@
 #define ANDROID_TOAST_LONG  0x00000000
 
 #define EXTRA_PREFIX_SIZE 16
-
-#define AES_PRIVATE_KEY "keyMustBeChanged"
 
 #endif

@@ -171,7 +171,6 @@ unsigned char* decrypt(const unsigned char* key, const unsigned char* src, int s
     // decrypt with CBC mode
     AES_RETURN aesResult = decryptor->cbc_decrypt(&src[AES_BLOCK_SIZE], plainBytes, *plainSize , iv);
     if( aesResult != EXIT_SUCCESS ){
-         LOGE("decryptCbcMode: AES(CBC mode) decryption failed");
          free(plainBytes);
          return NULL;
      }
@@ -223,8 +222,13 @@ string decryptString(const string& src){
     // decrypt bytes
     int plainSize = 0;
     unsigned char * decryptedBytes = decrypt(key, decodedBytes, size, &plainSize);
-    string dst = string( (char*) decryptedBytes);
 
+    // return empty string if decryption was failed
+    if(decryptedBytes == NULL){
+        return string();
+    }
+
+    string dst = string( (char*) decryptedBytes);
     return dst;
 }
 
@@ -253,7 +257,7 @@ int min(int a, int b) {
     return a < b ? a : b;
 }
 
-vector <string> split( string target, string splitter ) {
+vector<string> split( string target, string splitter ) {
     vector<string> ret;
     for( unsigned int i=0, n; i <= target.length(); i=n+1 ){
         n = target.find_first_of( splitter, i );
@@ -264,6 +268,25 @@ vector <string> split( string target, string splitter ) {
         ret.push_back(tmp);
     }
     return ret;
+}
+
+bool findString(vector<string>& strings, string target){
+    vector<string>::iterator itStrings;
+    for(itStrings = strings.begin(); itStrings != strings.end(); itStrings++){
+         if(*itStrings == target){
+             return true;
+         }
+     }
+    return false;
+}
+emo::CipherHolder* findCipherHolder(vector<emo::CipherHolder>& holders, string plainText ){
+    vector<emo::CipherHolder>::iterator itHolders;
+    for(itHolders = holders.begin(); itHolders != holders.end(); itHolders++){
+         if( itHolders->getPlainText() == plainText ){
+             return itHolders;
+         }
+     }
+    return NULL;
 }
 
 void test(void){

@@ -34,50 +34,98 @@
 #include "sqlite3.h"
 #include "squirrel.h"
 
+using namespace std;
+
 void initDatabaseFunctions();
 
 namespace emo {
+
     class CipherHolder {
     public:
         CipherHolder();
         ~CipherHolder();
-        std::string getPlainText();
-        void setPlainText(std::string cipher);
-        std::string getCipher();
-        void setCipher(std::string cipher);
+        string getPlainText();
+        void setPlainText(string plainText);
+        string getCipher();
+        void setCipher(string cipher);
         bool hasCipher();
-        bool compareWithCipher(std::string cipher);
+        bool compareWithCipher(string cipher);
         bool compareWithHolder(CipherHolder holder);
     protected:
-        std::string plainText;
-        std::string cipher;
+        string plainText;
+        string cipher;
+    };
+
+    class ColumnHolder {
+    public:
+        ColumnHolder(CipherHolder name);
+        ColumnHolder(string name);
+        CipherHolder getColumnName();
+        ~ColumnHolder();
+    protected:
+        CipherHolder columnName;
+    };
+
+    class TableHolder {
+    public:
+        TableHolder(CipherHolder name);
+        ~TableHolder();
+        void addColumn(ColumnHolder column);
+        CipherHolder getTableName();
+        ColumnHolder* getColumnHolder(string columnName);
+    protected:
+        CipherHolder tableName;
+        vector<ColumnHolder> columns;
     };
 
     class Database {
     public:
         Database();
         ~Database();
-        std::string getPath(std::string name);
-        std::string create(std::string name, jint mode);
+
         int lastError;
-        std::string lastErrorMessage;
-        bool openOrCreate(std::string name, jint mode);
-        bool open(std::string name);
+        string lastErrorMessage;
+
+        string getPath(string name);
+        string create(string name, jint mode);
+
+        bool open(string name);
+        bool openOrCreate(string name, jint mode);
+        bool openDatabase();
         bool close();
-        bool deleteDatabase(std::string name);
+        bool deleteDatabase(string name);
+        void analyze();
+        TableHolder* getTableHolder(string tableName);
+
         bool openOrCreatePreference();
-        bool openPreference();
-        std::string getPreference(std::string key);
-        bool setPreference(std::string key, std::string value);
-        std::vector<emo::CipherHolder> getPreferenceKeys();
-        bool deletePreference(std::string key);
+        string getPreference(string key);
+        bool setPreference(string key, string value);
+        vector<emo::CipherHolder> getPreferenceKeys();
+        bool deletePreference(string key);
+
+        char* getConfig();
+        char* getScript(const char* name);
+
     protected:
         sqlite3* db;
         bool isOpen;
-        int  exec(std::string sql);
-        int  exec_count(std::string sql, int* count);
-        int  query_vector(std::string sql, std::vector<emo::CipherHolder>* values);
+        bool isAnalyzed;
+        vector<TableHolder>* tables;
+
+        int exec(char* sql, bool freeSqlFlag);
+        int query(char* sql, sqlite3_callback callback, void* values, bool freeSqlFlag);
+        int selectString(string* value, const string& contentColumn, const string& tableName, const string& keyColumn, const string& keyValue);
+        int selectStringCipher(emo::CipherHolder* value, const string& contentColumn, const string& tableName, const string& keyColumn, const string& keyValue);
+        int selectStrings(vector<string>* value, const string& targetColumn, const string& tableName);
+        int selectStringCiphers(vector<emo::CipherHolder>* value, const string& targetColumn, const string& tableName);
+        int selectBinaryContent(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName);
+        int selectBinaryCipherContent(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName);
+        int insertStrings(const string& tableName, vector<string>& values);
+        int updateString(const string& tableName, const string& targetColumn, const string& value, const string& keyColumn, const string& keyValue);
+        int deleteRecords(const string& tableName, const string& keyColumn, const string& keyValue);
+
     };
+
 }
 
 SQInteger emoDatabaseOpenOrCreate(HSQUIRRELVM v);

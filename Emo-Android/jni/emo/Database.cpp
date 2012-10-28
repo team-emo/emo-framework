@@ -36,6 +36,7 @@
 #include "VmFunc.h"
 #include "Util.h"
 
+using namespace std;
 extern emo::Engine* engine;
 
 void initDatabaseFunctions() {
@@ -59,27 +60,80 @@ void initDatabaseFunctions() {
     registerClassFunc(engine->sqvm, EMO_PREFERENCE_CLASS, "close",        emoDatabaseClose);
 }
 
-static int database_preference_callback(void *arg, int argc, char **argv, char **column)  {
-    emo::CipherHolder* value = (emo::CipherHolder*)arg;
-    if (argc > 0){
-        value->setCipher( std::string(argv[0]) );
-    }
-    return SQLITE_OK;
-}
-
-static int database_count_callback(void *arg, int argc, char **argv, char **column)  {
+static int database_callback_count(void *arg, int argc, char **argv, char **column)  {
     int* count = (int*)arg;
     if (argc > 0) *count = atoi(argv[0]);
+
     return SQLITE_OK;
 }
 
-static int database_query_vector_callback(void *arg, int argc, char **argv, char **column)  {
-    std::vector<emo::CipherHolder>* values = (std::vector<emo::CipherHolder>*)arg;
+static int database_callback_string(void *arg, int argc, char **argv, char **column)  {
+    vector<string>* values = (vector<string>*)arg;
+
+    if(argc > 0) values->push_back(string(argv[0]) );
+
+    return SQLITE_OK;
+}
+
+static int database_callback_string_cipher(void *arg, int argc, char **argv, char **column)  {
+    vector<emo::CipherHolder>* values = (vector<emo::CipherHolder>*)arg;
 
     for (int i = 0; i < argc; i++) {
         emo::CipherHolder holder = emo::CipherHolder();
-        holder.setCipher( std::string(argv[i]) );
+        holder.setCipher( string(argv[i]) );
         values->push_back(holder);
+    }
+
+    return SQLITE_OK;
+}
+
+static int database_callback_multiple_string(void *arg, int argc, char **argv, char **column)  {
+    vector< vector<string> >* values = (vector< vector<string> >*)arg;
+
+    vector<string> cols;
+    for (int i = 0; i < argc; i++) {
+        cols.push_back( string(argv[i]) );
+    }
+    values->push_back(cols);
+
+    return SQLITE_OK;
+}
+
+static int database_callback_multiple_string_cipher(void *arg, int argc, char **argv, char **column)  {
+    vector<vector< emo::CipherHolder> >* values = (vector< vector<emo::CipherHolder> >*)arg;
+
+    vector<emo::CipherHolder> cols;
+    for (int i = 0; i < argc; i++) {
+        if(argv[i] == NULL) continue;
+        emo::CipherHolder holder = emo::CipherHolder();
+        holder.setCipher( string(argv[i]) );
+        cols.push_back( holder );
+    }
+    values->push_back(cols);
+
+    return SQLITE_OK;
+}
+
+static int database_callback_binary(void *arg, int argc, char **argv, char **column)  {
+    vector<unsigned char*>* values = (vector<unsigned char*>*)arg;
+
+    if (argc > 0){
+        int len = strlen(argv[0]);
+        unsigned char* binary =  (unsigned char*) calloc( len + 1, sizeof(char));
+        memcpy(binary, argv[0], len + 1);
+        values->push_back( binary );
+    }
+
+    return SQLITE_OK;
+}
+
+static int database_callback_binary_cipher(void *arg, int argc, char **argv, char **column)  {
+    vector<unsigned char*>* values = (vector<unsigned char*>*)arg;
+
+    if(argc > 0){
+        int plainSize = 0;
+        unsigned char * decryptedBytes = decrypt( (unsigned char *)AES_PRIVATE_KEY, (unsigned char *)argv[0], atoi(argv[1]), &plainSize);
+        values->push_back(decryptedBytes);
     }
 
     return SQLITE_OK;
@@ -96,20 +150,25 @@ namespace emo {
 
     }
 
-    std::string CipherHolder::getCipher(){
+    string CipherHolder::getCipher(){
         return this->cipher;;
     }
 
-    void CipherHolder::setCipher(std::string cipher){
-        this->plainText  = decryptString(cipher);
+    void CipherHolder::setCipher(string cipher){
         this->cipher = cipher;
+        this->plainText  = decryptString(cipher);
+
+        // if the string cannot be decrypted, save it as a plain text
+        if(this->plainText.empty() == true){
+            this->plainText = cipher;
+        }
     }
 
-    std::string CipherHolder::getPlainText(){
+    string CipherHolder::getPlainText(){
         return this->plainText;;
     }
 
-    void CipherHolder::setPlainText(std::string plainText){
+    void CipherHolder::setPlainText(string plainText){
         this->plainText = plainText;
         this->cipher    = encryptString(plainText);
     }
@@ -121,7 +180,7 @@ namespace emo {
         return false;
     }
 
-    bool CipherHolder::compareWithCipher(std::string cipher) {
+    bool CipherHolder::compareWithCipher(string cipher) {
         if(plainText == decryptString(cipher)){
             return true;
         }
@@ -135,17 +194,62 @@ namespace emo {
         return false;
     }
 
+    ColumnHolder::ColumnHolder(CipherHolder name){
+        this->columnName = name;
+    }
+
+    ColumnHolder::ColumnHolder(string name){
+        this->columnName = emo::CipherHolder();
+        this->columnName.setPlainText(name);
+    }
+
+    emo::CipherHolder ColumnHolder::getColumnName(){
+        return this->columnName;
+    }
+
+    ColumnHolder::~ColumnHolder(){
+
+    }
+
+    TableHolder::TableHolder(CipherHolder name){
+        this->tableName = name;
+    }
+
+    TableHolder::~TableHolder(){
+
+    }
+
+    void TableHolder::addColumn(ColumnHolder column){
+        this->columns.push_back(column);
+    }
+
+    ColumnHolder* TableHolder::getColumnHolder(string columnName){
+        vector<emo::ColumnHolder>::iterator itCols;
+        for(itCols = this->columns.begin(); itCols != this->columns.end(); itCols++){
+            if(itCols->getColumnName().getPlainText() == columnName){
+                return itCols;
+            }
+        }
+        return NULL;
+    }
+
+    CipherHolder TableHolder::getTableName(){
+        return this->tableName;
+    }
+
     Database::Database() {
         this->isOpen = false;
+        this->isAnalyzed = false;
         this->lastError = SQLITE_OK;
+        this->tables = new vector<TableHolder>();
     }
 
     Database::~Database() {
-
+        delete tables;
     }
 
-    std::string Database::getPath(std::string name) {
-        std::string databasePath;
+    string Database::getPath(string name) {
+        string databasePath;
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
         
@@ -169,8 +273,8 @@ namespace emo {
         return databasePath;
     }
 
-    std::string Database::create(std::string name, jint mode) {
-        std::string filename;
+    string Database::create(string name, jint mode) {
+        string filename;
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
         
@@ -196,7 +300,7 @@ namespace emo {
         return filename;
     }
 
-    bool Database::deleteDatabase(std::string name) {
+    bool Database::deleteDatabase(string name) {
         JNIEnv* env;
         JavaVM* vm = engine->app->activity->vm;
         
@@ -211,11 +315,11 @@ namespace emo {
         return deleted;
     }
 
-    bool Database::openOrCreate(std::string name, jint mode) {
+    bool Database::open(string name) {
         if (this->isOpen) return false;
-        
-        std::string path = this->create(name, mode);
-        
+
+        string path = this->getPath(name);
+
         int rcode = sqlite3_open(path.c_str(), &this->db);
         
         if (rcode != SQLITE_OK) {
@@ -224,13 +328,15 @@ namespace emo {
         }
         
         this->isOpen = true;
+        if(!this->isAnalyzed) this->analyze();
+
         return true;
     }
 
-    bool Database::open(std::string name) {
+    bool Database::openOrCreate(string name, jint mode) {
         if (this->isOpen) return false;
 
-        std::string path = this->getPath(name);
+        string path = this->create(name, mode);
 
         int rcode = sqlite3_open(path.c_str(), &this->db);
         
@@ -240,7 +346,14 @@ namespace emo {
         }
         
         this->isOpen = true;
+        // analyze DB to get names of all the tables and columns
+        if(!this->isAnalyzed) this->analyze();
+
         return true;
+    }
+
+    bool Database::openDatabase() {
+        return this->open(DEFAULT_DATABASE_NAME);
     }
 
     bool Database::close() {
@@ -252,98 +365,244 @@ namespace emo {
         return true;
     }
 
-    int Database::exec(std::string sql) {
+    void Database::analyze(){
+        if(this->isAnalyzed == true) return;
+
+        // retrieve all tables' name
+        vector<emo::CipherHolder> tableNames;
+        char sqlTables [256] = "SELECT NAME FROM sqlite_master WHERE TYPE='table'";
+        this->query(sqlTables, database_callback_string_cipher, &tableNames, false);
+
+        vector<emo::CipherHolder>::iterator itTables;
+        for(itTables = tableNames.begin(); itTables != tableNames.end(); itTables++){
+            emo::TableHolder table = emo::TableHolder(*itTables);
+            // retrieve table's information
+            vector< vector<emo::CipherHolder> > tableInfos;
+            char *sqlColumns = sqlite3_mprintf("PRAGMA TABLE_INFO('%q')", itTables->getCipher().c_str());
+            this->query(sqlColumns, database_callback_multiple_string_cipher, &tableInfos, true);
+
+            vector<vector<emo::CipherHolder> >::iterator itCols;
+            for(itCols = tableInfos.begin(); itCols != tableInfos.end(); itCols++){
+                emo::ColumnHolder column = emo::ColumnHolder(itCols->at(1));
+                table.addColumn(column);
+            }
+            this->tables->push_back(table);
+        }
+        this->isAnalyzed = true;
+    }
+
+    TableHolder* Database::getTableHolder(string tableName){
+        // find table
+        vector<emo::TableHolder>::iterator itTables;
+        for(itTables = this->tables->begin(); itTables != this->tables->end(); itTables++){
+            if(itTables->getTableName().getPlainText() == tableName){
+                return itTables;
+            }
+        }
+        return NULL;
+    }
+
+    int Database::exec(char* sql, bool freeSqlFlag) {
         char* error;
-        int rcode = sqlite3_exec(this->db, sql.c_str(), NULL, 0, &error);
+        int rcode = sqlite3_exec(this->db, sql, NULL, 0, &error);
         if (rcode != SQLITE_OK) {
             this->lastError = rcode;
             this->lastErrorMessage = error;
             sqlite3_free(error);
+        }
+        if( freeSqlFlag) sqlite3_free(sql);
+
+        return rcode;
+    }
+
+    int Database::query(char* sql, sqlite3_callback callback, void * values, bool freeSqlFlag) {
+        char* error;
+        int rcode = sqlite3_exec(this->db, sql, callback, values, &error);
+        if (rcode != SQLITE_OK) {
+            this->lastError = rcode;
+            this->lastErrorMessage = error;
+            sqlite3_free(error);
+        }
+        if( freeSqlFlag) sqlite3_free(sql);
+
+        return rcode;
+    }
+
+    int Database::selectString(std::string* value, const string& contentColumn, const string& tableName, const string& keyColumn, const string& keyValue){
+        std::vector<std::string> container;
+        char *sqlScript = sqlite3_mprintf(
+                "SELECT \"%q\" FROM %Q WHERE \"%q\"=\"%q\"",
+                contentColumn.c_str(), tableName.c_str(), keyColumn.c_str(), keyValue.c_str() );
+
+        int rcode = this->query(sqlScript, database_callback_string, &container, true);
+        if( rcode == SQLITE_OK ){
+            *value = container.at(0);
         }
         return rcode;
     }
 
-    int Database::exec_count(std::string sql, int* count) {
-        char* error;
-        int rcode = sqlite3_exec(this->db, sql.c_str(), database_count_callback, count, &error);
-        if (rcode != SQLITE_OK) {
-            this->lastError = rcode;
-            this->lastErrorMessage = error;
-            sqlite3_free(error);
+    int Database::selectStringCipher(emo::CipherHolder* value, const string& contentColumn, const string& tableName, const string& keyColumn, const string& keyValue){
+        std::vector<emo::CipherHolder> container;
+        char *sqlScript = sqlite3_mprintf(
+                "SELECT \"%q\" FROM %Q WHERE \"%q\"=\"%q\"",
+                contentColumn.c_str(), tableName.c_str(), keyColumn.c_str(), keyValue.c_str() );
+
+        int rcode = this->query(sqlScript, database_callback_string_cipher, &container, true);
+        if( rcode == SQLITE_OK ){
+            *value = container.at(0);
         }
         return rcode;
     }
 
-    int Database::query_vector(std::string sql, std::vector<emo::CipherHolder>* values) {
-        char* error;
-        int rcode = sqlite3_exec(this->db, sql.c_str(), database_query_vector_callback, values, &error);
-        if (rcode != SQLITE_OK) {
-            this->lastError = rcode;
-            this->lastErrorMessage = error;
-            sqlite3_free(error);
+    int Database::selectStrings(std::vector<std::string>* value, const string& targetColumn, const string& tableName){
+        char *sqlScript = sqlite3_mprintf(
+                "SELECT \"%q\" FROM %Q", targetColumn.c_str(), tableName.c_str() );
+
+        return this->query(sqlScript, database_callback_string, value, true);
+    }
+
+    int Database::selectStringCiphers(std::vector<emo::CipherHolder>* value, const string& targetColumn, const string& tableName){
+        char *sqlScript = sqlite3_mprintf(
+                "SELECT \"%q\" FROM %Q", targetColumn.c_str(), tableName.c_str() );
+
+        return this->query(sqlScript, database_callback_string_cipher, value, true);
+    }
+
+    int Database::selectBinaryContent(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName){
+        vector<unsigned char*> binaryContents;
+
+        char *sqlScript = sqlite3_mprintf(
+                "SELECT \"%q\" FROM %Q WHERE \"%q\"=\"%q\"",
+                contentColumn.c_str(), tableName.c_str(), nameColumn.c_str(), targetName.c_str() );
+
+        int rcode = this->query(sqlScript, database_callback_binary, &binaryContents, true);
+        if( rcode == SQLITE_OK ){
+            *value = (char*)binaryContents.at(0);
         }
         return rcode;
+    }
+
+    int Database::selectBinaryCipherContent(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName){
+        vector<unsigned char*> binaryContents;
+
+        char *sqlScript = sqlite3_mprintf(
+                "SELECT \"%q\", length(\"%q\") FROM %Q WHERE \"%q\"=\"%q\"",
+                contentColumn.c_str(), contentColumn.c_str(), tableName.c_str(), nameColumn.c_str(), targetName.c_str() );
+
+        int rcode = this->query(sqlScript, database_callback_binary_cipher, &binaryContents, true);
+        if( rcode == SQLITE_OK ){
+            *value = (char*)binaryContents.at(0);
+        }
+        return rcode;
+    }
+
+    int Database::insertStrings(const string& tableName, vector<string>& values){
+        string stringValues = string("");
+
+        bool firstFlag = true;
+        vector<string>::iterator itValues;
+        for(itValues = values.begin(); itValues != values.end(); itValues++){
+            if(firstFlag == true){
+                firstFlag = false;
+            }else{
+                stringValues += ", ";
+            }
+            stringValues += "\"" + *itValues + "\"";
+        }
+        string sqlScript = "INSERT INTO '" + tableName + "' VALUES(" + stringValues + ")";
+
+        return this->exec((char*)sqlScript.c_str(), false);
+    }
+
+    int Database::updateString(const string& tableName, const string& targetColumn, const string& value, const string& keyColumn, const string& keyValue){
+        char* sql = sqlite3_mprintf("UPDATE %Q SET \"%q\"=\"%q\" WHERE \"%q\"=\"%q\"",
+                tableName.c_str(), targetColumn.c_str(), value.c_str(), keyColumn.c_str(), keyValue.c_str());
+        return this->exec(sql, true);
+    }
+
+    int Database::deleteRecords(const string& tableName, const string& keyColumn, const string& keyValue){
+        char *sql = sqlite3_mprintf("DELETE FROM %Q WHERE \"%q\"=\"%q\"",
+                tableName.c_str(), keyColumn.c_str(), keyValue.c_str());
+        return this->exec(sql, true);
+
     }
 
     bool Database::openOrCreatePreference() {
         bool result = this->openOrCreate(DEFAULT_DATABASE_NAME, FILE_MODE_PRIVATE);
         if (!result) return false;
 
-        char* sql = sqlite3_mprintf("CREATE TABLE IF NOT EXISTS %q (KEY TEXT PRIMARY KEY, VALUE TEXT)", PREFERENCE_TABLE_NAME);
-        int rcode = this->exec(sql);
-        sqlite3_free(sql);
+        if(this->getTableHolder(PREFERENCE_TABLE_NAME) != NULL){
+            return true;
+        }
+        emo::CipherHolder tableName   = emo::CipherHolder();
+        emo::CipherHolder keyHolder   = emo::CipherHolder();
+        emo::CipherHolder valueHolder = emo::CipherHolder();
 
+        tableName.setPlainText(PREFERENCE_TABLE_NAME);
+        keyHolder.setPlainText("KEY");
+        valueHolder.setPlainText("VALUE");
+
+#ifndef PREFERENCE_WITHOUT_ENCRYPTION
+        char* sql = sqlite3_mprintf("CREATE TABLE IF NOT EXISTS %Q (\"%q\" TEXT PRIMARY KEY, \"%q\" TEXT)",
+                tableName.getCipher().c_str(), keyHolder.getCipher().c_str(), valueHolder.getCipher().c_str() );
+        int rcode = this->exec(sql, true);
+#else
+        char* sql = sqlite3_mprintf("CREATE TABLE IF NOT EXISTS %Q (\"%q\" TEXT PRIMARY KEY, \"%q\" TEXT)",
+                tableName.getPlainText().c_str(), keyHolder.getPlainText().c_str(), valueHolder.getPlainText().c_str() );
+        int rcode = this->exec(sql, true);
+#endif
+
+        if(rcode == SQLITE_OK){
+            emo::TableHolder table = emo::TableHolder(tableName);
+            table.addColumn(emo::ColumnHolder(keyHolder));
+            table.addColumn(emo::ColumnHolder(valueHolder));
+            this->tables->push_back(table);
+        }
         return rcode == SQLITE_OK;
     }
 
-    bool Database::openPreference() {
-        return this->open(DEFAULT_DATABASE_NAME);
-    }
-
-    std::string Database::getPreference(std::string key) {
+    string Database::getPreference(string key) {
         bool forceClose = false;
-
         if (!this->isOpen) {
             this->openOrCreatePreference();
             forceClose = true;
         }
+        TableHolder* preferenceTable  = this->getTableHolder(PREFERENCE_TABLE_NAME);
+        ColumnHolder* keyColumn       = preferenceTable->getColumnHolder("KEY");
+        ColumnHolder* valueColumn     = preferenceTable->getColumnHolder("VALUE");
 
-        CipherHolder keyHolder = CipherHolder();
-        std::vector<emo::CipherHolder> keyList = getPreferenceKeys();
+        vector<emo::CipherHolder> keyList = getPreferenceKeys();
+        CipherHolder* keyHolder = findCipherHolder(keyList, key);
 
-        std::vector<emo::CipherHolder>::iterator it;
-        for( it = keyList.begin(); it != keyList.end(); it++ ){
-            if( it->getPlainText() == key){
-                keyHolder = *it;
-                break;
-            }
-        }
-
-        if(keyHolder.hasCipher() == false){
-            LOGE("Database::getPreference : key specified does not exist");
-            return NULL;
+        if(keyHolder == NULL){
+            //LOGE("Database::getPreference : key specified does not exist");
+            return string();
         }
 
         emo::CipherHolder value;
-        char* sql = sqlite3_mprintf("SELECT VALUE FROM %q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, keyHolder.getCipher().c_str());
-
-        char* error;
-        int rcode = sqlite3_exec(this->db, sql, database_preference_callback, &value, &error);
-        if (rcode != SQLITE_OK) {
-            this->lastError = rcode;
-            this->lastErrorMessage = error;
-            sqlite3_free(error);
-        }
-        sqlite3_free(sql);
-
+#ifndef PREFERENCE_WITHOUT_ENCRYPTION
+        this->selectStringCipher(
+                &value,
+                valueColumn->getColumnName().getCipher(),
+                preferenceTable->getTableName().getCipher(),
+                keyColumn->getColumnName().getCipher(),
+                keyHolder->getCipher() );
+#else
+        this->selectStringCipher(
+                &value,
+                valueColumn->getColumnName().getPlainText(),
+                preferenceTable->getTableName().getPlainText(),
+                keyColumn->getColumnName().getPlainText(),
+                keyHolder->getPlainText() );
+#endif
         if (forceClose) {
             this->close();
         }
-
         return value.getPlainText();
     }
 
-    bool Database::setPreference(std::string key, std::string value) {
+    bool Database::setPreference(string key, string value) {
+        if(key.empty()) return false;
 
         bool forceClose = false;
         if (!this->isOpen) {
@@ -351,49 +610,69 @@ namespace emo {
             forceClose = true;
         }
 
-        CipherHolder keyHolder = CipherHolder();
-        std::vector<emo::CipherHolder> keyList = getPreferenceKeys();
-        std::vector<emo::CipherHolder>::iterator it;
-        for( it = keyList.begin(); it != keyList.end(); it++ ){
-            if(it->getPlainText() == key){
-                keyHolder = *it;
-                break;
-            }
-        }
+        TableHolder* preferenceTable  = this->getTableHolder(PREFERENCE_TABLE_NAME);
+        ColumnHolder* keyColumn       = preferenceTable->getColumnHolder("KEY");
+        ColumnHolder* valueColumn     = preferenceTable->getColumnHolder("VALUE");
+
+        vector<emo::CipherHolder> keyList = getPreferenceKeys();
+        CipherHolder* keyHolder = findCipherHolder(keyList, key);
 
         // encrypt before storing to database
-        std::string encryptedValue = encryptString(value);
+        string encryptedValue = encryptString(value);
 
         int rcode = SQLITE_OK;
-        if (keyHolder.hasCipher() == false) {
+        if(keyHolder == NULL){
+#ifndef PREFERENCE_WITHOUT_ENCRYPTION
             string encryptedKey = encryptString(key);
-            char* sql = sqlite3_mprintf("INSERT INTO %q(KEY,VALUE) VALUES(%Q,%Q)", PREFERENCE_TABLE_NAME, encryptedKey.c_str(), encryptedValue.c_str());
-            rcode = this->exec(sql);
-            sqlite3_free(sql);
-        } else {
-            char* sql = sqlite3_mprintf("UPDATE %q SET VALUE=%Q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, encryptedValue.c_str(), keyHolder.getCipher().c_str());
-            rcode = this->exec(sql);
-            sqlite3_free(sql);
+
+            vector<string> values;
+            values.push_back(encryptedKey);
+            values.push_back(encryptedValue);
+            rcode = this->insertStrings(preferenceTable->getTableName().getCipher(), values);
+#else
+            vector<string> values;
+            values.push_back(key);
+            values.push_back(value);
+            rcode = this->insertStrings(preferenceTable->getTableName().getPlainText(), values);
+#endif
+        }else{
+#ifndef PREFERENCE_WITHOUT_ENCRYPTION
+            rcode = this->updateString(preferenceTable->getTableName().getCipher(),
+                    valueColumn->getColumnName().getCipher(), encryptedValue,
+                    keyColumn->getColumnName().getCipher(), keyHolder->getCipher());
+#else
+            rcode = this->updateString(preferenceTable->getTableName().getPlainText(),
+                    valueColumn->getColumnName().getPlainText(), value,
+                    keyColumn->getColumnName().getPlainText(), key);
+#endif
         }
 
         if (forceClose) {
             this->close();
         }
-
         return rcode == SQLITE_OK;
     }
 
-    std::vector<emo::CipherHolder> Database::getPreferenceKeys() {
+    vector<emo::CipherHolder> Database::getPreferenceKeys() {
         bool forceClose = false;
         if (!this->isOpen) {
             this->openOrCreatePreference();
             forceClose = true;
         }
 
-        std::vector<emo::CipherHolder> keys;
-        char *sql = sqlite3_mprintf("SELECT KEY FROM %q", PREFERENCE_TABLE_NAME);
-        query_vector(sql, &keys);
-        sqlite3_free(sql);
+        TableHolder* preferenceTable  = this->getTableHolder(PREFERENCE_TABLE_NAME);
+        ColumnHolder* keyColumn       = preferenceTable->getColumnHolder("KEY");
+
+        vector<emo::CipherHolder> keys;
+#ifndef PREFERENCE_WITHOUT_ENCRYPTION
+        this->selectStringCiphers(&keys,
+                keyColumn->getColumnName().getCipher(),
+                preferenceTable->getTableName().getCipher() );
+#else
+        this->selectStringCiphers(&keys,
+                keyColumn->getColumnName().getPlainText(),
+                preferenceTable->getTableName().getPlainText() );
+#endif
 
         if (forceClose) {
             this->close();
@@ -401,36 +680,125 @@ namespace emo {
         return keys;
     }
 
-    bool Database::deletePreference(std::string key) {
+    bool Database::deletePreference(string key) {
         bool forceClose = false;
         if (!this->isOpen) {
             this->openOrCreatePreference();
             forceClose = true;
         }
 
-        CipherHolder keyHolder = CipherHolder();
-        std::vector<emo::CipherHolder> keyList = getPreferenceKeys();
-        std::vector<emo::CipherHolder>::iterator it;
-        for( it = keyList.begin(); it != keyList.end(); it++ ){
-            if(it->getPlainText() == key){
-                keyHolder = *it;
-                break;
-            }
-        }
+        TableHolder* preferenceTable  = this->getTableHolder(PREFERENCE_TABLE_NAME);
+        ColumnHolder* keyColumn       = preferenceTable->getColumnHolder("KEY");
 
-        if (keyHolder.hasCipher() == false) {
+        vector<emo::CipherHolder> keyList = getPreferenceKeys();
+        CipherHolder* keyHolder = findCipherHolder(keyList, key);
+
+        if (keyHolder == NULL) {
             LOGE("Database::getPreference : key specified does not exist");
             return false;
         }
-
-        char *sql = sqlite3_mprintf("DELETE FROM %q WHERE KEY=%Q", PREFERENCE_TABLE_NAME, keyHolder.getCipher().c_str());
-        int rcode = this->exec(sql);
-        sqlite3_free(sql);
+#ifndef PREFERENCE_WITHOUT_ENCRYPTION
+        int rcode = this->deleteRecords(
+                preferenceTable->getTableName().getCipher(),
+                keyColumn->getColumnName().getCipher(),
+                keyHolder->getCipher());
+#else
+        int rcode = this->deleteRecords(
+                preferenceTable->getTableName().getPlainText(),
+                keyColumn->getColumnName().getPlainText(),
+                key);
+#endif
 
         if (forceClose) {
             this->close();
         }
         return rcode == SQLITE_OK;
+    }
+
+    char* Database::getConfig() {
+        bool forceClose = false;
+        if (!this->isOpen) {
+            this->openDatabase();
+            forceClose = true;
+        }
+
+        TableHolder* configTable = this->getTableHolder("CONFIG");
+        if(configTable == NULL) return NULL;
+
+        ColumnHolder* contentColumn = configTable->getColumnHolder("CONTENT");
+        emo::CipherHolder columnName = contentColumn->getColumnName();
+
+        // retrieve config content
+        vector<unsigned char*> configContents;
+        char *sqlConfig = sqlite3_mprintf(
+                "SELECT \"%q\", length(\"%q\") FROM %Q",
+                columnName.getCipher().c_str(),
+                columnName.getCipher().c_str(),
+                configTable->getTableName().getCipher().c_str());
+
+        this->query(sqlConfig, database_callback_binary_cipher, &configContents, true);
+
+        if (forceClose) {
+            this->close();
+        }
+        return (char*)configContents.at(0);
+    }
+
+    char* Database::getScript(const char* name) {
+        bool forceClose = false;
+        if (!this->isOpen) {
+            this->openDatabase();
+            forceClose = true;
+        }
+
+        char* script = NULL;
+        TableHolder* scriptTable = this->getTableHolder("SCRIPTS");
+        ColumnHolder* nameColumn = scriptTable->getColumnHolder("NAME");
+        ColumnHolder* contentColumn = scriptTable->getColumnHolder("CONTENT");
+
+        emo::CipherHolder nameColumnName = nameColumn->getColumnName();
+        emo::CipherHolder contentColumnName = contentColumn->getColumnName();
+
+        if(engine->config->scriptsInfo.encrypted == true){
+            // retrieve all "NAME" values from "SCRIPT" table
+            vector<emo::CipherHolder> scriptNames;
+            this->selectStringCiphers(
+                    &scriptNames,
+                    nameColumnName.getCipher(),
+                    scriptTable->getTableName().getCipher() );
+
+            CipherHolder* targetScriptName = findCipherHolder(scriptNames, string(name));
+
+            if(engine->config->scriptsInfo.contentEncrypted == true){
+                // retrieve script content
+                this->selectBinaryCipherContent(
+                        &script,
+                        contentColumnName.getCipher(),
+                        scriptTable->getTableName().getCipher(),
+                        nameColumnName.getCipher(),
+                        targetScriptName->getCipher() );
+            }else{
+                this->selectBinaryContent(
+                        &script,
+                        contentColumnName.getCipher(),
+                        scriptTable->getTableName().getCipher(),
+                        nameColumnName.getCipher(),
+                        targetScriptName->getCipher() );
+            }
+
+        }else{
+            this->selectBinaryContent(
+                    &script,
+                    contentColumnName.getPlainText(),
+                    scriptTable->getTableName().getPlainText(),
+                    nameColumnName.getPlainText(),
+                    string(name) );
+        }
+
+        if (forceClose) {
+            this->close();
+        }
+        return script;
     }
 
 }
@@ -528,7 +896,7 @@ SQInteger emoDatabaseGetPath(HSQUIRRELVM v) {
         return 0;
     }
 
-    std::string path  = engine->database->getPath(name);
+    string path  = engine->database->getPath(name);
     const char* cpath = path.c_str();
 
     sq_pushstring(v, cpath, -1);
@@ -557,7 +925,7 @@ SQInteger emoDatabaseGetLastErrorMessage(HSQUIRRELVM v) {
  * open preference database
  */
 SQInteger emoDatabaseOpenPreference(HSQUIRRELVM v) {
-    if (!engine->database->openPreference()) {
+    if (!engine->database->openDatabase()) {
         sq_pushinteger(v, ERR_DATABASE_OPEN);
         return 1;
     }
@@ -596,7 +964,7 @@ SQInteger emoDatabaseGetPreference(HSQUIRRELVM v) {
         return 0;
     }
 
-    std::string str = engine->database->getPreference(key);
+    string str = engine->database->getPreference(key);
     const char* cstr = str.c_str();
 
     sq_pushstring(v, cstr, -1);
@@ -699,7 +1067,7 @@ SQInteger emoDatabaseDeletePreference(HSQUIRRELVM v) {
  */
 SQInteger emoDatabaseGetPreferenceKeys(HSQUIRRELVM v) {
 
-    std::vector<emo::CipherHolder> keys = engine->database->getPreferenceKeys();
+    vector<emo::CipherHolder> keys = engine->database->getPreferenceKeys();
 
     sq_newarray(v, 0);
 
