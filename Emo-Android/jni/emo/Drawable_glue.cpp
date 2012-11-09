@@ -1340,8 +1340,8 @@ SQInteger emoDrawableUseMeshMapSprite(HSQUIRRELVM v) {
  * @returns EMO_NO_ERROR if succeeds
  */
 SQInteger emoDrawableGetMapDataFromTmx(HSQUIRRELVM v) {
-    const char *delim = ",";
-    const char *LF = "\n";
+    const char* delim = ",";
+    const char* LF = "\n";
 
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);
@@ -3277,10 +3277,6 @@ SQInteger emoStageMoveCamera(HSQUIRRELVM v) {
         sq_pushinteger(v, ERR_INVALID_PARAM);
         return 1;
     }
-
-    //char msg [128];
-    //sprintf(msg,"CameraInfo : x = %f, y = %f", x, y);
-    //LOGI(msg);
 
     engine->stage->moveRelativeCamera(x, y);
     sq_pushinteger(v, EMO_NO_ERROR);

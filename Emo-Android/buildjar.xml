@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project basedir="." default="all" name="emo_framework">
-
 	<property environment="env" />
 	<property name="target" value="1.6" />
 	<property name="source" value="1.6" />
@@ -8,7 +7,8 @@
 	<property name="src" value="src" />
 
 	<property name="binfile" value="export/emo_framework.jar" />
-	<property name="sofile" value="libs/armeabi/libemo-android.so" />
+	<property name="sofile"  value="libs/armeabi/libemo-android.so" />
+	<property name="libfile" value="libs/android-sqlite-asset-helper.jar" />
 
 	<!--property name="example_dir"   value="../Android-Examples/" /-->
 	<!--property name="template_dir"  value="../Android-Template/" /-->
@@ -36,6 +36,8 @@
 	<target name="copyjar">
 		<copy file="${binfile}" todir="${to_dir}libs/" />
 		<copy file="${sofile}" todir="${to_dir}libs/armeabi/" />
+		<copy file="${libfile}" todir="${to_dir}libs/" />
+		<!-- COMMENT THIS SECTION WHEN SOURCE CODE PROTECTION IS VALID -->
 		<copy todir="${to_dir}assets/scripts/emo-framework">
 			<fileset dir="assets/scripts/emo-framework" includes="*.nut" />
 		</copy>

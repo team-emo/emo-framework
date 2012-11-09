@@ -6,7 +6,7 @@
  ******************************************************/
 
 EMO_VERSION <- "0.2.0";
-EMO_EXPERIMENT_VERSION <- "0.4.1";
+EMO_EXPERIMENT_VERSION <- "0.5.0";
 
 OS_ANDROID <- "Android";
 OS_IOS     <- "iOS";
