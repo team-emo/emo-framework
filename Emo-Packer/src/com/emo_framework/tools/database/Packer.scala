@@ -73,9 +73,14 @@ object Packer extends LogWriter{
     }
 
     def pack() = {
-        val targetFile   =  new File(Config.target);
-        if(Config.resetFlag && targetFile.exists()) 
-            if(!targetFile.delete()) error("pack : failed to delete target database");
+        val targetFile   = new File(Config.target);
+        val zipFile      = new File(Config.target + ".zip");
+        
+        // delete files if already exist
+        if(Config.resetFlag && targetFile.exists())
+            if(!targetFile.delete()) error("pack : failed to delete target database file");
+        if(Config.zipFlag && zipFile.exists())
+            if(!zipFile.delete()) error("pack : failed to delete target zip file");
         
         if ( Config.getPackFlag("Tables") == true )  packTables();
         if ( Config.getPackFlag("Config") == true )  packFiles("Config", Constants.TABLE_NAME_CONFIG, false);
@@ -86,7 +91,7 @@ object Packer extends LogWriter{
         if ( Config.getPackFlag("Models") == true )  packFiles("Models", Constants.TABLE_NAME_MODELS, true);
         
         // zip database file
-        if( Config.zipFlag == true) zip(Config.target, Config.target + ".zip");
+        if( Config.zipFlag == true) zip(targetFile, zipFile);
     }
     
     def unpack() = {
@@ -138,11 +143,11 @@ object Packer extends LogWriter{
         dstMediator.close();
     }
     
-    def zip(inFileName: String, outFileName: String ) = {
-        val zip = new ZipOutputStream(new FileOutputStream(outFileName));
-        val fileName = new File(inFileName).getName();
+    def zip(inFile: File, outFile: File ) = {
+        val zip = new ZipOutputStream(new FileOutputStream(outFile));
+        val fileName = inFile.getName();
         zip.putNextEntry(new ZipEntry(fileName));
-        val in = new BufferedInputStream(new FileInputStream(inFileName));
+        val in = new BufferedInputStream(new FileInputStream(inFile));
         var b = in.read();
         while (b > -1) {
             zip.write(b);
