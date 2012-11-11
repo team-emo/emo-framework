@@ -97,6 +97,23 @@ namespace emo {
         void analyze();
         TableHolder* getTableHolder(string tableName);
 
+        int createTable(const string& tableName, vector<string>& columns, bool primaryFlag);
+        int dropTable(const string& tableName);
+        int select(vector<emo::CipherHolder>* values, const string& targetColumn, const string& tableName);
+        int selectWhere(vector<emo::CipherHolder>* values, const string& targetColumn, const string& tableName, const string& keyColumn, const string& keyValue);
+        int selectAll(vector< vector<emo::CipherHolder> >* values, const string& tableName);
+        int selectAllWhere(vector< vector<emo::CipherHolder> >* values, const string& tableName, const string& keyColumn, const string& keyValue);
+        int selectBinary(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName);
+        int selectBinaryCipher(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName);
+        int count(int* value, const string& tableName);
+        int countWhere(int* value, const string& tableName, const string& keyColumn, const string& keyValue);
+        int insert(const string& tableName, vector<string>& values);
+        int update(const string& tableName, vector<string>& columns, vector<string>& values);
+        int updateWhere(const string& tableName, vector<string>& columns, vector<string>& values, const string& keyColumn, const string& keyValue);
+        int deleteWhere(const string& tableName, const string& keyColumn, const string& keyValue);
+        int truncate(const string& tableName);
+        int vacuum(void);
+
         bool openOrCreatePreference();
         string getPreference(string key);
         bool setPreference(string key, string value);
@@ -114,14 +131,6 @@ namespace emo {
 
         int exec(char* sql, bool freeSqlFlag);
         int query(char* sql, sqlite3_callback callback, void* values, bool freeSqlFlag);
-        int selectStringCipher(emo::CipherHolder* value, const string& contentColumn, const string& tableName, const string& keyColumn, const string& keyValue);
-        int selectStringCiphers(vector<emo::CipherHolder>* value, const string& targetColumn, const string& tableName);
-        int selectBinaryContent(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName);
-        int selectBinaryCipherContent(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName);
-        int insertStrings(const string& tableName, vector<string>& values);
-        int updateString(const string& tableName, const string& targetColumn, const string& value, const string& keyColumn, const string& keyValue);
-        int deleteRecords(const string& tableName, const string& keyColumn, const string& keyValue);
-
     };
 
 }

@@ -350,7 +350,7 @@ namespace emo {
 
         // retrieve all tables' name
         vector<emo::CipherHolder> tableNames;
-        char sqlTables [256] = "SELECT NAME FROM sqlite_master WHERE TYPE='table'";
+        char sqlTables [64] = "SELECT NAME FROM sqlite_master WHERE TYPE='table'";
         this->query(sqlTables, database_callback_string_cipher, &tableNames, false);
 
         vector<emo::CipherHolder>::iterator itTables;
@@ -408,55 +408,109 @@ namespace emo {
         return rcode;
     }
 
-    int Database::selectStringCipher(emo::CipherHolder* value, const string& contentColumn, const string& tableName, const string& keyColumn, const string& keyValue){
-        std::vector<emo::CipherHolder> container;
-        char *sqlScript = sqlite3_mprintf(
-                "SELECT \"%q\" FROM %Q WHERE \"%q\"=\"%q\"",
-                contentColumn.c_str(), tableName.c_str(), keyColumn.c_str(), keyValue.c_str() );
+    int Database::createTable(const string& tableName, vector<string>& columns, bool primaryFlag){
+        string stringValues = string("");
 
-        int rcode = this->query(sqlScript, database_callback_string_cipher, &container, true);
-        if( rcode == SQLITE_OK ){
-            *value = container.at(0);
+        bool firstFlag = true;
+        vector<string>::iterator itColumns;
+        for(itColumns = columns.begin(); itColumns != columns.end(); itColumns++){
+            if(firstFlag == true){
+                firstFlag = false;
+                stringValues += "\"" + *itColumns + "\" TEXT";
+                if(primaryFlag) stringValues += " PRIMARY KEY";
+            }else{
+                stringValues += ", \"" + *itColumns + "\" TEXT";
+            }
         }
+        string sqlString = "CREATE TABLE IF NOT EXISTS '" + tableName + "' (" + stringValues + ")";
+
+        return this->exec((char*)sqlString.c_str(), false);
+    }
+
+    int Database::dropTable(const string& tableName){
+        char *sql = sqlite3_mprintf( "DROP TABLE %Q", tableName.c_str() );
+        return this->exec(sql, true);
+    }
+
+    int Database::select(vector<emo::CipherHolder>* values, const string& targetColumn, const string& tableName){
+        char *sql = sqlite3_mprintf(
+                "SELECT \"%q\" FROM %Q",
+                targetColumn.c_str(), tableName.c_str() );
+
+        int rcode = this->query(sql, database_callback_string_cipher, values, true);
         return rcode;
     }
 
-    int Database::selectStringCiphers(std::vector<emo::CipherHolder>* value, const string& targetColumn, const string& tableName){
-        char *sqlScript = sqlite3_mprintf(
-                "SELECT \"%q\" FROM %Q", targetColumn.c_str(), tableName.c_str() );
+    int Database::selectWhere(vector<emo::CipherHolder>* values, const string& targetColumn, const string& tableName, const string& keyColumn, const string& keyValue){
+        char *sql = sqlite3_mprintf(
+                "SELECT \"%q\" FROM %Q WHERE \"%q\"=\"%q\"",
+                targetColumn.c_str(), tableName.c_str(), keyColumn.c_str(), keyValue.c_str() );
 
-        return this->query(sqlScript, database_callback_string_cipher, value, true);
+        int rcode = this->query(sql, database_callback_string_cipher, values, true);
+        return rcode;
     }
 
-    int Database::selectBinaryContent(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName){
+    int Database::selectAll(vector< vector<emo::CipherHolder> >* values, const string& tableName){
+        char *sql = sqlite3_mprintf( "SELECT * FROM %Q", tableName.c_str() );
+
+        int rcode = this->query(sql, database_callback_multiple_string_cipher, values, true);
+        return rcode;
+    }
+
+    int Database::selectAllWhere(vector< vector<emo::CipherHolder> >* values, const string& tableName, const string& keyColumn, const string& keyValue){
+        char *sql = sqlite3_mprintf(
+                "SELECT * FROM %Q WHERE \"%q\"=\"%q\"",
+                tableName.c_str(), keyColumn.c_str(), keyValue.c_str() );
+
+        int rcode = this->query(sql, database_callback_multiple_string_cipher, values, true);
+        return rcode;
+    }
+
+    int Database::selectBinary(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName){
         vector<unsigned char*> binaryContents;
 
-        char *sqlScript = sqlite3_mprintf(
+        char *sql = sqlite3_mprintf(
                 "SELECT \"%q\" FROM %Q WHERE \"%q\"=\"%q\"",
                 contentColumn.c_str(), tableName.c_str(), nameColumn.c_str(), targetName.c_str() );
 
-        int rcode = this->query(sqlScript, database_callback_binary, &binaryContents, true);
+        int rcode = this->query(sql, database_callback_binary, &binaryContents, true);
         if( rcode == SQLITE_OK ){
             *value = (char*)binaryContents.at(0);
         }
         return rcode;
     }
 
-    int Database::selectBinaryCipherContent(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName){
+    int Database::selectBinaryCipher(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName){
         vector<unsigned char*> binaryContents;
 
-        char *sqlScript = sqlite3_mprintf(
+        char *sql = sqlite3_mprintf(
                 "SELECT \"%q\", length(\"%q\") FROM %Q WHERE \"%q\"=\"%q\"",
                 contentColumn.c_str(), contentColumn.c_str(), tableName.c_str(), nameColumn.c_str(), targetName.c_str() );
 
-        int rcode = this->query(sqlScript, database_callback_binary_cipher, &binaryContents, true);
+        int rcode = this->query(sql, database_callback_binary_cipher, &binaryContents, true);
         if( rcode == SQLITE_OK ){
             *value = (char*)binaryContents.at(0);
         }
         return rcode;
     }
 
-    int Database::insertStrings(const string& tableName, vector<string>& values){
+    int Database::count(int* value, const string& tableName){
+        char *sql = sqlite3_mprintf( "SELECT COUNT(*) FROM %Q", tableName.c_str() );
+
+        int rcode = this->query(sql, database_callback_count, value, true);
+        return rcode;
+    }
+
+    int Database::countWhere(int* value, const string& tableName, const string& keyColumn, const string& keyValue){
+        char *sql = sqlite3_mprintf(
+                "SELECT COUNT(*) FROM %Q WHERE \"%q\"=\"%q\"",
+                tableName.c_str(), keyColumn.c_str(), keyValue.c_str() );
+
+        int rcode = this->query(sql, database_callback_count, value, true);
+        return rcode;
+    }
+
+    int Database::insert(const string& tableName, vector<string>& values){
         string stringValues = string("");
 
         bool firstFlag = true;
@@ -469,22 +523,63 @@ namespace emo {
             }
             stringValues += "\"" + *itValues + "\"";
         }
-        string sqlScript = "INSERT INTO '" + tableName + "' VALUES(" + stringValues + ")";
+        string sqlString = "INSERT INTO '" + tableName + "' VALUES(" + stringValues + ")";
 
-        return this->exec((char*)sqlScript.c_str(), false);
+        return this->exec((char*)sqlString.c_str(), false);
     }
 
-    int Database::updateString(const string& tableName, const string& targetColumn, const string& value, const string& keyColumn, const string& keyValue){
-        char* sql = sqlite3_mprintf("UPDATE %Q SET \"%q\"=\"%q\" WHERE \"%q\"=\"%q\"",
-                tableName.c_str(), targetColumn.c_str(), value.c_str(), keyColumn.c_str(), keyValue.c_str());
-        return this->exec(sql, true);
+    int Database::update(const string& tableName, vector<string>& columns, vector<string>& values){
+        string stringValues = string("");
+
+        bool firstFlag = true;
+        vector<string>::iterator itColumns;
+        vector<string>::iterator itValues;
+        for(itColumns = columns.begin(), itValues = values.begin(); itColumns != columns.end(); itColumns++, itValues++){
+            if(firstFlag == true){
+                firstFlag = false;
+            }else{
+                stringValues += ", ";
+            }
+            stringValues += "\"" + *itColumns + "\"" + " = " + "\"" + *itValues + "\"";
+        }
+        string sqlString = "UPDATE '" + tableName + "' SET " + stringValues;
+
+        return this->exec((char*)sqlString.c_str(), false);
     }
 
-    int Database::deleteRecords(const string& tableName, const string& keyColumn, const string& keyValue){
+    int Database::updateWhere(const string& tableName, vector<string>& columns, vector<string>& values, const string& keyColumn, const string& keyValue){
+        string stringValues = string("");
+
+        bool firstFlag = true;
+        vector<string>::iterator itColumns;
+        vector<string>::iterator itValues;
+        for(itColumns = columns.begin(), itValues = values.begin(); itColumns != columns.end(); itColumns++, itValues++){
+            if(firstFlag == true){
+                firstFlag = false;
+            }else{
+                stringValues += ", ";
+            }
+            stringValues += "\"" + *itColumns + "\"" + " = " + "\"" + *itValues + "\"";
+        }
+        string sqlString = "UPDATE '" + tableName + "' SET " + stringValues + " WHERE \"" + keyColumn + "\" = \"" + keyValue + "\"";
+
+        return this->exec((char*)sqlString.c_str(), false);
+    }
+
+    int Database::deleteWhere(const string& tableName, const string& keyColumn, const string& keyValue){
         char *sql = sqlite3_mprintf("DELETE FROM %Q WHERE \"%q\"=\"%q\"",
                 tableName.c_str(), keyColumn.c_str(), keyValue.c_str());
         return this->exec(sql, true);
+    }
 
+    int Database::truncate(const string& tableName){
+        char *sql = sqlite3_mprintf("DELETE FROM %Q", tableName.c_str());
+        return this->exec(sql, true);
+    }
+
+    int Database::vacuum(){
+        char sql [8] = "VACUUM";
+        return this->exec(sql, false);
     }
 
     bool Database::openOrCreatePreference() {
@@ -502,14 +597,15 @@ namespace emo {
         keyHolder.setPlainText("KEY");
         valueHolder.setPlainText("VALUE");
 
+        vector<string> columnNames;
 #ifndef PREFERENCE_WITHOUT_ENCRYPTION
-        char* sql = sqlite3_mprintf("CREATE TABLE IF NOT EXISTS %Q (\"%q\" TEXT PRIMARY KEY, \"%q\" TEXT)",
-                tableName.getCipher().c_str(), keyHolder.getCipher().c_str(), valueHolder.getCipher().c_str() );
-        int rcode = this->exec(sql, true);
+        columnNames.push_back(keyHolder.getCipher());
+        columnNames.push_back(valueHolder.getCipher());
+        int rcode = this->createTable(tableName.getCipher(), columnNames, true);
 #else
-        char* sql = sqlite3_mprintf("CREATE TABLE IF NOT EXISTS %Q (\"%q\" TEXT PRIMARY KEY, \"%q\" TEXT)",
-                tableName.getPlainText().c_str(), keyHolder.getPlainText().c_str(), valueHolder.getPlainText().c_str() );
-        int rcode = this->exec(sql, true);
+        columnNames.push_back(keyHolder.getPlainText());
+        columnNames.push_back(valueHolder.getPlainText());
+        int rcode = this->createTable(tableName.getPlainText(), columnNames, true);
 #endif
 
         if(rcode == SQLITE_OK){
@@ -539,17 +635,17 @@ namespace emo {
             return string();
         }
 
-        emo::CipherHolder value;
+        vector<emo::CipherHolder> values;
 #ifndef PREFERENCE_WITHOUT_ENCRYPTION
-        this->selectStringCipher(
-                &value,
+        this->selectWhere(
+                &values,
                 valueColumn->getColumnName().getCipher(),
                 preferenceTable->getTableName().getCipher(),
                 keyColumn->getColumnName().getCipher(),
                 keyHolder->getCipher() );
 #else
-        this->selectStringCipher(
-                &value,
+        this->selectWhere(
+                &values,
                 valueColumn->getColumnName().getPlainText(),
                 preferenceTable->getTableName().getPlainText(),
                 keyColumn->getColumnName().getPlainText(),
@@ -558,7 +654,7 @@ namespace emo {
         if (forceClose) {
             this->close();
         }
-        return value.getPlainText();
+        return values.at(0).getPlainText();
     }
 
     bool Database::setPreference(string key, string value) {
@@ -582,28 +678,33 @@ namespace emo {
 
         int rcode = SQLITE_OK;
         if(keyHolder == NULL){
+            vector<string> values;
 #ifndef PREFERENCE_WITHOUT_ENCRYPTION
             string encryptedKey = encryptString(key);
 
-            vector<string> values;
             values.push_back(encryptedKey);
             values.push_back(encryptedValue);
-            rcode = this->insertStrings(preferenceTable->getTableName().getCipher(), values);
+            rcode = this->insert(preferenceTable->getTableName().getCipher(), values);
 #else
-            vector<string> values;
             values.push_back(key);
             values.push_back(value);
-            rcode = this->insertStrings(preferenceTable->getTableName().getPlainText(), values);
+            rcode = this->insert(preferenceTable->getTableName().getPlainText(), values);
 #endif
         }else{
+            vector<string> columns;
+            vector<string> values;
 #ifndef PREFERENCE_WITHOUT_ENCRYPTION
-            rcode = this->updateString(preferenceTable->getTableName().getCipher(),
-                    valueColumn->getColumnName().getCipher(), encryptedValue,
-                    keyColumn->getColumnName().getCipher(), keyHolder->getCipher());
+            columns.push_back(valueColumn->getColumnName().getCipher());
+            values.push_back(encryptedValue);
+
+            rcode = this->updateWhere(preferenceTable->getTableName().getCipher(),
+                    columns, values, keyColumn->getColumnName().getCipher(), keyHolder->getCipher());
 #else
-            rcode = this->updateString(preferenceTable->getTableName().getPlainText(),
-                    valueColumn->getColumnName().getPlainText(), value,
-                    keyColumn->getColumnName().getPlainText(), key);
+            columns.push_back(valueColumn->getColumnName().getPlainText());
+            values.push_back(value);
+
+            rcode = this->updateWhere(preferenceTable->getTableName().getPlainText(),
+                    columns, values, keyColumn->getColumnName().getPlainText(), key);
 #endif
         }
 
@@ -625,11 +726,11 @@ namespace emo {
 
         vector<emo::CipherHolder> keys;
 #ifndef PREFERENCE_WITHOUT_ENCRYPTION
-        this->selectStringCiphers(&keys,
+        this->select(&keys,
                 keyColumn->getColumnName().getCipher(),
                 preferenceTable->getTableName().getCipher() );
 #else
-        this->selectStringCiphers(&keys,
+        this->select(&keys,
                 keyColumn->getColumnName().getPlainText(),
                 preferenceTable->getTableName().getPlainText() );
 #endif
@@ -658,12 +759,12 @@ namespace emo {
             return false;
         }
 #ifndef PREFERENCE_WITHOUT_ENCRYPTION
-        int rcode = this->deleteRecords(
+        int rcode = this->deleteWhere(
                 preferenceTable->getTableName().getCipher(),
                 keyColumn->getColumnName().getCipher(),
                 keyHolder->getCipher());
 #else
-        int rcode = this->deleteRecords(
+        int rcode = this->deleteWhere(
                 preferenceTable->getTableName().getPlainText(),
                 keyColumn->getColumnName().getPlainText(),
                 key);
@@ -722,7 +823,7 @@ namespace emo {
         if(engine->config->scriptsInfo.encrypted == true){
             // retrieve all "NAME" values from "SCRIPT" table
             vector<emo::CipherHolder> scriptNames;
-            this->selectStringCiphers(
+            this->select(
                     &scriptNames,
                     nameColumnName.getCipher(),
                     scriptTable->getTableName().getCipher() );
@@ -731,14 +832,14 @@ namespace emo {
 
             if(engine->config->scriptsInfo.contentEncrypted == true){
                 // retrieve script content
-                this->selectBinaryCipherContent(
+                this->selectBinaryCipher(
                         &script,
                         contentColumnName.getCipher(),
                         scriptTable->getTableName().getCipher(),
                         nameColumnName.getCipher(),
                         targetScriptName->getCipher() );
             }else{
-                this->selectBinaryContent(
+                this->selectBinary(
                         &script,
                         contentColumnName.getCipher(),
                         scriptTable->getTableName().getCipher(),
@@ -747,7 +848,7 @@ namespace emo {
             }
 
         }else{
-            this->selectBinaryContent(
+            this->selectBinary(
                     &script,
                     contentColumnName.getPlainText(),
                     scriptTable->getTableName().getPlainText(),
