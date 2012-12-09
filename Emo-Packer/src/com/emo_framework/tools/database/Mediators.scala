@@ -95,7 +95,9 @@ class SQLiteMediator(val path: String, val dataHolder: DatabaseHolder, val targe
             val columnType = res.getString(3);
             val notNull = res.getBoolean(4);
             val defaultValue = res.getString(5);
-            val columnHolder = new ColumnHolder(columnName, columnType, key, Config.packModeFlag, tableEncryptFlag);
+            val primaryKey = res.getBoolean(6);
+            
+            val columnHolder = new ColumnHolder(columnName, columnType, primaryKey, key, Config.packModeFlag, tableEncryptFlag);
             tableHolder.addColumn(columnHolder);
         }
 
@@ -125,6 +127,7 @@ class SQLiteMediator(val path: String, val dataHolder: DatabaseHolder, val targe
             val columnHolder = tableHolder.columnList.get(i);
             val columnName = if (Config.packModeFlag && columnHolder.encryptFlag) columnHolder.columnName.getCipherString() else columnHolder.columnName.getPlainString();
             sql.append(columnName + "' '" + columnHolder.newColumnType);
+            if(columnHolder.primaryKey) sql.append("' 'primary key");
         }
         sql.append("')");
         logger.info("SQL : " + sql);
@@ -330,9 +333,9 @@ class FileMediator(val path: String, val tableName:String, val dataHolder: Datab
     def buildTableHolder() = {
         logger.info("Building table for \"" + target + "\"");
         val tableHolder = new TableHolder(tableName, key, Config.packModeFlag, encryptFlag);
-        val nameColumnHolder = new ColumnHolder(Constants.TABLE_COLUMN_NAME, "TEXT", key, Config.packModeFlag, encryptFlag);
+        val nameColumnHolder = new ColumnHolder(Constants.TABLE_COLUMN_NAME, "TEXT", true, key, Config.packModeFlag, encryptFlag);
         tableHolder.addColumn(nameColumnHolder);
-        val contentColumnHolder = new ColumnHolder(Constants.TABLE_COLUMN_CONTENT, "BLOB", key, Config.packModeFlag, encryptFlag);
+        val contentColumnHolder = new ColumnHolder(Constants.TABLE_COLUMN_CONTENT, "BLOB", false, key, Config.packModeFlag, encryptFlag);
         tableHolder.addColumn(contentColumnHolder);
         dataHolder.addTable(tableHolder);
     }

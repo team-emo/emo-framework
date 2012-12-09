@@ -62,7 +62,7 @@ class TableHolder(tableStr: String, private val key: Array[Byte], val packMode: 
     }
 }
 
-class ColumnHolder(columnStr: String, val columnType: String, private val key: Array[Byte], val packMode: Boolean, val encryptFlag: Boolean) {
+class ColumnHolder(columnStr: String, val columnType: String, val primaryKey: Boolean, private val key: Array[Byte], val packMode: Boolean, val encryptFlag: Boolean) {
     val columnName = new CipherHolder(columnStr.getBytes(Constants.CHAR_ENCODE), key, packMode, encryptFlag, encryptFlag);
     val newColumnType = if(columnName.getPlainString() == Constants.TABLE_COLUMN_CONTENT) "BLOB" else "TEXT"
 }
