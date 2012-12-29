@@ -41,11 +41,13 @@ namespace emo {
     class Android {
     public:
         Android();
-        void toast(std::string text);
-        std::string getOSVersion();
-        int getSDKVersion();
-        int getNativeOrientation();
-        void transit(Sqrat::Object intent, int requestCode);
+
+        // Squirrel Functions
+        void        sqToast(std::string text);
+        std::string sqGetOSVersion();
+        int         sqGetSDKVersion();
+        int         sqGetNativeOrientation();
+        void        sqTransit(Sqrat::Object intent, int requestCode);
 
     public:
         std::hash_map<int, std::string> activityMap;

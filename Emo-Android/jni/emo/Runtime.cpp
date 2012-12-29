@@ -43,45 +43,43 @@ extern emo::Engine* engine;
 
 namespace emo {
 
-Android::Android() {
-    androidTable = new Sqrat::Table(engine->sqvm);
-    engine->emoSpace->Bind("ANDROID", *androidTable);
+    Android::Android() {
+        androidTable = new Sqrat::Table(engine->sqvm);
+        engine->emoSpace->Bind("ANDROID", *androidTable);
 
-    extraPostTable = new Sqrat::Table(engine->sqvm);
-    androidTable->Bind("EXTRA_POST", *extraPostTable);
-
-}
-
-void Android::toast(std::string text) {
-    int duration = ANDROID_TOAST_SHORT;
-    engine->javaGlue->callStringInt_Void("toast", text, duration);
-}
-
-std::string Android::getOSVersion() {
-    return engine->javaGlue->getOSVersion();
-}
-
-int Android::getSDKVersion() {
-    return engine->javaGlue->getSDKVersion();
-}
-
-int Android::getNativeOrientation() {
-    return engine->nativeOrientation;
-}
-
-void Android::transit(Sqrat::Object intent, int requestCode = -1) {
-    std::string targetClass = intent.GetSlot("className").Cast<std::string>();
-    int optionFlag = intent.GetSlot("optionFlag").Cast<int>();
-    kvs_t* extras = new kvs_t();
-    Sqrat::Array extraArray = intent.GetSlot("extras");
-    for (int i = 0, size = extraArray.GetSize(); i < size; i++) {
-        std::string key = extraArray[i].GetSlot("key").Cast<std::string>();
-        std::string value = extraArray[i].GetSlot("value").Cast<std::string>();
-        extras->insert(make_pair(key, value));
+        extraPostTable = new Sqrat::Table(engine->sqvm);
+        androidTable->Bind("EXTRA_POST", *extraPostTable);
     }
-    engine->javaGlue->transit(targetClass, extras, optionFlag,requestCode);
-}
 
+    void Android::sqToast(std::string text) {
+        int duration = ANDROID_TOAST_SHORT;
+        engine->javaGlue->callStringInt_Void("toast", text, duration);
+    }
+
+    std::string Android::sqGetOSVersion() {
+        return engine->javaGlue->getOSVersion();
+    }
+
+    int Android::sqGetSDKVersion() {
+        return engine->javaGlue->getSDKVersion();
+    }
+
+    int Android::sqGetNativeOrientation() {
+        return engine->nativeOrientation;
+    }
+
+    void Android::sqTransit(Sqrat::Object intent, int requestCode = -1) {
+        std::string targetClass = intent.GetSlot("className").Cast<std::string>();
+        int optionFlag = intent.GetSlot("optionFlag").Cast<int>();
+        kvs_t* extras = new kvs_t();
+        Sqrat::Array extraArray = intent.GetSlot("extras");
+        for (int i = 0, size = extraArray.GetSize(); i < size; i++) {
+            std::string key = extraArray[i].GetSlot("key").Cast<std::string>();
+            std::string value = extraArray[i].GetSlot("value").Cast<std::string>();
+            extras->insert(make_pair(key, value));
+        }
+        engine->javaGlue->transit(targetClass, extras, optionFlag,requestCode);
+    }
 }
 
 void initRuntimeFunctions() {

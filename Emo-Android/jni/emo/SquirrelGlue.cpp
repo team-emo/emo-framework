@@ -44,11 +44,11 @@ namespace emo {
         // "Android" class binding
         engine->emoSpace->Bind(
             EMO_ANDROID_CLASS,
-            Class<emo::Android>().Func("toast", &emo::Android::toast)
-                                 .Func("getOSVersion", &emo::Android::getOSVersion)
-                                 .Func("getSDKVersion", &emo::Android::getSDKVersion)
-                                 .Func("getNativeOrientation",&emo::Android::getNativeOrientation)
-                                 .Func("transit",&emo::Android::transit)
+            Class<emo::Android>().Func("toast", &emo::Android::sqToast)
+                                 .Func("getOSVersion", &emo::Android::sqGetOSVersion)
+                                 .Func("getSDKVersion", &emo::Android::sqGetSDKVersion)
+                                 .Func("getNativeOrientation",&emo::Android::sqGetNativeOrientation)
+                                 .Func("transit",&emo::Android::sqTransit)
         );
 
         // @TODO refactoring with Sqrat
