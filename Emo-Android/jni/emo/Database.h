@@ -43,6 +43,7 @@ namespace emo {
     class CipherHolder {
     public:
         CipherHolder();
+        CipherHolder(string text, bool cipherFlag);
         ~CipherHolder();
         string getPlainText();
         void setPlainText(string plainText);

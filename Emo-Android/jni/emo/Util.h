@@ -40,6 +40,9 @@ unsigned char* decrypt(const unsigned char* key, const unsigned char* src, int s
 
 string encryptString(const string& src);
 string decryptString(const string& src);
+void encryptStrings(vector<emo::CipherHolder>* encryptedTexts, vector<string>& texts);
+void getCiphers(vector<string>* texts, vector<emo::CipherHolder>& encryptedTexts);
+void getPlainTexts(vector<string>* texts, vector<emo::CipherHolder>& encryptedTexts);
 
 bool isPowerOfTwo(int x);
 int nextPowerOfTwo(int minimum);
@@ -47,11 +50,13 @@ int nextPowerOfTwo(int minimum);
 int max(int a, int b);
 int min(int a, int b);
 
-vector<string> split( string target, string splitter );
-bool findString(vector<string>& strings, string target);
-emo::CipherHolder* findCipherHolder(vector<emo::CipherHolder>& holders, string target );
+vector<string>& split(const string& s, char delim, vector<string>& elems);
+vector<string>  split(const string& s, char delim);
+
+bool findString(vector<string>& strings, const string& target);
+bool findCipherHolder(emo::CipherHolder* result, vector<emo::CipherHolder>& holders, const string& plainText );
+bool findCipherHolders(vector<emo::CipherHolder>* result, vector<emo::CipherHolder>& holders, const string& plainText );
 
 void test();
-
 
 #endif

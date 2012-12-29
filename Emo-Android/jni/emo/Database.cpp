@@ -130,6 +130,15 @@ namespace emo {
 
     }
 
+    CipherHolder::CipherHolder(string text, bool cipherFlag) {
+        if(cipherFlag == true){
+            this->setCipher(text);
+        }else{
+            this->setPlainText(text);
+        }
+    }
+
+
     string CipherHolder::getCipher(){
         return this->cipher;;
     }
@@ -628,9 +637,8 @@ namespace emo {
         ColumnHolder* valueColumn     = preferenceTable->getColumnHolder("VALUE");
 
         vector<emo::CipherHolder> keyList = getPreferenceKeys();
-        CipherHolder* keyHolder = findCipherHolder(keyList, key);
-
-        if(keyHolder == NULL){
+        CipherHolder keyHolder;
+        if( findCipherHolder(&keyHolder, keyList, key) ){
             //LOGE("Database::getPreference : key specified does not exist");
             return string();
         }
@@ -642,14 +650,14 @@ namespace emo {
                 valueColumn->getColumnName().getCipher(),
                 preferenceTable->getTableName().getCipher(),
                 keyColumn->getColumnName().getCipher(),
-                keyHolder->getCipher() );
+                keyHolder.getCipher() );
 #else
         this->selectWhere(
                 &values,
                 valueColumn->getColumnName().getPlainText(),
                 preferenceTable->getTableName().getPlainText(),
                 keyColumn->getColumnName().getPlainText(),
-                keyHolder->getPlainText() );
+                keyHolder.getPlainText() );
 #endif
         if (forceClose) {
             this->close();
@@ -670,14 +678,14 @@ namespace emo {
         ColumnHolder* keyColumn       = preferenceTable->getColumnHolder("KEY");
         ColumnHolder* valueColumn     = preferenceTable->getColumnHolder("VALUE");
 
-        vector<emo::CipherHolder> keyList = getPreferenceKeys();
-        CipherHolder* keyHolder = findCipherHolder(keyList, key);
-
         // encrypt before storing to database
         string encryptedValue = encryptString(value);
 
+        vector<emo::CipherHolder> keyList = getPreferenceKeys();
+        CipherHolder keyHolder;
+
         int rcode = SQLITE_OK;
-        if(keyHolder == NULL){
+        if(!findCipherHolder(&keyHolder, keyList, key)){
             vector<string> values;
 #ifndef PREFERENCE_WITHOUT_ENCRYPTION
             string encryptedKey = encryptString(key);
@@ -698,7 +706,7 @@ namespace emo {
             values.push_back(encryptedValue);
 
             rcode = this->updateWhere(preferenceTable->getTableName().getCipher(),
-                    columns, values, keyColumn->getColumnName().getCipher(), keyHolder->getCipher());
+                    columns, values, keyColumn->getColumnName().getCipher(), keyHolder.getCipher());
 #else
             columns.push_back(valueColumn->getColumnName().getPlainText());
             values.push_back(value);
@@ -752,17 +760,16 @@ namespace emo {
         ColumnHolder* keyColumn       = preferenceTable->getColumnHolder("KEY");
 
         vector<emo::CipherHolder> keyList = getPreferenceKeys();
-        CipherHolder* keyHolder = findCipherHolder(keyList, key);
-
-        if (keyHolder == NULL) {
-            LOGE("Database::getPreference : key specified does not exist");
+        CipherHolder keyHolder;
+        if( findCipherHolder(&keyHolder, keyList, key) ){
+            //LOGE("Database::deletePreference : key specified does not exist");
             return false;
         }
 #ifndef PREFERENCE_WITHOUT_ENCRYPTION
         int rcode = this->deleteWhere(
                 preferenceTable->getTableName().getCipher(),
                 keyColumn->getColumnName().getCipher(),
-                keyHolder->getCipher());
+                keyHolder.getCipher());
 #else
         int rcode = this->deleteWhere(
                 preferenceTable->getTableName().getPlainText(),
@@ -828,7 +835,8 @@ namespace emo {
                     nameColumnName.getCipher(),
                     scriptTable->getTableName().getCipher() );
 
-            CipherHolder* targetScriptName = findCipherHolder(scriptNames, string(name));
+            CipherHolder targetScriptName;
+            findCipherHolder(&targetScriptName, scriptNames, string(name));
 
             if(engine->config->scriptsInfo.contentEncrypted == true){
                 // retrieve script content
@@ -837,14 +845,14 @@ namespace emo {
                         contentColumnName.getCipher(),
                         scriptTable->getTableName().getCipher(),
                         nameColumnName.getCipher(),
-                        targetScriptName->getCipher() );
+                        targetScriptName.getCipher() );
             }else{
                 this->selectBinary(
                         &script,
                         contentColumnName.getCipher(),
                         scriptTable->getTableName().getCipher(),
                         nameColumnName.getCipher(),
-                        targetScriptName->getCipher() );
+                        targetScriptName.getCipher() );
             }
 
         }else{

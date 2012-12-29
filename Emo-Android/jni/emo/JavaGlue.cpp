@@ -118,7 +118,7 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_onReturnToSquirrel
 
         // check "String Array" prefix
         }else if(extraKeyWithPrefix.find("emo_prefix_ars_") != string::npos ){
-            vector<string> extraValueVector = split( extraValueString, string("|") );
+            vector<string> extraValueVector = split( extraValueString, '|' );
 
             Sqrat::Array extraStringArray = Sqrat::Array();
             for(unsigned int i = 0; i < extraValueVector.size() ; i++){
@@ -128,7 +128,7 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_onReturnToSquirrel
 
         // check "Int Array" prefix
         }else if(extraKeyWithPrefix.find("emo_prefix_ari_") != string::npos ){
-            vector<string> extraValueVector = split( extraValueString, string("|") );
+            vector<string> extraValueVector = split( extraValueString, '|' );
 
             Sqrat::Array extraIntArray = Sqrat::Array();
             for(unsigned int i = 0; i < extraValueVector.size() ; i++){

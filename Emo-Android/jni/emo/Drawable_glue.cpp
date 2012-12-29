@@ -1340,8 +1340,8 @@ SQInteger emoDrawableUseMeshMapSprite(HSQUIRRELVM v) {
  * @returns EMO_NO_ERROR if succeeds
  */
 SQInteger emoDrawableGetMapDataFromTmx(HSQUIRRELVM v) {
-    const char* delim = ",";
-    const char* LF = "\n";
+    const char delim = ',';
+    const char LF = '\n';
 
     const SQChar* id;
     SQInteger nargs = sq_gettop(v);

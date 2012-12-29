@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#include <set>
 
 #include "Constants.h"
 #include "Runtime.h"
@@ -232,8 +233,32 @@ string decryptString(const string& src){
     return dst;
 }
 
+void encryptStrings(vector<emo::CipherHolder>* encryptedTexts, vector<string>& texts){
+    vector<string>::iterator itTexts;
+    for(itTexts = texts.begin(); itTexts != texts.end(); itTexts++){
+        emo::CipherHolder cipher = emo::CipherHolder(*itTexts, true);
+        encryptedTexts->push_back(cipher);
+    }
+}
+
+void getCiphers(vector<string>* texts, vector<emo::CipherHolder>& encryptedTexts){
+    vector<emo::CipherHolder>::iterator itCiphers;
+    for(itCiphers = encryptedTexts.begin(); itCiphers != encryptedTexts.end(); itCiphers++){
+        string cipher = itCiphers->getCipher();
+        texts->push_back(cipher);
+    }
+}
+
+void getPlainTexts(vector<string>* texts, vector<emo::CipherHolder>& encryptedTexts){
+    vector<emo::CipherHolder>::iterator itCiphers;
+    for(itCiphers = encryptedTexts.begin(); itCiphers != encryptedTexts.end(); itCiphers++){
+        string plainText = itCiphers->getPlainText();
+        texts->push_back(plainText);
+    }
+}
+
 bool isPowerOfTwo(int x) {
-	return (x != 0) && ((x & (x - 1)) == 0);
+    return (x != 0) && ((x & (x - 1)) == 0);
 }
 
 int nextPowerOfTwo(int minimum) {
@@ -257,20 +282,21 @@ int min(int a, int b) {
     return a < b ? a : b;
 }
 
-vector<string> split( string target, string splitter ) {
-    vector<string> ret;
-    for( unsigned int i=0, n; i <= target.length(); i=n+1 ){
-        n = target.find_first_of( splitter, i );
-        if( n == string::npos ) {
-        	n = target.length();
-        }
-        string tmp = target.substr( i, n-i );
-        ret.push_back(tmp);
+vector<string>& split(vector<string>& elems, const string& s, char delim) {
+    stringstream ss(s);
+    string item;
+    while(getline(ss, item, delim)) {
+        elems.push_back(item);
     }
-    return ret;
+    return elems;
 }
 
-bool findString(vector<string>& strings, string target){
+vector<string> split(const string& s, char delim) {
+    vector<string> elems;
+    return split(elems, s, delim);
+}
+
+bool findString(vector<string>& strings, const string& target){
     vector<string>::iterator itStrings;
     for(itStrings = strings.begin(); itStrings != strings.end(); itStrings++){
          if(*itStrings == target){
@@ -279,14 +305,33 @@ bool findString(vector<string>& strings, string target){
      }
     return false;
 }
-emo::CipherHolder* findCipherHolder(vector<emo::CipherHolder>& holders, string plainText ){
+
+bool findCipherHolder(emo::CipherHolder* result, vector<emo::CipherHolder>& holders, const string& plainText ){
+    vector<emo::CipherHolder>::iterator itHolders;
+    for(itHolders = holders.begin(); itHolders != holders.end(); itHolders++){
+        if( itHolders->getPlainText() == plainText ){
+            *result = *itHolders;
+            return true;
+        }
+     }
+    return false;
+}
+
+bool findCipherHolders(vector<emo::CipherHolder>* result, vector<emo::CipherHolder>& holders, const string& plainText ){
+    bool detectFlag = false;
+
+    set<string> cipherSet;
     vector<emo::CipherHolder>::iterator itHolders;
     for(itHolders = holders.begin(); itHolders != holders.end(); itHolders++){
          if( itHolders->getPlainText() == plainText ){
-             return itHolders;
+             //check duplication
+             if(cipherSet.insert(itHolders->getCipher()).second == true){
+                 result->push_back(*itHolders);
+                 detectFlag = true;
+             }
          }
      }
-    return NULL;
+    return detectFlag;
 }
 
 void test(void){
