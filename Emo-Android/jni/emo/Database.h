@@ -34,16 +34,17 @@
 #include "sqlite3.h"
 #include "squirrel.h"
 
-using namespace std;
+#include "SquirrelGlue.h"
 
-void initDatabaseFunctions();
+using namespace std;
 
 namespace emo {
 
+    class Database;
     class CipherHolder {
     public:
         CipherHolder();
-        CipherHolder(string text, bool cipherFlag);
+        CipherHolder(string text, bool isCipher);
         ~CipherHolder();
         string getPlainText();
         void setPlainText(string plainText);
@@ -59,12 +60,14 @@ namespace emo {
 
     class ColumnHolder {
     public:
-        ColumnHolder(CipherHolder name);
-        ColumnHolder(string name);
-        CipherHolder getColumnName();
+        ColumnHolder(CipherHolder name, bool primaryFlag);
+        ColumnHolder(string name, bool primaryFlag);
         ~ColumnHolder();
+        CipherHolder getColumnName();
+        bool isPrimaryColumn();
     protected:
         CipherHolder columnName;
+        bool isPrimary;
     };
 
     class TableHolder {
@@ -74,9 +77,33 @@ namespace emo {
         void addColumn(ColumnHolder column);
         CipherHolder getTableName();
         ColumnHolder* getColumnHolder(string columnName);
+        ColumnHolder* getColumnHolder(int index);
+        vector<ColumnHolder>* getColumns();
     protected:
         CipherHolder tableName;
         vector<ColumnHolder> columns;
+    };
+
+    class ConditionBuilder {
+    public:
+        ConditionBuilder(Database* db, TableHolder* tbl, bool encryptFlag);
+        ~ConditionBuilder();
+        bool createCondition(Sqrat::Object condArray);
+
+        string getCondition();
+        bool isValidCondition();
+        bool addCondition(string colName, string eqSign, string value);
+        bool addConjunction(string conjunction);
+        bool addParenthesis(string parenthesis);
+
+    protected:
+        Database* database;
+        TableHolder* table;
+        string condition;
+        bool isEncrypted;
+        bool isValid;
+        int leftParenthCount;
+        int rightParenthCount;
     };
 
     class Database {
@@ -87,42 +114,69 @@ namespace emo {
         int lastError;
         string lastErrorMessage;
 
+        // Primary Functions
         string getPath(string name);
         string create(string name, jint mode);
-
-        bool open(string name);
-        bool openOrCreate(string name, jint mode);
-        bool openDatabase();
+        bool remove(string name);
+        bool openOrCreate(string name, jint mode, bool encryptFlag);
+        bool open(string name, bool encryptFlag);
         bool close();
-        bool deleteDatabase(string name);
         void analyze();
+        void addTableHolder(TableHolder& table);
         TableHolder* getTableHolder(string tableName);
+        bool isDuplicatedKey(string& tableName, int index, CipherHolder& value, bool encryptFlag);
 
+        // SQL Functions
         int createTable(const string& tableName, vector<string>& columns, bool primaryFlag);
         int dropTable(const string& tableName);
         int select(vector<emo::CipherHolder>* values, const string& targetColumn, const string& tableName);
-        int selectWhere(vector<emo::CipherHolder>* values, const string& targetColumn, const string& tableName, const string& keyColumn, const string& keyValue);
+        int selectWhere(vector<emo::CipherHolder>* values, const string& targetColumn, const string& tableName, ConditionBuilder& con);
         int selectAll(vector< vector<emo::CipherHolder> >* values, const string& tableName);
-        int selectAllWhere(vector< vector<emo::CipherHolder> >* values, const string& tableName, const string& keyColumn, const string& keyValue);
+        int selectAllWhere(vector< vector<emo::CipherHolder> >* values, const string& tableName, ConditionBuilder& con);
         int selectBinary(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName);
         int selectBinaryCipher(char** value, const string& contentColumn, const string& tableName, const string& nameColumn, const string& targetName);
         int count(int* value, const string& tableName);
-        int countWhere(int* value, const string& tableName, const string& keyColumn, const string& keyValue);
+        int countWhere(int* value, const string& tableName,  ConditionBuilder& con);
         int insert(const string& tableName, vector<string>& values);
-        int update(const string& tableName, vector<string>& columns, vector<string>& values);
-        int updateWhere(const string& tableName, vector<string>& columns, vector<string>& values, const string& keyColumn, const string& keyValue);
-        int deleteWhere(const string& tableName, const string& keyColumn, const string& keyValue);
+        int update(const string& tableName, vector< vector<string> >& columns);
+        int updateWhere(const string& tableName, vector< vector<string> >& columns, ConditionBuilder& con);
+        int deleteWhere(const string& tableName, ConditionBuilder& con);
         int truncate(const string& tableName);
         int vacuum(void);
 
-        bool openOrCreatePreference();
+        // Preference Operation
+        bool   openOrCreatePreference(bool encryptFlag);
         string getPreference(string key);
-        bool setPreference(string key, string value);
+        bool   setPreference(string key, string value);
         vector<emo::CipherHolder> getPreferenceKeys();
         bool deletePreference(string key);
 
+        // Assets Acquisition
         char* getConfig();
         char* getScript(const char* name);
+
+        // Native Closures
+        int sqOpenOrCreate(bool encryptFlag, string databaseName, int mode);
+        int sqOpen(bool encryptFlag, string databaseName);
+        int sqClose();
+        int sqRemove(string databaseName);
+        int sqCreateTable(string tableName, Sqrat::Object columnNames, bool primaryFlag);
+        int sqDropTable(string tableName);
+        Sqrat::Object sqSelect(string targetColumn, string tableName);
+        Sqrat::Object sqSelectAll(string tableName);
+        Sqrat::Object sqSelectWhere(string targetColumn, string tableName, Sqrat::Object conds);
+        Sqrat::Object sqSelectAllWhere(string tableName, Sqrat::Object conds);
+        int sqCount(string tableName);
+        int sqCountWhere(string tableName, Sqrat::Object conds);
+        int sqInsert(string tableName, Sqrat::Object values);
+        int sqUpdate(string tableName, Sqrat::Object dataSets);
+        int sqUpdateWhere(string tableName, Sqrat::Object dataSets, Sqrat::Object conds);
+        int sqTruncate(string tableName);
+        int sqDeleteWhere(string tableName, Sqrat::Object conds);
+        int sqVacuum();
+        string sqGetPath(string databaseName);
+        int    sqGetLastError();
+        string sqGetLastErrorMessage();
 
     protected:
         sqlite3* db;
@@ -134,19 +188,14 @@ namespace emo {
         int query(char* sql, sqlite3_callback callback, void* values, bool freeSqlFlag);
     };
 
+    class Preference {
+    public:
+        int sqOpenOrCreatePreference(bool encryptFlag);
+        string sqGetPreference(string key);
+        int sqSetPreference(string key, string value);
+        int sqDeletePreference(string key);
+        Sqrat::Object sqGetPreferenceKeys();
+    };
 }
 
-SQInteger emoDatabaseOpenOrCreate(HSQUIRRELVM v);
-SQInteger emoDatabaseOpen(HSQUIRRELVM v);
-SQInteger emoDatabaseClose(HSQUIRRELVM v);
-SQInteger emoDatabaseGetPath(HSQUIRRELVM v);
-SQInteger emoDatabaseGetLastError(HSQUIRRELVM v);
-SQInteger emoDatabaseGetLastErrorMessage(HSQUIRRELVM v);
-SQInteger emoDatabaseOpenPreference(HSQUIRRELVM v);
-SQInteger emoDatabaseOpenOrCreatePreference(HSQUIRRELVM v);
-SQInteger emoDatabaseGetPreference(HSQUIRRELVM v);
-SQInteger emoDatabaseSetPreference(HSQUIRRELVM v);
-SQInteger emoDatabaseDeletePreference(HSQUIRRELVM v);
-SQInteger emoDatabaseGetPreferenceKeys(HSQUIRRELVM v);
-SQInteger emoDatabaseDeleteDatabase(HSQUIRRELVM v);
 #endif

@@ -51,12 +51,47 @@ namespace emo {
                                  .Func("transit",&emo::Android::sqTransit)
         );
 
+        engine->emoSpace->Bind(
+            EMO_DATABASE_CLASS,
+            Class<emo::Database>().Func("openOrCreate", &emo::Database::sqOpenOrCreate)
+                                  .Func("open", &emo::Database::sqOpen)
+                                  .Func("close", &emo::Database::sqClose)
+                                  .Func("remove", &emo::Database::sqRemove)
+                                  .Func("createTable", &emo::Database::sqCreateTable)
+                                  .Func("dropTable", &emo::Database::sqDropTable)
+                                  .Func("select", &emo::Database::sqSelect)
+                                  .Func("selectAll", &emo::Database::sqSelectAll)
+                                  .Func("selectWhere", &emo::Database::sqSelectWhere)
+                                  .Func("selectAllWhere", &emo::Database::sqSelectAllWhere)
+                                  .Func("count", &emo::Database::sqCount)
+                                  .Func("countWhere", &emo::Database::sqCountWhere)
+                                  .Func("insert", &emo::Database::sqInsert)
+                                  .Func("update", &emo::Database::sqUpdate)
+                                  .Func("updateWhere", &emo::Database::sqUpdateWhere)
+                                  .Func("truncate", &emo::Database::sqTruncate)
+                                  .Func("deleteWhere", &emo::Database::sqDeleteWhere)
+                                  .Func("vacuum", &emo::Database::sqVacuum)
+                                  .Func("getPath", &emo::Database::sqGetPath)
+                                  .Func("getLastError", &emo::Database::sqGetLastError)
+                                  .Func("getLastErrorMessage", &emo::Database::sqGetLastErrorMessage)
+        );
+
+        engine->emoSpace->Bind(
+            EMO_PREFERENCE_CLASS,
+            Class<emo::Preference>().Func("openOrCreate", &emo::Preference::sqOpenOrCreatePreference)
+                                    .Func("open", &emo::Database::sqOpen)
+                                    .Func("close", &emo::Database::sqClose)
+                                    .Func("get", &emo::Preference::sqGetPreference)
+                                    .Func("set", &emo::Preference::sqSetPreference)
+                                    .Func("del", &emo::Preference::sqDeletePreference)
+                                    .Func("keys", &emo::Preference::sqGetPreferenceKeys)
+        );
+
         // @TODO refactoring with Sqrat
         initRuntimeFunctions();
         initDrawableFunctions();
         initAudioFunctions();
         initJavaGlueFunctions();
-        initDatabaseFunctions();
         initPhysicsFunctions();
     }
 }

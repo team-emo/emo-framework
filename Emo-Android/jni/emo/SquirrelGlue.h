@@ -30,13 +30,17 @@
 
 #include "sqratVM.h"
 
-void initScriptFunctions();
-
 namespace emo {
+
     class SquirrelGlue {
     public:
         void initScriptFunctions();
+
+        static SQInteger getParamCount(HSQUIRRELVM v){
+            return sq_gettop(v) - 2; // -1 for environment object & -1 for function pointer (Sqrat)
+        }
     };
+
 }
 
 #endif
