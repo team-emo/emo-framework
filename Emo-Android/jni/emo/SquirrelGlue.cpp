@@ -68,7 +68,7 @@ namespace emo {
                                   .Func("insert", &emo::Database::sqInsert)
                                   .Func("update", &emo::Database::sqUpdate)
                                   .Func("updateWhere", &emo::Database::sqUpdateWhere)
-                                  .Func("truncate", &emo::Database::sqTruncate)
+                                  .Func("truncateTable", &emo::Database::sqTruncateTable)
                                   .Func("deleteWhere", &emo::Database::sqDeleteWhere)
                                   .Func("vacuum", &emo::Database::sqVacuum)
                                   .Func("getPath", &emo::Database::sqGetPath)

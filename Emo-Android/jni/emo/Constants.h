@@ -28,7 +28,7 @@
 #ifndef EMO_CONSTANT_H
 #define EMO_CONSTANT_H
 
-#define EMO_BUILD_NUMBER 36
+#define EMO_BUILD_NUMBER 37
 
 // Uncomment below to enable sandbox mode
 //#define EMO_WITH_SANDBOX

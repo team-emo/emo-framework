@@ -141,7 +141,7 @@ namespace emo {
         int update(const string& tableName, vector< vector<string> >& columns);
         int updateWhere(const string& tableName, vector< vector<string> >& columns, ConditionBuilder& con);
         int deleteWhere(const string& tableName, ConditionBuilder& con);
-        int truncate(const string& tableName);
+        int truncateTable(const string& tableName);
         int vacuum(void);
 
         // Preference Operation
@@ -171,7 +171,7 @@ namespace emo {
         int sqInsert(string tableName, Sqrat::Object values);
         int sqUpdate(string tableName, Sqrat::Object dataSets);
         int sqUpdateWhere(string tableName, Sqrat::Object dataSets, Sqrat::Object conds);
-        int sqTruncate(string tableName);
+        int sqTruncateTable(string tableName);
         int sqDeleteWhere(string tableName, Sqrat::Object conds);
         int sqVacuum();
         string sqGetPath(string databaseName);

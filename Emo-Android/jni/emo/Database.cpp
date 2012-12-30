@@ -744,7 +744,7 @@ namespace emo {
         return this->exec((char*)sqlString.c_str(), false);
     }
 
-    int Database::truncate(const string& tableName){
+    int Database::truncateTable(const string& tableName){
         char *sql = sqlite3_mprintf("DELETE FROM %Q", tableName.c_str());
 
         return this->exec(sql, true);
@@ -800,7 +800,6 @@ namespace emo {
         vector<emo::CipherHolder> keyList = getPreferenceKeys();
         CipherHolder keyHolder;
         if(findCipherHolder(&keyHolder, keyList, key) == false){
-            LOGE("Database::getPreference : key specified does not exist");
             return string();
         }
         TableHolder* preferenceTable  = this->getTableHolder(PREFERENCE_TABLE_NAME);
@@ -1063,7 +1062,7 @@ namespace emo {
                  mode != FILE_MODE_WORLD_READABLE &&
                  mode != FILE_MODE_WORLD_WRITEABLE){
             LOGE("sqOpenOrCreate : invalid file mode specified");
-            return ERR_DATABASE;
+            return ERR_INVALID_PARAM;
         }
 
         if( engine->database->openOrCreate(databaseName, mode, encryptFlag) == false ){
@@ -1187,7 +1186,6 @@ namespace emo {
             rcode = engine->database->createTable(tableName, colStrings, primaryFlag);
         }
         if(rcode != SQLITE_OK){
-            LOGE("sqCreateTable : SQL statement, 'create table', failed");
             return ERR_DATABASE;
         }else{
             engine->database->addTableHolder(tableHolder);
@@ -1221,7 +1219,6 @@ namespace emo {
             rcode = engine->database->dropTable(tableName);
         }
         if(rcode != SQLITE_OK){
-            LOGE("sqDropTable : SQL statement, 'drop table', failed");
             return ERR_DATABASE;
         }
         return EMO_NO_ERROR;
@@ -1288,7 +1285,7 @@ namespace emo {
         }
         TableHolder* table = engine->database->getTableHolder(tableName);
         if(table == NULL){
-            LOGE("sqSelect : no such table");
+            LOGE("sqSelectAll : no such table");
             return Sqrat::Array();
         }
 
@@ -1301,7 +1298,6 @@ namespace emo {
             rcode = engine->database->selectAll(&records, tableName);
         }
         if(rcode != SQLITE_OK){
-            LOGE("sqSelectAll : SQL statement, 'select *', failed");
             return Sqrat::Array();
         }
 
@@ -1356,7 +1352,6 @@ namespace emo {
             rcode = engine->database->selectWhere(&values, targetColName, tableName, conBuilder);
         }
         if(rcode != SQLITE_OK){
-            LOGE("sqSelectWhere : SQL statement, 'select [columnName] where', failed");
             return Sqrat::Array();
         }
 
@@ -1383,7 +1378,7 @@ namespace emo {
         }
         TableHolder* table = engine->database->getTableHolder(tableName);
         if(table == NULL){
-            LOGE("sqSelectWhere : no such table");
+            LOGE("sqSelectAllWhere : no such table");
             return Sqrat::Array();
         }
         ConditionBuilder conBuilder(engine->database, table, engine->config->tablesInfo.encrypted);
@@ -1400,7 +1395,6 @@ namespace emo {
             rcode = engine->database->selectAllWhere(&records, tableName, conBuilder);
         }
         if(rcode != SQLITE_OK){
-            LOGE("sqSelectAllWhere : SQL statement, 'select * where', failed");
             return Sqrat::Array();
         }
 
@@ -1419,7 +1413,7 @@ namespace emo {
      * count records on specified table with given condition
      *
      * @param table name
-     * @return count of records
+     * @return count of records or -1 on failure
      */
     int Database::sqCount(string tableName){
         // param check
@@ -1441,7 +1435,6 @@ namespace emo {
             rcode = engine->database->count(&count, tableName);
         }
         if(rcode != SQLITE_OK){
-            LOGE("sqCount : SQL statement, 'select count(*)', failed");
             return -1;
         }
         return count;
@@ -1478,7 +1471,6 @@ namespace emo {
             rcode = engine->database->countWhere(&count, tableName, conBuilder);
         }
         if(rcode != SQLITE_OK){
-            LOGE("sqCountWhere : SQL statement, 'select count(*) where', failed");
             return -1;
         }
         return count;
@@ -1529,7 +1521,6 @@ namespace emo {
             rcode = engine->database->insert(tableName, values);
         }
         if(rcode != SQLITE_OK){
-            LOGE("sqInsert : SQL statement, 'insert', failed");
             return ERR_DATABASE;
         }
         return EMO_NO_ERROR;
@@ -1591,7 +1582,6 @@ namespace emo {
             rcode = engine->database->update(tableName, columns);
         }
         if(rcode != SQLITE_OK){
-            LOGE("sqUpdate : SQL statement, 'update', failed");
             return ERR_DATABASE;
         }
         return EMO_NO_ERROR;
@@ -1658,7 +1648,6 @@ namespace emo {
             rcode = engine->database->updateWhere(tableName, columns, conBuilder);
         }
         if(rcode != SQLITE_OK){
-            LOGE("sqUpdateWhere : SQL statement, 'update where', failed");
             return ERR_DATABASE;
         }
         return EMO_NO_ERROR;
@@ -1670,7 +1659,7 @@ namespace emo {
      * @param table name
      * @return EMO_NO_ERROR if succeeds
      */
-    int Database::sqTruncate(string tableName){
+    int Database::sqTruncateTable(string tableName){
         // param check
         int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
         if(paramCount != 1){
@@ -1685,12 +1674,11 @@ namespace emo {
 
         int rcode;
         if(engine->config->tablesInfo.encrypted){
-            rcode = engine->database->truncate(table->getTableName().getCipher());
+            rcode = engine->database->truncateTable(table->getTableName().getCipher());
         }else{
-            rcode = engine->database->truncate(tableName);
+            rcode = engine->database->truncateTable(tableName);
         }
         if(rcode != SQLITE_OK){
-            LOGE("sqTruncate : SQL statement, 'truncate', failed");
             return ERR_DATABASE;
         }
         return EMO_NO_ERROR;
@@ -1727,7 +1715,6 @@ namespace emo {
             rcode = engine->database->deleteWhere(tableName, conBuilder);
         }
         if(rcode != SQLITE_OK){
-            LOGE("sqDeleteWhere : SQL statement, 'delete where', failed");
             return ERR_DATABASE;
         }
         return EMO_NO_ERROR;
@@ -1748,7 +1735,6 @@ namespace emo {
 
         int rcode = engine->database->vacuum();
         if(rcode != SQLITE_OK){
-            LOGE("sqVacuum : SQL statement, 'vacuum', failed");
             return ERR_DATABASE;
         }
         return EMO_NO_ERROR;
