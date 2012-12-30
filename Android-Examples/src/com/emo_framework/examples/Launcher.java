@@ -61,7 +61,8 @@ public class Launcher extends ExpandableListActivity {
 			"Changing Volume"
 		},
 		{
-			"Save and Restore"
+			"Save and Restore",
+		    "Executing SQL Statements"
 		},
     	{
     		"HelloWorld (No Graphics)",
@@ -133,6 +134,7 @@ public class Launcher extends ExpandableListActivity {
 			".AudioVolumeExample"
 		},
 		{
+		    ".PreferenceExample",
 			".DatabaseExample"
 		},
     	{

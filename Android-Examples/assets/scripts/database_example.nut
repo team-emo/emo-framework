@@ -1,42 +1,158 @@
-local stage = emo.Stage();
-
-/*
- * This example shows one rectangular shape
- * that saves the latest position and restore it when loaded.
- */
- 
-const KEY_RECTANGLE_X = "RECTANGLE_X";
-const KEY_RECTANGLE_Y = "RECTANGLE_Y";
-
-class Main {
-
-    rectangle   = emo.Rectangle();
-    preference  = emo.Preference();
-    database    = emo.Database();
-
+class Main {	
+    // Create 16x16 text sprite with 2 pixel border and 1 pixel margin
+    text = emo.TextSprite("font_16x16.png",
+        " !\"c*%#'{}@+,-./0123456789:;[|]?&ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        16, 16, 2, 1);
+    
     /*
      * Called when this class is loaded
      */
     function onLoad() {
         print("onLoad"); 
-
-        local width  = 60;
-        local height = 60;
         
-        // move rectangle to the center of the screen
-        local x = (stage.getWindowWidth()  - width)  / 2;
-        local y = (stage.getWindowHeight() - height) / 2;
+        text.setText("CHECK PROCESS ON THE LOG");
+        text.setZ(1);
+        text.moveCenter(emo.Stage.getWindowWidth() * 0.5, emo.Stage.getWindowHeight() * 0.5);
+        text.load();
         
-        rectangle.move(x, y);
+        local database = emo.Database();
         
-        // set rectangle color(RGBA)
-        rectangle.color(1, 0, 0, 1);
+        print("*************** OPEN *****************");
+        // Open database with encryption flag
+        local result = database.openOrCreate(true);
+        if( result != EMO_NO_ERROR){
+            print("failed to open database");
+        }else{
+            print("OK");
+        }
+        
+        print("*********** CREATE TABLE *************");
+        local tableName = "tableA";
+        local columns = ["name", "age", "description"];
+        // Set true for the 3rd argument when you use primary key
+        result = database.createTable(tableName, columns, true);
+        if(result != EMO_NO_ERROR){
+            print("failed to create table");
+        }else{
+            print("OK");
+        }
+        
+        print("************** INSERT ****************");
+        local record1 = ["Maria", "25", "a woman"];
+        local record2 = ["Ken", "44", "a man"];
+        local record3 = ["Mickey", "3", "a mouse"];
+        
+        result = database.insert(tableName, record1);
+        if(result != EMO_NO_ERROR){
+            print("failed to insert record");
+        }else{
+            print("OK");
+        }
+        result = database.insert(tableName, record2);
+        if(result != EMO_NO_ERROR){
+            print("failed to insert record");
+        }else{
+            print("OK");
+        }
+        result = database.insert(tableName, record3);
+        if(result != EMO_NO_ERROR){
+            print("failed to insert record");
+        }else{
+            print("OK");
+        }
+        
+        print("************ SELECT ALL **************");
+        local recordArray = database.selectAll(tableName);
+        for(local i = 0; i < recordArray.len() ; i++){
+            local str = "";
+            for(local j = 0; j < recordArray[i].len() ; j++){
+                str += recordArray[i][j] + "; ";
+            }
+            print(str);
+        }
+        
+        print("******* UPDATE WITH CONDITION ********");
+        local dataSets = [ ["age", "7"], ["description", "a dog"] ]; // column name & value sets to update
+        local condition = [["name", "==", "Mickey"]];
+        result = database.updateWhere(tableName, dataSets, condition);
+        if(result != EMO_NO_ERROR){
+            print("failed to update record");
+        }else{
+            print("OK");
+        }
 
-        // initial rectangle size is 1x1 so update the size to 60x60
-        rectangle.setSize(width, height);
-
-        // load rectangle to the screen
-        rectangle.load();
+        print("******* SELECT WITH CONDITION ********");
+        // Select records to verify the result
+        local condition = [["name", "==", "Mickey"]];
+        recordArray = database.selectAllWhere(tableName, condition);
+         for(local i = 0; i < recordArray.len() ; i++){
+            local str = "";
+            for(local j = 0; j < recordArray[i].len() ; j++){
+                str += recordArray[i][j] + "; ";
+            }
+            print(str);
+        }
+        
+        print("******* DELETE WITH CONDITION ********");
+        condition = [["description", "==", "a woman"]];
+        result = database.deleteWhere(tableName, condition);
+        if(result != EMO_NO_ERROR){
+            print("failed to delete record");
+        }else{
+            print("OK");
+        }
+        
+        recordArray = database.selectAll(tableName);
+        print("************ SELECT ALL **************");
+        for(local i = 0; i < recordArray.len() ; i++){
+            local str = "";
+            for(local j = 0; j < recordArray[i].len() ; j++){
+                str += recordArray[i][j] + "; ";
+            }
+            print(str);
+        }
+        
+        print("*********** TRUNCATE TABLE ***********");
+        result = database.truncateTable(tableName);
+        if(result != EMO_NO_ERROR){
+            print("failed to truncate table");
+        }else{
+            print("OK");
+        }
+        
+        print("*************** COUNT ****************");
+        // Count remaining records
+        local count = database.count(tableName);
+        print( count );
+        
+        print("************ DROP TABLE **************");
+        result = database.dropTable(tableName);
+        if(result != EMO_NO_ERROR){
+            print("failed to drop table");
+        }else{
+            print("OK");
+        }
+        
+        print("************ ERROR CHECK *************");
+        // Printing errors if any
+        print( "last error : " + database.getLastError() );
+        print( "last error message : " + database.getLastErrorMessage() );
+        
+        print("*********** CLOSE DATABASE ***********");
+        result = database.close();
+        if(result != EMO_NO_ERROR){
+            print("failed to close database");
+        }else{
+            print("OK");
+        }
+        
+        print("*********** REMOVE DATABASE **********");
+        result = database.remove();
+        if(result != EMO_NO_ERROR){
+            print("failed to remove database");
+        }else{
+            print("OK");
+        }
     }
 
     /*
@@ -44,36 +160,6 @@ class Main {
      */
     function onGainedFocus() {
         print("onGainedFocus");
-        
-        // since we'are not sure whether the initial preference table is already created or not,
-        // we use openOrCreate() that creates new preference table if the table does not exist.
-        if (preference.openOrCreate() == EMO_NO_ERROR) {
-
-            // detabase are stored at the following directory:
-            print(format("STORED AT: %s", database.getPath(DEFAULT_DATABASE_NAME)));
-        
-            // retrieve the latest position.
-            local x = preference.get(KEY_RECTANGLE_X);
-            local y = preference.get(KEY_RECTANGLE_Y);
-            
-            // we have to close the database after retrieving values.
-            preference.close();
-            
-            // NOTE: all preference values are 'string'
-            //       so we have to restore numeric values now.
-            if (x.len() > 0 && y.len() > 0) {
-                print(format("LOAD: RECTANGLE_X = %s", x));
-                print(format("LOAD: RECTANGLE_Y = %s", y));
-            
-                print("RESTORE THE POSITION");
-                rectangle.move(x.tointeger(), y.tointeger());
-            }
-        } else {
-            print("failed to store the position");
-            print(format("ERROR CODE:    %d", database.getLastError()));
-            print(format("ERROR MESSAGE: %s", database.getLastErrorMessage()));
-        }
-        
     }
 
     /*
@@ -81,32 +167,6 @@ class Main {
      */
     function onLostFocus() {
         print("onLostFocus"); 
-        // now we are sure that the preference table is created,
-        // we use preference.open().
-        if (preference.open() == EMO_NO_ERROR) {
-            // store the latest position to database.
-            preference.set(KEY_RECTANGLE_X, rectangle.getX());
-            preference.set(KEY_RECTANGLE_Y, rectangle.getY());
-            
-            // list all of the preference keys.
-            local keys = preference.keys();
-            for (local i = 0; i < keys.len(); i++) {
-                print(format("SAVED: %s = %s", keys[i], preference.get(keys[i])));
-            }
-            
-            // if you want to delete the preference value, uncomment below.
-            //preference.del(KEY_RECTANGLE_X);
-            //preference.del(KEY_RECTANGLE_Y);
-            
-            preference.close();
-    
-            // if you want to delete emo framework database completely, uncomment below.
-            // NOTE: by using deleteDatabase, all of the tables used by emo framework are deleted.
-            //       this function might be useful for developing or testing your program.
-            // database.deleteDatabase(DEFAULT_DATABASE_NAME);
-        } else {
-            print("failed to store the latest position");
-        }
     }
 
     /*
@@ -114,24 +174,9 @@ class Main {
      */
     function onDispose() {
         print("onDispose");
-        
-        // remove rectangle from the screen
-        rectangle.remove();
-    }
-
-    /*
-     * touch event
-     */
-    function onMotionEvent(mevent) {
-        // move rectangle to the position on the motion event 
-        if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            local x = mevent.getX() - (rectangle.getWidth()  / 2);
-            local y = mevent.getY() - (rectangle.getHeight() / 2);
-            rectangle.move(x, y);
-        }
     }
 }
 
 function emo::onLoad() {
-    stage.load(Main());
+    emo.Stage().load(Main());
 }

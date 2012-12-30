@@ -6,6 +6,7 @@
  ******************************************************/
 
 EMO_VERSION <- "0.2.0";
+EMO_EXPERIMENT_VERSION <- "0.6.0";
 
 OS_ANDROID <- "Android";
 OS_IOS     <- "iOS";
@@ -42,6 +43,9 @@ ERR_INVALID_ID            <- 0x0117;
 ERR_FILE_OPEN             <- 0x0118;
 ERR_CREATE_VERTEX         <- 0x0119;
 ERR_NOT_SUPPORTED         <- 0x0120;
+ERR_DATABASE              <- 0x0121;
+ERR_DATABASE_OPEN         <- 0x0122;
+ERR_DATABASE_CLOSE        <- 0x0123;
 
 OPT_ENABLE_PERSPECTIVE_NICEST   <- 0x1000;
 OPT_ENABLE_PERSPECTIVE_FASTEST  <- 0x1001;
@@ -1434,9 +1438,9 @@ class emo.FontSprite extends emo.Sprite {
 
 class emo.SpriteSheet extends emo.Sprite {
 
-    function constructor(rawname, frameWidth = 1, frameHeight = 1, border = 0, margin = 0, frameIndex = 0) {
+    function constructor(rawname, frameWidth = 1, frameHeight = 1, border = 0, margin = 0, frameIndex = 0, centerFlag = false) {
         name = base.getResourceName(rawname);
-        id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border, margin);
+        id = stage.createSpriteSheet(name, frameIndex, frameWidth, frameHeight, border, margin, centerFlag);
     }
     
     function load(x = null, y = null, frameIndex = null) {
@@ -1482,6 +1486,10 @@ class emo.SpriteSheet extends emo.Sprite {
     
     function getFrameCount() {
         return stage.getFrameCount(id);
+    }
+    
+    function centerFrames(centerFlag = true){
+        stage.centerFrames(id, centerFlag)
     }
     
     function isAnimationFinished() {
