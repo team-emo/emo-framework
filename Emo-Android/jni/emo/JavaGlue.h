@@ -50,6 +50,14 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_checkNative
 
 /*
  * Class:     com_emo_framework_EmoActivity
+ * Method:    isPacked
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_emo_1framework_EmoActivity_isPacked
+(JNIEnv* env, jclass);
+
+/*
+ * Class:     com_emo_framework_EmoActivity
  * Method:    callback
  * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
  */

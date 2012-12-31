@@ -52,6 +52,7 @@ public class EmoActivity extends NativeActivity {
     static{ System.loadLibrary("emo-android"); }
     
     native private static void checkNative();
+    native public boolean isPacked();
     native public void callback(String name, String value, String errCode, String errMsg);
     native public void onReturnToSquirrel(int requestCode, int resultCode, String thisClassName, String... extras);
     
@@ -70,22 +71,27 @@ public class EmoActivity extends NativeActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        // copy database from assets/database folder
-        try{
-            database = new EmoDatabase(this);
-            database.getWritableDatabase();
-        }catch(SQLiteAssetException e){
-            LOGI("onCreate : No database file found in assets/database");
-        }catch(Exception e){
-            LOGE("onCreate : Unknown error has occurred while reading database file");
-            LOGE(e.getMessage());
+        if( isPacked() ){
+            // copy database from assets/database folder
+            try{
+                database = new EmoDatabase(this);
+                database.getWritableDatabase();
+            }catch(SQLiteAssetException e){
+                LOGI("onCreate : No database file found in assets/database");
+            }catch(Exception e){
+                LOGE("onCreate : Unknown error has occurred while reading database file");
+                LOGE(e.getMessage());
+            }
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        database.close();
+        
+        if( isPacked() ){
+            database.close();
+        }
     }
     
     private static synchronized Random initRNG() {
