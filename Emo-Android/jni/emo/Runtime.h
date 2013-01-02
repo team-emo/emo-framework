@@ -41,21 +41,14 @@ namespace emo {
     class Android {
     public:
         Android();
-
-        // Squirrel Functions
-        void        sqToast(std::string text);
-        std::string sqGetOSVersion();
-        int         sqGetSDKVersion();
-        int         sqGetNativeOrientation();
-        void        sqTransit(Sqrat::Object intent, int requestCode);
-
+        ~Android();
     public:
         std::hash_map<int, std::string> activityMap;
         Sqrat::Table* androidTable;
         Sqrat::Table* extraPostTable;
-
     };
 }
+
 
 void initRuntimeFunctions();
 
@@ -134,4 +127,12 @@ SQInteger emoGetDefaultLocale(HSQUIRRELVM v);
 SQInteger emoRuntimeAndroidGetOSVersion(HSQUIRRELVM v);
 SQInteger emoRuntimeAndroidGetSDKVersion(HSQUIRRELVM v);
 SQInteger emoRuntimeAndroidGetNativeOrientation(HSQUIRRELVM v);
+
+// Native Closures
+void        sqToast(std::string text);
+std::string sqGetOSVersion();
+int         sqGetSDKVersion();
+int         sqGetNativeOrientation();
+void        sqTransit(Sqrat::Object intent, int requestCode);
+
 #endif

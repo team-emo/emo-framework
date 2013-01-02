@@ -41,51 +41,52 @@ namespace emo {
         // Set default VM
         DefaultVM::Set(engine->sqvm);
 
-        // "Android" class binding
-        engine->emoSpace->Bind(
-            EMO_ANDROID_CLASS,
-            Class<emo::Android>().Func("toast", &emo::Android::sqToast)
-                                 .Func("getOSVersion", &emo::Android::sqGetOSVersion)
-                                 .Func("getSDKVersion", &emo::Android::sqGetSDKVersion)
-                                 .Func("getNativeOrientation",&emo::Android::sqGetNativeOrientation)
-                                 .Func("transit",&emo::Android::sqTransit)
-        );
+        // bind functions to "emo::Android"
+        Sqrat::Table androidSpace(engine->sqvm);
+        androidSpace.Func("toast", sqToast)
+                    .Func("getOSVersion", sqGetOSVersion)
+                    .Func("getSDKVersion", sqGetSDKVersion)
+                    .Func("getNativeOrientation",sqGetNativeOrientation)
+                    .Func("transit",sqTransit);
 
-        engine->emoSpace->Bind(
-            EMO_DATABASE_CLASS,
-            Class<emo::Database>().Func("openOrCreate", &emo::Database::sqOpenOrCreate)
-                                  .Func("open", &emo::Database::sqOpen)
-                                  .Func("close", &emo::Database::sqClose)
-                                  .Func("remove", &emo::Database::sqRemove)
-                                  .Func("createTable", &emo::Database::sqCreateTable)
-                                  .Func("dropTable", &emo::Database::sqDropTable)
-                                  .Func("select", &emo::Database::sqSelect)
-                                  .Func("selectAll", &emo::Database::sqSelectAll)
-                                  .Func("selectWhere", &emo::Database::sqSelectWhere)
-                                  .Func("selectAllWhere", &emo::Database::sqSelectAllWhere)
-                                  .Func("count", &emo::Database::sqCount)
-                                  .Func("countWhere", &emo::Database::sqCountWhere)
-                                  .Func("insert", &emo::Database::sqInsert)
-                                  .Func("update", &emo::Database::sqUpdate)
-                                  .Func("updateWhere", &emo::Database::sqUpdateWhere)
-                                  .Func("truncateTable", &emo::Database::sqTruncateTable)
-                                  .Func("deleteWhere", &emo::Database::sqDeleteWhere)
-                                  .Func("vacuum", &emo::Database::sqVacuum)
-                                  .Func("getPath", &emo::Database::sqGetPath)
-                                  .Func("getLastError", &emo::Database::sqGetLastError)
-                                  .Func("getLastErrorMessage", &emo::Database::sqGetLastErrorMessage)
-        );
+        // bind functions to "emo::Database"
+        Sqrat::Table databaseSpace(engine->sqvm);
+        databaseSpace.Func("openOrCreate", sqOpenOrCreate)
+                     .Func("open", sqOpen)
+                     .Func("close", sqClose)
+                     .Func("remove", sqRemove)
+                     .Func("createTable", sqCreateTable)
+                     .Func("dropTable", sqDropTable)
+                     .Func("select", sqSelect)
+                     .Func("selectAll", sqSelectAll)
+                     .Func("selectWhere", sqSelectWhere)
+                     .Func("selectAllWhere", sqSelectAllWhere)
+                     .Func("count", sqCount)
+                     .Func("countWhere", sqCountWhere)
+                     .Func("insert", sqInsert)
+                     .Func("update", sqUpdate)
+                     .Func("updateWhere", sqUpdateWhere)
+                     .Func("truncateTable", sqTruncateTable)
+                     .Func("deleteWhere", sqDeleteWhere)
+                     .Func("vacuum", sqVacuum)
+                     .Func("getPath", sqGetPath)
+                     .Func("getLastError", sqGetLastError)
+                     .Func("getLastErrorMessage", sqGetLastErrorMessage);
 
-        engine->emoSpace->Bind(
-            EMO_PREFERENCE_CLASS,
-            Class<emo::Preference>().Func("openOrCreate", &emo::Preference::sqOpenOrCreatePreference)
-                                    .Func("open", &emo::Database::sqOpen)
-                                    .Func("close", &emo::Database::sqClose)
-                                    .Func("get", &emo::Preference::sqGetPreference)
-                                    .Func("set", &emo::Preference::sqSetPreference)
-                                    .Func("del", &emo::Preference::sqDeletePreference)
-                                    .Func("keys", &emo::Preference::sqGetPreferenceKeys)
-        );
+        // bind functions to "emo::Preference"
+        Sqrat::Table preferenceSpace(engine->sqvm);
+        preferenceSpace.Func("openOrCreate", sqOpenOrCreatePreference)
+                       .Func("open", sqOpen)
+                       .Func("close", sqClose)
+                       .Func("get", sqGetPreference)
+                       .Func("set", sqSetPreference)
+                       .Func("del", sqDeletePreference)
+                       .Func("keys", sqGetPreferenceKeys);
+
+        // bind tables to "emo"
+        engine->emoSpace->Bind(EMO_ANDROID_CLASS, androidSpace);
+        engine->emoSpace->Bind(EMO_DATABASE_CLASS, databaseSpace);
+        engine->emoSpace->Bind(EMO_PREFERENCE_CLASS, preferenceSpace);
 
         // @TODO refactoring with Sqrat
         initRuntimeFunctions();

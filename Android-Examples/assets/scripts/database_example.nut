@@ -15,7 +15,7 @@ class Main {
         text.moveCenter(emo.Stage.getWindowWidth() * 0.5, emo.Stage.getWindowHeight() * 0.5);
         text.load();
         
-        local database = emo.Database();
+        local database = emo.Database;
         
         print("*************** OPEN *****************");
         // Open database with encryption flag

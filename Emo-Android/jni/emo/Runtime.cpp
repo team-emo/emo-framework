@@ -51,35 +51,40 @@ namespace emo {
         androidTable->Bind("EXTRA_POST", *extraPostTable);
     }
 
-    void Android::sqToast(std::string text) {
-        int duration = ANDROID_TOAST_SHORT;
-        engine->javaGlue->callStringInt_Void("toast", text, duration);
+    Android::~Android() {
+        delete extraPostTable;
+        delete androidTable;
     }
+}
 
-    std::string Android::sqGetOSVersion() {
-        return engine->javaGlue->getOSVersion();
-    }
+void sqToast(std::string text) {
+    int duration = ANDROID_TOAST_SHORT;
+    engine->javaGlue->callStringInt_Void("toast", text, duration);
+}
 
-    int Android::sqGetSDKVersion() {
-        return engine->javaGlue->getSDKVersion();
-    }
+std::string sqGetOSVersion() {
+    return engine->javaGlue->getOSVersion();
+}
 
-    int Android::sqGetNativeOrientation() {
-        return engine->nativeOrientation;
-    }
+int sqGetSDKVersion() {
+    return engine->javaGlue->getSDKVersion();
+}
 
-    void Android::sqTransit(Sqrat::Object intent, int requestCode = -1) {
-        std::string targetClass = intent.GetSlot("className").Cast<std::string>();
-        int optionFlag = intent.GetSlot("optionFlag").Cast<int>();
-        kvs_t* extras = new kvs_t();
-        Sqrat::Array extraArray = intent.GetSlot("extras");
-        for (int i = 0, size = extraArray.GetSize(); i < size; i++) {
-            std::string key = extraArray[i].GetSlot("key").Cast<std::string>();
-            std::string value = extraArray[i].GetSlot("value").Cast<std::string>();
-            extras->insert(make_pair(key, value));
-        }
-        engine->javaGlue->transit(targetClass, extras, optionFlag,requestCode);
+int sqGetNativeOrientation() {
+    return engine->nativeOrientation;
+}
+
+void sqTransit(Sqrat::Object intent, int requestCode = -1) {
+    std::string targetClass = intent.GetSlot("className").Cast<std::string>();
+    int optionFlag = intent.GetSlot("optionFlag").Cast<int>();
+    kvs_t extras = kvs_t();
+    Sqrat::Array extraArray = intent.GetSlot("extras");
+    for (int i = 0, size = extraArray.GetSize(); i < size; i++) {
+        std::string key = extraArray[i].GetSlot("key").Cast<std::string>();
+        std::string value = extraArray[i].GetSlot("value").Cast<std::string>();
+        extras.insert(make_pair(key, value));
     }
+    engine->javaGlue->transit(targetClass, &extras, optionFlag,requestCode);
 }
 
 void initRuntimeFunctions() {

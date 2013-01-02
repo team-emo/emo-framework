@@ -1025,870 +1025,871 @@ namespace emo {
         return script;
     }
 
-    // **************************************************
-    // *                Native Closures                 *
-    // **************************************************
-
-    /*
-     * open database with given name
-     * if database is not found, creates new database with given name
-     * file mode is one of FILE_MODE_PRIVATE, FILE_MODE_WORLD_READABLE
-     * or FILE_MODE_WORLD_WRITABLE
-     *
-     * @param encryption flag [default : true]
-     * @param database name [default : DEFAULT_DATABASE_NAME]
-     * @param file mode [default : FILE_MODE_PRIVATE]
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Database::sqOpenOrCreate(bool encryptFlag, string databaseName, int mode){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount > 3){
-            LOGE("sqOpenOrCreate : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-        if(paramCount < 3 ){
-            mode = FILE_MODE_PRIVATE;
-        }
-        if(paramCount < 2){
-            databaseName = DEFAULT_DATABASE_NAME;
-        }
-        if(paramCount < 1 ){
-            encryptFlag = true;
-        }
-
-        // check file mode
-        if(mode != FILE_MODE_PRIVATE &&
-                 mode != FILE_MODE_WORLD_READABLE &&
-                 mode != FILE_MODE_WORLD_WRITEABLE){
-            LOGE("sqOpenOrCreate : invalid file mode specified");
-            return ERR_INVALID_PARAM;
-        }
-
-        if( engine->database->openOrCreate(databaseName, mode, encryptFlag) == false ){
-            return ERR_DATABASE_OPEN;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * open database with given name
-     *
-     * @param encryption flag [default : true]
-     * @param database name [default : DEFAULT_DATABASE_NAME]
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Database::sqOpen(bool encryptFlag, string databaseName){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount > 2){
-            LOGE("sqOpen : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-        if(paramCount < 2 ){
-            databaseName = DEFAULT_DATABASE_NAME;
-        }
-        if(paramCount < 1 ){
-            encryptFlag = true;
-        }
-
-        if( engine->database->open(databaseName, encryptFlag) == false ){
-            return ERR_DATABASE_OPEN;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * close database
-     *
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Database::sqClose(){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 0){
-            LOGE("sqClose : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-
-        if( engine->database->close() == false ){
-            return ERR_DATABASE_CLOSE;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * remove database with given name
-     *
-     * @param database name [default : DEFAULT_DATABASE_NAME]
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Database::sqRemove(string databaseName){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount > 1){
-            LOGE("sqRemove : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-        if(paramCount < 1 ){
-            databaseName = DEFAULT_DATABASE_NAME;
-        }
-
-        if( engine->database->remove(databaseName) == false ){
-            return ERR_DATABASE;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * create table with given column names
-     *
-     * @param table name
-     * @param column names
-     * @param primary key flag
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Database::sqCreateTable(string tableName, Sqrat::Object columnNames, bool primaryFlag){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 3){
-            LOGE("sqCreateTable : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-        if(engine->database->getTableHolder(tableName) != NULL){
-            LOGE("sqCreateTable : table with given name already exists");
-            return ERR_INVALID_PARAM;
-        }
-        bool encryptFlag = engine->config->tablesInfo.encrypted;
-
-        CipherHolder tableNameCipher = CipherHolder(tableName, !encryptFlag);
-        TableHolder tableHolder = TableHolder(tableNameCipher);
-        vector<CipherHolder> columns;
-        for (int i = 0, size = columnNames.GetSize(); i < size; i++) {
-            CipherHolder colName = CipherHolder(columnNames[i].Cast<string>(), !encryptFlag);
-            columns.push_back(colName);
-
-            bool pFlag = false;
-            if(i == 0){
-                pFlag = primaryFlag;
-            }
-            ColumnHolder colHolder = ColumnHolder(colName, pFlag);
-            tableHolder.addColumn(colHolder);
-        }
-
-        int rcode;
-        vector<string> colStrings;
-        if(encryptFlag){
-            getCiphers(&colStrings, columns);
-            rcode = engine->database->createTable(tableNameCipher.getCipher(), colStrings, primaryFlag);
-        }else{
-            getPlainTexts(&colStrings, columns);
-            rcode = engine->database->createTable(tableName, colStrings, primaryFlag);
-        }
-        if(rcode != SQLITE_OK){
-            return ERR_DATABASE;
-        }else{
-            engine->database->addTableHolder(tableHolder);
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * drop table with given name
-     *
-     * @param table name
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Database::sqDropTable(string tableName){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 1){
-            LOGE("sqDropTable : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-        TableHolder* table = engine->database->getTableHolder(tableName);
-        if( table == NULL){
-            LOGE("sqDropTable : table with given name not exists");
-            return ERR_INVALID_PARAM;
-        }
-
-        int rcode;
-        if(engine->config->tablesInfo.encrypted){
-            rcode = engine->database->dropTable(table->getTableName().getCipher());
-        }else{
-            rcode = engine->database->dropTable(tableName);
-        }
-        if(rcode != SQLITE_OK){
-            return ERR_DATABASE;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * select values with given condition
-     *
-     * @param target column name
-     * @param table name
-     * @return selected values (array)
-     */
-    Sqrat::Object Database::sqSelect(string targetColumn, string tableName){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 2){
-            LOGE("sqSelect : wrong number of arguments");
-            return Sqrat::Array();
-        }
-        TableHolder* table = engine->database->getTableHolder(tableName);
-        if(table == NULL){
-            LOGE("sqSelect : no such table");
-            return Sqrat::Array();
-        }
-        ColumnHolder* column = table->getColumnHolder(targetColumn);
-        if(column == NULL){
-            LOGE("sqSelect : no such column");
-            return Sqrat::Array();
-        }
-
-        int rcode;
-        vector<emo::CipherHolder> values;
-        if(engine->config->tablesInfo.encrypted){
-            string targetTableCipher = table->getTableName().getCipher();
-            string targetColumnCipher = column->getColumnName().getCipher();
-            rcode = engine->database->select(&values, targetColumnCipher, targetTableCipher);
-        }else{
-            rcode = engine->database->select(&values, targetColumn, tableName);
-        }
-        if(rcode != SQLITE_OK){
-            LOGE("sqSelect : SQL statement, 'select [columnName]', failed");
-            return Sqrat::Array();
-        }
-
-        Sqrat::Array array(engine->sqvm, values.size());
-        for(unsigned int i = 0; i < values.size(); i++){
-            array.SetValue(i, values[i].getPlainText());
-        }
-        return array;
-    }
-
-    /*
-     * select all values with given condition
-     *
-     * @param table name
-     * @return selected records (2d array)
-     */
-    Sqrat::Object Database::sqSelectAll(string tableName){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 1){
-            LOGE("sqSelectAll : wrong number of arguments");
-            return Sqrat::Array();
-        }
-        TableHolder* table = engine->database->getTableHolder(tableName);
-        if(table == NULL){
-            LOGE("sqSelectAll : no such table");
-            return Sqrat::Array();
-        }
-
-        int rcode;
-        vector< vector<emo::CipherHolder> > records;
-        if(engine->config->tablesInfo.encrypted){
-            string targetTableCipher = table->getTableName().getCipher();
-            rcode = engine->database->selectAll(&records, targetTableCipher);
-        }else{
-            rcode = engine->database->selectAll(&records, tableName);
-        }
-        if(rcode != SQLITE_OK){
-            return Sqrat::Array();
-        }
-
-        Sqrat::Array array(engine->sqvm, records.size());
-        for(unsigned int i = 0; i < records.size(); i++){
-            Sqrat::Array array2(engine->sqvm, records[i].size());
-            for(unsigned int j = 0; j < records[i].size(); j++){
-                array2.SetValue(j, records[i][j].getPlainText());
-            }
-            array.Bind(i, array2);
-        }
-        return array;
-    }
-
-    /*
-     * select values with given condition
-     *
-     * @param target column name
-     * @param table name
-     * @param 2D array with given condition
-     * @return selected values (array)
-     */
-    Sqrat::Object Database::sqSelectWhere(string targetColName, string tableName, Sqrat::Object conds){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 3){
-            LOGE("sqSelectWhere : wrong number of arguments");
-            return Sqrat::Array();
-        }
-        TableHolder* table = engine->database->getTableHolder(tableName);
-        if(table == NULL){
-            LOGE("sqSelectWhere : no such table");
-            return Sqrat::Array();
-        }
-        ColumnHolder* targetColumn = table->getColumnHolder(targetColName);
-        if(targetColumn == NULL){
-            LOGE("sqSelectWhere : no such column (target)");
-            return Sqrat::Array();
-        }
-        ConditionBuilder conBuilder(engine->database, table, engine->config->tablesInfo.encrypted);
-        if(!conBuilder.createCondition(conds)){
-            return Sqrat::Array();
-        }
-
-        int rcode;
-        vector<emo::CipherHolder> values;
-        if(engine->config->tablesInfo.encrypted){
-            string targetTableCipher  = table->getTableName().getCipher();
-            string targetColumnCipher = targetColumn->getColumnName().getCipher();
-            rcode = engine->database->selectWhere(&values, targetColumnCipher, targetTableCipher, conBuilder);
-        }else{
-            rcode = engine->database->selectWhere(&values, targetColName, tableName, conBuilder);
-        }
-        if(rcode != SQLITE_OK){
-            return Sqrat::Array();
-        }
-
-        Sqrat::Array array(engine->sqvm, values.size());
-        for(unsigned int i = 0; i < values.size(); i++){
-            array.SetValue(i, values[i].getPlainText());
-        }
-        return array;
-    }
-
-    /*
-     * select records with given condition
-     *
-     * @param table name
-     * @param 2D array with given condition
-     * @return selected records (table)
-     */
-    Sqrat::Object Database::sqSelectAllWhere(string tableName, Sqrat::Object conds){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 2){
-            LOGE("sqSelectAllWhere : wrong number of arguments");
-            return Sqrat::Array();
-        }
-        TableHolder* table = engine->database->getTableHolder(tableName);
-        if(table == NULL){
-            LOGE("sqSelectAllWhere : no such table");
-            return Sqrat::Array();
-        }
-        ConditionBuilder conBuilder(engine->database, table, engine->config->tablesInfo.encrypted);
-        if(!conBuilder.createCondition(conds)){
-            return Sqrat::Array();
-        }
-
-        int rcode;
-        vector< vector<emo::CipherHolder> > records;
-        if(engine->config->tablesInfo.encrypted){
-            string targetTableCipher  = table->getTableName().getCipher();
-            rcode = engine->database->selectAllWhere(&records, targetTableCipher, conBuilder);
-        }else{
-            rcode = engine->database->selectAllWhere(&records, tableName, conBuilder);
-        }
-        if(rcode != SQLITE_OK){
-            return Sqrat::Array();
-        }
-
-        Sqrat::Array array(engine->sqvm, records.size());
-        for(unsigned int i = 0; i < records.size(); i++){
-            Sqrat::Array array2(engine->sqvm, records[i].size());
-            for(unsigned int j = 0; j < records[i].size(); j++){
-                array2.SetValue(j, records[i][j].getPlainText());
-            }
-            array.Bind(i, array2);
-        }
-        return array;
-    }
-
-    /*
-     * count records on specified table with given condition
-     *
-     * @param table name
-     * @return count of records or -1 on failure
-     */
-    int Database::sqCount(string tableName){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 1){
-            LOGE("sqCount : wrong number of arguments");
-            return -1;
-        }
-        TableHolder* table = engine->database->getTableHolder(tableName);
-        if(table == NULL){
-            LOGE("sqCount : no such table");
-            return -1;
-        }
-
-        int rcode, count;
-        if(engine->config->tablesInfo.encrypted){
-            rcode = engine->database->count(&count, table->getTableName().getCipher());
-        }else{
-            rcode = engine->database->count(&count, tableName);
-        }
-        if(rcode != SQLITE_OK){
-            return -1;
-        }
-        return count;
-    }
-
-    /*
-     * count records on specified table
-     *
-     * @param table name
-     * @param 2D array with given condition
-     * @return count of matched records
-     */
-    int Database::sqCountWhere(string tableName, Sqrat::Object conds){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 2){
-            LOGE("sqCountWhere : wrong number of arguments");
-            return -1;
-        }
-        TableHolder* table = engine->database->getTableHolder(tableName);
-        if(table == NULL){
-            LOGE("sqCountWhere : no such table");
-            return -1;
-        }
-        ConditionBuilder conBuilder(engine->database, table, engine->config->tablesInfo.encrypted);
-        if(!conBuilder.createCondition(conds)){
-            return -1;
-        }
-
-        int rcode, count;
-        if(engine->config->tablesInfo.encrypted){
-            rcode = engine->database->countWhere(&count, table->getTableName().getCipher(), conBuilder);
-        }else{
-            rcode = engine->database->countWhere(&count, tableName, conBuilder);
-        }
-        if(rcode != SQLITE_OK){
-            return -1;
-        }
-        return count;
-    }
-
-    /*
-     * update records with given values
-     *
-     * @param table name
-     * @param values to insert (array)
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Database::sqInsert(string tableName, Sqrat::Object sqValues){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 2){
-            LOGE("sqInsert : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-        TableHolder* table = engine->database->getTableHolder(tableName);
-        if(table == NULL){
-            LOGE("sqInsert : no such table");
-            return ERR_INVALID_PARAM;
-        }
-        if((unsigned int)sqValues.GetSize() != table->getColumns()->size()){
-            LOGE("sqInsert : number of values does not match");
-            return ERR_INVALID_PARAM;
-        }
-        bool encryptFlag = engine->config->tablesInfo.encrypted;
-
-        vector<CipherHolder> holders;
-        for (int i = 0, size = sqValues.GetSize(); i < size; i++) {
-            CipherHolder holder = CipherHolder(sqValues[i].Cast<std::string>(), !encryptFlag);
-            if( engine->database->isDuplicatedKey(tableName, i, holder, encryptFlag) ){
-                LOGE("sqInsert : duplicated primary key");
-                return ERR_INVALID_PARAM;
-            }
-            holders.push_back( holder );
-        }
-
-        int rcode;
-        vector<string> values;
-        if(engine->config->tablesInfo.encrypted){
-            getCiphers(&values, holders);
-            rcode = engine->database->insert(table->getTableName().getCipher(), values);
-        }else{
-            getPlainTexts(&values, holders);
-            rcode = engine->database->insert(tableName, values);
-        }
-        if(rcode != SQLITE_OK){
-            return ERR_DATABASE;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * update records with given values
-     *
-     * @param table name
-     * @param 2D array with target column & value pairs
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Database::sqUpdate(string tableName, Sqrat::Object dataSets){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 2){
-            LOGE("sqUpdate : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-        TableHolder* table = engine->database->getTableHolder(tableName);
-        if(table == NULL){
-            LOGE("sqUpdate : no such table");
-            return ERR_INVALID_PARAM;
-        }
-
-        vector< vector<string> > columns;
-        for (int i = 0, size = dataSets.GetSize(); i < size; i++) {
-            if( dataSets[i].GetSize() != 2 ){
-                LOGE("sqUpdate : illegal array index for data sets");
-                return ERR_INVALID_PARAM;
-            }
-            vector<string> colAndValue;
-            string targetColName = dataSets[i][0].Cast<std::string>();
-            string targetValue = dataSets[i][1].Cast<std::string>();
-
-            ColumnHolder* targetColumn = table->getColumnHolder(targetColName);
-            if(targetColumn == NULL){
-                LOGE("sqUpdate : no such column (target)");
-                return ERR_INVALID_PARAM;
-            }
-            if(targetColumn->isPrimaryColumn()){
-                LOGE("sqUpdate : unable to update primary key");
-                return ERR_INVALID_PARAM;
-            }
-            if(engine->config->tablesInfo.encrypted){
-                colAndValue.push_back( targetColumn->getColumnName().getCipher() );
-                colAndValue.push_back( encryptString(targetValue) );
-            }else{
-                colAndValue.push_back( targetColName );
-                colAndValue.push_back( targetValue );
-            }
-            columns.push_back(colAndValue);
-        }
-
-        int rcode;
-        if(engine->config->tablesInfo.encrypted){
-            rcode = engine->database->update(table->getTableName().getCipher(), columns);
-        }else{
-            rcode = engine->database->update(tableName, columns);
-        }
-        if(rcode != SQLITE_OK){
-            return ERR_DATABASE;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * update records with given values and condition
-     *
-     * @param table name
-     * @param 2D array with target column & value pairs
-     * @param 2D array with given conditions
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Database::sqUpdateWhere(string tableName, Sqrat::Object dataSets, Sqrat::Object conds){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 3){
-            LOGE("sqUpdateWhere : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-        TableHolder* table = engine->database->getTableHolder(tableName);
-        if(table == NULL){
-            LOGE("sqUpdateWhere : no such table");
-            return ERR_INVALID_PARAM;
-        }
-        ConditionBuilder conBuilder(engine->database, table, engine->config->tablesInfo.encrypted);
-        if(!conBuilder.createCondition(conds)){
-            return ERR_DATABASE;
-        }
-
-        vector< vector<string> > columns;
-        for (int i = 0, size = dataSets.GetSize(); i < size; i++) {
-            if( dataSets[i].GetSize() != 2 ){
-                LOGE("sqUpdateWhere : illegal array index for data sets");
-                return ERR_INVALID_PARAM;
-            }
-            vector<string> colAndValue;
-            string targetColName = dataSets[i][0].Cast<std::string>();
-            string targetValue = dataSets[i][1].Cast<std::string>();
-
-            ColumnHolder* targetColumn = table->getColumnHolder(targetColName);
-            if(targetColumn == NULL){
-                LOGE("sqUpdateWhere : no such column (target)");
-                return ERR_INVALID_PARAM;
-            }
-            if(targetColumn->isPrimaryColumn()){
-                LOGE("sqUpdateWhere : unable to update primary key");
-                return ERR_INVALID_PARAM;
-            }
-            if(engine->config->tablesInfo.encrypted){
-                colAndValue.push_back( targetColumn->getColumnName().getCipher() );
-                colAndValue.push_back( encryptString(targetValue) );
-            }else{
-                colAndValue.push_back( targetColName );
-                colAndValue.push_back( targetValue );
-            }
-            columns.push_back(colAndValue);
-        }
-
-        int rcode;
-        if(engine->config->tablesInfo.encrypted){
-            rcode = engine->database->updateWhere(table->getTableName().getCipher(), columns, conBuilder);
-        }else{
-            rcode = engine->database->updateWhere(tableName, columns, conBuilder);
-        }
-        if(rcode != SQLITE_OK){
-            return ERR_DATABASE;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * delete all records of the table
-     *
-     * @param table name
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Database::sqTruncateTable(string tableName){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 1){
-            LOGE("sqTruncate : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-        TableHolder* table = engine->database->getTableHolder(tableName);
-        if(table == NULL){
-            LOGE("sqTruncate : no such table");
-            return ERR_INVALID_PARAM;
-        }
-
-        int rcode;
-        if(engine->config->tablesInfo.encrypted){
-            rcode = engine->database->truncateTable(table->getTableName().getCipher());
-        }else{
-            rcode = engine->database->truncateTable(tableName);
-        }
-        if(rcode != SQLITE_OK){
-            return ERR_DATABASE;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * delete records with given condition
-     *
-     * @param table name
-     * @param 2D array with given conditions
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Database::sqDeleteWhere(string tableName, Sqrat::Object conds){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 2){
-            LOGE("sqDeleteWhere : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-        TableHolder* table = engine->database->getTableHolder(tableName);
-        if(table == NULL){
-            LOGE("sqDeleteWhere : no such table");
-            return ERR_INVALID_PARAM;
-        }
-        ConditionBuilder conBuilder(engine->database, table, engine->config->tablesInfo.encrypted);
-        if(!conBuilder.createCondition(conds)){
-            return ERR_DATABASE;
-        }
-
-        int rcode;
-        if(engine->config->tablesInfo.encrypted){
-            rcode = engine->database->deleteWhere(table->getTableName().getCipher(), conBuilder);
-        }else{
-            rcode = engine->database->deleteWhere(tableName, conBuilder);
-        }
-        if(rcode != SQLITE_OK){
-            return ERR_DATABASE;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * vacuum unnecessary data from database
-     *
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Database::sqVacuum(){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 0){
-            LOGE("sqVacuum : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-
-        int rcode = engine->database->vacuum();
-        if(rcode != SQLITE_OK){
-            return ERR_DATABASE;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * returns database path with given name
-     *
-     * @param database name [default : DEFAULT_DATABASE_NAME]
-     * @return database path
-     */
-    string Database::sqGetPath(string databaseName){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount > 1){
-            LOGE("sqGetPath : wrong number of arguments");
-            return string();
-        }
-        if(paramCount < 1 ){
-            databaseName = DEFAULT_DATABASE_NAME;
-        }
-
-        return engine->database->getPath(databaseName);
-    }
-
-    /*
-     * returns latest database error (integer value)
-     *
-     * @return last database error
-     */
-    int Database::sqGetLastError(){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 0){
-            LOGE("sqGetLastError : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-
-        return engine->database->lastError;
-    }
-
-    /*
-     * returns latest database error message
-     *
-     * @return last database error message
-     */
-    string Database::sqGetLastErrorMessage(){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 0){
-            LOGE("sqGetLastErrorMessage : wrong number of arguments");
-            return string();
-        }
-
-        return engine->database->lastErrorMessage;
-    }
-
-    /*
-     * open or create preference database
-     *
-     * @param encryption flag [default : true]
-     * @return true when successful
-     */
-    int Preference::sqOpenOrCreatePreference(bool encryptFlag){
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount > 1){
-            LOGE("sqOpenOrCreatePreference : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-        if(paramCount < 1 ){
-            encryptFlag = true;
-        }
-        if(!engine->database->openOrCreatePreference(encryptFlag)){
-            return ERR_DATABASE_OPEN;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * returns preference value with given key
-     *
-     * @param preference key
-     * @return preference value
-     */
-    string Preference::sqGetPreference(string key) {
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 1){
-            LOGE("sqGetPreference : wrong number of arguments");
-            return string();
-        }
-
-        return engine->database->getPreference(key);
-    }
-
-    /*
-     * set preference value with given key
-     *
-     * @param preference key
-     * @param preference value
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Preference::sqSetPreference(string key, string value) {
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 2){
-            LOGE("sqSetPreference : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-
-        if (!engine->database->setPreference(key, value)) {
-            return ERR_DATABASE;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * delete preference with given key
-     *
-     * @param preference key
-     * @return EMO_NO_ERROR if succeeds
-     */
-    int Preference::sqDeletePreference(string key) {
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 1){
-            LOGE("sqDeletePreference : wrong number of arguments");
-            return ERR_INVALID_PARAM;
-        }
-
-        if (!engine->database->deletePreference(key)) {
-            return ERR_DATABASE;
-        }
-        return EMO_NO_ERROR;
-    }
-
-    /*
-     * returns all preference keys
-     */
-    Sqrat::Object Preference::sqGetPreferenceKeys() {
-        // param check
-        int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
-        if(paramCount != 0){
-            LOGE("sqGetPreferenceKeys : wrong number of arguments");
-            return Sqrat::Array();
-        }
-
-        vector<emo::CipherHolder> keys = engine->database->getPreferenceKeys();
-        Sqrat::Array array(engine->sqvm, keys.size());
-        for(unsigned int i = 0; i < keys.size(); i++){
-            array.SetValue(i, keys[i].getPlainText());
-        }
-        return array;
-    }
-
 }
+
+// **************************************************
+// *                Native Closures                 *
+// **************************************************
+
+/*
+ * open database with given name
+ * if database is not found, creates new database with given name
+ * file mode is one of FILE_MODE_PRIVATE, FILE_MODE_WORLD_READABLE
+ * or FILE_MODE_WORLD_WRITABLE
+ *
+ * @param encryption flag [default : true]
+ * @param database name [default : DEFAULT_DATABASE_NAME]
+ * @param file mode [default : FILE_MODE_PRIVATE]
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqOpenOrCreate(bool encryptFlag, string databaseName, int mode) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount > 3) {
+        LOGE("sqOpenOrCreate : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+    if (paramCount < 3) {
+        mode = FILE_MODE_PRIVATE;
+    }
+    if (paramCount < 2) {
+        databaseName = DEFAULT_DATABASE_NAME;
+    }
+    if (paramCount < 1) {
+        encryptFlag = true;
+    }
+
+    // check file mode
+    if (mode != FILE_MODE_PRIVATE && mode != FILE_MODE_WORLD_READABLE
+            && mode != FILE_MODE_WORLD_WRITEABLE) {
+        LOGE("sqOpenOrCreate : invalid file mode specified");
+        return ERR_INVALID_PARAM;
+    }
+
+    if (engine->database->openOrCreate(databaseName, mode, encryptFlag) == false) {
+        return ERR_DATABASE_OPEN;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * open database with given name
+ *
+ * @param encryption flag [default : true]
+ * @param database name [default : DEFAULT_DATABASE_NAME]
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqOpen(bool encryptFlag, string databaseName) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount > 2) {
+        LOGE("sqOpen : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+    if (paramCount < 2) {
+        databaseName = DEFAULT_DATABASE_NAME;
+    }
+    if (paramCount < 1) {
+        encryptFlag = true;
+    }
+
+    if (engine->database->open(databaseName, encryptFlag) == false) {
+        return ERR_DATABASE_OPEN;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * close database
+ *
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqClose() {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 0) {
+        LOGE("sqClose : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+
+    if (engine->database->close() == false) {
+        return ERR_DATABASE_CLOSE;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * remove database with given name
+ *
+ * @param database name [default : DEFAULT_DATABASE_NAME]
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqRemove(string databaseName) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount > 1) {
+        LOGE("sqRemove : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+    if (paramCount < 1) {
+        databaseName = DEFAULT_DATABASE_NAME;
+    }
+
+    if (engine->database->remove(databaseName) == false) {
+        return ERR_DATABASE;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * create table with given column names
+ *
+ * @param table name
+ * @param column names
+ * @param primary key flag
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqCreateTable(string tableName, Sqrat::Object columnNames, bool primaryFlag) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 3) {
+        LOGE("sqCreateTable : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+    if (engine->database->getTableHolder(tableName) != NULL) {
+        LOGE("sqCreateTable : table with given name already exists");
+        return ERR_INVALID_PARAM;
+    }
+    bool encryptFlag = engine->config->tablesInfo.encrypted;
+
+    emo::CipherHolder tableNameCipher = emo::CipherHolder(tableName,
+            !encryptFlag);
+    emo::TableHolder tableHolder = emo::TableHolder(tableNameCipher);
+    vector<emo::CipherHolder> columns;
+    for (int i = 0, size = columnNames.GetSize(); i < size; i++) {
+        emo::CipherHolder colName = emo::CipherHolder(columnNames[i].Cast<string>(), !encryptFlag);
+        columns.push_back(colName);
+
+        bool pFlag = false;
+        if (i == 0) {
+            pFlag = primaryFlag;
+        }
+        emo::ColumnHolder colHolder = emo::ColumnHolder(colName, pFlag);
+        tableHolder.addColumn(colHolder);
+    }
+
+    int rcode;
+    vector < string > colStrings;
+    if (encryptFlag) {
+        getCiphers(&colStrings, columns);
+        rcode = engine->database->createTable(tableNameCipher.getCipher(), colStrings, primaryFlag);
+    } else {
+        getPlainTexts(&colStrings, columns);
+        rcode = engine->database->createTable(tableName, colStrings, primaryFlag);
+    }
+    if (rcode != SQLITE_OK) {
+        return ERR_DATABASE;
+    } else {
+        engine->database->addTableHolder(tableHolder);
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * drop table with given name
+ *
+ * @param table name
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqDropTable(string tableName) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 1) {
+        LOGE("sqDropTable : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+    emo::TableHolder* table = engine->database->getTableHolder(tableName);
+    if (table == NULL) {
+        LOGE("sqDropTable : table with given name not exists");
+        return ERR_INVALID_PARAM;
+    }
+
+    int rcode;
+    if (engine->config->tablesInfo.encrypted) {
+        rcode = engine->database->dropTable(table->getTableName().getCipher());
+    } else {
+        rcode = engine->database->dropTable(tableName);
+    }
+    if (rcode != SQLITE_OK) {
+        return ERR_DATABASE;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * select values with given condition
+ *
+ * @param target column name
+ * @param table name
+ * @return selected values (array)
+ */
+Sqrat::Object sqSelect(string targetColumn, string tableName) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 2) {
+        LOGE("sqSelect : wrong number of arguments");
+        return Sqrat::Array();
+    }
+    emo::TableHolder* table = engine->database->getTableHolder(tableName);
+    if (table == NULL) {
+        LOGE("sqSelect : no such table");
+        return Sqrat::Array();
+    }
+    emo::ColumnHolder* column = table->getColumnHolder(targetColumn);
+    if (column == NULL) {
+        LOGE("sqSelect : no such column");
+        return Sqrat::Array();
+    }
+
+    int rcode;
+    vector<emo::CipherHolder> values;
+    if (engine->config->tablesInfo.encrypted) {
+        string targetTableCipher = table->getTableName().getCipher();
+        string targetColumnCipher = column->getColumnName().getCipher();
+        rcode = engine->database->select(&values, targetColumnCipher, targetTableCipher);
+    } else {
+        rcode = engine->database->select(&values, targetColumn, tableName);
+    }
+    if (rcode != SQLITE_OK) {
+        LOGE("sqSelect : SQL statement, 'select [columnName]', failed");
+        return Sqrat::Array();
+    }
+
+    Sqrat::Array array(engine->sqvm, values.size());
+    for (unsigned int i = 0; i < values.size(); i++) {
+        array.SetValue(i, values[i].getPlainText());
+    }
+    return array;
+}
+
+/*
+ * select all values with given condition
+ *
+ * @param table name
+ * @return selected records (2d array)
+ */
+Sqrat::Object sqSelectAll(string tableName) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 1) {
+        LOGE("sqSelectAll : wrong number of arguments");
+        return Sqrat::Array();
+    }
+    emo::TableHolder* table = engine->database->getTableHolder(tableName);
+    if (table == NULL) {
+        LOGE("sqSelectAll : no such table");
+        return Sqrat::Array();
+    }
+
+    int rcode;
+    vector < vector<emo::CipherHolder> > records;
+    if (engine->config->tablesInfo.encrypted) {
+        string targetTableCipher = table->getTableName().getCipher();
+        rcode = engine->database->selectAll(&records, targetTableCipher);
+    } else {
+        rcode = engine->database->selectAll(&records, tableName);
+    }
+    if (rcode != SQLITE_OK) {
+        return Sqrat::Array();
+    }
+
+    Sqrat::Array array(engine->sqvm, records.size());
+    for (unsigned int i = 0; i < records.size(); i++) {
+        Sqrat::Array array2(engine->sqvm, records[i].size());
+        for (unsigned int j = 0; j < records[i].size(); j++) {
+            array2.SetValue(j, records[i][j].getPlainText());
+        }
+        array.Bind(i, array2);
+    }
+    return array;
+}
+
+/*
+ * select values with given condition
+ *
+ * @param target column name
+ * @param table name
+ * @param 2D array with given condition
+ * @return selected values (array)
+ */
+Sqrat::Object sqSelectWhere(string targetColName, string tableName, Sqrat::Object conds) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 3) {
+        LOGE("sqSelectWhere : wrong number of arguments");
+        return Sqrat::Array();
+    }
+    emo::TableHolder* table = engine->database->getTableHolder(tableName);
+    if (table == NULL) {
+        LOGE("sqSelectWhere : no such table");
+        return Sqrat::Array();
+    }
+    emo::ColumnHolder* targetColumn = table->getColumnHolder(targetColName);
+    if (targetColumn == NULL) {
+        LOGE("sqSelectWhere : no such column (target)");
+        return Sqrat::Array();
+    }
+    emo::ConditionBuilder conBuilder(engine->database, table, engine->config->tablesInfo.encrypted);
+    if (!conBuilder.createCondition(conds)) {
+        return Sqrat::Array();
+    }
+
+    int rcode;
+    vector<emo::CipherHolder> values;
+    if (engine->config->tablesInfo.encrypted) {
+        string targetTableCipher = table->getTableName().getCipher();
+        string targetColumnCipher = targetColumn->getColumnName().getCipher();
+        rcode = engine->database->selectWhere(&values, targetColumnCipher, targetTableCipher, conBuilder);
+    } else {
+        rcode = engine->database->selectWhere(&values, targetColName, tableName, conBuilder);
+    }
+    if (rcode != SQLITE_OK) {
+        return Sqrat::Array();
+    }
+
+    Sqrat::Array array(engine->sqvm, values.size());
+    for (unsigned int i = 0; i < values.size(); i++) {
+        array.SetValue(i, values[i].getPlainText());
+    }
+    return array;
+}
+
+/*
+ * select records with given condition
+ *
+ * @param table name
+ * @param 2D array with given condition
+ * @return selected records (table)
+ */
+Sqrat::Object sqSelectAllWhere(string tableName, Sqrat::Object conds) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 2) {
+        LOGE("sqSelectAllWhere : wrong number of arguments");
+        return Sqrat::Array();
+    }
+    emo::TableHolder* table = engine->database->getTableHolder(tableName);
+    if (table == NULL) {
+        LOGE("sqSelectAllWhere : no such table");
+        return Sqrat::Array();
+    }
+    emo::ConditionBuilder conBuilder(engine->database, table, engine->config->tablesInfo.encrypted);
+    if (!conBuilder.createCondition(conds)) {
+        return Sqrat::Array();
+    }
+
+    int rcode;
+    vector < vector<emo::CipherHolder> > records;
+    if (engine->config->tablesInfo.encrypted) {
+        string targetTableCipher = table->getTableName().getCipher();
+        rcode = engine->database->selectAllWhere(&records, targetTableCipher, conBuilder);
+    } else {
+        rcode = engine->database->selectAllWhere(&records, tableName, conBuilder);
+    }
+    if (rcode != SQLITE_OK) {
+        return Sqrat::Array();
+    }
+
+    Sqrat::Array array(engine->sqvm, records.size());
+    for (unsigned int i = 0; i < records.size(); i++) {
+        Sqrat::Array array2(engine->sqvm, records[i].size());
+        for (unsigned int j = 0; j < records[i].size(); j++) {
+            array2.SetValue(j, records[i][j].getPlainText());
+        }
+        array.Bind(i, array2);
+    }
+    return array;
+}
+
+/*
+ * count records on specified table with given condition
+ *
+ * @param table name
+ * @return count of records or -1 on failure
+ */
+int sqCount(string tableName) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 1) {
+        LOGE("sqCount : wrong number of arguments");
+        return -1;
+    }
+    emo::TableHolder* table = engine->database->getTableHolder(tableName);
+    if (table == NULL) {
+        LOGE("sqCount : no such table");
+        return -1;
+    }
+
+    int rcode, count;
+    if (engine->config->tablesInfo.encrypted) {
+        rcode = engine->database->count(&count, table->getTableName().getCipher());
+    } else {
+        rcode = engine->database->count(&count, tableName);
+    }
+    if (rcode != SQLITE_OK) {
+        return -1;
+    }
+    return count;
+}
+
+/*
+ * count records on specified table
+ *
+ * @param table name
+ * @param 2D array with given condition
+ * @return count of matched records
+ */
+int sqCountWhere(string tableName, Sqrat::Object conds) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 2) {
+        LOGE("sqCountWhere : wrong number of arguments");
+        return -1;
+    }
+    emo::TableHolder* table = engine->database->getTableHolder(tableName);
+    if (table == NULL) {
+        LOGE("sqCountWhere : no such table");
+        return -1;
+    }
+    emo::ConditionBuilder conBuilder(engine->database, table, engine->config->tablesInfo.encrypted);
+    if (!conBuilder.createCondition(conds)) {
+        return -1;
+    }
+
+    int rcode, count;
+    if (engine->config->tablesInfo.encrypted) {
+        rcode = engine->database->countWhere(&count, table->getTableName().getCipher(), conBuilder);
+    } else {
+        rcode = engine->database->countWhere(&count, tableName, conBuilder);
+    }
+    if (rcode != SQLITE_OK) {
+        return -1;
+    }
+    return count;
+}
+
+/*
+ * update records with given values
+ *
+ * @param table name
+ * @param values to insert (array)
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqInsert(string tableName, Sqrat::Object sqValues) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 2) {
+        LOGE("sqInsert : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+    emo::TableHolder* table = engine->database->getTableHolder(tableName);
+    if (table == NULL) {
+        LOGE("sqInsert : no such table");
+        return ERR_INVALID_PARAM;
+    }
+    if ((unsigned int) sqValues.GetSize() != table->getColumns()->size()) {
+        LOGE("sqInsert : number of values does not match");
+        return ERR_INVALID_PARAM;
+    }
+    bool encryptFlag = engine->config->tablesInfo.encrypted;
+
+    vector<emo::CipherHolder> holders;
+    for (int i = 0, size = sqValues.GetSize(); i < size; i++) {
+        emo::CipherHolder holder = emo::CipherHolder(sqValues[i].Cast<std::string>(), !encryptFlag);
+        if (engine->database->isDuplicatedKey(tableName, i, holder, encryptFlag)) {
+            LOGE("sqInsert : duplicated primary key");
+            return ERR_INVALID_PARAM;
+        }
+        holders.push_back(holder);
+    }
+
+    int rcode;
+    vector < string > values;
+    if (engine->config->tablesInfo.encrypted) {
+        getCiphers(&values, holders);
+        rcode = engine->database->insert(table->getTableName().getCipher(), values);
+    } else {
+        getPlainTexts(&values, holders);
+        rcode = engine->database->insert(tableName, values);
+    }
+    if (rcode != SQLITE_OK) {
+        return ERR_DATABASE;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * update records with given values
+ *
+ * @param table name
+ * @param 2D array with target column & value pairs
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqUpdate(string tableName, Sqrat::Object dataSets) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 2) {
+        LOGE("sqUpdate : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+    emo::TableHolder* table = engine->database->getTableHolder(tableName);
+    if (table == NULL) {
+        LOGE("sqUpdate : no such table");
+        return ERR_INVALID_PARAM;
+    }
+
+    vector < vector<string> > columns;
+    for (int i = 0, size = dataSets.GetSize(); i < size; i++) {
+        if (dataSets[i].GetSize() != 2) {
+            LOGE("sqUpdate : illegal array index for data sets");
+            return ERR_INVALID_PARAM;
+        }
+        vector < string > colAndValue;
+        string targetColName = dataSets[i][0].Cast<std::string>();
+        string targetValue = dataSets[i][1].Cast<std::string>();
+
+        emo::ColumnHolder* targetColumn = table->getColumnHolder(targetColName);
+        if (targetColumn == NULL) {
+            LOGE("sqUpdate : no such column (target)");
+            return ERR_INVALID_PARAM;
+        }
+        if (targetColumn->isPrimaryColumn()) {
+            LOGE("sqUpdate : unable to update primary key");
+            return ERR_INVALID_PARAM;
+        }
+        if (engine->config->tablesInfo.encrypted) {
+            colAndValue.push_back(targetColumn->getColumnName().getCipher());
+            colAndValue.push_back(encryptString(targetValue));
+        } else {
+            colAndValue.push_back(targetColName);
+            colAndValue.push_back(targetValue);
+        }
+        columns.push_back(colAndValue);
+    }
+
+    int rcode;
+    if (engine->config->tablesInfo.encrypted) {
+        rcode = engine->database->update(table->getTableName().getCipher(), columns);
+    } else {
+        rcode = engine->database->update(tableName, columns);
+    }
+    if (rcode != SQLITE_OK) {
+        return ERR_DATABASE;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * update records with given values and condition
+ *
+ * @param table name
+ * @param 2D array with target column & value pairs
+ * @param 2D array with given conditions
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqUpdateWhere(string tableName, Sqrat::Object dataSets, Sqrat::Object conds) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 3) {
+        LOGE("sqUpdateWhere : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+    emo::TableHolder* table = engine->database->getTableHolder(tableName);
+    if (table == NULL) {
+        LOGE("sqUpdateWhere : no such table");
+        return ERR_INVALID_PARAM;
+    }
+    emo::ConditionBuilder conBuilder(engine->database, table, engine->config->tablesInfo.encrypted);
+    if (!conBuilder.createCondition(conds)) {
+        return ERR_DATABASE;
+    }
+
+    vector < vector<string> > columns;
+    for (int i = 0, size = dataSets.GetSize(); i < size; i++) {
+        if (dataSets[i].GetSize() != 2) {
+            LOGE("sqUpdateWhere : illegal array index for data sets");
+            return ERR_INVALID_PARAM;
+        }
+        vector < string > colAndValue;
+        string targetColName = dataSets[i][0].Cast<std::string>();
+        string targetValue = dataSets[i][1].Cast<std::string>();
+
+        emo::ColumnHolder* targetColumn = table->getColumnHolder(targetColName);
+        if (targetColumn == NULL) {
+            LOGE("sqUpdateWhere : no such column (target)");
+            return ERR_INVALID_PARAM;
+        }
+        if (targetColumn->isPrimaryColumn()) {
+            LOGE("sqUpdateWhere : unable to update primary key");
+            return ERR_INVALID_PARAM;
+        }
+        if (engine->config->tablesInfo.encrypted) {
+            colAndValue.push_back(targetColumn->getColumnName().getCipher());
+            colAndValue.push_back(encryptString(targetValue));
+        } else {
+            colAndValue.push_back(targetColName);
+            colAndValue.push_back(targetValue);
+        }
+        columns.push_back(colAndValue);
+    }
+
+    int rcode;
+    if (engine->config->tablesInfo.encrypted) {
+        rcode = engine->database->updateWhere(table->getTableName().getCipher(), columns, conBuilder);
+    } else {
+        rcode = engine->database->updateWhere(tableName, columns, conBuilder);
+    }
+    if (rcode != SQLITE_OK) {
+        return ERR_DATABASE;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * delete all records of the table
+ *
+ * @param table name
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqTruncateTable(string tableName) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 1) {
+        LOGE("sqTruncate : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+    emo::TableHolder* table = engine->database->getTableHolder(tableName);
+    if (table == NULL) {
+        LOGE("sqTruncate : no such table");
+        return ERR_INVALID_PARAM;
+    }
+
+    int rcode;
+    if (engine->config->tablesInfo.encrypted) {
+        rcode = engine->database->truncateTable(table->getTableName().getCipher());
+    } else {
+        rcode = engine->database->truncateTable(tableName);
+    }
+    if (rcode != SQLITE_OK) {
+        return ERR_DATABASE;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * delete records with given condition
+ *
+ * @param table name
+ * @param 2D array with given conditions
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqDeleteWhere(string tableName, Sqrat::Object conds) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 2) {
+        LOGE("sqDeleteWhere : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+    emo::TableHolder* table = engine->database->getTableHolder(tableName);
+    if (table == NULL) {
+        LOGE("sqDeleteWhere : no such table");
+        return ERR_INVALID_PARAM;
+    }
+    emo::ConditionBuilder conBuilder(engine->database, table, engine->config->tablesInfo.encrypted);
+    if (!conBuilder.createCondition(conds)) {
+        return ERR_DATABASE;
+    }
+
+    int rcode;
+    if (engine->config->tablesInfo.encrypted) {
+        rcode = engine->database->deleteWhere(table->getTableName().getCipher(), conBuilder);
+    } else {
+        rcode = engine->database->deleteWhere(tableName, conBuilder);
+    }
+    if (rcode != SQLITE_OK) {
+        return ERR_DATABASE;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * vacuum unnecessary data from database
+ *
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqVacuum() {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 0) {
+        LOGE("sqVacuum : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+
+    int rcode = engine->database->vacuum();
+    if (rcode != SQLITE_OK) {
+        return ERR_DATABASE;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * returns database path with given name
+ *
+ * @param database name [default : DEFAULT_DATABASE_NAME]
+ * @return database path
+ */
+string sqGetPath(string databaseName) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount > 1) {
+        LOGE("sqGetPath : wrong number of arguments");
+        return string();
+    }
+    if (paramCount < 1) {
+        databaseName = DEFAULT_DATABASE_NAME;
+    }
+
+    return engine->database->getPath(databaseName);
+}
+
+/*
+ * returns latest database error (integer value)
+ *
+ * @return last database error
+ */
+int sqGetLastError() {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 0) {
+        LOGE("sqGetLastError : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+
+    return engine->database->lastError;
+}
+
+/*
+ * returns latest database error message
+ *
+ * @return last database error message
+ */
+string sqGetLastErrorMessage() {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 0) {
+        LOGE("sqGetLastErrorMessage : wrong number of arguments");
+        return string();
+    }
+
+    return engine->database->lastErrorMessage;
+}
+
+/*
+ * open or create preference database
+ *
+ * @param encryption flag [default : true]
+ * @return true when successful
+ */
+int sqOpenOrCreatePreference(bool encryptFlag) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount > 1) {
+        LOGE("sqOpenOrCreatePreference : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+    if (paramCount < 1) {
+        encryptFlag = true;
+    }
+    if (!engine->database->openOrCreatePreference(encryptFlag)) {
+        return ERR_DATABASE_OPEN;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * returns preference value with given key
+ *
+ * @param preference key
+ * @return preference value
+ */
+string sqGetPreference(string key) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 1) {
+        LOGE("sqGetPreference : wrong number of arguments");
+        return string();
+    }
+
+    return engine->database->getPreference(key);
+}
+
+/*
+ * set preference value with given key
+ *
+ * @param preference key
+ * @param preference value
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqSetPreference(string key, string value) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 2) {
+        LOGE("sqSetPreference : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+
+    if (!engine->database->setPreference(key, value)) {
+        return ERR_DATABASE;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * delete preference with given key
+ *
+ * @param preference key
+ * @return EMO_NO_ERROR if succeeds
+ */
+int sqDeletePreference(string key) {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 1) {
+        LOGE("sqDeletePreference : wrong number of arguments");
+        return ERR_INVALID_PARAM;
+    }
+
+    if (!engine->database->deletePreference(key)) {
+        return ERR_DATABASE;
+    }
+    return EMO_NO_ERROR;
+}
+
+/*
+ * returns all preference keys
+ */
+Sqrat::Object sqGetPreferenceKeys() {
+    // param check
+    int paramCount = emo::SquirrelGlue::getParamCount(engine->sqvm);
+    if (paramCount != 0) {
+        LOGE("sqGetPreferenceKeys : wrong number of arguments");
+        return Sqrat::Array();
+    }
+
+    vector<emo::CipherHolder> keys = engine->database->getPreferenceKeys();
+    Sqrat::Array array(engine->sqvm, keys.size());
+    for (unsigned int i = 0; i < keys.size(); i++) {
+        array.SetValue(i, keys[i].getPlainText());
+    }
+    return array;
+}
+

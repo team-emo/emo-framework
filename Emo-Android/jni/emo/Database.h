@@ -155,29 +155,6 @@ namespace emo {
         char* getConfig();
         char* getScript(const char* name);
 
-        // Native Closures
-        int sqOpenOrCreate(bool encryptFlag, string databaseName, int mode);
-        int sqOpen(bool encryptFlag, string databaseName);
-        int sqClose();
-        int sqRemove(string databaseName);
-        int sqCreateTable(string tableName, Sqrat::Object columnNames, bool primaryFlag);
-        int sqDropTable(string tableName);
-        Sqrat::Object sqSelect(string targetColumn, string tableName);
-        Sqrat::Object sqSelectAll(string tableName);
-        Sqrat::Object sqSelectWhere(string targetColumn, string tableName, Sqrat::Object conds);
-        Sqrat::Object sqSelectAllWhere(string tableName, Sqrat::Object conds);
-        int sqCount(string tableName);
-        int sqCountWhere(string tableName, Sqrat::Object conds);
-        int sqInsert(string tableName, Sqrat::Object values);
-        int sqUpdate(string tableName, Sqrat::Object dataSets);
-        int sqUpdateWhere(string tableName, Sqrat::Object dataSets, Sqrat::Object conds);
-        int sqTruncateTable(string tableName);
-        int sqDeleteWhere(string tableName, Sqrat::Object conds);
-        int sqVacuum();
-        string sqGetPath(string databaseName);
-        int    sqGetLastError();
-        string sqGetLastErrorMessage();
-
     protected:
         sqlite3* db;
         bool isOpen;
@@ -187,15 +164,35 @@ namespace emo {
         int exec(char* sql, bool freeSqlFlag);
         int query(char* sql, sqlite3_callback callback, void* values, bool freeSqlFlag);
     };
-
-    class Preference {
-    public:
-        int sqOpenOrCreatePreference(bool encryptFlag);
-        string sqGetPreference(string key);
-        int sqSetPreference(string key, string value);
-        int sqDeletePreference(string key);
-        Sqrat::Object sqGetPreferenceKeys();
-    };
 }
+
+// Native Closures
+int sqOpenOrCreate(bool encryptFlag, string databaseName, int mode);
+int sqOpen(bool encryptFlag, string databaseName);
+int sqClose();
+int sqRemove(string databaseName);
+int sqCreateTable(string tableName, Sqrat::Object columnNames, bool primaryFlag);
+int sqDropTable(string tableName);
+Sqrat::Object sqSelect(string targetColumn, string tableName);
+Sqrat::Object sqSelectAll(string tableName);
+Sqrat::Object sqSelectWhere(string targetColumn, string tableName, Sqrat::Object conds);
+Sqrat::Object sqSelectAllWhere(string tableName, Sqrat::Object conds);
+int sqCount(string tableName);
+int sqCountWhere(string tableName, Sqrat::Object conds);
+int sqInsert(string tableName, Sqrat::Object values);
+int sqUpdate(string tableName, Sqrat::Object dataSets);
+int sqUpdateWhere(string tableName, Sqrat::Object dataSets, Sqrat::Object conds);
+int sqTruncateTable(string tableName);
+int sqDeleteWhere(string tableName, Sqrat::Object conds);
+int sqVacuum();
+string sqGetPath(string databaseName);
+int    sqGetLastError();
+string sqGetLastErrorMessage();
+
+int sqOpenOrCreatePreference(bool encryptFlag);
+string sqGetPreference(string key);
+int sqSetPreference(string key, string value);
+int sqDeletePreference(string key);
+Sqrat::Object sqGetPreferenceKeys();
 
 #endif

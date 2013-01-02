@@ -103,7 +103,7 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_onReturnToSquirrel
     Sqrat::DefaultVM::Set(engine->sqvm);
 
     // Build extra table
-    Sqrat::Table* extraTable = new Sqrat::Table();
+    Sqrat::Table extraTable = Sqrat::Table();
     jint extraSize = env->GetArrayLength(extras);
 
     for(int i = 0; i < extraSize ; i+=2){
@@ -117,18 +117,18 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_onReturnToSquirrel
         // check "int" parameter
         if(extraKeyWithPrefix.find("emo_prefix_int_") != string::npos ){
             int extraValue = atoi(extraValueString.c_str());
-            extraTable->SetValue(extraKey.c_str(), extraValue);
+            extraTable.SetValue(extraKey.c_str(), extraValue);
 
         // check "float" parameter
         }else if(extraKeyWithPrefix.find("emo_prefix_flo_") != string::npos ){
             float extraValue = atof(extraValueString.c_str());
-            extraTable->SetValue(extraKey.c_str(), extraValue);
+            extraTable.SetValue(extraKey.c_str(), extraValue);
 
         // check "bool" parameter
         }else if(extraKeyWithPrefix.find("emo_prefix_boo_") != string::npos ){
             bool extraValue = false;
             if(extraValueString.find("TRUE") != string::npos || extraValueString.find("true") != string::npos) extraValue = true;
-            extraTable->SetValue(extraKey.c_str(), extraValue);
+            extraTable.SetValue(extraKey.c_str(), extraValue);
 
         // check "String Array" prefix
         }else if(extraKeyWithPrefix.find("emo_prefix_ars_") != string::npos ){
@@ -138,7 +138,7 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_onReturnToSquirrel
             for(unsigned int i = 0; i < extraValueVector.size() ; i++){
                 extraStringArray.Append(extraValueVector[i]);
             }
-            extraTable->Bind(extraKey.c_str(), extraStringArray);
+            extraTable.Bind(extraKey.c_str(), extraStringArray);
 
         // check "Int Array" prefix
         }else if(extraKeyWithPrefix.find("emo_prefix_ari_") != string::npos ){
@@ -148,11 +148,11 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_onReturnToSquirrel
             for(unsigned int i = 0; i < extraValueVector.size() ; i++){
                 extraIntArray.Append(atoi(extraValueVector[i].c_str()));
             }
-            extraTable->Bind(extraKey.c_str(), extraIntArray);
+            extraTable.Bind(extraKey.c_str(), extraIntArray);
 
         // put parameter as a "String"
         }else{
-            extraTable->SetValue(extraKey.c_str(), extraValueString);
+            extraTable.SetValue(extraKey.c_str(), extraValueString);
 
         }
     }
@@ -168,7 +168,7 @@ JNIEXPORT void JNICALL Java_com_emo_1framework_EmoActivity_onReturnToSquirrel
     std::string srcClassName = engine->android->activityMap[requestCode];
     std::string thisClassName= string( getCStringFromJava(env, jThisClassName) );
 
-    engine->android->extraPostTable->Bind(srcClassName.c_str(), *extraTable);
+    engine->android->extraPostTable->Bind(srcClassName.c_str(), extraTable);
 
     LOGI("onReturnToSquirrel : switching onto Squirrel function");
     returnFunc.Execute(requestCode, resultCode, srcClassName, thisClassName);

@@ -11,8 +11,8 @@ const KEY_RECTANGLE_Y = "RECTANGLE_Y";
 class Main {
 
     rectangle   = emo.Rectangle();
-    preference  = emo.Preference();
-    database    = emo.Database();
+    preference  = emo.Preference;
+    database    = emo.Database;
 
     /*
      * Called when this class is loaded

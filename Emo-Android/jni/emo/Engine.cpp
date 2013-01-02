@@ -147,12 +147,14 @@ namespace emo {
     }
 
     Engine::~Engine() {
+        delete this->config;
         delete this->stage;
         delete this->audio;
         delete this->drawables;
         delete this->drawablesToRemove;
         delete this->database;
         delete this->javaGlue;
+        delete this->squirrelGlue;
         delete this->sortedDrawables;
         delete this->imageCache;
     }
@@ -498,6 +500,8 @@ namespace emo {
             }
             this->updateUptime();
             callSqFunction(this->sqvm, EMO_NAMESPACE, EMO_FUNC_ONDISPOSE);
+
+            delete this->emoSpace;
             sq_close(this->sqvm);
             this->sqvm = NULL;
 
