@@ -4,8 +4,8 @@
  */
 emo.Runtime.import("emo-framework/physics.nut");
 
-local stage   = emo.Stage();
-local physics = emo.Physics();
+local stage   = emo.Stage;
+local physics = emo.Physics;
 local world   = emo.physics.World(emo.Vec2(0, 10), true);
 
 const FPS = 60.0;
@@ -129,8 +129,8 @@ class Main {
             axis.getCenterX(), axis.getCenterY(),
             box.getCenterX(),  box.getCenterY());
         
-        if (emo.Runtime().uptime() - lastRecycledTime > 1000) {
-            lastRecycledTime = emo.Runtime().uptime();
+        if (emo.Runtime.uptime() - lastRecycledTime > 1000) {
+            lastRecycledTime = emo.Runtime.uptime();
             
             // if the drop box is sleeping, drop it again.
             if (dropBox.getPhysicsInfo() == null ||

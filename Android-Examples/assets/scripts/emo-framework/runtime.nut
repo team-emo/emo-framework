@@ -6,7 +6,7 @@
  ******************************************************/
 
 EMO_VERSION <- "0.2.0";
-EMO_EXPERIMENT_VERSION <- "0.6.1";
+EMO_EXPERIMENT_VERSION <- "0.6.2";
 
 OS_ANDROID <- "Android";
 OS_IOS     <- "iOS";
@@ -232,7 +232,7 @@ DEFAULT_DATABASE_NAME  <- "emoruntime.db";
 PREFERENCE_TABLE_NAME  <- "preferences";
 
 EMO_RUNTIME_DELEGATE    <- null;
-EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch();
+EMO_RUNTIME_STOPWATCH   <- emo.Stopwatch;
 EMO_MOTION_LISTENERS    <- [];
 EMO_RUNTIME_SNAPSHOT    <- null;
 EMO_RUNTIME_SNAPSHOT_STOPPED <- false;
@@ -434,7 +434,7 @@ class emo.ModifierManager {
     
     function add(modifier) {
         if (modifiers.len() == 0) {
-            emo.Event().enableOnUpdateCallback();
+            emo.Event.enableOnUpdateCallback();
         }
         modifiers.append(modifier);
     }
@@ -463,7 +463,7 @@ class emo.ModifierManager {
                 }
             }
             if (modifiers.len() == 0) {
-                emo.Event().disableOnUpdateCallback();
+                emo.Event.disableOnUpdateCallback();
             }
             modifiersToRemove.clear();
         }
@@ -562,7 +562,7 @@ class emo.Modifier {
         if (elapsedf >= duration) {
             onModify(maxValue);
             if (repeatCount >= 0 && repeatCount <= currentCount) {
-                emo.Event().removeOnUpdateListener(this);
+                emo.Event.removeOnUpdateListener(this);
                 if (eventCallback != null) {
                     eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
                 }
@@ -649,13 +649,13 @@ class emo.ConcurrentModifier {
     
     function onModifierEvent(targetObj, _modifier, eventType) {
         if (eventType == EVENT_MODIFIER_FINISH) {
-            emo.Event().removeOnUpdateListener(_modifier);
+            emo.Event.removeOnUpdateListener(_modifier);
 
             local idx = modifiers.find(_modifier);
             if (idx != null) modifiers.remove(idx);
             if (modifiers.len() > 0) return;
 
-            emo.Event().removeOnUpdateListener(this);
+            emo.Event.removeOnUpdateListener(this);
             if (eventCallback != null) {
                 eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
             }
@@ -784,7 +784,7 @@ class emo.SequenceModifier {
                     }
                     modifier = null;
                     modifiers.clear();
-                    emo.Event().removeOnUpdateListener(this);
+                    emo.Event.removeOnUpdateListener(this);
                     if (eventCallback != null) {
                         eventCallback(obj, this, eventType);
                     }
@@ -884,7 +884,7 @@ class emo.MultiModifier extends emo.Modifier {
             if (elapsedf >= duration) {
                 onModify(maxValue);
                 if (repeatCount >= 0 && repeatCount <= currentCount) {
-                    emo.Event().removeOnUpdateListener(this);
+                    emo.Event.removeOnUpdateListener(this);
                     if (eventCallback != null) {
                         eventCallback(targetObj, this, EVENT_MODIFIER_FINISH);
                     }
@@ -1188,7 +1188,7 @@ class emo.AudioChannel {
     }
 
     function load(file) {
-        local runtime = emo.Runtime();
+        local runtime = emo.Runtime;
         if (runtime.os() == OS_ANDROID) {
             file = ANDROID_SOUNDS_DIR + file;
         }
@@ -1230,8 +1230,8 @@ function emo::Audio::createChannel(id) {
 class emo.Sprite {
 
     name   = null;
-    stage  = emo.Stage();
-    runtime = emo.Runtime();
+    stage  = emo.Stage;
+    runtime = emo.Runtime;
 
     id       = null;
     childId  = null;
@@ -1347,7 +1347,7 @@ class emo.Sprite {
         local status = EMO_NO_ERROR;
         if (loaded) {
             clearModifier();
-            emo.Event().removeMotionListener(this);
+            emo.Event.removeMotionListener(this);
             if (physicsInfo != null) {
                 physicsInfo.remove();
                 physicsInfo = null;
@@ -1370,15 +1370,15 @@ class emo.Sprite {
         if (startTime != null) modifier.startTime = startTime;
 
         modifier.setObject(this);
-        emo.Event().addOnUpdateListener(modifier);
+        emo.Event.addOnUpdateListener(modifier);
     }
 
     function removeModifier(modifier) {
-        emo.Event().removeOnUpdateListener(modifier);
+        emo.Event.removeOnUpdateListener(modifier);
     }
     
     function clearModifier() {
-        emo.Event().removeOnUpdateListenerForObject(this);
+        emo.Event.removeOnUpdateListenerForObject(this);
     }
     
     function setPhysicsInfo(_physicsInfo) {
@@ -1718,8 +1718,8 @@ class emo.AnalogOnScreenController extends emo.Sprite {
         
         alpha(_alpha);
         
-        emo.Event().addMotionListener(this);
-        emo.Event().addOnUpdateListener(this);
+        emo.Event.addMotionListener(this);
+        emo.Event.addOnUpdateListener(this);
         
         padding = 0;
         margin  = 0;
@@ -1780,8 +1780,8 @@ class emo.AnalogOnScreenController extends emo.Sprite {
     }
 
     function remove() {
-        emo.Event().removeOnUpdateListener(this);
-        emo.Event().removeMotionListener(this);
+        emo.Event.removeOnUpdateListener(this);
+        emo.Event.removeMotionListener(this);
         knob.remove();
         return base.remove();
     }
@@ -1968,7 +1968,7 @@ class emo.Snapshot extends emo.Sprite {
         local status = EMO_NO_ERROR;
         if (loaded) {
             clearModifier();
-            emo.Event().removeMotionListener(this);
+            emo.Event.removeMotionListener(this);
             if (physicsInfo != null) {
                 physicsInfo.remove();
                 physicsInfo = null;

@@ -1,3 +1,12 @@
+local stage = emo.Stage;
+
+/*
+ * This example shows how to execute regular SQL statements
+ * with emo.Database feature.
+ * However, not all of the functions are performed here.
+ * Check the document for the rest and details. 
+ */
+
 class Main {	
     // Create 16x16 text sprite with 2 pixel border and 1 pixel margin
     text = emo.TextSprite("font_16x16.png",
@@ -18,7 +27,7 @@ class Main {
         local database = emo.Database;
         
         print("*************** OPEN *****************");
-        // Open database with encryption flag
+        // open database with encryption flag
         local result = database.openOrCreate(true);
         if( result != EMO_NO_ERROR){
             print("failed to open database");
@@ -29,7 +38,7 @@ class Main {
         print("*********** CREATE TABLE *************");
         local tableName = "tableA";
         local columns = ["name", "age", "description"];
-        // Set true for the 3rd argument when you use primary key
+        // set true for the 3rd argument when you use primary key
         result = database.createTable(tableName, columns, true);
         if(result != EMO_NO_ERROR){
             print("failed to create table");
@@ -82,7 +91,7 @@ class Main {
         }
 
         print("******* SELECT WITH CONDITION ********");
-        // Select records to verify the result
+        // select records to verify the result
         local condition = [["name", "==", "Mickey"]];
         recordArray = database.selectAllWhere(tableName, condition);
          for(local i = 0; i < recordArray.len() ; i++){
@@ -121,7 +130,7 @@ class Main {
         }
         
         print("*************** COUNT ****************");
-        // Count remaining records
+        // count remaining records
         local count = database.count(tableName);
         print( count );
         
@@ -134,7 +143,7 @@ class Main {
         }
         
         print("************ ERROR CHECK *************");
-        // Printing errors if any
+        // printing errors if any
         print( "last error : " + database.getLastError() );
         print( "last error message : " + database.getLastErrorMessage() );
         
@@ -178,5 +187,5 @@ class Main {
 }
 
 function emo::onLoad() {
-    emo.Stage().load(Main());
+    stage.load(Main());
 }

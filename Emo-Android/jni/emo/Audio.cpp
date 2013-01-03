@@ -38,30 +38,30 @@
 extern emo::Engine* engine;
 
 void initAudioFunctions() {
-    registerClass(engine->sqvm, EMO_AUDIO_CLASS);
+    registerTable(engine->sqvm, EMO_AUDIO_TABLE);
 
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "constructor",    emoCreateAudioEngine);
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "load",           emoLoadAudio);
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "play",           emoPlayAudioChannel);
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "resume_play",    emoResumeAudioChannel);
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "pause",          emoPauseAudioChannel);
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "stop",           emoStopAudioChannel);
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "seek",           emoSeekAudioChannel);
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getChannelCount",emoGetAudioChannelCount);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "createEngine",   emoCreateAudioEngine);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "load",           emoLoadAudio);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "play",           emoPlayAudioChannel);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "resume_play",    emoResumeAudioChannel);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "pause",          emoPauseAudioChannel);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "stop",           emoStopAudioChannel);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "seek",           emoSeekAudioChannel);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "getChannelCount",emoGetAudioChannelCount);
 
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getVolume",      emoGetAudioChannelVolume);
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "setVolume",      emoSetAudioChannelVolume);
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getMaxVolume",   emoGetAudioChannelMaxVolume);
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getMinVolume",   emoGetAudioChannelMinVolume);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "getVolume",      emoGetAudioChannelVolume);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "setVolume",      emoSetAudioChannelVolume);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "getMaxVolume",   emoGetAudioChannelMaxVolume);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "getMinVolume",   emoGetAudioChannelMinVolume);
 
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "setLoop",        emoSetAudioChannelLooping);
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "isLoop",         emoGetAudioChannelLooping);
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "getState",       emoGetAudioChannelState);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "setLoop",        emoSetAudioChannelLooping);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "isLoop",         emoGetAudioChannelLooping);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "getState",       emoGetAudioChannelState);
 
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "close",          emoCloseAudioChannel);
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "closeEngine",    emoCloseAudioEngine);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "close",          emoCloseAudioChannel);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "closeEngine",    emoCloseAudioEngine);
 
-    registerClassFunc(engine->sqvm, EMO_AUDIO_CLASS,    "vibrate",        emoAudioVibrate);
+    registerMemberFunc(engine->sqvm, EMO_AUDIO_TABLE,    "vibrate",        emoAudioVibrate);
 }
 
 /*

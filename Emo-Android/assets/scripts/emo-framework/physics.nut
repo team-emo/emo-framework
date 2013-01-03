@@ -36,7 +36,7 @@ emo.physics <- {};
 
 class emo.physics.World {
     id      = null;
-    physics = emo.Physics();
+    physics = emo.Physics;
     scale   = null;
     sprites = null;
     groundBody = null;
@@ -158,7 +158,7 @@ class emo.physics.World {
 
 class emo.physics.Body {
     id      = null;
-    physics = emo.Physics();
+    physics = emo.Physics;
     function constructor(_id) {
         id = _id;
     }
@@ -349,7 +349,7 @@ class emo.physics.BodyDef {
 }
 
 class emo.physics.Fixture {
-	physics = emo.Physics();
+	physics = emo.Physics;
     id     = null;
     bodyId = null;
     function constructor(_bodyId, _id) {
@@ -390,7 +390,7 @@ class emo.physics.Filter {
 class emo.physics.Joint {
     id    = null;
     type = null;
-    physics  = emo.Physics();
+    physics  = emo.Physics;
     function constructor(_id) {
         id = _id;
     }
@@ -652,7 +652,7 @@ class emo.physics.JointDef {
     type     = null;
     bodyA    = null;
     bodyB    = null;
-    physics  = emo.Physics();
+    physics  = emo.Physics;
     collideConnected = null;
     function update() {
         return physics.updateJointDef(id, this);
@@ -769,7 +769,7 @@ class emo.physics.MouseJointDef extends emo.physics.JointDef {
 }
 class emo.physics.PolygonShape {
     id      = null;
-    physics = emo.Physics();
+    physics = emo.Physics;
     type    = PHYSICS_SHAPE_TYPE_POLYGON;
     
     function constructor() {
@@ -804,7 +804,7 @@ class emo.physics.PolygonShape {
 
 class emo.physics.CircleShape {
     id       = null;
-    physics  = emo.Physics();
+    physics  = emo.Physics;
     type     = PHYSICS_SHAPE_TYPE_CIRCLE;
     function constructor() {
         id = physics.newShape(PHYSICS_SHAPE_TYPE_CIRCLE);

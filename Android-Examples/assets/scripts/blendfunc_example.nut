@@ -1,4 +1,4 @@
-local stage = emo.Stage();
+local stage = emo.Stage;
 
 /*
  * This example shows multiple sprites with blend function that can be moved by on-screen controller

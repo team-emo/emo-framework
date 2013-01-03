@@ -4,8 +4,8 @@
  */
 emo.Runtime.import("emo-framework/physics.nut");
 
-local stage   = emo.Stage();
-local physics = emo.Physics();
+local stage   = emo.Stage;
+local physics = emo.Physics;
 local world   = emo.physics.World(emo.Vec2(0, 10), true);
 
 const FPS = 60.0;

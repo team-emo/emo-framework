@@ -1,5 +1,5 @@
-local stage = emo.Stage();
-local runtime = emo.Runtime();
+local stage = emo.Stage;
+local runtime = emo.Runtime;
 
 /*
  * This example shows a font sprite that uses native fonts and 

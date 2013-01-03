@@ -1,4 +1,4 @@
-local stage = emo.Stage();
+local stage = emo.Stage;
 
 local text = null;
 

@@ -1,4 +1,4 @@
-local stage = emo.Stage();
+local stage = emo.Stage;
 
 const MY_REQUEST_NAME = "My HTTP Request";
 
@@ -94,5 +94,5 @@ class Main {
 }
 
 function emo::onLoad() {
-    emo.Stage().load(Main());
+    emo.Stage.load(Main());
 }

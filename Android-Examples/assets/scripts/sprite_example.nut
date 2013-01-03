@@ -1,4 +1,4 @@
-local stage = emo.Stage();
+local stage = emo.Stage;
 
 /*
  * This example shows single sprite that rotates and scales on touch-down event

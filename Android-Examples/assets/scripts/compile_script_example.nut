@@ -1,4 +1,4 @@
-local stage = emo.Stage();
+local stage = emo.Stage;
 
 /*
  * This example shows the way to compile user string dynamically.

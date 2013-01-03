@@ -1,4 +1,4 @@
-local stage = emo.Stage();
+local stage = emo.Stage;
 
 /*
  * This example shows one rectangular shape that moves to the position on touch-down event.

@@ -283,10 +283,38 @@ void register_class_with_namespace(HSQUIRRELVM v, const char *nname, const char 
 }
 
 /*
- * Register class method.
+ * Register new table.
  * Must be called before loading script files
  */
-void register_class_func(HSQUIRRELVM v, const char* cname, const char* fname, SQFUNCTION func) {
+void register_table(HSQUIRRELVM v, const char *name) {
+    sq_pushroottable(v);
+    sq_pushstring(v, name, -1);
+    sq_newtable(v);
+    sq_createslot(v, -3);
+    sq_pop(v, 1);
+}
+
+/*
+ * Register new table with namespace.
+ * Must be called before loading script files
+ */
+void register_table_with_namespace(HSQUIRRELVM v, const char *nname, const char *tname) {
+    sq_pushroottable(v);
+    sq_pushstring(v, nname, -1);
+    if(SQ_SUCCEEDED(sq_get(v, -2))) {
+        sq_pushstring(v, tname, -1);
+        sq_newtable(v);
+        sq_createslot(v, -3);
+    }
+    sq_pop(v, 1);
+}
+
+
+/*
+ * Register member method.
+ * Must be called before loading script files
+ */
+void register_member_func(HSQUIRRELVM v, const char* cname, const char* fname, SQFUNCTION func) {
     sq_pushroottable(v);
     sq_pushstring(v, cname, -1);
     if(SQ_SUCCEEDED(sq_get(v, -2))) {
@@ -298,48 +326,42 @@ void register_class_func(HSQUIRRELVM v, const char* cname, const char* fname, SQ
 }
 
 /*
- * Register class method with namespace
+ * Register member method with namespace
  * Must be called before loading script files
  */
-void register_class_func_with_namespace(HSQUIRRELVM v, const char* nname, const char* cname, const char* fname, SQFUNCTION func) {
+void register_member_func_with_namespace(HSQUIRRELVM v, const char* nname, const char* cname, const char* fname, SQFUNCTION func) {
     sq_pushroottable(v);
     sq_pushstring(v, nname, -1);
     if(SQ_SUCCEEDED(sq_get(v, -2))) {
-    	sq_pushstring(v, cname, -1);
-    	if(SQ_SUCCEEDED(sq_get(v, -2))) {
-    		sq_pushstring(v, fname, -1);
-    		sq_newclosure(v, func, 0);
-    		sq_newslot(v, -3, true);
-    	}
+        sq_pushstring(v, cname, -1);
+        if(SQ_SUCCEEDED(sq_get(v, -2))) {
+            sq_pushstring(v, fname, -1);
+            sq_newclosure(v, func, 0);
+            sq_newslot(v, -3, true);
+        }
     }
     sq_pop(v, 1);
 }
 
 /*
- * Register new table.
- * Must be called before loading script files
- */
-void register_table(HSQUIRRELVM v, const char *name) {
-    sq_pushroottable(v);
-    sq_pushstring(v, name, -1);
-    sq_newtable(v);
-    sq_createslot(v, -3);
-    sq_pop(v, 1);
-}
-	
-/*
  * Register new class for emo framework
  */
 void registerClass(HSQUIRRELVM v, const char *cname) {
-	register_class_with_namespace(v, EMO_NAMESPACE, cname);
+    register_class_with_namespace(v, EMO_NAMESPACE, cname);
+}
+
+/*
+ * Register new table for emo framework
+ */
+void registerTable(HSQUIRRELVM v, const char *tname) {
+    register_table_with_namespace(v, EMO_NAMESPACE, tname);
 }
 	
 /*
- * Register class method for emo framework
+ * Register member method for emo framework
  */
-void registerClassFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func) {
-	register_class_func_with_namespace(
-				   v, EMO_NAMESPACE, cname, fname, func);
+void registerMemberFunc(HSQUIRRELVM v, const char *cname, const char *fname, SQFUNCTION func) {
+    register_member_func_with_namespace(v, EMO_NAMESPACE, cname, fname, func);
 }
 
 /*

@@ -109,7 +109,7 @@ class Main {
      * Called when the app has gained focus
      */
     function onGainedFocus() {
-        emo.Event().enableOnDrawCallback(500);
+        emo.Event.enableOnDrawCallback(500);
         print("onGainedFocus");
     }
 
@@ -117,7 +117,7 @@ class Main {
      * Called when the app has lost focus
      */
     function onLostFocus() {
-        emo.Event().disableOnDrawCallback();
+        emo.Event.disableOnDrawCallback();
         print("onLostFocus"); 
     }
 
@@ -155,5 +155,5 @@ class Main {
 }
 
 function emo::onLoad() {
-    emo.Stage().load(Main());
+    emo.Stage.load(Main());
 }

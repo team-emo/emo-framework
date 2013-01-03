@@ -1,5 +1,5 @@
-local stage = emo.Stage();
-local event = emo.Event();
+local stage = emo.Stage;
+local event = emo.Event;
 
 class Main {
 

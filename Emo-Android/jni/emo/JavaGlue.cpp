@@ -37,10 +37,10 @@ using namespace std;
 extern emo::Engine* engine;
 
 void initJavaGlueFunctions() {
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "nativeEcho",   emoJavaEcho);
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "nativeEcho",   emoJavaEcho);
 
-    registerClass(engine->sqvm, EMO_NET_CLASS);
-    registerClassFunc(engine->sqvm, EMO_NET_CLASS, "request",   emoJavaAsyncHttpRequest);
+    registerTable(engine->sqvm, EMO_NET_TABLE);
+    registerMemberFunc(engine->sqvm, EMO_NET_TABLE, "request",   emoJavaAsyncHttpRequest);
 }
 
 // JNI function with C++ needs to be surrounded by these lines below

@@ -1,8 +1,8 @@
 emo.Runtime.import("emo-framework/physics.nut");
 
-local stage = emo.Stage();
-local event = emo.Event();
-local physics = emo.Physics();
+local stage = emo.Stage;
+local event = emo.Event;
+local physics = emo.Physics;
 
 local gravity = emo.Vec2(0, 10);
 local world   = emo.physics.World(gravity, true);

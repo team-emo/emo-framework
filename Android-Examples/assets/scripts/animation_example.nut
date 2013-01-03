@@ -1,4 +1,4 @@
-local stage = emo.Stage();
+local stage = emo.Stage;
 
 /*
  * This example shows single sprite with animations.
@@ -49,7 +49,7 @@ class Main {
         endX   = startX * 4;
         
         // onDrawFrame(dt) will be called on every 33 milliseconds
-        emo.Event().enableOnDrawCallback(33);
+        emo.Event.enableOnDrawCallback(33);
     }
 
     /*

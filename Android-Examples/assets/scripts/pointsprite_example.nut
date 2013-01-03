@@ -1,5 +1,5 @@
-local stage = emo.Stage();
-local event = emo.Event();
+local stage = emo.Stage;
+local event = emo.Event;
 
 const NUMBER_OF_SPARKS = 18;
 const NUMBER_OF_RINGS  = 6;

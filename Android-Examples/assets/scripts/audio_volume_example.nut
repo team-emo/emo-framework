@@ -1,11 +1,11 @@
-local stage = emo.Stage();
+local stage = emo.Stage;
 
 // create audio manager with 1 channel.
-local audio = emo.Audio(1);
+emo.Audio.createEngine(1);
 
 // select audio channel 1 (index=0) to play the audio.
 // you can handle audios through this channel.
-local audioCh1 = audio.createChannel(0);
+local audioCh1 = emo.Audio.createChannel(0);
 
 /*
  * This example of audio

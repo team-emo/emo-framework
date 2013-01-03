@@ -38,5 +38,5 @@ class Main {
 }
 
 function emo::onLoad() {
-    emo.Stage().load(Main());
+    emo.Stage.load(Main());
 }

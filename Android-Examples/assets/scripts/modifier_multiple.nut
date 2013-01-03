@@ -1,4 +1,4 @@
-local stage = emo.Stage();
+local stage = emo.Stage;
 
 const NUMBER_OF_SPARKS = 12;
 local touchCount = 0;
@@ -101,7 +101,7 @@ class Main {
     function addSpark(startX, startY) {
         // save the start time of the modifiers because
         // there's a 'time lag' between the first modifier and the last modifier.
-        local startTime = emo.Runtime().uptime();
+        local startTime = emo.Runtime.uptime();
         local doRandom = touchCount++ % 2 == 0;
         
         for (local i = 0; i < sparks.len(); i++) {

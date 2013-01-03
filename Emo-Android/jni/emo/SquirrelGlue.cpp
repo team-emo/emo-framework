@@ -84,9 +84,9 @@ namespace emo {
                        .Func("keys", sqGetPreferenceKeys);
 
         // bind tables to "emo"
-        engine->emoSpace->Bind(EMO_ANDROID_CLASS, androidSpace);
-        engine->emoSpace->Bind(EMO_DATABASE_CLASS, databaseSpace);
-        engine->emoSpace->Bind(EMO_PREFERENCE_CLASS, preferenceSpace);
+        engine->emoSpace->Bind(EMO_ANDROID_TABLE, androidSpace);
+        engine->emoSpace->Bind(EMO_DATABASE_TABLE, databaseSpace);
+        engine->emoSpace->Bind(EMO_PREFERENCE_TABLE, preferenceSpace);
 
         // @TODO refactoring with Sqrat
         initRuntimeFunctions();

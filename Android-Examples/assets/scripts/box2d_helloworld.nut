@@ -24,7 +24,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-emo.Runtime.import("physics.nut");
+emo.Runtime.import("emo-framework/physics.nut");
 
 // This is a simple example of building and running a simulation
 // using Box2D. Here we create a large ground box and a small dynamic

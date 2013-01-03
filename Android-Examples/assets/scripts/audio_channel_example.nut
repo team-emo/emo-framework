@@ -1,16 +1,16 @@
-local stage = emo.Stage();
+local stage = emo.Stage;
 
 // create audio manager with 3 channels.
-local audio = emo.Audio(3);
+emo.Audio.createEngine(3);
 
 // select audio channel 1 (index=0) to play background(drums.wav).
-local audioCh1 = audio.createChannel(0);
+local audioCh1 = emo.Audio.createChannel(0);
 
 // select audio channel 2 (index=1) to play clang.wav.
-local audioCh2 = audio.createChannel(1);
+local audioCh2 = emo.Audio.createChannel(1);
 
 // select audio channel 3 (index=2) to play tada.wav.
-local audioCh3 = audio.createChannel(2);
+local audioCh3 = emo.Audio.createChannel(2);
 
 /*
  * This example of multiple audio channels

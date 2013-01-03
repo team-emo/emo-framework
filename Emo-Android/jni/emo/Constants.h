@@ -28,7 +28,7 @@
 #ifndef EMO_CONSTANT_H
 #define EMO_CONSTANT_H
 
-#define EMO_BUILD_NUMBER 38
+#define EMO_BUILD_NUMBER 39
 
 // Uncomment below to enable sandbox mode
 //#define EMO_WITH_SANDBOX
@@ -50,16 +50,16 @@
 #define SQUIRREL_MAIN_SCRIPT    "main.nut"
 
 #define EMO_NAMESPACE        "emo"
-#define EMO_RUNTIME_CLASS    "Runtime"
-#define EMO_EVENT_CLASS      "Event"
-#define EMO_STAGE_CLASS      "Stage"
-#define EMO_AUDIO_CLASS      "Audio"
-#define EMO_NET_CLASS        "Net"
-#define EMO_DATABASE_CLASS   "Database"
-#define EMO_PREFERENCE_CLASS "Preference"
-#define EMO_STOPWATCH_CLASS  "Stopwatch"
-#define EMO_PHYSICS_CLASS    "Physics"
-#define EMO_ANDROID_CLASS    "Android"
+#define EMO_RUNTIME_TABLE    "Runtime"
+#define EMO_EVENT_TABLE      "Event"
+#define EMO_STAGE_TABLE      "Stage"
+#define EMO_AUDIO_TABLE      "Audio"
+#define EMO_NET_TABLE        "Net"
+#define EMO_DATABASE_TABLE   "Database"
+#define EMO_PREFERENCE_TABLE "Preference"
+#define EMO_STOPWATCH_TABLE  "Stopwatch"
+#define EMO_PHYSICS_TABLE    "Physics"
+#define EMO_ANDROID_TABLE    "Android"
 
 #define EMO_FUNC_ONLOAD         "_onLoad"
 #define EMO_FUNC_ONGAINED_FOUCS "_onGainedFocus"

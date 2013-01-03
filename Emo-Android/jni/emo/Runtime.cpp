@@ -88,90 +88,90 @@ void sqTransit(Sqrat::Object intent, int requestCode = -1) {
 }
 
 void initRuntimeFunctions() {
-    registerClass(engine->sqvm, EMO_RUNTIME_CLASS);
-    registerClass(engine->sqvm, EMO_EVENT_CLASS);
-    registerClass(engine->sqvm, EMO_STOPWATCH_CLASS);
+    registerTable(engine->sqvm, EMO_RUNTIME_TABLE);
+    registerTable(engine->sqvm, EMO_EVENT_TABLE);
+    registerTable(engine->sqvm, EMO_STOPWATCH_TABLE);
 
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "import",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "import",
             emoImportScript);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setOptions",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "setOptions",
             emoSetOptions);
 
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "echo", emoRuntimeEcho);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "test", emoRuntimeTest);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "log", emoRuntimeLog);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "info",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "echo", emoRuntimeEcho);
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "test", emoRuntimeTest);
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "log", emoRuntimeLog);
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "info",
             emoRuntimeLogInfo);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "error",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "error",
             emoRuntimeLogError);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "warn",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "warn",
             emoRuntimeLogWarn);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "finish",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "finish",
             emoRuntimeFinish);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "os",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "os",
             emoRuntimeGetOSName);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "device",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "device",
             emoRuntimeGetDeviceName);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "isSimulator",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "isSimulator",
             emoRuntimeIsSimulator);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "gc", emoRuntimeGC);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "clearTextureCache",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "gc", emoRuntimeGC);
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "clearTextureCache",
             emoClearImageCache);
-    registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "start",
+    registerMemberFunc(engine->sqvm, EMO_STOPWATCH_TABLE, "start",
             emoRuntimeStopwatchStart);
-    registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "restart",
+    registerMemberFunc(engine->sqvm, EMO_STOPWATCH_TABLE, "restart",
                 emoRuntimeStopwatchRestart);
-    registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "stop",
+    registerMemberFunc(engine->sqvm, EMO_STOPWATCH_TABLE, "stop",
             emoRuntimeStopwatchStop);
-    registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "isStopped",
+    registerMemberFunc(engine->sqvm, EMO_STOPWATCH_TABLE, "isStopped",
                 emoRuntimeStopwatchIsStopped);
-    registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "elapsed",
+    registerMemberFunc(engine->sqvm, EMO_STOPWATCH_TABLE, "elapsed",
             emoRuntimeStopwatchElapsed);
-    registerClassFunc(engine->sqvm, EMO_STOPWATCH_CLASS, "realElapsed",
+    registerMemberFunc(engine->sqvm, EMO_STOPWATCH_TABLE, "realElapsed",
             emoRuntimeStopwatchRealElapsed);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "setLogLevel",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "setLogLevel",
             emoRuntimeSetLogLevel);
 #ifndef EMO_WITH_SANDBOX
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "compilebuffer",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "compilebuffer",
             emoRuntimeCompileBuffer);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "compile",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "compile",
             emoRuntimeCompile);
 #endif
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "getDocumentDir",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "getDocumentDir",
             emoRuntimeGetDocumentDir);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "isSandboxEnabled",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "isSandboxEnabled",
             emoRuntimeIsSandboxEnabled);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "buildNumber",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "buildNumber",
             emoRuntimeBuildNumber);
 
-    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS, "registerSensors",
+    registerMemberFunc(engine->sqvm, EMO_EVENT_TABLE, "registerSensors",
             emoRegisterSensors);
-    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS, "enableSensor",
+    registerMemberFunc(engine->sqvm, EMO_EVENT_TABLE, "enableSensor",
             emoEnableSensor);
-    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS, "disableSensor",
+    registerMemberFunc(engine->sqvm, EMO_EVENT_TABLE, "disableSensor",
             emoDisableSensor);
-    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS, "enableOnDrawCallback",
+    registerMemberFunc(engine->sqvm, EMO_EVENT_TABLE, "enableOnDrawCallback",
             emoEnableOnDrawCallback);
-    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS, "disableOnDrawCallback",
+    registerMemberFunc(engine->sqvm, EMO_EVENT_TABLE, "disableOnDrawCallback",
             emoDisableOnDrawCallback);
-    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS, "enableOnUpdateCallback",
+    registerMemberFunc(engine->sqvm, EMO_EVENT_TABLE, "enableOnUpdateCallback",
             emoEnableOnUpdateCallback);
-    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS, "disableOnUpdateCallback",
+    registerMemberFunc(engine->sqvm, EMO_EVENT_TABLE, "disableOnUpdateCallback",
             emoDisableOnUpdateCallback);
-    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS, "enableOnFpsCallback",
+    registerMemberFunc(engine->sqvm, EMO_EVENT_TABLE, "enableOnFpsCallback",
             emoEnableOnFpsCallback);
-    registerClassFunc(engine->sqvm, EMO_EVENT_CLASS, "disableOnFpsCallback",
+    registerMemberFunc(engine->sqvm, EMO_EVENT_TABLE, "disableOnFpsCallback",
             emoDisableOnFpsCallback);
 
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "enableSimpleLog",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "enableSimpleLog",
             emoEnableSimpleLog);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS,
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE,
             "enableSimpleLogWithLevel", emoEnableSimpleLogWithLevel);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "nativeRandom",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "nativeRandom",
             emoRuntimeNativeRandom);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "random",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "random",
             emoRuntimeRandom);
-    registerClassFunc(engine->sqvm, EMO_RUNTIME_CLASS, "getDefaultLocale",
+    registerMemberFunc(engine->sqvm, EMO_RUNTIME_TABLE, "getDefaultLocale",
             emoGetDefaultLocale);
 
 }
@@ -497,7 +497,7 @@ bool loadScriptFromDatabase(const char* fname) {
 
     const char* script = engine->database->getScript(fname);
 
-    if(sqCompileBuffer(engine->sqvm, script, EMO_RUNTIME_CLASS) == EMO_NO_ERROR ){
+    if(sqCompileBuffer(engine->sqvm, script, EMO_RUNTIME_TABLE) == EMO_NO_ERROR ){
         sq_pushroottable(engine->sqvm);
         if (SQ_FAILED(sq_call(engine->sqvm, 1, SQFalse, SQTrue))) {
             engine->setLastError(ERR_SCRIPT_CALL_ROOT);
@@ -899,7 +899,7 @@ SQInteger emoRuntimeCompileBuffer(HSQUIRRELVM v) {
         return 1;
     }
 
-    sq_pushinteger(v, sqCompileBuffer(v, script, EMO_RUNTIME_CLASS));
+    sq_pushinteger(v, sqCompileBuffer(v, script, EMO_RUNTIME_TABLE));
     return 1;
 }
 #endif
