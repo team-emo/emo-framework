@@ -1074,17 +1074,21 @@ namespace emo {
         int invertX = -this->x;
         int invertY = -this->y;
 
-        int columnCount = (int)ceil(this->getScaledWidth()  / (double)this->drawable->getScaledWidth());
-        int rowCount    = (int)ceil(this->getScaledHeight() / (double)this->drawable->getScaledHeight());
-        
-        int firstColumn = max(0, min(this->columns, (invertX / this->drawable->getScaledWidth())));
-        int lastColumn  = min(firstColumn + columnCount + 1, this->columns);
-        
-        int firstRow = max(0, min(this->rows, (invertY / this->drawable->getScaledHeight())));
-        int lastRow  = min(firstRow + rowCount + 1, this->rows);
+        std::vector<int> leftTop = this->getTileIndexAtCoord(
+                engine->stage->defaultRelativeCamera.x,
+                engine->stage->defaultRelativeCamera.y);
+        std::vector<int> rightBottom = this->getTileIndexAtCoord(
+                engine->stage->defaultRelativeCamera.x + engine->stage->width,
+                engine->stage->defaultRelativeCamera.y + engine->stage->height);
 
-        for (int i = firstRow; i < lastRow; i++) {
-            for (int j = firstColumn; j < lastColumn; j++) {
+        int firstRow = max(0, min(this->rows - 1, leftTop.at(0)) );
+        int firstColumn = max(0, min(this->columns - 1, leftTop.at(1)) );
+
+        int lastRow = max(0, min(this->rows - 1, rightBottom.at(0)) );
+        int lastColumn = max(0, min(this->columns - 1, rightBottom.at(1)) );
+        
+        for (int i = firstRow; i < lastRow + 1; i++) {
+            for (int j = firstColumn; j < lastColumn + 1; j++) {
                if (((int)tiles->size()) <= i || ((int)tiles->at(i)->size()) <= j) break;
                 this->drawable->x = j * this->drawable->getScaledWidth()  - invertX;
                 this->drawable->y = i * this->drawable->getScaledHeight() - invertY;

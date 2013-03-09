@@ -21,8 +21,8 @@ class Main {
     lastDirection = CONTROL_CENTER;
     
     // get center coordinate of screen
-    centerX = stage.getWindowWidth()   / 2;
-    centerY = stage.getWindowHeight()  / 2;
+    centerX = 0;
+    centerY = 0;
     
     // create map sprite with 32x32, 2 pixel border and 2 pixel margin
     map = emo.MapSprite("desert_chips.png", MAP_BLOCK_SIZE, MAP_BLOCK_SIZE, 1, 1);
@@ -38,6 +38,12 @@ class Main {
      * Called when this class is loaded
      */
     function onLoad() {
+        stage.setContentScale(stage.getWindowWidth() / 420.0);
+        
+        // get center coordinate of screen
+        centerX = stage.getWindowWidth()   / 2;
+        centerY = stage.getWindowHeight()  / 2;
+        
         // load tmx file from graphics folder
         local rawname = ANDROID_GRAPHICS_DIR + "desert.tmx";
         local mapdata = stage.getMapData(rawname);
@@ -48,7 +54,7 @@ class Main {
         controller.updateInterval = 16;
         
         // set size of objects which don't have sprites
-        wallN.setSize(map.getWidth(), 20)
+        wallN.setSize(map.getWidth(), 20);
         wallS.setSize(map.getWidth(), 20);
         wallE.setSize(20, map.getHeight());
         wallW.setSize(20, map.getHeight());

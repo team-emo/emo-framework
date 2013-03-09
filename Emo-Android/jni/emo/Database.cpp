@@ -1227,7 +1227,7 @@ int sqDropTable(string tableName) {
 }
 
 /*
- * select values with given condition
+ * select values
  *
  * @param target column name
  * @param table name
@@ -1273,7 +1273,7 @@ Sqrat::Object sqSelect(string targetColumn, string tableName) {
 }
 
 /*
- * select all values with given condition
+ * select all values
  *
  * @param table name
  * @return selected records (2d array)

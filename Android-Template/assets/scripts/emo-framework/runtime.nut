@@ -6,7 +6,7 @@
  ******************************************************/
 
 EMO_VERSION <- "0.2.0";
-EMO_EXPERIMENT_VERSION <- "0.6.2";
+EMO_EXPERIMENT_VERSION <- "0.6.3";
 
 OS_ANDROID <- "Android";
 OS_IOS     <- "iOS";
@@ -1546,6 +1546,10 @@ class emo.MapSprite extends emo.Sprite {
     
     function clearTiles() {
         stage.clearTiles(id);
+    }
+    
+    function useMeshMapSprite(useMesh) {
+        stage.useMeshMapSprite(id, useMesh);
     }
 
     function setTileAt(row, column, value) {

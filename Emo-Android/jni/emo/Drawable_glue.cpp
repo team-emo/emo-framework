@@ -1358,6 +1358,10 @@ SQInteger emoDrawableGetMapDataFromTmx(HSQUIRRELVM v) {
     if (fname.length() <= 4) return false;
     std::string data = loadContentFromAsset(fname);
 
+    if(data.empty() == true){
+        return 0;
+    }
+
     rapidxml::xml_document<char> doc;
     doc.parse<0>((char*)data.c_str());
 
@@ -1410,7 +1414,11 @@ SQInteger emoDrawableGetMapDataFromTmx(HSQUIRRELVM v) {
 
         ch = imagenode->first_attribute("trans");
         sq_pushstring(v, "trans", -1);
-        sq_pushstring(v, ch->value(), -1);
+        if(ch != NULL){
+            sq_pushstring(v, ch->value(), -1);
+        }else{
+            sq_pushstring(v, "NA", -1);
+        }
         sq_newslot(v, -3, SQFalse);
 
         ch = imagenode->first_attribute("width");
@@ -1460,7 +1468,7 @@ SQInteger emoDrawableGetMapDataFromTmx(HSQUIRRELVM v) {
         vector <string> lines = split(datanode->value(), LF);
         for(unsigned int i = 0; i < lines.size() ; i++){
             vector <string> chNums = split(lines[i], delim);
-            if(chNums.size() == 1) continue;// ignore empty lines
+            if(chNums.size() <= 1) continue;// ignore empty lines
 
             sq_newarray(v, 0);
             for(unsigned int j = 0 ; j < chNums.size() ; j++){
