@@ -124,6 +124,8 @@ void initDrawableFunctions() {
     registerMemberFunc(engine->sqvm, EMO_STAGE_TABLE,    "getPointDrawablePointCount",      emoPointDrawableGetPointCount);
     registerMemberFunc(engine->sqvm, EMO_STAGE_TABLE,    "isOffscreenSupported",            emoStageIsOffscreenSupported);
     registerMemberFunc(engine->sqvm, EMO_STAGE_TABLE,    "moveCamera",      emoStageMoveCamera);
+    registerMemberFunc(engine->sqvm, EMO_STAGE_TABLE,    "setZoomRatio",    emoStageSetZoomRatio);
+    registerMemberFunc(engine->sqvm, EMO_STAGE_TABLE,    "getZoomRatio",    emoStageGetZoomRatio);
 
     registerMemberFunc(engine->sqvm, EMO_STAGE_TABLE,    "blendFunc",      emoDrawableBlendFunc);
 }
@@ -3287,6 +3289,39 @@ SQInteger emoStageMoveCamera(HSQUIRRELVM v) {
     }
 
     engine->stage->moveRelativeCamera(x, y);
+    engine->stage->dirty = true;
+    sq_pushinteger(v, EMO_NO_ERROR);
+    return 1;
+}
+
+
+/*
+ * returns zoom ratio of the camera.
+ *
+ * @return EMO_NO_ERROR if succeeds
+ */
+SQInteger emoStageGetZoomRatio(HSQUIRRELVM v) {
+    sq_pushfloat(v, engine->stage->defaultRelativeCamera.zoomRatio);
+    return 1;
+}
+
+/*
+ * set zoom ratio of the camera.
+ *
+ * @param scale
+ * @return EMO_NO_ERROR if succeeds
+ */
+SQInteger emoStageSetZoomRatio(HSQUIRRELVM v) {
+    if (sq_gettype(v, 2) != OT_NULL) {
+        SQFloat ratio;
+        sq_getfloat(v, 2, &ratio);
+        engine->stage->defaultRelativeCamera.zoomRatio = ratio;
+        engine->stage->dirty = true;
+    } else {
+        sq_pushinteger(v, ERR_INVALID_PARAM_TYPE);
+        return 1;
+    }
+
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;
 }

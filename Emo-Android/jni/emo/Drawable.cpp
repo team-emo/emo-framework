@@ -447,15 +447,20 @@ namespace emo {
             }
         }
 
+        float ratio = engine->stage->defaultRelativeCamera.zoomRatio;
         if(engine->stage->usePerspective || this->isCameraObject == false){
             glTranslatef(drawableX * this->orthFactorX, drawableY * this->orthFactorY, 0);
         }else{
-            glTranslatef( (drawableX - engine->stage->defaultRelativeCamera.x) * this->orthFactorX,
-                          (drawableY - engine->stage->defaultRelativeCamera.y) * this->orthFactorY, 0);
+            glTranslatef( (drawableX - engine->stage->defaultRelativeCamera.x) * this->orthFactorX * ratio,
+                          (drawableY - engine->stage->defaultRelativeCamera.y) * this->orthFactorY * ratio, 0);
         }
 
         // rotate
-        glTranslatef(this->param_rotate[1], this->param_rotate[2], 0);
+        if(engine->stage->usePerspective || this->isCameraObject == false){
+            glTranslatef(this->param_rotate[1], this->param_rotate[2], 0);
+        }else{
+            glTranslatef(this->param_rotate[1] * ratio, this->param_rotate[2] * ratio, 0);
+        }
         if (this->param_rotate[3] == AXIS_X) {
             glRotatef(this->param_rotate[0], 1, 0, 0);
         } else if (this->param_rotate[3] == AXIS_Y) {
@@ -463,12 +468,22 @@ namespace emo {
         } else {
             glRotatef(this->param_rotate[0], 0, 0, 1);
         }
-        glTranslatef(-this->param_rotate[1], -this->param_rotate[2], 0);
+        if(engine->stage->usePerspective || this->isCameraObject == false){
+            glTranslatef(-this->param_rotate[1], -this->param_rotate[2], 0);
+        }else{
+            glTranslatef(-this->param_rotate[1] * ratio, -this->param_rotate[2] * ratio, 0);
+        }
 
         // scale
-        glTranslatef(this->param_scale[2], this->param_scale[3], 0);
-        glScalef(this->param_scale[0], this->param_scale[1], 1);
-        glTranslatef(-this->param_scale[2], -this->param_scale[3], 0);
+        if(engine->stage->usePerspective || this->isCameraObject == false){
+            glTranslatef(this->param_scale[2], this->param_scale[3], 0);
+            glScalef(this->param_scale[0], this->param_scale[1], 1);
+            glTranslatef(-this->param_scale[2], -this->param_scale[3], 0);
+        }else{
+            glTranslatef(this->param_scale[2], this->param_scale[3], 0);
+            glScalef(this->param_scale[0] * ratio, this->param_scale[1] * ratio, 1);
+            glTranslatef(-this->param_scale[2], -this->param_scale[3], 0);
+        }
 
         // update width and height
         glScalef(this->width, this->height, 1);
@@ -558,11 +573,11 @@ namespace emo {
     }
 
     float Drawable::getScaledWidth() {
-        return this->width * this->param_scale[0];
+        return this->width * this->param_scale[0]  * engine->stage->defaultRelativeCamera.zoomRatio;
     }
 
     float Drawable::getScaledHeight() {
-        return this->height * this->param_scale[1];
+        return this->height * this->param_scale[1]  * engine->stage->defaultRelativeCamera.zoomRatio;
     }
 
     void Drawable::setChild(Drawable* child) {
@@ -1075,11 +1090,11 @@ namespace emo {
         int invertY = -this->y;
 
         std::vector<int> leftTop = this->getTileIndexAtCoord(
-                engine->stage->defaultRelativeCamera.x,
-                engine->stage->defaultRelativeCamera.y);
+                engine->stage->defaultRelativeCamera.x * engine->stage->defaultRelativeCamera.zoomRatio,
+                engine->stage->defaultRelativeCamera.y * engine->stage->defaultRelativeCamera.zoomRatio);
         std::vector<int> rightBottom = this->getTileIndexAtCoord(
-                engine->stage->defaultRelativeCamera.x + engine->stage->width,
-                engine->stage->defaultRelativeCamera.y + engine->stage->height);
+                engine->stage->defaultRelativeCamera.x * engine->stage->defaultRelativeCamera.zoomRatio + engine->stage->width,
+                engine->stage->defaultRelativeCamera.y * engine->stage->defaultRelativeCamera.zoomRatio + engine->stage->height);
 
         int firstRow = max(0, min(this->rows - 1, leftTop.at(0)) );
         int firstColumn = max(0, min(this->columns - 1, leftTop.at(1)) );
@@ -1090,8 +1105,10 @@ namespace emo {
         for (int i = firstRow; i < lastRow + 1; i++) {
             for (int j = firstColumn; j < lastColumn + 1; j++) {
                if (((int)tiles->size()) <= i || ((int)tiles->at(i)->size()) <= j) break;
-                this->drawable->x = j * this->drawable->getScaledWidth()  - invertX;
-                this->drawable->y = i * this->drawable->getScaledHeight() - invertY;
+                //this->drawable->x = j * this->drawable->getScaledWidth() - invertX;
+                //this->drawable->y = i * this->drawable->getScaledHeight()- invertY;
+                this->drawable->x = j * this->drawable->width * this->param_scale[0] - invertX;
+                this->drawable->y = i * this->drawable->width * this->param_scale[1] - invertY;
                 if (tiles->at(i)->at(j) < 0) continue;
 
                 this->drawable->setFrameIndex(tiles->at(i)->at(j));

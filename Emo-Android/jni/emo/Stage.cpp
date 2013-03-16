@@ -138,6 +138,7 @@ namespace emo {
     void Stage::resetRelativeCameraInfo(){
         defaultRelativeCamera.x = 0;
         defaultRelativeCamera.y = 0;
+        defaultRelativeCamera.zoomRatio = 1.0f;
     }
 
     void Stage::moveRelativeCamera(float x, float y){

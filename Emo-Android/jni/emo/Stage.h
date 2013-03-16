@@ -49,6 +49,7 @@ typedef struct PerspectiveCameraInfo {
 typedef struct RelativeCameraInfo {
     float x;
     float y;
+    float zoomRatio;
 } RelativeCameraInfo;
 
 namespace emo {

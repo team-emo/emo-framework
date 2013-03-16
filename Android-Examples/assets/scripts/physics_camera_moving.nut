@@ -8,6 +8,7 @@ local stage = emo.Stage;
 local physics = emo.Physics;
 local world   = emo.physics.World(emo.Vec2(0, 0), true);
 local fps = 60.0;
+local zoomRatio = 1.0;
 
 const MAP_BLOCK_SIZE   = 32;
 
@@ -23,6 +24,9 @@ class Main {
     // get center coordinate of screen
     centerX = 0;
     centerY = 0;
+    
+    zoomIn = emo.Sprite("zoom_in.png");
+    zoomOut = emo.Sprite("zoom_out.png");
     
     // create map sprite with 32x32, 2 pixel border and 2 pixel margin
     map = emo.MapSprite("desert_chips.png", MAP_BLOCK_SIZE, MAP_BLOCK_SIZE, 1, 1);
@@ -44,6 +48,10 @@ class Main {
         centerX = stage.getWindowWidth()   / 2;
         centerY = stage.getWindowHeight()  / 2;
         
+        // set zoom icons as unmoving objects
+        zoomIn.setAsGui();
+        zoomOut.setAsGui();
+        
         // load tmx file from graphics folder
         local rawname = ANDROID_GRAPHICS_DIR + "desert.tmx";
         local mapdata = stage.getMapData(rawname);
@@ -62,6 +70,8 @@ class Main {
         // move sprite to the center of the screen
     	controller.move((stage.getWindowWidth() - controller.getWidth()) / 2,
                          stage.getWindowHeight() - controller.getHeight());
+        zoomIn.move(stage.getWindowWidth() - zoomIn.getWidth() - zoomOut.getWidth(), 0);
+        zoomOut.move(stage.getWindowWidth() - zoomOut.getWidth(), 0 );
         map.move(0, 0);
         dog.moveCenter(centerX + 15, centerY);
         ball.moveCenter(centerX - 15, centerY);
@@ -73,6 +83,8 @@ class Main {
         
         // set Z-Order
         controller.setZ(80);
+        zoomIn.setZ(80);
+        zoomOut.setZ(80);
         ball.setZ(70);
         dog.setZ(60);
         wallN.setZ(20);
@@ -88,13 +100,13 @@ class Main {
         physics.createStaticSprite(world, wallW);
         
         local fixtureDef = emo.physics.FixtureDef();
+        local bodyDef = emo.physics.BodyDef();
+        
         fixtureDef.density  = 0.1;
         fixtureDef.friction = 0.3;
         fixtureDef.restitution = 0.5;
-        physics.createDynamicCircleSprite(world, ball, ball.getWidth() * 0.5, fixtureDef);
-        
-        local bodyDef = emo.physics.BodyDef();
-        
+        physics.createDynamicCircleSprite(world, ball, ball.getWidth() * 0.5, fixtureDef, bodyDef);
+                
         bodyDef.fixedRotation = true;
         bodyDef.linearDamping = 1.0;
         
@@ -105,6 +117,8 @@ class Main {
         
         // load sprites to the screen
         controller.load();
+        zoomIn.load();
+        zoomOut.load();
         map.load();
         dog.load();
         ball.load();
@@ -205,6 +219,31 @@ class Main {
             } else if (controlX > 0 && lastDirection != CONTROL_RIGHT ) {
                     dog.animate(0, 5, 120, -1);
                     lastDirection = CONTROL_RIGHT;
+            }
+        }
+    }
+    
+    /*
+     * touch event
+     */
+    function onMotionEvent(mevent) {
+        if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
+            if(mevent.getX() > zoomIn.getX() && mevent.getX() < zoomIn.getX() + zoomIn.getWidth()
+            && mevent.getY() > zoomIn.getY() && mevent.getY() < zoomIn.getY() + zoomIn.getHeight()){
+                zoomRatio += 0.1;
+                stage.setZoomRatio(zoomRatio);
+                print(stage.getZoomRatio());
+                centerX = stage.getWindowWidth() / stage.getZoomRatio() / 2;
+                centerY = stage.getWindowHeight() / stage.getZoomRatio() / 2;
+            }
+            
+            if(mevent.getX() > zoomOut.getX() && mevent.getX() < zoomOut.getX() + zoomOut.getWidth()
+            && mevent.getY() > zoomOut.getY() && mevent.getY() < zoomOut.getY() + zoomOut.getHeight()){
+                zoomRatio -= 0.1;
+                stage.setZoomRatio(zoomRatio);
+                print(stage.getZoomRatio());
+                centerX = stage.getWindowWidth() / stage.getZoomRatio() / 2;
+                centerY = stage.getWindowHeight() / stage.getZoomRatio() / 2;
             }
         }
     }
