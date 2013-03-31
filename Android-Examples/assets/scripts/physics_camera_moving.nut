@@ -26,7 +26,9 @@ class Main {
     centerY = 0;
     
     zoomIn = emo.Sprite("zoom_in.png");
+    zoomInEnabled = true;
     zoomOut = emo.Sprite("zoom_out.png");
+    zoomOutEnabled = true;
     
     // create map sprite with 32x32, 2 pixel border and 2 pixel margin
     map = emo.MapSprite("desert_chips.png", MAP_BLOCK_SIZE, MAP_BLOCK_SIZE, 1, 1);
@@ -158,7 +160,23 @@ class Main {
         local force = emo.Vec2( controlX, controlY);
         dogBody.applyForce(force, point);
         
-        stage.moveCamera(dog.getX() - centerX, dog.getY() - centerY);
+        if( zoomRatio >= 1.5 ){
+        	zoomInEnabled = false;
+            zoomIn.hide();	
+        }else if( zoomInEnabled == false ){
+            zoomInEnabled = true;
+            zoomIn.show();
+        }
+        
+        if( zoomRatio <= 0.5 ){
+        	zoomOutEnabled = false;
+            zoomOut.hide();
+        }else if( zoomOutEnabled == false){
+            zoomOutEnabled = true;
+            zoomOut.show();	
+        }
+        
+        stage.moveCamera(dog.getCenterX() - centerX, dog.getCenterY() - centerY);
     }
 
     /*
@@ -228,8 +246,9 @@ class Main {
      */
     function onMotionEvent(mevent) {
         if (mevent.getAction() == MOTION_EVENT_ACTION_DOWN) {
-            if(mevent.getX() > zoomIn.getX() && mevent.getX() < zoomIn.getX() + zoomIn.getWidth()
-            && mevent.getY() > zoomIn.getY() && mevent.getY() < zoomIn.getY() + zoomIn.getHeight()){
+            if(zoomInEnabled == true && 
+              (   mevent.getX() > zoomIn.getX() && mevent.getX() < zoomIn.getX() + zoomIn.getWidth()
+               && mevent.getY() > zoomIn.getY() && mevent.getY() < zoomIn.getY() + zoomIn.getHeight() ) ){
                 zoomRatio += 0.1;
                 stage.setZoomRatio(zoomRatio);
                 print(stage.getZoomRatio());
@@ -237,8 +256,9 @@ class Main {
                 centerY = stage.getWindowHeight() / stage.getZoomRatio() / 2;
             }
             
-            if(mevent.getX() > zoomOut.getX() && mevent.getX() < zoomOut.getX() + zoomOut.getWidth()
-            && mevent.getY() > zoomOut.getY() && mevent.getY() < zoomOut.getY() + zoomOut.getHeight()){
+            if(zoomOutEnabled == true && 
+              (   mevent.getX() > zoomOut.getX() && mevent.getX() < zoomOut.getX() + zoomOut.getWidth()
+               && mevent.getY() > zoomOut.getY() && mevent.getY() < zoomOut.getY() + zoomOut.getHeight() ) ){
                 zoomRatio -= 0.1;
                 stage.setZoomRatio(zoomRatio);
                 print(stage.getZoomRatio());

@@ -134,6 +134,7 @@ namespace emo {
         this->independent = true;
         this->needTexture = false;
         this->isPackedAtlas = false;
+        this->isTiled = false;
 
         // color param RGBA
         this->param_color[0] = 1.0f;
@@ -489,31 +490,41 @@ namespace emo {
         glScalef(this->width, this->height, 1);
 
         // bind vertex positions
-        glBindBuffer(GL_ARRAY_BUFFER, engine->stage->vbo[0]);
-        glVertexPointer(3, GL_FLOAT, 0, 0);
+        if(!isTiled ){
+            glBindBuffer(GL_ARRAY_BUFFER, engine->stage->vbo[0]);
+            glVertexPointer(3, GL_FLOAT, 0, 0);
+        }
 
         // bind a texture
-        if (this->hasTexture) {
-            glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, this->texture->textureId);
+        if ( this->hasTexture ) {
+            if( !isTiled ){
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, this->texture->textureId);
+            }
 
             // bind texture coords
             glBindBuffer(GL_ARRAY_BUFFER, this->getCurrentBufferId());
             glTexCoordPointer(2, GL_FLOAT, 0, 0);
-        } else {
+        } else if( !this->hasTexture ) {
             glDisable(GL_TEXTURE_2D);
         }
 
         // bind indices
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, engine->stage->vbo[1]);
+        if( !isTiled ){
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, engine->stage->vbo[1]);
+        }
 
         // draw sprite
         glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_SHORT, 0);
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        if( !isTiled ){
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        }
 
-        glBindTexture(GL_TEXTURE_2D, 0);
+        if ( this->hasTexture && !isTiled ) {
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
     }
 
     void Drawable::setFrameCount(int count) {
@@ -792,6 +803,7 @@ namespace emo {
 
     MapDrawable::MapDrawable(Drawable* drawable) : Drawable() {
         this->drawable = drawable;
+        this->drawable->isTiled = true;
         this->tiles = new std::vector<std::vector<int>*>;
         this->setChild(drawable);
         this->meshLoaded = false;
@@ -1089,6 +1101,7 @@ namespace emo {
         int invertX = -this->x;
         int invertY = -this->y;
 
+        // calculate the first and the last tile to draw
         std::vector<int> leftTop = this->getTileIndexAtCoord(
                 engine->stage->defaultRelativeCamera.x * engine->stage->defaultRelativeCamera.zoomRatio,
                 engine->stage->defaultRelativeCamera.y * engine->stage->defaultRelativeCamera.zoomRatio);
@@ -1098,15 +1111,19 @@ namespace emo {
 
         int firstRow = max(0, min(this->rows - 1, leftTop.at(0)) );
         int firstColumn = max(0, min(this->columns - 1, leftTop.at(1)) );
-
         int lastRow = max(0, min(this->rows - 1, rightBottom.at(0)) );
         int lastColumn = max(0, min(this->columns - 1, rightBottom.at(1)) );
         
+        // bind everything without texCoords once at first
+        glBindBuffer(GL_ARRAY_BUFFER, engine->stage->vbo[0]);
+        glVertexPointer(3, GL_FLOAT, 0, 0);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, this->drawable->getTexture()->textureId);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, engine->stage->vbo[1]);
+
         for (int i = firstRow; i < lastRow + 1; i++) {
             for (int j = firstColumn; j < lastColumn + 1; j++) {
                if (((int)tiles->size()) <= i || ((int)tiles->at(i)->size()) <= j) break;
-                //this->drawable->x = j * this->drawable->getScaledWidth() - invertX;
-                //this->drawable->y = i * this->drawable->getScaledHeight()- invertY;
                 this->drawable->x = j * this->drawable->width * this->param_scale[0] - invertX;
                 this->drawable->y = i * this->drawable->width * this->param_scale[1] - invertY;
                 if (tiles->at(i)->at(j) < 0) continue;
@@ -1115,6 +1132,10 @@ namespace emo {
                 this->drawable->onDrawFrame();
             }
         }
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     LineDrawable::LineDrawable() {

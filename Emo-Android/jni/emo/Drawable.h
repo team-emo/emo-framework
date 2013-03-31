@@ -126,6 +126,7 @@ namespace emo {
         bool independent;
         bool needTexture;
         bool isPackedAtlas;
+        bool isTiled;
 
         int border;
         int margin;
