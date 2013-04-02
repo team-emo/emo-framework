@@ -1065,10 +1065,26 @@ namespace emo {
         
             // update colors
             glColor4f(param_color[0], param_color[1], param_color[2], param_color[3]);
-        
+
             // update position
-            glTranslatef(x, y, 0);
-        
+            float ratio = engine->stage->defaultRelativeCamera.zoomRatio;
+            if(engine->stage->usePerspective || this->isCameraObject == false){
+                glTranslatef(x * this->orthFactorX, y * this->orthFactorY, 0);
+            }else{
+                glTranslatef( (x - engine->stage->defaultRelativeCamera.x) * this->orthFactorX * ratio,
+                              (y - engine->stage->defaultRelativeCamera.y) * this->orthFactorY * ratio, 0);
+            }
+
+            if(engine->stage->usePerspective || this->isCameraObject == false){
+                glTranslatef(this->param_scale[2], this->param_scale[3], 0);
+                glScalef(this->param_scale[0], this->param_scale[1], 1);
+                glTranslatef(-this->param_scale[2], -this->param_scale[3], 0);
+            }else{
+                glTranslatef(this->param_scale[2], this->param_scale[3], 0);
+                glScalef(this->param_scale[0] * ratio, this->param_scale[1] * ratio, 1);
+                glTranslatef(-this->param_scale[2], -this->param_scale[3], 0);
+            }
+
             // bind vertex positions
             glBindBuffer(GL_ARRAY_BUFFER, mesh_vbos[0]);
             glVertexPointer(3, GL_FLOAT, 0, 0);

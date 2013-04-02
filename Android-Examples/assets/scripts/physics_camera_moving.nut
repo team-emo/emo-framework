@@ -57,6 +57,7 @@ class Main {
         // load tmx file from graphics folder
         local rawname = ANDROID_GRAPHICS_DIR + "desert.tmx";
         local mapdata = stage.getMapData(rawname);
+        map.useMeshMapSprite(true);
         map.setMap(mapdata.layer[0].data);
         
         // onControlEvent is fired every 16 milliseconds at most
