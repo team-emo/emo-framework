@@ -103,6 +103,9 @@ namespace emo {
         virtual void setFrameCount(int count);
         int  getFrameCount();
 
+        virtual bool isCameraObject();
+        virtual void setCameraObject(bool isObject);
+
         GLuint getCurrentBufferId();
         bool isCurrentTexBufferLoaded();
 		bool isVisible();
@@ -190,8 +193,6 @@ namespace emo {
         GLint srcBlendFactor;
         GLint dstBlendFactor;
 
-        bool isCameraObject;
-
     protected:
 
         float      vertex_tex_coords[8];
@@ -221,6 +222,8 @@ namespace emo {
         void deleteImagePacks();
         imagepack_t* imagepacks;
         std::vector<std::string>* imagepacks_names;
+
+        bool cameraObject;
     };
 
     class MapDrawable : public Drawable {
@@ -236,6 +239,9 @@ namespace emo {
 
         virtual void setChild(Drawable* child);
         virtual Drawable* getChild();
+
+        virtual bool isCameraObject();
+        virtual void setCameraObject(bool isObject);
 
         virtual void addRow(int rowdata[], int count);
         virtual bool clearTiles();

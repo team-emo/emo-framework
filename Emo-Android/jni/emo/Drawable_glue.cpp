@@ -1979,7 +1979,7 @@ SQInteger emoDrawableSetAsGui(HSQUIRRELVM v) {
         return 1;
     }
 
-    drawable->isCameraObject = false;
+    drawable->setCameraObject(false);
 
     sq_pushinteger(v, EMO_NO_ERROR);
     return 1;

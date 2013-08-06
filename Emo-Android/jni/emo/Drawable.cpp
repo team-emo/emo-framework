@@ -181,7 +181,7 @@ namespace emo {
         this->srcBlendFactor = GL_SRC_ALPHA;
         this->dstBlendFactor = GL_ONE_MINUS_SRC_ALPHA;
 
-        this->isCameraObject = true;
+        this->cameraObject = true;
 
     }
 
@@ -449,7 +449,7 @@ namespace emo {
         }
 
         float ratio = engine->stage->defaultRelativeCamera.zoomRatio;
-        if(engine->stage->usePerspective || this->isCameraObject == false){
+        if(engine->stage->usePerspective || this->cameraObject == false){
             glTranslatef(drawableX * this->orthFactorX, drawableY * this->orthFactorY, 0);
         }else{
             glTranslatef( (drawableX - engine->stage->defaultRelativeCamera.x) * this->orthFactorX * ratio,
@@ -457,7 +457,7 @@ namespace emo {
         }
 
         // rotate
-        if(engine->stage->usePerspective || this->isCameraObject == false){
+        if(engine->stage->usePerspective || this->cameraObject == false){
             glTranslatef(this->param_rotate[1], this->param_rotate[2], 0);
         }else{
             glTranslatef(this->param_rotate[1] * ratio, this->param_rotate[2] * ratio, 0);
@@ -469,14 +469,14 @@ namespace emo {
         } else {
             glRotatef(this->param_rotate[0], 0, 0, 1);
         }
-        if(engine->stage->usePerspective || this->isCameraObject == false){
+        if(engine->stage->usePerspective || this->cameraObject == false){
             glTranslatef(-this->param_rotate[1], -this->param_rotate[2], 0);
         }else{
             glTranslatef(-this->param_rotate[1] * ratio, -this->param_rotate[2] * ratio, 0);
         }
 
         // scale
-        if(engine->stage->usePerspective || this->isCameraObject == false){
+        if(engine->stage->usePerspective || this->cameraObject == false){
             glTranslatef(this->param_scale[2], this->param_scale[3], 0);
             glScalef(this->param_scale[0], this->param_scale[1], 1);
             glTranslatef(-this->param_scale[2], -this->param_scale[3], 0);
@@ -569,6 +569,14 @@ namespace emo {
 
     int Drawable::getFrameIndex() {
         return this->frame_index;
+    }
+
+    bool Drawable::isCameraObject() {
+        return this->cameraObject;
+    }
+
+    void Drawable::setCameraObject(bool isObject) {
+        this->cameraObject = isObject;
     }
 
     GLuint Drawable::getCurrentBufferId() {
@@ -910,6 +918,15 @@ namespace emo {
         Drawable::setChild(child);
     }
 
+    bool MapDrawable::isCameraObject() {
+        return this->cameraObject;
+    }
+
+    void MapDrawable::setCameraObject(bool isObject) {
+        this->cameraObject = isObject;
+        this->drawable->setCameraObject(isObject);
+    }
+
     bool MapDrawable::bindVertex() {
         if (this->useMesh && !this->meshLoaded) {
             this->unbindMeshVertex();
@@ -1068,14 +1085,14 @@ namespace emo {
 
             // update position
             float ratio = engine->stage->defaultRelativeCamera.zoomRatio;
-            if(engine->stage->usePerspective || this->isCameraObject == false){
+            if(engine->stage->usePerspective || this->cameraObject == false){
                 glTranslatef(x * this->orthFactorX, y * this->orthFactorY, 0);
             }else{
                 glTranslatef( (x - engine->stage->defaultRelativeCamera.x) * this->orthFactorX * ratio,
                               (y - engine->stage->defaultRelativeCamera.y) * this->orthFactorY * ratio, 0);
             }
 
-            if(engine->stage->usePerspective || this->isCameraObject == false){
+            if(engine->stage->usePerspective || this->cameraObject == false){
                 glTranslatef(this->param_scale[2], this->param_scale[3], 0);
                 glScalef(this->param_scale[0], this->param_scale[1], 1);
                 glTranslatef(-this->param_scale[2], -this->param_scale[3], 0);
@@ -1118,13 +1135,20 @@ namespace emo {
         int invertY = -this->y;
 
         // calculate the first and the last tile to draw
-        std::vector<int> leftTop = this->getTileIndexAtCoord(
-                engine->stage->defaultRelativeCamera.x * engine->stage->defaultRelativeCamera.zoomRatio,
-                engine->stage->defaultRelativeCamera.y * engine->stage->defaultRelativeCamera.zoomRatio);
-        std::vector<int> rightBottom = this->getTileIndexAtCoord(
-                engine->stage->defaultRelativeCamera.x * engine->stage->defaultRelativeCamera.zoomRatio + engine->stage->width,
-                engine->stage->defaultRelativeCamera.y * engine->stage->defaultRelativeCamera.zoomRatio + engine->stage->height);
-
+        std::vector<int> leftTop, rightBottom;
+        if( this->cameraObject ) {
+            leftTop= this->getTileIndexAtCoord(
+                    engine->stage->defaultRelativeCamera.x * engine->stage->defaultRelativeCamera.zoomRatio,
+                    engine->stage->defaultRelativeCamera.y * engine->stage->defaultRelativeCamera.zoomRatio);
+            rightBottom = this->getTileIndexAtCoord(
+                    engine->stage->defaultRelativeCamera.x * engine->stage->defaultRelativeCamera.zoomRatio + engine->stage->width,
+                    engine->stage->defaultRelativeCamera.y * engine->stage->defaultRelativeCamera.zoomRatio + engine->stage->height);
+        }
+        else
+        {
+            leftTop= this->getTileIndexAtCoord(0, 0);
+            rightBottom = this->getTileIndexAtCoord(engine->stage->width, engine->stage->height);
+        }
         int firstRow = max(0, min(this->rows - 1, leftTop.at(0)) );
         int firstColumn = max(0, min(this->columns - 1, leftTop.at(1)) );
         int lastRow = max(0, min(this->rows - 1, rightBottom.at(0)) );
