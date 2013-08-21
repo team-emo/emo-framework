@@ -1,6 +1,7 @@
 bin/
 .settings/
 test/
+/.project
 /.cache
 /key.txt
 /emo_packer.log
